@@ -2,16 +2,13 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { TranslateModule } from '@ngx-translate/core';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
-import { ButtonsModule } from 'ngx-bootstrap';
+import { ButtonsModule } from 'ngx-bootstrap/buttons';
 
-import {
-  CalendarComponent,
-  DateRangeComponent,
-  DatepickerComponent
-} from './components';
+import { CalendarComponent, DateRangeComponent, DatepickerComponent } from './components';
 import { SelectDateDirective } from './directives';
 import { CalendarTooltipDirective } from './pipes';
 import {
@@ -19,11 +16,12 @@ import {
   CalendarDataService,
   DatepickerService,
   DateRangeService,
-  SelectDateService
+  SelectDateService,
 } from './services';
 
-import { SharedModule } from '@webui/shared';
+// import { SharedModule } from '@webui/shared';
 import { DynamicFormModule } from '@webui/dynamic-form';
+import { UiModule } from '@webui/ui';
 
 @NgModule({
   imports: [
@@ -34,23 +32,19 @@ import { DynamicFormModule } from '@webui/dynamic-form';
     FontAwesomeModule,
     NgbTooltipModule,
     ButtonsModule,
-    SharedModule,
-    DynamicFormModule
+    // SharedModule,
+    DynamicFormModule,
+    TranslateModule,
+    UiModule
   ],
   declarations: [
     CalendarComponent,
     DateRangeComponent,
     CalendarTooltipDirective,
     DatepickerComponent,
-    SelectDateDirective
+    SelectDateDirective,
   ],
   exports: [CalendarComponent],
-  providers: [
-    CalendarService,
-    CalendarDataService,
-    DatepickerService,
-    DateRangeService,
-    SelectDateService
-  ]
+  providers: [CalendarService, CalendarDataService, DatepickerService, DateRangeService, SelectDateService],
 })
 export class CalendarModule {}

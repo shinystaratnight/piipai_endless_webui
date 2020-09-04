@@ -5,28 +5,27 @@ import { Moment } from 'moment';
 
 moment.updateLocale('en', {
   week: {
-    dow: 1 // Monday is the first day of the week.
-  } as any
+    dow: 1, // Monday is the first day of the week.
+  } as any,
 });
 
-export type DateInstance = Moment;
+export type DateInstance = moment.Moment;
 
 export enum Format {
   Date = 'DD/MM/YYYY',
   DateTime = 'DD/MM/YYYY hh:mm A',
-  Time = 'hh:mm A'
+  Time = 'hh:mm A',
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class DateService {
-
-  get instance() {
+  get instance(): any {
     return moment;
   }
 
-  public parse(date: Date | string, timezone?: string, format?: string): DateInstance {
+  public parse(date: string, timezone?: string, format?: string): DateInstance {
     return this.instance.tz(date, format, timezone);
   }
 

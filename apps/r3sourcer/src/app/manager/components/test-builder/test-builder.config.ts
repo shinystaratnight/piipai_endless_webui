@@ -81,7 +81,7 @@ export const testMetadata = {
               templateOptions: {
                 label: 'Industries',
                 type: 'related',
-                values: ['__str__'],
+                values: ['__str__', 'translations'],
                 delete: true,
                 add: false
               }
@@ -102,7 +102,7 @@ export const testMetadata = {
               templateOptions: {
                 label: 'Skills',
                 type: 'related',
-                values: ['__str__'],
+                values: ['__str__', 'tranlsations'],
                 delete: true,
                 add: false
               }
@@ -123,7 +123,7 @@ export const testMetadata = {
               templateOptions: {
                 label: 'Tags',
                 type: 'related',
-                values: ['__str__'],
+                values: ['__str__', 'translation'],
                 delete: true,
                 add: false
               }

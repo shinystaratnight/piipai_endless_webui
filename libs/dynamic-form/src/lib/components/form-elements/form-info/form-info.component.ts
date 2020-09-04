@@ -1,12 +1,4 @@
-import {
-  Component,
-  OnInit,
-  Output,
-  EventEmitter,
-  OnDestroy,
-  ViewChild,
-  TemplateRef
-} from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, OnDestroy, ViewChild, TemplateRef } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
@@ -20,7 +12,7 @@ import { Endpoints } from '@webui/data';
 @Component({
   selector: 'app-form-info',
   templateUrl: './form-info.component.html',
-  styleUrls: ['./form-info.component.scss']
+  styleUrls: ['./form-info.component.scss'],
 })
 export class FormInfoComponent implements OnInit, OnDestroy {
   public config: any;
@@ -70,7 +62,7 @@ export class FormInfoComponent implements OnInit, OnDestroy {
     2: '#fc9183',
     3: '#FFA236',
     4: '#ffbf00',
-    5: '#FFD042'
+    5: '#FFD042',
   };
 
   formId: number;
@@ -78,7 +70,7 @@ export class FormInfoComponent implements OnInit, OnDestroy {
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
 
-  @ViewChild('modal', { static: false })
+  @ViewChild('modal')
   public modal: TemplateRef<any>;
 
   private subscriptions: Subscription[];
@@ -94,7 +86,7 @@ export class FormInfoComponent implements OnInit, OnDestroy {
 
   get isCandiateContactForm() {
     if (this.formId) {
-      return this.formService.getForm(this.formId).endpoint === Endpoints.CandidateContact
+      return this.formService.getForm(this.formId).endpoint === Endpoints.CandidateContact;
     }
   }
 
@@ -110,10 +102,7 @@ export class FormInfoComponent implements OnInit, OnDestroy {
 
       keys.forEach((key) => {
         if (key === 'status') {
-          this[key] = this.getValue(
-            this.config.values[key].field,
-            this.config.value
-          );
+          this[key] = this.getValue(this.config.values[key].field, this.config.value);
 
           if (this[key]) {
             if (this[key].length > 4) {
@@ -129,15 +118,8 @@ export class FormInfoComponent implements OnInit, OnDestroy {
           }
         } else if (key === 'picture') {
           this[key] =
-            this.getValue(
-              this.config.values[key],
-              this.config.value,
-              'picture'
-            ) ||
-            (this.getConfig('picture') &&
-            this.getConfig('picture').companyContact
-              ? '/assets/img/logo.svg'
-              : null);
+            this.getValue(this.config.values[key], this.config.value, 'picture') ||
+            (this.getConfig('picture') && this.getConfig('picture').companyContact ? '/assets/img/logo.svg' : null);
         } else if (key === 'map') {
           this[key] = this.getValue(this.config.values[key], this.config.value);
 
@@ -159,10 +141,7 @@ export class FormInfoComponent implements OnInit, OnDestroy {
         this.contactAvatar = getContactAvatar(this.title);
       }
 
-      if (
-        this.config.metadata['title'] &&
-        this.config.metadata['title'].value instanceof Object
-      ) {
+      if (this.config.metadata['title'] && this.config.metadata['title'].value instanceof Object) {
         this.titlePath = true;
       }
     }
@@ -187,7 +166,7 @@ export class FormInfoComponent implements OnInit, OnDestroy {
       this.event.emit({
         type: 'create',
         el: this.config,
-        value: this.config.key === 'id' && { id: this.config.value.id }
+        value: this.config.key === 'id' && { id: this.config.value.id },
       });
     }
   }
@@ -196,9 +175,7 @@ export class FormInfoComponent implements OnInit, OnDestroy {
     if (name === 'title' && !this.config.editForm) {
       const config = this.config.metadata[name];
 
-      config.templateOptions.label = `${config.key[0].toUpperCase()}${config.key.slice(
-        1
-      )}`;
+      config.templateOptions.label = `${config.key[0].toUpperCase()}${config.key.slice(1)}`;
       return config;
     }
 
@@ -228,8 +205,7 @@ export class FormInfoComponent implements OnInit, OnDestroy {
       const keys = Object.keys(this.color);
 
       keys.forEach((key) => {
-        className =
-          this.color[key].indexOf(item[this.colorAttr]) > -1 ? key : 'success';
+        className = this.color[key].indexOf(item[this.colorAttr]) > -1 ? key : 'success';
       });
     }
 
@@ -272,25 +248,22 @@ export class FormInfoComponent implements OnInit, OnDestroy {
         default_shift_starting_time: {
           action: 'add',
           data: {
-            value: formatString.format(
-              '{default_shift_starting_time}',
-              this.config.value
-            )
-          }
+            value: formatString.format('{default_shift_starting_time}', this.config.value),
+          },
         },
         skill: {
           action: 'add',
           data: {
-            value: formatString.format('{position.id}', this.config.value)
-          }
+            value: formatString.format('{position.id}', this.config.value),
+          },
         },
         job: {
           action: 'add',
           data: {
-            value: formatString.format('{id.id}', this.config.value)
-          }
-        }
-      }
+            value: formatString.format('{id.id}', this.config.value),
+          },
+        },
+      },
     };
 
     this.modalRef = this.modalService.open(this.modal, { size: 'lg', windowClass: 'extend-modal', backdrop: 'static' });
@@ -322,7 +295,7 @@ export class FormInfoComponent implements OnInit, OnDestroy {
     }
 
     if (e.type === 'patchAddress') {
-      this.updateContact({address: e.value});
+      this.updateContact({ address: e.value });
     }
 
     // if (this.isCandidatePage()) {
@@ -340,12 +313,12 @@ export class FormInfoComponent implements OnInit, OnDestroy {
     this.saveProcess = false;
   }
 
-  private updateContact(data: { picture?: string , address?: string }) {
+  private updateContact(data: { picture?: string; address?: string }) {
     const contactId = this.config.formData.value.data.contact.id;
     const birthday = this.config.formData.value.data.contact.birthday;
     const endpoint = `${Endpoints.Contact}${contactId}/`;
 
-    this.gfs.updateForm(endpoint, {...data, birthday}).subscribe((res) => {
+    this.gfs.updateForm(endpoint, { ...data, birthday }).subscribe((res) => {
       if (data.picture) {
         this.picture = res.picture.origin;
         this.config.metadata['picture'].value = res.picture;

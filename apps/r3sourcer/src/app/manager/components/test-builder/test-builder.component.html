@@ -16,6 +16,10 @@
         <app-dynamic-form [config]="question" (submitForm)="saveQuestion($event, index, getId(question))">
         </app-dynamic-form>
 
+        <div class="images" *ngIf="getId(question)">
+          <app-image-uploader [source]="pictures.get(getId(question))" (images)="onUpload($event, getId(question))"></app-image-uploader>
+        </div>
+
         <div class="test__answers" *ngIf="getId(question) && getType(question) !== 1">
           <div class="test__answer" *ngFor="let answer of answers[getId(question)]; let index = index">
             <div class="test__actions">

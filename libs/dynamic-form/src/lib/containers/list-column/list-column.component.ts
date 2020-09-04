@@ -1,16 +1,18 @@
 import {
   Component,
+  OnInit,
   Output,
   EventEmitter,
-  ChangeDetectionStrategy
+  ChangeDetectionStrategy,
 } from '@angular/core';
+import { getTranslationKey } from '@webui/utilities';
 
 @Component({
   selector: 'app-list-column',
   templateUrl: 'list-column.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ListColumnComponent {
+export class ListColumnComponent implements OnInit {
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
 
@@ -19,12 +21,17 @@ export class ListColumnComponent {
 
   public config: any;
   public head: boolean;
+  translationKey = '';
+
+  ngOnInit() {
+    this.translationKey = getTranslationKey(this.config.name, 'label');
+  }
 
   public sort() {
     if (this.config.sort) {
       this.event.emit({
         type: 'sort',
-        name: this.config.name
+        name: this.config.name,
       });
     }
   }

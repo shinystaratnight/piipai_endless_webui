@@ -28,4 +28,8 @@ export class ListCheckboxComponent implements OnInit {
     this.buttonAction.emit(event);
   }
 
+  getTranslationKey(value) {
+    return `list.${this.config.key}.${value}`;
+  }
+
 };

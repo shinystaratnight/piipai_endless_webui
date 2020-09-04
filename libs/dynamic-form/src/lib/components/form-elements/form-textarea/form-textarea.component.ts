@@ -1,28 +1,18 @@
-import {
-  Component,
-  OnInit,
-  ViewChild,
-  AfterViewInit,
-  OnDestroy,
-  ChangeDetectorRef,
-  ElementRef
-} from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, OnDestroy, ChangeDetectorRef, ElementRef } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 
 import { Subscription } from 'rxjs';
 
 import { BasicElementComponent } from './../basic-element/basic-element.component';
+import { getTranslationKey } from '@webui/utilities';
 
 @Component({
   selector: 'app-form-textarea',
   templateUrl: 'form-textarea.component.html',
-  styleUrls: ['./form-textarea.component.scss']
+  styleUrls: ['./form-textarea.component.scss'],
 })
-
-export class FormTextareaComponent
-  extends BasicElementComponent
-  implements OnInit, AfterViewInit, OnDestroy {
-  @ViewChild('textarea', { static: false })
+export class FormTextareaComponent extends BasicElementComponent implements OnInit, AfterViewInit, OnDestroy {
+  @ViewChild('textarea')
   public textarea: ElementRef;
 
   public config;
@@ -39,14 +29,13 @@ export class FormTextareaComponent
 
   private subscriptions: Subscription[];
 
-  constructor(
-    private fb: FormBuilder,
-    private cd: ChangeDetectorRef
-  ) {
+  constructor(private fb: FormBuilder, private cd: ChangeDetectorRef) {
     super();
     this.subscriptions = [];
     this.editMode = true;
   }
+
+  getTranslationKey = getTranslationKey;
 
   public ngOnInit() {
     this.addControl(this.config, this.fb);
@@ -55,9 +44,7 @@ export class FormTextareaComponent
     this.checkHiddenProperty();
     this.createEvent();
 
-    this.className = this.config.templateOptions.background
-      ? 'message-text'
-      : '';
+    this.className = this.config.templateOptions.background ? 'message-text' : '';
   }
 
   public ngOnDestroy() {
@@ -75,7 +62,7 @@ export class FormTextareaComponent
           this.config.hide = hide;
         }
 
-        if (!(<any> this.cd).destroyed) {
+        if (!(<any>this.cd).destroyed) {
           this.cd.detectChanges();
         }
       });

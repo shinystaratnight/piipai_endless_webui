@@ -20,13 +20,13 @@ interface Field {
 @Component({
   selector: 'app-form-fields-group',
   templateUrl: 'form-fields-group.component.html',
-  styleUrls: ['./form-fields-group.component.scss']
+  styleUrls: ['./form-fields-group.component.scss'],
 })
 export class FormFieldsGroupComponent implements OnInit {
-  @ViewChild('modal', { static: false })
+  @ViewChild('modal')
   public modal: any;
 
-  @ViewChild('modalActiveFields', { static: false })
+  @ViewChild('modalActiveFields')
   public modalActiveFields: any;
 
   public formFieldGroupsEndpoint = '/core/formfieldgroups/';
@@ -50,38 +50,35 @@ export class FormFieldsGroupComponent implements OnInit {
   public lastPosition = 0;
 
   public positions = {
-    'contact__title': 1,
-    'contact__first_name': 2,
-    'contact__last_name': 3,
-    'contact__email': 4,
-    'contact__phone_mobile': 5,
-    'contact__gender': 6,
-    'contact__birthday': 7,
-    'contact__address__street_address': 8,
-    'contact__address__city': 9,
-    'contact__address__postal_code': 10,
-    'contact__address__state': 11,
-    'contact__address__country': 12,
-    'contact__picture': 13,
-    'tax_file_number': 14,
-    'bank_account__bank_name': 15,
-    'bank_account__bank_account_name': 16,
-    'bank_account__bsb': 17,
-    'bank_account__account_number': 18,
-    'superannuation_fund': 19,
-    'superannuation_membership_number': 20,
-    'residency': 21,
-    'nationality': 22,
-    'transportation_to_work': 23,
-    'weight': 24,
-    'height': 25,
-    'skill': 26,
+    contact__title: 1,
+    contact__first_name: 2,
+    contact__last_name: 3,
+    contact__email: 4,
+    contact__phone_mobile: 5,
+    contact__gender: 6,
+    contact__birthday: 7,
+    contact__address__street_address: 8,
+    contact__address__city: 9,
+    contact__address__postal_code: 10,
+    contact__address__state: 11,
+    contact__address__country: 12,
+    contact__picture: 13,
+    tax_file_number: 14,
+    bank_account__bank_name: 15,
+    bank_account__bank_account_name: 16,
+    bank_account__bsb: 17,
+    bank_account__account_number: 18,
+    superannuation_fund: 19,
+    superannuation_membership_number: 20,
+    residency: 21,
+    nationality: 22,
+    transportation_to_work: 23,
+    weight: 24,
+    height: 25,
+    skill: 26,
   };
 
-  constructor(
-    private modalService: NgbModal,
-    private genericFormService: GenericFormService
-  ) {}
+  constructor(private modalService: NgbModal, private genericFormService: GenericFormService) {}
 
   public ngOnInit() {
     if (this.config.fields && this.config.fields.length) {
@@ -112,47 +109,47 @@ export class FormFieldsGroupComponent implements OnInit {
     this.fields = {
       modelfield: {
         endpoint: '/core/modelformfields/',
-        label: 'Model field'
+        label: 'Model field',
       },
       group: {
-        label: 'Custom fields:'
+        label: 'Custom fields:',
       },
       textareafield: {
         endpoint: '/core/textareaformfields/',
-        label: 'TextArea field'
+        label: 'TextArea field',
       },
       numberfield: {
         endpoint: '/core/numberformfields/',
-        label: 'Number field'
+        label: 'Number field',
       },
       selectfield: {
         endpoint: '/core/selectformfields/',
-        label: 'Select field'
+        label: 'Select field',
       },
       filefield: {
         endpoint: '/core/fileformfields/',
-        label: 'File field'
+        label: 'File field',
       },
       imagefield: {
         endpoint: '/core/imageformfields/',
-        label: 'Image field'
+        label: 'Image field',
       },
       checkboxfield: {
         endpoint: '/core/checkboxformfields/',
-        label: 'Checkbox field'
+        label: 'Checkbox field',
       },
       datefield: {
         endpoint: '/core/dateformfields/',
-        label: 'Date field'
+        label: 'Date field',
       },
       radiobuttonsfield: {
         endpoint: '/core/radiobuttonsformfields/',
-        label: 'Radio button field'
+        label: 'Radio button field',
       },
       textfield: {
         endpoint: '/core/textformfields/',
-        label: 'Text field'
-      }
+        label: 'Text field',
+      },
     };
     this.types = Object.keys(this.fields);
   }
@@ -169,19 +166,19 @@ export class FormFieldsGroupComponent implements OnInit {
         action: 'add',
         data: {
           value: [],
-          hide: true
-        }
+          hide: true,
+        },
       },
       form: {
         action: 'add',
         data: {
           value: this.config.id,
           hide: true,
-          default: 0
-        }
-      }
+          default: 0,
+        },
+      },
     };
-    this.modalRef = this.modalService.open(this.modal, {backdrop: 'static'});
+    this.modalRef = this.modalService.open(this.modal, { backdrop: 'static' });
   }
 
   public createGroup(): void {
@@ -189,16 +186,14 @@ export class FormFieldsGroupComponent implements OnInit {
       field_list: [],
       form: this.config.id,
       name: this.config.id,
-      position: 0
+      position: 0,
     };
-    this.genericFormService
-      .submitForm(this.formFieldGroupsEndpoint, body)
-      .subscribe(
-        (res: any) => {
-          this.groupId = res.id;
-        },
-        (err: any) => (this.error = err)
-      );
+    this.genericFormService.submitForm(this.formFieldGroupsEndpoint, body).subscribe(
+      (res: any) => {
+        this.groupId = res.id;
+      },
+      (err: any) => (this.error = err)
+    );
   }
 
   public addCollapseProperty(list): void {
@@ -250,11 +245,11 @@ export class FormFieldsGroupComponent implements OnInit {
         action: 'add',
         data: {
           value: id,
-          hide: true
-        }
-      }
+          hide: true,
+        },
+      },
     };
-    this.modalRef = this.modalService.open(this.modal, {backdrop: 'static'});
+    this.modalRef = this.modalService.open(this.modal, { backdrop: 'static' });
   }
 
   public toggleActiveState(field: Field, remove?): void {
@@ -269,19 +264,17 @@ export class FormFieldsGroupComponent implements OnInit {
     }
 
     if (field.id) {
-      this.genericFormService
-        .delete(endpoint, field.id)
-        .subscribe(
-          (res: any) => {
-            delete field.id;
-            delete field.position;
-            this.activeFields = this.getActiveFields(this.groups);
-            this.activeFields.sort((p, n) => {
-              return p.position > n.position ? 1 : -1;
-            });
-          },
-          (err: any) => (this.error = err)
-        );
+      this.genericFormService.delete(endpoint, field.id).subscribe(
+        (res: any) => {
+          delete field.id;
+          delete field.position;
+          this.activeFields = this.getActiveFields(this.groups);
+          this.activeFields.sort((p, n) => {
+            return p.position > n.position ? 1 : -1;
+          });
+        },
+        (err: any) => (this.error = err)
+      );
     } else if (!removeField) {
       const body = Object.assign({ group: this.groupId }, field);
       body.position = this.positions[field.name];
@@ -289,27 +282,23 @@ export class FormFieldsGroupComponent implements OnInit {
       delete body.isCollapsed;
       delete body.model_fields;
       delete body.disabled;
-      this.genericFormService
-        .submitForm(endpoint, body)
-        .subscribe(
-          (res: any) => {
-            field.id = res.id;
-            field.position = res.position;
-            this.lastPosition = res.position;
-            this.activeFields = this.getActiveFields(this.groups);
-            this.activeFields.sort((p, n) => {
-              return p.position > n.position ? 1 : -1;
-            });
-          },
-          (err: any) => (this.error = err)
-        );
+      this.genericFormService.submitForm(endpoint, body).subscribe(
+        (res: any) => {
+          field.id = res.id;
+          field.position = res.position;
+          this.lastPosition = res.position;
+          this.activeFields = this.getActiveFields(this.groups);
+          this.activeFields.sort((p, n) => {
+            return p.position > n.position ? 1 : -1;
+          });
+        },
+        (err: any) => (this.error = err)
+      );
     }
   }
 
   public getEndpoint(field: Field): string {
-    return field.name === 'skill'
-      ? this.relatedformfieldsEndpoint
-      : this.formModelFieldEndpoint;
+    return field.name === 'skill' ? this.relatedformfieldsEndpoint : this.formModelFieldEndpoint;
   }
 
   public getActiveFields(array) {
@@ -347,14 +336,12 @@ export class FormFieldsGroupComponent implements OnInit {
       } else {
         body.required = !field.required;
       }
-      this.genericFormService
-        .editForm(`${endpoint}${field.id}/`, body)
-        .subscribe(
-          (res: any) => {
-            field.required = res.required;
-          },
-          (err: any) => (this.error = err)
-        );
+      this.genericFormService.editForm(`${endpoint}${field.id}/`, body).subscribe(
+        (res: any) => {
+          field.required = res.required;
+        },
+        (err: any) => (this.error = err)
+      );
     } else {
       if (removeField) {
         field.required = false;
@@ -371,44 +358,38 @@ export class FormFieldsGroupComponent implements OnInit {
     this.modalData.edit = true;
     this.modalData.title = object.__str__;
     this.modalData.container = container;
-    this.modalData.endpoint =
-      type === 'group'
-        ? this.formFieldGroupsEndpoint
-        : this.fields[object.field_type].endpoint;
+    this.modalData.endpoint = type === 'group' ? this.formFieldGroupsEndpoint : this.fields[object.field_type].endpoint;
     this.modalData.id = object.id;
     if (type === 'group') {
       this.modalData.data = {
         field_list: {
           action: 'add',
           data: {
-            hide: true
-          }
+            hide: true,
+          },
         },
         form: {
           action: 'add',
           data: {
-            hide: true
-          }
-        }
+            hide: true,
+          },
+        },
       };
     } else if (type === 'field') {
       this.modalData.data = {
         group: {
           action: 'add',
           data: {
-            hide: true
-          }
-        }
+            hide: true,
+          },
+        },
       };
     }
-    this.modalRef = this.modalService.open(this.modal, {backdrop: 'static'});
+    this.modalRef = this.modalService.open(this.modal, { backdrop: 'static' });
   }
 
   public delete(object, container: any[], type) {
-    const endpoint =
-      type === 'group'
-        ? this.formFieldGroupsEndpoint
-        : this.fields[object.field_type].endpoint;
+    const endpoint = type === 'group' ? this.formFieldGroupsEndpoint : this.fields[object.field_type].endpoint;
     const id = object.id;
     this.genericFormService.delete(endpoint, id).subscribe(
       (res: any) => {
@@ -431,8 +412,8 @@ export class FormFieldsGroupComponent implements OnInit {
         if (type === 'field') {
           const data = {
             polymorphic_ctype: {
-              id: this.choosenType
-            }
+              id: this.choosenType,
+            },
           };
           e.data = Object.assign(data, e.data);
         }
@@ -441,11 +422,7 @@ export class FormFieldsGroupComponent implements OnInit {
       container.sort((p, n) => {
         return p.position > n.position ? 1 : -1;
       });
-    } else if (
-      e.type === 'blur' &&
-      this.choosenType === 'modelfield' &&
-      e.el.key === 'name'
-    ) {
+    } else if (e.type === 'blur' && this.choosenType === 'modelfield' && e.el.key === 'name') {
       const element = this.config.fields.filter((el) => el.name === e.value);
       this.modalData.data = Object.assign({}, this.modalData.data);
       if (element && element[0]) {
@@ -453,8 +430,8 @@ export class FormFieldsGroupComponent implements OnInit {
           this.modalData.data[el] = {
             action: 'add',
             data: {
-              value: element[0][el]
-            }
+              value: element[0][el],
+            },
           };
         });
       }
@@ -479,8 +456,8 @@ export class FormFieldsGroupComponent implements OnInit {
       this.modalData.data['name'] = {
         action: 'add',
         data: {
-          autocomplete: this.config.fields
-        }
+          autocomplete: this.config.fields,
+        },
       };
     }
   }
@@ -530,7 +507,7 @@ export class FormFieldsGroupComponent implements OnInit {
   }
 
   public openActiveFields() {
-    this.modalRef = this.modalService.open(this.modalActiveFields, {backdrop: 'static'});
+    this.modalRef = this.modalService.open(this.modalActiveFields, { backdrop: 'static' });
   }
 
   public changePosition(item, type) {
@@ -542,23 +519,21 @@ export class FormFieldsGroupComponent implements OnInit {
     delete body.hidden;
     delete body.isCollapsed;
     delete body.model_fields;
-    this.genericFormService
-      .editForm(`${this.formModelFieldEndpoint}${item.id}/`, body)
-      .subscribe((res: any) => {
-        const newBody = Object.assign({ group: this.groupId }, element);
-        newBody.position = currentPosition;
-        delete newBody.hidden;
-        delete newBody.isCollapsed;
-        delete newBody.model_fields;
-        this.genericFormService
-          .editForm(`${this.formModelFieldEndpoint}${element.id}/`, newBody)
-          .subscribe((response: any) => {
-            element.position = response.position;
-            this.activeFields.sort((p, n) => {
-              return p.position > n.position ? 1 : -1;
-            });
+    this.genericFormService.editForm(`${this.formModelFieldEndpoint}${item.id}/`, body).subscribe((res: any) => {
+      const newBody = Object.assign({ group: this.groupId }, element);
+      newBody.position = currentPosition;
+      delete newBody.hidden;
+      delete newBody.isCollapsed;
+      delete newBody.model_fields;
+      this.genericFormService
+        .editForm(`${this.formModelFieldEndpoint}${element.id}/`, newBody)
+        .subscribe((response: any) => {
+          element.position = response.position;
+          this.activeFields.sort((p, n) => {
+            return p.position > n.position ? 1 : -1;
           });
-      });
+        });
+    });
   }
 
   public getItemByPosition(array, position) {
@@ -608,12 +583,7 @@ export class FormFieldsGroupComponent implements OnInit {
   }
 
   lockUserField(field: Field) {
-    const lockedFields = [
-      'contact__first_name',
-      'contact__last_name',
-      'contact__email',
-      'contact__phone_mobile'
-    ];
+    const lockedFields = ['contact__first_name', 'contact__last_name', 'contact__email', 'contact__phone_mobile'];
 
     if (lockedFields.includes(field.name)) {
       field.disabled = true;

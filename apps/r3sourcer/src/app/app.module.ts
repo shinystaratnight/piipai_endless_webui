@@ -1,11 +1,14 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppComponent } from './app.component';
 import { RouterModule, NoPreloading } from '@angular/router';
 
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { library } from '@fortawesome/fontawesome-svg-core';
+import {
+  FontAwesomeModule,
+  FaIconLibrary
+} from '@fortawesome/angular-fontawesome';
 import {
   faChevronLeft,
   faChevronRight,
@@ -48,6 +51,12 @@ import {
   faDotCircle
 } from '@fortawesome/free-solid-svg-icons';
 import { NgxWebstorageModule } from 'ngx-webstorage';
+import { HttpClientModule, HttpClient } from '@angular/common/http';
+import {
+  TranslateModule,
+  TranslateLoader,
+  MissingTranslationHandler
+} from '@ngx-translate/core';
 
 import { VerifyEmailComponent, ToastComponent } from './components';
 
@@ -55,13 +64,15 @@ import { routes } from './app.routing';
 
 import { CoreModule } from '@webui/core';
 import { environment } from '../environments/environment';
-import { HttpClientModule } from '@angular/common/http';
 import { AgmCoreModule } from '@agm/core';
 import { DynamicFormModule } from '@webui/dynamic-form';
+import { UiModule } from '@webui/ui';
 
 import { Metadata } from './metadata.config';
 import { MasterGuideModule } from './master-guide/master-guide.module';
 import { RedirectComponent } from './redirect.component';
+import { HttpLoaderFactory } from './translate.loader';
+import { MissingTranslationHelper } from './helpers/translate.helper';
 
 @NgModule({
   declarations: [
@@ -72,7 +83,11 @@ import { RedirectComponent } from './redirect.component';
   ],
   imports: [
     BrowserModule,
-    RouterModule.forRoot(routes, { useHash: false, preloadingStrategy: NoPreloading }),
+    BrowserAnimationsModule,
+    RouterModule.forRoot(routes, {
+      useHash: false,
+      preloadingStrategy: NoPreloading
+    }),
     HttpClientModule,
     FontAwesomeModule,
     NgxWebstorageModule.forRoot({ prefix: 'web', separator: '.' }),
@@ -80,16 +95,29 @@ import { RedirectComponent } from './redirect.component';
       apiKey: environment.GOOGLE_GEO_CODING_API_KEY,
       libraries: ['places']
     }),
+    TranslateModule.forRoot({
+      defaultLanguage: 'en',
+      missingTranslationHandler: {
+        provide: MissingTranslationHandler,
+        useClass: MissingTranslationHelper
+      },
+      loader: {
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [HttpClient]
+      }
+    }),
 
     CoreModule.forRoot(environment),
     DynamicFormModule.forRoot({ metadata: Metadata }),
-    MasterGuideModule
+    MasterGuideModule,
+    UiModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule {
-  constructor() {
+  constructor(library: FaIconLibrary) {
     const icons = [
       faChevronLeft,
       faChevronRight,
@@ -130,8 +158,8 @@ export class AppModule {
       faSortUp,
       faSortDown,
       faDotCircle
-    ]
+    ];
 
-    library.add(...icons);
+    library.addIcons(...icons);
   }
 }

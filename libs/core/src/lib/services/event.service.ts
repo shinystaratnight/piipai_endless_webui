@@ -1,13 +1,15 @@
 import { Subject } from 'rxjs';
+import { Injectable } from '@angular/core';
 
 export enum EventType {
   PurposeChanged,
   Logout,
   RoleChanged,
   CalendarJobSelected,
-  RefreshCalendar
+  RefreshCalendar,
 }
 
+@Injectable()
 export class EventService {
   get event$() {
     return this.event.asObservable();

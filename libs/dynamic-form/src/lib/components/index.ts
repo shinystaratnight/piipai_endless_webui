@@ -7,6 +7,7 @@ import { TestGeneratorComponent } from './test-generator/test-generator.componen
 import { TestListComponent } from './test-list/test-list.component';
 import { TimeTrackingComponent } from './time-tracking/time-tracking.component';
 import { SignatureComponent } from './signature/signature.component';
+import { ImageUploaderComponent } from './image-uploader/image-uploader.component';
 
 // Filters
 import {
@@ -16,7 +17,8 @@ import {
   FilterMultipleComponent,
   FilterRangeComponent,
   FilterRelatedComponent,
-  FilterSelectComponent
+  FilterSelectComponent,
+  FilterHeaderComponent
 } from './filter-elements';
 
 // Form elements
@@ -78,6 +80,7 @@ export * from './action-element/action-element.component';
 export * from './webcam/webcam.component';
 export * from './workflow/workflow.component';
 export * from './test-generator/test-generator.component';
+export * from './image-uploader/image-uploader.component';
 
 export * from './filter-elements';
 export * from './form-elements';
@@ -90,6 +93,7 @@ export const entryComponents = [
   FilterRangeComponent,
   FilterRelatedComponent,
   FilterSelectComponent,
+  FilterHeaderComponent,
 
   FormButtonComponent,
   FormCheckboxComponent,
@@ -145,6 +149,7 @@ export const components = [
   TestGeneratorComponent,
   FormElementViewComponent,
   DropdownComponent,
+  ImageUploaderComponent,
 
   SortIconComponent,
 

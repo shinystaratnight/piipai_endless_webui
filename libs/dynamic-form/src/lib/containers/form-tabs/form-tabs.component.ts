@@ -53,18 +53,18 @@ export class FormTabsComponent implements OnInit, OnDestroy {
       this.formService.getAllowedMethods(this.formId).indexOf('update') > -1 &&
       this.config.editForm; //tslint:disable-line
 
-    this.config.children.forEach(tab => {
+    this.config.children.forEach((tab) => {
       this.checkCustomLabel(tab);
     });
 
     if (this.form) {
-      this.modeSubscription = this.form.mode.subscribe(mode => {
+      this.modeSubscription = this.form.mode.subscribe((mode) => {
         this.mode = mode;
 
         this.cd.markForCheck();
       });
 
-      this.saveSubscription = this.form.saveProcess.subscribe(saving => {
+      this.saveSubscription = this.form.saveProcess.subscribe((saving) => {
         this.saving = saving;
       });
     }
@@ -119,5 +119,9 @@ export class FormTabsComponent implements OnInit, OnDestroy {
       this.formService.getForm(this.formId).hideEditButton ||
       this.config.hideEditButton
     );
+  }
+
+  public getTranslateKey(key, type) {
+    return `tabs.${key}.${type}`;
   }
 }

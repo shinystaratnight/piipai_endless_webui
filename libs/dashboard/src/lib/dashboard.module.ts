@@ -4,8 +4,10 @@ import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { DragDropModule } from '@angular/cdk/drag-drop';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { library } from '@fortawesome/fontawesome-svg-core';
+import {
+  FontAwesomeModule,
+  FaIconLibrary
+} from '@fortawesome/angular-fontawesome';
 import {
   faEllipsisH,
   faArrowsAlt,
@@ -14,9 +16,10 @@ import {
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
-import { SharedModule } from '@webui/shared';
+// import { SharedModule } from '@webui/shared';
 import { CalendarModule } from '@webui/calendar';
 import { DynamicFormModule } from '@webui/dynamic-form';
+import { UiModule } from '@webui/ui';
 
 import { DashboardService, WidgetService } from './services';
 import {
@@ -34,14 +37,15 @@ import { DashboardComponent } from './dashboard.component';
     RouterModule,
     FontAwesomeModule,
     InfiniteScrollModule,
-    SharedModule,
+    // SharedModule,
     CalendarModule,
     DynamicFormModule,
     NgbTooltipModule,
     FormsModule,
     NgbModalModule,
     DragDropModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    UiModule
   ],
   declarations: [
     DashboardComponent,
@@ -56,7 +60,7 @@ import { DashboardComponent } from './dashboard.component';
   exports: [DashboardComponent]
 })
 export class DashboardModule {
-  constructor() {
-    library.add(faEllipsisH, faArrowsAlt, faTrash);
+  constructor(library: FaIconLibrary) {
+    library.addIcons(faEllipsisH, faArrowsAlt, faTrash);
   }
 }

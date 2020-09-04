@@ -13,7 +13,7 @@ import {
   SiteSettingsService,
   CompanyPurposeService,
   EventService,
-  EventType
+  EventType,
 } from '@webui/core';
 import { PageData, User, Role } from '@webui/data';
 import { GenericFormService, FormMode } from '@webui/dynamic-form';
@@ -24,7 +24,7 @@ import { Endpoints } from '@webui/data';
 @Component({
   selector: 'app-site',
   templateUrl: './site.component.html',
-  styleUrls: ['./site.component.scss']
+  styleUrls: ['./site.component.scss'],
 })
 export class SiteComponent implements OnInit, OnDestroy {
   public pageData: PageData;
@@ -42,7 +42,7 @@ export class SiteComponent implements OnInit, OnDestroy {
     paginated: 'off',
     supportData: 'job',
     metaType: true,
-    actions: true
+    actions: true,
   };
   public FormMode = FormMode;
 
@@ -75,11 +75,7 @@ export class SiteComponent implements OnInit, OnDestroy {
 
   public modalRef: NgbModalRef;
 
-  public mobileDesign = [
-    '/hr/timesheets/approved/',
-    '/hr/timesheets/history/',
-    '/hr/timesheets/unapproved/'
-  ];
+  public mobileDesign = ['/hr/timesheets/approved/', '/hr/timesheets/history/', '/hr/timesheets/unapproved/'];
 
   public loader: boolean;
 
@@ -101,8 +97,8 @@ export class SiteComponent implements OnInit, OnDestroy {
     return `Back to ${this.listName.toLocaleLowerCase()} list`;
   }
 
-  @ViewChild('modal', { static: false }) public modal;
-  @ViewChild('forgotPassword', { static: false }) public forgotPasswordModal;
+  @ViewChild('modal') public modal;
+  @ViewChild('forgotPassword') public forgotPasswordModal;
 
   constructor(
     private router: Router,
@@ -124,9 +120,7 @@ export class SiteComponent implements OnInit, OnDestroy {
     this.loadScript();
     this.user = this.userService.user;
     this.currentRole = this.user.currentRole;
-    this.changePasswordEndpoint = `${Endpoints.Contact}${
-      this.user.data.contact.id
-    }/change_password/`;
+    this.changePasswordEndpoint = `${Endpoints.Contact}${this.user.data.contact.id}/change_password/`;
     this.updateJiraTask(this.user.currentRole);
 
     this.route.url.subscribe((url: any) => {
@@ -157,7 +151,7 @@ export class SiteComponent implements OnInit, OnDestroy {
       this.modalRef.close();
     }
 
-    this.subscriptions.forEach(sub => sub.unsubscribe());
+    this.subscriptions.forEach((sub) => sub.unsubscribe());
   }
 
   public loadScript() {
@@ -192,72 +186,55 @@ export class SiteComponent implements OnInit, OnDestroy {
   }
 
   public getPageData(url) {
-    this.siteService
-      .getDataOfPage(url, this.pagesList)
-      .subscribe((pageData: PageData) => {
-        if (pageData.endpoint === '/core/workflownodes/') {
-          this.additionalData = {
-            company: {
-              action: 'add',
-              data: {
-                value: {
-                  id: this.siteSettingsService.settings.company_settings.company
-                }
-              }
-            }
-          };
-          this.pageData = pageData;
-          this.permissionMethods = this.permission.getAllowMethods(
-            undefined,
-            pageData.endpoint
-          );
-        } else if (this.isProfilePage(pageData)) {
-          pageData.pathData.id = this.user.data.contact.candidate_contact;
-          pageData.endpoint = '/candidate/candidatecontacts/';
-          this.formMode = FormMode.View;
-          this.pageData = pageData;
-          this.permissionMethods = this.permission.getAllowMethods(
-            undefined,
-            pageData.endpoint
-          );
-        } else if (
-          pageData.endpoint === '/' &&
-          pageData.pathData.path !== '/'
-        ) {
-          setTimeout(() => {
-            this.ts.sendMessage('Page not found!', MessageType.error);
-          }, 2000);
+    this.siteService.getDataOfPage(url, this.pagesList).subscribe((pageData: PageData) => {
+      if (pageData.endpoint === '/core/workflownodes/') {
+        this.additionalData = {
+          company: {
+            action: 'add',
+            data: {
+              value: {
+                id: this.siteSettingsService.settings.company_settings.company,
+              },
+            },
+          },
+        };
+        this.pageData = pageData;
+        this.permissionMethods = this.permission.getAllowMethods(undefined, pageData.endpoint);
+      } else if (this.isProfilePage(pageData)) {
+        pageData.pathData.id = this.user.data.contact.candidate_contact;
+        pageData.endpoint = '/candidate/candidatecontacts/';
+        this.formMode = FormMode.View;
+        this.pageData = pageData;
+        this.permissionMethods = this.permission.getAllowMethods(undefined, pageData.endpoint);
+      } else if (pageData.endpoint === '/' && pageData.pathData.path !== '/') {
+        setTimeout(() => {
+          this.ts.sendMessage('Page not found!', MessageType.error);
+        }, 2000);
 
-          this.router.navigate(['']);
-          return;
-        } else {
-          setTimeout(() => {
-            this.pageData = pageData;
-            if (
-              pageData.pathData.id &&
-              this.endpointWithoutViewMode.indexOf(pageData.endpoint) === -1
-            ) {
-              this.formMode = FormMode.View;
-            }
-            if (isClient()) {
-              this.permissionMethods = ['delete', 'get', 'post', 'update'];
-            } else {
-              this.permissionMethods = this.permission.getAllowMethods(
-                undefined,
-                pageData.endpoint
-              );
-            }
-            if (pageData.endpoint === '/core/formstorages/') {
-              this.formStorage = true;
-            } else {
-              this.formStorage = false;
-            }
-          }, 0);
-        }
-        this.setActivePage(this.pagesList, pageData.pathData.path);
+        this.router.navigate(['']);
+        return;
+      } else {
+        setTimeout(() => {
+          this.pageData = pageData;
+          if (pageData.pathData.id && this.endpointWithoutViewMode.indexOf(pageData.endpoint) === -1) {
+            this.formMode = FormMode.View;
+          }
+          if (isClient()) {
+            this.permissionMethods = ['delete', 'get', 'post', 'update'];
+          } else {
+            this.permissionMethods = this.permission.getAllowMethods(undefined, pageData.endpoint);
+          }
+          if (pageData.endpoint === '/core/formstorages/') {
+            this.formStorage = true;
+          } else {
+            this.formStorage = false;
+          }
+        }, 0);
+      }
+      this.setActivePage(this.pagesList, pageData.pathData.path);
 
-        this.getNameOfList(pageData);
-      });
+      this.getNameOfList(pageData);
+    });
   }
 
   public getNameOfList(pageData: PageData) {
@@ -267,7 +244,7 @@ export class SiteComponent implements OnInit, OnDestroy {
         return;
       }
 
-      this.genericFormService.getMetadata(pageData.endpoint).subscribe(list => {
+      this.genericFormService.getMetadata(pageData.endpoint).subscribe((list) => {
         if (list && list.list && list.list.label) {
           this.listName = list.list.label;
           this.listNameCache[pageData.endpoint] = list.list.label;
@@ -367,19 +344,13 @@ export class SiteComponent implements OnInit, OnDestroy {
     }
     if (e.type === 'sendForm' && e.status === 'success') {
       if (this.pageData.pathData.postfix === 'submit') {
-        this.router.navigate([
-          '/' + this.authService.getRedirectUrl() + this.pageData.pathData.path
-        ]);
+        this.router.navigate(['/' + this.authService.getRedirectUrl() + this.pageData.pathData.path]);
         this.saveProcess = false;
         return;
       }
       if (!this.pageData.pathData.id) {
         this.router.navigate([
-          '/' +
-            this.authService.getRedirectUrl() +
-            this.pageData.pathData.path +
-            e.data.id +
-            '/change'
+          '/' + this.authService.getRedirectUrl() + this.pageData.pathData.path + e.data.id + '/change',
         ]);
         this.saveProcess = false;
         return;
@@ -402,20 +373,15 @@ export class SiteComponent implements OnInit, OnDestroy {
   }
 
   public deleteElement(element) {
-    this.genericFormService
-      .delete(element.endpoint, element.pathData.id)
-      .subscribe(
-        (res: any) =>
-          this.router.navigate([
-            '/' + this.authService.getRedirectUrl() + element.pathData.path
-          ]),
-        (err: any) => {
-          if (err.status === 'error') {
-            this.ts.sendMessage(err.errors.error, MessageType.error);
-          }
-          this.errors = err.errors;
+    this.genericFormService.delete(element.endpoint, element.pathData.id).subscribe(
+      (res: any) => this.router.navigate(['/' + this.authService.getRedirectUrl() + element.pathData.path]),
+      (err: any) => {
+        if (err.status === 'error') {
+          this.ts.sendMessage(err.errors.error, MessageType.error);
         }
-      );
+        this.errors = err.errors;
+      }
+    );
   }
 
   public updateNavigation(e) {
@@ -427,26 +393,19 @@ export class SiteComponent implements OnInit, OnDestroy {
   }
 
   public approveFormStorage(element) {
-    const endpoint = `${this.formStorageEndpoint}${
-      element.pathData.id
-    }/approve/`;
+    const endpoint = `${this.formStorageEndpoint}${element.pathData.id}/approve/`;
     const body = {
-      status: 'True'
+      status: 'True',
     };
-    this.genericFormService
-      .submitForm(endpoint, body)
-      .subscribe(
-        (res: any) =>
-          this.router.navigate([
-            '/' + this.authService.getRedirectUrl() + element.pathData.path
-          ]),
-        (err: any) => (this.error = err)
-      );
+    this.genericFormService.submitForm(endpoint, body).subscribe(
+      (res: any) => this.router.navigate(['/' + this.authService.getRedirectUrl() + element.pathData.path]),
+      (err: any) => (this.error = err)
+    );
   }
 
   public setActivePage(pages, path) {
     let active = false;
-    pages.forEach(page => {
+    pages.forEach((page) => {
       if (path === page.url && page.url !== '/') {
         active = true;
         page.active = true;
@@ -471,7 +430,7 @@ export class SiteComponent implements OnInit, OnDestroy {
   }
 
   public openChangePassword() {
-    this.modalRef = this.modalService.open(this.modal, {backdrop: 'static'});
+    this.modalRef = this.modalService.open(this.modal, { backdrop: 'static' });
   }
 
   public openResetForm() {
@@ -481,12 +440,12 @@ export class SiteComponent implements OnInit, OnDestroy {
         action: 'add',
         data: {
           value: this.user.data.contact.email,
-          read_only: true
-        }
-      }
+          read_only: true,
+        },
+      },
     };
 
-    this.modalRef = this.modalService.open(this.forgotPasswordModal, {backdrop: 'static'});
+    this.modalRef = this.modalService.open(this.forgotPasswordModal, { backdrop: 'static' });
 
     return false;
   }
@@ -498,10 +457,10 @@ export class SiteComponent implements OnInit, OnDestroy {
   }
 
   public checkedObjects(e) {
-    const shifts = e.filters.keys.date.value.filter(el => el.checked);
+    const shifts = e.filters.keys.date.value.filter((el) => el.checked);
     this.data = {
       candidates: e.checkedData,
-      shifts: shifts.map(el => el.data.id)
+      shifts: shifts.map((el) => el.data.id),
     };
   }
 
@@ -512,7 +471,7 @@ export class SiteComponent implements OnInit, OnDestroy {
         this.pageData.pathData.path +
         '/' +
         this.getId(this.pageData.endpoint) +
-        '/change'
+        '/change',
     ]); //tslint:disable-line
 
     return false;
@@ -520,20 +479,18 @@ export class SiteComponent implements OnInit, OnDestroy {
 
   public sendData() {
     if (this.data) {
-      this.genericFormService
-        .submitForm(this.pageData.endpoint, this.data)
-        .subscribe(
-          (res: any) =>
-            this.router.navigate([
+      this.genericFormService.submitForm(this.pageData.endpoint, this.data).subscribe(
+        (res: any) =>
+          this.router.navigate([
+            '/' +
+              this.authService.getRedirectUrl() +
+              this.pageData.pathData.path +
               '/' +
-                this.authService.getRedirectUrl() +
-                this.pageData.pathData.path +
-                '/' +
-                this.getId(this.pageData.endpoint) +
-                '/change'
-            ]), //tslint:disable-line
-          (err: any) => (this.error = err)
-        );
+              this.getId(this.pageData.endpoint) +
+              '/change',
+          ]), //tslint:disable-line
+        (err: any) => (this.error = err)
+      );
     }
   }
 
@@ -545,30 +502,19 @@ export class SiteComponent implements OnInit, OnDestroy {
 
   public identifyDevice() {
     if (this.pageData) {
-      if (
-        this.user.currentRole.__str__.includes('client') &&
-        this.pageData.pathData.path === '/'
-      ) {
+      if (this.user.currentRole.__str__.includes('client') && this.pageData.pathData.path === '/') {
         return isMobile();
       }
     }
   }
 
   public permissionErrorHandler() {
-    const path =
-      (this.pageData &&
-        this.pageData.pathData &&
-        this.pageData.pathData.path) ||
-      '';
+    const path = (this.pageData && this.pageData.pathData && this.pageData.pathData.path) || '';
     this.router.navigate(['/' + this.authService.getRedirectUrl() + path]);
   }
 
   public showDeleteButton() {
-    return (
-      this.pageData.pathData.id &&
-      this.checkPermission('delete') &&
-      !this.isProfilePage(this.pageData)
-    );
+    return this.pageData.pathData.id && this.checkPermission('delete') && !this.isProfilePage(this.pageData);
   }
 
   public isProfilePage(page: PageData) {

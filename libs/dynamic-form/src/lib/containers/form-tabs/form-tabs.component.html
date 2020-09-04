@@ -7,8 +7,8 @@
       <ngb-tab
         [id]="'ngb-tab-' + i"
         *ngIf="!field.hide && (!config.editForm ? field.main : true)"
-        [title]="
-          field.name || (field.templateOptions && field.templateOptions.label)
+        title="
+          {{ getTranslateKey(field.translateKey, 'name') | translate: {'Default': field.name || (field.templateOptions && field.templateOptions.label) } }}
         "
       >
         <ng-template ngbTabContent>
@@ -16,7 +16,7 @@
             class="label"
             *ngIf="field.main && !isMobileDevice && !config.notEdit"
           >
-            {{ field.label }}
+            {{ getTranslateKey(field.translateKey, 'label') | translate: {"Default": field.label} }}
             <button
               type="button"
               class="btn edit-mode"
@@ -24,7 +24,7 @@
               (click)="changeMode('edit')"
             >
               <fa-icon icon="pencil-alt"></fa-icon>
-              Edit mode
+              {{'edit_mode' | translate: {"Default": "Edit mode"} }}
             </button>
 
             <button
@@ -33,7 +33,7 @@
               *ngIf="mode === 'edit'"
               (click)="changeMode('view')"
             >
-              Close without save
+              {{ 'close_without_save' | translate: {"Default": "Close without save"} }}
             </button>
 
             <button
@@ -43,7 +43,7 @@
               *ngIf="mode === 'edit' || !config.editForm"
               [disabled]="form && form.disableSaveButton"
             >
-              {{ mode !== 'edit' ? 'Save' : 'Save changes' }}
+              {{ mode !== 'edit' ? ('save' | translate: {"Default": "Save"}) : ('save_changes' | translate: {"Default": "Save changes"}) }}
               <app-spinner *ngIf="saving"></app-spinner>
             </button>
           </div>

@@ -19,21 +19,22 @@ export class FilterSelectComponent implements OnInit, OnDestroy {
   public config: any;
   public data: string;
   public query: string;
-  public isCollapsed = true;
+  // public isCollapsed = true;
   public options: any;
-  public icons = {
-    r3sourcer: {
-      true: 'chevron-right',
-      false: 'chevron-down'
-    },
-    default: {
-      true: 'eye',
-      false: 'eye-slash'
-    }
-  };
-  public theme: string;
+  // public icons = {
+  //   r3sourcer: {
+  //     true: 'chevron-right',
+  //     false: 'chevron-down'
+  //   },
+  //   default: {
+  //     true: 'eye',
+  //     false: 'eye-slash'
+  //   }
+  // };
+  // public theme: string;
   public filterSubscription: Subscription;
   public querySubscription: Subscription;
+  // translationKey = '';
 
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
@@ -48,13 +49,13 @@ export class FilterSelectComponent implements OnInit, OnDestroy {
     this.options = this.config.options.sort((p, n) =>
       p.label > n.label ? 1 : -1
     );
-    this.isCollapsed =
-      this.query || document.body.classList.contains('r3sourcer')
-        ? false
-        : true;
-    this.theme = document.body.classList.contains('r3sourcer')
-      ? 'r3sourcer'
-      : 'default';
+    // this.isCollapsed =
+    //   this.query || document.body.classList.contains('r3sourcer')
+    //     ? false
+    //     : true;
+    // this.theme = document.body.classList.contains('r3sourcer')
+    //   ? 'r3sourcer'
+    //   : 'default';
     this.data = this.config.default || '';
     this.querySubscription = this.route.queryParams.subscribe(() => {
       setTimeout(() => {
@@ -66,6 +67,8 @@ export class FilterSelectComponent implements OnInit, OnDestroy {
     this.filterSubscription = this.fs.reset.subscribe(() =>
       this.updateFilter()
     );
+
+    // this.translationKey = `filter.${this.config.key}`;
   }
 
   public ngOnDestroy() {
@@ -102,7 +105,7 @@ export class FilterSelectComponent implements OnInit, OnDestroy {
     this.query = query;
     const value = query.split('=')[1];
     const existValue = this.config.options.find(
-      el => el.value + '' === value + ''
+      (el) => el.value + '' === value + ''
     );
     if (existValue) {
       this.data = existValue.value;
@@ -129,5 +132,9 @@ export class FilterSelectComponent implements OnInit, OnDestroy {
     this.query = '';
     this.fs.generateQuery('', this.config.key, this.config.listName);
     this.changeQuery();
+  }
+
+  public getTranslateKey(type: string): string {
+    return `filter.${this.config.key}.${type}`;
   }
 }

@@ -1,4 +1,11 @@
-import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  Output,
+  EventEmitter,
+  OnDestroy,
+} from '@angular/core';
 import { Router } from '@angular/router';
 import { FormGroup } from '@angular/forms';
 import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -14,10 +21,9 @@ import { PassTestModalComponent, PassTestModalConfig } from '../../modals';
 @Component({
   selector: 'app-form-builder-form',
   templateUrl: './form-builder-form.component.html',
-  styleUrls: ['./form-builder-form.component.scss']
+  styleUrls: ['./form-builder-form.component.scss'],
 })
 export class FormBuilderFormComponent implements OnInit, OnDestroy {
-
   @Input() public id: string;
   @Input() public companyId: string;
   @Input() public config: any;
@@ -31,7 +37,7 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
   public hiddenFields: HiddenFields = {
     elements: [],
     keys: [],
-    observers: []
+    observers: [],
   };
   public process: boolean;
 
@@ -53,12 +59,12 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
       type: 'related',
       values: ['__str__', 'id', 'translations']
     },
-    query: {}
+    query: {},
   };
 
   public steps = [
     {
-      title: 'Contact information',
+      title: 'contact_information',
       metadata: [],
       content: [
         'contact.picture',
@@ -77,7 +83,7 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
       ],
     },
     {
-      title: 'Additional information',
+      title: 'additional_information',
       metadata: [],
       content: [
         'nationality',
@@ -88,7 +94,7 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
       ],
     },
     {
-      title: 'Bank and superannuation informatioin',
+      title: 'bank_and_superannuation_informatioin',
       metadata: [],
       content: [
         'bank_account.bank_name',
@@ -96,17 +102,14 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
         'bank_account.bsb',
         'bank_account.account_number',
         'superannuation_fund',
-        'superannuation_membership_number'
+        'superannuation_membership_number',
       ],
     },
     {
-      title: 'Industry and skills',
+      title: 'industry_and_skills',
       metadata: [],
-      content: [
-        'industry',
-        'skill'
-      ]
-    }
+      content: ['industry', 'skill'],
+    },
   ];
 
   constructor(
@@ -114,7 +117,7 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
     private router: Router,
     private toastr: ToastService,
     private modalService: NgbModal
-  ) { }
+  ) {}
 
   public ngOnInit() {
     this.form = new FormGroup({});
@@ -124,7 +127,7 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
     });
 
     this.industyField.query = {
-      company: this.companyId
+      company: this.companyId,
     };
 
     this.getRenderData();
@@ -161,12 +164,11 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
 
             step.metadata.push({
               type: 'row',
-              children: metadata
+              children: metadata,
             });
           }
         } else {
           const field = getElementFromMetadata(this.config.ui_config, key);
-
 
           if (field) {
             if (key === 'superannuation_membership_number') {
@@ -204,32 +206,30 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
   }
 
   public getRenderData() {
-    this.service.getRenderData(this.id)
-      .subscribe((res: any) => {
-        this.updatePhoneField(res.ui_config);
-        this.updateConfigByGroups(res.ui_config, res.tests || []);
+    this.service.getRenderData(this.id).subscribe((res: any) => {
+      this.updatePhoneField(res.ui_config);
+      this.updateConfigByGroups(res.ui_config, res.tests || []);
 
-        this.config = res;
-        this.formConfig.emit(res);
+      this.config = res;
+      this.formConfig.emit(res);
 
-        this.updateConfig(this.config.ui_config);
-        this.addAutocompleteProperty(this.config.ui_config);
+      this.updateConfig(this.config.ui_config);
+      this.addAutocompleteProperty(this.config.ui_config);
 
-        this.changeType('contact.title', 'radio');
-        this.changeType('contact.gender', 'radio');
-        this.changeType('transportation_to_work', 'radio');
+      this.changeType('contact.title', 'radio');
+      this.changeType('contact.gender', 'radio');
+      this.changeType('transportation_to_work', 'radio');
 
-        this.generateSteps();
-
-      });
+      this.generateSteps();
+    });
   }
 
   updatePhoneField(fields: any[]) {
-    fields.forEach(el => {
+    fields.forEach((el) => {
       if (el.key === 'contact.phone_mobile') {
         el.intl = true;
       }
-    })
+    });
   }
 
   back() {
@@ -239,7 +239,7 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
 
       setTimeout(() => {
         this.process = false;
-      }, 1000)
+      }, 1000);
     }
   }
 
@@ -260,7 +260,7 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
   }
 
   public eventHandler(event: any) {
-    const { type, item, list, el, value }  = event;
+    const { type, item, list, el, value } = event;
 
     if (type === 'blur') {
       ['email', 'phone'].forEach((field) => {
@@ -293,17 +293,22 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
 
       passTestAction.subscribe((index) => {
         const test = tests[index];
-        this.modalRef = this.modalService.open(PassTestModalComponent, {backdrop: 'static'});
+        this.modalRef = this.modalService.open(PassTestModalComponent, {
+          backdrop: 'static',
+        });
         this.modalRef.componentInstance.config = {
           test,
           description: test.description,
-          send: false
+          send: false,
         } as PassTestModalConfig;
 
         this.modalRef.result
           .then((res: any[]) => {
             if (this.passedTests.has(item.id)) {
-              this.passedTests.set(item.id, [...this.passedTests.get(item.id), ...res]);
+              this.passedTests.set(item.id, [
+                ...this.passedTests.get(item.id),
+                ...res,
+              ]);
             } else {
               this.passedTests.set(item.id, res);
             }
@@ -333,35 +338,36 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
           tests.push(...el);
         }
       });
-      body = {...this.form.value, tests };
+      body = { ...this.form.value, tests };
     } else {
       body = this.form.value;
     }
 
-    this.service.sendFormData(this.id, body)
-      .subscribe(
-        (res: any) => {
-          this.saveProcess = false;
-          this.toastr.sendMessage(this.config.submit_message, 'success');
-          this.router.navigate(['/login']);
-        },
-        (err: any) => {
-          this.parseError(err.errors);
-          this.saveProcess = false;
-         }
-      );
+    this.service.sendFormData(this.id, body).subscribe(
+      (res: any) => {
+        this.saveProcess = false;
+        this.toastr.sendMessage(this.config.submit_message, 'success');
+        this.router.navigate(['/login']);
+      },
+      (err: any) => {
+        this.parseError(err.errors);
+        this.saveProcess = false;
+      }
+    );
   }
 
   public parseAddress(data, el) {
-    this.service.parseAddress(data)
-      .subscribe(
-        (res) => {
-          this.parseError({ [el.key]: [] });
-          el.autocompleteData.next(res);
-        },
-        (err: any) => {
-          this.parseError(Object.assign({}, this.error, { [el.key]: err.errors }));
-        });
+    this.service.parseAddress(data).subscribe(
+      (res) => {
+        this.parseError({ [el.key]: [] });
+        el.autocompleteData.next(res);
+      },
+      (err: any) => {
+        this.parseError(
+          Object.assign({}, this.error, { [el.key]: err.errors })
+        );
+      }
+    );
   }
 
   public parseError(errors) {
@@ -420,14 +426,14 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
 
     if (streetAddress) {
       streetAddress.updateFormData = true;
-      streetAddress.formData = new BehaviorSubject({data: {}});
+      streetAddress.formData = new BehaviorSubject({ data: {} });
       config.forEach((field) => {
         if (
           field.key &&
           (field.key.includes('postal_code') ||
-          field.key.includes('state') ||
-          field.key.includes('country') ||
-          field.key.includes('city'))
+            field.key.includes('state') ||
+            field.key.includes('country') ||
+            field.key.includes('city'))
         ) {
           field.showIf = [streetAddress.key];
           field.mode = new BehaviorSubject('view');
@@ -439,8 +445,10 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
           if (this.hiddenFields.keys.indexOf(field.key) === -1) {
             this.hiddenFields.keys.push(field.key);
             this.hiddenFields.elements.push(field);
-            this.hiddenFields.observers =
-              this.observeFields(field.showIf, this.hiddenFields.observers);
+            this.hiddenFields.observers = this.observeFields(
+              field.showIf,
+              this.hiddenFields.observers
+            );
             field.hidden = new BehaviorSubject(true);
           }
         }
@@ -475,7 +483,12 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
     return observers;
   }
 
-  public getFields(result: Field[], key: string, target: Field[], index: number): Field[] {
+  public getFields(
+    result: Field[],
+    key: string,
+    target: Field[],
+    index: number
+  ): Field[] {
     if (index === target.length) {
       return result;
     }
@@ -491,7 +504,11 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
     return this.getFields(result, key, target, index);
   }
 
-  public updateSkillField(field: Field, formData: BehaviorSubject<any>, tests: any[]): Field {
+  public updateSkillField(
+    field: Field,
+    formData: BehaviorSubject<any>,
+    tests: any[]
+  ): Field {
     return {
       ...field,
       query: {
@@ -515,11 +532,16 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
         this.disableNextButton = false;
       },
       (err) => {
-        this.updateErrors(this.error, {
-          [field]: err.errors.message
-        }, {});
+        this.updateErrors(
+          this.error,
+          {
+            [field]: err.errors.message,
+          },
+          {}
+        );
         this.disableNextButton = true;
-      });
+      }
+    );
   }
 
   public validateForm(step: number) {
@@ -529,7 +551,8 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
     fields.forEach((key) => {
       if (Array.isArray(key)) {
         key.forEach((field) => {
-          result = (this.form.get(field) && this.form.get(field).invalid) || result;
+          result =
+            (this.form.get(field) && this.form.get(field).invalid) || result;
         });
       } else {
         result = (this.form.get(key) && this.form.get(key).invalid) || result;

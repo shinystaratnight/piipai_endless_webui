@@ -9,14 +9,14 @@ import {
   HostListener,
   ViewEncapsulation,
   OnDestroy,
-  ChangeDetectorRef
+  ChangeDetectorRef,
 } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 
 import {
   SearchCountryField,
   TooltipLabel,
-  CountryISO
+  CountryISO,
 } from 'ngx-intl-tel-input';
 
 import { Subscription } from 'rxjs';
@@ -33,7 +33,7 @@ import { formatCurrency, getCurrencySymbol } from '@angular/common';
   selector: 'app-form-input',
   templateUrl: './form-input.component.html',
   styleUrls: ['./form-input.component.scss'],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
 })
 export class FormInputComponent extends BasicElementComponent
   implements OnInit, AfterViewInit, OnDestroy {
@@ -71,7 +71,7 @@ export class FormInputComponent extends BasicElementComponent
     CountryISO.Australia,
     CountryISO.Estonia,
     CountryISO.Finland,
-    CountryISO.Ukraine
+    CountryISO.Ukraine,
   ];
   selectedCountryISO: CountryISO;
 
@@ -81,7 +81,7 @@ export class FormInputComponent extends BasicElementComponent
     2: '#fc9183',
     3: '#FFA236',
     4: '#ffbf00',
-    5: '#FFD042'
+    5: '#FFD042',
   };
 
   public requiredField: boolean;
@@ -103,7 +103,7 @@ export class FormInputComponent extends BasicElementComponent
     );
   }
 
-  @ViewChild('input', { static: false })
+  @ViewChild('input')
   public input;
 
   @Output()
@@ -115,7 +115,7 @@ export class FormInputComponent extends BasicElementComponent
     private fb: FormBuilder,
     public elementRef: ElementRef,
     private cd: ChangeDetectorRef,
-    private siteSettings: SiteSettingsService
+    private siteSettings: SiteSettingsService,
   ) {
     super();
     this.subscriptions = [];
@@ -126,7 +126,8 @@ export class FormInputComponent extends BasicElementComponent
   public ngOnInit() {
     if (
       this.config.type !== 'static' ||
-      (this.config.type === 'static' || !this.config.read_only)
+      this.config.type === 'static' ||
+      !this.config.read_only
     ) {
       this.requiredField =
         (this.config.key === 'score' || this.config.key === 'hourly_rate') &&
@@ -146,11 +147,11 @@ export class FormInputComponent extends BasicElementComponent
         );
 
         this.subscriptions.push(
-          this.group.get(this.key).valueChanges.subscribe(value => {
+          this.group.get(this.key).valueChanges.subscribe((value) => {
             if (value) {
               this.group.get(this.key).patchValue(parseFloat(value), {
                 onlySelf: true,
-                emitEvent: false
+                emitEvent: false,
               });
             }
           })
@@ -163,10 +164,7 @@ export class FormInputComponent extends BasicElementComponent
       this.subscriptions.push(
         this.group
           .get(this.key)
-          .valueChanges.pipe(
-            distinctUntilChanged(),
-            debounceTime(400)
-          )
+          .valueChanges.pipe(distinctUntilChanged(), debounceTime(400))
           .subscribe(() => {
             this.eventHandler({ type: 'blur' });
           })
@@ -192,19 +190,25 @@ export class FormInputComponent extends BasicElementComponent
     }
 
     if (this.config.templateOptions.icon) {
-      const currency = getCurrencySymbol(this.siteSettings.settings.currency, 'wide');
+      const currency = getCurrencySymbol(
+        this.siteSettings.settings.currency,
+        'wide'
+      );
 
-      this.config.templateOptions.icon = FormatString.format(this.config.templateOptions.icon, { currency })
+      this.config.templateOptions.icon = FormatString.format(
+        this.config.templateOptions.icon,
+        { currency }
+      );
     }
   }
 
   public ngOnDestroy() {
-    this.subscriptions.forEach(s => s && s.unsubscribe());
+    this.subscriptions.forEach((s) => s && s.unsubscribe());
   }
 
   public checkFormData() {
     if (this.config.formData) {
-      const subscription = this.config.formData.subscribe(data => {
+      const subscription = this.config.formData.subscribe((data) => {
         this.formData = data.data;
         this.checkTimesheetTime(data);
         this.checkTotalTime(data.data);
@@ -228,7 +232,7 @@ export class FormInputComponent extends BasicElementComponent
 
       this.displayValue = formatString.format('{totalTime}', {
         ...newData,
-        totalTime: getTotalTime(this.timeInstance, newData)
+        totalTime: getTotalTime(this.timeInstance, newData),
       });
     }
   }
@@ -238,7 +242,7 @@ export class FormInputComponent extends BasicElementComponent
       const formatString = new FormatString();
       const attributes = Object.keys(this.config.attributes);
 
-      attributes.forEach(key => {
+      attributes.forEach((key) => {
         this.config.templateOptions[key] = formatString.format(
           this.config.attributes[key],
           this.formData
@@ -258,7 +262,7 @@ export class FormInputComponent extends BasicElementComponent
       'shift_started_at',
       'shift_ended_at',
       'break_started_at',
-      'break_ended_at'
+      'break_ended_at',
     ];
 
     if (keys.indexOf(data.key) > -1) {
@@ -318,7 +322,7 @@ export class FormInputComponent extends BasicElementComponent
       (this.config.type !== 'static' ||
         (this.config.type === 'static' && !this.config.read_only))
     ) {
-      const subscription = this.config.hidden.subscribe(hide => {
+      const subscription = this.config.hidden.subscribe((hide) => {
         if (hide) {
           this.config.hide = hide;
           this.group.get(this.key).patchValue(undefined);
@@ -338,7 +342,7 @@ export class FormInputComponent extends BasicElementComponent
 
   public checkModeProperty() {
     if (this.config && this.config.mode) {
-      const subscription = this.config.mode.subscribe(mode => {
+      const subscription = this.config.mode.subscribe((mode) => {
         if (mode === 'view') {
           this.viewMode = true;
           this.editMode = false;
@@ -369,13 +373,13 @@ export class FormInputComponent extends BasicElementComponent
 
   public checkAutocomplete() {
     if (this.config.autocompleteData) {
-      const subscription = this.config.autocompleteData.subscribe(data => {
+      const subscription = this.config.autocompleteData.subscribe((data) => {
         const key = this.propertyMatches(Object.keys(data), this.config.key);
         if (
           key &&
-          (this.config.type !== 'address' &&
-            this.config.key !== 'address' &&
-            !this.config.key.includes('street_address'))
+          this.config.type !== 'address' &&
+          this.config.key !== 'address' &&
+          !this.config.key.includes('street_address')
         ) {
           this.viewMode = true;
           this.autocompleteValue = data[key] || '-';
@@ -392,7 +396,7 @@ export class FormInputComponent extends BasicElementComponent
   }
 
   public propertyMatches(keys: string[], key: string): string {
-    return keys.find(el => key.includes(el));
+    return keys.find((el) => key.includes(el));
   }
 
   public setInitValue(update?: boolean) {
@@ -456,16 +460,24 @@ export class FormInputComponent extends BasicElementComponent
         ) {
           this.address = value;
         }
-        const currency = getCurrencySymbol(this.siteSettings.settings.currency, 'wide');
+        const currency = getCurrencySymbol(
+          this.siteSettings.settings.currency,
+          'wide'
+        );
         const text = format.format(this.config.templateOptions.text, {
           [this.config.key]: value,
-          currency
+          currency,
         });
         this.displayValue = text || (value || value === 0 ? value : '-');
 
         if (this.config.templateOptions.display) {
           if (this.config.templateOptions.currency) {
-            this.displayValue = formatCurrency(parseFloat(this.displayValue), 'en', getCurrencySymbol(this.siteSettings.settings.currency, 'wide') || 'USD')
+            this.displayValue = formatCurrency(
+              parseFloat(this.displayValue),
+              'en',
+              getCurrencySymbol(this.siteSettings.settings.currency, 'wide') ||
+                'USD'
+            );
           } else {
             this.displayValue = format.format(
               this.config.templateOptions.display.replace(
@@ -482,7 +494,7 @@ export class FormInputComponent extends BasicElementComponent
         this.displayValue = this.config.value.__str__ || '-';
       } else {
         const text = format.format(this.config.templateOptions.text, {
-          [this.config.key]: this.config.value
+          [this.config.key]: this.config.value,
         });
 
         this.displayValue = text || this.config.value || '-';
@@ -508,7 +520,7 @@ export class FormInputComponent extends BasicElementComponent
     this.event.emit({
       type: e.type,
       el: this.config,
-      value: this.group.get(this.key).value
+      value: this.group.get(this.key).value,
     });
   }
 
@@ -519,7 +531,7 @@ export class FormInputComponent extends BasicElementComponent
     const query = this.group.get(key).value;
     if (query !== '') {
       if (this.config.autocomplete) {
-        this.filteredList = this.config.autocomplete.filter(el => {
+        this.filteredList = this.config.autocomplete.filter((el) => {
           return el.name.toLowerCase().indexOf(query.toLowerCase()) > -1;
         });
       }
@@ -585,13 +597,13 @@ export class FormInputComponent extends BasicElementComponent
     this.event.emit({
       type: 'change',
       el: this.config,
-      value: data
+      value: data,
     });
 
     this.event.emit({
       type: 'address',
       el: this.config,
-      value: data
+      value: data,
     });
 
     setTimeout(() => {
@@ -617,6 +629,10 @@ export class FormInputComponent extends BasicElementComponent
       this.intl = number.number;
       this.group.get(this.key).patchValue(internationalNumber);
     }
+  }
+
+  getTranslationKey(type) {
+    return `${this.config.key}.${type}`;
   }
 
   @HostListener('document:click', ['$event'])

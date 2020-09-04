@@ -14,6 +14,7 @@
           <app-back-link
             [label]="this.backToListLabel"
             [path]="pageData.pathData.path"
+            [key]="this.listName + '.back'"
           >
           </app-back-link>
         </ng-container>
@@ -188,8 +189,8 @@
 
           </app-generic-list>
           <div class="buttons mb-5">
-            <button type="button" class="btn btn-secondary" (click)="back()">Cancel</button>
-            <button type="button" class="btn btn-primary pr-3" (click)="sendData()">Fill in</button>
+            <button type="button" class="btn btn-secondary" (click)="back()">{{'cancel' | translate: {"Default": "Cancel"} }}</button>
+            <button type="button" class="btn btn-primary pr-3" (click)="sendData()">{{'fill_in.label' | translate: {"Default": "Fill in"} }}</button>
           </div>
         </div>
       </ng-container>

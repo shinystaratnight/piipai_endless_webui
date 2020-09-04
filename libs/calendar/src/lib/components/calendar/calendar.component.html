@@ -1,12 +1,12 @@
 <div class="widget">
 
   <div class="widget-header calendar-header">
-    <h3 class="widget-name">Calendar</h3>
+    <h3 class="widget-name">{{ 'calendar' | translate: {"Default": "Calendar"} }}</h3>
 
     <div *ngIf="calendarType !== 2" class="btn-group range-buttons" btnRadioGroup [formControl]="currentRange">
-      <label [btnRadio]="range.Month" role="button"  [class.active]="isMonthRange">Month</label>
-      <label [btnRadio]="range.Week" role="button"  [class.active]="isWeekRange">Week</label>
-      <label [btnRadio]="range.Day" role="button"  [class.active]="isDayRange">Day</label>
+      <label [btnRadio]="range.Month" role="button"  [class.active]="isMonthRange">{{ 'month' | translate: {"Default": "Month"} }}</label>
+      <label [btnRadio]="range.Week" role="button"  [class.active]="isWeekRange">{{ 'week' | translate: {"Default": "Week"} }}</label>
+      <label [btnRadio]="range.Day" role="button"  [class.active]="isDayRange">{{ 'day' | translate: {"Default": "Day"} }}</label>
     </div>
 
     <div class="range-title-wrapper">
@@ -33,13 +33,13 @@
       <app-filter-related *ngIf="calendarType === 0" (event)="changeQuery($event)" [config]="filters.candidate"></app-filter-related>
 
       <div class="filter-element" #filter>
-        <label class="filter-label related">Info layers</label>
+        <label class="filter-label related">{{ 'info_layers' | translate: {"Default": "Info layers"} }}</label>
 
         <div class="filter-related">
           <div class="d-flex justify-content-center align-items-center autocomplete-filter" style="position: relative">
             <div class="form-control autocomplete-value"
               (click)="openAutocomplete($event)">
-                <div style="overflow: hidden; white-space: nowrap">{{status.displayValue(status.data)}} layers</div>
+                <div style="overflow: hidden; white-space: nowrap">{{status.displayValue(status.data)}} {{'layers' | translate: {"Default": 'layers'} }}</div>
                 <fa-icon [icon]="['fas', status.hideAutocomplete ? 'chevron-down' : 'chevron-up']" class="text-md-white ml-2"></fa-icon>
             </div>
 
@@ -83,15 +83,15 @@
                   <fa-icon [icon]="['fas', calendarType === 2 ? 'file' : 'circle']" [ngClass]="layer.cssClass" [ngStyle]="{fontSize: calendarType === 2 ? '16px' : '8px'}"></fa-icon>
                   {{layer.count}}
                 </span><br>
-                <span class="count-description">{{layer.text}} / {{currentRange.value}}</span>
+                <span class="count-description">{{layer.text | lowercase | translate}} / {{currentRange.value | translate}}</span>
             </div>
           </ng-container>
         </div>
 
         <ng-container *ngIf="(isManager() || canClientCreateJob()) && hasSelectedDates && calendarData">
-          <span class="f-size-12 hov-opacity ml-auto" (click)="clearSelectedDates()">Reset selected dates</span>
+          <span class="f-size-12 hov-opacity ml-auto" (click)="clearSelectedDates()">{{'reset_dates' | translate: {"Default": "Reset selected dates"} }} </span>
 
-          <button type="button" class="btn job-btn ml-3" (click)="addJob()">Create Job</button>
+          <button type="button" class="btn job-btn ml-3" (click)="addJob()">{{'create_job' | translate: {"Default": "Create Job"} }}</button>
         </ng-container>
       </footer>
     </div>
@@ -108,7 +108,7 @@
         (ngModelChange)="updateLayers()"
         hidden>
         <app-checkbox [sm]="true" [checked]="status.data[type]" [className]="className"></app-checkbox>
-      {{display}}
+      {{display | lowercase | translate}}
     </label>
   </ng-template>
 
@@ -138,10 +138,10 @@
 
           <ng-template #availabilityTooltip>
             <div class="shift-tooltip">
-              <h5 class="text-center">{{ day.availableId ? 'Update' : 'Confirm?'}}</h5>
+              <h5 class="text-center">{{ day.availableId ? ('update' | translate: {"Default": "Update"}) : ('confirm' | translate: {"Default": "Confirm"}) }}</h5>
               <div class="d-flex align-items-center justify-content-between">
-                <button type="button" class="btn btn-sm btn-primary mr-auto" (click)="setAvailability($event, day, true)">Available</button>
-                <button type="button" class="btn btn-sm btn-primary" (click)="setAvailability($event, day, false)">Unavailable</button>
+                <button type="button" class="btn btn-sm btn-primary mr-auto" (click)="setAvailability($event, day, true)">{{ 'available.label' | translate: {"Default": "Available"} }}</button>
+                <button type="button" class="btn btn-sm btn-primary" (click)="setAvailability($event, day, false)">{{ 'unavailable.label' | translate: {"Default": "Unavailable"} }}</button>
               </div>
             </div>
           </ng-template>
@@ -175,12 +175,12 @@
 
         <ng-template #monthTooltip>
           <div class="shift-tooltip">
-            <ng-container *ngTemplateOutlet="shiftGroup; context: {shifts: day.tooltip[1], className: 'success', name: 'Fulfilled', status: 'accepted', month: true}"></ng-container>
-            <ng-container *ngTemplateOutlet="shiftGroup; context: {shifts: day.tooltip[0], className: 'danger', name: 'Unfulfilled', status: 'cancelled', month: true}"></ng-container>
-            <ng-container *ngTemplateOutlet="shiftGroup; context: {shifts: day.tooltip[2], className: 'warning', name: 'Pending', status: 'undefined', month: true}"></ng-container>
-            <ng-container *ngTemplateOutlet="shiftGroup; context: {shifts: day.tooltip[3], className: 'primary', name: 'Open', month: true}"></ng-container>
-            <ng-container *ngTemplateOutlet="shiftGroup; context: {shifts: day.tooltip[4], className: 'warning', name: 'Filled', month: true}"></ng-container>
-            <ng-container *ngTemplateOutlet="shiftGroup; context: {shifts: day.tooltip[5], className: 'success', name: 'Approved', month: true}"></ng-container>
+            <ng-container *ngTemplateOutlet="shiftGroup; context: {shifts: day.tooltip[1], className: 'success', name: 'fulfilled.label', status: 'accepted', month: true}"></ng-container>
+            <ng-container *ngTemplateOutlet="shiftGroup; context: {shifts: day.tooltip[0], className: 'danger', name: 'unfulfilled', status: 'cancelled', month: true}"></ng-container>
+            <ng-container *ngTemplateOutlet="shiftGroup; context: {shifts: day.tooltip[2], className: 'warning', name: 'pending', status: 'undefined', month: true}"></ng-container>
+            <ng-container *ngTemplateOutlet="shiftGroup; context: {shifts: day.tooltip[3], className: 'primary', name: 'open', month: true}"></ng-container>
+            <ng-container *ngTemplateOutlet="shiftGroup; context: {shifts: day.tooltip[4], className: 'warning', name: 'filled', month: true}"></ng-container>
+            <ng-container *ngTemplateOutlet="shiftGroup; context: {shifts: day.tooltip[5], className: 'success', name: 'approved', month: true}"></ng-container>
           </div>
 
           <div *ngIf="day.jobOffers && day.jobOffers.length">
@@ -288,7 +288,7 @@
 <ng-template #shiftGroup let-shifts="shifts" let-className="className" let-name="name" let-status="status">
   <div class="mb-3" *ngIf="shifts.length">
     <p *ngIf="status" class="shift-tooltip-title">
-      <span class="mr-1" [ngClass]="'badge badge-' + className">{{status === 'cancelled' ? shifts.length : getShiftCount(shifts, status)}}</span> {{name}}
+      <span class="mr-1" [ngClass]="'badge badge-' + className">{{status === 'cancelled' ? shifts.length : getShiftCount(shifts, status)}}</span> {{name | translate}}
     </p>
 
     <div class="shift-name" [class.flex-column]="!status" [class.align-items-start]="!status" *ngFor="let shift of shifts">

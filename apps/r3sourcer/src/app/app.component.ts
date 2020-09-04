@@ -1,13 +1,42 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
+import { TranslateHelperService } from '@webui/core';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-root',
   template: `
-    <img *ngIf="loader" class="preloader" src="/assets/img/logo.svg" alt="R3sourcer" width="120" height="120" />
-    <router-outlet (activate)="loader = false" (deactivate)="loader = true"></router-outlet>
+    <img
+      *ngIf="loader"
+      class="preloader"
+      src="/assets/img/logo.svg"
+      alt="R3sourcer"
+      width="120"
+      height="120"
+    />
+    <router-outlet
+      (activate)="loader = false"
+      (deactivate)="loader = true"
+    ></router-outlet>
     <app-toast></app-toast>
   `
 })
-export class AppComponent {
+export class AppComponent implements OnInit, OnDestroy {
   loader = true;
+  langSubscription: Subscription;
+
+  constructor(
+    private translate: TranslateService,
+    private translateHelper: TranslateHelperService
+  ) {}
+
+  ngOnInit() {
+    this.langSubscription = this.translateHelper.langChange$.subscribe((v) => {
+      this.translate.use(v);
+    });
+  }
+
+  ngOnDestroy() {
+    this.langSubscription.unsubscribe();
+  }
 }

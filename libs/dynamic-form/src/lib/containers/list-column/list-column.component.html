@@ -1,9 +1,11 @@
-<span *ngIf="head && !config.iconLabel" (click)="sort()">{{config.label}}</span>
-<span *ngIf="head && config.iconLabel" (clock)="sort()">
-  <fa-icon class="text-muted"
-    [icon]="['fas', config.iconLabel]">
-  </fa-icon>
+<span *ngIf="head" (click)="sort()">
+  {{ translationKey | translate: {"Default": config.label} }}
 </span>
+<!--<span *ngIf="head && config.iconLabel" (clock)="sort()">-->
+<!--  <fa-icon class="text-muted"-->
+<!--    [icon]="['fas', config.iconLabel]">-->
+<!--  </fa-icon>-->
+<!--</span>-->
 
 <ng-container *ngIf="!head">
   <ng-container

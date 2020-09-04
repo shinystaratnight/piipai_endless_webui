@@ -7,7 +7,8 @@ import {
   Input,
   OnDestroy,
   AfterContentInit,
-  ViewEncapsulation
+  ViewEncapsulation,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
@@ -20,10 +21,10 @@ import { getTimeInstance, getToday } from '@webui/utilities';
   selector: 'app-form-vacancy-dates',
   templateUrl: 'form-vacancy-dates.component.html',
   styleUrls: ['./form-vacancy-dates.component.scss'],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class FormVacancyDatesComponent extends BasicElementComponent
-  implements OnInit, OnDestroy, AfterContentInit {
+export class FormVacancyDatesComponent extends BasicElementComponent implements OnInit, OnDestroy, AfterContentInit {
   @Input()
   public deleteDate: BehaviorSubject<string>;
 
@@ -40,21 +41,18 @@ export class FormVacancyDatesComponent extends BasicElementComponent
   public dateFormat = 'YYYY-MM-DD';
   public minDate: any;
   public markDisabled: Function;
-  public vacancyDate: any;
+  // public vacancyDate: any;
   public vacancyDates: string[];
   public dates: any = {};
   public todayElement: any;
   public timeInstance = getTimeInstance();
 
-  @ViewChild('calendar', { static: false })
+  @ViewChild('calendar')
   public calendar: ElementRef;
 
   private subscription: Subscription;
 
-  constructor(
-    private fb: FormBuilder,
-    private ngbCalendar: NgbCalendar,
-  ) {
+  constructor(private fb: FormBuilder, private ngbCalendar: NgbCalendar) {
     super();
   }
 
@@ -87,10 +85,9 @@ export class FormVacancyDatesComponent extends BasicElementComponent
   public ngAfterContentInit() {
     setTimeout(() => {
       if (this.calendar) {
-        const today = this.calendar.nativeElement.querySelector('.bg-primary');
+        const today = this.calendar.nativeElement.querySelector('.today');
 
         if (today) {
-          today.classList.remove('bg-primary');
           this.todayElement = today.parentElement;
 
           if (this.todayElement) {
@@ -103,13 +100,14 @@ export class FormVacancyDatesComponent extends BasicElementComponent
 
   public markDisabledDates(dates: any[] = []) {
     this.markDisabled = (calendarDate) => {
-
       const exist = dates.find((shift) => {
         const shiftDate = this.timeInstance(shift);
 
-        return shiftDate.year() === calendarDate.year
-          && shiftDate.month() + 1 === calendarDate.month
-          && shiftDate.date() === calendarDate.day;
+        return (
+          shiftDate.year() === calendarDate.year &&
+          shiftDate.month() + 1 === calendarDate.month &&
+          shiftDate.date() === calendarDate.day
+        );
       });
 
       if (!exist) {
@@ -135,7 +133,7 @@ export class FormVacancyDatesComponent extends BasicElementComponent
     this.minDate = {
       year: time().year(),
       month: time().month() + 1,
-      day: time().date()
+      day: time().date(),
     };
   }
 
@@ -151,19 +149,19 @@ export class FormVacancyDatesComponent extends BasicElementComponent
 
         setTimeout(() => {
           this.markSelectedDates(date);
-        }, 50);
+        }, 150);
       } else {
         this.vacancyDates.splice(this.vacancyDates.indexOf(date), 1);
 
         setTimeout(() => {
           this.markSelectedDates(date, true);
-        }, 50);
+        }, 150);
       }
 
       this.group.get(this.key).patchValue(this.vacancyDates);
       this.event.emit({
         el: this.config,
-        type: 'change'
+        type: 'change',
       });
     }
   }
@@ -173,47 +171,43 @@ export class FormVacancyDatesComponent extends BasicElementComponent
 
     setTimeout(() => {
       this.markSelectedDates(date, true);
-    }, 50);
+    }, 150);
   }
 
   public markSelectedDates(date?, remove?) {
     const calendar = this.calendar.nativeElement;
-    const selectedDate = calendar.querySelectorAll(
-      `.bg-primary:not(.not-current)`
-    );
+    const selectedDate = calendar.querySelectorAll(`.bg-primary:not(.not-current)`);
     const currentDate = selectedDate[0];
 
     if (currentDate && date && !this.dates[date]) {
       this.dates[date] = currentDate.parentElement;
     }
 
-    this.vacancyDate = {};
-
-    setTimeout(() => {
-      if (remove) {
-        if (this.dates[date]) {
-          this.dates[date].children[0].classList.remove('bg-primary');
-          this.dates[date].children[0].classList.remove('text-white');
-          this.dates[date].children[0].classList.remove('not-current');
-        }
-
-        delete this.dates[date];
+    if (remove) {
+      if (this.dates[date]) {
+        this.dates[date].children[0].classList.remove('bg-primary');
+        this.dates[date].children[0].classList.remove('text-white');
+        this.dates[date].children[0].classList.remove('not-current');
       }
-      Object.keys(this.dates).forEach((el) => {
-        if (this.dates[el]) {
-          const element = this.dates[el].children[0];
 
-          if (element) {
-            element.classList.add('bg-primary');
-            element.classList.add('text-white');
-            element.classList.add('not-current');
-          }
+      delete this.dates[date];
+    }
+
+    Object.keys(this.dates).forEach((el) => {
+      if (this.dates[el]) {
+        const element = this.dates[el].children[0];
+
+        if (element) {
+          element.classList.add('bg-primary');
+          element.classList.add('text-white');
+          element.classList.add('not-current');
         }
-      });
-      if (this.todayElement) {
-        this.todayElement.classList.add('current-day');
       }
-    }, 50);
+    });
+
+    if (this.todayElement) {
+      this.todayElement.classList.add('current-day');
+    }
   }
 
   public isToday(month: number, day: number): boolean {

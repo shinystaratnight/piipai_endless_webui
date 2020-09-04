@@ -1,5 +1,5 @@
 <div class="wrapper">
-  <div class="main title">Select Dates</div>
+  <div class="main title">{{'select_dates' | translate: {"Default": "Select Dates"} }}</div>
 
   <ng-container
     appFormElement
@@ -10,7 +10,7 @@
 
   <div class="form-element-inline-container"
     *ngIf="viewConfig">
-      <b>Extend:</b>
+      <b>{{'extend' | translate: {"Default": "Extend"} }}:</b>
 
       <ng-container
         appFormElement
@@ -40,14 +40,14 @@
         [description]="availableinfo">
       </app-info>
 
-      <span class="message" *ngIf="showAvailability && viewData.value.extendCandidates">Candidate was replaced for some dates, due to unavailability</span>
+      <span class="message" *ngIf="showAvailability && viewData.value.extendCandidates">{{'candidate_replaced' | translate: {"Default": "Candidate was replaced for some dates, due to unavailability"} }}</span>
   </div>
 
   <ng-container *ngIf="shifts && shifts.length">
     <div class="shifts-header">
-      <div class="title">Shifts</div>
+      <div class="title">{{'shifts' | translate: {"Default": "Shifts"} }} </div>
 
-      <button type="button" class="btn btn-shadow btn-primary mr-3" (click)="autocompleteCandidates()">Autocomplete <app-spinner *ngIf="autocompleteProcess"></app-spinner></button>
+      <button type="button" class="btn btn-shadow btn-primary mr-3" (click)="autocompleteCandidates()">{{'autocomplete' | translate: {"Default": "Autocomplete"} }} <app-spinner *ngIf="autocompleteProcess"></app-spinner></button>
       <app-info placement="left" [description]="requirements"></app-info>
     </div>
 
@@ -69,13 +69,13 @@
 
 <ng-template #requirements>
   <div class="info-block">
-    <h6 class="info-block__title">Fills shifts automatically using criteria:</h6>
+    <h6 class="info-block__title">{{'fill_shifts' | translate: {"Default": "Fills shifts automatically using criteria"} }} :</h6>
     <ul class="info-block__list">
       <li class="info-block__item">
-        <fa-icon class="info-block__icon" icon="circle"></fa-icon>Candidate Score
+        <fa-icon class="info-block__icon" icon="circle"></fa-icon>{{ 'candidate_score' | translate: {"Default": "Candidate Score"} }}
       </li>
       <li class="info-block__item">
-        <fa-icon class="info-block__icon" icon="circle"></fa-icon>Distanse to the jobsite
+        <fa-icon class="info-block__icon" icon="circle"></fa-icon>{{'distance' | translate: {"Default": "Distanse to the jobsite"} }}
       </li>
     </ul>
   </div>
@@ -83,7 +83,7 @@
 
 <ng-template #fillinfo>
   <div *ngIf="autoFillData" class="info-block">
-    <h6 class="info-block__title">Use information from last fullfilled shift:</h6>
+    <h6 class="info-block__title">{{'use_information' | translate: {"Default": "Use information from last fullfilled shift"} }}:</h6>
     <ul class="info-block__list" *ngFor="let date of autoFillData">
       <li class="info-block__item">
         <fa-icon class="info-block__icon" icon="circle"></fa-icon>
@@ -95,7 +95,7 @@
       </li>
     </ul>
   </div>
-  <div class="text-danger" *ngIf="!autoFillData">Fulfilled shift doesn't exist on this job!</div>
+  <div class="text-danger" *ngIf="!autoFillData">{{'fullfilled_shift' | translate: {"Default": "Fulfilled shift doesn't exist on this job!"} }}</div>
 </ng-template>
 
 <ng-template #date let-group="group" let-config="config" let-index="index" let-target="target" let-parentIndex="parentIndex">
@@ -138,7 +138,7 @@
 
 <ng-template #availableinfo>
   <div class="available-info">
-    <h6 class="available-info-title">Unavailable candidates, dates and reason</h6>
+    <h6 class="available-info-title">{{'unavailable_candidates' | translate: {"Default": "Unavailable candidates, dates and reason"} }} </h6>
 
     <div class="candidate-available-info" *ngFor="let candidate of availabilityCandidates">
       <ng-container *ngIf="candidate.show">

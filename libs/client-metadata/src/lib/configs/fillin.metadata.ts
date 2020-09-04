@@ -15,6 +15,7 @@ const filters = {
     label: 'Available',
     values: [
       {
+        key: 'partialy_available',
         label: 'Show partialy available',
         value: 'True'
       }
@@ -26,6 +27,7 @@ const filters = {
     label: 'Tags',
     values: [
       {
+        key: 'only_job_tags',
         label: 'Only job tags',
         value: 'False'
       }
@@ -36,6 +38,7 @@ const filters = {
     label: 'Overpriced',
     values: [
       {
+        key: 'show_overpriced',
         label: 'Show overpriced',
         value: 'True'
       }
@@ -47,10 +50,12 @@ const filters = {
     label: 'Transportation to Work',
     values: [
       {
+        key: 'own_car',
         label: 'Own Car',
         value: 1
       },
       {
+        key: 'public_transportation',
         label: 'Public Transportation',
         value: 2
       }

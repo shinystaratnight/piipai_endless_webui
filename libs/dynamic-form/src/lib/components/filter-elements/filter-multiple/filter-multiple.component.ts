@@ -102,7 +102,8 @@ export class FilterMultipleComponent implements OnInit, OnDestroy {
         query: this.config.query,
         param: this.config.param,
         checked: type === 'data' ? true : false,
-        data: type === 'data' ? data : data.value
+        data: type === 'data' ? data : data.value,
+        key: data.key
       };
     });
   }
@@ -258,5 +259,9 @@ export class FilterMultipleComponent implements OnInit, OnDestroy {
       this.data
     );
     this.changeQuery();
+  }
+
+  public getTranslateKey(type: string): string {
+    return `filter.${this.config.key}.${type}`;
   }
 }

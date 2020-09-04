@@ -307,7 +307,7 @@ const form = [
       label: 'Industry',
       type: 'related',
       param: 'id',
-      values: ['__str__']
+      values: ['__str__', 'translations']
     }
   },
   {
@@ -332,7 +332,7 @@ const formadd = [
       label: 'Industry',
       type: 'related',
       param: 'id',
-      values: ['__str__']
+      values: ['__str__', 'translations']
     }
   },
   {

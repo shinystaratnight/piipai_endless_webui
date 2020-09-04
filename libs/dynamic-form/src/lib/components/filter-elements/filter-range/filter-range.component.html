@@ -1,6 +1,6 @@
 <div class="filter-element" [class.active]="!isCollapsed">
   <label class="filter-label" [class.active]="!isCollapsed">
-    {{ config.label }}
+    {{ getTranslateKey('label') | translate: {"Default": config.label} }}
     <fa-icon
       *ngIf="query"
       class="text-danger ml-1"
@@ -21,7 +21,7 @@
         [(ngModel)]="toggle"
       />
       <app-checkbox [sm]="true" [checked]="toggle"></app-checkbox>
-      Search by distance
+      {{'search_by_distance' | translate: {"Default": "Search by distance"} }}
     </label>
     <div class="px-2 my-3" [hidden]="!toggle">
       <div id="slider"></div>

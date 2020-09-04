@@ -9,7 +9,7 @@ import {
   AfterViewChecked,
   ElementRef,
   HostListener,
-  Optional
+  Optional,
 } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { FormBuilder, FormGroup } from '@angular/forms';
@@ -28,12 +28,22 @@ import {
   SiteSettingsService,
   CheckPermissionService,
   ToastService,
-  MessageType
+  MessageType,
 } from '@webui/core';
 import { Field, Endpoints } from '@webui/data';
-import { FormatString, isManager, isClient, isCandidate } from '@webui/utilities';
+import {
+  FormatString,
+  isManager,
+  isClient,
+  isCandidate,
+  getTranslationKey,
+} from '@webui/utilities';
 
-import { GenericFormService, TimelineService, TimelineAction } from '../../../services';
+import {
+  GenericFormService,
+  TimelineService,
+  TimelineAction,
+} from '../../../services';
 import { BasicElementComponent } from '../basic-element/basic-element.component';
 
 export interface RelatedObject {
@@ -59,15 +69,16 @@ const translationMap = {
 @Component({
   selector: 'app-form-related',
   templateUrl: './form-related.component.html',
-  styleUrls: ['./form-related.component.scss']
+  styleUrls: ['./form-related.component.scss'],
 })
-export class FormRelatedComponent extends BasicElementComponent implements OnInit, OnDestroy, AfterViewChecked {
-  @ViewChild('search', { static: false }) search;
-  @ViewChild('searchElement', { static: false }) searchElement;
-  @ViewChild('modal', { static: false }) modal;
-  @ViewChild('tableWrapper', { static: false }) tableWrapper: any;
-  @ViewChild('messageDetail', { static: false }) messageDetail: any;
-  @ViewChild('autocomplete', { static: false }) elementRef: ElementRef;
+export class FormRelatedComponent extends BasicElementComponent
+  implements OnInit, OnDestroy, AfterViewChecked {
+  @ViewChild('search') search;
+  @ViewChild('searchElement') searchElement;
+  @ViewChild('modal') modal;
+  @ViewChild('tableWrapper') tableWrapper: any;
+  @ViewChild('messageDetail') messageDetail: any;
+  @ViewChild('autocomplete') elementRef: ElementRef;
 
   @Output() event: EventEmitter<any> = new EventEmitter();
 
@@ -143,6 +154,7 @@ export class FormRelatedComponent extends BasicElementComponent implements OnIni
   };
 
   isClient = isClient;
+  getTranslationKey = getTranslationKey;
 
   constructor(
     private fb: FormBuilder,
@@ -200,15 +212,22 @@ export class FormRelatedComponent extends BasicElementComponent implements OnIni
       this.getReplaceElements(this.config.metadata);
     }
 
-    this.placeholder = this.config.templateOptions.placeholder ||
+    this.placeholder =
+      this.config.templateOptions.placeholder ||
       (this.config.templateOptions.edit ? 'Select or add new' : 'Select');
 
     if (this.timelineService) {
-      this.subscriptions.push(this.timelineService.buttonAction$.subscribe((action: any) => {
-        if (action.type === 'editContact' && this.config.endpoint === Endpoints.Contact && !this.config.hide) {
-          this.open('update');
-        }
-      }));
+      this.subscriptions.push(
+        this.timelineService.buttonAction$.subscribe((action: any) => {
+          if (
+            action.type === 'editContact' &&
+            this.config.endpoint === Endpoints.Contact &&
+            !this.config.hide
+          ) {
+            this.open('update');
+          }
+        })
+      );
     }
   }
 
@@ -239,7 +258,7 @@ export class FormRelatedComponent extends BasicElementComponent implements OnIni
   public checkDelayData() {
     if (this.config.delay) {
       this.config.data = {
-        sendData: []
+        sendData: [],
       };
       this.config.delayData[this.config.endpoint] = this.config;
     }
@@ -278,10 +297,9 @@ export class FormRelatedComponent extends BasicElementComponent implements OnIni
       Object.keys(this.config.defaultData).forEach((el) => {
         const value = format.format(this.config.defaultData[el], this.formData);
 
-        query += `${el}=${format.format(
-          this.config.defaultData[el],
-          this.formData
-        ) || false}&`;
+        query += `${el}=${
+          format.format(this.config.defaultData[el], this.formData) || false
+        }&`;
       });
 
       if (this.listDefaultQuery === query) {
@@ -306,7 +324,7 @@ export class FormRelatedComponent extends BasicElementComponent implements OnIni
       this.genericFormService
         .getByQuery(this.config.endpoint, query)
         .subscribe((res) => {
-          this.generateDataForList(<any> { list: true, metadata }, res.results);
+          this.generateDataForList(<any>{ list: true, metadata }, res.results);
         });
     }
   }
@@ -327,7 +345,7 @@ export class FormRelatedComponent extends BasicElementComponent implements OnIni
   public generateCustomTemplate(fieldsList) {
     if (this.config.value) {
       this.customTemplate = fieldsList.map((el, index) => {
-        const object = <CustomField> {};
+        const object = <CustomField>{};
         object.value = this.config.customValue[index];
         object.key = el;
         if (el.indexOf('email') > -1) {
@@ -361,7 +379,7 @@ export class FormRelatedComponent extends BasicElementComponent implements OnIni
         }
         this.config.hide = hide;
 
-        if (!(<any> this.cd).destroyed) {
+        if (!(<any>this.cd).destroyed) {
           this.cd.detectChanges();
         }
       });
@@ -523,7 +541,7 @@ export class FormRelatedComponent extends BasicElementComponent implements OnIni
                       }
                     }
                   }
-                }  else {
+                } else {
                   id = format.format(this.config.default, this.formData);
                 }
               } else if (Array.isArray(this.config.default)) {
@@ -597,7 +615,13 @@ export class FormRelatedComponent extends BasicElementComponent implements OnIni
         result = el.url;
       }
     });
-    const prefix = isManager() ? '/mn' : isClient() ? '/cl' : isCandidate() ? '/cd' : '';
+    const prefix = isManager()
+      ? '/mn'
+      : isClient()
+      ? '/cl'
+      : isCandidate()
+      ? '/cd'
+      : '';
 
     return prefix + result;
   }
@@ -716,7 +740,8 @@ export class FormRelatedComponent extends BasicElementComponent implements OnIni
     } else if (
       this.config.default &&
       this.config.default.includes &&
-      (this.config.default.includes('company_id') || this.config.default.includes('client_contact_id')) &&
+      (this.config.default.includes('company_id') ||
+        this.config.default.includes('client_contact_id')) &&
       !this.config.editForm
     ) {
       const id = this.userService.user.currentRole[this.config.default];
@@ -786,7 +811,7 @@ export class FormRelatedComponent extends BasicElementComponent implements OnIni
           this.dataOfList.push(object);
         });
         // if (!data.length) {
-          this.addObject();
+        this.addObject();
         // }
 
         this.group.get(this.key).patchValue(data);
@@ -817,7 +842,7 @@ export class FormRelatedComponent extends BasicElementComponent implements OnIni
       id: undefined,
       allData: undefined,
       data: this.fb.group({}),
-      metadata: []
+      metadata: [],
     };
     const format = new FormatString();
     object.metadata = metadata.map((el) => {
@@ -865,15 +890,15 @@ export class FormRelatedComponent extends BasicElementComponent implements OnIni
     e.stopPropagation();
     e.preventDefault();
     if (object.id) {
-      this.genericFormService
-        .delete(this.config.endpoint, object.id)
-        .subscribe((response: any) => {
+      this.genericFormService.delete(this.config.endpoint, object.id).subscribe(
+        (response: any) => {
           this.dataOfList.splice(this.dataOfList.indexOf(object), 1);
           this.updateValue(undefined);
         },
         (error) => {
           this.toastr.sendMessage(error.errors.join(' '), MessageType.error);
-        });
+        }
+      );
     }
   }
 
@@ -890,7 +915,7 @@ export class FormRelatedComponent extends BasicElementComponent implements OnIni
       const endpoint = `${this.config.endpoint}${object.id}/`;
       const body = {
         default_rate: true,
-        skill: object.allData.skill.id
+        skill: object.allData.skill.id,
       };
       this.genericFormService
         .editForm(endpoint, body)
@@ -949,7 +974,8 @@ export class FormRelatedComponent extends BasicElementComponent implements OnIni
   public onModalScrollDown(): void {
     if (
       !this.skipScroll &&
-      (this.previewList && this.previewList.length !== this.count)
+      this.previewList &&
+      this.previewList.length !== this.count
     ) {
       this.skipScroll = true;
       this.generateList(this.searchValue, true);
@@ -962,7 +988,7 @@ export class FormRelatedComponent extends BasicElementComponent implements OnIni
       type: 'delete',
       endpoint: this.modalData.endpoint,
       id: this.modalData.id,
-      el: this.config
+      el: this.config,
     });
     this.group.get(this.key).patchValue('');
     delete this.config.value;
@@ -1063,45 +1089,51 @@ export class FormRelatedComponent extends BasicElementComponent implements OnIni
               : format.format(this.config.prefilled[el], this.formData),
             read_only: true,
             isPrefilled: true,
-            editForm: true
-          }
+            editForm: true,
+          },
         };
       });
     }
 
     if (this.modalData.endpoint === Endpoints.SmsMessages) {
       const messageType = (object && object.type) || this.config.metadata_query;
-      const newModal = Object.assign(this.modalData,
-        {
-          label: messageType.toLowerCase().includes('sent')
-            ? 'Sent message'
-            : 'Received message',
-          mode: 'view',
-          edit: true,
-          metadataQuery: messageType.toLowerCase()
-        }
-      );
+      const newModal = Object.assign(this.modalData, {
+        label: messageType.toLowerCase().includes('sent')
+          ? 'Sent message'
+          : 'Received message',
+        mode: 'view',
+        edit: true,
+        metadataQuery: messageType.toLowerCase(),
+      });
 
       if (this.config.strField) {
         newModal.label = '';
       }
 
-      this.modalRef = this.modalService.open(this.messageDetail, { windowClass: 'message-detail', backdrop: 'static' });
+      this.modalRef = this.modalService.open(this.messageDetail, {
+        windowClass: 'message-detail',
+        backdrop: 'static',
+      });
 
       return false;
     }
 
-    let windowClass = this.config.visibleMode && type === 'post' ? 'visible-mode' : '';
+    let windowClass =
+      this.config.visibleMode && type === 'post' ? 'visible-mode' : '';
     if (this.config.smallModal && type === 'post') {
       windowClass += ' small-modal';
     }
 
-    this.modalRef = this.modalService.open(this.modal, { size: 'lg', windowClass, backdrop: 'static' });
+    this.modalRef = this.modalService.open(this.modal, {
+      size: 'lg',
+      windowClass,
+      backdrop: 'static',
+    });
 
     return false;
   }
 
-  public changeLabel(data: { str: string, data: any }) {
+  public changeLabel(data: { str: string; data: any }) {
     if (this.config.strField) {
       const type = data.data[this.config.strField].toLowerCase();
 
@@ -1112,7 +1144,11 @@ export class FormRelatedComponent extends BasicElementComponent implements OnIni
   }
 
   public openAutocomplete(): void {
-    if (this.config.type !== 'address' && !this.config.doNotChoice && !this.fieldDisabled) {
+    if (
+      this.config.type !== 'address' &&
+      !this.config.doNotChoice &&
+      !this.fieldDisabled
+    ) {
       if (this.hideAutocomplete === true) {
         this.searchValue = null;
         this.count = 0;
@@ -1219,7 +1255,7 @@ export class FormRelatedComponent extends BasicElementComponent implements OnIni
     }
     this.count = null;
 
-    if (!(<any> this.cd).destroyed) {
+    if (!(<any>this.cd).destroyed) {
       this.cd.detectChanges();
     }
   }
@@ -1285,7 +1321,7 @@ export class FormRelatedComponent extends BasicElementComponent implements OnIni
 
     this.event.emit({
       type: 'test',
-      item
+      item,
     });
   }
 
@@ -1337,7 +1373,7 @@ export class FormRelatedComponent extends BasicElementComponent implements OnIni
       el: this.config,
       value,
       additionalData,
-      manual
+      manual,
     });
   }
 
@@ -1345,7 +1381,7 @@ export class FormRelatedComponent extends BasicElementComponent implements OnIni
     this.event.emit({
       list: this.results,
       el: this.config,
-      type: 'chenge'
+      type: 'chenge',
     });
   }
 
@@ -1354,11 +1390,11 @@ export class FormRelatedComponent extends BasicElementComponent implements OnIni
       if (this.config.sendData) {
         const result = {};
 
-        this.config.sendData.forEach((key) => result[key] = el[key]);
+        this.config.sendData.forEach((key) => (result[key] = el[key]));
         return {
           [this.param]: el[this.param],
-          ...result
-        }
+          ...result,
+        };
       }
       return el[this.param];
     });
@@ -1410,7 +1446,10 @@ export class FormRelatedComponent extends BasicElementComponent implements OnIni
       this.eventHandler({ type: 'change' }, e.data[this.param], e.data);
 
       if (this.config.candidateForm) {
-        this.eventHandler({type: 'patchAddress'}, this.group.get(this.key).value);
+        this.eventHandler(
+          { type: 'patchAddress' },
+          this.group.get(this.key).value
+        );
       }
     } else if (
       e.type === 'sendForm' &&
@@ -1435,7 +1474,7 @@ export class FormRelatedComponent extends BasicElementComponent implements OnIni
       this.fillingForm(newMetadata, data);
       object.metadata = newMetadata;
 
-      if (!(<any> this.cd).destroyed) {
+      if (!(<any>this.cd).destroyed) {
         this.cd.detectChanges();
       }
     }
@@ -1450,7 +1489,7 @@ export class FormRelatedComponent extends BasicElementComponent implements OnIni
 
     this.event.emit({
       type: 'updateData',
-      el: this.config
+      el: this.config,
     });
   }
 
@@ -1559,8 +1598,8 @@ export class FormRelatedComponent extends BasicElementComponent implements OnIni
 
                 results.forEach((el) => {
                   const display = this.config.templateOptions.listDisplay || this.display;
-                  if (el.translations || (el.name && el.name.translations)) {
-                    const translations = el.translations || el.name.translations;
+                  if (el.translations || el.translation || (el.name && el.name.translations)) {
+                    const translations = el.translations || el.translation || el.name.translations;
                     const coutryCode = this.settingsService.settings.country_code;
                     const translation = translations.find((t) => t.language.id === translationMap[coutryCode]);
                     el.__str__ = (translation && translation.__str__) || formatString.format(display, el);
@@ -1569,8 +1608,14 @@ export class FormRelatedComponent extends BasicElementComponent implements OnIni
                   }
 
                   if (this.config.templateOptions.listParam) {
-                    el[this.param] = FormatString.format(this.config.templateOptions.listParam, el);
-                    el['name'] = FormatString.format(this.config.templateOptions.listDisplay, el);
+                    el[this.param] = FormatString.format(
+                      this.config.templateOptions.listParam,
+                      el
+                    );
+                    el['name'] = FormatString.format(
+                      this.config.templateOptions.listDisplay,
+                      el
+                    );
                   }
 
                   if (this.config.templateOptions.info) {
@@ -1589,7 +1634,9 @@ export class FormRelatedComponent extends BasicElementComponent implements OnIni
                   if (el) {
                     this.config.options = this.config.options || [];
 
-                    if (!this.config.options.find((item) => item.id === el.id)) {
+                    if (
+                      !this.config.options.find((item) => item.id === el.id)
+                    ) {
                       this.config.options.push(el);
                     }
                   }
@@ -1628,7 +1675,10 @@ export class FormRelatedComponent extends BasicElementComponent implements OnIni
                 if (only) {
                   if (res.results.length === only) {
                     canSetValue = true;
-                  } else if (only > res.results.length || only < res.results.length) {
+                  } else if (
+                    only > res.results.length ||
+                    only < res.results.length
+                  ) {
                     this.count = null;
                     this.clearField();
                   }
@@ -1797,7 +1847,7 @@ export class FormRelatedComponent extends BasicElementComponent implements OnIni
 
     return {
       disable,
-      messages
+      messages,
     };
   }
 

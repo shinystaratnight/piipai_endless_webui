@@ -375,7 +375,7 @@ describe('PermissionsComponent', () => {
 
   describe('resetData method', () => {
     it('should delete active property from objects', () => {
-      let array = [{
+      const array = [{
         active: true
       }];
       comp.resetData(array);

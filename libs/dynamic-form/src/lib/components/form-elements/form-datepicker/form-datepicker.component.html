@@ -16,9 +16,9 @@
       *ngIf="label && config.templateOptions.label"
       [attr.for]="key"
     >
-      {{ config.templateOptions.label }}:
+      {{ getTranslationKey(config.key, 'label') | translate: {"Default": config.templateOptions.label}  }}:
     </label>
-    <app-info [description]="config.templateOptions.description"></app-info>
+    <app-info *ngIf="config.templateOptions.description" [description]="getTranslationKey(config.key, 'description') | translate: {'Default': config.templateOptions.description}"></app-info>
     <div
       *ngIf="!mobileDevice"
       class="input-group form-element-content datepicker mb-2 edit"
@@ -116,9 +116,9 @@
       class="form-element-label"
       *ngIf="label && config.templateOptions.label"
     >
-      {{ config.templateOptions.label }}:
+      {{ getTranslationKey(config.key, 'label') | translate: {'Default': config.templateOptions.label}  }}:
     </label>
-    <app-info [description]="config.templateOptions.description"></app-info>
+    <app-info *ngIf="config.templateOptions.description" [description]="getTranslationKey(config.key, 'description') | translate: {'Default': config.templateOptions.description}"></app-info>
     <div [class.readonly-value]="editMode" class="form-element-content">
       {{ displayValue || '-' }}
     </div>

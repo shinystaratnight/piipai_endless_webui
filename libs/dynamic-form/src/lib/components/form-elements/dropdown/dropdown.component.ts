@@ -1,21 +1,14 @@
-import {
-  Component,
-  Input,
-  ElementRef,
-  ViewChild,
-  Output,
-  EventEmitter
-} from '@angular/core';
+import { Component, Input, ElementRef, ViewChild, Output, EventEmitter } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
   selector: 'app-dropdown',
-  templateUrl: './dropdown.component.html'
+  templateUrl: './dropdown.component.html',
 })
 export class DropdownComponent {
-  @ViewChild('autocomplete', { static: false }) elementRef: ElementRef;
+  @ViewChild('autocomplete') elementRef: ElementRef;
 
   @Input() data: any[];
   @Input() count: number;
@@ -39,11 +32,8 @@ export class DropdownComponent {
   ngOnInit() {
     this.searchInput = new FormControl('');
     this.searchSubscription = this.searchInput.valueChanges
-      .pipe(
-        debounceTime(400),
-        distinctUntilChanged()
-      )
-      .subscribe(value => {
+      .pipe(debounceTime(400), distinctUntilChanged())
+      .subscribe((value) => {
         this.onSearch(value);
       });
   }

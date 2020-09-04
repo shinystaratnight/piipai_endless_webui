@@ -180,4 +180,8 @@ export class FilterRangeComponent implements OnInit, OnDestroy, AfterViewInit {
     this.fs.generateQuery('', this.config.key, this.config.listName);
     this.changeQuery();
   }
+
+  public getTranslateKey(type: string): string {
+    return `filter.${this.config.key}.${type}`;
+  }
 }

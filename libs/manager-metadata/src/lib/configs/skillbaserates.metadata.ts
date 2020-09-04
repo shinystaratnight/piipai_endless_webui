@@ -74,7 +74,7 @@ const form = [
     templateOptions: {
       add: true,
       label: 'Skill',
-      values: ['__str__'],
+      values: ['__str__', 'tranlsations'],
       type: 'related',
       edit: true,
       delete: false
@@ -146,7 +146,7 @@ const formadd = [
     templateOptions: {
       add: true,
       label: 'Skill',
-      values: ['__str__'],
+      values: ['__str__', 'tranlsations'],
       type: 'related',
       edit: true,
       delete: false

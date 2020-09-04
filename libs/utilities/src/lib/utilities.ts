@@ -4,7 +4,7 @@ export enum DateRange {
   Year = 'year',
   Month = 'month',
   Week = 'week',
-  Day = 'day'
+  Day = 'day',
 }
 
 export const filterDateFormat = 'YYYY-MM-DD';
@@ -16,7 +16,7 @@ export const rangeFormats = {
   [DateRange.Year]: 'YYYY',
   [DateRange.Month]: 'MMMM YYYY',
   [DateRange.Week]: 'MMM D',
-  [DateRange.Day]: 'D MMMM YYYY'
+  [DateRange.Day]: 'D MMMM YYYY',
 };
 
 export function getContactAvatar(name): string {
@@ -25,13 +25,13 @@ export function getContactAvatar(name): string {
   if (nameElements && nameElements.length) {
     if (nameElements.length === 2) {
       return nameElements
-        .map(el => el[0])
+        .map((el) => el[0])
         .join('')
         .toUpperCase();
     } else if (nameElements.length > 2) {
       nameElements.shift();
       return nameElements
-        .map(el => el[0])
+        .map((el) => el[0])
         .join('')
         .toUpperCase();
     }
@@ -160,4 +160,8 @@ export function format(str, data) {
 export class FormatString {
   static format = format;
   format = format;
+}
+
+export function getTranslationKey(key, type) {
+  return `${key}.${type}`;
 }

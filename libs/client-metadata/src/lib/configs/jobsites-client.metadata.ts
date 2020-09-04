@@ -320,6 +320,8 @@ const form = [
       {
         main: true,
         name: 'General Info',
+        key: 'general',
+        translateKey: 'general',
         type: 'group',
         label: 'General information',
         children: [
@@ -328,6 +330,8 @@ const form = [
             children: [
               {
                 label: 'Primary Contact',
+                key: 'primary_contact',
+                translateKey: 'primary_contact',
                 type: 'group',
                 children: [
                   {
@@ -389,6 +393,8 @@ const form = [
               },
               {
                 label: 'Additional Info',
+                key: 'additional_info',
+                translateKey: 'additional_info',
                 type: 'group',
                 children: [
                   {
@@ -396,7 +402,7 @@ const form = [
                     read_only: true,
                     templateOptions: {
                       label: 'Industry',
-                      values: ['__str__'],
+                      values: ['__str__', 'translations'],
                       type: 'related',
                     },
                     type: 'related',
@@ -427,6 +433,8 @@ const form = [
               },
               {
                 label: 'Portfolio Manager',
+                key: 'portfolio_manager',
+                translateKey: 'portfolio_manager',
                 type: 'group',
                 children: [
                   {
@@ -475,6 +483,8 @@ const form = [
       },
       {
         endpoint: Endpoints.Job,
+        key: 'job',
+        translateKey: 'job',
         templateOptions: {
           label: 'Jobs',
           type: 'list',
@@ -496,6 +506,8 @@ const form = [
       },
       {
         endpoint: '/core/notes/',
+        key: 'notes',
+        translateKey: 'notes',
         templateOptions: {
           label: 'Notes',
           type: 'list',
@@ -670,7 +682,7 @@ const formadd = [
               label: 'Industry',
               add: true,
               delete: false,
-              values: ['__str__'],
+              values: ['__str__', 'translations'],
               type: 'related',
               edit: true,
               required: true,

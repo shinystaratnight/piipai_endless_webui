@@ -4,17 +4,14 @@
   <div class="container">
     <div class="login-wrapper">
       <div class="login-title">
-        <img
-          src="{{ settings.logo || '/assets/img/logo.svg' }}"
-          alt="R3sourcer"
-        />
+        <img src="{{ settings.logo || '/assets/img/logo.svg' }}" alt="" />
         <p>{{ settings.company_name || 'R3sourcer' }}</p>
       </div>
 
       <div class="login-form">
         <div class="login-label">
-          <h5 class="title">Login</h5>
-          <p class="description">Please enter your email and password</p>
+          <h5 class="title">{{'login.title' | translate}}</h5>
+          <p class="description">{{'login.subtitle' | translate}}</p>
         </div>
 
         <app-generic-form
@@ -30,22 +27,16 @@
         >
           <div class="links form-group">
             <label class="form-element-checkbox" [class.active]="rememberMe">
-              <input
-                type="checkbox"
-                class="form-check-input"
-                [(ngModel)]="rememberMe"
-                hidden
-              />
+              <input type="checkbox" class="form-check-input" [(ngModel)]="rememberMe" hidden />
               <app-checkbox [checked]="rememberMe"></app-checkbox>
-              <span>Remember me</span>
+              <span>{{'login.remember_me' | translate}}</span>
             </label>
-            <a class="forgot" href="" (click)="openResetForm()"
-              >Forgot Password?</a
-            >
+            <a class="forgot" href="" (click)="openResetForm()">{{'login.forgot_password' | translate}}</a>
           </div>
           <button class="btn btn-primary login-button" type="submit">
-            Lоgin <app-spinner *ngIf="loginProcess"></app-spinner>
+            {{'login.login' | translate}} <app-spinner *ngIf="loginProcess"></app-spinner>
           </button>
+          <app-language-selector></app-language-selector>
         </app-generic-form>
       </div>
     </div>
@@ -54,7 +45,7 @@
   <div *ngIf="subdomain" class="register-link">
     <a [routerLink]="['/registration']">
       <app-icon-plus appIcon size="sm" color="primary"></app-icon-plus>
-      Register
+      {{'login.register' | translate}}
     </a>
   </div>
 </ng-container>
@@ -69,21 +60,15 @@
   <div class="modal-content-wrapper">
     <div class="modal-header-wrapper">
       <div class="modal-header">
-        <h5 class="modal-title">Password Reset</h5>
+        <h5 class="modal-title">{{'password.reset' | translate}}</h5>
 
-        <app-close-button
-          class="ml-auto"
-          (click)="modal.dismiss()"
-        ></app-close-button>
+        <app-close-button class="ml-auto" (click)="modal.dismiss()"></app-close-button>
       </div>
     </div>
     <div class="py-3">
-      <app-generic-form
-        [showResponse]="true"
-        endpoint="/core/contacts/forgot_password/"
-      >
+      <app-generic-form [showResponse]="true" endpoint="/core/contacts/forgot_password/">
         <div class="d-flex align-items-center">
-          <button type="submit" class="btn btn-primary ml-auto">Reset</button>
+          <button type="submit" class="btn btn-primary ml-auto">{{'reset' | translate}}</button>
         </div>
       </app-generic-form>
     </div>

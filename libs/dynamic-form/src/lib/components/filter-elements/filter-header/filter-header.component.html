@@ -1,0 +1,7 @@
+<label class="filter-label">
+  {{ translationKey | translate: { Default: label } }}
+
+  <button type="button" class="button" *ngIf="resetButton" (click)="onReset()">
+    <fa-icon icon="times-circle"></fa-icon>
+  </button>
+</label>

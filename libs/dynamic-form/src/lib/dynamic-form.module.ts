@@ -7,7 +7,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { AgmCoreModule } from '@agm/core';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
-import { ButtonsModule, BsDropdownModule } from 'ngx-bootstrap';
+import { ButtonsModule } from 'ngx-bootstrap/buttons';
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { GooglePlaceModule } from 'ngx-google-places-autocomplete';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { QuillModule } from 'ngx-quill';
@@ -15,14 +16,17 @@ import { SignaturePadModule } from 'angular2-signaturepad';
 
 import { NgxIntlTelInputModule } from 'ngx-intl-tel-input';
 
-import { SharedModule } from '@webui/shared';
 import { MetadataModule } from '@webui/metadata';
+import { UiModule } from '@webui/ui';
 
 import { services, METADATA } from './services';
 import * as fromComponents from './components';
 import * as fromContainers from './containers';
 import { modals } from './modals';
 import { directives } from './directives';
+
+import { SharedModule } from '@webui/shared';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
   imports: [
@@ -44,7 +48,11 @@ import { directives } from './directives';
     BsDropdownModule.forRoot(),
     NgxIntlTelInputModule,
 
-    MetadataModule
+    MetadataModule,
+
+    TranslateModule,
+
+    UiModule,
   ],
   exports: [
     fromComponents.GenericFormComponent,
@@ -55,7 +63,8 @@ import { directives } from './directives';
     fromComponents.WorkflowComponent,
     fromComponents.TestGeneratorComponent,
     fromContainers.FormBuilderFormComponent,
-    fromComponents.FilterRelatedComponent
+    fromComponents.FilterRelatedComponent,
+    fromComponents.ImageUploaderComponent,
   ],
   declarations: [
     fromComponents.WebcamComponent,
@@ -65,9 +74,7 @@ import { directives } from './directives';
     ...fromContainers.components,
     ...modals
   ],
-  providers: [
-    ...services,
-  ],
+  providers: [...services],
   entryComponents: [
     ...fromComponents.entryComponents,
     ...fromContainers.entryComponents,
@@ -75,21 +82,21 @@ import { directives } from './directives';
   ]
 })
 export class DynamicFormModule {
-  static forRoot(data: { metadata: any }): ModuleWithProviders<DynamicFormModule> {
+  static forRoot(data: {
+    metadata: any;
+  }): ModuleWithProviders<DynamicFormModule> {
     return {
       ngModule: DynamicFormModule,
-      providers: [
-        { provide: METADATA, useClass: data.metadata }
-      ]
+      providers: [{ provide: METADATA, useClass: data.metadata }]
     };
   }
 
-  static forChild(data: { metadata: any }): ModuleWithProviders<DynamicFormModule> {
+  static forChild(data: {
+    metadata: any;
+  }): ModuleWithProviders<DynamicFormModule> {
     return {
       ngModule: DynamicFormModule,
-      providers: [
-        { provide: METADATA, useClass: data.metadata }
-      ]
+      providers: [{ provide: METADATA, useClass: data.metadata }]
     };
   }
 }

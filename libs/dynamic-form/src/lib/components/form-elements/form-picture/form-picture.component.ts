@@ -7,7 +7,7 @@ import {
   ElementRef,
   EventEmitter,
   OnDestroy,
-  ChangeDetectorRef
+  ChangeDetectorRef,
 } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 
@@ -16,7 +16,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
 
 import { BasicElementComponent } from './../basic-element/basic-element.component';
-import { getContactAvatar } from '@webui/utilities';
+import { getContactAvatar, getTranslationKey } from '@webui/utilities';
 
 import { FormService } from '../../../services';
 
@@ -25,18 +25,15 @@ import { FormService } from '../../../services';
   templateUrl: 'form-picture.component.html',
   styleUrls: ['./form-picture.component.scss'],
 })
-
-export class FormPictureComponent
-  extends BasicElementComponent
+export class FormPictureComponent extends BasicElementComponent
   implements OnInit, AfterViewInit, OnDestroy {
-
-  @ViewChild('modal', { static: false })
+  @ViewChild('modal')
   public modal;
 
-  @ViewChild('picture', { static: false })
+  @ViewChild('picture')
   public picture;
 
-  @ViewChild('dropzone', { static: false })
+  @ViewChild('dropzone')
   public dropzone;
 
   @Output()
@@ -75,8 +72,10 @@ export class FormPictureComponent
     fallbackMode: 'callback',
     fallbackSrc: 'assets/jscam_canvas_only.swf',
     fallbackQuality: 85,
-    cameraType: 'front'
+    cameraType: 'front',
   };
+
+  getTranslationKey = getTranslationKey;
 
   private subscriptions: Subscription[];
 
@@ -85,7 +84,7 @@ export class FormPictureComponent
     public modalService: NgbModal,
     private element: ElementRef,
     private cd: ChangeDetectorRef,
-    private formService: FormService,
+    private formService: FormService
   ) {
     super();
     this.onSuccess = (stream: any) => {
@@ -114,10 +113,18 @@ export class FormPictureComponent
 
     if (this.dropzone) {
       ['dragenter', 'dragover', 'dragleave', 'drop'].forEach((event) => {
-        this.dropzone.nativeElement.removeEventListener(event, this.stopEvent, false);
+        this.dropzone.nativeElement.removeEventListener(
+          event,
+          this.stopEvent,
+          false
+        );
       });
 
-      this.dropzone.nativeElement.removeEventListener('drop', this.handleDrop, false);
+      this.dropzone.nativeElement.removeEventListener(
+        'drop',
+        this.handleDrop,
+        false
+      );
     }
   }
 
@@ -132,7 +139,7 @@ export class FormPictureComponent
           this.config.hide = hide;
         }
 
-        if (!(<any> this.cd).destroyed) {
+        if (!(<any>this.cd).destroyed) {
           this.cd.detectChanges();
         }
       });
@@ -173,7 +180,10 @@ export class FormPictureComponent
     }
 
     if (!this.value) {
-      this.value = this.config.companyContact && this.config.key === 'logo' ? '/assets/img/logo.svg' : '';
+      this.value =
+        this.config.companyContact && this.config.key === 'logo'
+          ? '/assets/img/logo.svg'
+          : '';
 
       if (!this.value && this.config.contactName) {
         this.contactAvatar = getContactAvatar(this.config.contactName);
@@ -182,7 +192,11 @@ export class FormPictureComponent
 
     this.group.get(this.key).patchValue(undefined);
 
-    if (this.config.value && (typeof this.config.value === 'string') && this.config.value.indexOf('data:image') > -1) {
+    if (
+      this.config.value &&
+      typeof this.config.value === 'string' &&
+      this.config.value.indexOf('data:image') > -1
+    ) {
       this.value = this.config.value;
       this.group.get(this.key).patchValue(this.config.value);
     }
@@ -199,10 +213,18 @@ export class FormPictureComponent
 
     if (this.dropzone) {
       ['dragenter', 'dragover', 'dragleave', 'drop'].forEach((event) => {
-        this.dropzone.nativeElement.addEventListener(event, this.stopEvent, false);
+        this.dropzone.nativeElement.addEventListener(
+          event,
+          this.stopEvent,
+          false
+        );
       });
 
-      this.dropzone.nativeElement.addEventListener('drop', this.handleDrop.bind(this), false);
+      this.dropzone.nativeElement.addEventListener(
+        'drop',
+        this.handleDrop.bind(this),
+        false
+      );
     }
   }
 
@@ -225,7 +247,10 @@ export class FormPictureComponent
 
   public open(): void {
     this.photoExist = false;
-    this.modalService.open(this.modal, { windowClass: 'medium-modal', backdrop: 'static' });
+    this.modalService.open(this.modal, {
+      windowClass: 'medium-modal',
+      backdrop: 'static',
+    });
   }
 
   public getPhoto() {
@@ -243,8 +268,8 @@ export class FormPictureComponent
 
   public createPhoto() {
     this.photoExist = true;
-    const video = <any> document.getElementsByTagName('video')[0];
-    const canvas = <any> document.getElementsByTagName('canvas')[0];
+    const video = <any>document.getElementsByTagName('video')[0];
+    const canvas = <any>document.getElementsByTagName('canvas')[0];
     if (video) {
       canvas.style.maxWidth = `100%`;
       canvas.width = video.videoWidth;
@@ -260,7 +285,7 @@ export class FormPictureComponent
     this.updateValue('', '', true);
     const file = e.target.files[0];
 
-    if (file.size > (10 * 1024 * 1024)) {
+    if (file.size > 10 * 1024 * 1024) {
       this.formService.disableSaveButton(this.config.formId, true);
       this.sizeError = true;
     } else {
@@ -288,7 +313,7 @@ export class FormPictureComponent
 
   public onFallback(): void {
     const self = this;
-    const canvas = <any> document.getElementsByTagName('canvas')[0];
+    const canvas = <any>document.getElementsByTagName('canvas')[0];
     if (canvas) {
       const ctx = canvas.getContext('2d');
       const size = self.flashPlayer.getCameraSize();
@@ -296,7 +321,7 @@ export class FormPictureComponent
       const h = size.height;
       const externData = {
         imgData: ctx.getImageData(0, 0, w, h),
-        pos: 0
+        pos: 0,
       };
 
       canvas.width = w;
@@ -325,7 +350,6 @@ export class FormPictureComponent
           } catch (e) {
             console.error(e);
           }
-
         },
         debug: (tag, message): void => {
           // do nothing
@@ -335,7 +359,7 @@ export class FormPictureComponent
         },
         onTick: (time) => {
           // do nothing
-        }
+        },
       });
     }
   }
@@ -347,7 +371,7 @@ export class FormPictureComponent
     }
     this.group.get(this.key).patchValue(value);
     this.event.emit({
-      type: 'changeImage'
+      type: 'changeImage',
     });
   }
 
@@ -358,13 +382,13 @@ export class FormPictureComponent
   handleDrop(e) {
     const dt = e.dataTransfer;
     const files = dt.files;
-    this.fileChangeEvent({target: {files}});
+    this.fileChangeEvent({ target: { files } });
   }
 
   patchPicture() {
     this.event.emit({
       type: 'patchPicture',
-      value: this.group.get(this.key).value
+      value: this.group.get(this.key).value,
     });
 
     this.fileName = '';
@@ -382,5 +406,4 @@ export class FormPictureComponent
       this.isRemoved = true;
     }
   }
-
 }

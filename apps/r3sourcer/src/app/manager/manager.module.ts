@@ -6,7 +6,7 @@ import { RouterModule } from '@angular/router';
 
 import { AgmCoreModule } from '@agm/core';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { ButtonsModule } from 'ngx-bootstrap';
+import { ButtonsModule } from 'ngx-bootstrap/buttons';
 // import { NgxWebstorageModule } from 'ngx-webstorage';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 // import { Angular2FontawesomeModule } from 'angular2-fontawesome/angular2-fontawesome';
@@ -25,7 +25,7 @@ import * as formComponents from './components';
 import { DynamicFormModule } from '@webui/dynamic-form';
 import { CalendarModule } from '@webui/calendar';
 
-import { SharedModule } from '@webui/shared';
+// import { SharedModule } from '@webui/shared';
 // import { CoreModule } from '@webui/core';
 import { DashboardModule } from '@webui/dashboard';
 
@@ -37,13 +37,15 @@ import { Metadata } from './metadata.config';
 
 import { MasterGuideModule } from '../master-guide/master-guide.module';
 import { CommonModule } from '@angular/common';
+import { SharedModule } from '../shared/shared.module';
+import { UiModule } from '@webui/ui';
 
 @NgModule({
   // bootstrap: [ ManagerComponent ],
   declarations: [
     ManagerComponent,
     // RedirectComponent,
-    ...formComponents.components
+    ...formComponents.components,
   ],
   imports: [
     CommonModule,
@@ -60,19 +62,21 @@ import { CommonModule } from '@angular/common';
     // NgxWebstorageModule.forRoot({ prefix: 'web', separator: '.' }),
     RouterModule.forChild(routes),
     DynamicFormModule.forChild({ metadata: Metadata }),
-    SharedModule,
+    // SharedModule,
     InfiniteScrollModule,
     MasterGuideModule,
 
     FontAwesomeModule,
     // CoreModule.forRoot(environment),
     CalendarModule,
-    DashboardModule
+    DashboardModule,
+    SharedModule,
+    UiModule
   ],
   providers: [
     // ...guards,
-    ...formComponents.providers
+    ...formComponents.providers,
     // ...interceptors
-  ]
+  ],
 })
 export class ManagerModule {}

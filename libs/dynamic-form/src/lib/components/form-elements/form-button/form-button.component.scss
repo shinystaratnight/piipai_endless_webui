@@ -104,6 +104,8 @@ button.btn-link {
 
   cursor: pointer;
 
+  white-space: initial;
+
   &:hover {
     .backdrop {
       display: flex;

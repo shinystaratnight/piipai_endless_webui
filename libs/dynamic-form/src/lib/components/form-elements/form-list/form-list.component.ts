@@ -6,7 +6,7 @@ import {
   Output,
   EventEmitter,
   ChangeDetectorRef,
-  Optional
+  Optional,
 } from '@angular/core';
 import { Router } from '@angular/router';
 
@@ -19,19 +19,15 @@ import { smallModalEndpoints } from '../../../helpers';
 
 import { CheckPermissionService } from '@webui/core';
 import { Endpoints } from '@webui/data';
-import {
-  GenericFormService,
-  TimelineService,
-  TimelineAction
-} from '../../../services';
+import { GenericFormService, TimelineService, TimelineAction } from '../../../services';
 
 @Component({
   selector: 'app-form-list',
   templateUrl: 'form-list.component.html',
-  styleUrls: ['./form-list.component.scss']
+  styleUrls: ['./form-list.component.scss'],
 })
 export class FormListComponent implements OnInit, OnDestroy {
-  @ViewChild('modal', { static: false })
+  @ViewChild('modal')
   public modalTemplate: any;
 
   @Output()
@@ -70,18 +66,15 @@ export class FormListComponent implements OnInit, OnDestroy {
   public initialized: boolean;
   public metadataQuery: string;
   public addMetadataQuery: string;
+  labelTranslateKey: string;
+  helpTranslateKey: string;
 
   private subscriptions: Subscription[];
 
   get hasAddButton() {
     const { delay, disableButtons } = this.config;
 
-    return (
-      (this.showButton || delay) &&
-      this.checkPermissions('post') &&
-      !disableButtons &&
-      !this.hasAddForm
-    );
+    return (this.showButton || delay) && this.checkPermissions('post') && !disableButtons && !this.hasAddForm;
   }
 
   constructor(
@@ -102,11 +95,11 @@ export class FormListComponent implements OnInit, OnDestroy {
       this.checkTimelineChange();
     }
     this.checkHiddenProperty();
-    this.allowMethods = this.permission.getAllowMethods(
-      undefined,
-      this.config.endpoint
-    );
+    this.allowMethods = this.permission.getAllowMethods(undefined, this.config.endpoint);
     this.hasAddForm = this.config.add_form;
+
+    this.labelTranslateKey = `tabs.${this.config.translateKey}.label`;
+    this.helpTranslateKey = `tabs.${this.config.translateKey}.help`;
 
     if (this.hasAddForm) {
       this.addFormConfig = this.getAddFormConfig();
@@ -115,7 +108,7 @@ export class FormListComponent implements OnInit, OnDestroy {
 
   public checkHiddenProperty() {
     if (this.config && this.config.hidden) {
-      const subscription = this.config.hidden.subscribe(hide => {
+      const subscription = this.config.hidden.subscribe((hide) => {
         if (hide) {
           this.config.hide = hide;
         } else {
@@ -145,29 +138,17 @@ export class FormListComponent implements OnInit, OnDestroy {
       this.config.data = {
         length: 0,
         results: [],
-        sendData: []
+        sendData: [],
       };
       this.config.delayData[this.config.endpoint] = this.config;
     }
 
-    if (
-      this.config.metadata_query &&
-      typeof this.config.metadata_query !== 'string'
-    ) {
-      this.config.metadata_query = this.parseMetadataQuery(
-        this.config,
-        'metadata_query'
-      );
+    if (this.config.metadata_query && typeof this.config.metadata_query !== 'string') {
+      this.config.metadata_query = this.parseMetadataQuery(this.config, 'metadata_query');
     }
 
-    if (
-      this.config.add_metadata_query &&
-      typeof this.config.add_metadata_query !== 'string'
-    ) {
-      this.config.add_metadata_query = this.parseMetadataQuery(
-        this.config,
-        'add_metadata_query'
-      );
+    if (this.config.add_metadata_query && typeof this.config.add_metadata_query !== 'string') {
+      this.config.add_metadata_query = this.parseMetadataQuery(this.config, 'add_metadata_query');
     }
 
     this.initialized = true;
@@ -175,7 +156,7 @@ export class FormListComponent implements OnInit, OnDestroy {
 
   public parseMetadataQuery(data, field) {
     const keys = Object.keys(data[field]);
-    const result = keys.map(query => {
+    const result = keys.map((query) => {
       return `${query}=${data[field][query]}`;
     });
     return result.join('&');
@@ -185,7 +166,7 @@ export class FormListComponent implements OnInit, OnDestroy {
     if (this.modalRef) {
       this.modalRef.close();
     }
-    this.subscriptions.forEach(s => s && s.unsubscribe());
+    this.subscriptions.forEach((s) => s && s.unsubscribe());
   }
 
   public addObject() {
@@ -208,8 +189,7 @@ export class FormListComponent implements OnInit, OnDestroy {
     let size = 'lg';
 
     if (
-      (endpoint.includes('/candidate_contacts/') ||
-        endpoint.includes('/companies/')) &&
+      (endpoint.includes('/candidate_contacts/') || endpoint.includes('/companies/')) &&
       endpoint.includes('/languages/')
     ) {
       size = undefined;
@@ -228,7 +208,7 @@ export class FormListComponent implements OnInit, OnDestroy {
     this.modalRef = this.modal.open(this.modalTemplate, {
       size: size as any,
       windowClass,
-      backdrop: 'static'
+      backdrop: 'static',
     });
   }
 
@@ -254,10 +234,7 @@ export class FormListComponent implements OnInit, OnDestroy {
   }
 
   public updateList(event) {
-    if (
-      this.config.delay &&
-      this.checkOnUnique(event.sendData, this.config.unique)
-    ) {
+    if (this.config.delay && this.checkOnUnique(event.sendData, this.config.unique)) {
       this.addedData.push(event.viewData);
       this.config.data.sendData.push(event.sendData);
 
@@ -280,11 +257,9 @@ export class FormListComponent implements OnInit, OnDestroy {
     this.count = e;
     if (this.config.max) {
       this.showButton =
-        (this.config.templateOptions.add_label || this.config.add_endpoint) &&
-        this.config.max > this.count; //tslint:disable-line
+        (this.config.templateOptions.add_label || this.config.add_endpoint) && this.config.max > this.count; //tslint:disable-line
     } else {
-      this.showButton =
-        this.config.templateOptions.add_label || this.config.add_endpoint;
+      this.showButton = this.config.templateOptions.add_label || this.config.add_endpoint;
     }
   }
 
@@ -303,14 +278,14 @@ export class FormListComponent implements OnInit, OnDestroy {
     let check = true;
     fields.forEach((el: string) => {
       const inputValue = this.getValueByKey(el, data);
-      this.config.data.sendData.find(field => {
+      this.config.data.sendData.find((field) => {
         const value = this.getValueByKey(el, field);
         if (inputValue === value) {
           check = false;
         }
       });
 
-      this.config.data.results.find(field => {
+      this.config.data.results.find((field) => {
         const value = this.getValueByKey(el, field);
         if (inputValue === value) {
           check = false;
@@ -333,7 +308,7 @@ export class FormListComponent implements OnInit, OnDestroy {
 
   public checkFormData() {
     if (this.config.formData) {
-      const subscription = this.config.formData.subscribe(formData => {
+      const subscription = this.config.formData.subscribe((formData) => {
         this.formData = formData.data;
         this.checkDefaultValues(formData.data);
       });
@@ -344,9 +319,7 @@ export class FormListComponent implements OnInit, OnDestroy {
 
   public checkTimelineChange() {
     if (this.timelineService) {
-      const subscription = this.timelineService.action$
-        .pipe(skip(1))
-        .subscribe(() => this.update.next(true));
+      const subscription = this.timelineService.action$.pipe(skip(1)).subscribe(() => this.update.next(true));
 
       this.subscriptions.push(subscription);
     }
@@ -360,7 +333,7 @@ export class FormListComponent implements OnInit, OnDestroy {
       }
       const keys = Object.keys(this.config.default);
       let fullfilled = true;
-      keys.forEach(key => {
+      keys.forEach((key) => {
         const value = format.format(this.config.default[key], data);
         this.defaultQueries[key] = value;
         if (!value) {
@@ -369,16 +342,11 @@ export class FormListComponent implements OnInit, OnDestroy {
       });
 
       if (fullfilled) {
-        this.gfs
-          .getByQuery(
-            this.config.endpoint,
-            this.generateQuery(this.defaultQueries)
-          )
-          .subscribe((res: any) => {
-            this.defaultValues = res.results;
-            this.updateDataInTheList(this.defaultValues, this.addedData);
-            this.update.next(true);
-          });
+        this.gfs.getByQuery(this.config.endpoint, this.generateQuery(this.defaultQueries)).subscribe((res: any) => {
+          this.defaultValues = res.results;
+          this.updateDataInTheList(this.defaultValues, this.addedData);
+          this.update.next(true);
+        });
       } else {
         this.defaultValues = [];
         this.updateDataInTheList(this.defaultValues, this.addedData);
@@ -390,10 +358,10 @@ export class FormListComponent implements OnInit, OnDestroy {
 
   public generateQuery(data: any): string {
     const keys = Object.keys(data);
-    const values = keys.map(key => {
+    const values = keys.map((key) => {
       if (Array.isArray(data[key])) {
         const result = [];
-        data[key].forEach(el => {
+        data[key].forEach((el) => {
           result.push(`${key}=${el}`);
         });
         return result.join('&');
@@ -409,26 +377,18 @@ export class FormListComponent implements OnInit, OnDestroy {
     const length = this.config.data.results.length;
 
     this.pasredAddedData(addedData, defaultData, this.config.unique);
-    this.pasredAddedData(
-      this.config.data.sendData,
-      defaultData,
-      this.config.unique
-    );
+    this.pasredAddedData(this.config.data.sendData, defaultData, this.config.unique);
     this.config.data.results = [...defaultData, ...addedData];
   }
 
-  public pasredAddedData(
-    addedData: any[],
-    defaultData: any[],
-    fields: string[]
-  ) {
+  public pasredAddedData(addedData: any[], defaultData: any[], fields: string[]) {
     if (!fields) {
       return;
     }
     if (defaultData && defaultData.length) {
       fields.forEach((el: string) => {
         const inputValues = [];
-        defaultData.forEach(field => {
+        defaultData.forEach((field) => {
           inputValues.push(this.getValueByKey(el, field));
         });
 
@@ -444,32 +404,26 @@ export class FormListComponent implements OnInit, OnDestroy {
   }
 
   private getAddFormConfig() {
-    const {
-      endpoint,
-      add_endpoint,
-      templateOptions,
-      prefilled,
-      delay
-    } = this.config;
+    const { endpoint, add_endpoint, templateOptions, prefilled, delay } = this.config;
 
     const config = {
       title: templateOptions.add_label,
       endpoint: add_endpoint || endpoint,
-      data: null
+      data: null,
     };
 
     if (prefilled) {
       config.data = {};
       const keys = Object.keys(prefilled);
 
-      keys.forEach(el => {
+      keys.forEach((el) => {
         config.data[el] = {
           action: 'add',
           data: {
             value: delay ? undefined : prefilled[el],
             read_only: true,
-            editForm: true
-          }
+            editForm: true,
+          },
         };
 
         if (delay) {

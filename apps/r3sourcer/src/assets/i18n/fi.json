@@ -1,0 +1,489 @@
+{
+	"/hr/joboffers-candidate/": "Työtarjoukset",
+	"/hr/jobs/client_contact_job/": "Työpaikat",
+	"/hr/jobsites/client_contact_jobsite/": "Työpaikat",
+	"/hr/timesheets-candidate/": "Aikataulut",
+	"/hr/timesheets/history/": "Aikatauluhistoria",
+	"/hr/timesheets/unapproved/": "Hyväksymättömät aikataulut",
+	"Job.back": "Takaisin vuoroluetteloon",
+	"Jobsite.back": "Takaisin työpaikkaluetteloon",
+	"Scores.label": "Tulokset",
+	"Tags.label": "Tulokset",
+	"__str__": {
+		"label": "Job"
+	},
+	"accept": "Hyväksyä",
+	"actions": "Toimet",
+	"actions.label": "Toimet",
+	"add": "Lisätä",
+	"add_new": "Lisää uusi",
+	"add_photo": "Lisää valokuva",
+	"add_shifts_and_workers": "Lisää vuoroja ja työntekijöitä",
+	"add_shifts_and_workers.description": "Luo tehtävien päivämäärät, vuorot ja aika, lisää työntekijöitä.",
+	"additional_information": "Lisäinformaatio",
+	"address": {
+		"label": "Osoite"
+	},
+	"all": "Kaikki",
+	"approve": "Hyväksyä",
+	"approve.label": "Hyväksy / muuta",
+	"approve_timesheet": "Hyväksä aikataulut",
+	"approved": "Hyväksytty",
+	"are_you_sure": "Oletko varma?",
+	"autocomplete": "Automaattinen täydennys",
+	"available": {
+		"label": "Käytettävissä"
+	},
+	"back": "Takaisin",
+	"bank_and_superannuation_informatioin": "Pankki- ja eläketiedot",
+	"bmi.label": "Painoindeksi",
+	"break": "Tauko",
+	"break_ended_at": {
+		"label": "Tauko loppu"
+	},
+	"break_started_at": {
+		"label": "Tauko Start"
+	},
+	"calendar": "Kalenteri",
+	"cancel": "Peruuttaa",
+	"candidate_contact": {
+		"label": "Ehdokas"
+	},
+	"candidate_rate": {
+		"label": "Ehdokkaan korvaa"
+	},
+	"candidate_score": "Ehdokkaiden määrä",
+	"candidate_score.client_feedback.label": "Asiakaspalaute",
+	"candidate_score.loyalty.label": "Uskollisuus",
+	"candidate_score.recruitment_score.label": "Keskimääräinen testitulos",
+	"candidate_score.reliability.label": "Luotettavuus",
+	"candidate_score.skill_score.label": "Keskimääräinen taitopiste",
+	"candidate_scores.client_feedback": "Asiakaspalaute",
+	"candidate_scores.client_feedback.label": "Asiakaspalaute",
+	"candidate_scores.loyalty": "Uskollisuus",
+	"candidate_scores.loyalty.label": "Uskollisuus",
+	"candidate_scores.recruitment_score": "Keskimääräinen testitulos",
+	"candidate_scores.recruitment_score.label": "Keskimääräinen testitulos",
+	"candidate_scores.reliability": "Luotettavuus",
+	"candidate_scores.reliability.label": "Luotettavuus",
+	"candidate_scores.skill_score": "Keskimääräinen taitopiste",
+	"candidate_scores.skill_score.label": "Keskimääräinen taitopiste",
+	"candidates": {
+		"label": "Valitse työntekijät"
+	},
+	"change": "Muuttaa",
+	"change_password": "Vaihda salasana",
+	"city": {
+		"label": "Kaupunki"
+	},
+	"clear": "Vapaa tila",
+	"client.label": "Asiakas",
+	"client/candidate_rate": {
+		"label": "Pisteet"
+	},
+	"close_without_save": "Sulje tallentamatta",
+	"company": {
+		"label": "Yhtiö"
+	},
+	"confirm": "Vahvistaa?",
+	"confirm_going_to_work": "Vahvista, oletko menossa töihin",
+	"confirm_password.description": "Vahvista kirjoittamalla uusi salasana uudelleen.",
+	"confirm_password.label": "Tarkistaa",
+	"contact.__str__.label": "Yhteyshenkilö",
+	"contact.address.street_address.description": "Osoite",
+	"contact.address.street_address.label": "Katuosoite",
+	"contact.birthday.label": "Syntymäpäivä",
+	"contact.email.label": "Sähköposti",
+	"contact.first_name.label": "Etunimi",
+	"contact.gender.label": "Sukupuoli",
+	"contact.last_name.label": "Sukunimi",
+	"contact.phone_mobile.label": "Kännykkä",
+	"contact.picture.label_photo": "Ottaa valokuva",
+	"contact.title.label": "Otsikko",
+	"contact_information": "Yhteystiedot",
+	"create_job": "Luo työ",
+	"created": {
+		"label": "Luotu"
+	},
+	"customer_company": {
+		"label": "Asiakas"
+	},
+	"customer_representative": {
+		"label": "Asiakasedustaja"
+	},
+	"date": "Treffi",
+	"date.shift_date.label": "Treffi",
+	"day": "Päivä",
+	"decline": "Aleneminen",
+	"default": "Oletusarvo",
+	"default_shift_starting_time": {
+		"label": "Oletusvaihteen aloitusaika"
+	},
+	"delete": "Poistaa",
+	"distance": "Etäisyys työpaikalla",
+	"distance.distance_to_jobsite.label": "Etäisyys",
+	"distance.label": "Etäisyys / aika",
+	"distance.time_to_jobsite.label": "Aika",
+	"drag_and_drop": "Vedä valokuva alueelle tai napsauta painiketta",
+	"edit": "Muokata",
+	"edit_mode": "Muokkausmoodi",
+	"edit_submission": "Muokkaa lähetystä",
+	"email": {
+		"description": "Salasanan vaihto-ohjeet lähetetään tähän sähköpostiosoitteeseen.",
+		"label": "Sähköposti"
+	},
+	"emergency_contact_name.label": "Hätäyhteyshenkilön nimi",
+	"emergency_contact_phone.label": "Hätäpuhelinnumero",
+	"end": "Pää",
+	"end_date": {
+		"label": "Päättymispäivä"
+	},
+	"evaluate": {
+		"button": "Arvioida",
+		"label": "Arvioida"
+	},
+	"evaluated_at.label": "Arvioitu",
+	"evaluation": "Arvioida",
+	"evaluation_score.label": "Arvioida",
+	"extend": "Laajenna",
+	"extendCandidates": {
+		"text": "Ehdokkaat"
+	},
+	"extendDates": {
+		"text": "Päivämäärä"
+	},
+	"favourite": {
+		"label": "Suosikki"
+	},
+	"female": "nainen",
+	"file": "Tiedosto",
+	"file_size": "Tiedoston koko on liian suuri!",
+	"fill_in": {
+		"label": "Täyttää"
+	},
+	"fill_shifts": "Täyttää vuorot automaattisesti kriteereillä",
+	"filled": "Täytetty",
+	"filter.available.label": "Käytettävissä",
+	"filter.available.partialy_available": "Näytä osittain saatavana",
+	"filter.date.label": "Vuorot",
+	"filter.distance_to_jobsite.label": "Etäisyys",
+	"filter.overpriced.label": "Ylihinnoiteltu",
+	"filter.overpriced.show_overpriced": "Näytä ylihinnoiteltu",
+	"filter.shift_started_at": "",
+	"filter.shift_started_at.from": "Alkaen",
+	"filter.shift_started_at.label": "Vaihtopäivä",
+	"filter.shift_started_at.to": "Siihen asti kun",
+	"filter.shift_started_at.today": "Tänään",
+	"filter.shift_started_at.tomorrow": "Huomenna",
+	"filter.shift_started_at.yesterday": "Eilen",
+	"filter.show_without_tags.label": "Tulokset",
+	"filter.show_without_tags.only_job_tags": "Vain työtehtävät",
+	"filter.status": "",
+	"filter.status.4": "Odottaa lähettämistä",
+	"filter.status.5": "Odottaa hyväksyntää",
+	"filter.status.7": "Hyväksytty",
+	"filter.status.label": "Tila",
+	"filter.transportation_to_work.label": "Kuljetus töihin",
+	"filter.transportation_to_work.own_car": "Oma auto",
+	"filter.transportation_to_work.public_transportation": "Julkinen liikenne",
+	"filters": "Suodattimet",
+	"forgot_password": "Unohtuiko salasana?",
+	"fulfilled": {
+		"label": "Täytetty"
+	},
+	"group": {
+		"additional_info": "Lisätiedot",
+		"client": "Asiakas",
+		"contacts": "Yhteyshenkilö",
+		"emergency_contact": "Hätäyhteyshenkilön nimi",
+		"general": "Yleinen",
+		"phisical_parameters": "Fysikaaliset parametrit",
+		"portfolio_manager": "Salkunhoitaja",
+		"primary_contact": "Ensisijainen yhteyshenkilö",
+		"provider": "Palveluntarjoajayritys",
+		"rating": "Arvosana",
+		"residency": "Residenssi",
+		"scores": "Tulokset",
+		"times": "Ajat"
+	},
+	"height.label": "Korkeus, cm",
+	"hourly_rate": {
+		"label": "Tuntitaksa"
+	},
+	"hourly_rate_default": {
+		"label": "Ehdokkaan korvaa"
+	},
+	"inactive_timesheet": "Ei-aktiivinen aikataulu poistetaan 48 tunnissa",
+	"industry": {
+		"placeholder": "Valitse tai lisää uusi"
+	},
+	"industry.description": "",
+	"industry.label": "Älä",
+	"industry_and_skills": "Teollisuus ja taidot",
+	"info_layers": "Tietokerrokset",
+	"is_available": {
+		"label": "Tila"
+	},
+	"job": {
+		"label": "Työ"
+	},
+	"job_site_-_map.label": "Työpaikka - kartta",
+	"job_site_contact.label": "Yhteys työpaikkaan",
+	"joboffer": "Työtarjous",
+	"joboffer.label": "Työtarjous",
+	"jobsite.label": "Rooli / Työpaikka",
+	"layers": "kerroksia",
+	"list": {
+		"status": [
+			"Uusi",
+			"Pre-Shift-tarkistus odottaa",
+			"Esivaiheen tarkistus vahvistettu",
+			"Esivaiheen tarkistus epäonnistui",
+			"Lähetä vireillä",
+			"Hyväksyntä odottaa",
+			"Ohjaaja muutettu",
+			"Hyväksytty"
+		]
+	},
+	"list.transportation_to_work.1": "Oma auto",
+	"log_out": "Kirjautua ulos",
+	"login.forgot_password": "Unohtuiko salasana?",
+	"login.login": "Kirjaudu sisään",
+	"login.register": "Rekisteröidy",
+	"login.remember_me": "Muista minut",
+	"login.subtitle": "Anna sähköpostiosoitteesi ja salasanasi",
+	"login.title": "Kirjaudu sisään",
+	"make_default": "Laita oletusarvoksi",
+	"male": "Uros",
+	"master_company": {
+		"label": "Palveluntarjoajayritys",
+		"placeholder": "Valitse tai lisää uusi"
+	},
+	"max_size": "Suurin sallittu tiedostokoko on 10 Mt.",
+	"mobileTimes": {
+		"break_started_at": {
+			"label": "Tauko alku / loppu"
+		},
+		"shift_ended_at": {
+			"label": "Vaihda alku / loppu"
+		},
+		"shift_started_at": {
+			"label": "Vaihtopäivä"
+		}
+	},
+	"month": "Kuukausi",
+	"more": "Lisää",
+	"nationality.label": "Kansallisuus",
+	"next": "Seuraava askel",
+	"noBreak": {
+		"text": "Ei taukoa"
+	},
+	"no_record": "Ei levyä",
+	"no_tracking_data": "Ei seurantatietoja",
+	"note": {
+		"label": "Huomautuksia"
+	},
+	"notes": {
+		"description": "Työn kuvaus / Ohjeet ehdokkaalle",
+		"label": "Huomautuksia"
+	},
+	"old_password.label": "Nykyinen salasana",
+	"open": "Avata",
+	"open_in_tab": "Avaa uudessa välilehdessä",
+	"open_map": "Avaa Kartta",
+	"open_tracking_map": "Avaa seurantakartta",
+	"pass_test": "Läpäistä testi",
+	"passed": "Hyväksytty",
+	"password.description": "Salasanan on oltava 8-20 merkkiä, eikä se saa sisältää välilyöntejä.",
+	"password.label": "Uusi salasana",
+	"password.placeholder": "Salasana",
+	"password.reset": "Salasanan nollaus",
+	"password_reset": "Salasanan nollaus",
+	"pending": "odotettaessa",
+	"personal_info": {
+		"label": "Ehdokas / asema"
+	},
+	"photo": "Kuva",
+	"portfolio_manager": {
+		"contact": {
+			"email": {
+				"label": "Sähköposti"
+			},
+			"phone_mobile": {
+				"label": "Puhelinnumero"
+			}
+		},
+		"job_title": {
+			"label": "Työnimike"
+		},
+		"label": "Salkunhoitaja",
+		"placeholder": "Valitse tai lisää uusi"
+	},
+	"position": {
+		"label": "Asento"
+	},
+	"primary_contact": {
+		"contact": {
+			"email": {
+				"label": "Sähköposti"
+			},
+			"phone_mobile": {
+				"label": "Puhelinnumero"
+			}
+		},
+		"job_title": {
+			"label": "Työnimike"
+		},
+		"label": "Nimi"
+	},
+	"prior_experience.label": "Edellinen kokemus",
+	"profile": "Profiili",
+	"provider_company": {
+		"label": "Palveluntarjoajayritys"
+	},
+	"provider_representative": {
+		"label": "Palveluntarjoajan edustaja"
+	},
+	"provider_signed_at": {
+		"label": "Hyväksytty klo"
+	},
+	"reference_timesheet.label": "Aiheeseen liittyvä aikataulu",
+	"registration.fill_error": "Täytä kaikki pakolliset kentät",
+	"registration.of": "kokonaismäärästä",
+	"registration.register": "Rekisteröidy",
+	"registration.step": "Vaihe",
+	"regular_company": {
+		"label": "Asiakas"
+	},
+	"reset": "Asettaa uudelleen",
+	"reset_all": "Nollaa kaikki",
+	"reset_dates": "Nollaa valitut päivämäärät",
+	"residency.label": "Residenssi",
+	"save": "Tallentaa",
+	"save_changes": "Tallenna muutokset",
+	"score.label": "Pisteet",
+	"search_by_distance": "Etsi etäisyyden mukaan",
+	"select": "valita",
+	"select_dates": "Valitse päivämäärät",
+	"shift.date.job.notes.label": "Huomautuksia",
+	"shift.date.job.position.label": "Asento",
+	"shift.date.shift_date.label": "Vaihtotiedot",
+	"shift.label": "Siirtää",
+	"shift_ended_at": {
+		"label": "Vaihto päättyy"
+	},
+	"shift_start_end": "Vaihda alku / loppu",
+	"shift_started_at": {
+		"label": "Vaihda aloitusaika"
+	},
+	"shift_starting_time": {
+		"label": "Vaihto-aloitusaika"
+	},
+	"shifts": "Vuorot",
+	"short_name": {
+		"label": "Sivuston nimi"
+	},
+	"show_map": "Näytä kartta",
+	"signature": "Allekirjoitus",
+	"site_name": {
+		"label": "Sivuston nimi"
+	},
+	"skill.label": "Taito",
+	"skillrel.label": "Ehdokastaito",
+	"sms_history": {
+		"label": "SMS-historia"
+	},
+	"start": "Alkaa",
+	"start_date": {
+		"label": "Työn aloituspäivä"
+	},
+	"state": {
+		"label": "Osavaltio"
+	},
+	"status": {
+		"label": "Tila",
+		"status": {
+			"label": "Odotetaan lähettämistä"
+		},
+		"supervisor_approved": {
+			"label": "Hyväksytty"
+		}
+	},
+	"status.label": "Tila",
+	"submit": "Lähetä",
+	"supervisor.label": "Valvoja",
+	"tabs.evaluations.help": "Täältä näet arviot",
+	"tabs.evaluations.label": "Arvioinnit",
+	"tabs.evaluations.name": "Arvioinnit",
+	"tabs.general.help": "",
+	"tabs.general.label": "Yleistä tietoa",
+	"tabs.general.name": "Yleistä tietoa",
+	"tabs.job.help": "",
+	"tabs.job.label": "",
+	"tabs.job.name": "Työ",
+	"tabs.job_info.help": "",
+	"tabs.job_info.label": "Työtiedot",
+	"tabs.job_info.name": "Työtiedot",
+	"tabs.job_offers.label": "Työtarjoukset",
+	"tabs.job_offers.name": "Työtarjoukset",
+	"tabs.notes.name": "Huomautuksia",
+	"tabs.personal.label": "Henkilökohtaisia tietoja",
+	"tabs.personal.name": "Henkilökohtaiset tiedot",
+	"tabs.shift_dates.label": "Vaihtopäivät",
+	"tabs.shift_dates.name": "Vaihtopäivät",
+	"tabs.skills.help": "Täällä voit nähdä taitoja",
+	"tabs.skills.label": "Taidot",
+	"tabs.skills.name": "Taidot",
+	"tabs.tags.help": "Täällä näet tagit",
+	"tabs.tags.label": "Tulokset",
+	"tabs.tags.name": "Tulokset",
+	"tag.label": "Tulokset",
+	"take_a_photo": "Ottaa valokuva",
+	"tax_file_number.label": " AU Verotiedoston numero",
+	"time": {
+		"label": "Vaihda aloitusaika"
+	},
+	"times.break_started_at.label": "Tauko",
+	"times.label": "Ajat",
+	"times.shift.date.job.notes.label": "Huomautuksia",
+	"times.shift.date.job.position.label": "Asento",
+	"times.shift.date.shift_date.label": "Vaihtopäivä",
+	"times.shift.time.label": "Vaihtoaika",
+	"times.shift_ended_at.label": "Pää",
+	"times.shift_started_at.date": "Päivämäärä",
+	"times.shift_started_at.label": "Alku",
+	"timesheet": "Kellokortti",
+	"timesheet.count_timesheets.label": "Kaikki yhteensä",
+	"timesheet.days_from_last_timesheet.label": "Viimeisestä",
+	"timesheet.label": "Kellokortti",
+	"timesheet_will_approved": "Aikataulu hyväksytään automaattisesti 4 tunnissa",
+	"totalTime.label": "Kokonaisaika",
+	"total_time": {
+		"label": "Kokonaisaika"
+	},
+	"tracking.label": "Seuranta",
+	"transportation_to_work.label": "Kuljetus töihin",
+	"try_again": "Yritä uudelleen",
+	"unavailable": {
+		"label": "Ei käytettävissä"
+	},
+	"unfulfilled": "Täyttämättä",
+	"update": "Päivittää",
+	"updated": {
+		"label": "Päivitetty"
+	},
+	"upload_file": "Lataa uusi tiedosto",
+	"use_camera": "Käytä kameraa",
+	"username.placeholder": "Kirjaudu sisään",
+	"verification_evidence.label": "Varmennustodisteet",
+	"verified_by.label": "Jonkin varmistama",
+	"week": "Viikko",
+	"weight.label": "Paino (kg)",
+	"work_start_date": {
+		"label": "Työn aloituspäivä"
+	},
+	"workers": {
+		"label": "Työntekijöiden",
+		"placeholder": "Työntekijöiden"
+	}
+}

@@ -2,8 +2,9 @@ module.exports = {
   name: 'shared-metadata',
   preset: '../../jest.config.js',
   transform: {
-    '^.+\\.[tj]sx?$': 'ts-jest'
+    '^.+\\.[tj]sx?$': 'ts-jest',
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'html'],
-  coverageDirectory: '../../coverage/libs/shared-metadata'
+  coverageDirectory: '../../coverage/libs/shared-metadata',
+  globals: { 'ts-jest': { tsConfig: '<rootDir>/tsconfig.spec.json' } },
 };

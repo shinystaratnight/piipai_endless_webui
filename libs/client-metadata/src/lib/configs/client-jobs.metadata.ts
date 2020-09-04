@@ -177,7 +177,7 @@ const list = {
         label: 'Position',
         add: true,
         delete: false,
-        values: ['__str__'],
+        values: ['__str__', 'tranlsations'],
         type: 'related',
         edit: true,
         placeholder: 'Please select role/trade'
@@ -409,7 +409,7 @@ const formset = {
         add: true,
         delete: false,
         edit: true,
-        values: ['__str__'],
+        values: ['__str__', 'tranlsations'],
         label: 'Position',
         type: 'related',
         placeholder: 'Please select role/trade'
@@ -642,7 +642,7 @@ const jobsite_client = {
         add: true,
         delete: false,
         edit: true,
-        values: ['__str__'],
+        values: ['__str__', 'tranlsations'],
         label: 'Position',
         type: 'related',
         placeholder: 'Please select role/trade'
@@ -823,6 +823,8 @@ const form = [
       {
         main: true,
         name: 'Job info',
+        key: 'job_info',
+        translateKey: 'job_info',
         type: 'group',
         label: 'Job information',
         children: [
@@ -831,6 +833,8 @@ const form = [
             children: [
               {
                 label: 'General',
+                key: 'general',
+                translateKey: 'general',
                 type: 'group',
                 children: [
                   {
@@ -886,6 +890,8 @@ const form = [
               },
               {
                 label: 'Client',
+                key: 'client',
+                translateKey: 'client',
                 type: 'group',
                 children: [
                   {
@@ -947,6 +953,8 @@ const form = [
               },
               {
                 label: 'Provider',
+                key: 'provider',
+                translateKey: 'provider',
                 type: 'group',
                 children: [
                   {
@@ -1007,6 +1015,7 @@ const form = [
           type: 'list',
           text: 'Shift Dates'
         },
+        key: 'shift_dates',
         query: {
           job: '{id}'
         },
@@ -1017,6 +1026,7 @@ const form = [
           workers: '{workers}'
         },
         type: 'list',
+        translateKey: 'shift_dates',
         add_metadata_query: {
           fieldsets_type: 'job'
         },
@@ -1024,11 +1034,13 @@ const form = [
       },
       {
         endpoint: '/hr/joboffers/',
+        translateKey: 'job_offers',
         templateOptions: {
           label: 'Job Offers',
           type: 'list',
           text: 'Job Offers'
         },
+        key: 'job_offers',
         visibleMode: true,
         type: 'list',
         query: {
@@ -1069,7 +1081,7 @@ const form = [
       label: 'Position',
       add: false,
       delete: false,
-      values: ['__str__'],
+      values: ['__str__', 'tranlsations'],
       type: 'related',
       edit: true,
       placeholder: 'Please select role/trade'
@@ -1229,7 +1241,8 @@ const formadd = [
                 '__str__',
                 'upper_rate_limit',
                 'lower_rate_limit',
-                'default_rate'
+                'default_rate',
+                'tranlsations'
               ],
               type: 'related',
               edit: true,
