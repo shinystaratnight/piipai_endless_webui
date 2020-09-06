@@ -82,8 +82,8 @@ const list = {
         content: [
           {
             endpoint: '/skills/skills/',
-            field: 'position',
-            type: 'related'
+            field: 'position.__str__',
+            type: 'text'
           }
         ],
         name: 'position',
