@@ -12,6 +12,11 @@ import { SiteSettingsService } from '@webui/core';
 
 const translationMap = CountryCodeLanguage;
 
+const translationCountryName = {
+  'EE': 'Estonian',
+  'FI': 'Finnish'
+}
+
 @Component({
   selector: 'app-form-info',
   templateUrl: './form-info.component.html',
