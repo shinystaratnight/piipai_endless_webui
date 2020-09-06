@@ -3,13 +3,13 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 
 import { map, catchError } from 'rxjs/operators';
 
-import { ErrorsService } from '@webui/core';
-import { Endpoints } from '@webui/data';
+import { ErrorsService, SiteSettingsService } from '@webui/core';
+import { Endpoints, CountryCodeLanguage } from '@webui/data';
 import { getContactAvatar } from '@webui/utilities';
 
 @Injectable()
 export class DashboardService {
-  constructor(private http: HttpClient, private errorService: ErrorsService) {}
+  constructor(private http: HttpClient, private errorService: ErrorsService, private siteSettings: SiteSettingsService) {}
 
   getCandidates(query?: { [key: string]: any }) {
     const params = new HttpParams({ fromObject: query });
@@ -36,9 +36,23 @@ export class DashboardService {
             score: average_score,
             state: latest_state[0],
             skills: skill_list.map(el => {
+              const { skill: { name } } = el;
+              const trans = name.translations.find(item => item.language.id === CountryCodeLanguage[this.siteSettings.settings.country_code]);
+
+              if (trans) {
+                el.skill.__str__ = trans.value
+              }
+
               return { name: el.skill.__str__, score: el.score };
             }),
             tags: tag_list.map(el => {
+              const { tag } = el;
+              const trans = tag.translations.find(item => item.language.id === CountryCodeLanguage[this.siteSettings.settings.country_code]);
+
+              if (trans) {
+                el.tag.name = trans.value
+              }
+
               return { name: el.tag.name };
             })
           };
