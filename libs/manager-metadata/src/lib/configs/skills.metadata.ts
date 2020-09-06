@@ -138,7 +138,7 @@ const form = [
     values: {
       available: 'active',
       company: 'name.industry',
-      skill_title: 'name.__str__',
+      skill_title: '__str__',
       created_at: 'created_at',
       updated_at: 'updated_at'
     },

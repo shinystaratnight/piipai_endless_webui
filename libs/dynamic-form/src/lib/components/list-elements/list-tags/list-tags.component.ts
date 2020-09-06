@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 
 import { FormatString } from '@webui/utilities';
+import { SiteSettingsService } from '@webui/core';
+import { CountryCodeLanguage } from '@webui/data';
+
+const translationMap = CountryCodeLanguage;
 
 @Component({
   selector: 'app-list-tags',
@@ -17,6 +21,8 @@ export class ListTagsComponent implements OnInit {
   public color: any;
   public colorAttr: string;
 
+  constructor(private siteSettings: SiteSettingsService) {}
+
   public ngOnInit() {
     const formatSting = new FormatString();
 
@@ -24,8 +30,12 @@ export class ListTagsComponent implements OnInit {
     this.tags = this.config.value;
 
     this.tags.forEach((el) => {
+      const { tag } = el;
+      const trans = tag.translations.find(item => item.language.id === translationMap[this.siteSettings.settings.country_code]);
+      let val = trans && trans.value ;
+
       if (el) {
-        el.__str__ = formatSting.format(this.display, el);
+        el.__str__ = val || formatSting.format(this.display, el);
       }
     });
 

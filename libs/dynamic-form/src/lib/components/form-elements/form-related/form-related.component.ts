@@ -30,7 +30,7 @@ import {
   ToastService,
   MessageType,
 } from '@webui/core';
-import { Field, Endpoints } from '@webui/data';
+import { Field, Endpoints, CountryCodeLanguage } from '@webui/data';
 import {
   FormatString,
   isManager,
@@ -62,9 +62,12 @@ export interface CustomField {
   outside?: boolean;
 }
 
-const translationMap = {
-  'EE': 'et'
-};
+const translationMap = CountryCodeLanguage;
+
+const translationCountryName = {
+  'EE': 'Estonian',
+  'FI': 'Finnish'
+}
 
 @Component({
   selector: 'app-form-related',
@@ -658,6 +661,23 @@ export class FormRelatedComponent extends BasicElementComponent
             } else {
               this.linkPath = '/';
             }
+
+            if (data.translations) {
+              const trans = data.translations.find(el => el.language.id === translationMap[this.settingsService.settings.country_code]);
+
+              if (trans) {
+                data.__str__ = trans.value
+              }
+            }
+
+            if (data.name && data.name.translations) {
+              const trans = data.name.translations.find(el => el.language.id === translationMap[this.settingsService.settings.country_code]);
+
+              if (trans) {
+                data.__str__ = trans.value
+              }
+            }
+
             this.displayValue = formatString.format(this.display, data);
           }
           value = data[this.param];
@@ -685,10 +705,26 @@ export class FormRelatedComponent extends BasicElementComponent
         if (this.config.options && this.config.options.length) {
           const results = [];
           this.config.options.forEach((el) => {
+            if (el.translations) {
+              const trans = data.translations.find(item => item.language.id === translationMap[this.settingsService.settings.country_code]);
+
+              if (trans) {
+                el.__str__ = trans.value
+              }
+            }
+
             el.__str__ = formatString.format(this.display, el);
             el.checked = false;
             data.forEach((elem) => {
               if (elem instanceof Object) {
+                if (elem.translations) {
+                  const trans = elem.translations.find(el => el.language.id === translationMap[this.settingsService.settings.country_code]);
+
+                  if (trans) {
+                    elem.__str__ = trans.value
+                  }
+                }
+
                 const param = this.config.relatedObjects
                   ? this.config.relatedObjects.field + '.id'
                   : this.param;
@@ -713,6 +749,14 @@ export class FormRelatedComponent extends BasicElementComponent
           this.results =
             data && data !== '-'
               ? data.map((el) => {
+                  if (el.translations) {
+                    const trans = el.translations.find(item => item.language.id === translationMap[this.settingsService.settings.country_code]);
+
+                    if (trans) {
+                      el.__str__ = trans.value
+                    }
+                  }
+
                   if (el.__str__) {
                     el.__str__ = formatString.format(this.display, el);
                   }
@@ -1274,6 +1318,10 @@ export class FormRelatedComponent extends BasicElementComponent
       this.displayValue = formatString.format(this.display, item);
       this.group.get(this.key).patchValue(item[this.param]);
 
+      if (!(<any>this.cd).destroyed) {
+        this.cd.markForCheck();
+      }
+
       return true;
     }
 
@@ -1601,8 +1649,8 @@ export class FormRelatedComponent extends BasicElementComponent
                   if (el.translations || el.translation || (el.name && el.name.translations)) {
                     const translations = el.translations || el.translation || el.name.translations;
                     const coutryCode = this.settingsService.settings.country_code;
-                    const translation = translations.find((t) => t.language.id === translationMap[coutryCode]);
-                    el.__str__ = (translation && translation.__str__) || formatString.format(display, el);
+                    const translation = [...translations].find((t) => t.language.id === translationMap[coutryCode] || t.language.name === translationCountryName[coutryCode]);
+                    el.__str__ = (translation && (translation.__str__ || translation.value)) || formatString.format(display, el);
                   } else {
                     el.__str__ = formatString.format(display, el);
                   }
@@ -1716,6 +1764,13 @@ export class FormRelatedComponent extends BasicElementComponent
               this.loading = false;
               this.lastElement = 0;
               if (res) {
+                if (res.translations || res.translation || (res.name && res.name.translations)) {
+                  const translations = res.translations || res.translation || res.name.translations;
+                  const coutryCode = this.settingsService.settings.country_code;
+                  const translation = [...translations].find((t) => t.language.id === translationMap[coutryCode] || t.language.name === translationCountryName[coutryCode]);
+                  res.__str__ = (translation && (translation.__str__ || translation.value)) || res.__str__;
+                }
+
                 const path = this.getLinkPath(this.config.endpoint);
                 if (path) {
                   this.linkPath =

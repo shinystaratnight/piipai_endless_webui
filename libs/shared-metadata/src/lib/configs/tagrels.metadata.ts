@@ -219,7 +219,7 @@ const formset = {
         content: [
           {
             endpoint: '/core/tags/',
-            type: 'related',
+            type: 'text',
             field: 'tag'
           }
         ],
@@ -483,7 +483,7 @@ const profile = {
         content: [
           {
             endpoint: '/core/tags/',
-            type: 'related',
+            type: 'text',
             field: 'tag'
           }
         ],

@@ -131,7 +131,7 @@ const list = {
         width: 150,
         content: [
           {
-            field: 'name',
+            field: '__str__',
             type: 'text'
           }
         ],
@@ -144,7 +144,7 @@ const list = {
         label: 'Industry',
         content: [
           {
-            field: 'industry.type',
+            field: 'industry',
             type: 'text'
           }
         ],

@@ -1,4 +1,8 @@
 import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
+import { SiteSettingsService } from '@webui/core';
+import { CountryCodeLanguage } from '@webui/data';
+
+const translationMap = CountryCodeLanguage;
 
 @Component({
   selector: 'app-list-skills',
@@ -6,7 +10,6 @@ import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
   styleUrls: ['./list-skills.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-
 export class ListSkillsComponent implements OnInit {
 
   public config: any;
@@ -25,15 +28,28 @@ export class ListSkillsComponent implements OnInit {
   public more: boolean;
   public evaluationCount: string;
 
+  constructor(private siteSetting: SiteSettingsService) {}
+
   public ngOnInit() {
-    if (Array.isArray(this.config.value)) {
+    const { value } = this.config;
+
+    if (Array.isArray(value)) {
       this.list = true;
 
-      if (this.config.value && this.config.value.length > 4) {
-        this.dataList = this.config.value.slice(0, 4);
+      value.forEach(el => {
+        const { skill: { name } } = el;
+        const trans = name.translations.find(el => el.language.id === translationMap[this.siteSetting.settings.country_code]);
+
+        if (trans) {
+          el.skill.__str__ = trans.value
+        }
+      })
+
+      if (value && value.length > 4) {
+        this.dataList = value.slice(0, 4);
         this.more = true;
       } else {
-        this.dataList = this.config.value;
+        this.dataList = [...value];
       }
 
     } else {

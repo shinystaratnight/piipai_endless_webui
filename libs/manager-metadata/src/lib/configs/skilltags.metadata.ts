@@ -9,7 +9,7 @@ const formset = {
         content: [
           {
             endpoint: '/core/tags/',
-            type: 'related',
+            type: 'text',
             field: 'tag'
           }
         ],
@@ -54,7 +54,7 @@ const form = [
     read_only: true,
     templateOptions: {
       label: 'Skill',
-      values: ['__str__', 'tranlsations'],
+      values: ['__str__', 'tranlsations', 'name'],
     },
     type: 'related',
     key: 'skill',
@@ -80,7 +80,7 @@ const formadd = [
       add: true,
       delete: false,
       edit: true,
-      values: ['__str__', 'tranlsations'],
+      values: ['__str__', 'tranlsations', 'name'],
     },
     type: 'related',
     key: 'skill',
