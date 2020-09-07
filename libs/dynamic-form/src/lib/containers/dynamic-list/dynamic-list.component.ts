@@ -2747,7 +2747,7 @@ export class DynamicListComponent
   }
 
   getListLabelKey(): string {
-    return `${this.config.list.list}.label`;
+    return this.config.list.list && `${this.config.list.list}.label`;
   }
 
   openDetails(row, e) {
