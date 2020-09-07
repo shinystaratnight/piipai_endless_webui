@@ -98,8 +98,8 @@ export class FormListComponent implements OnInit, OnDestroy {
     this.allowMethods = this.permission.getAllowMethods(undefined, this.config.endpoint);
     this.hasAddForm = this.config.add_form;
 
-    this.labelTranslateKey = `tabs.${this.config.translateKey}.label`;
-    this.helpTranslateKey = `tabs.${this.config.translateKey}.help`;
+    this.labelTranslateKey = this.config.translateKey && `tabs.${this.config.translateKey}.label`;
+    this.helpTranslateKey = this.config.translateKey && `tabs.${this.config.translateKey}.help`;
 
     if (this.hasAddForm) {
       this.addFormConfig = this.getAddFormConfig();
