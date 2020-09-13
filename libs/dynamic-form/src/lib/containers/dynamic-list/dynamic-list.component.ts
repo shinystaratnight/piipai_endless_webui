@@ -39,7 +39,7 @@ import {
   isManager,
   isClient,
 } from '@webui/utilities';
-import { Endpoints } from '@webui/data';
+import { Endpoints, CountryCodeLanguage } from '@webui/data';
 
 import {
   FilterService,
@@ -62,6 +62,8 @@ import { environment } from '../../../../../../apps/r3sourcer/src/environments/e
 import { TrackingModalComponent } from '../../modals';
 import { FilterEvent } from '../../interfaces';
 import { formatCurrency, getCurrencySymbol } from '@angular/common';
+
+const translationMap = CountryCodeLanguage;
 
 @Component({
   selector: 'app-dynamic-list',
@@ -1203,7 +1205,24 @@ export class DynamicListComponent
         if (prop === 'totalTime') {
           object[param] = this.getTotalTime(data);
         } else {
-          object[param] = data[prop];
+          if (data.translations || (data.name && data.name.translations)) {
+            const translations = data.translations || (data.name && data.name.translation) || [];
+            const trans = translations.find(el => el.language.id === translationMap[this.siteSettings.settings.country_code]);
+
+            data.__str__ = trans ? trans.value : data.__str__;
+          }
+
+          if (data[prop] && data[prop].translations) {
+            const trans = data[prop].translations.find(el => el.language.id === translationMap[this.siteSettings.settings.country_code]);
+
+            if (trans) {
+              object[param] = trans.value
+            } else {
+              object[param] = data[prop].__str__
+            }
+          } else {
+            object[param] = data[prop];
+          }
         }
       }
     } else if (data[prop]) {
@@ -2728,7 +2747,7 @@ export class DynamicListComponent
   }
 
   getListLabelKey(): string {
-    return `${this.config.list.list}.label`;
+    return this.config.list.list && `${this.config.list.list}.label`;
   }
 
   openDetails(row, e) {

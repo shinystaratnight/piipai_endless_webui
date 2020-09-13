@@ -7,7 +7,15 @@ import { Subscription } from 'rxjs';
 
 import { getContactAvatar, isCandidate, isMobile, FormatString, isClient } from '@webui/utilities';
 import { GenericFormService, FormService } from '../../../services';
-import { Endpoints } from '@webui/data';
+import { Endpoints, CountryCodeLanguage } from '@webui/data';
+import { SiteSettingsService } from '@webui/core';
+
+const translationMap = CountryCodeLanguage;
+
+const translationCountryName = {
+  'EE': 'Estonian',
+  'FI': 'Finnish'
+}
 
 @Component({
   selector: 'app-form-info',
@@ -79,7 +87,8 @@ export class FormInfoComponent implements OnInit, OnDestroy {
     private modalService: NgbModal,
     private router: Router,
     private gfs: GenericFormService,
-    private formService: FormService
+    private formService: FormService,
+    private siteSettings: SiteSettingsService
   ) {
     this.subscriptions = [];
   }
@@ -190,6 +199,13 @@ export class FormInfoComponent implements OnInit, OnDestroy {
       if (!keys.length) {
         if (data[prop] instanceof Object && type === 'picture') {
           return data[prop].origin;
+        }
+
+        if (data.translations || data.translation || (data.name && data.name.translations)) {
+          const translations = data.translations || data.translation || data.name.translations;
+          const coutryCode = this.siteSettings.settings.country_code;
+          const translation = [...translations].find((t) => t.language.id === translationMap[coutryCode] || t.language.name === translationCountryName[coutryCode]);
+          data.__str__ = (translation && (translation.__str__ || translation.value)) || data.__str__;
         }
 
         return data[prop];

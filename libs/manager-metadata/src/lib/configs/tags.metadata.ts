@@ -131,7 +131,7 @@ const form = [
       tag: '{id}'
     },
     templateOptions: {
-      values: ['__str__'],
+      values: ['__str__', 'name'],
       label: 'Skills',
       delete: true,
       add: true,
