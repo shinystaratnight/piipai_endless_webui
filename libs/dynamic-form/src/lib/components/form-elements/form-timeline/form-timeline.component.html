@@ -22,7 +22,7 @@
 </div>
 
 <div
-  *ngIf="selectArray && currentState && this.dropdown"
+  *ngIf="selectArray && currentState.value && this.dropdown"
   class="timeline timeline-select-wrapper"
 >
   Status:
@@ -30,15 +30,15 @@
   <select
     class="timeline-element badge badge-outline timeline-select"
     [ngClass]="{
-      'need-requirements': getState(currentState).state === 0,
-      allowed: getState(currentState).state === 1,
-      active: getState(currentState).state === 2,
-      visited: getState(currentState).state === 3,
-      'not-allowed': getState(currentState).state === 4
+      'need-requirements': getState(currentState.value).state === 0,
+      allowed: getState(currentState.value).state === 1,
+      active: getState(currentState.value).state === 2,
+      visited: getState(currentState.value).state === 3,
+      'not-allowed': getState(currentState.value).state === 4
     }"
-    [(ngModel)]="currentState"
+    [formControl]="currentState"
   >
-    <option *ngFor="let option of selectArray" [value]="option.id">
+    <option *ngFor="let option of selectArray" [ngValue]="option.id">
       <span *ngIf="option.state === 2">
         {{
           option.name_after_activation
@@ -53,16 +53,16 @@
   </select>
 
   <app-info
-    *ngIf="getState(currentState).state === 0"
+    *ngIf="getState(currentState.value).state === 0"
     triggersType="click:click"
     [description]="requirements"
   ></app-info>
   <button
     type="button"
     class="btn btn-sm btn-outline-success"
-    *ngIf="getState(currentState).state === 1"
+    *ngIf="getState(currentState.value).state === 1"
     [class.active]="saveProcess"
-    (click)="open(getState(currentState))"
+    (click)="open(getState(currentState.value))"
   >
     <fa-icon class="f-size-10 mr-0" icon="check" *ngIf="!saveProcess"></fa-icon>
     <app-spinner *ngIf="saveProcess" [sm]="true"></app-spinner>
@@ -255,7 +255,7 @@
     <ul class="info-block__list">
       <li
         class="info-block__item"
-        *ngFor="let option of getState(currentState).requirements"
+        *ngFor="let option of getState(currentState.value).requirements"
       >
         <fa-icon class="info-block__icon" icon="circle"></fa-icon>
         {{ option }}

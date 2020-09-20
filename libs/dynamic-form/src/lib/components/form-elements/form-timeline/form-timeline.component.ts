@@ -12,6 +12,7 @@ import { SiteSettingsService } from '@webui/core';
 import { TimelineService, TimelineAction } from '../../../services';
 import { PassTestModalComponent, PassTestModalConfig } from '../../../modals';
 import { Endpoints } from '@webui/data';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-form-timeline',
@@ -30,7 +31,7 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
   public query: { [key: string]: string } = {};
   public testId: string;
 
-  public currentState: any;
+  public currentState = new FormControl();
 
   public dropdown: boolean;
   public selectArray: any[];
@@ -131,7 +132,7 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
         }
       });
 
-      this.currentState = this.selectArray[key] && this.selectArray[key].id;
+      this.currentState.patchValue(this.selectArray[key] && this.selectArray[key].id);
     }
   }
 
