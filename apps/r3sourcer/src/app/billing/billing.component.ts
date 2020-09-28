@@ -156,4 +156,8 @@ export class BillingComponent implements OnInit, OnDestroy {
     });
     return active;
   }
+
+  onCardChange() {
+    this.checkPaymentInformation();
+  }
 }

@@ -5,6 +5,8 @@ import {
   Input,
   Inject,
   Optional,
+  Output,
+  EventEmitter,
 } from '@angular/core';
 
 import { BillingService } from '../../services/billing-service';
@@ -42,6 +44,9 @@ export class CheckCardComponent implements OnInit {
 
   @Input()
   public cardExist: boolean;
+
+  @Output()
+  public cardChange = new EventEmitter();
 
   private stripe: any;
   private card: any;
@@ -94,6 +99,7 @@ export class CheckCardComponent implements OnInit {
         this.saving = false;
         this.cardExist = true;
         this.newCard = false;
+        this.cardChange.emit();
       });
     } else {
       this.billingService.setCardInfo({
@@ -102,6 +108,7 @@ export class CheckCardComponent implements OnInit {
         this.saving = false;
         this.cardExist = true;
         this.newCard = false;
+        this.cardChange.emit();
       });
     }
 

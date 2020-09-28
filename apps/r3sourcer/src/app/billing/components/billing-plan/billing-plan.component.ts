@@ -17,6 +17,7 @@ export class BillingPlanComponent implements OnChanges, OnDestroy {
   @Input() public workerCount: number;
   @Input() public plans: Plan[];
   @Input() public currency = 'USD';
+  @Input() public cardExist: boolean;
 
   @ViewChild('subscription') public modal;
 
@@ -71,7 +72,9 @@ export class BillingPlanComponent implements OnChanges, OnDestroy {
   }
 
   public setPlan() {
-    this.openModal();
+    if (this.cardExist) {
+      this.openModal();
+    }
   }
 
   public changePlan() {
