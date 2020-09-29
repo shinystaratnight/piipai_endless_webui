@@ -3,7 +3,7 @@
 <div class="site-page pt-5 billing-page">
   <div class="form-page">
     <div class="form-content">
-      <app-check-card [cardExist]="checkInformation"></app-check-card>
+      <app-check-card [cardExist]="checkInformation" (cardChange)="onCardChange()"></app-check-card>
 
       <div class="row">
         <div class="col">
@@ -13,6 +13,7 @@
             [currentPlan]="currentPlan"
             [workerCount]="(currentPlan && currentPlan.worker_count) || 1"
             [currency]="currency"
+            [cardExist]="checkInformation"
             (selectedPlan)="selectPlan($event)"
             (cancelingPlan)="cancelPlan()"
           ></app-billing-plan>
@@ -24,7 +25,7 @@
         </div>
 
         <div class="col">
-          <app-billing-sms [currency]="currency"></app-billing-sms>
+            <app-billing-sms [currency]="currency" [cardExist]="checkInformation"></app-billing-sms>
         </div>
       </div>
 
