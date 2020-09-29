@@ -13,6 +13,7 @@ import { ToastService, MessageType } from '@webui/core';
 })
 export class BillingSmsComponent implements OnInit, OnDestroy {
   @Input() currency = 'USD';
+  @Input() cardExist: boolean;
 
   public smsBalance: any;
   public amount = 20;
@@ -49,7 +50,9 @@ export class BillingSmsComponent implements OnInit, OnDestroy {
   }
 
   public showAddFundsForm() {
-    this.openModal(this.fundsModal);
+    if (this.cardExist) {
+      this.openModal(this.fundsModal);
+    }
   }
 
   public addFunds() {
