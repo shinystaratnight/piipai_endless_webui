@@ -135,6 +135,7 @@ export interface Field {
     listDisplay?: string;
     listParam?: string;
     round?: true;
+    array?: boolean;
   };
 }
 
