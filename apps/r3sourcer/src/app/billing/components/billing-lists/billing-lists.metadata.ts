@@ -38,6 +38,8 @@ export const metadata = {
             values: {
               paid: 'Paid',
               not_paid: 'Not paid',
+              open: 'Open',
+              void: 'Void'
             },
           }
         ],
