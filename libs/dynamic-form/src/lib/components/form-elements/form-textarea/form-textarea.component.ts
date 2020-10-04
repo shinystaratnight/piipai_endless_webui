@@ -93,7 +93,12 @@ export class FormTextareaComponent extends BasicElementComponent implements OnIn
   public setInitValue() {
     if (this.config.value || this.config.value === '') {
       this.group.get(this.key).patchValue(this.config.value);
-      this.displayValue = this.config.value;
+
+      if (this.config.templateOptions.array) {
+        this.displayValue = this.config.value[0].content
+      } else {
+        this.displayValue = this.config.value;
+      }
     } else {
       this.displayValue = '-';
     }
