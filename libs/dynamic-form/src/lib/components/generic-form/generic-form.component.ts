@@ -702,7 +702,6 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
   }
 
   public fillingForm(metadata, data) {
-    console.log(data, metadata);
     metadata.forEach((el) => {
       if (el.update) {
         const value = this.getValueOfData(data, el.key, metadata, {});
