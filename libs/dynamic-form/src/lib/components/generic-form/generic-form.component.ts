@@ -702,6 +702,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
   }
 
   public fillingForm(metadata, data) {
+    console.log(data, metadata);
     metadata.forEach((el) => {
       if (el.update) {
         const value = this.getValueOfData(data, el.key, metadata, {});
@@ -722,7 +723,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
           }
         }
       }
-      if (el.key && el.key !== 'timeline') {
+      if (el.key && el.key !== 'timeline' && el.type !== 'group') {
         if (el.type === 'replace') {
           el.data = new BehaviorSubject(data);
         }
