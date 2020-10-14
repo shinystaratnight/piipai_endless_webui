@@ -200,7 +200,7 @@
     </app-time>
 
     <p *ngIf="config && config.metadata['birthday']">
-      <span class="description">Birthday:</span>&nbsp;
+      <span class="description">{{ 'birthday' | translate: {"Default": "Birthday"} }} :</span>&nbsp;
       <ng-container appFormElement
         [config]="config.metadata['birthday']"
         [group]="group">

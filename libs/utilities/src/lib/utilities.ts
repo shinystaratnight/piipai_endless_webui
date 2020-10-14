@@ -163,5 +163,9 @@ export class FormatString {
 }
 
 export function getTranslationKey(key, type) {
-  return `${key}.${type}`;
+  if (!isManager()) {
+    return `${key}.${type}`;
+  }
+
+  return 'without_translation';
 }
