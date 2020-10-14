@@ -757,6 +757,14 @@ export class FormRelatedComponent extends BasicElementComponent
                     }
                   }
 
+                  if (el.industry && el.industry.translations)  {
+                    const trans = el.industry.translations.find(item => item.language.id === translationMap[this.settingsService.settings.country_code]);
+
+                    if (trans) {
+                      el.__str__ = trans.value
+                    }
+                  }
+
                   if (el.__str__) {
                     el.__str__ = formatString.format(this.display, el);
                   }
