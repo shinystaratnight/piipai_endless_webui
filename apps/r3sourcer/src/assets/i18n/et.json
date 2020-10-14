@@ -92,7 +92,8 @@
 	"contact.__str__.label": "Kontakt",
 	"contact.address.street_address.description": "Aadress",
 	"contact.address.street_address.label": "Tänava aadress",
-	"contact.birthday.label": "Sünnipäev",
+  "contact.birthday.label": "Sünnipäev",
+  "birthday": "Sünnipäev",
 	"contact.email.label": "E-post",
 	"contact.first_name.label": "Eesnimi",
 	"contact.gender.label": "Sugu",
@@ -231,7 +232,7 @@
 	"job_site_contact.label": "Töökoha kontakt",
 	"joboffer": "Tööpakkumine",
 	"joboffer.label": "Tööpakkumine",
-	"jobsite.label": "Ametikoht / töökoht",
+	"jobsite.label": "Töökoht",
 	"layers": "Kihid",
 	"list": {
 		"status": [
@@ -245,7 +246,8 @@
 			"Kinnitatud"
 		]
 	},
-	"list.transportation_to_work.1": "Oma auto",
+  "list.transportation_to_work.1": "Oma auto",
+  "list.transportation_to_work.2": "Ühistransport",
 	"log_out": "Logi välja",
 	"login.forgot_password": "Unustasid parooli?",
 	"login.login": "Logi sisse",
@@ -485,5 +487,13 @@
 	"workers": {
 		"label": "Töölised",
 		"placeholder": "Töölised"
-	}
+  },
+  "gender.male": "Mees",
+  "gender.female": "Naine",
+  "transportation_to_work.1": "Oma auto",
+  "transportation_to_work.2": "Ühistransport",
+  "residency.1": "Citizen",
+  "residency.2": "Permanent Resident",
+  "residency.3": "Temporary Resident",
+  "residency.4": "Unknown"
 }

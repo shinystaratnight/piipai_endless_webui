@@ -92,7 +92,8 @@
 	"contact.__str__.label": "Average score",
 	"contact.address.street_address.description": "Address",
 	"contact.address.street_address.label": "Street Address",
-	"contact.birthday.label": "birthday",
+  "contact.birthday.label": "birthday",
+  "birthday": "Birthday",
 	"contact.email.label": "Email",
 	"contact.first_name.label": "First Name",
 	"contact.gender.label": "Gender",
@@ -231,7 +232,7 @@
 	"job_site_contact.label": "Job site contact",
 	"joboffer": "Job Offer",
 	"joboffer.label": "Job Offer",
-	"jobsite.label": "Position / Jobsite",
+	"jobsite.label": "Jobsite",
 	"layers": "Layers",
 	"list": {
 		"status": [
@@ -245,7 +246,8 @@
 			"Approved"
 		]
 	},
-	"list.transportation_to_work.1": "Own Car",
+  "list.transportation_to_work.1": "Own Car",
+  "list.transportation_to_work.2": "Public Transportation",
 	"log_out": "Log out",
 	"login.forgot_password": "Forgot Password?",
 	"login.login": "Login",
@@ -485,5 +487,13 @@
 	"workers": {
 		"label": "Workers",
 		"placeholder": "Workers"
-	}
+  },
+  "gender.male": "Male",
+  "gender.female": "Female",
+  "transportation_to_work.1": "Own Car",
+  "transportation_to_work.2": "Public Transportation",
+  "residency.1": "Citizen",
+  "residency.2": "Permanent Resident",
+  "residency.3": "Temporary Resident",
+  "residency.4": "Unknown"
 }

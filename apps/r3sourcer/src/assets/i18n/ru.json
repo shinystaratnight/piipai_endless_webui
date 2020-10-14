@@ -92,7 +92,8 @@
 	"contact.__str__.label": "Средняя оценка",
 	"contact.address.street_address.description": "",
 	"contact.address.street_address.label": "Адрес",
-	"contact.birthday.label": "День рождения",
+  "contact.birthday.label": "Дата рождения",
+  "birthday": "Дата рождения",
 	"contact.email.label": "Email",
 	"contact.first_name.label": "Имя",
 	"contact.gender.label": "Пол",
@@ -231,7 +232,7 @@
 	"job_site_contact.label": "Контакт места работы",
 	"joboffer": "Предложение работы",
 	"joboffer.label": "Предложение работы",
-	"jobsite.label": "Должность / Место работы",
+	"jobsite.label": "Место работы",
 	"layers": "типы",
 	"list": {
 		"status": [
@@ -245,7 +246,8 @@
 			"Подтверждено"
 		]
 	},
-	"list.transportation_to_work.1": "Машина",
+  "list.transportation_to_work.1": "Машина",
+  "list.transportation_to_work.2": "Общественный транспорт",
 	"log_out": "Выйти",
 	"login.forgot_password": "Забыли пароль?",
 	"login.login": "Войти",
@@ -485,5 +487,13 @@
 	"workers": {
 		"label": "Рабочих",
 		"placeholder": ""
-	}
+  },
+  "gender.male": "Мужской",
+  "gender.female": "Женский",
+  "transportation_to_work.1": "Машина",
+  "transportation_to_work.2": "Общественный транспорт",
+  "residency.1": "Гражданин",
+  "residency.2": "Постоянный житель",
+  "residency.3": "Временный резидент",
+  "residency.4": "Неизвестно"
 }
