@@ -60,6 +60,7 @@ export class FormSelectComponent extends BasicElementComponent
     this.checkModeProperty();
     this.checkHiddenProperty();
     this.createEvent();
+    console.log(this);
   }
 
   public ngOnDestroy() {
@@ -107,10 +108,11 @@ export class FormSelectComponent extends BasicElementComponent
   public getValue(
     options: any[],
     value: string
-  ): { value: string; color?: string } {
+  ): { value: string; color?: string, key?: string } {
     let element = options.find((el) => el.value == value); // tslint:disable-line
     if (element) {
       return {
+        key: element.value,
         value: element.label,
         color: element.color,
       };
@@ -134,7 +136,7 @@ export class FormSelectComponent extends BasicElementComponent
     }
     if ((this.viewMode || this.config.read_only) && !this.config.hide) {
       const option = this.getValue(this.options, value);
-      this.displayValue = option.value;
+      this.displayValue = option.value !== '-' ? this.getOptionTranslationKey(option.key) : option.value;
       this.textColor = option.color ? `text-${option.color}` : '';
     }
   }
@@ -151,5 +153,9 @@ export class FormSelectComponent extends BasicElementComponent
       el: this.config,
       value: this.group.get(this.key).value,
     });
+  }
+
+  getOptionTranslationKey(optionKey: string): string {
+    return `${this.key}.${optionKey}`;
   }
 }

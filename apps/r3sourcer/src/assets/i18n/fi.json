@@ -92,7 +92,8 @@
 	"contact.__str__.label": "Yhteyshenkilö",
 	"contact.address.street_address.description": "Osoite",
 	"contact.address.street_address.label": "Katuosoite",
-	"contact.birthday.label": "Syntymäpäivä",
+  "contact.birthday.label": "Syntymäpäivä",
+  "birthday": "Syntymäpäivä",
 	"contact.email.label": "Sähköposti",
 	"contact.first_name.label": "Etunimi",
 	"contact.gender.label": "Sukupuoli",
@@ -231,7 +232,7 @@
 	"job_site_contact.label": "Yhteys työpaikkaan",
 	"joboffer": "Työtarjous",
 	"joboffer.label": "Työtarjous",
-	"jobsite.label": "Rooli / Työpaikka",
+	"jobsite.label": "Työpaikka",
 	"layers": "kerroksia",
 	"list": {
 		"status": [
@@ -245,7 +246,8 @@
 			"Hyväksytty"
 		]
 	},
-	"list.transportation_to_work.1": "Oma auto",
+  "list.transportation_to_work.1": "Oma auto",
+  "list.transportation_to_work.2": "Julkinen liikenne",
 	"log_out": "Kirjautua ulos",
 	"login.forgot_password": "Unohtuiko salasana?",
 	"login.login": "Kirjaudu sisään",
@@ -485,5 +487,13 @@
 	"workers": {
 		"label": "Työntekijöiden",
 		"placeholder": "Työntekijöiden"
-	}
+  },
+  "gender.male": "Uros",
+  "gender.female": "Nainen",
+  "transportation_to_work.1": "Oma auto",
+  "transportation_to_work.2": "Julkinen liikenne",
+  "residency.1": "Citizen",
+  "residency.2": "Permanent Resident",
+  "residency.3": "Temporary Resident",
+  "residency.4": "Unknown"
 }
