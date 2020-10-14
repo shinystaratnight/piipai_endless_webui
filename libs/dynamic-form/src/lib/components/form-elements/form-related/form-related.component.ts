@@ -702,6 +702,7 @@ export class FormRelatedComponent extends BasicElementComponent
         }
         this.group.get(this.key).patchValue(value);
       } else {
+        console.log(this.config);
         if (this.config.options && this.config.options.length) {
           const results = [];
           this.config.options.forEach((el) => {
@@ -751,6 +752,14 @@ export class FormRelatedComponent extends BasicElementComponent
               ? data.map((el) => {
                   if (el.translations) {
                     const trans = el.translations.find(item => item.language.id === translationMap[this.settingsService.settings.country_code]);
+
+                    if (trans) {
+                      el.__str__ = trans.value
+                    }
+                  }
+
+                  if (el.industry && el.industry.translations)  {
+                    const trans = el.industry.translations.find(item => item.language.id === translationMap[this.settingsService.settings.country_code]);
 
                     if (trans) {
                       el.__str__ = trans.value
