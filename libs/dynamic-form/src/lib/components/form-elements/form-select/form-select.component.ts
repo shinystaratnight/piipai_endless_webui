@@ -33,6 +33,7 @@ export class FormSelectComponent extends BasicElementComponent
   public label: boolean;
 
   public displayValue: string;
+  public displayValueKey: string;
   public textColor: string;
 
   public viewMode: boolean;
@@ -135,7 +136,10 @@ export class FormSelectComponent extends BasicElementComponent
     }
     if ((this.viewMode || this.config.read_only) && !this.config.hide) {
       const option = this.getValue(this.options, value);
-      this.displayValue = option.value !== '-' ? this.getOptionTranslationKey(option.key) : option.value;
+      if (option.value !== '-') {
+        this.displayValueKey = this.getOptionTranslationKey(option.key);
+      }
+      this.displayValue = option.value;
       this.textColor = option.color ? `text-${option.color}` : '';
     }
   }
