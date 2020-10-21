@@ -102,7 +102,7 @@ export const testMetadata = {
               templateOptions: {
                 label: 'Skills',
                 type: 'related',
-                values: ['__str__', 'tranlsations'],
+                values: ['__str__', 'tranlsations', 'name'],
                 delete: true,
                 add: false
               }
