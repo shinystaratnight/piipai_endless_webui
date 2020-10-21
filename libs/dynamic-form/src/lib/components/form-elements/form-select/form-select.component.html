@@ -53,7 +53,7 @@
     [ngClass]="textColor"
     [class.readonly-value]="!textColor && config.read_only"
   >
-    {{ displayValue | translate : {"Default": displayValue} }}
+    {{ displayValueKey | translate : {"Default": displayValue} }}
   </div>
   <small class="text-muted" *ngIf="config.templateOptions.description">
     {{ config.templateOptions.description }}
