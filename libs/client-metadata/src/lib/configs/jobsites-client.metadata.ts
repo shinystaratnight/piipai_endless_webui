@@ -75,7 +75,7 @@ const list = {
           {
             endpoint: '/pricing/industries/',
             field: 'industry',
-            type: 'related'
+            type: 'text'
           }
         ],
         name: 'industry',

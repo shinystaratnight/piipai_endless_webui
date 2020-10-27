@@ -102,7 +102,7 @@ const pricelist = {
         content: [
           {
             endpoint: '/skills/skills/',
-            type: 'related',
+            type: 'text',
             field: 'skill'
           }
         ],

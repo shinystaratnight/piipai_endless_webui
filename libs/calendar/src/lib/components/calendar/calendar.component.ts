@@ -479,6 +479,15 @@ export class CalendarComponent implements OnInit, OnDestroy {
     return count;
   }
 
+  getUnfulfilledCount(shifts: any[], status: string) {
+    let count = 0;
+    shifts.forEach((shift) => {
+      count += shift.shift.workers;
+    });
+
+    return count;
+  }
+
   selectJob(event, shift) {
     event.preventDefault();
     event.stopPropagation();

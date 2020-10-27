@@ -1206,7 +1206,7 @@ export class DynamicListComponent
           object[param] = this.getTotalTime(data);
         } else {
           if (data.translations || (data.name && data.name.translations)) {
-            const translations = data.translations || (data.name && data.name.translation) || [];
+            const translations = data.translations || (data.name && data.name.translations) || [];
             const trans = translations.find(el => el.language.id === translationMap[this.siteSettings.settings.country_code]);
 
             data.__str__ = trans ? trans.value : data.__str__;

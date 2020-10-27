@@ -189,9 +189,7 @@
 	"filter.transportation_to_work.public_transportation": "Public Transportation",
 	"filters": "Filters",
 	"forgot_password": "Forgot Password?",
-	"fulfilled": {
-		"label": "Fulfilled"
-	},
+	"fulfilled": "Fulfilled",
 	"group": {
 		"additional_info": "Additional info",
 		"client": "Client",
