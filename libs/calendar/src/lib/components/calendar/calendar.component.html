@@ -164,7 +164,7 @@
 
         <div class="shift-groups">
           <div *ngIf="day.tooltip[1].length" class="badge badge-success">{{getShiftCount(day.tooltip[1], 'accepted')}}</div>
-          <div *ngIf="day.tooltip[0].length" class="badge badge-danger">{{day.tooltip[0].length}}</div>
+          <div *ngIf="day.tooltip[0].length" class="badge badge-danger">{{getUnfulfilledCount(day.tooltip[0])}}</div>
           <div *ngIf="day.tooltip[2].length" class="badge badge-warning">{{getShiftCount(day.tooltip[2], 'undefined')}}</div>
           <div *ngIf="day.tooltip[3].length"><fa-icon [icon]="['fas', 'file']" class="text-primary"></fa-icon></div>
           <div *ngIf="day.tooltip[4].length"><fa-icon [icon]="['fas', 'file']" class="text-warning"></fa-icon></div>

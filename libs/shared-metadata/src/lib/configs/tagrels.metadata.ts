@@ -41,7 +41,7 @@ const list = {
           {
             endpoint: '/core/tags/',
             field: 'tag',
-            type: 'related'
+            type: 'text'
           }
         ],
         name: 'tag',
@@ -572,7 +572,7 @@ const candidatepool = {
         content: [
           {
             endpoint: '/core/tags/',
-            type: 'related',
+            type: 'text',
             field: 'tag'
           }
         ],
