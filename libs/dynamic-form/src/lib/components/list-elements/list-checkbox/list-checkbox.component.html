@@ -13,7 +13,7 @@
   ]"
 >
 </fa-icon>
-<span [ngClass]="[iconClass]" *ngIf="config.values && !config.content">
+<span [ngClass]="[iconClass]" *ngIf="config.values && !config.content && value">
   {{ getTranslationKey(config.value) | translate: {"Default": value} }}
 </span>
 <span

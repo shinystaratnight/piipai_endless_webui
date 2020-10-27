@@ -33,6 +33,7 @@ export class FormSelectComponent extends BasicElementComponent
   public label: boolean;
 
   public displayValue: string;
+  public displayValueKey: string;
   public textColor: string;
 
   public viewMode: boolean;
@@ -107,10 +108,11 @@ export class FormSelectComponent extends BasicElementComponent
   public getValue(
     options: any[],
     value: string
-  ): { value: string; color?: string } {
+  ): { value: string; color?: string, key?: string } {
     let element = options.find((el) => el.value == value); // tslint:disable-line
     if (element) {
       return {
+        key: element.value,
         value: element.label,
         color: element.color,
       };
@@ -134,6 +136,9 @@ export class FormSelectComponent extends BasicElementComponent
     }
     if ((this.viewMode || this.config.read_only) && !this.config.hide) {
       const option = this.getValue(this.options, value);
+      if (option.value !== '-') {
+        this.displayValueKey = this.getOptionTranslationKey(option.key);
+      }
       this.displayValue = option.value;
       this.textColor = option.color ? `text-${option.color}` : '';
     }
@@ -151,5 +156,9 @@ export class FormSelectComponent extends BasicElementComponent
       el: this.config,
       value: this.group.get(this.key).value,
     });
+  }
+
+  getOptionTranslationKey(optionKey: string): string {
+    return `${this.key}.${optionKey}`;
   }
 }
