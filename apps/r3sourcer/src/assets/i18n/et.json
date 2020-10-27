@@ -189,9 +189,7 @@
 	"filter.transportation_to_work.public_transportation": "Ühistransport",
 	"filters": "Filtrid",
 	"forgot_password": "Unustasid salasõna?",
-	"fulfilled": {
-		"label": "Täidetud"
-	},
+	"fulfilled": "Täidetud",
 	"group": {
 		"additional_info": "Lisainfo",
 		"client": "Klient",

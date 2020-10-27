@@ -702,7 +702,6 @@ export class FormRelatedComponent extends BasicElementComponent
         }
         this.group.get(this.key).patchValue(value);
       } else {
-        console.log(this.config);
         if (this.config.options && this.config.options.length) {
           const results = [];
           this.config.options.forEach((el) => {
