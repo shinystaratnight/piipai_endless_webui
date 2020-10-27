@@ -24,7 +24,7 @@ const list = {
           {
             endpoint: '/skills/skills/',
             field: 'skill',
-            type: 'related'
+            type: 'text'
           }
         ],
         name: 'skill',

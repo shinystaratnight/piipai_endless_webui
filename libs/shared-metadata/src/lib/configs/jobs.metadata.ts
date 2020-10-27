@@ -82,7 +82,7 @@ const list = {
         content: [
           {
             endpoint: '/skills/skills/',
-            field: 'position.__str__',
+            field: 'position',
             type: 'text'
           }
         ],
@@ -517,7 +517,7 @@ const formset = {
         content: [
           {
             endpoint: '/skills/skills/',
-            type: 'related',
+            type: 'text',
             field: 'position'
           }
         ],
@@ -750,7 +750,7 @@ const jobsite_client = {
         content: [
           {
             endpoint: '/skills/skills/',
-            type: 'related',
+            type: 'text',
             field: 'position'
           }
         ],

@@ -57,7 +57,7 @@ const list = {
         content: [
           {
             endpoint: '/core/tags/',
-            type: 'related',
+            type: 'text',
             field: 'tag'
           }
         ],
@@ -200,7 +200,7 @@ const formset = {
         content: [
           {
             endpoint: '/core/tags/',
-            type: 'related',
+            type: 'text',
             field: 'tag'
           }
         ],

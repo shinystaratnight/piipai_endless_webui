@@ -189,9 +189,7 @@
 	"filter.transportation_to_work.public_transportation": "Julkinen liikenne",
 	"filters": "Suodattimet",
 	"forgot_password": "Unohtuiko salasana?",
-	"fulfilled": {
-		"label": "Täytetty"
-	},
+	"fulfilled": "Täytetty",
 	"group": {
 		"additional_info": "Lisätiedot",
 		"client": "Asiakas",
