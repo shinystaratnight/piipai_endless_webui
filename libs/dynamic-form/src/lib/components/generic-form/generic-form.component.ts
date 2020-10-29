@@ -105,6 +105,8 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
   public relatedField = {};
   @Input()
   public showResponse = false;
+  @Input()
+  public showToastr = true;
 
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
@@ -1283,7 +1285,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
       return;
     }
 
-    if (response.message) {
+    if (response.message && this.showToastr) {
       setTimeout(() => {
         this.toastrService.sendMessage(response.message, 'success');
       }, 500);
