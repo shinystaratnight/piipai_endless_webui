@@ -39,16 +39,16 @@
       routerLink="add"
       *ngIf="first && !inForm && checkPermission('post')"
     >
-      <span class="button-icon mr-1"></span> Add new&nbsp;
-      <span class="text-lowercase">{{ label }}</span>
+      <span class="button-icon mr-1"></span>{{ 'add_new' | translate: {'Default': 'Add new'} }}&nbsp;
+      <span class="text-lowercase">{{ getTranslationKey(label.toLowerCase(), 'label') | translate: {'Default': label} }}</span>
     </a>
     <button
       *ngIf="(!first || inForm) && checkPermission('post')"
       class="datatable-button ml-auto"
       (click)="buttonAction('add_object')"
     >
-      <span class="button-icon mr-1"></span> Add new&nbsp;
-      <span class="text-lowercase">{{ label }}</span>
+      <span class="button-icon mr-1"></span>{{ 'add_new' | translate: {'Default': 'Add new'} }}&nbsp;
+      <span class="text-lowercase">{{ getTranslationKey(label.toLowerCase(), 'label') | translate: {'Default': label} }}</span>
     </button>
   </div>
   <button

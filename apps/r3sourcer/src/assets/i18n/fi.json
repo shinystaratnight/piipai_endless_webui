@@ -213,9 +213,7 @@
 		"label": "Ehdokkaan korvaa"
 	},
 	"inactive_timesheet": "Ei-aktiivinen aikataulu poistetaan 48 tunnissa",
-	"industry": {
-		"placeholder": "Valitse tai lisää uusi"
-	},
+	"industry.placeholder": "Valitse tai lisää uusi",
 	"industry.description": "",
 	"industry.label": "Älä",
 	"industry_and_skills": "Teollisuus ja taidot",
@@ -273,7 +271,8 @@
 	},
 	"month": "Kuukausi",
 	"more": "Lisää",
-	"nationality.label": "Kansallisuus",
+  "nationality.label": "Kansallisuus",
+  "nationality.placeholder": "Valita",
 	"next": "Seuraava askel",
 	"noBreak": {
 		"text": "Ei taukoa"
@@ -363,7 +362,7 @@
 	"save_changes": "Tallenna muutokset",
 	"score.label": "Pisteet",
 	"search_by_distance": "Etsi etäisyyden mukaan",
-	"select": "valita",
+	"select": "Valita",
 	"select_dates": "Valitse päivämäärät",
 	"shift.date.job.notes.label": "Huomautuksia",
 	"shift.date.job.position.label": "Asento",
@@ -493,5 +492,5 @@
   "residency.1": "Citizen",
   "residency.2": "Permanent Resident",
   "residency.3": "Temporary Resident",
-  "residency.4": "Unknown"
+  "residency.0": "Unknown"
 }

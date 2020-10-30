@@ -131,8 +131,9 @@ export class FormSelectComponent extends BasicElementComponent
     }
 
     if (value != undefined) {
-      //tslint:disable-line
       this.group.get(this.key).patchValue(value);
+    } else {
+      this.group.get(this.key).patchValue('');
     }
     if ((this.viewMode || this.config.read_only) && !this.config.hide) {
       const option = this.getValue(this.options, value);

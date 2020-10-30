@@ -1,6 +1,7 @@
 import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 
 import { SiteSettingsService } from '@webui/core';
+import { getTranslationKey } from '@webui/utilities';
 
 interface Button {
   label: string;
@@ -35,6 +36,8 @@ export class ListButtonsComponent {
 
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
+
+  getTranslationKey = getTranslationKey;
 
   constructor(
     private siteSettings: SiteSettingsService
