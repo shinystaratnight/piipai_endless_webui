@@ -6,7 +6,7 @@
 	"/hr/timesheets/history/": "Tunnilehtede ajalugu",
 	"/hr/timesheets/unapproved/": "Kinnitamata tunnilehed",
 	"Job.back": "Tagasi tööde nimekirja",
-	"Jobsite.back": "Tagasi tööde nimekirja",
+	"Jobsite.back": "Tagasi töökohtade nimekirja",
 	"Scores.label": "Hinnang",
 	"Tags.label": "Märksõnad",
 	"__str__": {
@@ -213,9 +213,7 @@
 		"label": "Kandidaadi tunnihinna ülekirjutamine"
 	},
 	"inactive_timesheet": "Passiivne tunnileht kustutatakse 48 tunni pärast",
-	"industry": {
-		"placeholder": "Valige või lisage uus"
-	},
+	"industry.placeholder": "Valige või lisage uus",
 	"industry.description": "",
 	"industry.label": "Ala",
 	"industry_and_skills": "Ala ja oskused",
@@ -273,7 +271,8 @@
 	},
 	"month": "Kuu",
 	"more": "Veel",
-	"nationality.label": "Rahvus",
+  "nationality.label": "Rahvus",
+  "nationality.placeholder": "Valige",
 	"next": "Järgmine samm",
 	"noBreak": {
 		"text": "Ilma pausita"
@@ -493,5 +492,5 @@
   "residency.1": "Citizen",
   "residency.2": "Permanent Resident",
   "residency.3": "Temporary Resident",
-  "residency.4": "Unknown"
+  "residency.0": "Unknown"
 }

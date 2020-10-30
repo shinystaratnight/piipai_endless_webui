@@ -213,9 +213,7 @@
 		"label": "Candidate rate override"
 	},
 	"inactive_timesheet": "Inactive timesheet will be deleted in 48 hours",
-	"industry": {
-		"placeholder": "Select or add new"
-	},
+	"industry.placeholder": "Select or add new",
 	"industry.description": "",
 	"industry.label": "Industry",
 	"industry_and_skills": "Industry and skills",
@@ -273,7 +271,8 @@
 	},
 	"month": "Month",
 	"more": "More",
-	"nationality.label": "Nationality",
+  "nationality.label": "Nationality",
+  "nationality.placeholder": "Select",
 	"next": "Next step",
 	"noBreak": {
 		"text": "No Break"
@@ -493,5 +492,5 @@
   "residency.1": "Citizen",
   "residency.2": "Permanent Resident",
   "residency.3": "Temporary Resident",
-  "residency.4": "Unknown"
+  "residency.0": "Unknown"
 }

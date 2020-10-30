@@ -41,7 +41,7 @@
               [ngStyle]="{ backgroundColor: radio.label }"
             ></span>
             <ng-container *ngIf="config.templateOptions.type !== 'color'">
-              {{ radio.label | lowercase | translate: {"Default": radio.label} }}
+              {{ getTranslationKey(key, radio.value) | translate: {"Default": radio.label} }}
             </ng-container>
           </label>
         </div>

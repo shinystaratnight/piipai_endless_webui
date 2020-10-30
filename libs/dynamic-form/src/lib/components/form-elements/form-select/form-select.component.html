@@ -22,9 +22,9 @@
         [attr.id]="key"
         [attr.name]="key"
       >
-        <option class="text-muted" value="" disabled selected></option>
+        <option class="text-muted" [ngValue]="" selected disabled>{{ 'select' | translate: {"Default" : "Select"} }}</option>
         <option *ngFor="let option of config.templateOptions.options" [ngValue]="option.value">
-          {{ getOptionTranslationKey() | translate: {"Default": option.label } }}
+          {{ getOptionTranslationKey(option.value) | translate: {"Default": option.label } }}
         </option>
       </select>
     </div>
