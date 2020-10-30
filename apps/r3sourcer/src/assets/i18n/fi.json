@@ -489,8 +489,8 @@
   "gender.female": "Nainen",
   "transportation_to_work.1": "Oma auto",
   "transportation_to_work.2": "Julkinen liikenne",
-  "residency.1": "Citizen",
-  "residency.2": "Permanent Resident",
-  "residency.3": "Temporary Resident",
-  "residency.0": "Unknown"
+  "residency.1": "Kansalainen",
+  "residency.2": "Pysyvä asukas",
+  "residency.3": "Tilapäinen asukas",
+  "residency.0": "Tuntematon"
 }

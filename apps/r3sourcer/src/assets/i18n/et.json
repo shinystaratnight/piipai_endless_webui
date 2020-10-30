@@ -213,7 +213,7 @@
 		"label": "Kandidaadi tunnihinna ülekirjutamine"
 	},
 	"inactive_timesheet": "Passiivne tunnileht kustutatakse 48 tunni pärast",
-	"industry.placeholder": "Valige või lisage uus",
+	"industry.placeholder": "Valige",
 	"industry.description": "",
 	"industry.label": "Ala",
 	"industry_and_skills": "Ala ja oskused",
@@ -489,8 +489,8 @@
   "gender.female": "Naine",
   "transportation_to_work.1": "Oma auto",
   "transportation_to_work.2": "Ühistransport",
-  "residency.1": "Citizen",
-  "residency.2": "Permanent Resident",
-  "residency.3": "Temporary Resident",
-  "residency.0": "Unknown"
+  "residency.1": "Kodanik",
+  "residency.2": "Alaline elanik",
+  "residency.3": "Ajutine elanik",
+  "residency.0": "Teadmata"
 }
