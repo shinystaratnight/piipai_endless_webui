@@ -213,7 +213,7 @@
 		"label": "Candidate rate override"
 	},
 	"inactive_timesheet": "Inactive timesheet will be deleted in 48 hours",
-	"industry.placeholder": "Select or add new",
+	"industry.placeholder": "Select",
 	"industry.description": "",
 	"industry.label": "Industry",
 	"industry_and_skills": "Industry and skills",
