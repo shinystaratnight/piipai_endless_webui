@@ -483,7 +483,6 @@ const form = [
       },
       {
         endpoint: Endpoints.Job,
-        key: 'job',
         translateKey: 'job',
         templateOptions: {
           label: 'Jobs',
@@ -506,7 +505,6 @@ const form = [
       },
       {
         endpoint: '/core/notes/',
-        key: 'notes',
         translateKey: 'notes',
         templateOptions: {
           label: 'Notes',
