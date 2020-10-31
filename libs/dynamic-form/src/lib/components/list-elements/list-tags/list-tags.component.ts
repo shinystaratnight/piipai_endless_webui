@@ -31,7 +31,11 @@ export class ListTagsComponent implements OnInit {
 
     this.tags.forEach((el) => {
       const { tag } = el;
-      const trans = tag.translations.find(item => item.language.id === translationMap[this.siteSettings.settings.country_code]);
+      let trans;
+      if (tag.translations) {
+        trans = tag.translations.find(item => item.language.id === translationMap[this.siteSettings.settings.country_code]);
+      }
+
       let val = trans && trans.value ;
 
       if (el) {

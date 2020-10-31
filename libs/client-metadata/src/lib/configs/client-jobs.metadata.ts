@@ -44,7 +44,7 @@ const list = {
         content: [
           {
             endpoint: '/skills/skills/',
-            field: 'position',
+            field: 'position.name',
             type: 'text'
           }
         ],
@@ -472,7 +472,7 @@ const formset = {
           {
             endpoint: '/skills/skills/',
             type: 'text',
-            field: 'position'
+            field: 'position.name'
           }
         ],
         label: 'Position'
@@ -705,7 +705,7 @@ const jobsite_client = {
           {
             endpoint: '/skills/skills/',
             type: 'text',
-            field: 'position'
+            field: 'position.name'
           }
         ],
         label: 'Position'
@@ -1015,7 +1015,6 @@ const form = [
           type: 'list',
           text: 'Shift Dates'
         },
-        key: 'shift_dates',
         query: {
           job: '{id}'
         },
@@ -1040,7 +1039,6 @@ const form = [
           type: 'list',
           text: 'Job Offers'
         },
-        key: 'job_offers',
         visibleMode: true,
         type: 'list',
         query: {
