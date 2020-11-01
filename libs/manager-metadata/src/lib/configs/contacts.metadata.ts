@@ -584,7 +584,9 @@ const form = [
       required: false,
       label: 'Picture',
       type: 'picture',
-      file: false
+      file: false,
+      label_photo: 'Take a photo',
+      label_upload: 'Choose a file',
     },
     hide: true,
     default: 'contact_pictures/default_picture.jpg',
