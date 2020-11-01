@@ -152,7 +152,9 @@
 
     img {
       margin-right: 12px;
-      border-radius: 50%;
+      border-radius: .25rem;
+      object-fit: cover;
+      object-position: center;
     }
 
     .contact-avatar {
