@@ -684,7 +684,9 @@ const supervisor = {
         file: false,
         label: 'Picture',
         max: 255,
-        type: 'picture'
+        type: 'picture',
+        label_photo: 'Take a photo',
+        label_upload: 'Choose a file',
       },
       type: 'input'
     },

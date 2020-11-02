@@ -49,7 +49,7 @@
             !viewMode &&
             !config.read_only &&
             config.templateOptions.file == undefined
-          " class="link ml-0" (click)="upload()">{{'upload_file' | translate}}</span>
+          " class="link ml-0" (click)="upload()">{{'upload_file' | translate: {"Default": 'Upload new file'} }}</span>
         <div *ngIf="
             !viewMode &&
             !config.read_only &&
@@ -75,7 +75,7 @@
 
         <div class="mt-1" style="overflow: hidden; text-overflow: ellipsis; max-width: 180px"
           *ngIf="fileName && !config.read_only && !config.view">
-          <i class="text-muted">{{'file' | translate}}:</i> {{ fileName }}
+          <i class="text-muted">{{'file' | translate: {"Default": 'File'} }}:</i> {{ fileName }}
         </div>
       </div>
     </ng-container>
@@ -84,8 +84,8 @@
     <div class="text-danger mt-1" *ngIf="errors[key]">{{ errors[key] }}</div>
   </div>
   <div class="text-danger mt-1 text-left" *ngIf="sizeError">
-    {{'file_size' | translate}} <br>
-    {{'max_size' | translate}}
+    {{'file_size' | translate: {"Default": 'File size is too large!'} }} <br>
+    {{'max_size' | translate: {"Default": 'Maximum allowed file size is 10 Mb.'} }}
   </div>
   <div *ngIf="message">
     <div *ngIf="message[key]" class="text-success mt-1">{{ message[key] }}</div>
@@ -103,24 +103,24 @@
     <app-webcam class="d-flex align-items-center" [options]="options" [onSuccess]="onSuccess" [onError]="onError">
     </app-webcam>
     <div class="photo d-flex justify-content-center align-items-center">
-      <span *ngIf="!photoExist" class="text-white">{{'photo' | translate}}</span>
+      <span *ngIf="!photoExist" class="text-white">{{'photo' | translate: {"Default": 'Photo'} }}</span>
       <canvas [hidden]="!photoExist"></canvas>
     </div>
   </div>
 
   <div class="modal-footer justify-content-start">
     <button *ngIf="photoExist" type="button" class="btn btn-success" (click)="save(c)">
-      {{'save' | translate}}
+      {{'save' | translate: {"Default": 'Save'} }}
     </button>
     <button type="button" class="btn btn-primary" (click)="getPhoto()">
       {{
         photoExist
-          ? ('try_again' | translate)
-          : (getTranslationKey(config.key,'label_photo') | translate: {"Default": config.templateOptions.label_photo}) || ('take_a_photo' | translate)
+          ? ('try_again' | translate: {"Default": 'Try again'})
+          : (getTranslationKey(config.key,'label_photo') | translate: {"Default": config.templateOptions.label_photo}) || ('take_a_photo' | translate: {"Default": 'Take a photo'})
       }}
     </button>
     <button type="button" class="btn btn-secondary" (click)="c()">
-      {{'cancel' | translate}}
+      {{'cancel' | translate: {"Default": 'Cancel'} }}
     </button>
   </div>
 </ng-template>
@@ -129,7 +129,7 @@
   <div class="d-flex flex-wrap">
     <div class="text-center dropzone-wrapper">
       <label class="dropzone-name" [class.required]="config.templateOptions.required">
-        {{'add_photo' | translate}}
+        {{'add_photo' | translate: {"Default": 'Add photo'} }}
       </label>
       <div class="dropzone" #dropzone>
         <img *ngIf="value" [src]="value" alt="" width="100" height="100" />
@@ -138,8 +138,8 @@
     <div class="d-flex flex-column justify-content-center">
       <span class="description">{{'drag_and_drop' | translate}}</span>
       <div class="d-flex align-items-center buttons-wrapper">
-        <button class="btn action mr-2" (click)="upload()">{{'add_photo' | translate}}</button>
-        <button class="btn action" (click)="open()">{{'use_camera' | translate}}</button>
+        <button class="btn action mr-2" (click)="upload()">{{'add_photo' | translate: {"Default": 'Add photo'} }}</button>
+        <button class="btn action" (click)="open()">{{'use_camera' | translate: {"Default": 'Use camera'} }}</button>
       </div>
     </div>
   </div>
