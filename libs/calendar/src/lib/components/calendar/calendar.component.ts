@@ -37,8 +37,8 @@ import {
 import { filters } from './calendar-filters.meta';
 
 import { DatepickerComponent } from '../datepicker/datepicker.component';
-import { UserService, EventService, EventType } from '@webui/core';
-import { Endpoints } from '@webui/data';
+import { UserService, EventService, EventType, SiteSettingsService } from '@webui/core';
+import { CountryCodeLanguage, Endpoints } from '@webui/data';
 
 @Component({
   selector: 'app-calendar',
@@ -162,7 +162,8 @@ export class CalendarComponent implements OnInit, OnDestroy {
     private userService: UserService,
     private selectDateService: SelectDateService,
     private cd: ChangeDetectorRef,
-    private eventService: EventService
+    private eventService: EventService,
+    private siteSettings: SiteSettingsService
   ) {}
 
   get isMonthRange() {
@@ -650,7 +651,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
             date: shift.date.shift_date,
             time: shift.time,
             jobsite: shift.date.job.jobsite.name,
-            position: shift.date.job.position.name,
+            position: this.getPositionTranslation(shift.date.job.position.name),
             is_fulfilled: this.getFulfilledStatus(shift.is_fulfilled, shift.workers_details),
             candidates: shift.workers_details,
             timesheet: this.calendar.calculateShiftSize(shift.time),
@@ -663,6 +664,20 @@ export class CalendarComponent implements OnInit, OnDestroy {
           counter.count += shift.candidates[this.shiftStatus[counter.type].key].length;
         });
       });
+    }
+  }
+
+  private getPositionTranslation(position): string {
+    const { translations, name } = position;
+    if (translations && translations.length) {
+      const coutryCode = this.siteSettings.settings.country_code;
+      const translation = [...translations].find((t) => {
+        return t.language.id === CountryCodeLanguage[coutryCode];
+      });
+
+      return (translation && (translation.__str__ || translation.value)) || name;
+    } else {
+      return position.name;
     }
   }
 
@@ -685,7 +700,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
             date: jobOffer.shift.date.shift_date,
             time: jobOffer.shift.time,
             jobsite: jobOffer.shift.date.job.jobsite.__str__,
-            position: jobOffer.shift.date.job.position.name,
+            position: this.getPositionTranslation(jobOffer.shift.date.job.position.name),
             timesheets,
             timesheetStatus: this.getTimesheetsStatus(timesheets[0]),
           };
