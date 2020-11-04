@@ -110,7 +110,8 @@
 		"label": "Клиент"
 	},
 	"customer_representative": {
-		"label": "Представитель клиента"
+    "label": "Представитель клиента",
+    "placeholder": "Выбрыть"
 	},
 	"date": "Дата",
 	"date.shift_date.label": "Дата",
@@ -319,7 +320,8 @@
 		"placeholder": "Выберете или создайте"
 	},
 	"position": {
-		"label": "Должность"
+    "label": "Позиция",
+    "position.placeholder": "Выбрать позицию"
 	},
 	"primary_contact": {
 		"contact": {
@@ -338,10 +340,12 @@
 	"prior_experience.label": "Предыдущий опыт",
 	"profile": "Профиль",
 	"provider_company": {
-		"label": "Компания-провайдер"
+    "label": "Компания-провайдер",
+    "placeholder": "Выбрыть"
 	},
 	"provider_representative": {
-		"label": "Представитель провайдера"
+    "label": "Представитель провайдера",
+    "placeholder": "Выбрыть"
 	},
 	"provider_signed_at": {
 		"label": "Принято"
@@ -492,5 +496,7 @@
   "residency.1": "Гражданин",
   "residency.2": "Постоянный житель",
   "residency.3": "Временный резидент",
-  "residency.0": "Неизвестно"
+  "residency.0": "Неизвестно",
+  "jobsite.placeholder": "Выбрыть",
+  "enter_location": "Введите местоположение"
 }

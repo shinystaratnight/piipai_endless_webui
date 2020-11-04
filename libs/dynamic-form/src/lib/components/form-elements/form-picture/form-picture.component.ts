@@ -11,9 +11,9 @@ import {
 } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 
-import { FallbackDispatcher } from '../../webcam/fallback.dispatcher';
+// import { FallbackDispatcher } from '../../webcam/fallback.dispatcher';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { Subscription } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 
 import { BasicElementComponent } from './../basic-element/basic-element.component';
 import { getContactAvatar, getTranslationKey } from '@webui/utilities';
@@ -48,9 +48,9 @@ export class FormPictureComponent extends BasicElementComponent
   public photoExist = false;
   public mime: string;
   public fileName = '';
-  public onSuccess;
-  public onError;
-  public flashPlayer: any;
+  // public onSuccess;
+  // public onError;
+  // public flashPlayer: any;
   public err: any;
   public base64: string;
   public link: string;
@@ -64,20 +64,23 @@ export class FormPictureComponent extends BasicElementComponent
 
   isRemoved: boolean;
 
-  public options = {
-    audio: false,
-    video: true,
-    width: 240,
-    height: 240,
-    fallbackMode: 'callback',
-    fallbackSrc: 'assets/jscam_canvas_only.swf',
-    fallbackQuality: 85,
-    cameraType: 'front',
-  };
+  // public options = {
+  //   audio: false,
+  //   video: true,
+  //   width: 240,
+  //   height: 240,
+  //   fallbackMode: 'callback',
+  //   fallbackSrc: 'assets/jscam_canvas_only.swf',
+  //   fallbackQuality: 85,
+  //   cameraType: 'front',
+  // };
+  private capture = new Subject();
+
+  capture$ = this.capture.asObservable();
 
   getTranslationKey = getTranslationKey;
 
-  private subscriptions: Subscription[];
+  private subscriptions: Subscription[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -87,16 +90,24 @@ export class FormPictureComponent extends BasicElementComponent
     private formService: FormService
   ) {
     super();
-    this.onSuccess = (stream: any) => {
-      if (stream instanceof FallbackDispatcher) {
-        this.flashPlayer = stream;
-        this.onFallback();
-      }
-    };
-    this.onError = (err) => {
-      this.err = err;
-    };
-    this.subscriptions = [];
+    // this.onSuccess = (stream: any) => {
+    //   if (stream instanceof FallbackDispatcher) {
+    //     this.flashPlayer = stream;
+    //     this.onFallback();
+    //   }
+    // };
+    // this.onError = (err) => {
+    //   this.err = err;
+    // };
+  }
+
+  public onImageCapture(data) {
+    const { imageAsDataUrl } = data;
+
+    if (imageAsDataUrl) {
+      this.photoExist = true;
+      this.base64 = imageAsDataUrl;
+    }
   }
 
   public ngOnInit(): void {
@@ -255,8 +266,9 @@ export class FormPictureComponent extends BasicElementComponent
 
   public getPhoto() {
     this.fileName = '';
-    const canvas = this.createPhoto();
-    this.base64 = canvas.toDataURL(this.mime);
+    this.capture.next();
+    // const canvas = this.createPhoto();
+    // this.base64 = canvas.toDataURL(this.mime);
   }
 
   public save(closeModal) {
@@ -266,20 +278,20 @@ export class FormPictureComponent extends BasicElementComponent
     }
   }
 
-  public createPhoto() {
-    this.photoExist = true;
-    const video = <any>document.getElementsByTagName('video')[0];
-    const canvas = <any>document.getElementsByTagName('canvas')[0];
-    if (video) {
-      canvas.style.maxWidth = `100%`;
-      canvas.width = video.videoWidth;
-      canvas.height = video.videoHeight;
-      canvas.getContext('2d').drawImage(video, 0, 0);
-    } else {
-      this.flashPlayer.capture();
-    }
-    return canvas;
-  }
+  // public createPhoto() {
+  //   this.photoExist = true;
+  //   const video = <any>document.getElementsByTagName('video')[0];
+  //   const canvas = <any>document.getElementsByTagName('canvas')[0];
+  //   if (video) {
+  //     canvas.style.maxWidth = `100%`;
+  //     canvas.width = video.videoWidth;
+  //     canvas.height = video.videoHeight;
+  //     canvas.getContext('2d').drawImage(video, 0, 0);
+  //   } else {
+  //     this.flashPlayer.capture();
+  //   }
+  //   return canvas;
+  // }
 
   public fileChangeEvent(e) {
     this.updateValue('', '', true);
@@ -311,58 +323,58 @@ export class FormPictureComponent extends BasicElementComponent
     }
   }
 
-  public onFallback(): void {
-    const self = this;
-    const canvas = <any>document.getElementsByTagName('canvas')[0];
-    if (canvas) {
-      const ctx = canvas.getContext('2d');
-      const size = self.flashPlayer.getCameraSize();
-      const w = size.width;
-      const h = size.height;
-      const externData = {
-        imgData: ctx.getImageData(0, 0, w, h),
-        pos: 0,
-      };
+  // public onFallback(): void {
+  //   const self = this;
+  //   const canvas = <any>document.getElementsByTagName('canvas')[0];
+  //   if (canvas) {
+  //     const ctx = canvas.getContext('2d');
+  //     const size = self.flashPlayer.getCameraSize();
+  //     const w = size.width;
+  //     const h = size.height;
+  //     const externData = {
+  //       imgData: ctx.getImageData(0, 0, w, h),
+  //       pos: 0,
+  //     };
 
-      canvas.width = w;
-      canvas.height = h;
-      ctx.clearRect(0, 0, w, h);
+  //     canvas.width = w;
+  //     canvas.height = h;
+  //     ctx.clearRect(0, 0, w, h);
 
-      FallbackDispatcher.implementExternal({
-        onSave: (data) => {
-          try {
-            const col = data.split(';');
-            let tmp = null;
+  //     FallbackDispatcher.implementExternal({
+  //       onSave: (data) => {
+  //         try {
+  //           const col = data.split(';');
+  //           let tmp = null;
 
-            for (let i = 0; i < w; i++) {
-              tmp = parseInt(col[i], 10);
-              externData.imgData.data[externData.pos + 0] = (tmp >> 16) & 0xff; //tslint:disable-line
-              externData.imgData.data[externData.pos + 1] = (tmp >> 8) & 0xff; //tslint:disable-line
-              externData.imgData.data[externData.pos + 2] = tmp & 0xff; //tslint:disable-line
-              externData.imgData.data[externData.pos + 3] = 0xff;
-              externData.pos += 4;
-            }
+  //           for (let i = 0; i < w; i++) {
+  //             tmp = parseInt(col[i], 10);
+  //             externData.imgData.data[externData.pos + 0] = (tmp >> 16) & 0xff; //tslint:disable-line
+  //             externData.imgData.data[externData.pos + 1] = (tmp >> 8) & 0xff; //tslint:disable-line
+  //             externData.imgData.data[externData.pos + 2] = tmp & 0xff; //tslint:disable-line
+  //             externData.imgData.data[externData.pos + 3] = 0xff;
+  //             externData.pos += 4;
+  //           }
 
-            if (externData.pos >= 4 * w * h) {
-              ctx.putImageData(externData.imgData, 0, 0);
-              externData.pos = 0;
-            }
-          } catch (e) {
-            console.error(e);
-          }
-        },
-        debug: (tag, message): void => {
-          // do nothing
-        },
-        onCapture: () => {
-          self.flashPlayer.save();
-        },
-        onTick: (time) => {
-          // do nothing
-        },
-      });
-    }
-  }
+  //           if (externData.pos >= 4 * w * h) {
+  //             ctx.putImageData(externData.imgData, 0, 0);
+  //             externData.pos = 0;
+  //           }
+  //         } catch (e) {
+  //           console.error(e);
+  //         }
+  //       },
+  //       debug: (tag, message): void => {
+  //         // do nothing
+  //       },
+  //       onCapture: () => {
+  //         self.flashPlayer.save();
+  //       },
+  //       onTick: (time) => {
+  //         // do nothing
+  //       },
+  //     });
+  //   }
+  // }
 
   public updateValue(name, value, image = false) {
     this.fileName = name;

@@ -140,8 +140,18 @@
             <div class="shift-tooltip">
               <h5 class="text-center">{{ day.availableId ? ('update' | translate: {"Default": "Update"}) : ('confirm' | translate: {"Default": "Confirm"}) }}</h5>
               <div class="d-flex align-items-center justify-content-between">
-                <button type="button" class="btn btn-sm btn-primary mr-auto" (click)="setAvailability($event, day, true)">{{ 'available.label' | translate: {"Default": "Available"} }}</button>
-                <button type="button" class="btn btn-sm btn-primary" (click)="setAvailability($event, day, false)">{{ 'unavailable.label' | translate: {"Default": "Unavailable"} }}</button>
+                <button
+                  type="button"
+                  class="btn btn-sm btn-primary mr-3"
+                  (click)="setAvailability($event, day, true)">
+                  {{ 'available.label' | translate: {"Default": "Available"} }}
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-sm btn-primary"
+                  (click)="setAvailability($event, day, false)">
+                    {{ 'unavailable.label' | translate: {"Default": "Unavailable"} }}
+                </button>
               </div>
             </div>
           </ng-template>

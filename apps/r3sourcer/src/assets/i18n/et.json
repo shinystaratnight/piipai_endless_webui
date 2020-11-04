@@ -110,7 +110,8 @@
 		"label": "Klient"
 	},
 	"customer_representative": {
-		"label": "Kliendi esindaja"
+    "label": "Kliendi esindaja",
+    "placeholder": "Valige"
 	},
 	"date": "Kuupäev",
 	"date.shift_date.label": "Kuupäev",
@@ -319,7 +320,8 @@
 		"placeholder": "Valige või lisage uus"
 	},
 	"position": {
-		"label": "Amet"
+    "label": "Amet",
+    "placeholder": "Please select role/trade"
 	},
 	"primary_contact": {
 		"contact": {
@@ -338,10 +340,12 @@
 	"prior_experience.label": "Eelnev kogemus",
 	"profile": "Profiil",
 	"provider_company": {
-		"label": "Teenusepakkuja ettevõte"
+    "label": "Teenusepakkuja ettevõte",
+    "placeholder": "Valige"
 	},
 	"provider_representative": {
-		"label": "Teenusepakkuja esindaja"
+    "label": "Teenusepakkuja esindaja",
+    "placeholder": "Valige"
 	},
 	"provider_signed_at": {
 		"label": "Vastu võetud kell"
@@ -492,5 +496,7 @@
   "residency.1": "Kodanik",
   "residency.2": "Alaline elanik",
   "residency.3": "Ajutine elanik",
-  "residency.0": "Teadmata"
+  "residency.0": "Teadmata",
+  "jobsite.placeholder": "Valige",
+  "enter_location": "Sisestage asukoht"
 }
