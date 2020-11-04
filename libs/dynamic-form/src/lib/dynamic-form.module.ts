@@ -13,6 +13,7 @@ import { GooglePlaceModule } from 'ngx-google-places-autocomplete';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { QuillModule } from 'ngx-quill';
 import { SignaturePadModule } from 'angular2-signaturepad';
+import { WebcamModule } from 'ngx-webcam';
 
 import { NgxIntlTelInputModule } from 'ngx-intl-tel-input';
 
@@ -53,6 +54,7 @@ import { TranslateModule } from '@ngx-translate/core';
     TranslateModule,
 
     UiModule,
+    WebcamModule
   ],
   exports: [
     fromComponents.GenericFormComponent,

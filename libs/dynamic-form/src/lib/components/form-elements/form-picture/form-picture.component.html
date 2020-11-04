@@ -99,12 +99,24 @@
     <app-close-button class="ml-auto" (click)="c()"></app-close-button>
   </div>
 
-  <div class="modal-body picture d-inline-block d-flex justify-content-around flex-wrap" style="overflow: auto">
-    <app-webcam class="d-flex align-items-center" [options]="options" [onSuccess]="onSuccess" [onError]="onError">
-    </app-webcam>
-    <div class="photo d-flex justify-content-center align-items-center">
-      <span *ngIf="!photoExist" class="text-white">{{'photo' | translate: {"Default": 'Photo'} }}</span>
-      <canvas [hidden]="!photoExist"></canvas>
+  <div class="modal-body picture d-flex justify-content-around flex-wrap" style="overflow: auto">
+    <!-- <app-webcam class="d-flex align-items-center" [options]="options" [onSuccess]="onSuccess" [onError]="onError">
+    </app-webcam> -->
+    <webcam
+      width="300"
+      height="200"
+      class="d-flex align-items-center"
+      [captureImageData]="true"
+      [trigger]="capture$"
+      (imageCapture)="onImageCapture($event)">
+    </webcam>
+
+    <div class="photo d-flex justify-content-center align-items-center mt-3 mt-sm-0">
+      <span *ngIf="!photoExist" class="text-white">
+        {{'photo' | translate: {"Default": 'Photo'} }}
+      </span>
+      <img *ngIf="photoExist" [src]="this.base64" alt="">
+      <!-- <canvas [hidden]="!photoExist"></canvas> -->
     </div>
   </div>
 

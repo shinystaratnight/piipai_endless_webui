@@ -110,7 +110,8 @@
 		"label": "Asiakas"
 	},
 	"customer_representative": {
-		"label": "Asiakasedustaja"
+    "label": "Asiakasedustaja",
+    "placeholder": "Valita"
 	},
 	"date": "Treffi",
 	"date.shift_date.label": "Treffi",
@@ -319,7 +320,8 @@
 		"placeholder": "Valitse tai lisää uusi"
 	},
 	"position": {
-		"label": "Asento"
+    "label": "Asento",
+    "placeholder": "Valitse rooli / kauppa"
 	},
 	"primary_contact": {
 		"contact": {
@@ -338,10 +340,12 @@
 	"prior_experience.label": "Edellinen kokemus",
 	"profile": "Profiili",
 	"provider_company": {
-		"label": "Palveluntarjoajayritys"
+    "label": "Palveluntarjoajayritys",
+    "placeholder": "Valita"
 	},
 	"provider_representative": {
-		"label": "Palveluntarjoajan edustaja"
+    "label": "Palveluntarjoajan edustaja",
+    "placeholder": "Valita"
 	},
 	"provider_signed_at": {
 		"label": "Hyväksytty klo"
@@ -492,5 +496,7 @@
   "residency.1": "Kansalainen",
   "residency.2": "Pysyvä asukas",
   "residency.3": "Tilapäinen asukas",
-  "residency.0": "Tuntematon"
+  "residency.0": "Tuntematon",
+  "jobsite.placeholder": "Valita",
+  "enter_location": "Anna sijainti"
 }

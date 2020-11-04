@@ -352,6 +352,7 @@
     [ngModelOptions]="{ standalone: true }"
     [attr.id]="key"
     [attr.name]="key"
+    placeholder="{{'enter_location' | translate: { 'Default': 'Enter a location' } }}"
     (onAddressChange)="getAddress($event, adr.value)"
   />
 </ng-template>
