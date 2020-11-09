@@ -22,7 +22,7 @@
         [attr.id]="key"
         [attr.name]="key"
       >
-        <option class="text-muted" value="" disabled>
+        <option class="text-muted" value="" selected disabled>
           {{ 'select' | translate: {"Default" : "Select"} }}
         </option>
         <option *ngFor="let option of config.templateOptions.options" [ngValue]="option.value">
