@@ -214,7 +214,7 @@
 		"label": "Ehdokkaan korvaa"
 	},
 	"inactive_timesheet": "Ei-aktiivinen aikataulu poistetaan 48 tunnissa",
-	"industry.placeholder": "Valitse tai lisää uusi",
+	"industry.placeholder": "Valita",
 	"industry.description": "",
 	"industry.label": "Älä",
 	"industry_and_skills": "Teollisuus ja taidot",
@@ -321,7 +321,7 @@
 	},
 	"position": {
     "label": "Asento",
-    "placeholder": "Valitse rooli / kauppa"
+    "placeholder": "Valitse toimisto"
 	},
 	"primary_contact": {
 		"contact": {
