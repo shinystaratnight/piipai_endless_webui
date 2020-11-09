@@ -321,7 +321,7 @@
 	},
 	"position": {
     "label": "Amet",
-    "placeholder": "Please select role/trade"
+    "placeholder": "Palun vali amet"
 	},
 	"primary_contact": {
 		"contact": {
@@ -498,5 +498,5 @@
   "residency.3": "Ajutine elanik",
   "residency.0": "Teadmata",
   "jobsite.placeholder": "Valige",
-  "enter_location": "Sisestage asukoht"
+  "enter_location": "Sisesta asukoht"
 }
