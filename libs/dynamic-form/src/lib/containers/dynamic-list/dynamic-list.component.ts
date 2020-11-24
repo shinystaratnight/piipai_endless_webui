@@ -269,6 +269,7 @@ export class DynamicListComponent
       if (this.actionEndpoint.indexOf('/sendsms/') > -1) {
         setTimeout(() => {
           this.openFrame(this.currentActionData.phone_number);
+          this.select = {};
         }, 250);
       }
 
