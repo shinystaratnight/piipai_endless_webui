@@ -498,5 +498,8 @@
   "residency.3": "Tilapäinen asukas",
   "residency.0": "Tuntematon",
   "jobsite.placeholder": "Valita",
-  "enter_location": "Anna sijainti"
+  "enter_location": "Anna sijainti",
+  "filled_shifts": "Filled shifts",
+  "unfilled_shifts": "Unfilled shifts",
+  "pending_shifts": "Pending shifts"
 }

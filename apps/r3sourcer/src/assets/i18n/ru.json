@@ -498,5 +498,8 @@
   "residency.3": "Временный резидент",
   "residency.0": "Неизвестно",
   "jobsite.placeholder": "Выбрыть",
-  "enter_location": "Введите местоположение"
+  "enter_location": "Введите местоположение",
+  "filled_shifts": "Filled shifts",
+  "unfilled_shifts": "Unfilled shifts",
+  "pending_shifts": "Pending shifts"
 }
