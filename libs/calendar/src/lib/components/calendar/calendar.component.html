@@ -83,7 +83,7 @@
                   <fa-icon [icon]="['fas', calendarType === 2 ? 'file' : 'circle']" [ngClass]="layer.cssClass" [ngStyle]="{fontSize: calendarType === 2 ? '16px' : '8px'}"></fa-icon>
                   {{layer.count}}
                 </span><br>
-                <span class="count-description">{{layer.text | lowercase | translate}} / {{currentRange.value | translate}}</span>
+                <span class="count-description">{{layer.text.replace(' ', '_') | lowercase | translate}} / {{currentRange.value | translate}}</span>
             </div>
           </ng-container>
         </div>
