@@ -270,7 +270,7 @@
 			"label": "Vahetuse kuupäev"
 		}
 	},
-	"month": "Kuu",
+	"month": "Sel kuul",
 	"more": "Veel",
   "nationality.label": "Rahvus",
   "nationality.placeholder": "Valige",
@@ -498,5 +498,8 @@
   "residency.3": "Ajutine elanik",
   "residency.0": "Teadmata",
   "jobsite.placeholder": "Valige",
-  "enter_location": "Sisesta asukoht"
+  "enter_location": "Sisesta asukoht",
+  "filled_shifts": "Täidetud vahetusi",
+  "unfilled_shifts": "Täitmata vahetusi",
+  "pending_shifts": "Ootel vahetusi"
 }

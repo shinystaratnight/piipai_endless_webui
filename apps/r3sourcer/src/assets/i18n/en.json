@@ -498,5 +498,8 @@
   "residency.3": "Temporary Resident",
   "residency.0": "Unknown",
   "jobsite.placeholder": "Select",
-  "enter_location": "Enter a location"
+  "enter_location": "Enter a location",
+  "filled_shifts": "Filled shifts",
+  "unfilled_shifts": "Unfilled shifts",
+  "pending_shifts": "Pending shifts"
 }
