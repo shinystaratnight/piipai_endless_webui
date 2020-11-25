@@ -90,6 +90,7 @@ export interface Field {
   smallModal?: boolean;
   replaceByData?: boolean;
   show?: BehaviorSubject<boolean>;
+  dataList?: any;
   templateOptions?: {
     hideLabel?: boolean;
     dontSendFields?: boolean;
@@ -136,6 +137,8 @@ export interface Field {
     listParam?: string;
     round?: true;
     array?: boolean;
+    pattern?: string;
+    patterError?: string;
   };
 }
 
