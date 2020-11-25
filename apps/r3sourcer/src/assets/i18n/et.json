@@ -499,7 +499,7 @@
   "residency.0": "Teadmata",
   "jobsite.placeholder": "Valige",
   "enter_location": "Sisesta asukoht",
-  "filled_shifts": "Filled shifts",
-  "unfilled_shifts": "Unfilled shifts",
-  "pending_shifts": "Pending shifts"
+  "filled_shifts": "Täidetud vahetusi",
+  "unfilled_shifts": "Täitmata vahetusi",
+  "pending_shifts": "Ootel vahetusi"
 }
