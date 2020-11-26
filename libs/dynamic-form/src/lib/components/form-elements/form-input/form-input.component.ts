@@ -61,6 +61,7 @@ export class FormInputComponent extends BasicElementComponent
   public modalScrollThrottle = 50;
   public address = '';
   public timeInstance = getTimeInstance();
+  dataListMap: any[];
 
   public intl;
   separateDialCode = true;
@@ -143,7 +144,8 @@ export class FormInputComponent extends BasicElementComponent
           this.fb,
           this.requiredField,
           this.config.templateOptions.min,
-          this.config.templateOptions.max
+          this.config.templateOptions.max,
+          this.config.templateOptions.pattern
         );
 
         this.subscriptions.push(
@@ -200,10 +202,25 @@ export class FormInputComponent extends BasicElementComponent
         { currency }
       );
     }
+
+    if (this.config.dataList) {
+      this.dataListMap = this.generateDataListView(this.config.dataList);
+    }
   }
 
   public ngOnDestroy() {
     this.subscriptions.forEach((s) => s && s.unsubscribe());
+  }
+
+  generateDataListView(data: any[]) {
+    return data.map((el) => {
+      return {
+        value: el.value,
+        label: el.type.name,
+        default: el.default,
+        id: el.id
+      };
+    });
   }
 
   public checkFormData() {

@@ -8,17 +8,17 @@ export class BasicElementComponent {
   public config: any;
   public event = new EventEmitter();
 
-  public addControl(config, fb: FormBuilder, required?: boolean, min?: number, max?: number) {
+  public addControl(config, fb: FormBuilder, ...validators) {
     if (config.key) {
       const keys = config.key.split('.');
       if (keys.length > 1) {
-        this.addControls(this.group, keys, fb, required, min, max);
+        this.addControls(this.group, keys, fb, validators);
       } else {
         if (config.type === 'related' && !config.many && !config.withoutIdField) {
           keys.push('id');
-          this.addControls(this.group, keys, fb, required, min, max);
+          this.addControls(this.group, keys, fb, validators);
         } else if (config.type !== 'static' || (config.type === 'static' && !config.read_only)) {
-          this.group.addControl(config.key, fb.control(undefined, this.getValidators(required, min, max))); //tslint:disable-line
+          this.group.addControl(config.key, fb.control(undefined, this.getValidators(validators))); //tslint:disable-line
           this.key = config.key;
         }
       }
@@ -26,37 +26,37 @@ export class BasicElementComponent {
   }
 
   public addFlags(element, config) {
-    if (config.templateOptions.type === 'number') {
-      element.nativeElement.step = 'any';
+    const { nativeElement } = element;
+    const { type, required, max, min, cols, rows, pattern, disabled, step } = config.templateOptions;
+
+    nativeElement.required = config.type !== 'datepicker' && required;
+
+    if (type === 'number') {
+      nativeElement.step = 'any';
     }
-    element.nativeElement.required =
-      config.type !== 'datepicker' && config.templateOptions.required;
-    if (config.templateOptions.max && config.templateOptions.type !== 'number') {
-      element.nativeElement.maxLength = config.templateOptions.max;
+    if (max && type !== 'number') {
+      nativeElement.maxLength = max;
     }
-    if (config.templateOptions.min && config.templateOptions.type !== 'number') {
-      const min = (config.templateOptions.min < 0) ? 0 : config.templateOptions.min;
-      element.nativeElement.minLength = min;
+    if (min && type !== 'number') {
+      nativeElement.minLength = min < 0 ? 0 : min;
     }
-    if (config.templateOptions.max
-      && (config.templateOptions.type === 'number' || config.templateOptions.type === 'score')) {
-      element.nativeElement.max = config.templateOptions.max;
+    if (max && (type === 'number' || type === 'score')) {
+      nativeElement.max = max;
     }
-    if ((config.templateOptions.min || config.templateOptions.min === 0)
-      && (config.templateOptions.type === 'number' || config.templateOptions.type === 'score')) {
-      element.nativeElement.min = config.templateOptions.min;
+    if ((min || min === 0) && (type === 'number' || type === 'score')) {
+      nativeElement.min = min;
     }
-    if (config.templateOptions.cols) {
-      element.nativeElement.cols = config.templateOptions.cols;
+    if (cols) {
+      nativeElement.cols = cols;
     }
-    if (config.templateOptions.disabled) {
-      element.nativeElement.disabled = config.templateOptions.disabled;
+    if (disabled) {
+      nativeElement.disabled = disabled;
     }
-    if (config.templateOptions.rows) {
-      element.nativeElement.rows = config.templateOptions.rows;
+    if (rows) {
+      nativeElement.rows = rows;
     }
-    if (config.templateOptions.step) {
-      element.nativeElement.step = config.templateOptions.step;
+    if (step) {
+      nativeElement.step = step;
     }
   }
 
@@ -70,43 +70,53 @@ export class BasicElementComponent {
     });
   }
 
-  private addElement(group, el, fb, required?: boolean, min?: number, max?: number) {
-    group.addControl(el, fb.control('', this.getValidators(required, min, max)));
+  private addElement(group, el, fb, validators) {
+    group.addControl(el, fb.control('', this.getValidators(validators)));
   }
 
   private addGroup(group, el, fb) {
     group.addControl(el, fb.group({}));
   }
 
-  private addControls(group, keys: string[], fb, required?: boolean, min?: number, max?: number) {
+  private addControls(group, keys: string[], fb, validators) {
     const el = keys.shift();
     if (keys.length === 0) {
       if (!group.get(el)) {
-        this.addElement(group, el, fb, required, min, max);
+        this.addElement(group, el, fb, validators);
       }
       this.key = el;
       this.group = group;
     } else if (!group.get(el)) {
       this.addGroup(group, el, fb);
-      this.addControls(group.get(el), keys, fb, required, min, max);
+      this.addControls(group.get(el), keys, fb, validators);
     } else {
-      this.addControls(group.get(el), keys, fb, required, min, max);
+      this.addControls(group.get(el), keys, fb, validators);
     }
   }
 
-  private getValidators(required?: boolean, min?: number, max?: number): ValidatorFn[] {
-    const validators = [];
+  private getValidators(options): ValidatorFn[] {
+    const {
+      required,
+      min,
+      max,
+      pattern
+    } = options;
+
+    const result = [];
 
     if (required) {
-      validators.push(Validators.required);
+      result.push(Validators.required);
     }
     if (typeof min === 'number') {
-      validators.push(Validators.min(min));
+      result.push(Validators.min(min));
     }
     if (typeof max === 'number') {
-      validators.push(Validators.max(max));
+      result.push(Validators.max(max));
+    }
+    if (pattern) {
+      result.push(Validators.pattern(pattern));
     }
 
-    return validators;
+    return result;
   }
 }

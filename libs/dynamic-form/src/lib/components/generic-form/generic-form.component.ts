@@ -705,6 +705,12 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
 
   public fillingForm(metadata, data) {
     metadata.forEach((el) => {
+      const { templateOptions } = el;
+
+      if (el.dataList) {
+        el.dataList = this.getValueOfData(data, el.dataList, {});
+      }
+
       if (el.update) {
         const value = this.getValueOfData(data, el.key, metadata, {});
         el.update['data'] = Array.isArray(value) && value.length ? value.map((item) => item.id) : value;
@@ -712,9 +718,12 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
 
       const currency = getCurrencySymbol(this.settingsService.settings.currency, 'wide');
 
-      if (el.templateOptions) {
-        el.templateOptions.label = this.format.format(el.templateOptions.label, { ...data, currency });
-        el.templateOptions.text = this.format.format(el.templateOptions.text, { ...data, currency });
+      if (templateOptions) {
+        const { label, text, pattern } = templateOptions;
+
+        templateOptions.label = this.format.format(label, { ...data, currency });
+        templateOptions.text = this.format.format(text, { ...data, currency });
+        templateOptions.pattern = this.getValueOfData(data, pattern, {});
       }
       if (el.type === 'input') {
         if (el.templateOptions && el.templateOptions.type === 'picture') {
@@ -830,6 +839,10 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
   }
 
   public getValueOfData(data, key, obj, metadata?, update = false) {
+    if (!key) {
+      return;
+    }
+
     const keys = key.split('.');
     const prop = keys.shift();
     if (keys.length === 0) {
