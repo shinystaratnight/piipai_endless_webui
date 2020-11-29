@@ -1005,10 +1005,11 @@ const form = [
                     type: 'input',
                     templateOptions: {
                       required: false,
-                      label: 'Tax File Number',
+                      label: 'Personal ID',
                       type: 'text',
                       pattern: "personal_id_regex",
-                      placeholder: "Add or change actual"
+                      placeholder: "Add or change actual",
+                      patternError: "This is invalid number",
                     },
                     showIf: ['display_personal_id'],
                     dataList: "personal_id_list",
