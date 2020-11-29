@@ -992,9 +992,27 @@ const form = [
                     templateOptions: {
                       required: false,
                       label: 'Tax File Number',
-                      max: 9,
-                      type: 'text'
+                      type: 'text',
+                      pattern: "tax_number_regex",
+                      patternError: "This is invalid number",
+                      placeholder: "Add or change actual"
                     },
+                    dataList: "taxnumber_list",
+                    read_only: false
+                  },
+                  {
+                    key: 'personal_id',
+                    type: 'input',
+                    templateOptions: {
+                      required: false,
+                      label: 'Personal ID',
+                      type: 'text',
+                      pattern: "personal_id_regex",
+                      placeholder: "Add or change actual",
+                      patternError: "This is invalid number",
+                    },
+                    showIf: ['display_personal_id'],
+                    dataList: "personal_id_list",
                     read_only: false
                   },
                   {

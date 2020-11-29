@@ -20,6 +20,9 @@
       {{ getTranslationKey('label') | translate: {"Default": config.templateOptions.label} }}:
     </label>
     <app-info *ngIf="config.templateOptions.description" [description]="getTranslationKey('description') | translate: {'Default': config.templateOptions.description || ''}"></app-info>
+    <i class="data-list-trigger" *ngIf="dataListMap" triggers="mouseover:mouseout"
+    [placement]="'bottom'"
+    [ngbTooltip]="dataListTemplate">View</i>
     <div
       class="form-element-content edit"
       [class.showAll]="viewMode || config.type === 'static'"
@@ -297,6 +300,9 @@
       </div>
     </div>
   </div>
+  <div class="text-danger mt-1" *ngIf="group.get(this.key) && group.get(this.key).getError('pattern')">
+    {{config.templateOptions.patternError}}
+  </div>
   <div *ngIf="errors">
     <div class="text-danger mt-1" *ngIf="errors[config.key]">
       {{ errors[config.key] }}
@@ -336,6 +342,7 @@
         ? group.get(key).value
         : ''
     "
+    pattern="{{config.templateOptions.pattern}}"
     (focus)="generateList()"
     (keyup)="filter(key)"
   />
@@ -436,4 +443,14 @@
     name="phone"
   >
   </ngx-intl-tel-input>
+</ng-template>
+
+<ng-template #dataListTemplate>
+  <ul class="list">
+    <li class="list__item" *ngFor="let item of dataListMap">
+      <label class="list__item-label">{{item.label}}</label>
+      <span> - </span>
+      <span class="list__item-value">{{item.value}}</span>
+    </li>
+  </ul>
 </ng-template>
