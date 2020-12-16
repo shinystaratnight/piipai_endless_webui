@@ -92,3 +92,4 @@ export * from './candidatelanguage.metadata';
 export * from './companieslanguages.metadata';
 export * from './emailtemplates.metadata';
 export * from './emailmessages.metadata';
+export * from './contactaddresses.metadata';

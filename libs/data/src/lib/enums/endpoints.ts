@@ -5,6 +5,7 @@ export enum Endpoints {
   ContactForgotPassword = '/core/contacts/forgot_password/',
   ContactChangePassword = 'change_password',
   ContactPassword = 'password',
+  ContactAddresses = '/core/contactaddresses/',
 
   User = '/core/users/',
 

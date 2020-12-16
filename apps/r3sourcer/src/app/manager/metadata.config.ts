@@ -104,7 +104,8 @@ import {
   // jobsitesclient
   companyLanguage,
   emailtemplates,
-  emailmessages
+  emailmessages,
+  contactaddresses
 } from '@webui/manager-metadata';
 
 import {
@@ -231,4 +232,5 @@ export class Metadata {
   'company_languages' = companyLanguage;
   [Endpoints.EmailTemplate] = emailtemplates;
   [Endpoints.EmailMessages] = emailmessages;
+  [Endpoints.ContactAddresses] = contactaddresses;
 }
