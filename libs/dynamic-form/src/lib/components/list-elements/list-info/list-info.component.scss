@@ -58,44 +58,14 @@
     .contact-avatar {
       width: 54px;
       height: 54px;
-
-      // margin-bottom: .5rem;
-
       border-radius: .5rem;
-
       object-fit: cover;
       background-color: #f5f5f5;
     }
 
-    // .available,
-    // .unavailable {
-    //   position: absolute;
-    //   right: 0;
-    //   bottom: 0.1rem;
-
-    //   padding-top: 1px;
-
-    //   display: flex;
-    //   align-items: center;
-    //   justify-content: center;
-
-    //   width: 1rem;
-    //   height: 1rem;
-
-    //   font-size: 0.7rem;
-
-    //   border-radius: 50%;
-
-    //   color: white;
-    // }
-
-    // .available {
-    //   background-color: $success;
-    // }
-
-    // .unavailable {
-    //   background-color: $danger;
-    // }
+    img.original {
+      width: auto;
+    }
   }
 
   &-edit-link {
@@ -217,18 +187,3 @@
   font-size: 14px;
   line-height: 16px;
 }
-
-// .average-info {
-//   &__title {
-//     @extend %f-w-500;
-//   }
-
-//   &__item fa-icon {
-//     position: relative;
-//     top: 2px;
-//   }
-
-//   &__score {
-//     margin-left: 0.25rem;
-//   }
-// }

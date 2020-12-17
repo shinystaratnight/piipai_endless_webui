@@ -464,6 +464,24 @@ const form = [
         ]
       },
       {
+        endpoint: Endpoints.ContactAddresses,
+        templateOptions: {
+          label: 'Contact Address',
+          type: 'list',
+          add_label: '+ Add',
+          text: 'Contact Address'
+        },
+        collapsed: false,
+        prefilled: {
+          contact: '{id}'
+        },
+        type: 'list',
+        query: {
+          contact: '{id}'
+        },
+        help: 'All addresses of the contact'
+      },
+      {
         endpoint: '/core/notes/',
         templateOptions: {
           label: 'Notes',

@@ -94,7 +94,7 @@
 	"contact.address.street_address.label": "Адрес",
   "contact.birthday.label": "Дата рождения",
   "birthday": "Дата рождения",
-	"contact.email.label": "Email",
+	"contact.email.label": "Эл. адрес",
 	"contact.first_name.label": "Имя",
 	"contact.gender.label": "Пол",
 	"contact.last_name.label": "Фамилия",
@@ -132,7 +132,7 @@
 	"edit_submission": "Изменить",
 	"email": {
 		"description": "Инструкции будут отправлены на этот почтовый адрес",
-		"label": "Email"
+		"label": "Эл. адрес"
 	},
 	"emergency_contact_name.label": "Имя Фамилия",
 	"emergency_contact_phone.label": "Номер телефона",
@@ -250,7 +250,7 @@
 	"login.login": "Войти",
 	"login.register": "Зарегистрироваться",
 	"login.remember_me": "Запомнить меня",
-	"login.subtitle": "Введите ваш email и пароль",
+	"login.subtitle": "Введите ваш эл.адрес и пароль",
 	"login.title": "Вход",
 	"make_default": "сделать по умолчанию",
 	"male": "Мужской",
@@ -307,7 +307,7 @@
 	"portfolio_manager": {
 		"contact": {
 			"email": {
-				"label": "E-mail"
+				"label": "Эл. адрес"
 			},
 			"phone_mobile": {
 				"label": "Номер телефона"
@@ -326,7 +326,7 @@
 	"primary_contact": {
 		"contact": {
 			"email": {
-				"label": "E-mail"
+				"label": "Эл. адрес"
 			},
 			"phone_mobile": {
 				"label": "Номер телефона"
