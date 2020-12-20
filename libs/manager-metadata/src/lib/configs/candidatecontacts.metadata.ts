@@ -1144,6 +1144,24 @@ const form = [
         ]
       },
       {
+        endpoint: Endpoints.ContactAddresses,
+        templateOptions: {
+          label: 'Addresses',
+          type: 'list',
+          add_label: '+ Add',
+          text: 'Candidate Addresses'
+        },
+        collapsed: false,
+        prefilled: {
+          contact: '{contact.id}'
+        },
+        type: 'list',
+        query: {
+          contact: '{contact.id}'
+        },
+        help: ''
+      },
+      {
         endpoint: Endpoints.CandidateSkill,
         templateOptions: {
           label: 'Skills',
