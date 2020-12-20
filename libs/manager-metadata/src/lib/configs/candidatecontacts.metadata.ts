@@ -1024,18 +1024,24 @@ const form = [
                       type: 'related'
                     },
                     type: 'related',
-                    key: 'superannuation_fund'
+                    key: 'superannuation_fund',
+                    showIf: [
+                      { ['master_company.timezone']: '^Australia' }
+                    ]
                   },
                   {
                     key: 'superannuation_membership_number',
                     type: 'input',
                     templateOptions: {
                       required: false,
-                      label: 'Employee membership number',
+                      label: 'Superannual membership number',
                       max: 255,
                       type: 'text'
                     },
-                    read_only: false
+                    read_only: false,
+                    showIf: [
+                      { ['master_company.timezone']: '^Australia' }
+                    ]
                   }
                 ],
                 width: 0.25
