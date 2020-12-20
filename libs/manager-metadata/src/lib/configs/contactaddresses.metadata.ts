@@ -660,13 +660,53 @@ const formadd = [
     type: 'address',
     key: 'address',
   },
-  // {
-  //   key: 'hq',
-  //   default: false,
-  //   type: 'checkbox',
-  //   templateOptions: { required: false, label: 'HQ', type: 'checkbox' },
-  //   read_only: false
-  // },
+  {
+    endpoint: '/core/countries/',
+    read_only: false,
+    templateOptions: {
+      label: 'Country',
+      values: [
+        '__str__',
+        'display_personal_id',
+        'display_tax_number',
+        'personal_id_regex_validation_pattern',
+        'personal_id_type',
+        'tax_number_regex_validation_pattern',
+        'tax_number_type'
+      ],
+      type: 'related',
+    },
+    reset: ['tax_number', 'personal_id'],
+    type: 'related',
+    key: 'country',
+    send: false,
+  },
+  {
+    key: 'tax_number.name',
+    type: 'input',
+    templateOptions: {
+      required: false,
+      label: 'Tax Number',
+      type: 'text',
+      pattern: "country.tax_number_regex_validation_pattern",
+      patternError: "This is invalid number",
+    },
+    showIf: ['country.id', 'country.display_tax_number'],
+    read_only: false
+  },
+  {
+    key: 'personal_id.name',
+    type: 'input',
+    templateOptions: {
+      required: false,
+      label: 'Personal ID',
+      type: 'text',
+      pattern: "country.personal_id_regex_validation_pattern",
+      patternError: "This is invalid number",
+    },
+    showIf: ['country.id', 'country.display_personal_id'],
+    read_only: false
+  },
   {
     key: 'is_active',
     default: true,
