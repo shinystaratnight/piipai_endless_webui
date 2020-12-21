@@ -997,7 +997,8 @@ const form = [
                       patternError: "This is invalid number",
                       placeholder: "Add or change actual"
                     },
-                    dataList: "taxnumber_list",
+                    showIf: ['display_tax_number'],
+                    // dataList: "taxnumber_list",
                     read_only: false
                   },
                   {
@@ -1012,7 +1013,7 @@ const form = [
                       patternError: "This is invalid number",
                     },
                     showIf: ['display_personal_id'],
-                    dataList: "personal_id_list",
+                    // dataList: "personal_id_list",
                     read_only: false
                   },
                   {

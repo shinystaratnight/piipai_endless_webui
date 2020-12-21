@@ -513,15 +513,15 @@ const formset = {
       {
         name: 'actions',
         content: [
-          // {
-          //   action: 'editForm',
-          //   endpoint: `${Endpoints.ContactAddresses}{id}`,
-          //   icon: 'fa-pencil-alt',
-          //   title: 'Edit',
-          //   text_color: '#f0ad4e',
-          //   type: 'button',
-          //   field: 'id'
-          // },
+          {
+            action: 'editForm',
+            endpoint: `${Endpoints.ContactAddresses}{id}`,
+            icon: 'fa-pencil-alt',
+            title: 'Edit',
+            text_color: '#f0ad4e',
+            type: 'button',
+            field: 'id'
+          },
           {
             action: 'delete',
             icon: 'fa-times-circle',
@@ -543,90 +543,91 @@ const formset = {
 };
 
 const form = [
+  // {
+  //   key: 'name',
+  //   type: 'input',
+  //   templateOptions: { required: false, label: 'Name', max: 63, type: 'text' },
+  //   read_only: false
+  // },
   {
-    key: 'name',
-    type: 'input',
-    templateOptions: { required: false, label: 'Name', max: 63, type: 'text' },
-    read_only: false
-  },
-  {
-    list: false,
-    endpoint: '/core/companies/',
-    read_only: false,
+    endpoint: Endpoints.Contact,
     templateOptions: {
-      label: 'Company',
-      add: true,
-      delete: false,
+      label: 'Contact',
       values: ['__str__'],
       type: 'related',
-      edit: true
     },
-    collapsed: false,
     type: 'related',
-    key: 'company',
-    many: false
+    key: 'contact',
   },
   {
-    list: false,
     endpoint: '/core/addresses/',
-    read_only: false,
+    read_only: true,
     templateOptions: {
+      required: true,
       label: 'Address',
       add: true,
-      delete: false,
       values: ['__str__'],
       type: 'address',
       edit: true
     },
-    collapsed: false,
     type: 'address',
     key: 'address',
-    many: false
   },
   {
-    key: 'hq',
-    default: false,
-    type: 'checkbox',
-    templateOptions: { required: false, label: 'HQ', type: 'checkbox' },
-    read_only: false
-  },
-  {
-    key: 'phone_landline',
-    type: 'input',
-    templateOptions: { required: false, label: 'Landline Phone', type: 'text' },
-    read_only: false
-  },
-  {
-    key: 'phone_fax',
-    type: 'input',
-    templateOptions: { required: false, label: 'Fax', type: 'text' },
-    read_only: false
-  },
-  {
-    list: false,
-    endpoint: '/core/companycontacts/',
+    endpoint: '/core/countries/',
     read_only: false,
-    key: 'primary_contact',
     templateOptions: {
-      label: 'Primary contact',
-      add: true,
-      delete: false,
-      values: ['__str__'],
+      label: 'Country',
+      values: [
+        '__str__',
+        'display_personal_id',
+        'display_tax_number',
+        'personal_id_regex_validation_pattern',
+        'personal_id_type',
+        'tax_number_regex_validation_pattern',
+        'tax_number_type'
+      ],
       type: 'related',
-      edit: true
     },
-    visibleMode: true,
-    prefilled: { company: '{company.id}' },
+    reset: ['tax_number', 'personal_id'],
     type: 'related',
-    query: { company: '{company.id}' },
-    many: false
+    key: 'country',
+    send: false,
   },
   {
-    key: 'active',
+    key: 'tax_number',
+    type: 'input',
+    templateOptions: {
+      required: false,
+      label: 'Tax Number',
+      type: 'text',
+      // pattern: "country.tax_number_regex_validation_pattern",
+      patternError: "This is invalid number",
+    },
+    showIf: ['country.id', 'country.display_tax_number'],
+    read_only: false
+  },
+  {
+    key: 'personal_id',
+    type: 'input',
+    templateOptions: {
+      required: false,
+      label: 'Personal ID',
+      type: 'text',
+      // pattern: "country.personal_id_regex_validation_pattern",
+      patternError: "This is invalid number",
+    },
+    showIf: ['country.id', 'country.display_personal_id'],
+    read_only: false
+  },
+  {
+    key: 'is_active',
     default: true,
     type: 'checkbox',
-    templateOptions: { required: false, label: 'Active', type: 'checkbox' },
-    read_only: false
+    templateOptions: {
+      label: 'Active',
+      type: 'checkbox'
+    },
   }
 ];
 
@@ -662,7 +663,7 @@ const formadd = [
   },
   {
     endpoint: '/core/countries/',
-    read_only: false,
+    read_only: true,
     templateOptions: {
       label: 'Country',
       values: [
@@ -682,26 +683,26 @@ const formadd = [
     send: false,
   },
   {
-    key: 'tax_number.name',
+    key: 'tax_number',
     type: 'input',
     templateOptions: {
       required: false,
       label: 'Tax Number',
       type: 'text',
-      pattern: "country.tax_number_regex_validation_pattern",
+      // pattern: "country.tax_number_regex_validation_pattern",
       patternError: "This is invalid number",
     },
     showIf: ['country.id', 'country.display_tax_number'],
     read_only: false
   },
   {
-    key: 'personal_id.name',
+    key: 'personal_id',
     type: 'input',
     templateOptions: {
       required: false,
       label: 'Personal ID',
       type: 'text',
-      pattern: "country.personal_id_regex_validation_pattern",
+      // pattern: "country.personal_id_regex_validation_pattern",
       patternError: "This is invalid number",
     },
     showIf: ['country.id', 'country.display_personal_id'],
