@@ -15,18 +15,18 @@ const list = {
         label: 'Id',
         sort: true
       },
-      {
-        content: [
-          {
-            field: 'title',
-            type: 'input'
-          }
-        ],
-        name: 'title',
-        sort_field: 'title',
-        label: 'Title',
-        sort: true
-      },
+      // {
+      //   content: [
+      //     {
+      //       field: 'title',
+      //       type: 'input'
+      //     }
+      //   ],
+      //   name: 'title',
+      //   sort_field: 'title',
+      //   label: 'Title',
+      //   sort: true
+      // },
       {
         content: [
           {
@@ -100,18 +100,18 @@ const list = {
     //   },
     //   read_only: true
     // },
-    {
-      key: 'title',
-      default: '',
-      type: 'input',
-      templateOptions: {
-        required: false,
-        label: 'Title',
-        type: 'text',
-        max: 1024
-      },
-      read_only: true
-    },
+    // {
+    //   key: 'title',
+    //   default: '',
+    //   type: 'input',
+    //   templateOptions: {
+    //     required: false,
+    //     label: 'Title',
+    //     type: 'text',
+    //     max: 1024
+    //   },
+    //   read_only: true
+    // },
     {
       list: false,
       endpoint: '/core/companies/',
@@ -155,18 +155,18 @@ const form = [
     },
     read_only: false
   },
-  {
-    key: 'title',
-    default: '',
-    type: 'input',
-    templateOptions: {
-      required: false,
-      label: 'Title',
-      max: 1024,
-      type: 'text'
-    },
-    read_only: false
-  },
+  // {
+  //   key: 'title',
+  //   default: '',
+  //   type: 'input',
+  //   templateOptions: {
+  //     required: false,
+  //     label: 'Title',
+  //     max: 1024,
+  //     type: 'text'
+  //   },
+  //   read_only: false
+  // },
   {
     list: false,
     endpoint: '/core/companies/',
@@ -215,41 +215,41 @@ const form = [
   //   },
   //   read_only: false
   // },
-  {
-    key: 'short_description',
-    default: '',
-    type: 'input',
-    templateOptions: {
-      required: false,
-      label: 'Short description',
-      type: 'text'
-    },
-    read_only: false
-  },
-  {
-    key: 'save_button_text',
-    default: 'Save',
-    type: 'input',
-    templateOptions: {
-      required: false,
-      label: 'Button text',
-      max: 512,
-      type: 'text'
-    },
-    read_only: false
-  },
-  {
-    key: 'submit_message',
-    default: '',
-    type: 'textarea',
-    templateOptions: {
-      required: false,
-      label: 'Result message',
-      type: 'textarea',
-      description: 'Would be used for display user message after saving'
-    },
-    read_only: false
-  },
+  // {
+  //   key: 'short_description',
+  //   default: '',
+  //   type: 'input',
+  //   templateOptions: {
+  //     required: false,
+  //     label: 'Short description',
+  //     type: 'text'
+  //   },
+  //   read_only: false
+  // },
+  // {
+  //   key: 'save_button_text',
+  //   default: 'Save',
+  //   type: 'input',
+  //   templateOptions: {
+  //     required: false,
+  //     label: 'Button text',
+  //     max: 512,
+  //     type: 'text'
+  //   },
+  //   read_only: false
+  // },
+  // {
+  //   key: 'submit_message',
+  //   default: '',
+  //   type: 'textarea',
+  //   templateOptions: {
+  //     required: false,
+  //     label: 'Result message',
+  //     type: 'textarea',
+  //     description: 'Would be used for display user message after saving'
+  //   },
+  //   read_only: false
+  // },
   {
     endpoint: '/core/formfieldgroups/',
     read_only: false,
