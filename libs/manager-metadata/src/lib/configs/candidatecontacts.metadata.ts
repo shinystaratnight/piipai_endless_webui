@@ -987,18 +987,17 @@ const form = [
                 type: 'group',
                 children: [
                   {
-                    key: 'tax_file_number',
+                    key: 'tax_number',
                     type: 'input',
                     templateOptions: {
                       required: false,
-                      label: 'Tax File Number',
+                      label: '{tax_number_type}',
                       type: 'text',
                       pattern: "tax_number_regex",
                       patternError: "This is invalid number",
                       placeholder: "Add or change actual"
                     },
                     showIf: ['display_tax_number'],
-                    // dataList: "taxnumber_list",
                     read_only: false
                   },
                   {
@@ -1006,14 +1005,13 @@ const form = [
                     type: 'input',
                     templateOptions: {
                       required: false,
-                      label: 'Personal ID',
+                      label: '{personal_id_type}',
                       type: 'text',
                       pattern: "personal_id_regex",
                       placeholder: "Add or change actual",
                       patternError: "This is invalid number",
                     },
                     showIf: ['display_personal_id'],
-                    // dataList: "personal_id_list",
                     read_only: false
                   },
                   {

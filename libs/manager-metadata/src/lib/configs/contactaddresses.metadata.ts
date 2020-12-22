@@ -570,56 +570,56 @@ const form = [
       type: 'address',
       edit: true
     },
-    type: 'address',
+    type: 'related',
     key: 'address',
   },
-  {
-    endpoint: '/core/countries/',
-    read_only: false,
-    templateOptions: {
-      label: 'Country',
-      values: [
-        '__str__',
-        'display_personal_id',
-        'display_tax_number',
-        'personal_id_regex_validation_pattern',
-        'personal_id_type',
-        'tax_number_regex_validation_pattern',
-        'tax_number_type'
-      ],
-      type: 'related',
-    },
-    reset: ['tax_number', 'personal_id'],
-    type: 'related',
-    key: 'country',
-    send: false,
-  },
-  {
-    key: 'tax_number',
-    type: 'input',
-    templateOptions: {
-      required: false,
-      label: 'Tax Number',
-      type: 'text',
-      // pattern: "country.tax_number_regex_validation_pattern",
-      patternError: "This is invalid number",
-    },
-    showIf: ['country.id', 'country.display_tax_number'],
-    read_only: false
-  },
-  {
-    key: 'personal_id',
-    type: 'input',
-    templateOptions: {
-      required: false,
-      label: 'Personal ID',
-      type: 'text',
-      // pattern: "country.personal_id_regex_validation_pattern",
-      patternError: "This is invalid number",
-    },
-    showIf: ['country.id', 'country.display_personal_id'],
-    read_only: false
-  },
+  // {
+  //   endpoint: '/core/countries/',
+  //   read_only: true,
+  //   templateOptions: {
+  //     label: 'Country',
+  //     values: [
+  //       '__str__',
+  //       'display_personal_id',
+  //       'display_tax_number',
+  //       'personal_id_regex_validation_pattern',
+  //       'personal_id_type',
+  //       'tax_number_regex_validation_pattern',
+  //       'tax_number_type'
+  //     ],
+  //     type: 'related',
+  //   },
+  //   reset: ['tax_number', 'personal_id'],
+  //   type: 'related',
+  //   key: 'address.country',
+  //   send: false,
+  // },
+  // {
+  //   key: 'set_tax_number',
+  //   type: 'input',
+  //   templateOptions: {
+  //     required: false,
+  //     label: 'Tax Number',
+  //     type: 'text',
+  //     pattern: "address.country.tax_number_regex_validation_pattern",
+  //     patternError: "This is invalid number",
+  //   },
+  //   showIf: ['address.country.id', 'address.country.display_tax_number'],
+  //   read_only: false
+  // },
+  // {
+  //   key: 'set_personal_id',
+  //   type: 'input',
+  //   templateOptions: {
+  //     required: false,
+  //     label: 'Personal ID',
+  //     type: 'text',
+  //     pattern: "address.country.personal_id_regex_validation_pattern",
+  //     patternError: "This is invalid number",
+  //   },
+  //   showIf: ['address.country.id', 'address.country.display_personal_id'],
+  //   read_only: false
+  // },
   {
     key: 'is_active',
     default: true,
@@ -632,12 +632,6 @@ const form = [
 ];
 
 const formadd = [
-  // {
-  //   key: 'name',
-  //   type: 'input',
-  //   templateOptions: { required: false, label: 'Name', max: 63, type: 'text' },
-  //   read_only: false
-  // },
   {
     endpoint: Endpoints.Contact,
     templateOptions: {
@@ -660,53 +654,6 @@ const formadd = [
     },
     type: 'address',
     key: 'address',
-  },
-  {
-    endpoint: '/core/countries/',
-    read_only: true,
-    templateOptions: {
-      label: 'Country',
-      values: [
-        '__str__',
-        'display_personal_id',
-        'display_tax_number',
-        'personal_id_regex_validation_pattern',
-        'personal_id_type',
-        'tax_number_regex_validation_pattern',
-        'tax_number_type'
-      ],
-      type: 'related',
-    },
-    reset: ['tax_number', 'personal_id'],
-    type: 'related',
-    key: 'country',
-    send: false,
-  },
-  {
-    key: 'tax_number',
-    type: 'input',
-    templateOptions: {
-      required: false,
-      label: 'Tax Number',
-      type: 'text',
-      // pattern: "country.tax_number_regex_validation_pattern",
-      patternError: "This is invalid number",
-    },
-    showIf: ['country.id', 'country.display_tax_number'],
-    read_only: false
-  },
-  {
-    key: 'personal_id',
-    type: 'input',
-    templateOptions: {
-      required: false,
-      label: 'Personal ID',
-      type: 'text',
-      // pattern: "country.personal_id_regex_validation_pattern",
-      patternError: "This is invalid number",
-    },
-    showIf: ['country.id', 'country.display_personal_id'],
-    read_only: false
   },
   {
     key: 'is_active',

@@ -71,8 +71,8 @@ input[type=number] {
   & > .nav-tabs {
     justify-content: center !important;
 
-    .nav-item:nth-child(12),
-    .nav-item:nth-child(13) {
+    .nav-item:nth-child(13),
+    .nav-item:nth-child(14) {
       width: 50%;
       font-weight: bold;
 
@@ -81,7 +81,7 @@ input[type=number] {
       }
     }
 
-    .nav-item:nth-child(12) {
+    .nav-item:nth-child(13) {
       text-align: right;
     }
   }
