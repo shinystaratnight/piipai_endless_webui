@@ -513,15 +513,15 @@ const formset = {
       {
         name: 'actions',
         content: [
-          // {
-          //   action: 'editForm',
-          //   endpoint: `${Endpoints.ContactAddresses}{id}`,
-          //   icon: 'fa-pencil-alt',
-          //   title: 'Edit',
-          //   text_color: '#f0ad4e',
-          //   type: 'button',
-          //   field: 'id'
-          // },
+          {
+            action: 'editForm',
+            endpoint: `${Endpoints.ContactAddresses}{id}`,
+            icon: 'fa-pencil-alt',
+            title: 'Edit',
+            text_color: '#f0ad4e',
+            type: 'button',
+            field: 'id'
+          },
           {
             action: 'delete',
             icon: 'fa-times-circle',
@@ -543,100 +543,95 @@ const formset = {
 };
 
 const form = [
-  {
-    key: 'name',
-    type: 'input',
-    templateOptions: { required: false, label: 'Name', max: 63, type: 'text' },
-    read_only: false
-  },
-  {
-    list: false,
-    endpoint: '/core/companies/',
-    read_only: false,
-    templateOptions: {
-      label: 'Company',
-      add: true,
-      delete: false,
-      values: ['__str__'],
-      type: 'related',
-      edit: true
-    },
-    collapsed: false,
-    type: 'related',
-    key: 'company',
-    many: false
-  },
-  {
-    list: false,
-    endpoint: '/core/addresses/',
-    read_only: false,
-    templateOptions: {
-      label: 'Address',
-      add: true,
-      delete: false,
-      values: ['__str__'],
-      type: 'address',
-      edit: true
-    },
-    collapsed: false,
-    type: 'address',
-    key: 'address',
-    many: false
-  },
-  {
-    key: 'hq',
-    default: false,
-    type: 'checkbox',
-    templateOptions: { required: false, label: 'HQ', type: 'checkbox' },
-    read_only: false
-  },
-  {
-    key: 'phone_landline',
-    type: 'input',
-    templateOptions: { required: false, label: 'Landline Phone', type: 'text' },
-    read_only: false
-  },
-  {
-    key: 'phone_fax',
-    type: 'input',
-    templateOptions: { required: false, label: 'Fax', type: 'text' },
-    read_only: false
-  },
-  {
-    list: false,
-    endpoint: '/core/companycontacts/',
-    read_only: false,
-    key: 'primary_contact',
-    templateOptions: {
-      label: 'Primary contact',
-      add: true,
-      delete: false,
-      values: ['__str__'],
-      type: 'related',
-      edit: true
-    },
-    visibleMode: true,
-    prefilled: { company: '{company.id}' },
-    type: 'related',
-    query: { company: '{company.id}' },
-    many: false
-  },
-  {
-    key: 'active',
-    default: true,
-    type: 'checkbox',
-    templateOptions: { required: false, label: 'Active', type: 'checkbox' },
-    read_only: false
-  }
-];
-
-const formadd = [
   // {
   //   key: 'name',
   //   type: 'input',
   //   templateOptions: { required: false, label: 'Name', max: 63, type: 'text' },
   //   read_only: false
   // },
+  {
+    endpoint: Endpoints.Contact,
+    templateOptions: {
+      label: 'Contact',
+      values: ['__str__'],
+      type: 'related',
+    },
+    type: 'related',
+    key: 'contact',
+  },
+  {
+    endpoint: '/core/addresses/',
+    read_only: true,
+    templateOptions: {
+      required: true,
+      label: 'Address',
+      add: true,
+      values: ['__str__'],
+      type: 'address',
+      edit: true
+    },
+    type: 'related',
+    key: 'address',
+  },
+  // {
+  //   endpoint: '/core/countries/',
+  //   read_only: true,
+  //   templateOptions: {
+  //     label: 'Country',
+  //     values: [
+  //       '__str__',
+  //       'display_personal_id',
+  //       'display_tax_number',
+  //       'personal_id_regex_validation_pattern',
+  //       'personal_id_type',
+  //       'tax_number_regex_validation_pattern',
+  //       'tax_number_type'
+  //     ],
+  //     type: 'related',
+  //   },
+  //   reset: ['tax_number', 'personal_id'],
+  //   type: 'related',
+  //   key: 'address.country',
+  //   send: false,
+  // },
+  // {
+  //   key: 'set_tax_number',
+  //   type: 'input',
+  //   templateOptions: {
+  //     required: false,
+  //     label: 'Tax Number',
+  //     type: 'text',
+  //     pattern: "address.country.tax_number_regex_validation_pattern",
+  //     patternError: "This is invalid number",
+  //   },
+  //   showIf: ['address.country.id', 'address.country.display_tax_number'],
+  //   read_only: false
+  // },
+  // {
+  //   key: 'set_personal_id',
+  //   type: 'input',
+  //   templateOptions: {
+  //     required: false,
+  //     label: 'Personal ID',
+  //     type: 'text',
+  //     pattern: "address.country.personal_id_regex_validation_pattern",
+  //     patternError: "This is invalid number",
+  //   },
+  //   showIf: ['address.country.id', 'address.country.display_personal_id'],
+  //   read_only: false
+  // },
+  {
+    key: 'is_active',
+    default: true,
+    type: 'checkbox',
+    templateOptions: {
+      label: 'Active',
+      type: 'checkbox'
+    },
+  }
+];
+
+const formadd = [
   {
     endpoint: Endpoints.Contact,
     templateOptions: {
@@ -660,13 +655,6 @@ const formadd = [
     type: 'address',
     key: 'address',
   },
-  // {
-  //   key: 'hq',
-  //   default: false,
-  //   type: 'checkbox',
-  //   templateOptions: { required: false, label: 'HQ', type: 'checkbox' },
-  //   read_only: false
-  // },
   {
     key: 'is_active',
     default: true,

@@ -11,7 +11,7 @@ import {
   OnDestroy,
   ChangeDetectorRef,
 } from '@angular/core';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 import {
   SearchCountryField,
@@ -23,7 +23,7 @@ import { Subscription } from 'rxjs';
 import { distinctUntilChanged, debounceTime } from 'rxjs/operators';
 
 import { Field } from '@webui/data';
-import { FormatString, getTotalTime, getTimeInstance } from '@webui/utilities';
+import { FormatString, getTotalTime, getTimeInstance, getPropValue } from '@webui/utilities';
 
 import { BasicElementComponent } from '../basic-element/basic-element.component';
 import { SiteSettingsService } from '@webui/core';
@@ -346,6 +346,14 @@ export class FormInputComponent extends BasicElementComponent
           this.setInitValue();
         } else {
           this.config.hide = hide;
+
+          if (this.config.templateOptions.pattern) {
+            const pattern = getPropValue(this.config.formData.value.data, this.config.templateOptions.pattern);
+            const control = this.group.get(this.key);
+
+            control.setValidators(Validators.pattern(pattern));
+            control.updateValueAndValidity({ onlySelf: true });
+          }
         }
 
         if (!(<any>this.cd).destroyed) {
