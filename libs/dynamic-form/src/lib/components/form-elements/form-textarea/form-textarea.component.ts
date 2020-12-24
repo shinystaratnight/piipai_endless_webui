@@ -4,7 +4,7 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
 import { BasicElementComponent } from './../basic-element/basic-element.component';
-import { getTranslationKey } from '@webui/utilities';
+import { FormatString, getTranslationKey } from '@webui/utilities';
 
 @Component({
   selector: 'app-form-textarea',
@@ -26,6 +26,7 @@ export class FormTextareaComponent extends BasicElementComponent implements OnIn
   public displayValue: string;
   public editMode: boolean;
   public className: string;
+  public formData: any;
 
   private subscriptions: Subscription[];
 
@@ -43,12 +44,40 @@ export class FormTextareaComponent extends BasicElementComponent implements OnIn
     this.checkModeProperty();
     this.checkHiddenProperty();
     this.createEvent();
+    this.checkFormData();
 
     this.className = this.config.templateOptions.background ? 'message-text' : '';
   }
 
   public ngOnDestroy() {
     this.subscriptions.forEach((s) => s && s.unsubscribe());
+  }
+
+  public checkFormData() {
+    if (this.config.formData) {
+      const subscription = this.config.formData.subscribe((value) => {
+        const { data, key } = value;
+
+        this.formData = data;
+        this.checkIfExistDefaultValue(key);
+      });
+
+      this.subscriptions.push(subscription);
+    }
+  }
+
+  public checkIfExistDefaultValue(key: string) {
+    if (
+      this.config.default &&
+      typeof this.config.default === 'string' &&
+      this.config.default.includes('{') &&
+      this.config.default.includes('}')
+    ) {
+      if (this.config.updated && !this.config.updated.includes(key)) {
+        return;
+      }
+      this.setInitValue(true);
+    }
   }
 
   public checkHiddenProperty() {
@@ -90,7 +119,7 @@ export class FormTextareaComponent extends BasicElementComponent implements OnIn
     }
   }
 
-  public setInitValue() {
+  public setInitValue(update?: boolean) {
     if (this.config.value || this.config.value === '') {
       this.group.get(this.key).patchValue(this.config.value);
 
@@ -100,6 +129,18 @@ export class FormTextareaComponent extends BasicElementComponent implements OnIn
         this.displayValue = this.config.value;
       }
     } else {
+      const format = new FormatString();
+      const defaultValue =
+          typeof this.config.default === 'string'
+            ? format.format(this.config.default, this.formData)
+            : this.config.default;
+
+      if (defaultValue || update) {
+        this.group.get(this.key).patchValue(defaultValue);
+        this.displayValue = this.displayValue;
+        return;
+      }
+
       this.displayValue = '-';
     }
   }
