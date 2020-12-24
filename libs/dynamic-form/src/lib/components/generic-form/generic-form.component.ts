@@ -712,6 +712,10 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
         el.dataList = this.getValueOfData(data, el.dataList, {});
       }
 
+      if (el.relatedData) {
+        el.relatedData = this.getValueOfData(data, el.relatedData, {});
+      }
+
       if (el.update) {
         const value = this.getValueOfData(data, el.key, metadata, {});
         el.update['data'] = Array.isArray(value) && value.length ? value.map((item) => item.id) : value;

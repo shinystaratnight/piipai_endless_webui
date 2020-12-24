@@ -98,3 +98,13 @@ export function generateCssStyles(styles: string[] = [], prefix: string): string
     .trim() || ''
   ];
 }
+
+export const isAddressField = (field: Field) => {
+  const { type, key } = field;
+
+  if (type === 'address') {
+    return true;
+  }
+
+  return key === 'address' || key === 'street_address';
+}

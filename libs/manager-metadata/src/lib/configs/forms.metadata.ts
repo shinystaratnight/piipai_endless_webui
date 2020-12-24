@@ -1,3 +1,5 @@
+import { Endpoints } from '@webui/data';
+
 const list = {
   list: {
     list: 'form',
@@ -144,17 +146,17 @@ const list = {
 };
 
 const form = [
-  {
-    key: 'id',
-    type: 'input',
-    hide: true,
-    templateOptions: {
-      required: false,
-      label: 'Id',
-      type: 'text'
-    },
-    read_only: false
-  },
+  // {
+  //   key: 'id',
+  //   type: 'input',
+  //   hide: true,
+  //   templateOptions: {
+  //     required: false,
+  //     label: 'Id',
+  //     type: 'text'
+  //   },
+  //   read_only: false
+  // },
   // {
   //   key: 'title',
   //   default: '',
@@ -203,6 +205,26 @@ const form = [
     key: 'builder',
     many: false
   },
+  {
+    key: 'language',
+    type: 'related',
+    endpoint: `${Endpoints.CompanyLanguages}{company.id}/languages/`,
+    relatedData: 'translations',
+    replaceByData: true,
+    relatedDataMap: {
+      0: 'name',
+      1: 'title',
+      2: 'short_description',
+      3: 'save_button_text',
+      4: 'submit_message'
+    },
+    templateOptions: {
+      required: true,
+      label: 'Language',
+      display: '{language.name}',
+      listParam: '{language.alpha_2}',
+    },
+  },
   // {
   //   key: 'is_active',
   //   default: false,
@@ -215,41 +237,62 @@ const form = [
   //   },
   //   read_only: false
   // },
-  // {
-  //   key: 'short_description',
-  //   default: '',
-  //   type: 'input',
-  //   templateOptions: {
-  //     required: false,
-  //     label: 'Short description',
-  //     type: 'text'
-  //   },
-  //   read_only: false
-  // },
-  // {
-  //   key: 'save_button_text',
-  //   default: 'Save',
-  //   type: 'input',
-  //   templateOptions: {
-  //     required: false,
-  //     label: 'Button text',
-  //     max: 512,
-  //     type: 'text'
-  //   },
-  //   read_only: false
-  // },
-  // {
-  //   key: 'submit_message',
-  //   default: '',
-  //   type: 'textarea',
-  //   templateOptions: {
-  //     required: false,
-  //     label: 'Result message',
-  //     type: 'textarea',
-  //     description: 'Would be used for display user message after saving'
-  //   },
-  //   read_only: false
-  // },
+  {
+    key: 'title',
+    default: '{language.relatedData.title}',
+    type: 'input',
+    useValue: true,
+    updated: ['language'],
+    showIf: ['language.id'],
+    templateOptions: {
+      required: false,
+      label: 'Title',
+      max: 1024,
+      type: 'text'
+    },
+    read_only: false
+  },
+  {
+    key: 'short_description',
+    default: '{language.relatedData.short_description}',
+    updated: ['language'],
+    showIf: ['language.id'],
+    type: 'input',
+    templateOptions: {
+      required: false,
+      label: 'Short description',
+      type: 'text'
+    },
+    read_only: false
+  },
+  {
+    key: 'save_button_text',
+    default: '{language.relatedData.save_button_text}',
+    updated: ['language'],
+    showIf: ['language.id'],
+    type: 'input',
+    templateOptions: {
+      required: false,
+      label: 'Button text',
+      max: 512,
+      type: 'text'
+    },
+    read_only: false
+  },
+  {
+    key: 'submit_message',
+    default: '{language.relatedData.submit_message}',
+    updated: ['language'],
+    showIf: ['language.id'],
+    type: 'textarea',
+    templateOptions: {
+      required: false,
+      label: 'Result message',
+      type: 'textarea',
+      description: 'Would be used for display user message after saving'
+    },
+    read_only: false
+  },
   {
     endpoint: '/core/formfieldgroups/',
     read_only: false,

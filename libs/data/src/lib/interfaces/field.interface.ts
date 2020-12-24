@@ -92,6 +92,8 @@ export interface Field {
   show?: BehaviorSubject<boolean>;
   dataList?: any;
   companyPicture?: boolean;
+  relatedData?: any;
+  relatedDataMap?: any;
   templateOptions?: {
     hideLabel?: boolean;
     dontSendFields?: boolean;
