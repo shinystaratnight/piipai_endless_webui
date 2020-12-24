@@ -91,6 +91,7 @@ export interface Field {
   replaceByData?: boolean;
   show?: BehaviorSubject<boolean>;
   dataList?: any;
+  companyPicture?: boolean;
   relatedData?: any;
   relatedDataMap?: any;
   templateOptions?: {

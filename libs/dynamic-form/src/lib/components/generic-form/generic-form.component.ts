@@ -409,6 +409,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
     if (infoElement && infoElement.type === 'info') {
       const keys = Object.keys(infoElement.values);
       infoElement.metadata = <any>{};
+      infoElement.companyPicture = Endpoints.Company === this.endpoint;
       keys.forEach((el) => {
         const value = infoElement.values[el];
         if (typeof value === 'string') {

@@ -3,6 +3,11 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { getContactAvatar } from '@webui/utilities';
 import { getValueOfData } from '../../../helpers';
 
+const defaultImage = {
+  client: '/assets/img/logo.svg',
+  contact: '/assets/img/avatar.png'
+}
+
 @Component({
   selector: 'app-list-info',
   templateUrl: 'list-info.component.html',
@@ -33,6 +38,7 @@ export class ListInfoComponent implements OnInit {
 
   public statusList: any[];
   public more: boolean;
+  public isDefaultImage: boolean;
 
   public colors = {
     0: '#bdbdbd',
@@ -64,9 +70,16 @@ export class ListInfoComponent implements OnInit {
           this.color = this.config.values[key].color;
           this.colorAttr = this.config.values[key].color_attr;
         } else if (key === 'picture') {
-          this[key] = this.getValue(this.config.values[key], this.config.value)
-            || (this.config.companyPicture ? '/assets/img/logo.svg' : null)
-            || (this.config.hideTitle ? '/assets/img/avatar.png' : null);
+          const value = this.getValue(this.config.values[key], this.config.value);
+
+          if (value) {
+            this[key] = value;
+            return;
+          }
+
+          const defaultImageKey = this.config.companyPicture ? 'client' : this.config.hideTitle ? 'contact' : null;
+          this[key] = defaultImage[defaultImageKey];
+          this.isDefaultImage = true;
         } else {
           this[key] = this.getValue(this.config.values[key], this.config.value);
         }
