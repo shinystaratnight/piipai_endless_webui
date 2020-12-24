@@ -28,6 +28,7 @@ import { FormatString, getTotalTime, getTimeInstance, getPropValue } from '@webu
 import { BasicElementComponent } from '../basic-element/basic-element.component';
 import { SiteSettingsService } from '@webui/core';
 import { formatCurrency, getCurrencySymbol } from '@angular/common';
+import { isAddressField } from '../../../helpers';
 
 @Component({
   selector: 'app-form-input',
@@ -88,11 +89,7 @@ export class FormInputComponent extends BasicElementComponent
   public requiredField: boolean;
 
   get isAddressField() {
-    const { type, key } = this.config;
-
-    return (
-      type === 'address' || key === 'address' || key.includes('street_address')
-    );
+    return isAddressField(this.config);
   }
 
   get isPhoneField() {
@@ -225,11 +222,13 @@ export class FormInputComponent extends BasicElementComponent
 
   public checkFormData() {
     if (this.config.formData) {
-      const subscription = this.config.formData.subscribe((data) => {
-        this.formData = data.data;
-        this.checkTimesheetTime(data);
-        this.checkTotalTime(data.data);
-        this.checkIfExistDefaultValue(data.key);
+      const subscription = this.config.formData.subscribe((value) => {
+        const { data, key } = value;
+
+        this.formData = data;
+        this.checkTimesheetTime(value);
+        this.checkTotalTime(data);
+        this.checkIfExistDefaultValue(key);
         this.checkAttributes();
       });
 
@@ -319,11 +318,7 @@ export class FormInputComponent extends BasicElementComponent
       this.config.default.includes('{') &&
       this.config.default.includes('}')
     ) {
-      if (
-        this.config.type !== 'address' &&
-        this.key !== 'address' &&
-        this.key !== 'street_address'
-      ) {
+      if (!this.isAddressField) {
         if (this.config.updated && !this.config.updated.includes(field)) {
           return;
         }
@@ -426,18 +421,23 @@ export class FormInputComponent extends BasicElementComponent
 
   public setInitValue(update?: boolean) {
     const format = new FormatString();
+    const control = this.group.get(this.key);
+    const controlValue = control.value;
+    const initValue = this.config.value;
 
-    if (this.config.value && this.config.templateOptions.round) {
-      this.config.value = parseInt(this.config.value, 10);
+    if (initValue && this.config.templateOptions.round) {
+      this.config.value = parseInt(initValue, 10);
     }
 
-    if (this.key === 'street_address' && this.group.get(this.key).value) {
-      this.address = this.group.get(this.key).value.formatted_address;
-    }
+    if (controlValue) {
+      if (this.key === 'street_address') {
+        this.address = controlValue;
+      }
 
-    if (this.key === 'postal_code' && this.group.get(this.key).value) {
-      this.config.value = this.group.get(this.key).value;
-      this.displayValue = this.group.get(this.key).value;
+      if (this.key === 'postal_code') {
+        this.config.value = controlValue;
+        this.displayValue = controlValue;
+      }
     }
 
     if (
@@ -446,8 +446,9 @@ export class FormInputComponent extends BasicElementComponent
     ) {
       if (this.autocompleteValue) {
         this.displayValue = this.autocompleteValue;
-        if (this.group.get(this.key)) {
-          this.group.get(this.key).patchValue(this.autocompleteValue);
+
+        if (control) {
+          control.patchValue(this.autocompleteValue);
         }
       } else if (
         this.config.value === 0 ||
@@ -474,15 +475,11 @@ export class FormInputComponent extends BasicElementComponent
           this.intl = value;
         }
 
-        if (this.group.get(this.key)) {
-          this.group.get(this.key).patchValue(value);
+        if (control) {
+          control.patchValue(value);
         }
 
-        if (
-          this.config.type === 'address' ||
-          this.key === 'address' ||
-          this.key === 'street_address'
-        ) {
+        if (this.isAddressField) {
           this.address = value;
         }
         const currency = getCurrencySymbol(
@@ -612,9 +609,6 @@ export class FormInputComponent extends BasicElementComponent
   // Address field
 
   public getAddress(address, value: string) {
-    // const apartmentMath = value.match(/^(\d*)(\w+?)\//);
-    // const apartment = apartmentMath ? apartmentMath[0].slice(0, -1) : undefined;
-    // const data = { ...address, apartment };
     const data = address;
 
     this.group.get(this.key).patchValue(data);

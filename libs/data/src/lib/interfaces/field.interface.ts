@@ -91,6 +91,8 @@ export interface Field {
   replaceByData?: boolean;
   show?: BehaviorSubject<boolean>;
   dataList?: any;
+  relatedData?: any;
+  relatedDataMap?: any;
   templateOptions?: {
     hideLabel?: boolean;
     dontSendFields?: boolean;

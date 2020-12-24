@@ -1,3 +1,5 @@
+import { Endpoints } from '@webui/data';
+
 const list = {
   list: {
     list: 'form',
@@ -15,18 +17,18 @@ const list = {
         label: 'Id',
         sort: true
       },
-      {
-        content: [
-          {
-            field: 'title',
-            type: 'input'
-          }
-        ],
-        name: 'title',
-        sort_field: 'title',
-        label: 'Title',
-        sort: true
-      },
+      // {
+      //   content: [
+      //     {
+      //       field: 'title',
+      //       type: 'input'
+      //     }
+      //   ],
+      //   name: 'title',
+      //   sort_field: 'title',
+      //   label: 'Title',
+      //   sort: true
+      // },
       {
         content: [
           {
@@ -100,18 +102,18 @@ const list = {
     //   },
     //   read_only: true
     // },
-    {
-      key: 'title',
-      default: '',
-      type: 'input',
-      templateOptions: {
-        required: false,
-        label: 'Title',
-        type: 'text',
-        max: 1024
-      },
-      read_only: true
-    },
+    // {
+    //   key: 'title',
+    //   default: '',
+    //   type: 'input',
+    //   templateOptions: {
+    //     required: false,
+    //     label: 'Title',
+    //     type: 'text',
+    //     max: 1024
+    //   },
+    //   read_only: true
+    // },
     {
       list: false,
       endpoint: '/core/companies/',
@@ -144,29 +146,29 @@ const list = {
 };
 
 const form = [
-  {
-    key: 'id',
-    type: 'input',
-    hide: true,
-    templateOptions: {
-      required: false,
-      label: 'Id',
-      type: 'text'
-    },
-    read_only: false
-  },
-  {
-    key: 'title',
-    default: '',
-    type: 'input',
-    templateOptions: {
-      required: false,
-      label: 'Title',
-      max: 1024,
-      type: 'text'
-    },
-    read_only: false
-  },
+  // {
+  //   key: 'id',
+  //   type: 'input',
+  //   hide: true,
+  //   templateOptions: {
+  //     required: false,
+  //     label: 'Id',
+  //     type: 'text'
+  //   },
+  //   read_only: false
+  // },
+  // {
+  //   key: 'title',
+  //   default: '',
+  //   type: 'input',
+  //   templateOptions: {
+  //     required: false,
+  //     label: 'Title',
+  //     max: 1024,
+  //     type: 'text'
+  //   },
+  //   read_only: false
+  // },
   {
     list: false,
     endpoint: '/core/companies/',
@@ -203,6 +205,26 @@ const form = [
     key: 'builder',
     many: false
   },
+  {
+    key: 'language',
+    type: 'related',
+    endpoint: `${Endpoints.CompanyLanguages}{company.id}/languages/`,
+    relatedData: 'translations',
+    replaceByData: true,
+    relatedDataMap: {
+      0: 'name',
+      1: 'title',
+      2: 'short_description',
+      3: 'save_button_text',
+      4: 'submit_message'
+    },
+    templateOptions: {
+      required: true,
+      label: 'Language',
+      display: '{language.name}',
+      listParam: '{language.alpha_2}',
+    },
+  },
   // {
   //   key: 'is_active',
   //   default: false,
@@ -216,8 +238,25 @@ const form = [
   //   read_only: false
   // },
   {
+    key: 'title',
+    default: '{language.relatedData.title}',
+    type: 'input',
+    useValue: true,
+    updated: ['language'],
+    showIf: ['language.id'],
+    templateOptions: {
+      required: false,
+      label: 'Title',
+      max: 1024,
+      type: 'text'
+    },
+    read_only: false
+  },
+  {
     key: 'short_description',
-    default: '',
+    default: '{language.relatedData.short_description}',
+    updated: ['language'],
+    showIf: ['language.id'],
     type: 'input',
     templateOptions: {
       required: false,
@@ -228,7 +267,9 @@ const form = [
   },
   {
     key: 'save_button_text',
-    default: 'Save',
+    default: '{language.relatedData.save_button_text}',
+    updated: ['language'],
+    showIf: ['language.id'],
     type: 'input',
     templateOptions: {
       required: false,
@@ -240,7 +281,9 @@ const form = [
   },
   {
     key: 'submit_message',
-    default: '',
+    default: '{language.relatedData.submit_message}',
+    updated: ['language'],
+    showIf: ['language.id'],
     type: 'textarea',
     templateOptions: {
       required: false,
