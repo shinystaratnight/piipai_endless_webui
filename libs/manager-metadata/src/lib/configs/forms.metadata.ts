@@ -210,6 +210,7 @@ const form = [
     type: 'related',
     endpoint: `${Endpoints.CompanyLanguages}{company.id}/languages/`,
     relatedData: 'translations',
+    replaceByData: true,
     relatedDataMap: {
       0: 'name',
       1: 'title',
@@ -242,6 +243,7 @@ const form = [
     type: 'input',
     useValue: true,
     updated: ['language'],
+    showIf: ['language.id'],
     templateOptions: {
       required: false,
       label: 'Title',
@@ -254,6 +256,7 @@ const form = [
     key: 'short_description',
     default: '{language.relatedData.short_description}',
     updated: ['language'],
+    showIf: ['language.id'],
     type: 'input',
     templateOptions: {
       required: false,
@@ -266,6 +269,7 @@ const form = [
     key: 'save_button_text',
     default: '{language.relatedData.save_button_text}',
     updated: ['language'],
+    showIf: ['language.id'],
     type: 'input',
     templateOptions: {
       required: false,
@@ -279,6 +283,7 @@ const form = [
     key: 'submit_message',
     default: '{language.relatedData.submit_message}',
     updated: ['language'],
+    showIf: ['language.id'],
     type: 'textarea',
     templateOptions: {
       required: false,
