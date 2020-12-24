@@ -61,6 +61,10 @@ p {
       }
     }
 
+    img.origin {
+      width: auto;
+    }
+
     &--preview {
       left: 0;
       position: absolute;
@@ -71,6 +75,10 @@ p {
       border-radius: 50%;
       object-fit: cover;
       z-index: 2;
+
+      &.hide {
+        visibility: hidden;
+      }
     }
 
     .available,

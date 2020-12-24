@@ -1277,6 +1277,20 @@ export class FormRelatedComponent extends BasicElementComponent
   public setValue(item, manual?: boolean, update?: boolean) {
     let updated = false;
 
+    if (this.config.relatedData) {
+      const data = this.config.relatedData.find((el) => !!el[item[this.param]]);
+      const mapedData = {};
+
+      if (data) {
+        const relatedData = data[item[this.param]];
+        relatedData.forEach((el, i) => {
+          const key = this.config.relatedDataMap[i];
+          mapedData[key] = el;
+        })
+      }
+      item.relatedData = mapedData;
+    }
+
     if (item) {
       if (this.config.many) {
         updated = this.updateValueOfManyType(item);

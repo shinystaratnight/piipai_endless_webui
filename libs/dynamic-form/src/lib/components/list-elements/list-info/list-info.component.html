@@ -5,6 +5,7 @@
         *ngIf="picture"
         [src]="picture"
         [class.original]="config.companyPicture"
+        [class.default]="isDefaultImage"
       />
       <div *ngIf="contactAvatar" class="contact-avatar">
         {{contactAvatar}}
