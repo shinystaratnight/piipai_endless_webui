@@ -66,7 +66,9 @@ $image-size: 54px;
     }
 
     img.original {
-      width: auto;
+      object-fit: contain;
+      width: 54px;
+      background-color: transparent;
     }
 
     img.default {
