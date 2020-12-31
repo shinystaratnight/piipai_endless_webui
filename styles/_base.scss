@@ -185,6 +185,7 @@ input[type=number] {
   background: $primary;
   background: -webkit-linear-gradient(to bottom, $primary, #f2fcfe);
   background: linear-gradient(to bottom, $primary, #f2fcfe);
+  user-select: none;
 
   @each $item in $themes {
     .#{$item}-theme & {

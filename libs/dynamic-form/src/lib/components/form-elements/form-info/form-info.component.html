@@ -1,9 +1,20 @@
 <div *ngIf="!(config.hideOnMobile && isMobileDevice)" class="form-info-wrapper" [class.mobile]="isMobileDevice">
   <div class=form-info-left *ngIf="config.metadata['picture'] || contactAvatar || picture || map">
-    <div class="form-info-image">
-      <img *ngIf="picture && !(config && config.metadata['picture'] && !viewMode && config.editForm)" [src]="picture" [class.origin]="config.companyPicture">
-      <img class="form-info-image--preview" *ngIf="picture && !(config && config.metadata['picture'] && !viewMode && config.editForm)" [src]="picture" [class.hide]="config.companyPicture">
-      <div *ngIf="contactAvatar && !(config && config.metadata['picture'] && !viewMode && config.editForm) && !map" class="contact-avatar">
+    <div class="form-info-image__wrapper">
+      <img
+        class="form-info-image"
+        *ngIf="picture && !(config && config.metadata['picture'] && !viewMode && config.editForm)"
+        [src]="picture"
+        [class.origin]="config.companyPicture"
+      />
+      <img
+        class="form-info-image--preview"
+        *ngIf="picture && !(config && config.metadata['picture'] && !viewMode && config.editForm)"
+        [src]="picture"
+      />
+      <div
+        *ngIf="contactAvatar && !(config && config.metadata['picture'] && !viewMode && config.editForm) && !map" class="contact-avatar"
+      >
         {{contactAvatar}}
       </div>
 

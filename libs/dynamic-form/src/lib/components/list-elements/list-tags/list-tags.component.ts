@@ -32,7 +32,7 @@ export class ListTagsComponent implements OnInit {
     this.tags.forEach((el) => {
       const { tag } = el;
       let trans;
-      if (tag.translations) {
+      if (tag && tag.translations) {
         trans = tag.translations.find(item => item.language.id === translationMap[this.siteSettings.settings.country_code]);
       }
 

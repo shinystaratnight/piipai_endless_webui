@@ -6,7 +6,9 @@
         config.key !== 'contact.picture'
       ">
       {{ getTranslationKey(config.key,'label') | translate: {"Default": config.templateOptions.label} }}:
-    </label> <br>
+
+      <br>
+    </label>
     <app-info *ngIf="config.templateOptions.description" [description]="getTranslationKey('description') | translate: {'Default': config.templateOptions.description || ''}"></app-info>
     <input #picture accept="image/*,application/pdf" [attr.type]="'file'" [hidden]="true" [attr.id]="key"
       (change)="fileChangeEvent($event)" [attr.name]="key" />
@@ -16,12 +18,24 @@
 
     <ng-container *ngIf="config.key !== 'contact.picture' || config.candidateForm">
       <div class="form-element-picture">
-        <img class="image-preview" [class.signature]="config.templateOptions.signature"
-          [class.start]="config.templateOptions.start" *ngIf="value && config.templateOptions.file === false"
-          [src]="value" alt="image" />
+        <img
+          *ngIf="value && config.templateOptions.file === false"
+          class="image-preview"
+          [class.signature]="config.templateOptions.signature"
+          [class.start]="config.templateOptions.start"
+          [src]="value"
+          alt="image"
+        />
 
-        <img class="image-profile" *ngIf="value && config.templateOptions.file === false" [src]="value" alt="image"
-          width="200" height="200" />
+        <img
+          *ngIf="value && config.templateOptions.file === false"
+          class="image-profile"
+          [class.origin]="config.companyContact"
+          [src]="value"
+          alt="image"
+          width="200"
+          height="200"
+        />
         <div *ngIf="contactAvatar && !fileName && !value" class="contact-avatar">
           {{ contactAvatar }}
         </div>
