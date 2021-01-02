@@ -1167,6 +1167,19 @@ const form = [
         help: ''
       },
       {
+        endpoint: Endpoints.CandidateFormalities,
+        templateOptions: {
+          label: 'Formalitites',
+          type: 'list',
+          text: 'Candidate Formalitites'
+        },
+        type: 'list',
+        query: {
+          candidate: '{id}'
+        },
+        help: ''
+      },
+      {
         endpoint: Endpoints.CandidateSkill,
         templateOptions: {
           label: 'Skills',
