@@ -97,24 +97,25 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   public tokenAuth(token) {
-    this.authService.loginWithToken(token).subscribe(
-      (res: any) => {
-        this.authService.storeToken({ data: res });
-        this.setTimezone().subscribe(() => {
-          const requests = [this.setTimezone(), this.userService.getUserData()];
+    this.authService.loginWithToken(token)
+      .pipe(
+        catchError(() => this.router.navigate(['login']))
+      )
+      .subscribe(
+        (res: any) => {
+          this.authService.storeToken({ data: res });
+          this.userService.getUserData()
+            .subscribe(() => {
+              if (res.data.redirect_to) {
+                const redirect = res.data.redirect_to.replace('/?', '?');
 
-          combineLatest(requests).subscribe(() => {
-            if (res.data.redirect_to) {
-              const redirect = res.data.redirect_to.replace('/?', '?');
-
-              this.router.navigateByUrl(redirect);
-            } else {
-              this.router.navigate([this.authService.getRedirectUrl()]);
+                this.router.navigateByUrl(redirect);
+              } else {
+                this.router.navigate([this.authService.getRedirectUrl()]);
+              }
             }
-          });
-        });
-      },
-      () => this.router.navigate(['login'])
+          );
+        }
     );
   }
 
@@ -132,22 +133,10 @@ export class LoginComponent implements OnInit, OnDestroy {
         response.formData.username
       );
 
-      const requests = [this.setTimezone(), this.userService.getUserData()];
-
-      combineLatest(requests).subscribe(() => {
+      this.userService.getUserData().subscribe(() => {
         this.router.navigate([this.authService.getRedirectUrl()]);
       });
     }
-  }
-
-  public setTimezone() {
-    return this.userService
-      .setTimezone()
-      .pipe(
-        catchError(() =>
-          this.router.navigate([this.authService.getRedirectUrl()])
-        )
-      );
   }
 
   public redirectHandler(data) {

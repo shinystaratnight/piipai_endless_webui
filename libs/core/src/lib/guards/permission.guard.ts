@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, Router, ActivatedRouteSnapshot } from '@angular/router';
 
-import { combineLatest, of } from 'rxjs';
-import { tap, mergeMap } from 'rxjs/operators';
+import { combineLatest, forkJoin, of, Subject } from 'rxjs';
+import { tap, mergeMap, map, concatAll, mergeAll, catchError } from 'rxjs/operators';
 
 import {
   UserService,
@@ -10,7 +10,6 @@ import {
   CheckPermissionService
 } from '../services';
 import { User, Role } from '@webui/data';
-import { isManager } from '@webui/utilities';
 
 @Injectable()
 export class PermissionGuard implements CanActivate {
@@ -21,40 +20,52 @@ export class PermissionGuard implements CanActivate {
     private navigationService: NavigationService
   ) {}
 
+  isManager(role: Role): boolean {
+    const { __str__: title } = role;
+
+    return title.includes('manager') || title.includes('trial');
+  }
+
   public canActivate(route: ActivatedRouteSnapshot) {
-    return this.userServise.getUserData().pipe(
-      mergeMap((user: User) => {
-        const requests = [
-          of(user),
-          this.navigationService.getPages(user.currentRole)
-        ];
+    const subject = new Subject<boolean>();
 
-        if (isManager()) {
-          requests.push(
-            this.checkPermissionServise.getPermissions(user.data.user)
-          );
+    setTimeout(() => {
+      this.userServise.getUserData()
+      .pipe(
+        catchError(() => of(false))
+      )
+      .subscribe((user: User) => {
+        const requests = [this.navigationService.getPages(user.currentRole)];
+
+        if (this.isManager(user.currentRole)) {
+          requests.push(this.checkPermissionServise.getPermissions(user.data.user));
         }
-        return combineLatest(...requests);
-      }),
-      mergeMap((response: any) => {
-        const role: Role = response[0].currentRole;
 
-        if (role.__str__.includes('manager') || role.__str__.includes('trial')) {
+        forkJoin(requests).subscribe(([ navigation ]) => {
+          if (!this.isManager(user.currentRole)) {
+            subject.next(true);
+          }
+
           let routeSegments = (<any>route)._urlSegment.segments;
 
           if (routeSegments[0].path === 'mn') {
             routeSegments = routeSegments.slice(1);
           }
 
-          return this.checkPermissionServise
-            .checkPermission(response[0].data.user, routeSegments, response[1])
-            .pipe(
-              tap((res: boolean) => !res && this.router.navigate(['login']))
-            );
-        } else {
-          return of(true);
-        }
-      })
-    );
+          this.checkPermissionServise
+            .checkPermission(user.data.user, routeSegments, navigation)
+            .subscribe((hasAccess) => {
+              if (hasAccess) {
+                subject.next(hasAccess);
+                return;
+              }
+
+              this.router.navigate(['/']);
+            });
+        })
+      });
+    });
+
+    return subject.asObservable().pipe(tap(console.log));
   }
 }
