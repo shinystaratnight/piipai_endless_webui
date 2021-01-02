@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 
-import { Observable, combineLatest, of } from 'rxjs';
+import { Observable, of, forkJoin } from 'rxjs';
 import { map, catchError, mergeMap } from 'rxjs/operators';
 
 import { ErrorsService } from './errors.service';
@@ -55,9 +55,9 @@ export class CheckPermissionService {
     this._permissions = this.filterPermissions(permissions);
   }
 
-  public getPermissions(id: string): Observable<Permission[]> {
+  public getPermissions(id: string, expired?: boolean): Observable<Permission[]> {
     if (!this.permissions) {
-      return this.getUserPermissions(id);
+      return this.getUserPermissions(id, expired);
     } else {
       return of(this.permissions);
     }
@@ -66,7 +66,7 @@ export class CheckPermissionService {
   public checkPermission(
     id: string,
     url: any[],
-    list: Page[]
+    list: Page[],
   ): Observable<boolean> {
     const permissions: Observable<Permission[]> = this.getPermissions(id);
     const page: Observable<PageData> = this.siteService.getDataOfPage(
@@ -74,7 +74,7 @@ export class CheckPermissionService {
       list
     );
 
-    return combineLatest(permissions, page).pipe(
+    return forkJoin([permissions, page]).pipe(
       mergeMap((data: [Permission[], PageData]) => {
         if (!this.navigationService.parsedByPermissions) {
           this.parseNavigation(data[0], list);
@@ -149,13 +149,18 @@ export class CheckPermissionService {
     return 'delete';
   }
 
-  private getUserPermissions(id: string): Observable<Permission[]> {
+  private getUserPermissions(id: string, expired?: boolean): Observable<Permission[]> {
     return this.http.get(this.userPermissionEndpoint + id + '/').pipe(
       map((response: PermissionResponse) => {
-        const permissions: Permission[] = [
+        let permissions: Permission[] = [
           ...response.permission_list,
           ...response.group_permission_list
         ];
+
+        if (expired) {
+          permissions = permissions.filter(({ codename }) => codename.includes('_get'));
+        }
+
         this.permissions = permissions;
 
         return this.permissions;

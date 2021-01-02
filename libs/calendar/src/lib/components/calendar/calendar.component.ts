@@ -37,7 +37,7 @@ import {
 import { filters } from './calendar-filters.meta';
 
 import { DatepickerComponent } from '../datepicker/datepicker.component';
-import { UserService, EventService, EventType, SiteSettingsService } from '@webui/core';
+import { UserService, EventService, EventType, SiteSettingsService, DateService } from '@webui/core';
 import { CountryCodeLanguage, Endpoints } from '@webui/data';
 
 @Component({
@@ -163,7 +163,8 @@ export class CalendarComponent implements OnInit, OnDestroy {
     private selectDateService: SelectDateService,
     private cd: ChangeDetectorRef,
     private eventService: EventService,
-    private siteSettings: SiteSettingsService
+    private siteSettings: SiteSettingsService,
+    private dateService: DateService,
   ) {}
 
   get isMonthRange() {
@@ -188,6 +189,19 @@ export class CalendarComponent implements OnInit, OnDestroy {
 
   get hasSelectedDates() {
     return this.selectDateService.hasSelectedDates();
+  }
+
+  private get trialExpired() {
+    const endTrial = this.dateService.instance(this.userService.user.data.end_trial_date);
+    return endTrial.isBefore(this.dateService.instance());
+  }
+
+  get hasActions() {
+    return !this.trialExpired && (this.calendarType === 0 || this.canClientCreateJob());
+  }
+
+  get canCreateJob() {
+    return (this.isManager() || this.canClientCreateJob()) && this.hasSelectedDates && this.calendarData && !this.trialExpired;
   }
 
   ngOnInit() {

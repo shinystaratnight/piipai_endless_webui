@@ -7,7 +7,8 @@ import { tap, mergeMap, map, concatAll, mergeAll, catchError } from 'rxjs/operat
 import {
   UserService,
   NavigationService,
-  CheckPermissionService
+  CheckPermissionService,
+  DateService
 } from '../services';
 import { User, Role } from '@webui/data';
 
@@ -17,7 +18,8 @@ export class PermissionGuard implements CanActivate {
     private router: Router,
     private userServise: UserService,
     private checkPermissionServise: CheckPermissionService,
-    private navigationService: NavigationService
+    private navigationService: NavigationService,
+    private dateService: DateService
   ) {}
 
   isManager(role: Role): boolean {
@@ -37,8 +39,11 @@ export class PermissionGuard implements CanActivate {
       .subscribe((user: User) => {
         const requests = [this.navigationService.getPages(user.currentRole)];
 
+        const endTrial = this.dateService.instance(user.data.end_trial_date);
+        const trielExpired = endTrial.isBefore(this.dateService.instance());
+
         if (this.isManager(user.currentRole)) {
-          requests.push(this.checkPermissionServise.getPermissions(user.data.user));
+          requests.push(this.checkPermissionServise.getPermissions(user.data.user, trielExpired));
         }
 
         forkJoin(requests).subscribe(([ navigation ]) => {

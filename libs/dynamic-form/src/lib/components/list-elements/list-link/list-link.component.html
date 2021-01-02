@@ -30,7 +30,14 @@
         </span>
       </a>
 
-      <a class="link" [ngClass]="[linkClass]" *ngIf="config.endpoint" href="" (click)="action($event)" [title]="config.title || ''">
+      <a
+        class="link"
+        [ngClass]="[linkClass]"
+        *ngIf="config.endpoint"
+        href=""
+        (click)="action($event)"
+        [title]="config.title || ''"
+      >
         {{value}}
         <span *ngIf="config.fields">
           <ng-container
@@ -48,14 +55,24 @@
 
     <span class="d-flex flex-column" *ngIf="arrayValue">
       <span *ngFor="let item of value; let l = last; let i = index">
-        <a class="link" [attr.href]="href[i]" *ngIf="item && !link" [title]="config.title || ''">{{item.__str__}}</a>
-
-        <a class="link"
-          [attr.href]="href[i]"
-          [attr.title]="config.title || ''"
-          (click)="action($event, i)"
-          *ngIf="item && link && config.link">
+        <a
+          *ngIf="item && !link"
+          class="link"
+          [href]="href[i]"
+          [title]="config.title || ''"
+        >
           {{item.__str__}}
+        </a>
+
+        <a
+          *ngIf="item && link && config.link"
+          class="link"
+          [href]="href[i]"
+          [title]="config.title || ''"
+          (click)="action($event, i)"
+        >
+          {{item.__str__}}
+
           <span *ngIf="config.fields">
             <ng-container *ngFor="let field of config.fields" appListElement [config]="field"></ng-container>
           </span>

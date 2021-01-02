@@ -1332,13 +1332,6 @@ export class DynamicListComponent
     }
   }
 
-  public openModal(modal, field) {
-    this.modalInfo.endpoint = field.endpoint;
-    this.modalInfo.label = field.label;
-    this.modalInfo.type = 'form';
-    this.open(modal, { size: 'lg' });
-  }
-
   public open(modal, options = {}) {
     this.modalRef = this.modalService.open(modal, {
       ...options,
@@ -2062,7 +2055,7 @@ export class DynamicListComponent
       endpoint: e.endpoint,
       label: e.label,
       id: e.id,
-      mode: 'edit',
+      mode: this.allowPermissions.includes('update') ? 'edit' : 'view',
       dontUseMetadataQuery: true,
     };
 
