@@ -185,7 +185,7 @@
 
         <ng-template #monthTooltip>
           <div class="shift-tooltip">
-            <ng-container *ngTemplateOutlet="shiftGroup; context: {shifts: day.tooltip[1], className: 'success', name: 'fulfilled.label', status: 'accepted', month: true}"></ng-container>
+            <ng-container *ngTemplateOutlet="shiftGroup; context: {shifts: day.tooltip[1], className: 'success', name: 'fulfilled', status: 'accepted', month: true}"></ng-container>
             <ng-container *ngTemplateOutlet="shiftGroup; context: {shifts: day.tooltip[0], className: 'danger', name: 'unfulfilled', status: 'cancelled', month: true}"></ng-container>
             <ng-container *ngTemplateOutlet="shiftGroup; context: {shifts: day.tooltip[2], className: 'warning', name: 'pending', status: 'undefined', month: true}"></ng-container>
             <ng-container *ngTemplateOutlet="shiftGroup; context: {shifts: day.tooltip[3], className: 'primary', name: 'open', month: true}"></ng-container>
