@@ -104,6 +104,8 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
         'contact.bank_accounts.bank_name',
         'contact.bank_accounts.IBAN',
         'contact.bank_accounts.TestBankAccountField',
+        'formalitites.tax_number',
+        'formalitites.personal_id',
         'superannuation_fund',
         'superannuation_membership_number',
       ],
