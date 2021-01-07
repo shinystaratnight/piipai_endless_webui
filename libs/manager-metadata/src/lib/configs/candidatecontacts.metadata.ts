@@ -988,13 +988,13 @@ const form = [
                     type: 'input',
                     templateOptions: {
                       required: false,
-                      label: '{tax_number_type}',
+                      label: '{formality_attributes.tax_number_type}',
                       type: 'text',
-                      pattern: "tax_number_regex",
+                      pattern: "formality_attributes.tax_number_regex_validation_pattern",
                       patternError: "This is invalid number",
                       placeholder: "Add or change actual"
                     },
-                    showIf: ['display_tax_number'],
+                    showIf: ['formality_attributes.display_tax_number'],
                     read_only: false
                   },
                   {
@@ -1002,13 +1002,13 @@ const form = [
                     type: 'input',
                     templateOptions: {
                       required: false,
-                      label: '{personal_id_type}',
+                      label: '{formality_attributes.personal_id_type}',
                       type: 'text',
-                      pattern: "personal_id_regex",
+                      pattern: "formality_attributes.personal_id_regex_validation_pattern",
                       placeholder: "Add or change actual",
                       patternError: "This is invalid number",
                     },
-                    showIf: ['display_personal_id'],
+                    showIf: ['formality_attributes.display_personal_id'],
                     read_only: false
                   },
                   {
