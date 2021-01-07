@@ -19,8 +19,19 @@ const formset = {
         content: [
           {
             type: 'text',
-            field: 'tax_number'
-          }
+            field: 'tax_number',
+            showIf: ['tax_number']
+          },
+          {
+            values: {
+              false: 'N/A',
+            },
+            color: {
+              false: 'danger'
+            },
+            field: 'formality_attributes.display_tax_number',
+            type: 'select'
+          },
         ],
         label: 'Tax Number',
       },
@@ -30,8 +41,19 @@ const formset = {
         content: [
           {
             type: 'text',
-            field: 'personal_id'
-          }
+            field: 'personal_id',
+            showIf: [ 'personal_id' ],
+          },
+          {
+            values: {
+              false: 'N/A',
+            },
+            color: {
+              false: 'danger'
+            },
+            field: 'formality_attributes.display_personal_id',
+            type: 'select'
+          },
         ],
         label: 'Personal ID',
       },
