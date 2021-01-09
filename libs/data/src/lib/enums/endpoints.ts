@@ -56,6 +56,7 @@ export enum Endpoints {
   CandidateEvaluation = '/hr/candidateevaluations/',
   CandidateJobOffer = '/hr/joboffers/candidate/',
   CandidateLocation = '/candidate/location/',
+  CandidateFormalities = '/candidate/formalities/',
 
   BlackList = '/hr/blacklists/',
   FavouriteList = '/hr/favouritelists/',

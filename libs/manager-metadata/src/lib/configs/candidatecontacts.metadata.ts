@@ -91,7 +91,7 @@ const list = {
           {
             values: {
               available: 'contact.is_available',
-              address: 'contact.address.__str__',
+              address: 'address.__str__',
               title: 'contact.__str__',
               status: {
                 field: 'latest_state',
@@ -394,7 +394,7 @@ const form = [
         }
       },
       available: 'contact.is_available',
-      address: 'contact.address.__str__',
+      address: 'address.__str__',
       title: 'contact.__str__',
       updated_at: 'updated_at',
       picture: 'contact.picture'
@@ -452,9 +452,8 @@ const form = [
                     many: false
                   },
                   {
-                    list: false,
                     endpoint: Endpoints.Address,
-                    read_only: false,
+                    read_only: true,
                     hide: true,
                     candidateForm: true,
                     templateOptions: {
@@ -465,11 +464,9 @@ const form = [
                       type: 'address',
                       edit: true
                     },
-                    collapsed: false,
                     send: false,
                     type: 'address',
-                    key: 'contact.address',
-                    many: false
+                    key: 'address',
                   },
                   {
                     key: 'contact.is_available',
@@ -991,13 +988,13 @@ const form = [
                     type: 'input',
                     templateOptions: {
                       required: false,
-                      label: '{tax_number_type}',
+                      label: '{formality_attributes.tax_number_type}',
                       type: 'text',
-                      pattern: "tax_number_regex",
+                      pattern: "formality_attributes.tax_number_regex_validation_pattern",
                       patternError: "This is invalid number",
                       placeholder: "Add or change actual"
                     },
-                    showIf: ['display_tax_number'],
+                    showIf: ['formality_attributes.display_tax_number'],
                     read_only: false
                   },
                   {
@@ -1005,13 +1002,13 @@ const form = [
                     type: 'input',
                     templateOptions: {
                       required: false,
-                      label: '{personal_id_type}',
+                      label: '{formality_attributes.personal_id_type}',
                       type: 'text',
-                      pattern: "personal_id_regex",
+                      pattern: "formality_attributes.personal_id_regex_validation_pattern",
                       placeholder: "Add or change actual",
                       patternError: "This is invalid number",
                     },
-                    showIf: ['display_personal_id'],
+                    showIf: ['formality_attributes.display_personal_id'],
                     read_only: false
                   },
                   {
@@ -1163,6 +1160,19 @@ const form = [
         type: 'list',
         query: {
           contact: '{contact.id}'
+        },
+        help: ''
+      },
+      {
+        endpoint: Endpoints.CandidateFormalities,
+        templateOptions: {
+          label: 'Formalitites',
+          type: 'list',
+          text: 'Candidate Formalitites'
+        },
+        type: 'list',
+        query: {
+          candidate: '{id}'
         },
         help: ''
       },
@@ -1523,7 +1533,7 @@ const formadd = [
 const profile = [
   {
     values: {
-      address: 'contact.address.__str__',
+      address: 'address.__str__',
       title: 'contact.__str__',
       picture: 'contact.picture',
       birthday: 'contact.birthday'
@@ -1548,7 +1558,7 @@ const profile = [
             children: [
               {
                 values: {
-                  address: 'contact.address.__str__',
+                  address: 'address.__str__',
                   title: 'contact.__str__',
                   picture: 'contact.picture',
                   birthday: 'contact.birthday'
@@ -1610,16 +1620,12 @@ const profile = [
                     templateOptions: {
                       label: 'Address',
                       add: true,
-                      delete: false,
                       values: ['__str__'],
                       type: 'address',
-                      edit: false
                     },
-                    collapsed: false,
                     send: false,
                     type: 'address',
-                    key: 'contact.address',
-                    many: false
+                    key: 'address',
                   },
                   {
                     key: 'contact.is_available',

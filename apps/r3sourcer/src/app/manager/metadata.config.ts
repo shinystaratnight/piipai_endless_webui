@@ -105,7 +105,8 @@ import {
   companyLanguage,
   emailtemplates,
   emailmessages,
-  contactaddresses
+  contactaddresses,
+  candidateformalities
 } from '@webui/manager-metadata';
 
 import {
@@ -233,4 +234,5 @@ export class Metadata {
   [Endpoints.EmailTemplate] = emailtemplates;
   [Endpoints.EmailMessages] = emailmessages;
   [Endpoints.ContactAddresses] = contactaddresses;
+  [Endpoints.CandidateFormalities] = candidateformalities;
 }
