@@ -5,7 +5,7 @@ import { Language } from '@webui/data';
 
 @Injectable()
 export class TranslateHelperService {
-  private _lang = new BehaviorSubject('');
+  private _lang = new BehaviorSubject('en');
 
   langChange$ = this._lang.asObservable();
 
