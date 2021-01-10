@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 
-import { of, Observable } from 'rxjs';
+import { of } from 'rxjs';
 import { map, mergeMap, catchError } from 'rxjs/operators';
 
 import { Endpoints, Role, Purpose } from '@webui/data';
@@ -9,7 +9,6 @@ import { Endpoints, Role, Purpose } from '@webui/data';
 import { CompanyPurposeService } from './company-purpose.service';
 import { ErrorsService } from './errors.service';
 import { EventService, EventType } from './event.service';
-// import { SiteSettingsService } from './site-settings.service';
 import { UserService } from './user.service';
 import { isManager, getCurrentRole, isClient } from '@webui/utilities';
 
@@ -55,8 +54,14 @@ export class NavigationService {
       const { id } = role;
 
       if (!this.navigationList[id] || update) {
-        const query = `?limit=-1&role=${id}`;
-        return this.http.get(`${Endpoints.ExtranetNavigation}${query}`).pipe(
+        const params = new HttpParams({
+          fromObject: {
+            limit: '-1',
+            role: id
+          }
+        });
+
+        return this.http.get(Endpoints.ExtranetNavigation, { params }).pipe(
           mergeMap((res: any) => {
             if (isManager()) {
               const companyId = this.userService.companyId;
@@ -80,8 +85,14 @@ export class NavigationService {
                   )
                 : res.list;
 
-              if (isClient() && !this.userService.user.data.allow_job_creation) {
-                const endpoints = [Endpoints.ClientJobs, Endpoints.JobsiteClient];
+              if (
+                isClient() &&
+                !this.userService.user.data.allow_job_creation
+              ) {
+                const endpoints = [
+                  Endpoints.ClientJobs,
+                  Endpoints.JobsiteClient
+                ];
                 list = list.filter((el) => !endpoints.includes(el.endpoint));
               }
 
@@ -93,7 +104,7 @@ export class NavigationService {
               return this.navigationList[id];
             }
           }),
-          catchError(errors => this.errorService.parseErrors(errors))
+          catchError((errors) => this.errorService.parseErrors(errors))
         );
       } else {
         return of(this.navigationList[id]);
@@ -118,7 +129,7 @@ export class NavigationService {
   }
 
   public generateLinks(links, target) {
-    links.forEach(el => {
+    links.forEach((el) => {
       target.push(el);
       if (el.childrens) {
         this.generateLinks(el.childrens, target);
@@ -127,13 +138,29 @@ export class NavigationService {
   }
 
   public removePrefix(list: Page[]) {
-    list.forEach(page => {
-      ['/mn/', '/cl/', '/cd/'].forEach(prefix => {
+    list.forEach((page) => {
+      ['/mn/', '/cl/', '/cd/'].forEach((prefix) => {
         page.url = page.url.replace(prefix, '/');
       });
 
       if (page.childrens && page.childrens.length) {
         this.removePrefix(page.childrens);
+      }
+    });
+  }
+
+  private removeMYOBLink(pages: Page[], countryCode: string) {
+    if (countryCode.toLocaleLowerCase() === 'au') {
+      return;
+    }
+
+    pages.forEach((el: Page, index: number) => {
+      if (el.endpoint === Endpoints.MYOB) {
+        pages.splice(index, 1);
+      }
+
+      if (el.childrens) {
+        this.removeMYOBLink(el.childrens, countryCode);
       }
     });
   }
