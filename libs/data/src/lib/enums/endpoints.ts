@@ -161,6 +161,7 @@ export enum Endpoints {
   Language = '/languages/',
   CandidateLanguages = '/candidate_contacts/',
   CompanyLanguages = '/companies/',
+  MYOB = '/company-settings/myobsettings/',
 }
 
 export const getBankAccountLayoutEndpoint = (countryCode: string) => {

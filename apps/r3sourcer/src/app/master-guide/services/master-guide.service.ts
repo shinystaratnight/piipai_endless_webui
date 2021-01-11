@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { catchError } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 
 import { Endpoints, Purpose } from '@webui/data';
 import {
   ErrorsService,
-  CompanyPurposeService
-  // SiteSettingsService
+  CompanyPurposeService,
+  SiteSettingsService
 } from '@webui/core';
+import { GuideProps } from '../interfaces';
 
 @Injectable()
 export class MasterGuideService {
@@ -16,14 +17,17 @@ export class MasterGuideService {
   constructor(
     private http: HttpClient,
     private errors: ErrorsService,
-    private purpose: CompanyPurposeService
-  ) // private settings: SiteSettingsService
-  {}
+    private purpose: CompanyPurposeService,
+    private siteSettings: SiteSettingsService
+  ) {}
 
   getGuide() {
-    return this.http
-      .get(this.endpoint)
-      .pipe(catchError((error: any) => this.errors.parseErrors(error)));
+    return this.http.get<GuideProps>(this.endpoint).pipe(
+      map((data: GuideProps) =>
+        this.removeMYOBFlag(data, this.siteSettings.settings.country_code)
+      ),
+      catchError((error: any) => this.errors.parseErrors(error))
+    );
   }
 
   changePurpose(id: string, purpose: Purpose) {
@@ -34,5 +38,15 @@ export class MasterGuideService {
     return this.http
       .put(endpoint, data)
       .pipe(catchError((error: any) => this.errors.parseErrors(error)));
+  }
+
+  private removeMYOBFlag(data: GuideProps, countryCode: string): GuideProps {
+    if (countryCode.toLocaleLowerCase() === 'au') {
+      return data;
+    }
+
+    const result = { ...data };
+    delete result.myob_connected;
+    return result;
   }
 }
