@@ -77,6 +77,7 @@ export class NavigationService {
           }),
           map((res: { purpose: Purpose; list: any[] }) => {
             this.removePrefix(res.list);
+            this.removeMYOBLink(res.list, this.userService.user.data.country_code);
             if (res.list) {
               let list = res.purpose
                 ? this.purposeService.filterNavigationByPurpose(
