@@ -16,18 +16,7 @@
       [message]="message">
     </ng-container>
 
-    <div class="text-danger mt-1 mb-3" *ngIf="errors && ((errors.non_field_errors && errors.non_field_errors[0] !== true) || errors.detail)">
-      <div *ngFor="let error of errors.non_field_errors">{{error}}</div>
-      <div *ngIf="errors.detail">{{errors.detail}}</div>
-    </div>
-
-    <div class="mt-1 mb-3" *ngIf="errors && errors.non_field_errors && errors.non_field_errors[0] === true && errors.non_field_errors.length > 1">
-      <div class="text-danger mt-1">{{errors.non_field_errors[1]}}</div>
-      <a *ngIf="errors.non_field_errors[2] && errors.non_field_errors[3]"
-        [attr.href]="errors.non_field_errors[3]">
-          {{errors.non_field_errors[2]}}
-      </a>
-    </div>
+    <app-form-errors [keys]="keys(errors)" [errors]="errors"></app-form-errors>
 
     <div class="text-success mt-1 mb-3" *ngIf="message && message.message">
       {{message.message}}

@@ -331,4 +331,8 @@ export class DynamicFormComponent implements OnInit {
       }
     });
   }
+
+  keys(obj: any): string[] {
+    return Object.keys(obj);
+  }
 }
