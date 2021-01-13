@@ -54,6 +54,11 @@ export class SiteSettingsService {
       return this.http.get<CompanySettings>(Endpoints.CompanySettings).pipe(
         tap((settings) => {
           this.settings = settings;
+
+          if (!settings.country_code) {
+            settings.country_code = 'GB';
+          }
+
           this.updateBrowserStyles(settings);
         }),
         tap((settings) => this.updateLanguage(settings)),
@@ -96,6 +101,10 @@ export class SiteSettingsService {
       ? companyLang
       : Language.English;
 
-    this.translate.setLang(lang);
+    if (!lang) {
+      this.translate.setLang(Language.English);
+    } else {
+      this.translate.setLang(lang);
+    }
   }
 }

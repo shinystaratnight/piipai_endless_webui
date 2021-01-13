@@ -8,6 +8,7 @@ import { TestListComponent } from './test-list/test-list.component';
 import { TimeTrackingComponent } from './time-tracking/time-tracking.component';
 import { SignatureComponent } from './signature/signature.component';
 import { ImageUploaderComponent } from './image-uploader/image-uploader.component';
+import { FormErrorsComponent } from './form-errors/form-errors.component';
 
 // Filters
 import {
@@ -49,7 +50,7 @@ import {
   FormListDropdownComponent,
   FormElementViewComponent,
   DropdownComponent,
-  FormBankAccountComponent
+  FormBankAccountComponent,
 } from './form-elements';
 
 // import { ExtendComponent } from './extend/extend.component';
@@ -152,6 +153,7 @@ export const components = [
   ImageUploaderComponent,
 
   SortIconComponent,
+  FormErrorsComponent,
 
   ...entryComponents
 ];
