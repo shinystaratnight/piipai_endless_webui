@@ -40,6 +40,11 @@ export class UserService {
       return this.http.get(this.authEndpoint).pipe(
         map((user: User) => {
           this.user = user;
+
+          if (!user.data.country_code) {
+            user.data.country_code = 'GB';
+          }
+
           const roles = user.data.roles;
           if (!user.data.contact.contact_type || !roles.length) {
             this.authService.logout();
