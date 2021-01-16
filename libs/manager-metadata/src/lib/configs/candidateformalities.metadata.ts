@@ -1,3 +1,5 @@
+import { Endpoints } from '@webui/data';
+
 const formset = {
   fields: [],
   list: {
@@ -64,6 +66,50 @@ const formset = {
   }
 };
 
+export const formadd = [
+  {
+    key: 'candidate_contact',
+    type: 'input',
+    hide: true,
+    templateOptions: {
+      label: 'Candidate Contact'
+    }
+  },
+  {
+    key: 'country',
+    type: 'related',
+    endpoint: Endpoints.Country,
+    replaceByData: true,
+    templateOptions: {
+      label: 'Country',
+      values: [ '__str__', 'display_tax_number', 'display_personal_id'],
+    }
+  },
+  {
+    key: 'tax_number',
+    type: 'input',
+    templateOptions: {
+      required: false,
+      label: 'Tax number',
+      type: 'text',
+    },
+    showIf: ['country.id', 'country.display_tax_number'],
+    read_only: false
+  },
+  {
+    key: 'personal_id',
+    type: 'input',
+    templateOptions: {
+      required: false,
+      label: 'Personal ID',
+      type: 'text',
+    },
+    showIf: ['country.id', 'country.display_personal_id'],
+    read_only: false
+  }
+];
+
 export const candidateformalities = {
   formset,
+  formadd,
 };

@@ -1168,12 +1168,17 @@ const form = [
         templateOptions: {
           label: 'Formalitites',
           type: 'list',
-          text: 'Candidate Formalitites'
+          text: 'Candidate Formalitites',
+          add_label: '+ Add',
         },
         type: 'list',
+        prefilled: {
+          candidate_contact: '{id}'
+        },
         query: {
           candidate: '{id}'
         },
+        visibleMode: true,
         help: ''
       },
       {
