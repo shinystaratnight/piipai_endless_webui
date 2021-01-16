@@ -75,15 +75,32 @@ export const formadd = [
       label: 'Candidate Contact'
     }
   },
+  // {
+  //   key: 'country',
+  //   type: 'related',
+  //   endpoint: Endpoints.Country,
+  //   replaceByData: true,
+  //   templateOptions: {
+  //     label: 'Country',
+  //     values: [ '__str__', 'display_tax_number', 'display_personal_id'],
+  //   }
+  // },
   {
-    key: 'country',
-    type: 'related',
-    endpoint: Endpoints.Country,
-    replaceByData: true,
+    list: false,
+    endpoint: '/core/countries/',
+    read_only: true,
     templateOptions: {
       label: 'Country',
-      values: [ '__str__', 'display_tax_number', 'display_personal_id'],
-    }
+      add: true,
+      delete: false,
+      values: ['__str__', 'display_tax_number', 'display_personal_id'],
+      type: 'related',
+      edit: true
+    },
+    collapsed: false,
+    type: 'related',
+    key: 'country',
+    many: false
   },
   {
     key: 'tax_number',

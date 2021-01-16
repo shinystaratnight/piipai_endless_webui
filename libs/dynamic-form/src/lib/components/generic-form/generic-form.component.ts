@@ -1709,11 +1709,11 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
           } else if (el.templateOptions.param) {
             fields.param = el.templateOptions.param;
           }
-          const keys = el.key.split('.');
-          if (keys.indexOf('country') > -1) {
-            fields.code2 = 'code2';
-            this.getRalatedData(metadata, el.key, el.endpoint, fields, '?limit=-1');
-          }
+          // const keys = el.key.split('.');
+          // if (keys.indexOf('country') > -1) {
+          //   fields.code2 = 'code2';
+          //   this.getRalatedData(metadata, el.key, el.endpoint, fields, '?limit=-1');
+          // }
           el.options = [];
           if (el.list) {
             let metadataQuery;
