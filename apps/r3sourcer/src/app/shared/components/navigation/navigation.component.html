@@ -44,11 +44,11 @@
     <div class="user-block">
       <div class="user-info d-xl-flex">
         <span>{{ user.data.contact.__str__ }}</span>
-        <span *ngIf="company" class="description">{{ company }}</span>
-        <span *ngIf="user.data.end_trial_date.length" class="description"
-          >Trail version expires
-          {{ formatDate(user.data.end_trial_date) }}</span
-        >
+        <span class="description">{{ companyName }}</span>
+        <span *ngIf="user.data.end_trial_date.length" class="description">
+          Trail version expires
+          {{ formatDate(user.data.end_trial_date) }}
+        </span>
       </div>
       <img
         *ngIf="picture"
