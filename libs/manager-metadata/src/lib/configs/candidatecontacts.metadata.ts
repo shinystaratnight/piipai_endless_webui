@@ -973,6 +973,50 @@ const form = [
                   }
                 ],
                 width: 0.25
+              },
+              {
+                label: 'Bank Account',
+                type: 'group',
+                children: [
+                  {
+                    type: 'bank_account',
+                    send: false,
+                    key: 'contact_bank_account',
+                    templateOptions: {
+                      label: 'Bank account:',
+                    }
+                  }
+                ],
+                width: 0.25
+              },
+              {
+                label: 'Emergency',
+                type: 'group',
+                children: [
+                  {
+                    key: 'emergency_contact_name',
+                    type: 'input',
+                    templateOptions: {
+                      required: false,
+                      label: 'Emergency Contact Name',
+                      max: 63,
+                      type: 'text'
+                    },
+                    read_only: false
+                  },
+                  {
+                    key: 'emergency_contact_phone',
+                    type: 'input',
+                    intl: true,
+                    templateOptions: {
+                      required: false,
+                      label: 'Emergency Contact Phone Number',
+                      type: 'text'
+                    },
+                    read_only: false
+                  }
+                ],
+                width: 0.25
               }
             ]
           },
@@ -1097,52 +1141,26 @@ const form = [
               //   ],
               //   width: 0.25
               // },
-              {
-                label: 'Bank Account',
-                type: 'group',
-                width: 0.5,
-                children: [
-                  {
-                    type: 'bank_account',
-                    send: false,
-                    key: 'contact_bank_account',
-                    templateOptions: {
-                      label: 'Bank account:',
-                    }
-                  }
-                ]
-              },
-              {
-                label: 'Emergency',
-                type: 'group',
-                children: [
-                  {
-                    key: 'emergency_contact_name',
-                    type: 'input',
-                    templateOptions: {
-                      required: false,
-                      label: 'Emergency Contact Name',
-                      max: 63,
-                      type: 'text'
-                    },
-                    read_only: false
-                  },
-                  {
-                    key: 'emergency_contact_phone',
-                    type: 'input',
-                    intl: true,
-                    templateOptions: {
-                      required: false,
-                      label: 'Emergency Contact Phone Number',
-                      type: 'text'
-                    },
-                    read_only: false
-                  }
-                ],
-                width: 0.25
-              }
+              
+              
             ]
-          }
+          },
+          {
+            endpoint: Endpoints.CandidateFormalities,
+            templateOptions: {
+              type: 'list',
+              add_label: '+ Add',
+            },
+            type: 'list',
+            prefilled: {
+              candidate_contact: '{id}'
+            },
+            query: {
+              candidate: '{id}'
+            },
+            visibleMode: true,
+            help: ''
+          },
         ]
       },
       {
@@ -1160,19 +1178,6 @@ const form = [
         type: 'list',
         query: {
           contact: '{contact.id}'
-        },
-        help: ''
-      },
-      {
-        endpoint: Endpoints.CandidateFormalities,
-        templateOptions: {
-          label: 'Formalitites',
-          type: 'list',
-          text: 'Candidate Formalitites'
-        },
-        type: 'list',
-        query: {
-          candidate: '{id}'
         },
         help: ''
       },

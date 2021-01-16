@@ -322,7 +322,11 @@ export class DynamicFormComponent implements OnInit {
 
         if (value.id) {
           if (el.key === 'language') {
-            data['language_id'] = value.id
+            data['language_id'] = value.id;
+          }
+
+          if (el.key === 'country') {
+            data['country'] = value.id;
           }
         }
 

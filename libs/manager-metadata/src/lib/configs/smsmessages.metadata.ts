@@ -28,7 +28,7 @@ const list = {
       },
       {
         delim: null,
-        label: '',
+        label: 'Subject',
         sort: true,
         content: [
           {
