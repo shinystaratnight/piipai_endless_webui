@@ -55,7 +55,6 @@ const form = [
     send: false,
     key: 'shifts',
     endpoint: '/hr/shifts/',
-    delay: 'asdasdasd',
     templateOptions: {
       add_label: '+ Add',
       delete: true,

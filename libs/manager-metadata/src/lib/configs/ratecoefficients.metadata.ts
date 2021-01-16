@@ -17,7 +17,7 @@ const list = {
         content: [
           {
             endpoint: '/pricing/industries/',
-            field: 'industry',
+            field: 'industry.name',
             type: 'text'
           }
         ],
