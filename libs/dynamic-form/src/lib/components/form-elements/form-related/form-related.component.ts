@@ -862,10 +862,8 @@ export class FormRelatedComponent extends BasicElementComponent
           value.push(object.data.value);
           this.dataOfList.push(object);
         });
-        // if (!data.length) {
-        this.addObject();
-        // }
 
+        this.addObject();
         this.group.get(this.key).patchValue(data);
       }
     }
@@ -900,6 +898,13 @@ export class FormRelatedComponent extends BasicElementComponent
     object.metadata = metadata.map((el) => {
       const element = Object.assign({}, el);
       element.mode = el.mode;
+
+      if (el.endpoint) {
+        el.endpoint = format.format(
+          el.endpoint,
+          this.formData
+        );
+      }
 
       if (el.query) {
         const newQuery = {};
@@ -979,6 +984,7 @@ export class FormRelatedComponent extends BasicElementComponent
     if (e.type !== 'create' && e.type !== 'updateValue') {
       const value = this.dataOfList.map((el) => {
         const object = el.data.value;
+
         if (el.id) {
           object.id = el.id;
         }
@@ -988,7 +994,19 @@ export class FormRelatedComponent extends BasicElementComponent
         this.config.data.sendData = value.filter((el) => !el.id);
       }
 
-      this.group.get(this.key).patchValue(value);
+      const newValue = value.filter((el) => {
+        if (el.language) {
+          if (el.language.id) {
+            return true;
+          } else {
+            return false;
+          }
+        } else {
+          return true;
+        }
+      });
+
+      this.group.get(this.key).patchValue(newValue);
     }
   }
 

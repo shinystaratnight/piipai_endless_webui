@@ -235,13 +235,18 @@
         (click)="addObject()">
         {{'add' | translate}}
       </button>
+
+      <button *ngIf="config.templateOptions.add_label && config.templateOptions.add" type="button" class="btn btn-sm btn-primary ml-auto mr-2"
+        (click)="addObject()">
+        {{'add' | translate}}
+      </button>
     </h6>
     <div #tableWrapper id="collapseExample" [ngbCollapse]="isCollapsed" class="list-related p-2 datatable">
       <table *ngIf="dataOfList" class="table mb-1">
         <thead>
           <tr>
             <ng-container *ngFor="let col of config.metadata">
-              <th *ngIf="!col.hide">
+              <th *ngIf="!col.hide" [style.width.px]="col.width">
                 {{ col.templateOptions.label }}
               </th>
             </ng-container>

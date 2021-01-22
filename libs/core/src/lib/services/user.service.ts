@@ -4,12 +4,13 @@ import { HttpClient } from '@angular/common/http';
 import { LocalStorageService } from 'ngx-webstorage';
 import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
-import { User, Role } from '@webui/data';
+import { User, Role, Language } from '@webui/data';
 
 import { AuthService } from './auth.service';
 import { ErrorsService } from './errors.service';
 import { ToastService, MessageType } from './toast.service';
 import { EventService, EventType } from './event.service';
+import { isManager } from '@webui/utilities';
 
 @Injectable()
 export class UserService {
@@ -32,7 +33,7 @@ export class UserService {
     private toastService: ToastService,
     private authService: AuthService,
     private errorsService: ErrorsService,
-    private eventService: EventService
+    private eventService: EventService,
   ) {}
 
   public getUserData(): Observable<any> {
@@ -60,6 +61,8 @@ export class UserService {
 
           const redirectRole: Role = this.authService.role;
           const storageRole: Role = this.storage.retrieve('role');
+          const lang: Language = this.storage.retrieve('lang');
+
           let role: Role;
 
           if (storageRole) {
@@ -82,6 +85,10 @@ export class UserService {
 
           this.user.currentRole = role || roles[0];
           this.storage.store('role', this.user.currentRole);
+
+          if (!lang && user.data.contact.default_language && !isManager()) {
+            this.storage.store('lang', user.data.contact.default_language);
+          }
 
           return this.user;
         }),
