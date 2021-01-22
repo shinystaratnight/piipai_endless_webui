@@ -1,10 +1,21 @@
-import { Component, OnInit, ViewChild, AfterViewInit, OnDestroy, ChangeDetectorRef, ElementRef } from '@angular/core';
+import { 
+  Component, 
+  OnInit, 
+  ViewChild, 
+  AfterViewInit, 
+  OnDestroy, 
+  ChangeDetectorRef, 
+  ElementRef, 
+  EventEmitter, 
+  Output 
+} from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 
 import { Subscription } from 'rxjs';
 
 import { BasicElementComponent } from './../basic-element/basic-element.component';
 import { FormatString, getTranslationKey } from '@webui/utilities';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
   selector: 'app-form-textarea',
@@ -14,6 +25,9 @@ import { FormatString, getTranslationKey } from '@webui/utilities';
 export class FormTextareaComponent extends BasicElementComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('textarea')
   public textarea: ElementRef;
+
+  @Output()
+  public event: EventEmitter<any> = new EventEmitter();
 
   public config;
   public group: FormGroup;
@@ -45,6 +59,17 @@ export class FormTextareaComponent extends BasicElementComponent implements OnIn
     this.checkHiddenProperty();
     this.createEvent();
     this.checkFormData();
+
+    if (this.group.get(this.key)) {
+      this.subscriptions.push(
+        this.group
+          .get(this.key)
+          .valueChanges.pipe(distinctUntilChanged(), debounceTime(400))
+          .subscribe(() => {
+            this.eventHandler({ type: 'blur' });
+          })
+      );
+    }
 
     this.className = this.config.templateOptions.background ? 'message-text' : '';
   }
@@ -155,5 +180,13 @@ export class FormTextareaComponent extends BasicElementComponent implements OnIn
         }
       }
     }
+  }
+
+  public eventHandler(e) {
+    this.event.emit({
+      type: e.type,
+      el: this.config,
+      value: this.group.get(this.key).value,
+    });
   }
 }

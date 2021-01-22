@@ -123,6 +123,7 @@ export class AuthService {
     this.eventService.emit(EventType.Logout);
     this.storage.clear('role');
     this.storage.clear('user');
+    this.storage.clear('lang');
     // this.logoutAction.next(true);
     this.router.navigate(['login']);
   }
