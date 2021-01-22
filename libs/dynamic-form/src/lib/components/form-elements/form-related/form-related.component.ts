@@ -864,9 +864,6 @@ export class FormRelatedComponent extends BasicElementComponent
         });
 
         this.addObject();
-
-        this.replaceByData(config.metadata, data);
-
         this.group.get(this.key).patchValue(data);
       }
     }
@@ -988,8 +985,6 @@ export class FormRelatedComponent extends BasicElementComponent
       const value = this.dataOfList.map((el) => {
         const object = el.data.value;
 
-        this.replaceByData(el.metadata, object);
-
         if (el.id) {
           object.id = el.id;
         }
@@ -1000,9 +995,11 @@ export class FormRelatedComponent extends BasicElementComponent
       }
 
       const newValue = value.filter((el) => {
-        if (el.hasOwnProperty('language_id')) {
-          if (typeof el['language_id'] == 'string') {
+        if (el.language) {
+          if (el.language.id) {
             return true;
+          } else {
+            return false;
           }
         } else {
           return true;
@@ -1011,20 +1008,6 @@ export class FormRelatedComponent extends BasicElementComponent
 
       this.group.get(this.key).patchValue(newValue);
     }
-  }
-
-  public replaceByData(metadata: Field[], data) {
-    metadata.forEach(el => {
-      if (el.replaceByData) {
-        const value = this.getValueByKey(el.key, data);
-
-        if (value && value.id) {
-          if (el.key === 'language') {
-            data['language_id'] = value.id;
-          }
-        }
-      }
-    });
   }
 
   public fillingForm(metadata: Field[], data): void {
@@ -1709,10 +1692,6 @@ export class FormRelatedComponent extends BasicElementComponent
                     const translation = [...translations].find((t) => t.language.id === translationMap[coutryCode] || t.language.name === translationCountryName[coutryCode]);
                     el.__str__ = (translation && (translation.__str__ || translation.value)) || formatString.format(display, el);
                   } else {
-                    if (el.language) {
-                      Object.assign(el, el.language);
-                    }
-
                     el.__str__ = formatString.format(display, el);
                   }
 
