@@ -21,7 +21,7 @@ export class LanguageSelectorComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.control.patchValue(this.translateHelperService.currentLang);
     this.controlSubscription = this.control.valueChanges.subscribe((language) => {
-      this.translateHelperService.setLang(language);
+      this.translateHelperService.setLang(language, true);
     })
   }
 

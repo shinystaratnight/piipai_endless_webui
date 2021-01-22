@@ -5,6 +5,8 @@ import { map, catchError, tap } from 'rxjs/operators';
 
 import { Endpoints, CountryCodeLanguage, Language } from '@webui/data';
 import { TranslateHelperService } from './translate-helper-service';
+import { LocalStorageService } from 'ngx-webstorage';
+import { isManager } from '@webui/utilities';
 
 interface CompanySettings {
   sms_enabled: boolean;
@@ -30,7 +32,8 @@ export class SiteSettingsService {
 
   constructor(
     private http: HttpClient,
-    private translate: TranslateHelperService
+    private translate: TranslateHelperService,
+    private storage: LocalStorageService,
   ) {}
 
   resolve() {
@@ -93,17 +96,26 @@ export class SiteSettingsService {
   }
 
   private updateLanguage(settings: CompanySettings): void {
-    const isManager = location.pathname.includes('/mn');
     const companyLang = CountryCodeLanguage[settings.country_code];
-    const lang = isManager
-      ? Language.English
-      : this.translate.currentLang !== companyLang
-      ? companyLang
-      : Language.English;
+    const defaultLanguage = this.storage.retrieve('lang');
+    const { currentLang } = this.translate;
 
-    if (!lang) {
+    let lang;
+
+    if (defaultLanguage) {
+      this.translate.setLang(defaultLanguage);
+      return;
+    }
+
+    if (isManager()) {
+      lang = Language.English;
+    } else if (companyLang && currentLang !== companyLang) {
+      lang = companyLang;
+    }
+
+    if (!lang && !companyLang) {
       this.translate.setLang(Language.English);
-    } else {
+    } else if (lang) {
       this.translate.setLang(lang);
     }
   }

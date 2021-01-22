@@ -1,3 +1,4 @@
+import { Language } from '../enums';
 import { Role } from './role.interface';
 
 export interface User {
@@ -17,6 +18,7 @@ export interface User {
       id: string;
       name: string;
       __str__: string;
+      default_language: Language;
     },
     is_primary: boolean;
     user: string;
