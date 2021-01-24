@@ -1208,18 +1208,22 @@ export class DynamicListComponent
         } else {
           if (data.translations || (data.name && data.name.translations)) {
             const translations = data.translations || (data.name && data.name.translations) || [];
-            const trans = translations.find(el => el.language ? el.language.id === translationMap[this.siteSettings.settings.country_code] : false);
+            const preferLanguage = this.storage.retrieve('lang') || translationMap[this.siteSettings.settings.country_code];
+
+            const trans = translations.find(el => el.language ? el.language.id === preferLanguage : false);
 
             data.__str__ = trans ? trans.value : data.__str__;
           }
 
           if (data[prop] && data[prop].translations) {
-            const trans = data[prop].translations.find(el => el.language.id === translationMap[this.siteSettings.settings.country_code]);
+            const preferLanguage = this.storage.retrieve('lang') || translationMap[this.siteSettings.settings.country_code]; 
+
+            const trans = data[prop].translations.find(el => el.language.id === preferLanguage);
 
             if (trans) {
-              object[param] = trans.value
+              object[param] = trans.value;
             } else {
-              object[param] = data[prop].__str__
+              object[param] = data[prop].__str__;
             }
           } else {
             object[param] = data[prop];

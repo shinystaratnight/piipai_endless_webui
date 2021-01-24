@@ -501,5 +501,6 @@
   "enter_location": "Введите местоположение",
   "filled_shifts": "Заполненные смены",
   "unfilled_shifts": "Не заполненные смены",
-  "pending_shifts": "Смены в обработке"
+  "pending_shifts": "Смены в обработке",
+  "submit_timesheet": "Заполните табель"
 }

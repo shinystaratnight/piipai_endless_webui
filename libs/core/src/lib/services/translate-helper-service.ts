@@ -22,7 +22,6 @@ export class TranslateHelperService {
       this.storage.store('lang', lang);
     }
 
-    console.log(lang);
     this._lang.next(lang);
   }
 }

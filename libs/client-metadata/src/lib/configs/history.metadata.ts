@@ -1,4 +1,3 @@
-import { Endpoints } from '@webui/data';
 import { List } from '@webui/metadata';
 import {
   getPictureColumn,
