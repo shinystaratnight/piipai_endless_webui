@@ -501,5 +501,6 @@
   "enter_location": "Anna sijainti",
   "filled_shifts": "Valmistuneet työvuorot",
   "unfilled_shifts": "Erinomaiset työvuorot",
-  "pending_shifts": "Odottaa työvuorot"
+  "pending_shifts": "Odottaa työvuorot",
+  "submit_timesheet": "Lähetä aikataulu"
 }
