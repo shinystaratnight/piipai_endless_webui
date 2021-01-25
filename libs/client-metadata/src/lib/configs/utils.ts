@@ -26,7 +26,7 @@ export function getPositionColumn() {
         `${Endpoints.CandidateContact}{job_offer.candidate_contact.id}/`
       ),
 
-      new List.static.element('position'),
+      new List.text.element('position.name'),
       new List.static.element('jobsite').setDescriptionStyle()
     ]);
 }
