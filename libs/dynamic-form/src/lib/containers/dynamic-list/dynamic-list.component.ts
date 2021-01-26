@@ -277,7 +277,7 @@ export class DynamicListComponent
         setTimeout(() => {
           this.modalInfo = {
             url: this.sanitizer.bypassSecurityTrustResourceUrl(
-              location.origin + this.currentActionData.pdf_url
+              this.currentActionData.pdf_url
             ),
           };
           this.open(this.pdfDocumentModal, { size: 'lg' });
@@ -2343,7 +2343,7 @@ export class DynamicListComponent
     this.genericFormService.getAll(e.el.endpoint).subscribe((res: any) => {
       this.modalInfo = {
         url: this.sanitizer.bypassSecurityTrustResourceUrl(
-          environment.api + res.pdf
+          res.pdf
         ),
       };
       this.open(this.pdfDocumentModal, { size: 'lg' });
