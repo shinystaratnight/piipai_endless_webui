@@ -982,7 +982,7 @@ export class FormRelatedComponent extends BasicElementComponent
 
   public updateValue(e): void {
     if (e.type !== 'create' && e.type !== 'updateValue') {
-      const value = this.dataOfList.map((el) => {
+      const value = this.dataOfList.filter(el => el.data.valid).map((el) => {
         const object = el.data.value;
 
         if (el.id) {

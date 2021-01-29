@@ -26,3 +26,14 @@
     background-color: #e0e0e0;
   }
 }
+
+.opacity-15 {
+  opacity: .15;
+}
+
+.required::after {
+  display: inline-block;
+  content: '*';
+  color: $danger;
+  margin-left: .25rem;
+}
