@@ -229,6 +229,7 @@
       </div>
 
       <button
+        type="button"
         *ngIf="config.key === 'password' && config.templateOptions.addon"
         class="password"
         (click)="switchType(config.templateOptions.type)"
