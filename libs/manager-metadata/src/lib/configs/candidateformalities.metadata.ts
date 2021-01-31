@@ -75,16 +75,17 @@ export const formadd = [
       label: 'Candidate Contact'
     }
   },
-  // {
-  //   key: 'country',
-  //   type: 'related',
-  //   endpoint: Endpoints.Country,
-  //   replaceByData: true,
-  //   templateOptions: {
-  //     label: 'Country',
-  //     values: [ '__str__', 'display_tax_number', 'display_personal_id'],
-  //   }
-  // },
+  {
+    key: 'company',
+    send: false,
+    hide: true,
+    type: 'related',
+    endpoint: Endpoints.Company,
+    templateOptions: {
+      label: 'Company',
+      values: [ '__str__'],
+    },
+  },
   {
     list: false,
     endpoint: '/core/countries/',
@@ -100,7 +101,10 @@ export const formadd = [
     collapsed: false,
     type: 'related',
     key: 'country',
-    many: false
+    many: false,
+    query: {
+      company: '{company.id}'
+    }
   },
   {
     key: 'tax_number',
