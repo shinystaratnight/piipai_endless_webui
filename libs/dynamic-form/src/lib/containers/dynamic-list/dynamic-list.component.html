@@ -437,7 +437,7 @@
                 >
                   &nbsp;
                 </td>
-                <td [attr.colspan]="row.content.length">
+                <td [attr.colspan]="row.content.length + 1">
                   <table
                     *ngIf="!row.additionalBody.inline"
                     class="inner-table table table-sm"
@@ -519,7 +519,7 @@
                     </div>
                   </ng-container>
                 </td>
-                <td *ngIf="config.list.tabs">&nbsp;</td>
+                <!-- <td *ngIf="config.list.tabs">&nbsp;</td> -->
               </tr>
             </ng-container>
           </tbody>
