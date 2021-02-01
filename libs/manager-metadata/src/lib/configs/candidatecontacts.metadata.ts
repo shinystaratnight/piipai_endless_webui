@@ -1141,8 +1141,8 @@ const form = [
               //   ],
               //   width: 0.25
               // },
-              
-              
+
+
             ]
           },
           {
@@ -1153,7 +1153,8 @@ const form = [
             },
             type: 'list',
             prefilled: {
-              candidate_contact: '{id}'
+              candidate_contact: '{id}',
+              company: '{master_company.id}',
             },
             query: {
               candidate: '{id}'
