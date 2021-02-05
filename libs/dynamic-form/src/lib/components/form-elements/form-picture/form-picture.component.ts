@@ -404,8 +404,4 @@ export class FormPictureComponent extends BasicElementComponent
       this.isRemoved = true;
     }
   }
-
-  downloadFile(link) {
-    console.log(link);
-  }
 }
