@@ -504,6 +504,10 @@ export class FormDatepickerComponent extends BasicElementComponent implements On
   }
 
   private validateTimesheetTime(date): boolean {
+    if (!date) {
+      return;
+    }
+
     const dateUtc = date.utc();
 
     enum TimesheetTime {

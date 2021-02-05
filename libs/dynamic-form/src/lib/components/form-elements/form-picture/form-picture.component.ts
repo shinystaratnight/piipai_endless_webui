@@ -11,7 +11,6 @@ import {
 } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 
-// import { FallbackDispatcher } from '../../webcam/fallback.dispatcher';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subject, Subscription } from 'rxjs';
 
@@ -48,9 +47,6 @@ export class FormPictureComponent extends BasicElementComponent
   public photoExist = false;
   public mime: string;
   public fileName = '';
-  // public onSuccess;
-  // public onError;
-  // public flashPlayer: any;
   public err: any;
   public base64: string;
   public link: string;
@@ -64,16 +60,6 @@ export class FormPictureComponent extends BasicElementComponent
 
   isRemoved: boolean;
 
-  // public options = {
-  //   audio: false,
-  //   video: true,
-  //   width: 240,
-  //   height: 240,
-  //   fallbackMode: 'callback',
-  //   fallbackSrc: 'assets/jscam_canvas_only.swf',
-  //   fallbackQuality: 85,
-  //   cameraType: 'front',
-  // };
   private capture = new Subject();
 
   capture$ = this.capture.asObservable();
@@ -417,5 +403,9 @@ export class FormPictureComponent extends BasicElementComponent
     if (this.config.candidateForm) {
       this.isRemoved = true;
     }
+  }
+
+  downloadFile(link) {
+    console.log(link);
   }
 }
