@@ -37,10 +37,10 @@ const list = {
         ],
         name: 'actions',
         label: 'Actions'
-      }, 
+      },
     ],
     pagination_label: 'Email Template',
-    search_enabled: false,
+    search_enabled: true,
     editDisable: false,
     buttons: []
   },
