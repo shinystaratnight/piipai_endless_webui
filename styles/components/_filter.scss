@@ -1,16 +1,21 @@
 .filter {
   &-label {
+    display: inline-flex;
+    align-items: center;
+    flex-shrink: 0;
     margin-bottom: 6px;
-
     font-size: 0.875rem;
     line-height: 18px;
-
     text-transform: uppercase;
     color: rgba(#333, 0.5);
 
     .filters-inline & {
       font-size: 12px;
       line-height: 14px;
+    }
+
+    .reset-icon {
+      margin-left: 0.5rem;
     }
   }
 

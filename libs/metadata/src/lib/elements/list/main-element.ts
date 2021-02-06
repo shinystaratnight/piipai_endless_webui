@@ -1,21 +1,15 @@
 import { ColumnElement } from './column-element';
 
 export class MainElement {
-
-  label: string;
-  list: string;
   columns: ColumnElement[];
   filters: any[];
 
-  search_enabled?: boolean;
+  search_enabled = true;
   pagination_label?: string;
   editDisable?: boolean;
   buttons?: any[];
 
-  constructor(list: string, label: string) {
-    this.list = list;
-    this.label = label;
-  }
+  constructor(public list: string, public label: string) { }
 
   disableSearch() {
     this.search_enabled = false;
@@ -30,19 +24,19 @@ export class MainElement {
   }
 
   setColumns(columns: ColumnElement[]) {
-    this.columns = [ ...columns ];
+    this.columns = [...columns];
 
     return this;
   }
 
   setFilters(filters: any[]) {
-    this.filters = [ ...filters ];
+    this.filters = [...filters];
 
     return this;
   }
 
   setButtons(buttons: any[]) {
-    this.buttons = [ ...buttons ];
+    this.buttons = [...buttons];
 
     return this;
   }
