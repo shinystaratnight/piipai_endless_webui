@@ -1,3 +1,6 @@
+import { Endpoints } from '@webui/data';
+import { Form } from '@webui/metadata';
+
 const list = {
   list: {
     list: 'skill',
@@ -308,6 +311,10 @@ const form = [
           }
         ]
       },
+      new Form.list.element(
+        'Skill Rates',
+        Endpoints.SkillRate,
+      ),
       {
         endpoint: '/skills/skilltags/',
         templateOptions: {
