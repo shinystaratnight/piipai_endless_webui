@@ -17,7 +17,6 @@ import {
   isMobile,
   getTimeInstance,
   isTouchDevice,
-  getTranslationKey
 } from '@webui/utilities';
 
 import { date as DateFilter } from '@webui/metadata';

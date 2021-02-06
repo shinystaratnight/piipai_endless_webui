@@ -1,14 +1,11 @@
 <div class="filter-element" [class.active]="!isCollapsed">
-  <label class="filter-label related" [class.active]="!isCollapsed">
-    {{ config.label }}
-    <fa-icon
-      *ngIf="query"
-      class="text-danger ml-1"
-      [icon]="['fas', 'times-circle']"
-      style="cursor: pointer"
-      (click)="resetFilter()"
-    ></fa-icon>
-  </label>
+  <app-filter-header
+    [label]="config.label"
+    [key]="config.key"
+    [resetButton]="query"
+    (resetEvent)="resetFilter()"
+  ></app-filter-header>
+
   <div class="filter-related">
     <div
       class="d-flex justify-content-center align-items-center autocomplete-filter"

@@ -1,4 +1,4 @@
-import { List } from '@webui/metadata';
+import { Filter, List } from '@webui/metadata';
 import { ColumnElement } from 'libs/metadata/src/lib/elements/list/column-element';
 import { Endpoints } from '@webui/data';
 
@@ -6,8 +6,34 @@ const list = () => {
   return {
     list: new List.main.element('emailmessages', 'Email Message')
       .disableEdit()
-      .disableSearch()
       .removeCreateButton()
+      .setFilters([
+        new Filter.select.element({
+          key: 'state',
+          label: 'State',
+          values: [
+            { label: 'Created', value: 'CREATED' },
+            { label: 'Waiting', value: 'WAIT' },
+            { label: 'Sending', value: 'SENDING' },
+            { label: 'Sent', value: 'SENT' },
+            { label: 'Failed', value: 'ERROR' },
+          ],
+        }),
+
+        new Filter.related.element({
+          key: 'template',
+          label: 'Template',
+          endpoint: Endpoints.EmailTemplate,
+          display: 'name',
+        }),
+
+        new Filter.date.element({
+          key: 'created_at',
+          label: 'Created at',
+          yesterday: true,
+          today: true,
+        }),
+      ])
       .setColumns([
         {
           content: [
