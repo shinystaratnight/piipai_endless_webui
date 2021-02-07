@@ -108,6 +108,7 @@ import {
   contactaddresses,
   candidateformalities,
   formtranslations,
+  skillrates,
 } from '@webui/manager-metadata';
 
 import {
@@ -237,4 +238,5 @@ export class Metadata {
   [Endpoints.ContactAddresses] = contactaddresses;
   [Endpoints.CandidateFormalities] = candidateformalities;
   [Endpoints.ApplicationFormTranslations] = formtranslations;
+  [Endpoints.SkillRate] = skillrates;
 }

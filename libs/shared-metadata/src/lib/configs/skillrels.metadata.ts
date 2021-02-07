@@ -262,15 +262,6 @@ const formset = {
         delim: null
       },
       {
-        name: 'hourly_rate',
-        content: [
-          { display: '{currency}{field}/h', type: 'static', field: 'hourly_rate' }
-        ],
-        label: 'Skill Rate',
-        title: null,
-        delim: null
-      },
-      {
         name: 'score',
         sort: true,
         sort_field: 'score',
