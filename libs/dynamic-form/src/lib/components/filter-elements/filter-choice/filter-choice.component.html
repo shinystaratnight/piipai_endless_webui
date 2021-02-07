@@ -1,22 +1,11 @@
 <div class="filter-element" [class.active]="!isCollapsed">
-  <label class="filter-label"  [class.active]="!isCollapsed">
-    {{ getTranslateKey('label') | translate: {"Default": config.label} }}
-    <!-- <i
-      fa
-      class="p-2 ml-auto"
-      [name]="icons[theme][isCollapsed]"
-      [border]=false
-      (click)="isCollapsed = !isCollapsed"
-      [class.text-primary]="!isCollapsed"
-      [attr.aria-expanded]="!isCollapsed"
-      style="cursor: pointer"></i> -->
-    <fa-icon
-      *ngIf="query"
-      class="text-danger ml-1"
-      [icon]="['fas', 'times-circle']"
-      style="cursor: pointer"
-      (click)="resetFilter()"></fa-icon>
-  </label>
+  <app-filter-header
+    [label]="config.label"
+    [key]="config.key"
+    [resetButton]="query"
+    (resetEvent)="resetFilter()"
+  ></app-filter-header>
+
   <ul class="list-unstyled filter-choice">
     <li
       *ngFor="let item of config.list"

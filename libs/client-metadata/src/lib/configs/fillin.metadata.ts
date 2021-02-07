@@ -1,4 +1,5 @@
-import { createFilter, Type } from '@webui/metadata';
+import { Endpoints } from '@webui/data';
+import { createFilter, Filter, Type } from '@webui/metadata';
 
 const filters = {
   date: createFilter(Type.Multiple, {
@@ -32,18 +33,6 @@ const filters = {
         value: 'False'
       }
     ]
-  }),
-  overpriced: createFilter(Type.Checkbox, {
-    key: 'overpriced',
-    label: 'Overpriced',
-    values: [
-      {
-        key: 'show_overpriced',
-        label: 'Show overpriced',
-        value: 'True'
-      }
-    ],
-    defaultValue: 'True'
   }),
   transportation_to_work: createFilter(Type.Checkbox, {
     key: 'transportation_to_work',
@@ -309,8 +298,17 @@ const list = {
     filters: [
       filters.date,
       filters.available,
+      new Filter.related.element({
+        key: 'uoms',
+        label: 'Unit of measurements',
+        endpoint: Endpoints.UnitOfMeasurements,
+      }),
+      new Filter.related.element({
+        key: 'worktypes',
+        label: 'Work types',
+        endpoint: Endpoints.SkillWorkTypes,
+      }),
       filters.show_without_tags,
-      filters.overpriced,
       filters.transportation_to_work,
       filters.distance_to_jobsite
     ]

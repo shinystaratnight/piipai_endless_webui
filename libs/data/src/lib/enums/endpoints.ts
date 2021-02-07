@@ -25,6 +25,7 @@ export enum Endpoints {
   SkillBaseRate = '/skills/skillbaserates/',
   SkillEmploymentClassification = '/skills/employmentclassifications/',
   SkillRateCoefficient = '/candidate/skillratecoefficientrels/',
+  SkillWorkTypes = '/skills/worktypes/',
 
   // Billing
   BillingCompany = '/billing/companies/',
@@ -163,6 +164,7 @@ export enum Endpoints {
   CompanyLanguages = '/companies/',
   MYOB = '/company-settings/myobsettings/',
   ApplicationFormTranslations = '/core/formtranlations/',
+  UnitOfMeasurements = '/core/unitofmeasurements/',
 }
 
 export const getBankAccountLayoutEndpoint = (countryCode: string) => {
