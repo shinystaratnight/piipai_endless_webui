@@ -1,5 +1,11 @@
 import { ColumnElement } from './column-element';
 
+export interface Tab {
+  label: string;
+  is_collapsed: boolean;
+  fields: string[];
+}
+
 export class MainElement {
   columns: ColumnElement[];
   filters: any[];
@@ -10,6 +16,7 @@ export class MainElement {
   buttons?: any[];
   canEdit?: string;
   editEndpoint?: string;
+  tabs?: Tab[];
 
   constructor(public list: string, public label: string) { }
 
@@ -52,6 +59,12 @@ export class MainElement {
   setEditOptions(endpoint: string, ifExist: string) {
     this.canEdit = ifExist;
     this.editEndpoint = endpoint;
+
+    return this;
+  }
+
+  setTabs(tabs: Tab[]) {
+    this.tabs = tabs;
 
     return this;
   }
