@@ -313,7 +313,7 @@ const form = [
       },
       new Form.list.element(
         'Skill Rates',
-        Endpoints.SkillRate,
+        Endpoints.SkillRateRanges,
       ),
       {
         endpoint: '/skills/skilltags/',

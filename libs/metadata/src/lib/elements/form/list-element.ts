@@ -1,3 +1,5 @@
+import { Endpoints } from '@webui/data';
+
 export const List = 'list';
 
 export interface ListElementTemplateOptions {

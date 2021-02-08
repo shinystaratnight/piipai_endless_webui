@@ -8,6 +8,8 @@ export class MainElement {
   pagination_label?: string;
   editDisable?: boolean;
   buttons?: any[];
+  canEdit?: string;
+  editEndpoint?: string;
 
   constructor(public list: string, public label: string) { }
 
@@ -43,6 +45,13 @@ export class MainElement {
 
   removeCreateButton() {
     this.buttons = [];
+
+    return this;
+  }
+
+  setEditOptions(endpoint: string, ifExist: string) {
+    this.canEdit = ifExist;
+    this.editEndpoint = endpoint;
 
     return this;
   }
