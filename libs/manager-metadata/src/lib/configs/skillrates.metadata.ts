@@ -23,7 +23,10 @@ const formset = {
         .setContent([
           new List.button.element('id', 'editForm', 'Edit')
             .setIcon('pencil-alt')
-            .setTextColor('#f0ad4e')
+            .setTextColor('#f0ad4e'),
+          new List.button.element('id', 'delete', 'Delete')
+            .setIcon('trash')
+            .setTextColor('#fa5c46')
         ])
     ])
 }
