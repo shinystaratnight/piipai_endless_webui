@@ -258,10 +258,10 @@ export class DynamicListComponent
 
     const addData = changes['addData'] && changes['addData'].currentValue;
 
-    this.config.list.columns = this.purposeService.filterListColumns(
-      this.endpoint,
-      this.config.list.columns
-    );
+    // this.config.list.columns = this.purposeService.filterListColumns(
+    //   this.endpoint,
+    //   this.config.list.columns
+    // );
 
     if (this.actionData !== this.currentActionData) {
       this.currentActionData = this.actionData;

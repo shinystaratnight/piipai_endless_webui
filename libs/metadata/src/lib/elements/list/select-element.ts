@@ -1,15 +1,13 @@
+import { BasicListElement } from './basic-list-element';
+
 export const Select = 'select';
 
-export class SelectElement {
-  type = Select;
-
-  field: string;
-
+export class SelectElement extends BasicListElement {
   values?: any;
   color?: any;
 
   constructor(field: string) {
-    this.field = field;
+    super(field, Select);
   }
 
   setValues(values: any) {

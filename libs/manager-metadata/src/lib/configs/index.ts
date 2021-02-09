@@ -96,3 +96,4 @@ export * from './contactaddresses.metadata';
 export * from './candidateformalities.metadata';
 export * from './formtranslations.metadata';
 export * from './skillrates.metadata';
+export * from './skillrateranges.metadata';

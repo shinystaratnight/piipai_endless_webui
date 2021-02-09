@@ -27,6 +27,7 @@ export enum Endpoints {
   SkillRateCoefficient = '/candidate/skillratecoefficientrels/',
   SkillWorkTypes = '/skills/worktypes/',
   SkillRate = '/candidate/skillrates/',
+  SkillRateRanges = '/skills/skillrateranges/',
 
   // Billing
   BillingCompany = '/billing/companies/',
