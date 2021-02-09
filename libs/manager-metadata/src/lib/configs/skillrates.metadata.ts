@@ -8,7 +8,8 @@ const formset = {
     .setColumns([
       new List.column.element('rate', 'Rate')
         .setContent([
-          new List.static.element('rate')
+          new List.text.element('rate')
+            .setFormatValue('{currency}{field}'),
         ]),
       new List.column.element('uom', 'Unit of measurements')
         .setContent([
@@ -16,7 +17,7 @@ const formset = {
         ]),
       new List.column.element('worktype', 'work type')
         .setContent([
-          new List.text.element('worktype')
+          new List.text.element('worktype.name')
         ]),
       new List.column.element('actions', 'Actions')
         .setContent([
@@ -29,15 +30,20 @@ const formset = {
 
 const formadd = () => [
   new Form.related.element('worktype', 'Work Type', Endpoints.SkillWorkTypes),
-  new Form.input.element('rate', 'Rate', InputType.Text),
+  new Form.input.element('rate', 'Rate', InputType.Number)
+    .setNumberOptions(0.01, 0),
   new Form.related.element('uom', 'Unit of measurements', Endpoints.UnitOfMeasurements),
+  new Form.related.element('skill_rel', 'Skill', Endpoints.CandidateSkill)
+    .hideField(),
 ];
 
 const form = () => [
   new Form.related.element('worktype', 'Work Type', Endpoints.SkillWorkTypes),
-  new Form.input.element('rate', 'Rate', InputType.Text),
+  new Form.input.element('rate', 'Rate', InputType.Number)
+    .setNumberOptions(0.01, 0),
   new Form.related.element('uom', 'Unit of measurements', Endpoints.UnitOfMeasurements),
-  new Form.related.element('skill_rel', 'Skill', Endpoints.Skill),
+  new Form.related.element('skill_rel', 'Skill', Endpoints.Skill)
+    .hideField(),
 ];
 
 export const skillrates = {

@@ -128,25 +128,25 @@ const form = () => [
         .setChildren([
           new Form.input.element('lower_rate_limit', 'Lower Rate Limit', InputType.Number)
             .setNumberOptions(0.01, 0)
-            .setFormatOfValue('{currency}{field}/h'),
+            .setFormatOfValue('{currency}{field}'),
           new Form.input.element('default_rate', 'Default Rate', InputType.Number)
             .setNumberOptions(0.01, 0)
-            .setFormatOfValue('{currency}{field}/h'),
+            .setFormatOfValue('{currency}{field}'),
           new Form.input.element('upper_rate_limit', 'Upper Rate Limit', InputType.Number)
             .setNumberOptions(0.01, 0)
-            .setFormatOfValue('{currency}{field}/h'),
+            .setFormatOfValue('{currency}{field}'),
         ]),
       new Form.group.element('Price List Rate')
         .setChildren([
           new Form.input.element('price_list_lower_rate_limit', 'Lower Rate Limit', InputType.Number)
             .setNumberOptions(0.01, 0)
-            .setFormatOfValue('{currency}{field}/h'),
+            .setFormatOfValue('{currency}{field}'),
           new Form.input.element('price_list_default_rate', 'Default Rate', InputType.Number)
             .setNumberOptions(0.01, 0)
-            .setFormatOfValue('{currency}{field}/h'),
+            .setFormatOfValue('{currency}{field}'),
           new Form.input.element('price_list_upper_rate_limit', 'Upper Rate Limit', InputType.Number)
             .setNumberOptions(0.01, 0)
-            .setFormatOfValue('{currency}{field}/h'),
+            .setFormatOfValue('{currency}{field}'),
         ]),
     ]),
   new Form.related.element('skill', 'Skill', Endpoints.Skill).hideField(),

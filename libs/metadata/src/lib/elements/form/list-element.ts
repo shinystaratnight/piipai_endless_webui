@@ -19,6 +19,7 @@ export class ListElement {
   query?: { [key: string]: any };
   metadata_query?: { [key: string]: any };
   translateKey?: string;
+  isHideHeader?: boolean;
 
   constructor(label: string, endpoint: string, translateKey?: string) {
     this.templateOptions = {
@@ -57,6 +58,12 @@ export class ListElement {
 
   withoutAddButton() {
     this.templateOptions.add_label = '';
+
+    return this;
+  }
+
+  hideHeader() {
+    this.isHideHeader = true;
 
     return this;
   }
