@@ -742,6 +742,9 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
         if (el.type === 'replace') {
           el.data = new BehaviorSubject(data);
         }
+        if (el.type === 'related' && typeof el.read_only === 'string') {
+          el.read_only = this.format.format(el.read_only, data);
+        }
         if (el.type === 'related' && el.list) {
           el.data = new BehaviorSubject(this.getValueOfData(data, el.key, el, metadata));
           if (el.prefilled) {
