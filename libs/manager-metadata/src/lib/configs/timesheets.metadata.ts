@@ -901,11 +901,14 @@ const form = [
                 children: [
                   {
                     endpoint: Endpoints.CompanyContact,
-                    read_only: true,
+                    read_only: '{supervisor_approved_at}',
                     templateOptions: {
                       label: 'Supervisor',
                       values: ['__str__'],
                       type: 'related'
+                    },
+                    query: {
+                      company: '{company.id}'
                     },
                     type: 'related',
                     key: 'supervisor'
