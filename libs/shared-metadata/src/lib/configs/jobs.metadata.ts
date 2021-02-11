@@ -960,21 +960,15 @@ const form = [
                   },
                   {
                     endpoint: '/core/companycontacts/',
-                    read_only: true,
                     key: 'customer_representative',
                     templateOptions: {
                       label: 'Client representative',
-                      add: true,
-                      delete: false,
-                      values: ['__str__'],
+                      values: ['__str__', 'company'],
                       type: 'related',
-                      edit: true
                     },
-                    additional_text: 'Or',
-                    default: '{jobsite.primary_contact.id}',
                     type: 'related',
                     query: {
-                      jobsites: '{jobsite.id}'
+                      company: '{customer_company.id}'
                     }
                   },
                   {
