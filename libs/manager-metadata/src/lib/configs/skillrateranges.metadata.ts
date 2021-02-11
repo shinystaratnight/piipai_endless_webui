@@ -91,7 +91,10 @@ const formadd = () => [
     .setChildren([
       new Form.group.element()
         .setChildren([
-          new Form.related.element('worktype', 'Work Type', Endpoints.SkillWorkTypes),
+          new Form.related.element('worktype', 'Work Type', Endpoints.SkillWorkTypes)
+            .setQuery({
+              skill_name: '{skill.name.id}'
+            }),
           new Form.related.element('uom', 'Unit of measurements', Endpoints.UnitOfMeasurements),
         ]),
       new Form.group.element('Skill Rate')
@@ -113,7 +116,9 @@ const formadd = () => [
             .setNumberOptions(0.01, 0),
         ]),
     ]),
-  new Form.related.element('skill', 'Skill', Endpoints.Skill).hideField(),
+  new Form.related.element('skill', 'Skill', Endpoints.Skill)
+    .updateValues(['name'])
+    .hideField(),
 ];
 
 const form = () => [
@@ -121,7 +126,10 @@ const form = () => [
     .setChildren([
       new Form.group.element()
         .setChildren([
-          new Form.related.element('worktype', 'Work Type', Endpoints.SkillWorkTypes),
+          new Form.related.element('worktype', 'Work Type', Endpoints.SkillWorkTypes)
+            .setQuery({
+              skill_name: '{skill.name.id}'
+            }),
           new Form.related.element('uom', 'Unit of measurements', Endpoints.UnitOfMeasurements),
         ]),
       new Form.group.element('Skill Rate')
@@ -149,7 +157,9 @@ const form = () => [
             .setFormatOfValue('{currency}{field}'),
         ]),
     ]),
-  new Form.related.element('skill', 'Skill', Endpoints.Skill).hideField(),
+  new Form.related.element('skill', 'Skill', Endpoints.Skill)
+    .hideField()
+    .updateValues(['name']),
 ]
 
 export const skillrateranges = {

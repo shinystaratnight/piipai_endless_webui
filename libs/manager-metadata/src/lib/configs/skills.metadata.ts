@@ -224,7 +224,7 @@ const form = [
           skill: '{id}'
         })
         .setPrefilledFields({
-          'skill': '{id}'
+          skill: '{id}'
         }),
       {
         endpoint: '/skills/skilltags/',

@@ -226,7 +226,10 @@ const form = [
     templateOptions: { required: false, label: 'Hourly Rate', type: 'text' },
     read_only: false
   },
-  new Form.related.element('worktype', 'Work Type', Endpoints.SkillWorkTypes),
+  new Form.related.element('worktype', 'Work Type', Endpoints.SkillWorkTypes)
+    .setQuery({
+      skill_name: '{skill.name.id}'
+    }),
   new Form.related.element('uom', 'Unit of measurements', Endpoints.UnitOfMeasurements),
   {
     endpoint: Endpoints.PriceListRateModifiers,
@@ -310,7 +313,10 @@ const formadd = [
     },
     read_only: false
   },
-  new Form.related.element('worktype', 'Work Type', Endpoints.SkillWorkTypes),
+  new Form.related.element('worktype', 'Work Type', Endpoints.SkillWorkTypes)
+    .setQuery({
+      skill_name: '{skill.name.id}'
+    }),
   new Form.related.element('uom', 'Unit of measurements', Endpoints.UnitOfMeasurements),
 ];
 
