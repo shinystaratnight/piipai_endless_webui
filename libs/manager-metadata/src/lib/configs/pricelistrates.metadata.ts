@@ -1,4 +1,5 @@
 import { Endpoints } from '@webui/data';
+import { Form, List } from '@webui/metadata';
 
 const list = {
   list: {
@@ -108,13 +109,32 @@ const pricelist = {
         ],
         label: 'Skill'
       },
-      {
-        name: 'hourly_rate',
-        sort: true,
-        sort_field: 'hourly_rate',
-        content: [{ type: 'input', field: 'hourly_rate' }],
-        label: 'Hourly Rate'
-      },
+      new List.column.element('rate', 'Rate')
+        .setSort(true, 'rate')
+        .setContent([
+          new List.input.element('rate')
+        ]),
+      new List.column.element('uom', 'Unit of measurements')
+        .setContent([
+          new List.related.element('uom', Endpoints.UnitOfMeasurements)
+        ]),
+      new List.column.element('worktype', 'Work type')
+        .setContent([
+          new List.related.element('worktype', Endpoints.SkillWorkTypes)
+            .setShowIfRule(['worktype']),
+          new List.select.element('worktype')
+            .setValues({ null: 'Default' })
+            .setColors({ null: 'info' })
+            .setShowIfRule([{ worktype: null }])
+        ]),
+
+      // {
+      //   name: 'rate',
+      //   sort: true,
+      //   sort_field: 'hourly_rate',
+      //   content: [{ type: 'input', field: 'hourly_rate' }],
+      //   label: 'Hourly Rate'
+      // },
       {
         name: 'actions',
         content: [
@@ -158,6 +178,9 @@ const form = [
     templateOptions: { required: false, label: 'Id', type: 'text' },
     read_only: false
   },
+  new Form.related.element('company', 'Company', Endpoints.Company)
+    .hideField()
+    .doNotSend(),
   {
     endpoint: '/pricing/pricelists/',
     visibleMode: true,
@@ -173,29 +196,38 @@ const form = [
     type: 'related',
     key: 'price_list',
   },
+  // {
+  //   endpoint: '/skills/skills/',
+  //   read_only: true,
+  //   templateOptions: {
+  //     label: 'Skill',
+  //     add: true,
+  //     delete: false,
+  //     values: ['default_rate', '__str__', 'tranlsations', 'name'],
+  //     type: 'related',
+  //     edit: true
+  //   },
+  //   type: 'related',
+  //   key: 'skill',
+  // },
+  new Form.related.element('skill', 'Skill', Endpoints.Skill)
+    .setQuery({
+      // company: '{company.id}',
+      active: true,
+      exclude_pricelist: '{price_list.id}'
+    })
+    .updateValues(['price_list_default_rate', 'tranlsations', 'name']),
   {
-    endpoint: '/skills/skills/',
-    read_only: true,
-    templateOptions: {
-      label: 'Skill',
-      add: true,
-      delete: false,
-      values: ['default_rate', '__str__', 'tranlsations', 'name'],
-      type: 'related',
-      edit: true
-    },
-    type: 'related',
-    key: 'skill',
-  },
-  {
-    key: 'hourly_rate',
-    default: '{skill.default_rate}',
+    key: 'rate',
+    default: '{skill.price_list_default_rate}',
     useValue: true,
     updated: ['skill'],
     type: 'input',
     templateOptions: { required: false, label: 'Hourly Rate', type: 'text' },
     read_only: false
   },
+  new Form.related.element('worktype', 'Work Type', Endpoints.SkillWorkTypes),
+  new Form.related.element('uom', 'Unit of measurements', Endpoints.UnitOfMeasurements),
   {
     endpoint: Endpoints.PriceListRateModifiers,
     type: 'list',
@@ -216,6 +248,9 @@ const form = [
 ];
 
 const formadd = [
+  new Form.related.element('company', 'Company', Endpoints.Company)
+    .hideField()
+    .doNotSend(),
   {
     list: false,
     endpoint: '/pricing/pricelists/',
@@ -234,40 +269,49 @@ const formadd = [
     key: 'price_list',
     many: false
   },
-  {
-    list: false,
-    endpoint: '/skills/skills/',
-    read_only: true,
-    templateOptions: {
-      required: true,
-      label: 'Skill',
-      add: true,
-      delete: false,
-      values: ['price_list_default_rate', '__str__', 'tranlsations', 'name'],
-      type: 'related',
-      edit: true
-    },
-    query: {
+  // {
+  //   list: false,
+  //   endpoint: '/skills/skills/',
+  //   read_only: true,
+  //   templateOptions: {
+  //     required: true,
+  //     label: 'Skill',
+  //     add: true,
+  //     delete: false,
+  //     values: ['price_list_default_rate', '__str__', 'tranlsations', 'name'],
+  //     type: 'related',
+  //     edit: true
+  //   },
+  //   query: {
+  //     active: true,
+  //     exclude_pricelist: '{price_list.id}'
+  //   },
+  //   collapsed: false,
+  //   type: 'related',
+  //   key: 'skill',
+  //   many: false
+  // },
+  new Form.related.element('skill', 'Skill', Endpoints.Skill)
+    .setQuery({
+      // company: '{company.id}',
       active: true,
       exclude_pricelist: '{price_list.id}'
-    },
-    collapsed: false,
-    type: 'related',
-    key: 'skill',
-    many: false
-  },
+    })
+    .updateValues(['price_list_default_rate', 'tranlsations', 'name']),
   {
-    key: 'hourly_rate',
+    key: 'rate',
     default: '{skill.price_list_default_rate}',
     updated: ['skill'],
     type: 'input',
     templateOptions: {
       required: true,
-      label: 'Hourly Rate',
+      label: 'Rate',
       type: 'text'
     },
     read_only: false
-  }
+  },
+  new Form.related.element('worktype', 'Work Type', Endpoints.SkillWorkTypes),
+  new Form.related.element('uom', 'Unit of measurements', Endpoints.UnitOfMeasurements),
 ];
 
 const pricelistForm = [
