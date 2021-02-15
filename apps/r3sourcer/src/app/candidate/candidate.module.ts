@@ -19,6 +19,7 @@ import { UiModule } from '@webui/ui';
 import { Metadata } from './metadata.config';
 import { CommonModule } from '@angular/common';
 import { SharedModule } from '../shared/shared.module';
+import { SharedModule as LibSharedModule } from '@webui/shared';
 
 @NgModule({
   declarations: [CandidateComponent, ...components],
@@ -33,6 +34,7 @@ import { SharedModule } from '../shared/shared.module';
     CalendarModule,
     SharedModule,
     TranslateModule,
+    LibSharedModule,
     UiModule
   ]
 })
