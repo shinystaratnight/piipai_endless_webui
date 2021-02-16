@@ -38,6 +38,7 @@ import { Metadata } from './metadata.config';
 import { MasterGuideModule } from '../master-guide/master-guide.module';
 import { CommonModule } from '@angular/common';
 import { SharedModule } from '../shared/shared.module';
+import { SharedModule as LibSharedModule } from '@webui/shared';
 import { UiModule } from '@webui/ui';
 
 @NgModule({
@@ -71,6 +72,7 @@ import { UiModule } from '@webui/ui';
     CalendarModule,
     DashboardModule,
     SharedModule,
+    LibSharedModule,
     UiModule
   ],
   providers: [
