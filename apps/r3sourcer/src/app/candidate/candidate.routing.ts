@@ -9,7 +9,7 @@ import { ConsentComponent } from './components/consent/consent.component';
 
 export const routes: Routes = [
   {
-    path: 'candidate/candidatecontacts/consent',
+    path: 'candidate/candidatecontacts/consent/:id',
     component: ConsentComponent,
     canActivate: [AuthGuard, PermissionGuard],
   },
