@@ -12,6 +12,7 @@ import { SharedModule } from '../shared/shared.module';
 import { SharedModule as LibSharedModule } from '@webui/shared';
 
 import { routes } from './login.routes';
+import { Metadata } from './metadata.config';
 
 @NgModule({
   declarations: [LoginComponent],
@@ -21,7 +22,7 @@ import { routes } from './login.routes';
     RouterModule.forChild(routes),
     TranslateModule,
 
-    DynamicFormModule,
+    DynamicFormModule.forChild({ metadata: Metadata }),
     SharedModule,
     LibSharedModule,
     UiModule
