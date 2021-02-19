@@ -318,7 +318,8 @@
 
       .form-element-checkbox {
         position: absolute;
-        right: 10px;
+        left: 214px;
+        white-space: nowrap;
       }
     }
 
@@ -384,10 +385,9 @@
 
       app-form-checkbox .form-element-content {
         .form-element-checkbox {
-          right: 30px;
-
-          font-size: 16px;
-          line-height: 20px;
+          left: calc(100% - 120px);
+          font-size: 14px;
+          line-height: 16px;
         }
       }
 
