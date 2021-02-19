@@ -43,10 +43,11 @@ $height: 80px;
   }
 }
 
-.signature {
-  width: 80px;
-  height: 40px;
-
+img.signature {
+  width: 90px;
+  height: 52px;
+  padding: 5px;
+  margin-top: 5px;
   border-radius: 3px;
   border: 1px solid rgba($gray, 0.7);
 }
