@@ -333,7 +333,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
     const props = {
       formId: this.formId,
       formData: this.formData,
-      mode: this.mode === 'view' ? this.modeBehaviorSubject : undefined,
+      mode: this.modeBehaviorSubject,
       autocompleteData: new Subject(),
     };
 
