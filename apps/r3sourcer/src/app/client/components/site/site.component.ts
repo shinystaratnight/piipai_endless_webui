@@ -414,15 +414,24 @@ export class SiteComponent implements OnInit, OnDestroy {
   }
 
   public deleteElement(element) {
-    this.genericFormService.delete(element.endpoint, element.pathData.id).subscribe(
-      (res: any) => this.router.navigate([element.pathData.path]),
-      (err: any) => {
-        if (err.status === 'error') {
-          this.ts.sendMessage(err.errors.error, MessageType.error);
+    this.genericFormService.delete(element.endpoint, element.pathData.id)
+      .subscribe(
+        () => {
+          const path = `/${this.authService.getRedirectUrl()}${element.pathData.path}`;
+
+          this.router.navigate([path]);
+        },
+        (err: any) => {
+          const { status, errors: { error, non_field_errors } } = err;
+
+          if (status === 'error') {
+            const message = error || (non_field_errors && non_field_errors.toString());
+
+            this.ts.sendMessage(message, MessageType.error);
+          }
+          this.errors = err.errors;
         }
-        this.errors = err.errors;
-      }
-    );
+      );
   }
 
   public updateNavigation(e) {
