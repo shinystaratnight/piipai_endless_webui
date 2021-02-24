@@ -5452,10 +5452,10 @@ globby@^6.1.0:
     pify "^2.0.0"
     pinkie-promise "^2.0.0"
 
-google-libphonenumber@^3.2.8:
-  version "3.2.11"
-  resolved "https://registry.yarnpkg.com/google-libphonenumber/-/google-libphonenumber-3.2.11.tgz#c5704513366b18f468a9505ea13e53f6fbcc9eec"
-  integrity sha512-LmndkcaQGxYC1j5XEugxCcYKs5Foxc2sILzAKVfTJjFxonnLlYZLptbqu4a2z036kw9OBSQFdnyQCcMacHBIXQ==
+google-libphonenumber@^3.2.17:
+  version "3.2.17"
+  resolved "https://registry.yarnpkg.com/google-libphonenumber/-/google-libphonenumber-3.2.17.tgz#6146ca39da98f9ddd20851b1ced2fb7b5b3f543d"
+  integrity sha512-T1fBQ3ujlpo4VUe0palZVHxBkY1zsfCShkS3l1rNq/d5C6C1SIijo8aXzgpJeGQFB8Bk+C36o6jhLl05NtfQ3w==
 
 graceful-fs@^4.1.11, graceful-fs@^4.1.15, graceful-fs@^4.1.2, graceful-fs@^4.1.6, graceful-fs@^4.2.0, graceful-fs@^4.2.4:
   version "4.2.4"
@@ -5972,10 +5972,10 @@ internal-ip@^4.3.0:
     default-gateway "^4.2.0"
     ipaddr.js "^1.9.0"
 
-intl-tel-input@14.1.0:
-  version "14.1.0"
-  resolved "https://registry.yarnpkg.com/intl-tel-input/-/intl-tel-input-14.1.0.tgz#8d8743037900fcc99be4c834376108acf59c1728"
-  integrity sha512-i5YVYVCwaMFvCt+TlqoDGbaVQVeIZSZeGcleDNofYFhX32/i7khBeuaugNTj/kKYXBstsa0DPHOHcYB4cj0l4A==
+intl-tel-input@17.0.3:
+  version "17.0.3"
+  resolved "https://registry.yarnpkg.com/intl-tel-input/-/intl-tel-input-17.0.3.tgz#0f1468ac0ea573b4cedddd24db9fd5cb32eb7d86"
+  integrity sha512-vfO5yIddrkNKaJYqGySuT6lyovWZoBLU/vyGA2A4VdKIZasknpd9/emTJYIPqFzjkguFfEDUiERKFih3k9Yj3Q==
 
 invariant@^2.2.2, invariant@^2.2.4:
   version "2.2.4"
@@ -7727,10 +7727,10 @@ next-tick@~1.0.0:
   resolved "https://registry.yarnpkg.com/next-tick/-/next-tick-1.0.0.tgz#ca86d1fe8828169b0120208e3dc8424b9db8342c"
   integrity sha1-yobR/ogoFpsBICCOPchCS524NCw=
 
-ngx-bootstrap@^5.6.1:
-  version "5.6.1"
-  resolved "https://registry.yarnpkg.com/ngx-bootstrap/-/ngx-bootstrap-5.6.1.tgz#c37643247441f9d421bca2cd7d7de1d0445e903f"
-  integrity sha512-8fDs3VaaWgKpupakPKS0QaUc+1E/JMBGJDxUUODjyIkLtFr1A8vH4cjXiV3AfrPvhK27GH0oyTPyKWKcCjEtVg==
+ngx-bootstrap@^6.2.0:
+  version "6.2.0"
+  resolved "https://registry.yarnpkg.com/ngx-bootstrap/-/ngx-bootstrap-6.2.0.tgz#678b274dabfda31411eb1234c981d1967750d890"
+  integrity sha512-5WKHo6/ltkenw4UyXZwED8rODCgp2RGbWurzYzZsF/gH1JO5SN7TJ+AL6kXYk6XM42sDA2WhN9Db+ZPNjiyHnA==
 
 ngx-google-places-autocomplete@^2.0.4:
   version "2.0.4"
@@ -7745,12 +7745,12 @@ ngx-infinite-scroll@^9.0.0:
     "@scarf/scarf" "0.1.5"
     opencollective-postinstall "^2.0.2"
 
-ngx-intl-tel-input@^2.3.4:
-  version "2.4.3"
-  resolved "https://registry.yarnpkg.com/ngx-intl-tel-input/-/ngx-intl-tel-input-2.4.3.tgz#d20806ae57634a946a27e7445faaf6f0c9bd9034"
-  integrity sha512-7HNuMBeDH9qSS/ZA5znyK7yfxZ+EdeQuIUVQAIH5p3cLxvXKYjaGh1CzNypjFcxSgjyqrLJWRUo79lcCBoK9Dg==
+ngx-intl-tel-input@^3.0.5:
+  version "3.0.5"
+  resolved "https://registry.yarnpkg.com/ngx-intl-tel-input/-/ngx-intl-tel-input-3.0.5.tgz#7fc3d5a50c6838fb09178b7c70682a63b8bd8c6c"
+  integrity sha512-FBEm7AcYp4kdjhMejn4OW5veBk43vKlW15tgTZpKQLArF/4TV+Le1dU6wS5DtiEP1V5oBf+snIh7mF4nLW1w4Q==
   dependencies:
-    tslib "^1.10.0"
+    tslib "^2.0.0"
 
 ngx-quill@12.0.1:
   version "12.0.1"
