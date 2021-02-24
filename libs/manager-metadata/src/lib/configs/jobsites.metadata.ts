@@ -436,11 +436,8 @@ const form = [
                     read_only: true,
                     templateOptions: {
                       label: 'Industry',
-                      add: true,
-                      delete: false,
                       values: ['__str__', 'translations'],
                       type: 'related',
-                      edit: true
                     },
                     collapsed: false,
                     type: 'related',
@@ -743,11 +740,8 @@ const formadd = [
             read_only: false,
             templateOptions: {
               label: 'Industry',
-              add: true,
-              delete: false,
               values: ['__str__', 'translations'],
               type: 'related',
-              edit: true,
               required: true,
             },
             default: 'industry.default',
