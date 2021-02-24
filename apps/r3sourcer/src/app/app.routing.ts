@@ -35,16 +35,16 @@ export const routes: Routes = [
     loadChildren: () => import('./register/register.module').then((m) => m.RegisterModule),
     canActivate: [NotAuthorizedGuard, SubdomainGuard]
   },
-  {
-    path: 'settings',
-    loadChildren: () => import('./settings/settings.module').then((m) => m.SettingsModule),
-    resolve: {
-      user: UserService,
-      pagesList: NavigationService,
-      settings: SiteSettingsService,
-    },
-    canActivate: [AuthGuard, PermissionGuard, ManagerGuard],
-  },
+  // {
+  //   path: 'settings',
+  //   loadChildren: () => import('./settings/settings.module').then((m) => m.SettingsModule),
+  //   resolve: {
+  //     user: UserService,
+  //     pagesList: NavigationService,
+  //     settings: SiteSettingsService,
+  //   },
+  //   canActivate: [AuthGuard, PermissionGuard, ManagerGuard],
+  // },
   {
     path: 'billing',
     loadChildren: () => import('./billing/billing.module').then((m) => m.BillingModule),

@@ -1,5 +1,5 @@
 <div *ngIf="!this.config.hide">
-  <h6
+  <!-- <h6
     class="card flex-row align-items-center form-element-list"
     [ngClass]="{ 'bg-primary text-white': !isCollapsed }"
     *ngIf="config.templateOptions.label"
@@ -21,7 +21,7 @@
     >
       {{ config?.templateOptions?.add_label || 'Add' }}
     </button>
-  </h6>
+  </h6> -->
 
   <div class="d-flex" *ngIf="!config.isHideHeader">
     <div class="mr-auto">
@@ -34,7 +34,7 @@
       *ngIf="hasAddButton"
       (click)="addObject()"
     >
-      {{ config?.templateOptions?.add_label || '+ Add' }}
+      {{ config?.templateOptions?.add_label || 'Add' }}
     </button>
   </div>
 

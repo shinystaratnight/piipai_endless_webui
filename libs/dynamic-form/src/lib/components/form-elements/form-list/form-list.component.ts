@@ -18,7 +18,7 @@ import { FormatString } from '@webui/utilities';
 import { smallModalEndpoints } from '../../../helpers';
 
 import { CheckPermissionService } from '@webui/core';
-import { Endpoints } from '@webui/data';
+import { Endpoints, Field } from '@webui/data';
 import { GenericFormService, TimelineService, TimelineAction } from '../../../services';
 
 @Component({
@@ -35,7 +35,7 @@ export class FormListComponent implements OnInit, OnDestroy {
 
   public isCollapsed: boolean;
 
-  public config;
+  public config: Field;
   public errors: any;
   public message: any;
   public key: any;
@@ -234,7 +234,7 @@ export class FormListComponent implements OnInit, OnDestroy {
   }
 
   public updateList(event) {
-    if (this.config.delay && this.checkOnUnique(event.sendData, this.config.unique)) {
+    if (this.config.delay && this.checkOnUnique(event.sendData, this.config.unique as string[])) {
       this.addedData.push(event.viewData);
       this.config.data.sendData.push(event.sendData);
 
@@ -253,14 +253,10 @@ export class FormListComponent implements OnInit, OnDestroy {
     }
   }
 
-  public checkCount(e: number): void {
-    this.count = e;
-    if (this.config.max) {
-      this.showButton =
-        (this.config.templateOptions.add_label || this.config.add_endpoint) && this.config.max > this.count; //tslint:disable-line
-    } else {
-      this.showButton = this.config.templateOptions.add_label || this.config.add_endpoint;
-    }
+  public checkCount(count: number): void {
+    this.count = count;
+    const showButton: boolean = !!this.config.templateOptions.add_label || !!this.config.add_endpoint;
+    this.showButton = this.config.max ? showButton && this.config.max > this.count : showButton;
   }
 
   public checkPermissions(type: string): boolean {
@@ -376,8 +372,8 @@ export class FormListComponent implements OnInit, OnDestroy {
   public updateDataInTheList(defaultData, addedData) {
     const length = this.config.data.results.length;
 
-    this.pasredAddedData(addedData, defaultData, this.config.unique);
-    this.pasredAddedData(this.config.data.sendData, defaultData, this.config.unique);
+    this.pasredAddedData(addedData, defaultData, this.config.unique as string[]);
+    this.pasredAddedData(this.config.data.sendData, defaultData, this.config.unique as string[]);
     this.config.data.results = [...defaultData, ...addedData];
   }
 
