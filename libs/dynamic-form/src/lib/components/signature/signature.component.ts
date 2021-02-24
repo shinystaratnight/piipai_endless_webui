@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, ViewChild, EventEmitter, ViewEncapsulation, Output, Input } from '@angular/core';
+import { Component, AfterViewInit, ViewChild, EventEmitter, ViewEncapsulation, Output, Input, ElementRef } from '@angular/core';
 import { SignaturePad } from 'angular2-signaturepad/signature-pad';
 
 import { getOrientation } from '../../helpers';
@@ -6,19 +6,8 @@ import { isMobile } from '@webui/utilities';
 
 @Component({
   selector: 'app-signature',
-  template: `<signature-pad
-    *ngIf="show"
-    [options]="signaturePadOptions"
-    (onEndEvent)="drawComplete()"
-  ></signature-pad>`,
-  styles: [
-    `
-      signature-pad canvas {
-        border-radius: 4px;
-        border: 1px solid #333;
-      }
-    `,
-  ],
+  templateUrl: 'signature.component.html',
+  styleUrls: ['signature.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
 export class SignatureComponent implements AfterViewInit {
@@ -27,7 +16,7 @@ export class SignatureComponent implements AfterViewInit {
   @Input()
   public supervisorSignature: string;
 
-  @ViewChild(SignaturePad) signaturePad: SignaturePad;
+  @ViewChild('signaturePad', { static: false }) signatureElement: any;
 
   @Output()
   public signature: EventEmitter<string> = new EventEmitter();
@@ -36,7 +25,7 @@ export class SignatureComponent implements AfterViewInit {
 
   ngAfterViewInit() {
     if (this.supervisorSignature) {
-      this.toDataURL(this.supervisorSignature, this.signaturePad.fromDataURL.bind(this), 'image/png');
+      this.toDataURL(this.supervisorSignature, this.getSignaturePad().fromDataURL.bind(this), 'image/png');
     }
 
     this.clear();
@@ -58,11 +47,15 @@ export class SignatureComponent implements AfterViewInit {
   }
 
   clear() {
-    this.signaturePad.clear();
+    if (this.getSignaturePad()) {
+      this.getSignaturePad().clear();
+    }
   }
 
   drawComplete() {
-    this.signature.emit(this.signaturePad.toDataURL());
+    if (this.getSignaturePad()) {
+      this.signature.emit(this.getSignaturePad().toDataURL());
+    }
   }
 
   toDataURL(src, callback, outputFormat?) {
@@ -77,5 +70,9 @@ export class SignatureComponent implements AfterViewInit {
       const dataURL = canvas.toDataURL(outputFormat);
       callback(dataURL);
     };
+  }
+
+  private getSignaturePad(): SignaturePad {
+    return this.signatureElement.signaturePad;
   }
 }

@@ -26,7 +26,6 @@
         <img
           *ngIf="value && config.templateOptions.file === false"
           class="image-preview"
-          [class.signature]="config.templateOptions.signature"
           [class.start]="config.templateOptions.start"
           [src]="value"
           alt="image"
@@ -35,6 +34,7 @@
         <img
           *ngIf="value && config.templateOptions.file === false"
           class="image-profile"
+          [class.signature]="config.templateOptions.signature"
           [class.origin]="config.companyContact"
           [src]="value"
           alt="image"
