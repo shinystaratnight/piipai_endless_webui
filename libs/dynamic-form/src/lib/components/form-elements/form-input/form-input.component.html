@@ -437,9 +437,9 @@
     [selectFirstCountry]="false"
     [selectedCountryISO]="selectedCountryISO"
     [maxLength]="15"
+    numberFormat="E164"
     [tooltipField]="TooltipLabel.Name"
     [phoneValidation]="true"
-    [separateDialCode]="separateDialCode"
     (ngModelChange)="onChangePhoneNumber($event)"
     name="phone"
   >

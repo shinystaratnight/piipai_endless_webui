@@ -1,0 +1,25 @@
+.iti {
+  width: 100%;
+}
+
+.iti input {
+  width: 100%;
+  font-size: 14px;
+  border: none;
+  border-bottom: 1px solid rgba($gray, .1);
+
+  .registration-form *:not(.ui-datebox-container) .form-element & {
+    padding-left: 60px;
+  }
+}
+
+.iti.separate-dial-code .iti__selected-flag {
+  background-color: transparent;
+}
+
+@each $item in $themes {
+  .#{$item}-theme .iti input:focus {
+    outline: none;
+    border-color: map-get($theme-colors, $item);
+  }
+}
