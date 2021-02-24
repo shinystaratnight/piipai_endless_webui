@@ -678,11 +678,8 @@ const formadd = [
             read_only: true,
             templateOptions: {
               label: 'Industry',
-              add: true,
-              delete: false,
               values: ['__str__', 'translations'],
               type: 'related',
-              edit: true,
               required: true,
             },
             collapsed: false,
