@@ -245,6 +245,8 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
       setTimeout(() => {
         this.process = false;
       }, 1000);
+    } else {
+      this.router.navigate(['/login']);
     }
   }
 
