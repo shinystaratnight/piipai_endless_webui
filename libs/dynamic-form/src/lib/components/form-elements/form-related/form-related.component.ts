@@ -796,7 +796,8 @@ export class FormRelatedComponent extends BasicElementComponent
         this.config.default.includes('client_contact_id')) &&
       !this.config.editForm
     ) {
-      const id = this.userService.user.currentRole[this.config.default];
+      const formatString = new FormatString();
+      const id = formatString.format(this.config.default, this.userService.user.currentRole);
 
       if (this.config.read_only) {
         this.viewMode = true;
