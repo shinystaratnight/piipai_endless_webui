@@ -1,5 +1,4 @@
-import { Component, AfterViewInit, ViewChild, EventEmitter, ViewEncapsulation, Output, Input, ElementRef } from '@angular/core';
-import { SignaturePad } from 'angular2-signaturepad/signature-pad';
+import { Component, AfterViewInit, ViewChild, EventEmitter, ViewEncapsulation, Output, Input } from '@angular/core';
 
 import { getOrientation } from '../../helpers';
 import { isMobile } from '@webui/utilities';
@@ -72,7 +71,7 @@ export class SignatureComponent implements AfterViewInit {
     };
   }
 
-  private getSignaturePad(): SignaturePad {
+  private getSignaturePad() {
     return this.signatureElement.signaturePad;
   }
 }
