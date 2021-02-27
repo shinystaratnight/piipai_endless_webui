@@ -27,10 +27,14 @@
         [hidden]="config.templateOptions.type === 'time'"
         class="form-control"
         #d
-        data-role="datebox"
-        [(ngModel)]="model.date"
+        bsDatepicker
+        autocomplete="off"
+        [ngModel]="model.date"
+        (ngModelChange)="onDateChange()"
+        [maxDate]="maxDate"
         [attr.id]="key"
         [attr.name]="key"
+        [bsConfig]="{ dateInputFormat: formats.date }"
       />
 
       <div class="position-relative time-wrapper">
