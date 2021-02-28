@@ -23,10 +23,10 @@
     </button>
   </h6> -->
 
-  <div class="d-flex" *ngIf="!config.isHideHeader">
-    <div class="mr-auto">
-      <h4>{{ labelTranslateKey | translate: {"Default": config.templateOptions.label} }}</h4>
-      <p *ngIf="config.help">{{ helpTranslateKey | translate: {"Default": config.help } }}</p>
+  <div class="d-flex">
+    <div class="mr-auto d-flex flex-column justify-content-center">
+      <h4 class="mb-0">{{ labelTranslateKey | translate: {"Default": config.templateOptions.label} }}</h4>
+      <p class="mt-2" *ngIf="config.help">{{ helpTranslateKey | translate: {"Default": config.help } }}</p>
     </div>
     <button
       type="button"

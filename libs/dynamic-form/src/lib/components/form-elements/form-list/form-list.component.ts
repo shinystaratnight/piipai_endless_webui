@@ -6,7 +6,7 @@ import {
   Output,
   EventEmitter,
   ChangeDetectorRef,
-  Optional,
+  Optional
 } from '@angular/core';
 import { Router } from '@angular/router';
 
@@ -19,12 +19,16 @@ import { smallModalEndpoints } from '../../../helpers';
 
 import { CheckPermissionService } from '@webui/core';
 import { Endpoints, Field } from '@webui/data';
-import { GenericFormService, TimelineService, TimelineAction } from '../../../services';
+import {
+  GenericFormService,
+  TimelineService,
+  TimelineAction
+} from '../../../services';
 
 @Component({
   selector: 'app-form-list',
   templateUrl: 'form-list.component.html',
-  styleUrls: ['./form-list.component.scss'],
+  styleUrls: ['./form-list.component.scss']
 })
 export class FormListComponent implements OnInit, OnDestroy {
   @ViewChild('modal')
@@ -74,14 +78,18 @@ export class FormListComponent implements OnInit, OnDestroy {
   get hasAddButton() {
     const { delay, disableButtons } = this.config;
 
-    return (this.showButton || delay) && this.checkPermissions('post') && !disableButtons && !this.hasAddForm;
+    return (
+      (this.showButton || delay) &&
+      this.checkPermissions('post') &&
+      !disableButtons &&
+      !this.hasAddForm
+    );
   }
 
   constructor(
     private modal: NgbModal,
     private permission: CheckPermissionService,
     private gfs: GenericFormService,
-    // private router: Router,
     private cd: ChangeDetectorRef,
     @Optional() private timelineService: TimelineService
   ) {
@@ -95,11 +103,18 @@ export class FormListComponent implements OnInit, OnDestroy {
       this.checkTimelineChange();
     }
     this.checkHiddenProperty();
-    this.allowMethods = this.permission.getAllowMethods(undefined, this.config.endpoint);
+    this.allowMethods = this.permission.getAllowMethods(
+      undefined,
+      this.config.endpoint
+    );
     this.hasAddForm = this.config.add_form;
 
-    this.labelTranslateKey = this.config.translateKey && `tabs.${this.config.translateKey}.label`;
-    this.helpTranslateKey = this.config.translateKey && `tabs.${this.config.translateKey}.help`;
+    this.labelTranslateKey = this.config.translateKey
+      ? `tabs.${this.config.translateKey}.label`
+      : 'without_translation';
+    this.helpTranslateKey = this.config.translateKey
+      ? `tabs.${this.config.translateKey}.help`
+      : 'without_translation';
 
     if (this.hasAddForm) {
       this.addFormConfig = this.getAddFormConfig();
@@ -138,17 +153,29 @@ export class FormListComponent implements OnInit, OnDestroy {
       this.config.data = {
         length: 0,
         results: [],
-        sendData: [],
+        sendData: []
       };
       this.config.delayData[this.config.endpoint] = this.config;
     }
 
-    if (this.config.metadata_query && typeof this.config.metadata_query !== 'string') {
-      this.config.metadata_query = this.parseMetadataQuery(this.config, 'metadata_query');
+    if (
+      this.config.metadata_query &&
+      typeof this.config.metadata_query !== 'string'
+    ) {
+      this.config.metadata_query = this.parseMetadataQuery(
+        this.config,
+        'metadata_query'
+      );
     }
 
-    if (this.config.add_metadata_query && typeof this.config.add_metadata_query !== 'string') {
-      this.config.add_metadata_query = this.parseMetadataQuery(this.config, 'add_metadata_query');
+    if (
+      this.config.add_metadata_query &&
+      typeof this.config.add_metadata_query !== 'string'
+    ) {
+      this.config.add_metadata_query = this.parseMetadataQuery(
+        this.config,
+        'add_metadata_query'
+      );
     }
 
     this.initialized = true;
@@ -189,7 +216,8 @@ export class FormListComponent implements OnInit, OnDestroy {
     let size = 'lg';
 
     if (
-      (endpoint.includes('/candidate_contacts/') || endpoint.includes('/companies/')) &&
+      (endpoint.includes('/candidate_contacts/') ||
+        endpoint.includes('/companies/')) &&
       endpoint.includes('/languages/')
     ) {
       size = undefined;
@@ -208,7 +236,7 @@ export class FormListComponent implements OnInit, OnDestroy {
     this.modalRef = this.modal.open(this.modalTemplate, {
       size: size as any,
       windowClass,
-      backdrop: 'static',
+      backdrop: 'static'
     });
   }
 
@@ -234,7 +262,10 @@ export class FormListComponent implements OnInit, OnDestroy {
   }
 
   public updateList(event) {
-    if (this.config.delay && this.checkOnUnique(event.sendData, this.config.unique as string[])) {
+    if (
+      this.config.delay &&
+      this.checkOnUnique(event.sendData, this.config.unique as string[])
+    ) {
       this.addedData.push(event.viewData);
       this.config.data.sendData.push(event.sendData);
 
@@ -255,8 +286,11 @@ export class FormListComponent implements OnInit, OnDestroy {
 
   public checkCount(count: number): void {
     this.count = count;
-    const showButton: boolean = !!this.config.templateOptions.add_label || !!this.config.add_endpoint;
-    this.showButton = this.config.max ? showButton && this.config.max > this.count : showButton;
+    const showButton: boolean =
+      !!this.config.templateOptions.add_label || !!this.config.add_endpoint;
+    this.showButton = this.config.max
+      ? showButton && this.config.max > this.count
+      : showButton;
   }
 
   public checkPermissions(type: string): boolean {
@@ -315,7 +349,9 @@ export class FormListComponent implements OnInit, OnDestroy {
 
   public checkTimelineChange() {
     if (this.timelineService) {
-      const subscription = this.timelineService.action$.pipe(skip(1)).subscribe(() => this.update.next(true));
+      const subscription = this.timelineService.action$
+        .pipe(skip(1))
+        .subscribe(() => this.update.next(true));
 
       this.subscriptions.push(subscription);
     }
@@ -338,11 +374,16 @@ export class FormListComponent implements OnInit, OnDestroy {
       });
 
       if (fullfilled) {
-        this.gfs.getByQuery(this.config.endpoint, this.generateQuery(this.defaultQueries)).subscribe((res: any) => {
-          this.defaultValues = res.results;
-          this.updateDataInTheList(this.defaultValues, this.addedData);
-          this.update.next(true);
-        });
+        this.gfs
+          .getByQuery(
+            this.config.endpoint,
+            this.generateQuery(this.defaultQueries)
+          )
+          .subscribe((res: any) => {
+            this.defaultValues = res.results;
+            this.updateDataInTheList(this.defaultValues, this.addedData);
+            this.update.next(true);
+          });
       } else {
         this.defaultValues = [];
         this.updateDataInTheList(this.defaultValues, this.addedData);
@@ -372,12 +413,24 @@ export class FormListComponent implements OnInit, OnDestroy {
   public updateDataInTheList(defaultData, addedData) {
     const length = this.config.data.results.length;
 
-    this.pasredAddedData(addedData, defaultData, this.config.unique as string[]);
-    this.pasredAddedData(this.config.data.sendData, defaultData, this.config.unique as string[]);
+    this.pasredAddedData(
+      addedData,
+      defaultData,
+      this.config.unique as string[]
+    );
+    this.pasredAddedData(
+      this.config.data.sendData,
+      defaultData,
+      this.config.unique as string[]
+    );
     this.config.data.results = [...defaultData, ...addedData];
   }
 
-  public pasredAddedData(addedData: any[], defaultData: any[], fields: string[]) {
+  public pasredAddedData(
+    addedData: any[],
+    defaultData: any[],
+    fields: string[]
+  ) {
     if (!fields) {
       return;
     }
@@ -400,12 +453,18 @@ export class FormListComponent implements OnInit, OnDestroy {
   }
 
   private getAddFormConfig() {
-    const { endpoint, add_endpoint, templateOptions, prefilled, delay } = this.config;
+    const {
+      endpoint,
+      add_endpoint,
+      templateOptions,
+      prefilled,
+      delay
+    } = this.config;
 
     const config = {
       title: templateOptions.add_label,
       endpoint: add_endpoint || endpoint,
-      data: null,
+      data: null
     };
 
     if (prefilled) {
@@ -418,8 +477,8 @@ export class FormListComponent implements OnInit, OnDestroy {
           data: {
             value: delay ? undefined : prefilled[el],
             read_only: true,
-            editForm: true,
-          },
+            editForm: true
+          }
         };
 
         if (delay) {
