@@ -173,10 +173,6 @@ export class FormDatepickerComponent extends BasicElementComponent implements On
           this.setOpenDatepicker(this.t);
           this.updatePosition();
           this.refreshDatebox(this.t);
-
-          if (type === 'datetime') {
-            this.closeDatebox(this.d);
-          }
         },
 
         closeCallback: ({ date }) => {
@@ -509,10 +505,6 @@ export class FormDatepickerComponent extends BasicElementComponent implements On
 
   private getDatepicker(elementRef: ElementRef) {
     return (window as any).$(elementRef.nativeElement);
-  }
-
-  private closeDatebox(element: ElementRef): void {
-    this.getDatepicker(element).datebox('close');
   }
 
   private refreshDatebox(element: ElementRef) {
