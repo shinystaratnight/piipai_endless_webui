@@ -32,11 +32,6 @@ const formset = () => {
               .setShowIfRule([{ worktype: null }])
           ]),
 
-        new List.column.element('uom', 'Unit of measurements')
-          .setContent([
-            new List.related.element('uom', Endpoints.UnitOfMeasurements)
-          ]),
-
         new List.column.element('default_rate', 'Default Rate')
           .setContent([
             new List.text.element('default_rate')
@@ -95,7 +90,6 @@ const formadd = () => [
             .setQuery({
               skill_name: '{skill.name.id}'
             }),
-          new Form.related.element('uom', 'Unit of measurements', Endpoints.UnitOfMeasurements),
         ]),
       new Form.group.element('Skill Rate')
         .setChildren([
@@ -130,7 +124,6 @@ const form = () => [
             .setQuery({
               skill_name: '{skill.name.id}'
             }),
-          new Form.related.element('uom', 'Unit of measurements', Endpoints.UnitOfMeasurements),
         ]),
       new Form.group.element('Skill Rate')
         .setChildren([

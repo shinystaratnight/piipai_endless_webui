@@ -387,26 +387,6 @@ const form = [
     },
     read_only: false
   },
-  // {
-  //   endpoint: '/pricing/pricelistrates/',
-  //   metadata_query: {
-  //     editable_type: 'pricelist'
-  //   },
-  //   templateOptions: {
-  //     label: 'Price List Rates',
-  //     type: 'list',
-  //     add_label: '+ Add',
-  //     text: 'Price List Rates'
-  //   },
-  //   prefilled: {
-  //     price_list: '{id}'
-  //   },
-  //   type: 'list',
-  //   query: {
-  //     price_list: '{id}'
-  //   }
-  // },
-
   new Form.list.element('Price List Rates', Endpoints.PriceListRate)
     .setMetadataQuery({
       editable_type: 'pricelist'

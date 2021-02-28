@@ -114,10 +114,6 @@ const pricelist = {
         .setContent([
           new List.input.element('rate')
         ]),
-      new List.column.element('uom', 'Unit of measurements')
-        .setContent([
-          new List.related.element('uom', Endpoints.UnitOfMeasurements)
-        ]),
       new List.column.element('worktype', 'Work type')
         .setContent([
           new List.related.element('worktype', Endpoints.SkillWorkTypes)
@@ -127,14 +123,6 @@ const pricelist = {
             .setColors({ null: 'info' })
             .setShowIfRule([{ worktype: null }])
         ]),
-
-      // {
-      //   name: 'rate',
-      //   sort: true,
-      //   sort_field: 'hourly_rate',
-      //   content: [{ type: 'input', field: 'hourly_rate' }],
-      //   label: 'Hourly Rate'
-      // },
       {
         name: 'actions',
         content: [
@@ -196,23 +184,8 @@ const form = [
     type: 'related',
     key: 'price_list',
   },
-  // {
-  //   endpoint: '/skills/skills/',
-  //   read_only: true,
-  //   templateOptions: {
-  //     label: 'Skill',
-  //     add: true,
-  //     delete: false,
-  //     values: ['default_rate', '__str__', 'tranlsations', 'name'],
-  //     type: 'related',
-  //     edit: true
-  //   },
-  //   type: 'related',
-  //   key: 'skill',
-  // },
   new Form.related.element('skill', 'Skill', Endpoints.Skill)
     .setQuery({
-      // company: '{company.id}',
       active: true,
       exclude_pricelist: '{price_list.id}'
     })
@@ -230,7 +203,6 @@ const form = [
     .setQuery({
       skill_name: '{skill.name.id}'
     }),
-  new Form.related.element('uom', 'Unit of measurements', Endpoints.UnitOfMeasurements),
   {
     endpoint: Endpoints.PriceListRateModifiers,
     type: 'list',
@@ -272,31 +244,8 @@ const formadd = [
     key: 'price_list',
     many: false
   },
-  // {
-  //   list: false,
-  //   endpoint: '/skills/skills/',
-  //   read_only: true,
-  //   templateOptions: {
-  //     required: true,
-  //     label: 'Skill',
-  //     add: true,
-  //     delete: false,
-  //     values: ['price_list_default_rate', '__str__', 'tranlsations', 'name'],
-  //     type: 'related',
-  //     edit: true
-  //   },
-  //   query: {
-  //     active: true,
-  //     exclude_pricelist: '{price_list.id}'
-  //   },
-  //   collapsed: false,
-  //   type: 'related',
-  //   key: 'skill',
-  //   many: false
-  // },
   new Form.related.element('skill', 'Skill', Endpoints.Skill)
     .setQuery({
-      // company: '{company.id}',
       active: true,
       exclude_pricelist: '{price_list.id}'
     })
@@ -317,7 +266,6 @@ const formadd = [
     .setQuery({
       skill_name: '{skill.name.id}'
     }),
-  new Form.related.element('uom', 'Unit of measurements', Endpoints.UnitOfMeasurements),
 ];
 
 const pricelistForm = [
