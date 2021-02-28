@@ -323,7 +323,7 @@ export class FormDatepickerComponent extends BasicElementComponent implements On
 
   private updateModel(value: DateInstance) {
     if (this.mobileDevice) {
-      this.model.date = this.dateService.format(value, this.formats.date);
+      this.model.date = this.dateService.format(value, 'YYYY-MM-DD');
       this.model.time = this.dateService.format(value, 'HH:mm');
     } else {
       this.model.date = this.dateService.format(value, this.formats.date);
