@@ -1,5 +1,4 @@
 import { Endpoints } from '@webui/data';
-import { Form } from '@webui/metadata';
 
 const list = {
   list: {
@@ -263,6 +262,15 @@ const formset = {
         delim: null
       },
       {
+        name: 'hourly_rate',
+        content: [
+          { display: '{currency}{field}/h', type: 'static', field: 'hourly_rate' }
+        ],
+        label: 'Skill Rate',
+        title: null,
+        delim: null
+      },
+      {
         name: 'score',
         sort: true,
         sort_field: 'score',
@@ -417,54 +425,39 @@ const form = [
     },
     read_only: false
   },
-  // {
-  //   key: 'hourly_rate',
-  //   default: '{skill.default_rate}',
-  //   updated: ['skill'],
-  //   type: 'input',
-  //   useValue: true,
-  //   templateOptions: {
-  //     required: true,
-  //     label: 'Skill Rate',
-  //     type: 'number',
-  //     step: '0.01',
-  //     icon: '{currency}'
-  //   },
-  //   read_only: false
-  // },
-  new Form.list.element('Skill Rates', Endpoints.SkillRate, 'without_translation')
-    .setQuery({
-      skill_rel: '{id}'
-    })
-    .setPrefilledFields({
-      skill_rel: '{id}'
-    }),
-
-  new Form.list.element('Candidat Skill Modifier', Endpoints.SkillRateCoefficient, 'without_translation')
-    .setQuery({
-      skill_rel: '{id}'
-    })
-    .setPrefilledFields({
-      skill_rel: '{id}'
-    }),
-  // {
-  //   endpoint: Endpoints.SkillRateCoefficient,
-  //   type: 'list',
-  //   templateOptions: {
-  //     label: 'Candidat Skill Modifier',
-  //     type: 'list',
-  //     text: 'Candidat Skill Modifier',
-  //     add_label: 'Add'
-  //   },
-  //   collapsed: false,
-  //   visibleMode: true,
-  //   prefilled: {
-  //     skill_rel: '{id}',
-  //   },
-  //   query: {
-  //     skill_rel: '{id}',
-  //   }
-  // }
+  {
+    key: 'hourly_rate',
+    default: '{skill.default_rate}',
+    updated: ['skill'],
+    type: 'input',
+    useValue: true,
+    templateOptions: {
+      required: true,
+      label: 'Skill Rate',
+      type: 'number',
+      step: '0.01',
+      icon: '{currency}'
+    },
+    read_only: false
+  },
+  {
+    endpoint: Endpoints.SkillRateCoefficient,
+    type: 'list',
+    templateOptions: {
+      label: 'Candidat Skill Modifier',
+      type: 'list',
+      text: 'Candidat Skill Modifier',
+      add_label: 'Add'
+    },
+    collapsed: false,
+    visibleMode: true,
+    prefilled: {
+      skill_rel: '{id}',
+    },
+    query: {
+      skill_rel: '{id}',
+    }
+  }
 ];
 
 const formadd = [
