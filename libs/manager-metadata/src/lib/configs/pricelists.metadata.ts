@@ -408,7 +408,6 @@ const form = [
   // },
 
   new Form.list.element('Price List Rates', Endpoints.PriceListRate)
-    .hideHeader()
     .setMetadataQuery({
       editable_type: 'pricelist'
     })

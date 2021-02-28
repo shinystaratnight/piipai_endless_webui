@@ -433,7 +433,6 @@ const form = [
   //   read_only: false
   // },
   new Form.list.element('Skill Rates', Endpoints.SkillRate, 'without_translation')
-    .hideHeader()
     .setQuery({
       skill_rel: '{id}'
     })
@@ -442,7 +441,6 @@ const form = [
     }),
 
   new Form.list.element('Candidat Skill Modifier', Endpoints.SkillRateCoefficient, 'without_translation')
-    .hideHeader()
     .setQuery({
       skill_rel: '{id}'
     })
