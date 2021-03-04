@@ -1611,7 +1611,7 @@ export class FormRelatedComponent extends BasicElementComponent
         query +=
           typeof queries[el] === 'string'
             ? queries[el] === 'currentCompany'
-              ? `${el}=${this.settingsService.settings.company_settings.company}&`
+              ? `${el}=${this.settingsService.settings.company}&`
               : `${el}=${format.format(queries[el], this.formData)}&`
             : `${el}=${this.parseQueryValue(queries[el])}&`;
       });
