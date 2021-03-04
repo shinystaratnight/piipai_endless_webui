@@ -1,15 +1,20 @@
 import { Endpoints } from '@webui/data';
+import { List } from '@webui/metadata';
 
 const list = {
   list: {
     list: 'skillratecoefficientrels',
     label: 'skill rate coefficient',
     columns: [
-      {
-        content: [{ field: '__str__', type: 'static' }],
-        name: '__str__',
-        label: 'Skill Rate Coefficient'
-      },
+      // {
+      //   content: [{ field: '__str__', type: 'static' }],
+      //   name: '__str__',
+      //   label: 'Skill Rate Coefficient'
+      // },
+      new List.column.element('rate_coefficient', 'Rate Coefficient')
+        .setContent([
+          new List.related.element('rate_coefficient', Endpoints.RateCoefficient),
+        ]),
       {
         name: 'actions',
         content: [

@@ -6,12 +6,17 @@
         config.key !== 'contact.picture'
       ">
       {{ getTranslationKey(config.key,'label') | translate: {"Default": config.templateOptions.label} }}:
-
-      <br>
     </label>
+    <br>
     <app-info *ngIf="config.templateOptions.description" [description]="getTranslationKey('description') | translate: {'Default': config.templateOptions.description || ''}"></app-info>
-    <input #picture accept="image/*,application/pdf" [attr.type]="'file'" [hidden]="true" [attr.id]="key"
-      (change)="fileChangeEvent($event)" [attr.name]="key" />
+    <input
+      #picture
+      accept="image/*,application/pdf"
+      [attr.type]="'file'"
+      [hidden]="true"
+      [attr.id]="key"
+      (change)="fileChangeEvent($event)" [attr.name]="key"
+    />
     <ng-container *ngIf="config.key === 'contact.picture' && !config.candidateForm">
       <ng-container *ngTemplateOutlet="pictureView"></ng-container>
     </ng-container>
@@ -21,7 +26,6 @@
         <img
           *ngIf="value && config.templateOptions.file === false"
           class="image-preview"
-          [class.signature]="config.templateOptions.signature"
           [class.start]="config.templateOptions.start"
           [src]="value"
           alt="image"
@@ -30,6 +34,7 @@
         <img
           *ngIf="value && config.templateOptions.file === false"
           class="image-profile"
+          [class.signature]="config.templateOptions.signature"
           [class.origin]="config.companyContact"
           [src]="value"
           alt="image"
@@ -39,31 +44,21 @@
         <div *ngIf="contactAvatar && !fileName && !value" class="contact-avatar">
           {{ contactAvatar }}
         </div>
-        <span *ngIf="
-            (link || value) &&
-            viewMode &&
-            config.templateOptions.file == undefined
-          ">
-          {{ getExtension(link || fileName || value) | uppercase }} {{'file' | translate}}
-          <a class="link" [href]="link || value" target="_blank">|&nbsp;{{'open_in_tab' | translate}}</a>
-        </span>
-        <span *ngIf="
-            (link || value) &&
-            !viewMode &&
-            config.templateOptions.file == undefined
-          ">
-          <a *ngIf="this.config.value" [href]="link || value"
-            target="_blank">{{ getExtension(link || fileName || value) | uppercase }} {{'file' | translate}}</a>
-          <a class="link" href="" (click)="upload($event)">|&nbsp;{{'upload_file' | translate}}</a>
-        </span>
+
+        <ng-container *ngIf="(link || value) && config.templateOptions.file == undefined">
+          <a class="document" [href]="link || value" target="_blank">
+            <fa-icon [icon]="['fas', 'file']" class="file-icon"></fa-icon>
+            <fa-icon [icon]="['fas', 'download']" class="download-icon"></fa-icon>
+            View document
+          </a>
+          <a *ngIf="!viewMode" class="link" href="" (click)="upload($event)">{{'upload_file' | translate}}</a>
+        </ng-container>
+
         <span *ngIf="!value && !contactAvatar && !link && viewMode">-</span>
-        <span *ngIf="
-            !link &&
-            !value &&
-            !viewMode &&
-            !config.read_only &&
-            config.templateOptions.file == undefined
-          " class="link ml-0" (click)="upload()">{{'upload_file' | translate: {"Default": 'Upload new file'} }}</span>
+        <span *ngIf="!link && !value && !viewMode && !config.read_only && config.templateOptions.file == undefined" class="link ml-0 mr-auto" (click)="upload()"
+        >
+            {{'upload_file' | translate: {"Default": 'Upload new file'} }}
+        </span>
         <div *ngIf="
             !viewMode &&
             !config.read_only &&

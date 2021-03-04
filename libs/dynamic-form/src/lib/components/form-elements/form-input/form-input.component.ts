@@ -434,7 +434,7 @@ export class FormInputComponent extends BasicElementComponent
 
       if (controlValue) {
         if (this.key === 'street_address') {
-          this.address = controlValue;
+          this.address = controlValue.formatted_address;
         }
 
         if (this.key === 'postal_code') {
@@ -650,6 +650,7 @@ export class FormInputComponent extends BasicElementComponent
     if (number) {
       const { internationalNumber = '' } = number;
       this.intl = number.number;
+      this.config.value = internationalNumber;
       this.group.get(this.key).patchValue(internationalNumber);
     }
   }

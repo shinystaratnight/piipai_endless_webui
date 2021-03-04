@@ -43,7 +43,7 @@ export class FormDatepickerComponent extends BasicElementComponent implements On
   public key: any;
 
   public model = {
-    date: '',
+    date: null,
     time: '',
   };
 
@@ -53,6 +53,7 @@ export class FormDatepickerComponent extends BasicElementComponent implements On
   public displayValue: string;
   public formData: any;
   public placement: any;
+  public maxDate: Date;
 
   public opened: ElementRef;
   public update: Subject<any> = new Subject();
@@ -96,6 +97,17 @@ export class FormDatepickerComponent extends BasicElementComponent implements On
     this.createEvent();
 
     this.subscriptions.push(this.subscribeOnChanges());
+
+    const { type } = this.config.templateOptions;
+    if (type === 'date' || type === 'datetime') {
+      const isBirthday = this.key.includes('birthday');
+
+      if (isBirthday) {
+        setTimeout(() => {
+          this.maxDate = new Date();
+        })
+      }
+    }
   }
 
   public ngOnDestroy() {
@@ -110,38 +122,48 @@ export class FormDatepickerComponent extends BasicElementComponent implements On
     this.init = true;
     const { type } = this.config.templateOptions;
 
-    if (type === 'date' || type === 'datetime') {
-      const isBirthday = this.key.includes('birthday');
-      const config = getDatePickerConfig(this.config, isBirthday);
+    // if (type === 'date' || type === 'datetime') {
+    //   const isBirthday = this.key.includes('birthday');
 
-      Object.assign(config, {
-        beforeOpenCallback: () => {
-          this.setOpenDatepicker(this.d);
-          this.updatePosition();
-          this.refreshDatebox(this.d);
+    //   if (isBirthday) {
+    //     setTimeout(() => {
+    //       this.maxDate = new Date();
+    //     })
+    //   }
+      // const config = getDatePickerConfig(this.config, isBirthday);
 
-          if (type === DateType.Datetime) {
-            this.closeDatebox(this.t);
-          }
+      // if (isBirthday) {
+      //   this.updateBirthdayYearPickMax();
+      // }
 
-          if (isBirthday) {
-            this.updateBirthdayYearPickMax();
-          }
-        },
+      // Object.assign(config, {
+      //   beforeOpenCallback: () => {
+      //     this.setOpenDatepicker(this.d);
+      //     this.updatePosition();
+      //     this.refreshDatebox(this.d);
 
-        closeCallback: () => {
-          if (this.validateTimesheetTime(this.getValue(type))) {
-            this.updateForm(type, this.getValue(type));
-          } else {
-            this.setDatepickerValue(this.d, this.model.date);
-          }
+      //     if (type === DateType.Datetime) {
+      //       this.closeDatebox(this.t);
+      //     }
 
-          this.opened = null;
-        },
-      });
+      //     if (isBirthday) {
+      //       this.updateBirthdayYearPickMax();
+      //     }
+      //   },
 
-      this.getDatepicker(this.d).datebox(config);
-    }
+      //   closeCallback: () => {
+      //     if (this.validateTimesheetTime(this.getValue(type))) {
+      //       this.updateForm(type, this.getValue(type));
+      //     } else {
+      //       this.setDatepickerValue(this.d, this.model.date);
+      //     }
+
+      //     this.opened = null;
+      //   },
+      // });
+
+      // this.getDatepicker(this.d).datebox(config);
+    // }
 
     if (type === 'datetime' || type === 'time') {
       const config = getTimePickerConfig(this.config);
@@ -151,10 +173,6 @@ export class FormDatepickerComponent extends BasicElementComponent implements On
           this.setOpenDatepicker(this.t);
           this.updatePosition();
           this.refreshDatebox(this.t);
-
-          if (type === 'datetime') {
-            this.closeDatebox(this.d);
-          }
         },
 
         closeCallback: ({ date }) => {
@@ -185,8 +203,17 @@ export class FormDatepickerComponent extends BasicElementComponent implements On
       this.getDatepicker(this.t).datebox(config);
     }
 
-    this.d.nativeElement.readOnly = false;
+    // this.d.nativeElement.readOnly = false;
     this.t.nativeElement.readOnly = false;
+  }
+
+  public onDateChange() {
+    const { type } = this.config.templateOptions;
+    if (this.validateTimesheetTime(this.getValue(type))) {
+      this.updateForm(type, this.getValue(type));
+    } else {
+      this.setDatepickerValue(this.d, this.model.date);
+    }
   }
 
   public updateFromMobile(data) {
@@ -345,7 +372,7 @@ export class FormDatepickerComponent extends BasicElementComponent implements On
   }
 
   private clearForm() {
-    this.model.date = '';
+    this.model.date = null;
     this.model.time = '';
     this.group.get(this.key).patchValue(null);
   }
@@ -452,19 +479,19 @@ export class FormDatepickerComponent extends BasicElementComponent implements On
     return result;
   }
 
-  private updateBirthdayYearPickMax() {
-    const value = this.group.get(this.key).value;
-    const { type } = this.config.templateOptions;
+  // private updateBirthdayYearPickMax() {
+  //   const value = this.group.get(this.key).value;
+  //   const { type } = this.config.templateOptions;
 
-    if (value && type === 'date') {
-      const now = this.dateService.instance();
-      const dateInstance = this.dateService.parse(value, this.timezone, 'YYYY-MM-DD');
+  //   if (value && type === 'date') {
+  //     const now = this.dateService.instance();
+  //     const dateInstance = this.dateService.parse(value, this.timezone, 'YYYY-MM-DD');
 
-      const maxValue = now.year() - dateInstance.year();
+  //     const maxValue = now.year() - dateInstance.year();
 
-      this.setDatepickerProp('calYearPickMax', maxValue, this.d);
-    }
-  }
+  //     this.setDatepickerProp('calYearPickMax', maxValue, this.d);
+  //   }
+  // }
 
   private emitChanges() {
     this.event.emit({
@@ -478,10 +505,6 @@ export class FormDatepickerComponent extends BasicElementComponent implements On
 
   private getDatepicker(elementRef: ElementRef) {
     return (window as any).$(elementRef.nativeElement);
-  }
-
-  private closeDatebox(element: ElementRef): void {
-    this.getDatepicker(element).datebox('close');
   }
 
   private refreshDatebox(element: ElementRef) {
@@ -504,6 +527,10 @@ export class FormDatepickerComponent extends BasicElementComponent implements On
   }
 
   private validateTimesheetTime(date): boolean {
+    if (!date) {
+      return;
+    }
+
     const dateUtc = date.utc();
 
     enum TimesheetTime {

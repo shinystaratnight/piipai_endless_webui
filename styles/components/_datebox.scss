@@ -212,3 +212,15 @@
 .jtsage-datebox-backdrop-div {
   z-index: 1;
 }
+
+.theme-green .bs-datepicker-head {
+  background: $primary;
+}
+
+.theme-green .bs-datepicker-body table td.week span {
+  color: $primary;
+}
+
+.theme-green .bs-datepicker-body table td span.selected {
+  background-color: $primary;
+}

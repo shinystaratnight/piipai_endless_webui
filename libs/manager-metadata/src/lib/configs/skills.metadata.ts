@@ -1,3 +1,6 @@
+import { Endpoints } from '@webui/data';
+import { Form } from '@webui/metadata';
+
 const list = {
   list: {
     list: 'skill',
@@ -212,102 +215,17 @@ const form = [
                 ],
                 width: 0.34
               },
-              {
-                label: 'Skill Rate',
-                type: 'group',
-                children: [
-                  {
-                    key: 'lower_rate_limit',
-                    type: 'input',
-                    templateOptions: {
-                      required: false,
-                      label: 'Lower Rate Limit',
-                      type: 'number',
-                      step: 0.01,
-                      min: 0,
-                      display: '{currency}{field}/h'
-                    },
-                    read_only: false
-                  },
-                  {
-                    key: 'default_rate',
-                    type: 'input',
-                    templateOptions: {
-                      required: false,
-                      label: 'Default Rate',
-                      type: 'number',
-                      step: 0.01,
-                      min: 0,
-                      display: '{currency}{field}/h'
-                    },
-                    read_only: false
-                  },
-                  {
-                    key: 'upper_rate_limit',
-                    type: 'input',
-                    templateOptions: {
-                      required: false,
-                      label: 'Upper Rate Limit',
-                      type: 'number',
-                      step: 0.01,
-                      min: 0,
-                      display: '{currency}{field}/h'
-                    },
-                    read_only: false
-                  }
-                ],
-                width: 0.33
-              },
-              {
-                label: 'Price List Rate',
-                type: 'group',
-                children: [
-                  {
-                    key: 'price_list_lower_rate_limit',
-                    type: 'input',
-                    templateOptions: {
-                      required: false,
-                      label: 'Lower Rate Limit',
-                      type: 'number',
-                      step: 0.01,
-                      min: 0,
-                      display: '{currency}{field}/h'
-                    },
-                    read_only: false
-                  },
-                  {
-                    key: 'price_list_default_rate',
-                    type: 'input',
-                    templateOptions: {
-                      required: false,
-                      label: 'Default Rate',
-                      type: 'number',
-                      step: 0.01,
-                      min: 0,
-                      display: '{currency}{field}/h'
-                    },
-                    read_only: false
-                  },
-                  {
-                    key: 'price_list_upper_rate_limit',
-                    type: 'input',
-                    templateOptions: {
-                      required: false,
-                      label: 'Upper Rate Limit',
-                      type: 'number',
-                      step: 0.01,
-                      min: 0,
-                      display: '{currency}{field}/h'
-                    },
-                    read_only: false
-                  }
-                ],
-                width: 0.33
-              }
             ]
           }
         ]
       },
+      new Form.list.element('Skill Rate Ranges', Endpoints.SkillRateRanges)
+        .setQuery({
+          skill: '{id}'
+        })
+        .setPrefilledFields({
+          skill: '{id}'
+        }),
       {
         endpoint: '/skills/skilltags/',
         templateOptions: {

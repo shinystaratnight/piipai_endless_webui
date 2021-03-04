@@ -1,15 +1,10 @@
 <div class="filter-element datepicker-element">
-  <label class="filter-label">
-    {{ getTranslateKey('label') | translate: {"Default": config.label} }}
-    <fa-icon
-      class="reset-icon text-danger ml-1"
-      style="cursor: pointer"
-      *ngIf="query"
-      [icon]="['fas', 'times-circle']"
-      (click)="resetFilter()"
-    >
-    </fa-icon>
-  </label>
+  <app-filter-header
+    [label]="config.label"
+    [key]="config.key"
+    [resetButton]="query"
+    (resetEvent)="resetFilter()"
+  ></app-filter-header>
   <div class="filter-date-wrapper">
     <ul class="list-inline dates my-1">
       <li

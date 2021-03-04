@@ -258,10 +258,10 @@ export class DynamicListComponent
 
     const addData = changes['addData'] && changes['addData'].currentValue;
 
-    this.config.list.columns = this.purposeService.filterListColumns(
-      this.endpoint,
-      this.config.list.columns
-    );
+    // this.config.list.columns = this.purposeService.filterListColumns(
+    //   this.endpoint,
+    //   this.config.list.columns
+    // );
 
     if (this.actionData !== this.currentActionData) {
       this.currentActionData = this.actionData;
@@ -1216,7 +1216,7 @@ export class DynamicListComponent
           }
 
           if (data[prop] && data[prop].translations) {
-            const preferLanguage = this.storage.retrieve('lang') || translationMap[this.siteSettings.settings.country_code]; 
+            const preferLanguage = this.storage.retrieve('lang') || translationMap[this.siteSettings.settings.country_code];
 
             const trans = data[prop].translations.find(el => el.language.id === preferLanguage);
 
@@ -2360,7 +2360,12 @@ export class DynamicListComponent
             list: this.config.list.list,
           });
         },
-        (err: any) => (this.error = err)
+        (err: any) => {
+          if (err && err.errors) {
+            const { non_field_errors } = err.errors;
+            this.toastr.sendMessage(non_field_errors, MessageType.error);
+          }
+        }
       );
   }
 

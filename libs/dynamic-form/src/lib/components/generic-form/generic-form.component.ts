@@ -13,6 +13,7 @@ import {
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import isObject from 'isobject';
 
 import { BehaviorSubject, Subject, Subscription, forkJoin } from 'rxjs';
 import { finalize, skip, catchError } from 'rxjs/operators';
@@ -332,7 +333,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
     const props = {
       formId: this.formId,
       formData: this.formData,
-      mode: this.mode === 'view' ? this.modeBehaviorSubject : undefined,
+      mode: this.modeBehaviorSubject,
       autocompleteData: new Subject(),
     };
 
@@ -1112,9 +1113,14 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
 
     const newData = this.form ? { ...data, ...this.form } : data || {};
 
-    if (newData.hasOwnProperty('apartment') && newData.address) {
-      Object.assign(newData.address, { apartment: newData.apartment });
-      delete newData.apartment;
+    if (newData.hasOwnProperty('apartment')) {
+      const { address, street_address, apartment } = newData;
+      const addressField = address || street_address;
+
+      if (addressField && isObject(addressField)) {
+        Object.assign(addressField, { apartment });
+        delete newData.apartment;
+      }
     }
 
     if (this.checkEmail) {

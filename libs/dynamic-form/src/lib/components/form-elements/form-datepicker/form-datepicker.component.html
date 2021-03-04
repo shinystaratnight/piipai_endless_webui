@@ -19,28 +19,30 @@
       {{ getTranslationKey(config.key, 'label') | translate: {"Default": config.templateOptions.label}  }}:
     </label>
     <app-info *ngIf="config.templateOptions.description" [description]="getTranslationKey(config.key, 'description') | translate: {'Default': config.templateOptions.description}"></app-info>
-    <div
-      *ngIf="!mobileDevice"
-      class="input-group form-element-content datepicker mb-2 edit"
-    >
-      <input
-        [hidden]="config.templateOptions.type === 'time'"
-        class="form-control"
-        #d
-        data-role="datebox"
-        [(ngModel)]="model.date"
-        [attr.id]="key"
-        [attr.name]="key"
-      />
+    <div *ngIf="!mobileDevice" class="input-group form-element-content datepicker mb-2 edit">
+      <div class="input-group" [hidden]="config.templateOptions.type === 'time'">
+        <input
+          class="form-control"
+          #d
+          bsDatepicker
+          autocomplete="off"
+          [ngModel]="model.date"
+          (ngModelChange)="onDateChange()"
+          [maxDate]="maxDate"
+          [attr.id]="key"
+          [attr.name]="key"
+          data-role="datebox"
+          [bsConfig]="{ dateInputFormat: formats.date }"
+        />
+
+        <div class="input-group-addon">
+          <div class="fa fa-calendar"></div>
+        </div>
+      </div>
 
       <div class="position-relative time-wrapper">
         <input
-          [hidden]="
-            !(
-              config.templateOptions.type === 'datetime' ||
-              config.templateOptions.type === 'time'
-            )
-          "
+          [hidden]="!(config.templateOptions.type === 'datetime' || config.templateOptions.type === 'time')"
           class="form-control"
           #t
           date-role="datebox"

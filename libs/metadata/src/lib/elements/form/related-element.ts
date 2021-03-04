@@ -37,7 +37,7 @@ export class RelatedElement extends BasicFormElement {
 
     this.endpoint = endpoint;
 
-    this.templateOptions.values = ['__str__', '__id__'];
+    this.templateOptions.values = ['__str__', 'id'];
   }
 
   setRelatedObjects(field: string, data: any, endpoint: string) {
