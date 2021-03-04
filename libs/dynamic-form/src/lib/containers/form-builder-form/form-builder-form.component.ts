@@ -97,10 +97,15 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
       title: 'bank_and_superannuation_informatioin',
       metadata: [],
       content: [
-        'bank_account.bank_name',
-        'bank_account.bank_account_name',
-        'bank_account.bsb',
-        'bank_account.account_number',
+        'contact.bank_accounts.bank_account_number',
+        'contact.bank_accounts.bank_account_name',
+        'contact.bank_accounts.bsb_number',
+        'contact.bank_accounts.AccountholdersName',
+        'contact.bank_accounts.bank_name',
+        'contact.bank_accounts.IBAN',
+        'contact.bank_accounts.TestBankAccountField',
+        'formalities.tax_number',
+        'formalities.personal_id',
         'superannuation_fund',
         'superannuation_membership_number',
       ],
@@ -240,6 +245,8 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
       setTimeout(() => {
         this.process = false;
       }, 1000);
+    } else {
+      this.router.navigate(['/login']);
     }
   }
 

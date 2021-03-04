@@ -796,7 +796,8 @@ export class FormRelatedComponent extends BasicElementComponent
         this.config.default.includes('client_contact_id')) &&
       !this.config.editForm
     ) {
-      const id = this.userService.user.currentRole[this.config.default];
+      const formatString = new FormatString();
+      const id = formatString.format(this.config.default, this.userService.user.currentRole);
 
       if (this.config.read_only) {
         this.viewMode = true;
@@ -862,10 +863,8 @@ export class FormRelatedComponent extends BasicElementComponent
           value.push(object.data.value);
           this.dataOfList.push(object);
         });
-        // if (!data.length) {
-        this.addObject();
-        // }
 
+        this.addObject();
         this.group.get(this.key).patchValue(data);
       }
     }
@@ -900,6 +899,13 @@ export class FormRelatedComponent extends BasicElementComponent
     object.metadata = metadata.map((el) => {
       const element = Object.assign({}, el);
       element.mode = el.mode;
+
+      if (el.endpoint) {
+        el.endpoint = format.format(
+          el.endpoint,
+          this.formData
+        );
+      }
 
       if (el.query) {
         const newQuery = {};
@@ -977,8 +983,9 @@ export class FormRelatedComponent extends BasicElementComponent
 
   public updateValue(e): void {
     if (e.type !== 'create' && e.type !== 'updateValue') {
-      const value = this.dataOfList.map((el) => {
+      const value = this.dataOfList.filter(el => el.data.valid).map((el) => {
         const object = el.data.value;
+
         if (el.id) {
           object.id = el.id;
         }
@@ -988,7 +995,19 @@ export class FormRelatedComponent extends BasicElementComponent
         this.config.data.sendData = value.filter((el) => !el.id);
       }
 
-      this.group.get(this.key).patchValue(value);
+      const newValue = value.filter((el) => {
+        if (el.language) {
+          if (el.language.id) {
+            return true;
+          } else {
+            return false;
+          }
+        } else {
+          return true;
+        }
+      });
+
+      this.group.get(this.key).patchValue(newValue);
     }
   }
 
@@ -1592,7 +1611,7 @@ export class FormRelatedComponent extends BasicElementComponent
         query +=
           typeof queries[el] === 'string'
             ? queries[el] === 'currentCompany'
-              ? `${el}=${this.settingsService.settings.company_settings.company}&`
+              ? `${el}=${this.settingsService.settings.company}&`
               : `${el}=${format.format(queries[el], this.formData)}&`
             : `${el}=${this.parseQueryValue(queries[el])}&`;
       });

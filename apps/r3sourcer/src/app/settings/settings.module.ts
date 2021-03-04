@@ -17,12 +17,12 @@ import { MasterGuideModule } from '../master-guide/master-guide.module';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
-import { DynamicFormModule } from '@webui/dynamic-form';
 import { SettingsService } from './settings.service';
 
 import { MyobResolver } from './myob/myob.resolver';
-import { Metadata } from './metadata.config';
 import { SharedModule as Shared } from '../shared/shared.module';
+import { DynamicFormModule } from '@webui/dynamic-form';
+import { Metadata } from './metadata.config';
 
 @NgModule({
   imports: [
@@ -33,10 +33,10 @@ import { SharedModule as Shared } from '../shared/shared.module';
     FormsModule,
     FontAwesomeModule,
     InfiniteScrollModule,
-    DynamicFormModule.forChild({ metadata: Metadata }),
     MasterGuideModule,
     QuillModule.forRoot(),
-    Shared
+    Shared,
+    DynamicFormModule.forChild({ metadata: Metadata }),
   ],
   declarations: [
     PermissionsComponent,

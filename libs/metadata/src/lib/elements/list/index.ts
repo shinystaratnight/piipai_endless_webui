@@ -11,6 +11,7 @@ import { InputElement, Input } from './input-element';
 import { IconElement, Icon } from './icon-element';
 import { InfoElement, Info } from './info-element';
 import { LinkElement, Link } from './link-element';
+import { CheckboxElement, Checkbox } from './checkbox-element';
 
 export const column = { element: ColumnElement };
 export const main = { element: MainElement };
@@ -25,3 +26,4 @@ export const input = { element: InputElement, type: Input };
 export const icon = { element: IconElement, type: Icon };
 export const info = { element: InfoElement, type: Info };
 export const link = { element: LinkElement, type: Link };
+export const checkbox = { element: CheckboxElement, type: Checkbox };

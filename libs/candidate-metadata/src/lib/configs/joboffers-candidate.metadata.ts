@@ -21,8 +21,8 @@ const list = function () {
         new List.column.element('shift.date.job.position', 'Position')
           .setSort(true, 'shift.date.job.position')
           .setContent([
-            new List.related.element(
-              'shift.date.job.position',
+            new List.text.element(
+              'shift.date.job.position.name',
               Endpoints.Skill
             ),
           ]),

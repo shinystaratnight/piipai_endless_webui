@@ -109,8 +109,11 @@ export class CheckPermissionService {
       }
 
       const allowMethods: Permission[] = permissions.filter(permission => {
-        const model = permission.codename.split('_')[0];
-        return endpoint && endpoint.indexOf(model) > -1;
+        const arr = permission.codename.split('_');
+        arr.pop();
+
+        const model = arr.join('_');
+        return endpoint && endpoint.indexOf(`/${model}/`) > -1;
       });
 
       return allowMethods.length

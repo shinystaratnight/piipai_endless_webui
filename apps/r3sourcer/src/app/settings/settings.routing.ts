@@ -6,11 +6,18 @@ import { CompanyComponent } from './company/company.component';
 import { MyobComponent } from './myob/myob.component';
 
 import { MyobResolver } from './myob/myob.resolver';
+import { AuthGuard, ManagerGuard, NavigationService, PermissionGuard, SiteSettingsService, UserService } from '@webui/core';
 
 export const routes: Routes = [
   {
-    path: '',
+    path: 'settings',
     component: SettingsComponent,
+    resolve: {
+      user: UserService,
+      pagesList: NavigationService,
+      settings: SiteSettingsService,
+    },
+    canActivate: [AuthGuard, PermissionGuard, ManagerGuard],
     children: [
       {
         path: '',
@@ -34,9 +41,9 @@ export const routes: Routes = [
       }
     ]
   },
-  {
-    path: '**',
-    pathMatch: 'full',
-    redirectTo: ''
-  }
+  // {
+  //   path: '**',
+  //   pathMatch: 'full',
+  //   redirectTo: ''
+  // }
 ];

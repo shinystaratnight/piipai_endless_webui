@@ -120,6 +120,10 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   public responseHandler(response) {
+    if (response.message) {
+      this.loginProcess = false;
+    }
+
     if (response.data) {
       if (response.data.redirect) {
         location.href = response.data.redirect;

@@ -6,8 +6,6 @@ import { guide } from './master-guide.config';
 import { MasterGuideService } from '../../services';
 import {
   updateGuide,
-  // NavigationService,
-  // CheckPermissionService,
   SiteSettingsService,
   EventService,
   EventType
@@ -31,8 +29,6 @@ export class MasterGuideComponent implements OnInit, OnDestroy {
 
   constructor(
     private masterGuideService: MasterGuideService,
-    // private navigationService: NavigationService,
-    // private checkPermissionService: CheckPermissionService,
     private siteSettings: SiteSettingsService,
     private eventService: EventService
   ) {}
@@ -70,7 +66,7 @@ export class MasterGuideComponent implements OnInit, OnDestroy {
 
   getProgress() {
     return (
-      (this.guide.filter(el => el.completed).length / this.guide.length) * 100
+      (this.guide.filter((el) => el.completed).length / this.guide.length) * 100
     );
   }
 
@@ -78,24 +74,16 @@ export class MasterGuideComponent implements OnInit, OnDestroy {
     if (type === 'purpose') {
       const id = this.siteSettings.companyId;
 
-      this.masterGuideService.changePurpose(id, value).subscribe(res => {
+      this.masterGuideService.changePurpose(id, value).subscribe((res) => {
         item.value = value;
         this.eventService.emit(EventType.PurposeChanged);
-        // this.navigationService
-        //   .updateNavigation(id)
-        //   .subscribe((pages: Page[]) => {
-        //     this.checkPermissionService.parseNavigation(
-        //       this.checkPermissionService.permissions,
-        //       pages
-        //     );
-        //   });
       });
     }
   }
 
   getGuide() {
     this.masterGuideService.getGuide().subscribe((res: any) => {
-      const complete = Object.keys(res).every(key => res[key]);
+      const complete = Object.keys(res).every((key) => res[key]);
 
       if (!complete) {
         if (!this.sub) {
@@ -104,7 +92,7 @@ export class MasterGuideComponent implements OnInit, OnDestroy {
           });
         }
 
-        this.guide = guide.map(item => {
+        this.guide = guide.map((item) => {
           if (item.key === 'purpose') {
             item.value = res.purpose;
           }

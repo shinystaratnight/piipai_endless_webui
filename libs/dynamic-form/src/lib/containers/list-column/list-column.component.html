@@ -1,5 +1,5 @@
 <span *ngIf="head" (click)="sort()">
-  {{ translationKey | translate: {"Default": config.label} }}
+  {{ translationKey | translate: {"Default": config.label || ' '} }}
 </span>
 <!--<span *ngIf="head && config.iconLabel" (clock)="sort()">-->
 <!--  <fa-icon class="text-muted"-->

@@ -16,12 +16,12 @@ import { ToastService, MessageType } from './toast.service';
 export class CompanyPurposeService {
   public purpose: Purpose;
 
-  hideListColumns = {
-    [Endpoints.SkillName]: {
-      [Purpose.SelfUse]: ['price_list_default_rate'],
-      [Purpose.Recruitment]: ['price_list_default_rate']
-    }
-  };
+  // hideListColumns = {
+  //   [Endpoints.SkillName]: {
+  //     [Purpose.SelfUse]: ['price_list_default_rate'],
+  //     [Purpose.Recruitment]: ['price_list_default_rate']
+  //   }
+  // };
 
   constructor(
     private http: HttpClient,
@@ -62,17 +62,17 @@ export class CompanyPurposeService {
     }
   }
 
-  public filterListColumns(endpoint: string, columns: any[]) {
-    const hideColumns: string[] = this.hideListColumns[endpoint];
+  // public filterListColumns(endpoint: string, columns: any[]) {
+  //   const hideColumns: string[] = this.hideListColumns[endpoint];
 
-    if (hideColumns && hideColumns[this.purpose]) {
-      return columns.filter(column => {
-        return !hideColumns[this.purpose].includes(column.name);
-      });
-    }
+  //   if (hideColumns && hideColumns[this.purpose]) {
+  //     return columns.filter(column => {
+  //       return !hideColumns[this.purpose].includes(column.name);
+  //     });
+  //   }
 
-    return columns;
-  }
+  //   return columns;
+  // }
 
   getPurpose(id: string): Observable<any[] | Purpose> {
     const query = { fields: ['purpose'] };

@@ -345,19 +345,19 @@ export class CalendarComponent implements OnInit, OnDestroy {
         default_shift_starting_time: {
           action: 'add',
           data: {
-            value: formatString.format('{data.shift.date.job.time}', data),
+            value: formatString.format('{shift.date.job.default_shift_starting_time}', data),
           },
         },
         skill: {
           action: 'add',
           data: {
-            value: formatString.format('{data.shift.date.job.position.id}', data),
+            value: formatString.format('{shift.date.job.position.id}', data),
           },
         },
         job: {
           action: 'add',
           data: {
-            value: formatString.format('{data.shift.date.job.id}', data),
+            value: formatString.format('{shift.date.job.id}', data),
           },
         },
       },

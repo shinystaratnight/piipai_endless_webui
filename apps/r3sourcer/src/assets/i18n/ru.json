@@ -111,7 +111,7 @@
 	},
 	"customer_representative": {
     "label": "Представитель клиента",
-    "placeholder": "Выбрыть"
+    "placeholder": "Выбрать"
 	},
 	"date": "Дата",
 	"date.shift_date.label": "Дата",
@@ -279,7 +279,7 @@
 		"text": "Без перерыва"
 	},
 	"no_record": "Нет записи",
-	"no_tracking_data": "Нет информации о местоположении",
+	"no_tracking_data": "Нет данных",
 	"note": {
 		"label": "Заметки"
 	},
@@ -341,11 +341,11 @@
 	"profile": "Профиль",
 	"provider_company": {
     "label": "Компания-провайдер",
-    "placeholder": "Выбрыть"
+    "placeholder": "Выбрать"
 	},
 	"provider_representative": {
     "label": "Представитель провайдера",
-    "placeholder": "Выбрыть"
+    "placeholder": "Выбрать"
 	},
 	"provider_signed_at": {
 		"label": "Принято"
@@ -497,9 +497,10 @@
   "residency.2": "Постоянный житель",
   "residency.3": "Временный резидент",
   "residency.0": "Неизвестно",
-  "jobsite.placeholder": "Выбрыть",
+  "jobsite.placeholder": "Выбрать",
   "enter_location": "Введите местоположение",
   "filled_shifts": "Заполненные смены",
   "unfilled_shifts": "Не заполненные смены",
-  "pending_shifts": "Смены в обработке"
+  "pending_shifts": "Смены в обработке",
+  "submit_timesheet": "Заполните табель"
 }

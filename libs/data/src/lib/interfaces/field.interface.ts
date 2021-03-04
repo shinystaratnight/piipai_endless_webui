@@ -60,7 +60,7 @@ export interface Field {
   if_master?: any;
   relatedObjects?: any;
   candidateTabs?: boolean;
-  unique?: boolean;
+  unique?: boolean | string[];
   visibleMode?: boolean;
   disableButtons?: boolean;
   disableActions?: boolean;
@@ -94,6 +94,10 @@ export interface Field {
   companyPicture?: boolean;
   relatedData?: any;
   relatedDataMap?: any;
+  add_form?: boolean;
+  translateKey?: string;
+  add_endpoint?: string;
+  max?: number;
   templateOptions?: {
     hideLabel?: boolean;
     dontSendFields?: boolean;
@@ -142,6 +146,7 @@ export interface Field {
     array?: boolean;
     pattern?: string;
     patterError?: string;
+    add_label?: string;
   };
 }
 

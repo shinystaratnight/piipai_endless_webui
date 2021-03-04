@@ -95,12 +95,12 @@ export class BasicElementComponent {
   }
 
   private getValidators(options): ValidatorFn[] {
-    const {
+    const [
       required,
       min,
       max,
       pattern
-    } = options;
+     ] = options;
 
     const result = [];
 

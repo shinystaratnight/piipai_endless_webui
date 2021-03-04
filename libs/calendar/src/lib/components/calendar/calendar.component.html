@@ -189,7 +189,7 @@
 
         <ng-template #monthTooltip>
           <div class="shift-tooltip">
-            <ng-container *ngTemplateOutlet="shiftGroup; context: {shifts: day.tooltip[1], className: 'success', name: 'fulfilled.label', status: 'accepted', month: true}"></ng-container>
+            <ng-container *ngTemplateOutlet="shiftGroup; context: {shifts: day.tooltip[1], className: 'success', name: 'fulfilled', status: 'accepted', month: true}"></ng-container>
             <ng-container *ngTemplateOutlet="shiftGroup; context: {shifts: day.tooltip[0], className: 'danger', name: 'unfulfilled', status: 'cancelled', month: true}"></ng-container>
             <ng-container *ngTemplateOutlet="shiftGroup; context: {shifts: day.tooltip[2], className: 'warning', name: 'pending', status: 'undefined', month: true}"></ng-container>
             <ng-container *ngTemplateOutlet="shiftGroup; context: {shifts: day.tooltip[3], className: 'primary', name: 'open', month: true}"></ng-container>
@@ -327,7 +327,7 @@
     <br>
     <a *ngIf="isManager()" [routerLink]="'/mn' + shift.jobsite_link" class="shift-jobsite">{{shift.jobsite}}</a>
     <span *ngIf="!isManager()" class="shift-jobsite">{{shift.jobsite}}</span> <br>
-    <span>Workers: {{shift.shift.workers}}</span>
+    <span *ngIf="shift.shift">Workers: {{shift.shift.workers}}</span>
     <div *ngIf="status && ((shift.candidates[status].length || shift.candidates[getStatus(1)].length))" class="shift-candidates">
       <span class="mr-1">Candidate&nbsp;({{shift.candidates[status].length || shift.candidates[getStatus(1)].length}}):</span>
       <div>

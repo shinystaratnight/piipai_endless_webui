@@ -258,10 +258,10 @@ export class DynamicListComponent
 
     const addData = changes['addData'] && changes['addData'].currentValue;
 
-    this.config.list.columns = this.purposeService.filterListColumns(
-      this.endpoint,
-      this.config.list.columns
-    );
+    // this.config.list.columns = this.purposeService.filterListColumns(
+    //   this.endpoint,
+    //   this.config.list.columns
+    // );
 
     if (this.actionData !== this.currentActionData) {
       this.currentActionData = this.actionData;
@@ -277,7 +277,7 @@ export class DynamicListComponent
         setTimeout(() => {
           this.modalInfo = {
             url: this.sanitizer.bypassSecurityTrustResourceUrl(
-              location.origin + this.currentActionData.pdf_url
+              this.currentActionData.pdf_url
             ),
           };
           this.open(this.pdfDocumentModal, { size: 'lg' });
@@ -1208,18 +1208,22 @@ export class DynamicListComponent
         } else {
           if (data.translations || (data.name && data.name.translations)) {
             const translations = data.translations || (data.name && data.name.translations) || [];
-            const trans = translations.find(el => el.language ? el.language.id === translationMap[this.siteSettings.settings.country_code] : false);
+            const preferLanguage = this.storage.retrieve('lang') || translationMap[this.siteSettings.settings.country_code];
+
+            const trans = translations.find(el => el.language ? el.language.id === preferLanguage : false);
 
             data.__str__ = trans ? trans.value : data.__str__;
           }
 
           if (data[prop] && data[prop].translations) {
-            const trans = data[prop].translations.find(el => el.language.id === translationMap[this.siteSettings.settings.country_code]);
+            const preferLanguage = this.storage.retrieve('lang') || translationMap[this.siteSettings.settings.country_code];
+
+            const trans = data[prop].translations.find(el => el.language.id === preferLanguage);
 
             if (trans) {
-              object[param] = trans.value
+              object[param] = trans.value;
             } else {
-              object[param] = data[prop].__str__
+              object[param] = data[prop].__str__;
             }
           } else {
             object[param] = data[prop];
@@ -2332,7 +2336,7 @@ export class DynamicListComponent
     this.genericFormService.getAll(e.el.endpoint).subscribe((res: any) => {
       this.modalInfo = {
         url: this.sanitizer.bypassSecurityTrustResourceUrl(
-          environment.api + res.pdf
+          res.pdf
         ),
       };
       this.open(this.pdfDocumentModal, { size: 'lg' });
@@ -2349,7 +2353,12 @@ export class DynamicListComponent
             list: this.config.list.list,
           });
         },
-        (err: any) => (this.error = err)
+        (err: any) => {
+          if (err && err.errors) {
+            const { non_field_errors } = err.errors;
+            this.toastr.sendMessage(non_field_errors, MessageType.error);
+          }
+        }
       );
   }
 

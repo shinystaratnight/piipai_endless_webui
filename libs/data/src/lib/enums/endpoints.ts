@@ -25,6 +25,9 @@ export enum Endpoints {
   SkillBaseRate = '/skills/skillbaserates/',
   SkillEmploymentClassification = '/skills/employmentclassifications/',
   SkillRateCoefficient = '/candidate/skillratecoefficientrels/',
+  SkillWorkTypes = '/skills/worktypes/',
+  SkillRate = '/candidate/skillrates/',
+  SkillRateRanges = '/skills/skillrateranges/',
 
   // Billing
   BillingCompany = '/billing/companies/',
@@ -56,6 +59,7 @@ export enum Endpoints {
   CandidateEvaluation = '/hr/candidateevaluations/',
   CandidateJobOffer = '/hr/joboffers/candidate/',
   CandidateLocation = '/candidate/location/',
+  CandidateFormalities = '/candidate/formalities/',
 
   BlackList = '/hr/blacklists/',
   FavouriteList = '/hr/favouritelists/',
@@ -119,6 +123,7 @@ export enum Endpoints {
   TimesheetApproved = '/hr/timesheets/approved/',
   TimesheetHistory = '/hr/timesheets/history/',
   TimesheetUnapproved = '/hr/timesheets/unapproved/',
+  TimesheetRates = '/hr/timesheetrates/',
 
   // Invoice
   Invoice = '/core/invoices/',
@@ -160,6 +165,9 @@ export enum Endpoints {
   Language = '/languages/',
   CandidateLanguages = '/candidate_contacts/',
   CompanyLanguages = '/companies/',
+  MYOB = '/company-settings/myobsettings/',
+  ApplicationFormTranslations = '/core/formtranlations/',
+  UnitOfMeasurements = '/core/unitofmeasurements/',
 }
 
 export const getBankAccountLayoutEndpoint = (countryCode: string) => {

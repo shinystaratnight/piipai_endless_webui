@@ -6,6 +6,7 @@ export class TextElement extends BasicListElement {
   label?: string;
   param?: string;
   score?: boolean;
+  display?: string;
 
   constructor(field: string, label?: string) {
     super(field, Text);
@@ -21,6 +22,12 @@ export class TextElement extends BasicListElement {
 
   scoreField() {
     this.score = true;
+
+    return this;
+  }
+
+  setFormatValue(format: string) {
+    this.display = format;
 
     return this;
   }

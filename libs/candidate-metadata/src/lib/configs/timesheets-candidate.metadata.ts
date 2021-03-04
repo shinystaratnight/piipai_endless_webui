@@ -30,7 +30,7 @@ const list = function () {
         new List.column.element('jobsite', 'Position / Jobsite')
           .setSort(true, 'jobsite')
           .setContent([
-            new List.static.element('position').setStyles(['bolder']),
+            new List.text.element('position').setStyles(['bolder']),
 
             new List.related.element('jobsite', Endpoints.Jobsite).setStyles([
               'secondary',

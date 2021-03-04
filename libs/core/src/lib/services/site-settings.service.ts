@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-
 import { Observable, of } from 'rxjs';
 import { map, catchError, tap } from 'rxjs/operators';
 
 import { Endpoints, CountryCodeLanguage, Language } from '@webui/data';
 import { TranslateHelperService } from './translate-helper-service';
-import { ActivatedRoute } from '@angular/router';
+import { LocalStorageService } from 'ngx-webstorage';
+import { isManager } from '@webui/utilities';
 
 interface CompanySettings {
   sms_enabled: boolean;
@@ -22,8 +22,7 @@ interface CompanySettings {
 
 @Injectable()
 export class SiteSettingsService {
-  public settings: CompanySettings;
-  public currentEndpoint: string;
+  settings: CompanySettings;
 
   get companyId() {
     if (this.settings) {
@@ -31,64 +30,93 @@ export class SiteSettingsService {
     }
   }
 
-  constructor(private http: HttpClient, private translate: TranslateHelperService, private route: ActivatedRoute) {}
+  constructor(
+    private http: HttpClient,
+    private translate: TranslateHelperService,
+    private storage: LocalStorageService,
+  ) {}
 
-  public resolve() {
+  resolve() {
     return this.getSettings();
   }
 
-  public isSmsEnabled(): boolean {
+  isSmsEnabled(): boolean {
     return this.settings.sms_enabled || false;
   }
 
-  public getCompanyName(): string {
+  getCompanyName(): string {
     return this.settings.company_name || '';
   }
 
-  public getSmsSendTitle() {
+  getSmsSendTitle() {
     return `SMS sending is disabled for ${this.getCompanyName()}, please contact your administrator.`;
   }
 
-  private getSettings(): Observable<CompanySettings | boolean> {
+  private getSettings(): Observable<CompanySettings> {
     if (!this.settings) {
       return this.http.get<CompanySettings>(Endpoints.CompanySettings).pipe(
-        tap(settings => {
+        tap((settings) => {
           this.settings = settings;
+
+          if (!settings.country_code) {
+            settings.country_code = 'GB';
+          }
+
           this.updateBrowserStyles(settings);
         }),
-        tap((settings) => this.setLanguage(settings)),
-        map(settings => {
+        tap((settings) => this.updateLanguage(settings)),
+        map((settings) => {
           if (settings.redirect_to) {
             location.href = settings.redirect_to;
 
-            return false;
+            return {} as CompanySettings;
           }
 
           return settings;
         }),
         catchError(() => {
-          return of(true);
+          return of({} as CompanySettings);
         })
       );
     } else if (this.settings) {
-      return of(this.settings).pipe(tap((settings) => this.setLanguage(this.settings)));
+      return of(this.settings).pipe(
+        tap((settings) => this.updateLanguage(settings))
+      );
     }
   }
 
   private updateBrowserStyles(settings: CompanySettings): void {
     const { body } = document;
+    const themeClass = `${settings.color_scheme}-theme`;
+    const fontFamily = `${settings.font || 'Source Sans Pro'}, sans-serif`;
 
-    body.parentElement.classList.add(`${settings.color_scheme}-theme`);
-    body.style.fontFamily = `${settings.font || 'Source Sans Pro'}, sans-serif`;
+    // TODO: refactor it
+    body.parentElement.classList.add(themeClass);
+    body.style.fontFamily = fontFamily;
   }
 
-  private setLanguage(settings: CompanySettings) {
-    const isManager = location.pathname.includes('/mn');
+  private updateLanguage(settings: CompanySettings): void {
+    const companyLang = CountryCodeLanguage[settings.country_code];
+    const defaultLanguage = this.storage.retrieve('lang');
+    const { currentLang } = this.translate;
 
-    if (!isManager) {
-      this.translate.setLang(this.translate.currentLang || CountryCodeLanguage[settings.country_code] || Language.English);
-    } else {
+    let lang;
+
+    if (defaultLanguage) {
+      this.translate.setLang(defaultLanguage);
+      return;
+    }
+
+    if (isManager()) {
+      lang = Language.English;
+    } else if (companyLang && currentLang !== companyLang) {
+      lang = companyLang;
+    }
+
+    if (!lang && !companyLang) {
       this.translate.setLang(Language.English);
+    } else if (lang) {
+      this.translate.setLang(lang);
     }
   }
 }

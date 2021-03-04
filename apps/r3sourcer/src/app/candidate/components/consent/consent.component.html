@@ -1,0 +1,12 @@
+<app-navigation [user]="user"></app-navigation>
+
+<div class="site-page pt-5">
+  <div class="form-content px-4 content">
+    <p>If you agree please press button "I agree"</p>
+
+    <div class="d-flex justify-content-end mt-4">
+      <button type="button" class="btn btn-primary mr-4" (click)="onAgree()">I agree</button>
+      <button type="button" class="btn btn-secondary" (click)="notAgree()">No</button>
+    </div>
+  </div>
+</div>

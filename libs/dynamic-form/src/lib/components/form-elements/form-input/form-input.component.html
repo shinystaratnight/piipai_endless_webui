@@ -3,7 +3,7 @@
   *ngIf="!config.hide"
   [class.mb-0]="config.templateOptions.bottom"
   [formGroup]="group"
-  style="position: relative"
+  style="position: relative;"
 >
   <div class="form-element" [class.inline]="config.templateOptions.inline">
     <label
@@ -17,12 +17,26 @@
       [class.required]="config.templateOptions.required"
       [attr.for]="key"
     >
-      {{ getTranslationKey('label') | translate: {"Default": config.templateOptions.label} }}:
+      {{
+        getTranslationKey('label')
+          | translate: { Default: config.templateOptions.label }
+      }}:
     </label>
-    <app-info *ngIf="config.templateOptions.description" [description]="getTranslationKey('description') | translate: {'Default': config.templateOptions.description || ''}"></app-info>
-    <i class="data-list-trigger" *ngIf="dataListMap" triggers="mouseover:mouseout"
-    [placement]="'bottom'"
-    [ngbTooltip]="dataListTemplate">View</i>
+    <app-info
+      *ngIf="config.templateOptions.description"
+      [description]="
+        getTranslationKey('description')
+          | translate: { Default: config.templateOptions.description || '' }
+      "
+    ></app-info>
+    <i
+      class="data-list-trigger"
+      *ngIf="dataListMap"
+      triggers="mouseover:mouseout"
+      [placement]="'bottom'"
+      [ngbTooltip]="dataListTemplate"
+      >View</i
+    >
     <div
       class="form-element-content edit"
       [class.showAll]="viewMode || config.type === 'static'"
@@ -40,7 +54,8 @@
         *ngIf="
           (this.config.type !== 'static' ||
             (this.config.type === 'static' && !this.config.read_only)) &&
-          (!viewMode && !config.read_only) &&
+          !viewMode &&
+          !config.read_only &&
           !isAddressField &&
           !isPhoneField &&
           config.templateOptions.type !== 'score'
@@ -196,7 +211,7 @@
           <ul class="list-group w-100">
             <li
               class="list-group-item autocomplete-item p-1 pl-2"
-              style="cursor: pointer"
+              style="cursor: pointer;"
               *ngFor="let item of list"
               (click)="select(item.name)"
             >
@@ -229,31 +244,12 @@
       </div>
 
       <button
+        type="button"
         *ngIf="config.key === 'password' && config.templateOptions.addon"
         class="password"
         (click)="switchType(config.templateOptions.type)"
       >
-        <svg
-          width="17px"
-          height="17px"
-          version="1.1"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 511.999 511.999"
-        >
-          <path
-            d="M508.745,246.041c-4.574-6.257-113.557-153.206-252.748-153.206S7.818,239.784,3.249,246.035
-         c-4.332,5.936-4.332,13.987,0,19.923c4.569,6.257,113.557,153.206,252.748,153.206s248.174-146.95,252.748-153.201
-         C513.083,260.028,513.083,251.971,508.745,246.041z M255.997,385.406c-102.529,0-191.33-97.533-217.617-129.418
-         c26.253-31.913,114.868-129.395,217.617-129.395c102.524,0,191.319,97.516,217.617,129.418
-         C447.361,287.923,358.746,385.406,255.997,385.406z"
-          />
-
-          <path
-            d="M255.997,154.725c-55.842,0-101.275,45.433-101.275,101.275s45.433,101.275,101.275,101.275
-         s101.275-45.433,101.275-101.275S311.839,154.725,255.997,154.725z M255.997,323.516c-37.23,0-67.516-30.287-67.516-67.516
-         s30.287-67.516,67.516-67.516s67.516,30.287,67.516,67.516S293.227,323.516,255.997,323.516z"
-          />
-        </svg>
+        <ng-container *ngTemplateOutlet="iconEye"></ng-container>
       </button>
 
       <span
@@ -300,8 +296,11 @@
       </div>
     </div>
   </div>
-  <div class="text-danger mt-1" *ngIf="group.get(this.key) && group.get(this.key).getError('pattern')">
-    {{config.templateOptions.patternError}}
+  <div
+    class="text-danger mt-1"
+    *ngIf="group.get(this.key) && group.get(this.key).getError('pattern')"
+  >
+    {{ config.templateOptions.patternError }}
   </div>
   <div *ngIf="errors">
     <div class="text-danger mt-1" *ngIf="errors[config.key]">
@@ -333,7 +332,10 @@
     "
     [attr.id]="key"
     [attr.name]="key"
-    [attr.placeholder]="getTranslationKey('placeholder') | translate: {Default: config.templateOptions.placeholder || ''}"
+    [attr.placeholder]="
+      getTranslationKey('placeholder')
+        | translate: { Default: config.templateOptions.placeholder || '' }
+    "
     [readonly]="config.read_only"
     [value]="
       config.value === 0 || config.value
@@ -342,7 +344,7 @@
         ? group.get(key).value
         : ''
     "
-    pattern="{{config.templateOptions.pattern}}"
+    pattern="{{ config.templateOptions.pattern }}"
     (focus)="generateList()"
     (keyup)="filter(key)"
   />
@@ -359,7 +361,9 @@
     [ngModelOptions]="{ standalone: true }"
     [attr.id]="key"
     [attr.name]="key"
-    placeholder="{{'enter_location' | translate: { 'Default': 'Enter a location' } }}"
+    placeholder="{{
+      'enter_location' | translate: { Default: 'Enter a location' }
+    }}"
     (onAddressChange)="getAddress($event, adr.value)"
   />
 </ng-template>
@@ -432,13 +436,17 @@
     [enableAutoCountrySelect]="true"
     [enablePlaceholder]="true"
     [searchCountryFlag]="true"
-    [searchCountryField]="[SearchCountryField.Iso2, SearchCountryField.Name, SearchCountryField.DialCode]"
+    [searchCountryField]="[
+      SearchCountryField.Iso2,
+      SearchCountryField.Name,
+      SearchCountryField.DialCode
+    ]"
     [selectFirstCountry]="false"
     [selectedCountryISO]="selectedCountryISO"
     [maxLength]="15"
+    numberFormat="E164"
     [tooltipField]="TooltipLabel.Name"
     [phoneValidation]="true"
-    [separateDialCode]="separateDialCode"
     (ngModelChange)="onChangePhoneNumber($event)"
     name="phone"
   >
@@ -448,9 +456,27 @@
 <ng-template #dataListTemplate>
   <ul class="list">
     <li class="list__item" *ngFor="let item of dataListMap">
-      <label class="list__item-label">{{item.label}}</label>
+      <label class="list__item-label">{{ item.label }}</label>
       <span> - </span>
-      <span class="list__item-value">{{item.value}}</span>
+      <span class="list__item-value">{{ item.value }}</span>
     </li>
   </ul>
+</ng-template>
+
+<ng-template #iconEye>
+  <svg width="17px" height="17px" viewBox="0 0 511.999 511.999">
+    <path
+      d="M508.745,246.041c-4.574-6.257-113.557-153.206-252.748-153.206S7.818,239.784,3.249,246.035
+  c-4.332,5.936-4.332,13.987,0,19.923c4.569,6.257,113.557,153.206,252.748,153.206s248.174-146.95,252.748-153.201
+  C513.083,260.028,513.083,251.971,508.745,246.041z M255.997,385.406c-102.529,0-191.33-97.533-217.617-129.418
+  c26.253-31.913,114.868-129.395,217.617-129.395c102.524,0,191.319,97.516,217.617,129.418
+  C447.361,287.923,358.746,385.406,255.997,385.406z"
+    />
+
+    <path
+      d="M255.997,154.725c-55.842,0-101.275,45.433-101.275,101.275s45.433,101.275,101.275,101.275
+  s101.275-45.433,101.275-101.275S311.839,154.725,255.997,154.725z M255.997,323.516c-37.23,0-67.516-30.287-67.516-67.516
+  s30.287-67.516,67.516-67.516s67.516,30.287,67.516,67.516S293.227,323.516,255.997,323.516z"
+    />
+  </svg>
 </ng-template>

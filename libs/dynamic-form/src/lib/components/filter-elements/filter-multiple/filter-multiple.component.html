@@ -1,14 +1,11 @@
 <div class="filter-element" [class.active]="!isCollapsed">
-  <label class="filter-label" [class.active]="!isCollapsed">
-    {{ getTranslateKey('label') | translate: {"Default": config.label} }}
-    <fa-icon
-      *ngIf="query"
-      class="reset-icon text-danger ml-1"
-      [icon]="['fas', 'times-circle']"
-      style="cursor: pointer"
-      (click)="resetFilter()"
-    ></fa-icon>
-  </label>
+  <app-filter-header
+    [label]="config.label"
+    [key]="config.key"
+    [resetButton]="query"
+    (resetEvent)="resetFilter()"
+  ></app-filter-header>
+
   <div class="filter-select-wrapper">
     <div *ngFor="let item of data; let index = index" class="form-check">
       <label class="d-flex align-items-center">

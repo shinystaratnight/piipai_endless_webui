@@ -30,8 +30,6 @@
       <button
         type="button"
         class="form__button btn btn-default"
-        *ngIf="steps.length > 1"
-        [disabled]="currentStep === 0"
         (click)="back()"
       >
         {{'back' | translate}}

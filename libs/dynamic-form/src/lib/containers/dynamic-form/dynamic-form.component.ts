@@ -322,7 +322,15 @@ export class DynamicFormComponent implements OnInit {
 
         if (value.id) {
           if (el.key === 'language') {
-            data['language_id'] = value.id
+            data['language_id'] = value.id;
+          }
+
+          if (el.key === 'country') {
+            data['country'] = value.id;
+          }
+
+          if (el.key === 'translations') {
+            data['translations'] = value.id;
           }
         }
 
@@ -330,5 +338,9 @@ export class DynamicFormComponent implements OnInit {
         this.filterSendData(el.children, data);
       }
     });
+  }
+
+  keys(obj: any): string[] {
+    return Object.keys(obj);
   }
 }

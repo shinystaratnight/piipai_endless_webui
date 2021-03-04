@@ -1,4 +1,4 @@
-import { createFilter, Type } from '@webui/metadata';
+import { createFilter, Type, Form } from '@webui/metadata';
 import { Endpoints } from '@webui/data';
 
 const filter = {
@@ -918,6 +918,13 @@ const form = [
                     },
                     read_only: false
                   },
+                  new Form.select.element('wage_type', 'Wage Type')
+                    .seDefaultValue(0)
+                    .addOptions({
+                      '0': 'Hourly wage',
+                      '1': 'Piecework wage',
+                      '2': 'Combined wage',
+                    }),
                   {
                     key: 'hourly_rate_default',
                     type: 'input',
@@ -960,21 +967,15 @@ const form = [
                   },
                   {
                     endpoint: '/core/companycontacts/',
-                    read_only: true,
                     key: 'customer_representative',
                     templateOptions: {
                       label: 'Client representative',
-                      add: true,
-                      delete: false,
-                      values: ['__str__'],
+                      values: ['__str__', 'company'],
                       type: 'related',
-                      edit: true
                     },
-                    additional_text: 'Or',
-                    default: '{jobsite.primary_contact.id}',
                     type: 'related',
                     query: {
-                      jobsites: '{jobsite.id}'
+                      company: '{customer_company.id}'
                     }
                   },
                   {
@@ -1438,6 +1439,13 @@ const formadd = [
             },
             read_only: false
           },
+          new Form.select.element('wage_type', 'Wage Type')
+            .seDefaultValue(0)
+            .addOptions({
+              0: 'Hourly wage',
+              1: 'Piecework wage',
+              2: 'Combined wage',
+            }),
           {
             key: 'default_shift_starting_time',
             default: '07:00:00',

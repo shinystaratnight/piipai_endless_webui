@@ -1,5 +1,5 @@
 import { Endpoints, Color } from '@webui/data';
-import { createFilter, Type } from '@webui/metadata';
+import { createFilter, Type, Form } from '@webui/metadata';
 
 const filters = {
   shift_started_at: createFilter(Type.Date, {
@@ -901,11 +901,14 @@ const form = [
                 children: [
                   {
                     endpoint: Endpoints.CompanyContact,
-                    read_only: true,
+                    read_only: '{supervisor_approved_at}',
                     templateOptions: {
                       label: 'Supervisor',
                       values: ['__str__'],
                       type: 'related'
+                    },
+                    query: {
+                      company: '{company.id}'
                     },
                     type: 'related',
                     key: 'supervisor'
@@ -992,7 +995,14 @@ const form = [
                     templateOptions: {
                       label: 'Accounting Integration'
                     }
-                  }
+                  },
+                  new Form.select.element('wage_type', 'Wage Type')
+                    .seDefaultValue(0)
+                    .addOptions({
+                      '0': 'Hourly wage',
+                      '1': 'Piecework wage',
+                      '2': 'Combined wage',
+                    }),
                 ]
               }
             ]
@@ -1077,7 +1087,11 @@ const form = [
                 ]
               }
             ]
-          }
+          },
+          new Form.list.element('Skill Activities', Endpoints.TimesheetRates)
+            .setPrefilledFields({
+              'timesheet': '{id}'
+            }),
         ]
       },
       {

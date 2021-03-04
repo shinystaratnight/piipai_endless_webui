@@ -65,10 +65,9 @@ import { routes } from './app.routing';
 import { CoreModule } from '@webui/core';
 import { environment } from '../environments/environment';
 import { AgmCoreModule } from '@agm/core';
-import { DynamicFormModule } from '@webui/dynamic-form';
-import { UiModule } from '@webui/ui';
+// import { UiModule } from '@webui/ui';
+import { SettingsModule } from './settings/settings.module';
 
-import { Metadata } from './metadata.config';
 import { MasterGuideModule } from './master-guide/master-guide.module';
 import { RedirectComponent } from './redirect.component';
 import { HttpLoaderFactory } from './translate.loader';
@@ -109,12 +108,15 @@ import { MissingTranslationHelper } from './helpers/translate.helper';
     }),
 
     CoreModule.forRoot(environment),
-    DynamicFormModule.forRoot({ metadata: Metadata }),
+    // DynamicFormModule.forRoot({ metadata: Metadata }),
     MasterGuideModule,
-    UiModule,
+    // UiModule,
+
+    SettingsModule
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  exports: [SettingsModule],
 })
 export class AppModule {
   constructor(library: FaIconLibrary) {

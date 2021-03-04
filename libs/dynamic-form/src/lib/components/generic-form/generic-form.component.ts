@@ -13,6 +13,7 @@ import {
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import isObject from 'isobject';
 
 import { BehaviorSubject, Subject, Subscription, forkJoin } from 'rxjs';
 import { finalize, skip, catchError } from 'rxjs/operators';
@@ -332,7 +333,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
     const props = {
       formId: this.formId,
       formData: this.formData,
-      mode: this.mode === 'view' ? this.modeBehaviorSubject : undefined,
+      mode: this.modeBehaviorSubject,
       autocompleteData: new Subject(),
     };
 
@@ -742,6 +743,9 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
         if (el.type === 'replace') {
           el.data = new BehaviorSubject(data);
         }
+        if (el.type === 'related' && typeof el.read_only === 'string') {
+          el.read_only = this.format.format(el.read_only, data);
+        }
         if (el.type === 'related' && el.list) {
           el.data = new BehaviorSubject(this.getValueOfData(data, el.key, el, metadata));
           if (el.prefilled) {
@@ -1109,9 +1113,14 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
 
     const newData = this.form ? { ...data, ...this.form } : data || {};
 
-    if (newData.hasOwnProperty('apartment') && newData.address) {
-      Object.assign(newData.address, { apartment: newData.apartment });
-      delete newData.apartment;
+    if (newData.hasOwnProperty('apartment')) {
+      const { address, street_address, apartment } = newData;
+      const addressField = address || street_address;
+
+      if (addressField && isObject(addressField)) {
+        Object.assign(addressField, { apartment });
+        delete newData.apartment;
+      }
     }
 
     if (this.checkEmail) {
@@ -1709,11 +1718,11 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
           } else if (el.templateOptions.param) {
             fields.param = el.templateOptions.param;
           }
-          const keys = el.key.split('.');
-          if (keys.indexOf('country') > -1) {
-            fields.code2 = 'code2';
-            this.getRalatedData(metadata, el.key, el.endpoint, fields, '?limit=-1');
-          }
+          // const keys = el.key.split('.');
+          // if (keys.indexOf('country') > -1) {
+          //   fields.code2 = 'code2';
+          //   this.getRalatedData(metadata, el.key, el.endpoint, fields, '?limit=-1');
+          // }
           el.options = [];
           if (el.list) {
             let metadataQuery;

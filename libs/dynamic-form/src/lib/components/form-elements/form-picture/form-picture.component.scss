@@ -43,10 +43,11 @@ $height: 80px;
   }
 }
 
-.signature {
-  width: 80px;
-  height: 40px;
-
+img.signature {
+  width: 90px;
+  height: 52px;
+  padding: 5px;
+  margin-top: 5px;
   border-radius: 3px;
   border: 1px solid rgba($gray, 0.7);
 }
@@ -58,14 +59,11 @@ $height: 80px;
 }
 
 .link {
-  margin-left: 4px;
-
   font-size: 12px;
   line-height: 14px;
-
   color: $primary;
-
   cursor: pointer;
+  align-self: flex-start;
 
   &:hover {
     text-decoration: underline;
@@ -167,5 +165,49 @@ $height: 80px;
 
   fa-icon {
     margin-right: 0;
+  }
+}
+
+.document-name {
+  overflow: hidden;
+  max-width: 180px;
+  text-overflow: ellipsis;
+}
+
+.download-icon,
+.file-icon {
+  width: 12px;
+  margin-right: 0.5rem;
+}
+
+.download-icon {
+  display: none;
+}
+
+.mobile {
+  position: relative;
+
+  .upload-button {
+    display: inline-flex;
+  }
+
+  a {
+    color: $primary;
+  }
+}
+
+.document {
+  min-height: 22px;
+  display: inline-flex;
+  align-items: center;
+}
+
+a:hover {
+  .file-icon {
+    display: none;
+  }
+
+  .download-icon {
+    display: inline-block;
   }
 }

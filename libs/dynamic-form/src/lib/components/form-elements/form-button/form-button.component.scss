@@ -123,20 +123,14 @@ button.btn-link {
     position: absolute;
     top: 0;
     left: 0;
-
     display: none;
-
-    height: 70px;
-    width: 70px;
-
-    border-radius: 50%;
-
+    height: 100%;
+    width: 100%;
+    border-radius: .5rem;
     text-align: center;
-
+    padding: .5rem;
     background-color: rgba($primary, 0.7);
-
     color: white;
-
     z-index: 1;
 
     &-danger {
@@ -160,7 +154,8 @@ button.btn-link {
 
   img {
     height: 70px;
-    width: 70px;
+    width: 100px;
+    object-fit: cover;
   }
 
   .tracking-mobile {

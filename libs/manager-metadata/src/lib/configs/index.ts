@@ -93,3 +93,8 @@ export * from './companieslanguages.metadata';
 export * from './emailtemplates.metadata';
 export * from './emailmessages.metadata';
 export * from './contactaddresses.metadata';
+export * from './candidateformalities.metadata';
+export * from './formtranslations.metadata';
+export * from './skillrates.metadata';
+export * from './skillrateranges.metadata';
+export * from './timesheetrates.metadata';
