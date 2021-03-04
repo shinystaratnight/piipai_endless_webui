@@ -123,6 +123,7 @@ export enum Endpoints {
   TimesheetApproved = '/hr/timesheets/approved/',
   TimesheetHistory = '/hr/timesheets/history/',
   TimesheetUnapproved = '/hr/timesheets/unapproved/',
+  TimesheetRates = '/hr/timesheetrates/',
 
   // Invoice
   Invoice = '/core/invoices/',

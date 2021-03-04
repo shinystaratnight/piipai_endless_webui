@@ -110,6 +110,7 @@ import {
   formtranslations,
   skillrates,
   skillrateranges,
+  timesheetrates,
 } from '@webui/manager-metadata';
 
 import {
@@ -241,4 +242,5 @@ export class Metadata {
   [Endpoints.ApplicationFormTranslations] = formtranslations;
   [Endpoints.SkillRate] = skillrates;
   [Endpoints.SkillRateRanges] = skillrateranges;
+  [Endpoints.TimesheetRates] = timesheetrates;
 }
