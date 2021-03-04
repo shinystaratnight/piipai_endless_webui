@@ -7,7 +7,7 @@ export class Form {
   public allowMethods: string[];
   public hasTabs: boolean;
   public hideEditButton: boolean;
-  public disableSaveButton: boolean;
+  public disableSaveButton = false;
 
   private _mode: BehaviorSubject<string>;
   get mode() {
