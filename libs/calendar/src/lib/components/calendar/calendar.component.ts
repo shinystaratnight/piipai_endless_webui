@@ -39,6 +39,7 @@ import { filters } from './calendar-filters.meta';
 import { DatepickerComponent } from '../datepicker/datepicker.component';
 import { UserService, EventService, EventType, SiteSettingsService } from '@webui/core';
 import { CountryCodeLanguage, Endpoints } from '@webui/data';
+import { Form } from '@webui/dynamic-form';
 
 @Component({
   selector: 'app-calendar',
@@ -84,6 +85,15 @@ export class CalendarComponent implements OnInit, OnDestroy {
 
   public client: string;
   public activeShift: string;
+  private extendForm: Form;
+
+  get extendFormInvalid() {
+    if (!this.extendForm) {
+      return false;
+    }
+
+    return this.extendForm.disableSaveButton;
+  }
 
   @ViewChild('filter')
   public filter: ElementRef;
@@ -378,6 +388,9 @@ export class CalendarComponent implements OnInit, OnDestroy {
       setTimeout(() => {
         this.changeCalendar();
       }, 2000);
+    }
+    if (e.type === 'formRegistration') {
+      this.extendForm = e.form;
     }
   }
 
