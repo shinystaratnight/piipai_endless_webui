@@ -1089,8 +1089,11 @@ const form = [
             ]
           },
           new Form.list.element('Skill Activities', Endpoints.TimesheetRates)
+            .setQuery({
+              timesheet: '{id}'
+            })
             .setPrefilledFields({
-              'timesheet': '{id}'
+              timesheet: '{id}'
             }),
         ]
       },

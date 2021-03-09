@@ -10,6 +10,12 @@ export interface RelatedElementTemplateOptions extends BasicElementTemplateOptio
   param?: string;
 }
 
+export interface Actions {
+  add?: boolean;
+  edit?: boolean;
+  delete?: boolean;
+}
+
 export class RelatedElement extends BasicFormElement {
 
   endpoint: string;
@@ -50,10 +56,8 @@ export class RelatedElement extends BasicFormElement {
     return this;
   }
 
-  setActions(addObject: boolean, editObject: boolean, deleteObject: boolean) {
-    this.templateOptions.add = addObject;
-    this.templateOptions.edit = editObject;
-    this.templateOptions.delete = deleteObject;
+  setActions(actions: Actions = {} as Actions) {
+    this.templateOptions = {...this.templateOptions, ...actions };
 
     return this;
   }

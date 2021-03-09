@@ -201,17 +201,29 @@
 
         <div class="autocomplete" [hidden]="hideAutocomplete">
           <div class="autocomplete-list">
-            <ul class="list-group w-100">
-              <li [class.bold]="config.endpoint === '/core/tags/' && option.owner === 'system'" class="list-group-item autocomplete-item p-1 pl-2" style="cursor: pointer"
-                *ngFor="let option of previewList; trackBy: trackByFn">
+            <ul *ngIf="previewList?.length" class="list-group w-100">
+              <li
+                [class.bold]="config.endpoint === '/core/tags/' && option.owner === 'system'"
+                class="list-group-item autocomplete-item p-1 pl-2"
+                style="cursor: pointer"
+                *ngFor="let option of previewList; trackBy: trackByFn"
+              >
                 <label class="d-flex align-items-center w-100">
-                  <input type="checkbox" class="form-check-input" [(ngModel)]="option.checked" name="checked"
-                    [ngModelOptions]="{ standalone: true }" (ngModelChange)="setValue(option, true)" hidden />
+                  <input
+                    type="checkbox"
+                    class="form-check-input"
+                    [(ngModel)]="option.checked"
+                    name="checked"
+                    [ngModelOptions]="{ standalone: true }"
+                    (ngModelChange)="setValue(option, true)"
+                    hidden
+                  />
                   <app-checkbox [sm]="true" [checked]="option.checked"></app-checkbox>
                   {{ option.__str__ }}
                 </label>
               </li>
             </ul>
+             <p class="m-0 text-center description" *ngIf="!previewList?.length">Empty list</p>
           </div>
         </div>
 
