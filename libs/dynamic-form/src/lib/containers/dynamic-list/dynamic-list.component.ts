@@ -784,6 +784,7 @@ export class DynamicListComponent
           contextMenu: col.context_menu,
           tab: this.getTabOfColumn(col.name),
           timezone: col.timezone,
+          sortMap: col.sortMap
         };
         col.content.forEach((element) => {
           const obj = this.generateContentElement(element, col, cell, el);
@@ -1147,17 +1148,22 @@ export class DynamicListComponent
     return result;
   }
 
-  sortingBy(field) {
+  sortingBy(field, event) {
     if (this.delay) {
       return;
     }
+    console.log(field);
     const { sort_field } = field;
+
+    console.log(event)
+
+    const sort_param = event ? event.name : sort_field;
 
     const data = this.sortService.updateSortParams(
       this.sortedColumns,
-      sort_field
+      sort_param
     );
-    field.sorted = data[sort_field];
+    field.sorted = data[sort_param];
 
     const query = this.sortService.getSortQuery(data);
 

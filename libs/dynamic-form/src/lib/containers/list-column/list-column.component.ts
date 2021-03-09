@@ -22,17 +22,35 @@ export class ListColumnComponent implements OnInit {
   public config: any;
   public head: boolean;
   translationKey = '';
+  sortView;
 
   ngOnInit() {
     this.translationKey = getTranslationKey(this.config.name, 'label');
+
+    if (this.config.sortMap) {
+      this.generateSortView();
+      console.log(this.sortView);
+    }
   }
 
-  public sort() {
+  public sort(key?: string) {
     if (this.config.sort) {
-      this.event.emit({
-        type: 'sort',
-        name: this.config.name,
-      });
+      console.log(this.config.sortMap[key], key);
+      if (key && this.config.sortMap[key]) {
+        console.log(this.config.sortMap[key])
+
+        this.event.emit({
+          type: 'sort',
+          name: this.config.sortMap[key]
+        })
+      } else {
+        console.log(this.config.name)
+
+        this.event.emit({
+          type: 'sort',
+          name: this.config.name,
+        });
+      }
     }
   }
 
@@ -42,5 +60,11 @@ export class ListColumnComponent implements OnInit {
 
   public buttonHandler(e) {
     this.buttonAction.emit(e);
+  }
+
+  private generateSortView() {
+    const keys = this.config.label.split('/');
+
+    this.sortView = keys.map(key => key.toLowerCase().trim());
   }
 }

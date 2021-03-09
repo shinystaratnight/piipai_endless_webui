@@ -1,11 +1,25 @@
-<span *ngIf="head" (click)="sort()">
+<!-- <span *ngIf="head" (click)="sort()">
   {{ translationKey | translate: {"Default": config.label || ' '} }}
-</span>
+</span> -->
 <!--<span *ngIf="head && config.iconLabel" (clock)="sort()">-->
 <!--  <fa-icon class="text-muted"-->
 <!--    [icon]="['fas', config.iconLabel]">-->
 <!--  </fa-icon>-->
 <!--</span>-->
+<ng-container *ngIf="head">
+  <ng-container *ngIf="sortView">
+    <ng-container *ngFor="let item of sortView; let index = index, let last = last">
+      <span (click)="sort(item)">{{item}}</span>
+      <span *ngIf="!last">/</span>
+    </ng-container>
+  </ng-container>
+
+  <ng-container *ngIf="!sortView">
+    <span *ngIf="head" (click)="sort()">
+      {{ translationKey | translate: {"Default": config.label || ' '} }}
+    </span>
+  </ng-container>
+</ng-container>
 
 <ng-container *ngIf="!head">
   <ng-container
