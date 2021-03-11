@@ -12,7 +12,7 @@ const form = () => [
 ];
 
 const formadd = () => [
-  new Form.input.element('id', 'Id', InputType.Text).hideField(),
+  new Form.input.element('timesheet', 'Timesheet', InputType.Text).hideField(),
   new Form.related.element('worktype', 'Skill Activity', Endpoints.SkillWorkTypes)
     .setQuery({
       'company': 'currentCompany'
