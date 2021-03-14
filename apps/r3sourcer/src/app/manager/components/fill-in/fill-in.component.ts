@@ -54,19 +54,23 @@ export class FillInComponent implements OnInit {
   }
 
   public back() {
-    this.router.navigate([this.pageData.pathData.path + '/' + this.getId(this.pageData.endpoint) + '/change']); //tslint:disable-line
+    const { pathData: path, endpoint } = this.pageData;
+    const id = this.getId(endpoint);
+    const route = `${path}/${id}/change`
+
+    this.router.navigate([route]);
   }
 
   public sendData() {
     if (this.data) {
       this.gfs.submitForm(this.endpoint, this.data).subscribe(
-        (res: any) => this.router.navigate([this.pageData.pathData.path + '/' + this.getId(this.pageData.endpoint) + '/change']), //tslint:disable-line
-        (err: any) => this.err = err
+        () => this.back(),
+        (err) => this.err = err
       );
     }
   }
 
-  public getId(path: string): string {
+  private getId(path: string): string {
     const keys = path.split('/');
 
     return keys[keys.length - 3];
