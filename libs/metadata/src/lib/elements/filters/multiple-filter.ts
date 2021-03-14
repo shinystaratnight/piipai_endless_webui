@@ -4,9 +4,9 @@ export interface MultipleFilterOptions {
   key: string;
   label: string;
   query: string;
-  values: { value: string, label: string, key?: string }[];
-  unique: string[];
-  data: { [key: string]: string };
+  values?: { value: string, label: string, key?: string }[];
+  unique?: string[];
+  data?: { [key: string]: string };
 }
 
 export const Multiple = 'multiple';
