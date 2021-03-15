@@ -784,7 +784,6 @@ export class DynamicListComponent
           contextMenu: col.context_menu,
           tab: this.getTabOfColumn(col.name),
           timezone: col.timezone,
-          sortMap: col.sortMap
         };
         col.content.forEach((element) => {
           const obj = this.generateContentElement(element, col, cell, el);
@@ -1152,18 +1151,30 @@ export class DynamicListComponent
     if (this.delay) {
       return;
     }
-    console.log(field);
+
     const { sort_field } = field;
+    let sort_param;
 
-    console.log(event)
+    if (event) {
+      const el = field.sortMap.find(({ name }) => name === event.name);
 
-    const sort_param = event ? event.name : sort_field;
+      sort_param = el.param;
+    } else {
+      sort_param = sort_field;
+    }
 
     const data = this.sortService.updateSortParams(
       this.sortedColumns,
       sort_param
     );
-    field.sorted = data[sort_param];
+
+    if (event) {
+      const el = field.sortMap.find(({ name }) => name === event.name);
+
+      el.sorted = data[sort_param];
+    } else {
+      field.sorted = data[sort_param];
+    }
 
     const query = this.sortService.getSortQuery(data);
 
@@ -1192,6 +1203,14 @@ export class DynamicListComponent
     columns.forEach((el) => {
       if (name === el.sort_field) {
         el.sorted = value;
+      } else if (el.sortMap) {
+        const element = el.sortMap.find(({ param }) => param == name);
+
+        if (!element) {
+          return;
+        }
+
+        element.sorted = value;
       }
     });
   }

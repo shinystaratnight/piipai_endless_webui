@@ -34,3 +34,9 @@
   padding: .5rem;
   background-color: #fff;
 }
+
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

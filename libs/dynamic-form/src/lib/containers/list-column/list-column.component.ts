@@ -3,14 +3,12 @@ import {
   OnInit,
   Output,
   EventEmitter,
-  ChangeDetectionStrategy,
 } from '@angular/core';
 import { getTranslationKey } from '@webui/utilities';
 
 @Component({
   selector: 'app-list-column',
   templateUrl: 'list-column.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ListColumnComponent implements OnInit {
   @Output()
@@ -22,35 +20,39 @@ export class ListColumnComponent implements OnInit {
   public config: any;
   public head: boolean;
   translationKey = '';
-  sortView;
+  sortView: string[];
 
   ngOnInit() {
     this.translationKey = getTranslationKey(this.config.name, 'label');
 
     if (this.config.sortMap) {
       this.generateSortView();
-      console.log(this.sortView);
     }
   }
 
   public sort(key?: string) {
-    if (this.config.sort) {
-      console.log(this.config.sortMap[key], key);
-      if (key && this.config.sortMap[key]) {
-        console.log(this.config.sortMap[key])
+    const { sort, sortMap } = this.config;
 
-        this.event.emit({
-          type: 'sort',
-          name: this.config.sortMap[key]
-        })
-      } else {
-        console.log(this.config.name)
+    if (!sort) {
+      return;
+    }
 
-        this.event.emit({
-          type: 'sort',
-          name: this.config.name,
-        });
+    if (sortMap) {
+      const el = sortMap.find(({ name }) => name.trim() === key.trim());
+
+      if (!el) {
+        return;
       }
+
+      this.eventHandler({
+        type: 'sort',
+        name: el.name
+      })
+    } else {
+      this.eventHandler({
+        type: 'sort',
+        name: this.config.name,
+      });
     }
   }
 
@@ -60,6 +62,16 @@ export class ListColumnComponent implements OnInit {
 
   public buttonHandler(e) {
     this.buttonAction.emit(e);
+  }
+
+  public getSortedValue(key: string) {
+    const el = this.config.sortMap.find(({ name }) => name == key);
+
+    if (el) {
+      return el.sorted;
+    } else {
+      return '';
+    }
   }
 
   private generateSortView() {

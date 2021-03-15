@@ -1,22 +1,15 @@
-<!-- <span *ngIf="head" (click)="sort()">
-  {{ translationKey | translate: {"Default": config.label || ' '} }}
-</span> -->
-<!--<span *ngIf="head && config.iconLabel" (clock)="sort()">-->
-<!--  <fa-icon class="text-muted"-->
-<!--    [icon]="['fas', config.iconLabel]">-->
-<!--  </fa-icon>-->
-<!--</span>-->
 <ng-container *ngIf="head">
   <ng-container *ngIf="sortView">
     <ng-container *ngFor="let item of sortView; let index = index, let last = last">
-      <span (click)="sort(item)">{{item}}</span>
-      <span *ngIf="!last">/</span>
+      <ng-container *ngTemplateOutlet="element; context: { item: item, last: last, sorted: getSortedValue(item) }"></ng-container>
     </ng-container>
   </ng-container>
 
   <ng-container *ngIf="!sortView">
-    <span *ngIf="head" (click)="sort()">
+    <span (click)="sort()">
       {{ translationKey | translate: {"Default": config.label || ' '} }}
+
+      <app-sort-icon class="ml-2" *ngIf="config.sorted" [exist]="config.sort" [sort]="config.sorted"></app-sort-icon>
     </span>
   </ng-container>
 </ng-container>
@@ -32,3 +25,14 @@
     (buttonAction)="buttonHandler($event)">
   </ng-container>
 </ng-container>
+
+
+<ng-template #element let-item="item" let-last="last" let-sorted="sorted">
+  <span (click)="sort(item)">
+    {{item}}
+
+    <app-sort-icon class="ml-2" *ngIf="sorted" [exist]="config.sort" [sort]="sorted"></app-sort-icon>
+
+    <i *ngIf="!last">/</i>
+  </span>
+</ng-template>
