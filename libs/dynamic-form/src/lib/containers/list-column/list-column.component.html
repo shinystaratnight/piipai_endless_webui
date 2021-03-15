@@ -1,4 +1,7 @@
 <ng-container *ngIf="head">
+  <ng-container *ngIf="sortStream$ | async as data">
+    {{ data | json }}
+  </ng-container>
   <ng-container *ngIf="sortView">
     <ng-container *ngFor="let item of sortView; let index = index, let last = last">
       <ng-container *ngTemplateOutlet="element; context: { item: item, last: last, sorted: getSortedValue(item) }"></ng-container>

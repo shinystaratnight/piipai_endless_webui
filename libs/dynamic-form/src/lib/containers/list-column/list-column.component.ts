@@ -3,8 +3,11 @@ import {
   OnInit,
   Output,
   EventEmitter,
+  Optional,
 } from '@angular/core';
 import { getTranslationKey } from '@webui/utilities';
+import { Observable } from 'rxjs';
+import { SortService, SortData } from '../../services';
 
 @Component({
   selector: 'app-list-column',
@@ -21,6 +24,12 @@ export class ListColumnComponent implements OnInit {
   public head: boolean;
   translationKey = '';
   sortView: string[];
+
+  get sortStream$(): Observable<SortData> {
+    return this.sortService.stream$;
+  }
+
+  constructor(@Optional() private sortService: SortService) {}
 
   ngOnInit() {
     this.translationKey = getTranslationKey(this.config.name, 'label');
@@ -43,6 +52,10 @@ export class ListColumnComponent implements OnInit {
       if (!el) {
         return;
       }
+
+      console.log(this.sortService);
+
+      console.log(el);
 
       this.eventHandler({
         type: 'sort',

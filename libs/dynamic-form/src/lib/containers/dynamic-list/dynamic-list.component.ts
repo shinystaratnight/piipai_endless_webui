@@ -419,6 +419,7 @@ export class DynamicListComponent
       };
       if (config.list) {
         this.sortedColumns = this.getSortedColumns(config.list.columns);
+        this.sortService.parseConfig(config.list.columns);
         if (this.tabs) {
           const mainMetadata = config.list.columns.filter(
             (el) => !el.tab || !el.tab.is_collapsed
@@ -1168,13 +1169,15 @@ export class DynamicListComponent
       sort_param
     );
 
-    if (event) {
-      const el = field.sortMap.find(({ name }) => name === event.name);
+    console.log(data);
 
-      el.sorted = data[sort_param];
-    } else {
-      field.sorted = data[sort_param];
-    }
+    // if (event) {
+    //   const el = field.sortMap.find(({ name }) => name === event.name);
+
+    //   el.sorted = data[sort_param];
+    // } else {
+    //   field.sorted = data[sort_param];
+    // }
 
     const query = this.sortService.getSortQuery(data);
 
