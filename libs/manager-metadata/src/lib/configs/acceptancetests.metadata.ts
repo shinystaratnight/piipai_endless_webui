@@ -158,7 +158,7 @@ const formadd = function () {
       'is_active',
       'Active',
       CheckboxType.Checkbox
-    ).seDefaultValue(true),
+    ).setDefaultValue(true),
 
     new Form.datepicker.element('valid_from', 'Valid From', DatepickerType.Date)
       .required()

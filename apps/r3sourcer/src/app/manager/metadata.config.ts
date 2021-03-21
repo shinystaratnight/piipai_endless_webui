@@ -111,6 +111,7 @@ import {
   skillrates,
   skillrateranges,
   timesheetrates,
+  worktypes,
 } from '@webui/manager-metadata';
 
 import {
@@ -243,4 +244,5 @@ export class Metadata {
   [Endpoints.SkillRate] = skillrates;
   [Endpoints.SkillRateRanges] = skillrateranges;
   [Endpoints.TimesheetRates] = timesheetrates;
+  [Endpoints.SkillWorkTypes] = worktypes;
 }
