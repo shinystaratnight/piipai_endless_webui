@@ -4,6 +4,9 @@ import { List, Form, InputType } from "@webui/metadata";
 const form = () => [
   new Form.related.element('timesheet', 'Timesheet', Endpoints.Timesheet).hideField(),
   new Form.related.element('worktype', 'Skill Activity', Endpoints.SkillWorkTypes)
+    .setActions({
+      add: true
+    })
     .setQuery({
       'company': 'currentCompany'
     }),
@@ -14,6 +17,9 @@ const form = () => [
 const formadd = () => [
   new Form.input.element('timesheet', 'Timesheet', InputType.Text).hideField(),
   new Form.related.element('worktype', 'Skill Activity', Endpoints.SkillWorkTypes)
+    .setActions({
+      add: true
+    })
     .setQuery({
       'company': 'currentCompany'
     }),

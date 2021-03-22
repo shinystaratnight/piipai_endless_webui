@@ -32,7 +32,7 @@ export class FormErrorsComponent implements OnChanges {
     this.objectExistError = null;
     this.details = [];
 
-    if (Array.isArray(non_field_errors)) {
+    if (Array.isArray(non_field_errors) && non_field_errors.length > 1) {
       if (non_field_errors[0]) {
         const [exist, description, title, href] = non_field_errors;
 
@@ -47,7 +47,7 @@ export class FormErrorsComponent implements OnChanges {
     } else if (detail) {
       this.details.push(detail);
     } else if (non_field_errors) {
-      this.details.push(non_field_errors);
+      this.details.push(Array.isArray(non_field_errors) ? non_field_errors[0]: non_field_errors);
     }
   }
 

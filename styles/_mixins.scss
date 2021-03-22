@@ -34,3 +34,10 @@
   padding: .5rem;
   background-color: #fff;
 }
+
+@mixin container {
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
