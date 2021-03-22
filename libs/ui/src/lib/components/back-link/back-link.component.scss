@@ -2,10 +2,6 @@
 @import '../../../../../../styles/mixins';
 
 .form-navigation {
-  width: calc(100% - 285px);
-  max-width: 80%;
-
-  margin: 0 auto;
   padding-bottom: 8px;
 
   .datatable-body & {

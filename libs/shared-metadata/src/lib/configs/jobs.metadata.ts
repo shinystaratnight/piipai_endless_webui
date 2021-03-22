@@ -919,7 +919,7 @@ const form = [
                     read_only: false
                   },
                   new Form.select.element('wage_type', 'Wage Type')
-                    .seDefaultValue(0)
+                    .setDefaultValue(0)
                     .addOptions({
                       '0': 'Hourly wage',
                       '1': 'Piecework wage',
@@ -1440,7 +1440,7 @@ const formadd = [
             read_only: false
           },
           new Form.select.element('wage_type', 'Wage Type')
-            .seDefaultValue(0)
+            .setDefaultValue(0)
             .addOptions({
               0: 'Hourly wage',
               1: 'Piecework wage',
