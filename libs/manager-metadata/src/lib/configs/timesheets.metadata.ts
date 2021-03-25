@@ -1,4 +1,4 @@
-import { Endpoints, Color } from '@webui/data';
+import { Endpoints, Color, Models } from '@webui/data';
 import { createFilter, Type, Form } from '@webui/metadata';
 
 const filters = {
@@ -230,7 +230,6 @@ const list = {
                 resend_sms_candidate: true
               }
             ],
-            size: 'small',
             action: 'editForm',
             type: 'button',
             text: 'Fill'
@@ -1093,7 +1092,7 @@ const form = [
               timesheet: '{id}'
             })
             .setPrefilledFields({
-              timesheet: '{id}'
+              [Models.Timesheet]: '{id}',
             }),
         ]
       },

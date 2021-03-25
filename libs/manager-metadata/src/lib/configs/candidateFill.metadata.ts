@@ -1,3 +1,6 @@
+import { Endpoints } from "@webui/data";
+import { Form } from "@webui/metadata";
+
 const form = [
   {
     key: 'shift_started_at',
@@ -51,6 +54,13 @@ const form = [
     read_only: false,
     showIf: [{ no_break: false }]
   },
+  new Form.select.element('wage_type', 'Wage Type')
+    .setDefaultValue(0)
+    .addOptions({
+      '0': 'Hourly wage',
+      '1': 'Piecework wage',
+      '2': 'Combined wage',
+    }),
   {
     key: 'total_worked',
     type: 'static',
@@ -66,7 +76,14 @@ const form = [
       label: 'Send confirmation message to supervisor'
     },
     read_only: false
-  }
+  },
+  new Form.list.element('Skill Activities', Endpoints.TimesheetRates)
+    .setQuery({
+      timesheet: '{id}'
+    })
+    .setPrefilledFields({
+      timesheet: '{id}'
+    }),
 ];
 
 export const candidateFill = {

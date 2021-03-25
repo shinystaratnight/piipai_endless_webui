@@ -39,7 +39,7 @@ import {
   isManager,
   isClient,
 } from '@webui/utilities';
-import { Endpoints, CountryCodeLanguage } from '@webui/data';
+import { Endpoints, CountryCodeLanguage, Models } from '@webui/data';
 
 import {
   FilterService,
@@ -2440,6 +2440,17 @@ export class DynamicListComponent
         } else if (lastElement === 'candidate_fill') {
           endpoint = [...arr, 'candidate_fill'].join('/') + '/';
           withoutId = true;
+          data = {
+            [Models.Timesheet]: {
+              action: 'add',
+              data: {
+                value: this.format(
+                  `{id}`,
+                  this.data.results.find((el) => el.id === e.el.rowId)
+                ),
+              },
+            }
+          };
         } else if (lastElement === 'supervisor_approve') {
           endpoint = [...arr, 'supervisor_approve'].join('/') + '/';
           withoutId = true;
