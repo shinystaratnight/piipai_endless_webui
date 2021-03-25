@@ -108,6 +108,10 @@ export class DynamicFormComponent implements OnInit {
     this.replaceByData(this.config, data);
     this.filterSendData(this.config, data);
 
+    if (data.hasOwnProperty('skill_name') && data.skill_name === null) {
+      data.skill_name = '';
+    }
+
     this.submitForm.emit(data);
   }
 
