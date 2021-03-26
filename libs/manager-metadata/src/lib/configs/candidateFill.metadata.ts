@@ -1,11 +1,10 @@
-import { Endpoints } from "@webui/data";
+import { Endpoints, Models } from "@webui/data";
 import { Form } from "@webui/metadata";
 
 const form = [
   {
     key: 'shift_started_at',
     type: 'datepicker',
-    default: '2018-07-10T07:00:00+10:00',
     templateOptions: {
       type: 'datetime',
       required: false,
@@ -16,7 +15,6 @@ const form = [
   {
     key: 'shift_ended_at',
     type: 'datepicker',
-    default: '2018-07-10T15:30:00+10:00',
     templateOptions: {
       type: 'datetime',
       required: false,
@@ -38,7 +36,6 @@ const form = [
       required: false,
       label: 'Break Started at'
     },
-    default: '2018-07-10T12:00:00+10:00',
     read_only: false,
     showIf: [{ no_break: false }]
   },
@@ -50,7 +47,6 @@ const form = [
       required: false,
       label: 'Break Ended at'
     },
-    default: '2018-07-10T12:30:00+10:00',
     read_only: false,
     showIf: [{ no_break: false }]
   },
@@ -82,7 +78,8 @@ const form = [
       timesheet: '{id}'
     })
     .setPrefilledFields({
-      timesheet: '{id}'
+      [Models.Skill]: '{position.id}',
+      [Models.Timesheet]: '{id}',
     }),
 ];
 
