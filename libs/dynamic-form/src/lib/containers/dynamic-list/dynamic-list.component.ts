@@ -2444,10 +2444,7 @@ export class DynamicListComponent
             [Models.Timesheet]: {
               action: 'add',
               data: {
-                value: this.format(
-                  `{id}`,
-                  this.data.results.find((el) => el.id === e.el.rowId)
-                ),
+                value: this.format('{id}', this.data.results.find((el) => el.id === e.el.rowId)),
               },
             }
           };

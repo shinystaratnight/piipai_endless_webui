@@ -1092,6 +1092,7 @@ const form = [
               timesheet: '{id}'
             })
             .setPrefilledFields({
+              [Models.Skill]: '{position.id}',
               [Models.Timesheet]: '{id}',
             }),
         ]
