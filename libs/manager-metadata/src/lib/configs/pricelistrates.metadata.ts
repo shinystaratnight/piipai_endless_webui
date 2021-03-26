@@ -197,7 +197,6 @@ const form = [
   new Form.related.element('skill', 'Skill', Endpoints.Skill)
     .setQuery({
       active: true,
-      exclude_pricelist: '{price_list.id}'
     })
     .updateValues(['price_list_default_rate', 'tranlsations', 'name']),
   {
@@ -254,7 +253,6 @@ const formadd = [
   new Form.related.element('skill', 'Skill', Endpoints.Skill)
     .setQuery({
       active: true,
-      exclude_pricelist: '{price_list.id}'
     })
     .updateValues(['price_list_default_rate', 'tranlsations', 'name']),
   {
