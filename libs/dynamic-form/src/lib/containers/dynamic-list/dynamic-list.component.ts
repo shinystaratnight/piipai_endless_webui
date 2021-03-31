@@ -39,7 +39,7 @@ import {
   isManager,
   isClient,
 } from '@webui/utilities';
-import { Endpoints, CountryCodeLanguage } from '@webui/data';
+import { Endpoints, CountryCodeLanguage, Models } from '@webui/data';
 
 import {
   FilterService,
@@ -1209,7 +1209,6 @@ export class DynamicListComponent
           if (data.translations || (data.name && data.name.translations)) {
             const translations = data.translations || (data.name && data.name.translations) || [];
             const preferLanguage = this.storage.retrieve('lang') || translationMap[this.siteSettings.settings.country_code];
-
             const trans = translations.find(el => el.language ? el.language.id === preferLanguage : false);
 
             data.__str__ = trans ? trans.value : data.__str__;
@@ -2434,6 +2433,14 @@ export class DynamicListComponent
         } else if (lastElement === 'candidate_fill') {
           endpoint = [...arr, 'candidate_fill'].join('/') + '/';
           withoutId = true;
+          data = {
+            [Models.Timesheet]: {
+              action: 'add',
+              data: {
+                value: this.format('{id}', this.data.results.find((el) => el.id === e.el.rowId)),
+              },
+            }
+          };
         } else if (lastElement === 'supervisor_approve') {
           endpoint = [...arr, 'supervisor_approve'].join('/') + '/';
           withoutId = true;

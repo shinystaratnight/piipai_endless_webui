@@ -388,9 +388,9 @@
         [mode]="modalInfo.mode"
         [edit]="modalInfo.edit"
         (event)="formEvent($event, modal.close)"
-        (errorForm)="formError($event)">
+        (errorForm)="formError()">
         <div class="text-center">
-          <button type="submit" class="btn big-btn btn-shadow btn-primary text-white button-save mt-3 mb-4" [disabled]="saveProcess">
+          <button type="submit" class="btn big-btn btn-shadow btn-primary text-white button-save mt-3 mb-4" [disabled]="saveProcess || extendFormInvalid">
             Save
             <app-spinner *ngIf="saveProcess"></app-spinner>
           </button>

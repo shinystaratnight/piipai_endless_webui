@@ -2,7 +2,7 @@ import { Endpoints } from '@webui/data';
 import { createFilter, Type, Filter } from '@webui/metadata';
 
 const filters = {
-  date: createFilter(Type.Multiple, {
+  date: new Filter.multiple.element({
     key: 'date',
     label: 'Shifts',
     query: 'shifts',
@@ -49,10 +49,21 @@ const filters = {
   distance_to_jobsite: createFilter(Type.Text, {
     key: 'distance_to_jobsite',
     label: 'Distance',
-    defaultValue: 80,
     max: 200,
     min: 0
-  })
+  }),
+  overpriced:  new Filter.checkbox.element({
+    key: 'overpriced',
+    label: 'Overpriced',
+    query: 'overpriced',
+    values: [
+      {
+        label: 'Show overpriced',
+        value: 'True'
+      }
+    ],
+    defaultValue: 'True'
+  }),
 };
 
 const list = {
@@ -294,16 +305,7 @@ const list = {
     filters: [
       filters.date,
       filters.available,
-      new Filter.related.element({
-        key: 'uoms',
-        label: 'Unit of measurements',
-        endpoint: Endpoints.UnitOfMeasurements,
-      }),
-      new Filter.related.element({
-        key: 'worktypes',
-        label: 'Work types',
-        endpoint: Endpoints.SkillWorkTypes,
-      }),
+      filters.overpriced,
       filters.show_without_tags,
       filters.transportation_to_work,
       filters.distance_to_jobsite,

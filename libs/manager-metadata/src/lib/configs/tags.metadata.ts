@@ -1,35 +1,14 @@
-const list = {
-  list: {
-    list: 'tag',
-    label: 'Tag',
-    columns: [
-      {
-        content: [
-          {
-            field: '__str__',
-            type: 'static'
-          }
-        ],
-        name: '__str__',
-        label: 'Tag'
-      }
-    ],
-    pagination_label: 'Tag',
-    search_enabled: true,
-    editDisable: false
-  },
-  fields: [
-    {
-      key: '__str__',
-      type: 'static',
-      templateOptions: {
-        required: false,
-        label: 'Tag',
-        type: 'static'
-      },
-      read_only: true
-    }
-  ]
+import { List } from '@webui/metadata';
+
+const list = () => {
+  return {
+    list: new List.main.element('tag', 'Tag')
+      .setColumns([
+        new List.column.element('name', 'Tag').setContent([
+          new List.text.element('__str__')
+        ])
+      ])
+  };
 };
 
 const form = [
@@ -63,7 +42,7 @@ const form = [
     templateOptions: {
       values: ['__str__', 'owner', 'translation'],
       label: 'Parent',
-      add: true,
+      add: true
     },
     read_only: false
   },
@@ -83,7 +62,7 @@ const form = [
     templateOptions: {
       values: ['__str__', 'owner', 'translation'],
       label: 'Child',
-      add: true,
+      add: true
     },
     read_only: false
   },

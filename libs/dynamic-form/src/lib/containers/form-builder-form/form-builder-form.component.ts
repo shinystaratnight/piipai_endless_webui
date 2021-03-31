@@ -371,7 +371,7 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
       },
       (err: any) => {
         this.parseError(
-          Object.assign({}, this.error, { [el.key]: err.errors })
+          Object.assign({...this.error, [el.key]: err.errors['address'] })
         );
       }
     );

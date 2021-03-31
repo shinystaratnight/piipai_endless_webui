@@ -1,4 +1,4 @@
-import { Endpoints, Color } from '@webui/data';
+import { Endpoints, Color, Models } from '@webui/data';
 import { createFilter, Type, Form } from '@webui/metadata';
 
 const filters = {
@@ -230,7 +230,6 @@ const list = {
                 resend_sms_candidate: true
               }
             ],
-            size: 'small',
             action: 'editForm',
             type: 'button',
             text: 'Fill'
@@ -997,7 +996,7 @@ const form = [
                     }
                   },
                   new Form.select.element('wage_type', 'Wage Type')
-                    .seDefaultValue(0)
+                    .setDefaultValue(0)
                     .addOptions({
                       '0': 'Hourly wage',
                       '1': 'Piecework wage',
@@ -1089,8 +1088,12 @@ const form = [
             ]
           },
           new Form.list.element('Skill Activities', Endpoints.TimesheetRates)
+            .setQuery({
+              timesheet: '{id}'
+            })
             .setPrefilledFields({
-              'timesheet': '{id}'
+              [Models.Skill]: '{position.id}',
+              [Models.Timesheet]: '{id}',
             }),
         ]
       },

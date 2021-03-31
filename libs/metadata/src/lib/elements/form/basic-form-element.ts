@@ -93,7 +93,7 @@ export class BasicFormElement {
     return this;
   }
 
-  seDefaultValue(value: any) {
+  setDefaultValue(value: any) {
     this.default = value;
 
     return this;

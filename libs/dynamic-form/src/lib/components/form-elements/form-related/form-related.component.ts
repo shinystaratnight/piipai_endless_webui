@@ -159,6 +159,24 @@ export class FormRelatedComponent extends BasicElementComponent
   isClient = isClient;
   getTranslationKey = getTranslationKey;
 
+  get canEdit() {
+    return this.config.templateOptions.edit && this.displayValue && this.checkPermission('update');
+  }
+
+  get canCreate() {
+    return this.config.templateOptions.add && this.checkPermission('post');
+  }
+
+  get canDelete() {
+    return this.config.templateOptions.delete && this.displayValue && this.checkPermission('delete');
+  }
+
+  get hasActions() {
+    const { options, type, errorMessage } = this.config;
+
+    return (options || type === 'address') && (this.canCreate || this.canEdit || this.canDelete) && !(errorMessage && errorMessage.visible);
+  }
+
   constructor(
     private fb: FormBuilder,
     private modalService: NgbModal,
@@ -1829,11 +1847,7 @@ export class FormRelatedComponent extends BasicElementComponent
   }
 
   public checkPermission(type: string): boolean {
-    if (this.allowPermissions) {
-      return this.allowPermissions.indexOf(type) > -1;
-    } else {
-      return false;
-    }
+    return this.allowPermissions.indexOf(type) > -1;
   }
 
   public checkRelatedField(key: string, data): boolean {
