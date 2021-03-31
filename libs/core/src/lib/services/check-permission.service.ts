@@ -26,6 +26,7 @@ export interface PermissionResponse {
 export class CheckPermissionService {
   private _permissions: Permission[];
   private userPermissionEndpoint = `/permissions/user/`;
+  private subscriptionEndpoint = `/billing/subscription/list/`;
 
   constructor(
     private http: HttpClient,
@@ -140,6 +141,14 @@ export class CheckPermissionService {
     });
   }
 
+  public hasActiveSubscription() {
+    return this.http.get<{subscriptions: Array<any>}>(this.subscriptionEndpoint)
+      .pipe(
+        map(({ subscriptions }) => subscriptions.some(el => el.active)),
+        catchError((err: any) => this.error.parseErrors(err))
+      )
+  }
+
   private parseMethod(type: string, id?: string): string {
     if (type === 'list' || (type === 'form' && id)) {
       return 'get';
@@ -153,14 +162,17 @@ export class CheckPermissionService {
   }
 
   private getUserPermissions(id: string, expired?: boolean): Observable<Permission[]> {
-    return this.http.get(this.userPermissionEndpoint + id + '/').pipe(
-      map((response: PermissionResponse) => {
+    return forkJoin([
+      this.hasActiveSubscription(),
+      this.http.get<PermissionResponse>(this.userPermissionEndpoint + id + '/')
+    ]).pipe(
+      map(([hasActiveSubscription, response]) => {
         let permissions: Permission[] = [
           ...response.permission_list,
           ...response.group_permission_list
         ];
 
-        if (expired) {
+        if (expired || !hasActiveSubscription) {
           permissions = permissions.filter(({ codename }) => codename.includes('_get'));
         }
 
@@ -169,7 +181,7 @@ export class CheckPermissionService {
         return this.permissions;
       }),
       catchError((error: HttpErrorResponse) => this.error.parseErrors(error))
-    );
+    )
   }
 
   private filterPermissions(array: Permission[]): Permission[] {
