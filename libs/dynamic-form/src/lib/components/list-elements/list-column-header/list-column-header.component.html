@@ -1,0 +1,4 @@
+<a href="#" class="label" [class.disabled]="!config.sort" (click)="onSort($event)">
+  {{config.label}}
+  <fa-icon *ngIf="config.sort" class="icon" [icon]="icon$ | async"></fa-icon>
+</a>

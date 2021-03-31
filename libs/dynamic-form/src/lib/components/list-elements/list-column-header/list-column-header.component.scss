@@ -1,0 +1,13 @@
+.label {
+  opacity: 0.15;
+
+  &:not(.disabled):hover,
+  &:not(.disabled):focus {
+    opacity: 1;
+  }
+
+  .icon {
+    font-size: 10px;
+    margin-left: 0.5rem;
+  }
+}

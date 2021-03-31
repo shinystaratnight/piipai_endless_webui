@@ -185,6 +185,11 @@ export class DynamicListComponent
   public approveInvoice: boolean;
   // public timeInstance = getTimeInstance();
 
+
+  get hasSelectColumn() {
+    return (!this.inForm && this.config.list.actions) || this.actions || (!this.noneEdit && !this.inForm);
+  }
+
   private subscriptions: Subscription[] = [];
 
   constructor(

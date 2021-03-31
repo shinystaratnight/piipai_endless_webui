@@ -12,7 +12,7 @@
     <span (click)="sort()">
       {{ translationKey | translate: {"Default": config.label || ' '} }}
 
-      <app-sort-icon class="ml-2" *ngIf="config.sorted" [exist]="config.sort" [sort]="config.sorted"></app-sort-icon>
+      <!-- <app-sort-icon class="ml-2" *ngIf="config.sorted" [exist]="config.sort" [sort]="config.sorted"></app-sort-icon> -->
     </span>
   </ng-container>
 </ng-container>
@@ -34,7 +34,7 @@
   <span (click)="sort(item)">
     {{item}}
 
-    <app-sort-icon class="ml-2" *ngIf="sorted" [exist]="config.sort" [sort]="sorted"></app-sort-icon>
+    <!-- <app-sort-icon class="ml-2" *ngIf="sorted" [exist]="config.sort" [sort]="sorted"></app-sort-icon> -->
 
     <i *ngIf="!last">/</i>
   </span>

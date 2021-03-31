@@ -18,10 +18,16 @@ a.active {
   opacity: 1;
 
   @each $item in $themes {
-    .#{$item}-theme & {
+    .#{$item}-theme &:not(.disabled) {
       color: map-get($theme-colors, $item);
     }
   }
+}
+
+a.disabled {
+  color: inherit;
+  pointer-events: none;
+  cursor: default;
 }
 
 fa-icon {
