@@ -23,7 +23,7 @@ const form = function() {
         new Form.group.element('Times', 'times')
           .setChildren([
             new Form.checkbox.element('noBreak', 'No Break', CheckboxType.Checkbox)
-              .seDefaultValue(false)
+              .setDefaultValue(false)
               .updateByNull(['break_started_at', 'break_ended_at'])
               .setWidth(0.25)
               .doNotSend()

@@ -11,8 +11,7 @@ import {
 import { Router } from '@angular/router';
 
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { BehaviorSubject, Subscription } from 'rxjs';
-import { skip } from 'rxjs/operators';
+import { Subject, Subscription } from 'rxjs';
 
 import { FormatString } from '@webui/utilities';
 import { smallModalEndpoints } from '../../../helpers';
@@ -51,7 +50,7 @@ export class FormListComponent implements OnInit, OnDestroy {
 
   public modalRef: NgbModalRef;
 
-  public update: BehaviorSubject<boolean>;
+  public update: Subject<boolean>;
   public query: string;
   public showButton: boolean;
 
@@ -100,7 +99,7 @@ export class FormListComponent implements OnInit, OnDestroy {
     if (!this.config.hide) {
       this.initialize();
       this.checkFormData();
-      this.checkTimelineChange();
+      // this.checkTimelineChange();
     }
     this.checkHiddenProperty();
     this.allowMethods = this.permission.getAllowMethods(
@@ -144,7 +143,7 @@ export class FormListComponent implements OnInit, OnDestroy {
   }
 
   public initialize(): void {
-    this.update = new BehaviorSubject(false);
+    this.update = new Subject();
     this.isCollapsed = this.config.collapsed ? this.config.collapsed : false;
     if (this.config.query) {
       this.query = this.generateQuery(this.config.query).slice(1);
@@ -347,15 +346,15 @@ export class FormListComponent implements OnInit, OnDestroy {
     }
   }
 
-  public checkTimelineChange() {
-    if (this.timelineService) {
-      const subscription = this.timelineService.action$
-        .pipe(skip(1))
-        .subscribe(() => this.update.next(true));
+  // public checkTimelineChange() {
+  //   if (this.timelineService) {
+  //     const subscription = this.timelineService.action$
+  //       .pipe(skip(1))
+  //       .subscribe(() => this.update.next(true));
 
-      this.subscriptions.push(subscription);
-    }
-  }
+  //     this.subscriptions.push(subscription);
+  //   }
+  // }
 
   public checkDefaultValues(data) {
     const format = new FormatString();

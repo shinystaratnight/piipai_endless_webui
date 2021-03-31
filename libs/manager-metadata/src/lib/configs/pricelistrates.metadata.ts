@@ -1,5 +1,15 @@
-import { Endpoints } from '@webui/data';
+import { Endpoints, SkillWorkTypeModel, Models } from '@webui/data';
 import { Form, List } from '@webui/metadata';
+
+const worktypeField = () => new SkillWorkTypeModel().formElement()
+  .setPerfilledFields({
+    [Models.Skill]: '{skill.id}'
+  })
+  .setShowIfRule(['skill.id'])
+  .setActions({ add: true })
+  .setQuery({
+    skill_name: '{skill.name.id}'
+  });
 
 const list = {
   list: {
@@ -187,7 +197,6 @@ const form = [
   new Form.related.element('skill', 'Skill', Endpoints.Skill)
     .setQuery({
       active: true,
-      exclude_pricelist: '{price_list.id}'
     })
     .updateValues(['price_list_default_rate', 'tranlsations', 'name']),
   {
@@ -199,10 +208,7 @@ const form = [
     templateOptions: { required: false, label: 'Hourly Rate', type: 'text' },
     read_only: false
   },
-  new Form.related.element('worktype', 'Work Type', Endpoints.SkillWorkTypes)
-    .setQuery({
-      skill_name: '{skill.name.id}'
-    }),
+  worktypeField(),
   {
     endpoint: Endpoints.PriceListRateModifiers,
     type: 'list',
@@ -247,7 +253,6 @@ const formadd = [
   new Form.related.element('skill', 'Skill', Endpoints.Skill)
     .setQuery({
       active: true,
-      exclude_pricelist: '{price_list.id}'
     })
     .updateValues(['price_list_default_rate', 'tranlsations', 'name']),
   {
@@ -262,10 +267,7 @@ const formadd = [
     },
     read_only: false
   },
-  new Form.related.element('worktype', 'Work Type', Endpoints.SkillWorkTypes)
-    .setQuery({
-      skill_name: '{skill.name.id}'
-    }),
+  worktypeField()
 ];
 
 const pricelistForm = [

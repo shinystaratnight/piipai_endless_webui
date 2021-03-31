@@ -1,8 +1,10 @@
+import { Endpoints, Models } from "@webui/data";
+import { Form } from "@webui/metadata";
+
 const form = [
   {
     key: 'shift_started_at',
     type: 'datepicker',
-    default: '2018-07-10T07:00:00+10:00',
     templateOptions: {
       type: 'datetime',
       required: false,
@@ -13,7 +15,6 @@ const form = [
   {
     key: 'shift_ended_at',
     type: 'datepicker',
-    default: '2018-07-10T15:30:00+10:00',
     templateOptions: {
       type: 'datetime',
       required: false,
@@ -35,7 +36,6 @@ const form = [
       required: false,
       label: 'Break Started at'
     },
-    default: '2018-07-10T12:00:00+10:00',
     read_only: false,
     showIf: [{ no_break: false }]
   },
@@ -47,10 +47,16 @@ const form = [
       required: false,
       label: 'Break Ended at'
     },
-    default: '2018-07-10T12:30:00+10:00',
     read_only: false,
     showIf: [{ no_break: false }]
   },
+  new Form.select.element('wage_type', 'Wage Type')
+    .setDefaultValue(0)
+    .addOptions({
+      '0': 'Hourly wage',
+      '1': 'Piecework wage',
+      '2': 'Combined wage',
+    }),
   {
     key: 'total_worked',
     type: 'static',
@@ -66,7 +72,15 @@ const form = [
       label: 'Send confirmation message to supervisor'
     },
     read_only: false
-  }
+  },
+  new Form.list.element('Skill Activities', Endpoints.TimesheetRates)
+    .setQuery({
+      timesheet: '{id}'
+    })
+    .setPrefilledFields({
+      [Models.Skill]: '{position.id}',
+      [Models.Timesheet]: '{id}',
+    }),
 ];
 
 export const candidateFill = {
