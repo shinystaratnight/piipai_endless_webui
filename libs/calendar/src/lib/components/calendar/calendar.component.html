@@ -88,10 +88,14 @@
           </ng-container>
         </div>
 
-        <ng-container *ngIf="(isManager() || canClientCreateJob()) && hasSelectedDates && calendarData">
-          <span class="f-size-12 hov-opacity ml-auto" (click)="clearSelectedDates()">{{'reset_dates' | translate: {"Default": "Reset selected dates"} }} </span>
+        <ng-container *ngIf="canCreateJob">
+          <span class="f-size-12 hov-opacity ml-auto" (click)="clearSelectedDates()">
+            {{'reset_dates' | translate: {"Default": "Reset selected dates"} }}
+          </span>
 
-          <button type="button" class="btn job-btn ml-3" (click)="addJob()">{{'create_job' | translate: {"Default": "Create Job"} }}</button>
+          <button type="button" class="btn job-btn ml-3" (click)="addJob()">
+            {{'create_job' | translate: {"Default": "Create Job"} }}
+          </button>
         </ng-container>
       </footer>
     </div>
@@ -361,7 +365,7 @@
       </div>
     </div>
   </div>
-  <div *ngIf="calendarType === 0 || canClientCreateJob()" class="shift-action-wrapper">
+  <div *ngIf="hasActions" class="shift-action-wrapper">
     <button class="shift-action" type="button" (click)="extendJob(shift)">Extend</button>
     <button class="shift-action" *ngIf="fillinAccess(shift)" type="button" (click)="fillInJob(shift)">Fill in</button>
     <button class="shift-action" [class.bg-success]="activeShift === shift.shift.id" *ngIf="fillinAccess(shift) && isManager()" type="button" (click)="selectJob($event, shift)">Fill</button>

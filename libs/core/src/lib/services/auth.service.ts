@@ -3,12 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 
 import { LocalStorageService } from 'ngx-webstorage';
-// import { Subject } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { Role, Endpoints } from '@webui/data';
-
-// import { NavigationService } from './navigation.service';
-// import { CheckPermissionService } from './check-permission.service';
 import { ErrorsService } from './errors.service';
 
 import { ENV } from './env.service';
@@ -23,17 +19,11 @@ interface AuthResponse {
 
 @Injectable()
 export class AuthService {
-  // public loginWithTokenEndpoint: string;
-  // public refreshTokenEndpoint = '/oauth2/token/';
-  // public logoutAction: Subject<any> = new Subject();
-
   private _role: Role;
 
   constructor(
     private http: HttpClient,
     private storage: LocalStorageService,
-    // private navigation: NavigationService,
-    // private permission: CheckPermissionService,
     private error: ErrorsService,
     private router: Router,
     private eventService: EventService,
@@ -118,13 +108,10 @@ export class AuthService {
   }
 
   public logout() {
-    // this.navigation.navigationList = {};
-    // this.permission.permissions = null;
     this.eventService.emit(EventType.Logout);
     this.storage.clear('role');
     this.storage.clear('user');
     this.storage.clear('lang');
-    // this.logoutAction.next(true);
     this.router.navigate(['login']);
   }
 }
