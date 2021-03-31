@@ -1,6 +1,5 @@
-import { Endpoints } from '@webui/data';
+import { Endpoints, Models, SkillWorkTypeModel } from '@webui/data';
 import { Form, InputType, List } from '@webui/metadata';
-
 
 const list = () => new List.main.element('skillrateranges', ' Skill Rate Ranges');
 
@@ -86,7 +85,14 @@ const formadd = () => [
     .setChildren([
       new Form.group.element()
         .setChildren([
-          new Form.related.element('worktype', 'Work Type', Endpoints.SkillWorkTypes)
+          new Form.related.element('skill', 'Skill', Endpoints.Skill)
+            .updateValues(['name']),
+          new SkillWorkTypeModel().formElement()
+            .setShowIfRule(['skill.id'])
+            .setPerfilledFields({
+              [Models.Skill]: '{skill.id}'
+            })
+            .setActions({ add: true })
             .setQuery({
               skill_name: '{skill.name.id}'
             }),
@@ -94,70 +100,33 @@ const formadd = () => [
       new Form.group.element('Skill Rate')
         .setChildren([
           new Form.input.element('lower_rate_limit', 'Lower Rate Limit', InputType.Number)
-            .setNumberOptions(0.01, 0),
+            .setNumberOptions(0.01, 0)
+            .setFormatOfValue('{currency}{field}'),
           new Form.input.element('default_rate', 'Default Rate', InputType.Number)
-            .setNumberOptions(0.01, 0),
+            .setNumberOptions(0.01, 0)
+            .setFormatOfValue('{currency}{field}'),
           new Form.input.element('upper_rate_limit', 'Upper Rate Limit', InputType.Number)
-            .setNumberOptions(0.01, 0),
+            .setNumberOptions(0.01, 0)
+            .setFormatOfValue('{currency}{field}'),
         ]),
       new Form.group.element('Price List Rate')
         .setChildren([
           new Form.input.element('price_list_lower_rate_limit', 'Lower Rate Limit', InputType.Number)
-            .setNumberOptions(0.01, 0),
+            .setNumberOptions(0.01, 0)
+            .setFormatOfValue('{currency}{field}'),
           new Form.input.element('price_list_default_rate', 'Default Rate', InputType.Number)
-            .setNumberOptions(0.01, 0),
+            .setNumberOptions(0.01, 0)
+            .setFormatOfValue('{currency}{field}'),
           new Form.input.element('price_list_upper_rate_limit', 'Upper Rate Limit', InputType.Number)
-            .setNumberOptions(0.01, 0),
+            .setNumberOptions(0.01, 0)
+            .setFormatOfValue('{currency}{field}'),
         ]),
-    ]),
-  new Form.related.element('skill', 'Skill', Endpoints.Skill)
-    .updateValues(['name'])
-    .hideField(),
+    ])
 ];
-
-const form = () => [
-  new Form.row.element()
-    .setChildren([
-      new Form.group.element()
-        .setChildren([
-          new Form.related.element('worktype', 'Work Type', Endpoints.SkillWorkTypes)
-            .setQuery({
-              skill_name: '{skill.name.id}'
-            }),
-        ]),
-      new Form.group.element('Skill Rate')
-        .setChildren([
-          new Form.input.element('lower_rate_limit', 'Lower Rate Limit', InputType.Number)
-            .setNumberOptions(0.01, 0)
-            .setFormatOfValue('{currency}{field}'),
-          new Form.input.element('default_rate', 'Default Rate', InputType.Number)
-            .setNumberOptions(0.01, 0)
-            .setFormatOfValue('{currency}{field}'),
-          new Form.input.element('upper_rate_limit', 'Upper Rate Limit', InputType.Number)
-            .setNumberOptions(0.01, 0)
-            .setFormatOfValue('{currency}{field}'),
-        ]),
-      new Form.group.element('Price List Rate')
-        .setChildren([
-          new Form.input.element('price_list_lower_rate_limit', 'Lower Rate Limit', InputType.Number)
-            .setNumberOptions(0.01, 0)
-            .setFormatOfValue('{currency}{field}'),
-          new Form.input.element('price_list_default_rate', 'Default Rate', InputType.Number)
-            .setNumberOptions(0.01, 0)
-            .setFormatOfValue('{currency}{field}'),
-          new Form.input.element('price_list_upper_rate_limit', 'Upper Rate Limit', InputType.Number)
-            .setNumberOptions(0.01, 0)
-            .setFormatOfValue('{currency}{field}'),
-        ]),
-    ]),
-  new Form.related.element('skill', 'Skill', Endpoints.Skill)
-    .hideField()
-    .updateValues(['name']),
-]
 
 export const skillrateranges = {
   list,
   formset,
   formadd,
-  form,
+  form: formadd,
 }
