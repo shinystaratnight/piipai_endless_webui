@@ -1,4 +1,4 @@
-import { Endpoints, Models, SkillWorkTypeModel } from '@webui/data';
+import { Endpoints, Models, SkillModel, SkillWorkTypeModel } from '@webui/data';
 import { Form, InputType, List } from '@webui/metadata';
 
 const list = () => new List.main.element('skillrateranges', ' Skill Rate Ranges');
@@ -85,7 +85,7 @@ const formadd = () => [
     .setChildren([
       new Form.group.element()
         .setChildren([
-          new Form.related.element('skill', 'Skill', Endpoints.Skill)
+          new SkillModel().formElement()
             .updateValues(['name']),
           new SkillWorkTypeModel().formElement()
             .setShowIfRule(['skill.id'])
