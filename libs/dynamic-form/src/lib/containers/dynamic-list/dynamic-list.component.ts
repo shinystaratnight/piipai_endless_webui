@@ -2387,11 +2387,10 @@ export class DynamicListComponent
     let id;
     let withoutId;
     let data;
+    const rowData = this.getRowData(e);
+
     if (this.editEndpoint) {
-      endpoint = this.format(
-        this.editEndpoint,
-        this.data.results.find((el) => el.id === e.el.rowId)
-      );
+      endpoint = this.format(this.editEndpoint, rowData);
 
       const arr: string[] = endpoint.split('/');
       const lastElement = arr.pop();
@@ -2410,24 +2409,17 @@ export class DynamicListComponent
         if (lastElement === 'extend') {
           endpoint = [...arr, 'extend'].join('/') + '/';
           withoutId = true;
-
           data = {
             skill: {
               action: 'add',
               data: {
-                value: this.format(
-                  '{position.id}',
-                  this.data.results.find((el) => el.id === e.el.rowId)
-                ),
+                value: this.format('{position.id}', rowData),
               },
             },
             default_shift_starting_time: {
               action: 'add',
               data: {
-                value: this.format(
-                  '{default_shift_starting_time}',
-                  this.data.results.find((el) => el.id === e.el.rowId)
-                ),
+                value: this.format('{default_shift_starting_time}', rowData),
               },
             },
             job: {
@@ -2444,7 +2436,7 @@ export class DynamicListComponent
             [Models.Timesheet]: {
               action: 'add',
               data: {
-                value: this.format('{id}', this.data.results.find((el) => el.id === e.el.rowId)),
+                value: this.format('{id}', rowData),
               },
             }
           };
