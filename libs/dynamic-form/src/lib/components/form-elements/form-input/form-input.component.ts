@@ -34,7 +34,6 @@ import { isAddressField } from '../../../helpers';
   selector: 'app-form-input',
   templateUrl: './form-input.component.html',
   styleUrls: ['./form-input.component.scss'],
-  encapsulation: ViewEncapsulation.None,
 })
 export class FormInputComponent extends BasicElementComponent
   implements OnInit, AfterViewInit, OnDestroy {
