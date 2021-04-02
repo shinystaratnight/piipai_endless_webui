@@ -172,9 +172,9 @@ export class CheckPermissionService {
           ...response.group_permission_list
         ];
 
-        // if (expired || !hasActiveSubscription) {
-        //   permissions = permissions.filter(({ codename }) => codename.includes('_get'));
-        // }
+        if (expired || !hasActiveSubscription) {
+          permissions = permissions.filter(({ codename }) => codename.includes('_get'));
+        }
 
         this.permissions = permissions;
 
