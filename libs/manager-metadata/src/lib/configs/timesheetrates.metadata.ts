@@ -1,12 +1,10 @@
-import { Endpoints, SkillModel } from "@webui/data";
+import { Endpoints, SkillModel, Models } from "@webui/data";
 import { List, Form, InputType } from "@webui/metadata";
 
 const form = () => [
   new Form.related.element('timesheet', 'Timesheet', Endpoints.Timesheet).hideField(),
   new Form.related.element('worktype', 'Skill Activity', Endpoints.SkillWorkTypes)
-    .setActions({
-      add: true
-    })
+    .readOnly()
     .setQuery({
       'company': 'currentCompany'
     }),
@@ -21,6 +19,9 @@ const formadd = () => [
   new Form.related.element('worktype', 'Skill Activity', Endpoints.SkillWorkTypes)
     .setActions({
       add: true
+    })
+    .setPerfilledFields({
+      [Models.Skill]: `{${Models.Skill}.id}`
     })
     .setQuery({
       'skill_name': '{skill.name.id}',
