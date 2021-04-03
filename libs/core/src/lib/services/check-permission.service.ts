@@ -9,6 +9,7 @@ import { SiteService } from './site.service';
 import { NavigationService } from './navigation.service';
 import { Page, PageData } from '@webui/data';
 import { EventService, EventType } from './event.service';
+import { isManager } from '@webui/utilities';
 
 export interface Permission {
   id: number;
@@ -172,7 +173,7 @@ export class CheckPermissionService {
           ...response.group_permission_list
         ];
 
-        if (expired || !hasActiveSubscription) {
+        if (isManager() && expired && !hasActiveSubscription) {
           permissions = permissions.filter(({ codename }) => codename.includes('_get'));
         }
 
