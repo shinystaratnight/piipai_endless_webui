@@ -39,16 +39,16 @@ export class PermissionGuard implements CanActivate {
       .subscribe((user: User) => {
         const requests = [this.navigationService.getPages(user.currentRole)];
 
-        const endTrial = this.dateService.instance(user.data.end_trial_date);
-        const trielExpired = endTrial.isBefore(this.dateService.instance());
-
         if (this.isManager(user.currentRole)) {
+          const endTrial = this.dateService.instance(user.data.end_trial_date);
+          const trielExpired = endTrial.isBefore(this.dateService.instance());
           requests.push(this.checkPermissionServise.getPermissions(user.data.user, trielExpired));
         }
 
         forkJoin(requests).subscribe(([ navigation ]) => {
           if (!this.isManager(user.currentRole)) {
             subject.next(true);
+            return;
           }
 
           let routeSegments = (<any>route)._urlSegment.segments;
