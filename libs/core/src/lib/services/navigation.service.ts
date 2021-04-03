@@ -78,6 +78,7 @@ export class NavigationService {
           map((res: { purpose: Purpose; list: any[] }) => {
             this.removePrefix(res.list);
             this.removeMYOBLink(res.list, this.userService.user.data.country_code);
+            this.hideCandidateConsentUrl(res.list);
             if (res.list) {
               let list = res.purpose
                 ? this.purposeService.filterNavigationByPurpose(
@@ -139,7 +140,7 @@ export class NavigationService {
   }
 
   public removePrefix(list: Page[]) {
-    list.forEach((page) => {
+    list.forEach((page: Page) => {
       ['/mn/', '/cl/', '/cd/'].forEach((prefix) => {
         page.url = page.url.replace(prefix, '/');
       });
@@ -148,6 +149,18 @@ export class NavigationService {
         this.removePrefix(page.childrens);
       }
     });
+  }
+
+  private hideCandidateConsentUrl(list: Page[]) {
+    list.forEach((page: Page, index: number) => {
+      if (page.endpoint.indexOf('/candidate/candidatecontacts/consent/') > -1) {
+        list.splice(index, 1);
+      }
+
+      if (page.childrens) {
+        this.hideCandidateConsentUrl(page.childrens);
+      }
+    })
   }
 
   private removeMYOBLink(pages: Page[], countryCode: string) {
