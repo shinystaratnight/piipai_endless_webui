@@ -124,9 +124,50 @@ const formadd = () => [
     ])
 ];
 
+const form = () => [
+  new Form.row.element()
+    .setChildren([
+      new Form.group.element()
+        .setChildren([
+          new SkillModel().formElement()
+            .readOnly()
+            .updateValues(['name']),
+          new SkillWorkTypeModel().formElement()
+            .readOnly()
+            .setQuery({
+              skill_name: '{skill.name.id}'
+            }),
+        ]),
+      new Form.group.element('Skill Rate')
+        .setChildren([
+          new Form.input.element('lower_rate_limit', 'Lower Rate Limit', InputType.Number)
+            .setNumberOptions(0.01, 0)
+            .setFormatOfValue('{currency}{field}'),
+          new Form.input.element('default_rate', 'Default Rate', InputType.Number)
+            .setNumberOptions(0.01, 0)
+            .setFormatOfValue('{currency}{field}'),
+          new Form.input.element('upper_rate_limit', 'Upper Rate Limit', InputType.Number)
+            .setNumberOptions(0.01, 0)
+            .setFormatOfValue('{currency}{field}'),
+        ]),
+      new Form.group.element('Price List Rate')
+        .setChildren([
+          new Form.input.element('price_list_lower_rate_limit', 'Lower Rate Limit', InputType.Number)
+            .setNumberOptions(0.01, 0)
+            .setFormatOfValue('{currency}{field}'),
+          new Form.input.element('price_list_default_rate', 'Default Rate', InputType.Number)
+            .setNumberOptions(0.01, 0)
+            .setFormatOfValue('{currency}{field}'),
+          new Form.input.element('price_list_upper_rate_limit', 'Upper Rate Limit', InputType.Number)
+            .setNumberOptions(0.01, 0)
+            .setFormatOfValue('{currency}{field}'),
+        ]),
+    ])
+];
+
 export const skillrateranges = {
   list,
   formset,
   formadd,
-  form: formadd,
+  form,
 }

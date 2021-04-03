@@ -71,6 +71,6 @@ export class PermissionGuard implements CanActivate {
       });
     });
 
-    return subject.asObservable().pipe(tap(console.log));
+    return subject.asObservable();
   }
 }
