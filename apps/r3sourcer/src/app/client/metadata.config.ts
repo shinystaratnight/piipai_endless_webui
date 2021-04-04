@@ -8,7 +8,8 @@ import {
   fillin,
   jobs as clientJobs,
   shifts,
-  joboffers
+  joboffers,
+  timesheetratesclient,
 } from '@webui/client-metadata';
 
 import {
@@ -16,7 +17,8 @@ import {
   notes,
   address,
   passwordforgot,
-  jobs
+  jobs,
+  worktypes,
 } from '@webui/shared-metadata';
 
 export class Metadata {
@@ -33,5 +35,7 @@ export class Metadata {
   'extend' = extend;
   'fillin' = fillin;
   [Endpoints.Shift] = shifts;
-  [Endpoints.JobOffer] = joboffers
+  [Endpoints.JobOffer] = joboffers;
+  [Endpoints.TimesheetRates] = timesheetratesclient;
+  [Endpoints.SkillWorkTypes] = worktypes;
 }

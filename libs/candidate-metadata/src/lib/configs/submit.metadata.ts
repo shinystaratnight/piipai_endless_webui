@@ -1,4 +1,5 @@
-import { Form, CheckboxType, DatepickerType } from '@webui/metadata';
+import { Endpoints, Models } from '@webui/data';
+import { Form, CheckboxType, DatepickerType, InputType } from '@webui/metadata';
 
 const form = function() {
   return [
@@ -53,7 +54,16 @@ const form = function() {
           .doNotSend()
           .setColor('text-success')
           .inlineValue()
-      ])
+      ]),
+
+    new Form.list.element('Skill Activities', Endpoints.TimesheetRates)
+      .setQuery({
+        timesheet: '{id}'
+      })
+      .setPrefilledFields({
+        [Models.Skill]: '{position.id}',
+        [Models.Timesheet]: '{id}',
+      }),
   ]
 };
 

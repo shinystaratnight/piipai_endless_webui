@@ -108,6 +108,8 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
   public showResponse = false;
   @Input()
   public showToastr = true;
+  @Input()
+  public extendData: any;
 
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
@@ -464,15 +466,16 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
 
   public getMetadata(endpoint) {
     this.service
-      .getMetadata(
-        endpoint,
-        (this.id || this.edit ? '?type=form' : '?type=formadd') + (this.metadataQuery ? `&${this.metadataQuery}` : '')
-      )
+      .getMetadata(endpoint, (this.id || this.edit ? '?type=form' : '?type=formadd') + (this.metadataQuery ? `&${this.metadataQuery}` : ''))
       .subscribe(
         (data: any) => {
           this.getReplaceElements(data);
           this.metadata = this.parseMetadata(data, this.data);
           this.metadata = this.parseMetadata(data, this.relatedField);
+
+          if (this.extendData) {
+            this.fillinForm(this.metadata, this.extendData);
+          }
 
           if (!(this.id || this.editForm)) {
             this.checkRuleElement(this.metadata);
@@ -675,7 +678,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
         }
 
         this.getRelatedDataForOptions(this.metadata, data);
-        this.fillingForm(this.metadata, data);
+        this.fillinForm(this.metadata, data);
         this.checkRuleElement(this.metadata);
         this.checkRelatedObjects(this.metadata, data);
         this.updateDatepickerByTimezone(this.metadata, data);
@@ -705,7 +708,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
     });
   }
 
-  public fillingForm(metadata, data) {
+  public fillinForm(metadata, data) {
     metadata.forEach((el) => {
       const { templateOptions } = el;
 
@@ -810,7 +813,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
         if (el.type === 'row') {
           el.label = this.format.format(el.label, data);
         }
-        this.fillingForm(el.children, data);
+        this.fillinForm(el.children, data);
       }
     });
   }

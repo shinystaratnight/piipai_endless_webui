@@ -8,3 +8,4 @@ export * from './jobs.metadata';
 export * from './notes.metadata';
 export * from './address.metadata';
 export * from './passwordforgot.metadata';
+export * from './worktypes.metadata';

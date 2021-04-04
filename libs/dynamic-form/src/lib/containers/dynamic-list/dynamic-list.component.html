@@ -700,6 +700,7 @@
         [needData]="modalInfo.needData"
         [endpoint]="modalInfo.endpoint"
         [data]="modalInfo.data"
+        [extendData]="modalInfo.extendData"
         [edit]="modalInfo.edit"
         (event)="evaluateEvent($event, modal.close)"
       >
@@ -925,6 +926,7 @@
               [metadataQuery]="modalInfo.metadataQuery"
               [changeMetadata]="modalInfo.changeMetadata"
               [data]="modalInfo.timesheetData"
+              [extendData]="modalInfo.extendData"
               [edit]="modalInfo.edit"
               (event)="evaluateEvent($event, modal.close)"
             >
@@ -944,10 +946,9 @@
               class="time-line d-flex align-items-center flex-wrap"
               [class.text-success]="total"
             >
-              <span class="label" [class.description]="muted"
-                >{{ key | translate: { Default: label } }}:</span
-              >&nbsp;
-              <span>{{ value }}</span>
+              <span class="label" [class.description]="muted">
+                {{ key | translate: { Default: label } }}:
+              </span> <span>{{ value }}</span>
             </div>
           </ng-template>
 
@@ -977,12 +978,8 @@
                   (rateChange)="hovered = undefined"
                 >
                   <ng-template let-fill="fill" let-index="index">
-                    <span *ngIf="fill === 100" class="star star-lg full"
-                      >&#9733;</span
-                    >
-                    <span *ngIf="fill === 0" class="star star-lg">{{
-                      modalInfo.data.evaluation_score ? '&#9733;' : '&#9734;'
-                    }}</span>
+                    <span *ngIf="fill === 100" class="star star-lg full">&#9733;</span>
+                    <span *ngIf="fill === 0" class="star star-lg">{{ modalInfo.data.evaluation_score ? '&#9733;' : '&#9734;' }}</span>
                   </ng-template>
                 </ngb-rating>
               </div>
