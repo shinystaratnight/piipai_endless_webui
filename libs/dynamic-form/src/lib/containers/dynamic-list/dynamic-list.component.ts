@@ -124,7 +124,6 @@ export class DynamicListComponent
   @ViewChild('approveSignature') approveSignature;
 
   public selectedCount: number;
-  public sortedColumns: any;
   public reason: any;
   public page: any;
   public currentData: any;
@@ -294,22 +293,6 @@ export class DynamicListComponent
     if (data && this.paginated === 'on') {
       this.initPagination(data);
     }
-    // if (this.maximize) {
-    //   this.unpopedTable();
-    // }
-    if (changes['sorted'] && this.sorted) {
-      this.sortedColumns = this.sorted;
-      const names = Object.keys(this.sorted);
-      if (names.length) {
-        names.forEach((el) => {
-          this.updateSort(config.list.columns, el, this.sorted[el]);
-        });
-      } else {
-        this.config.list.columns.forEach((el) => {
-          this.resetSort(el, false);
-        });
-      }
-    }
 
     if (this.datatable) {
       this.datatable.nativeElement.style.zIndex = this.active
@@ -423,8 +406,6 @@ export class DynamicListComponent
         ...this.resetSelectedElements(data[this.responseField]),
       };
       if (config.list) {
-        this.sortedColumns = this.getSortedColumns(config.list.columns);
-        this.sortService.parseConfig(config.list.columns);
         if (this.tabs) {
           const mainMetadata = config.list.columns.filter(
             (el) => !el.tab || !el.tab.is_collapsed
@@ -1143,83 +1124,15 @@ export class DynamicListComponent
     }
   }
 
-  public getSortedColumns(config) {
-    const result = {};
-    config.forEach((el) => {
-      if (el.sorted) {
-        result[el.sort_field] = el.sorted;
-      }
-    });
-    return result;
-  }
-
-  sortingBy(field, event) {
+  onSortChange() {
     if (this.delay) {
       return;
     }
 
-    const { sort_field } = field;
-    let sort_param;
-
-    if (event) {
-      const el = field.sortMap.find(({ name }) => name === event.name);
-
-      sort_param = el.param;
-    } else {
-      sort_param = sort_field;
-    }
-
-    const data = this.sortService.updateSortParams(
-      this.sortedColumns,
-      sort_param
-    );
-
-    console.log(data);
-
-    // if (event) {
-    //   const el = field.sortMap.find(({ name }) => name === event.name);
-
-    //   el.sorted = data[sort_param];
-    // } else {
-    //   field.sorted = data[sort_param];
-    // }
-
-    const query = this.sortService.getSortQuery(data);
-
     this.event.emit({
       type: 'sort',
       list: this.config.list.list,
-      query,
-    });
-  }
-
-  public resetSort(field, emit) {
-    if (!this.delay) {
-      delete field.sorted;
-      delete this.sortedColumns[field.sort_field];
-      if (emit) {
-        this.event.emit({
-          type: 'sort',
-          list: this.config.list.list,
-          query: this.sortService.getSortQuery(this.sortedColumns),
-        });
-      }
-    }
-  }
-
-  public updateSort(columns, name, value) {
-    columns.forEach((el) => {
-      if (name === el.sort_field) {
-        el.sorted = value;
-      } else if (el.sortMap) {
-        const element = el.sortMap.find(({ param }) => param == name);
-
-        if (!element) {
-          return;
-        }
-
-        element.sorted = value;
-      }
+      query: this.sortService.getSortQuery(this.sortService.getCurrentState()),
     });
   }
 

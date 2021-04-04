@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Sort } from '../../../helpers';
@@ -6,11 +6,25 @@ import { Sort } from '../../../helpers';
 import { SortData, SortService } from '../../../services';
 
 type ListColumnHeaderConfig = {
-  delim: string,
-  label: string,
-  name: string,
-  sort: boolean,
+  delim: string;
+  label: string;
+  name: string;
+  sort: boolean;
   sort_field: string;
+  sortMap: Array<{
+    name: string;
+    param: string;
+    sorted: Sort;
+  }>
+}
+
+type Name = {
+  sorted?: Sort;
+  param?: string;
+  label: string;
+  name: string;
+  sort: boolean;
+  icon$?: Observable<string>;
 }
 
 @Component({
@@ -22,15 +36,11 @@ type ListColumnHeaderConfig = {
 export class ListColumnHeaderComponent implements OnInit {
   @Input() public config: ListColumnHeaderConfig;
 
-  get icon$(): Observable<string> {
-    return this.sortService.stream$
-      .pipe(map((data: SortData) => {
-        const value = data[this.config.sort_field];
-        console.log(value, data, this.config);
+  hasMultipleNames: boolean;
+  multipleNamesData: Name[];
+  icon$: Observable<string>;
 
-        return this.icons[value] || this.icons[Sort.DEFAULT]
-      }));
-  }
+  @Output() public sortChange: EventEmitter<void> = new EventEmitter();
 
   private icons = {
     [Sort.DEFAULT]: 'sort',
@@ -41,12 +51,54 @@ export class ListColumnHeaderComponent implements OnInit {
   constructor(private sortService: SortService) {}
 
   ngOnInit() {
-    console.log(this);
+    if (this.config.sortMap) {
+      this.hasMultipleNames = true;
+      this.generateMultipleNames();
+    } else if (this.config.sort) {
+      this.icon$ = this.sortService.stream$
+        .pipe(map((data: SortData) => this.icons[data[this.config.sort_field]] || this.icons[Sort.DEFAULT]));
+    }
   }
 
-  onSort(event: MouseEvent) {
+  onSort(event: PointerEvent, name?: string) {
     event.preventDefault();
 
-    console.log(event);
+    if (this.hasMultipleNames) {
+      const item = this.multipleNamesData.find(el => el.name === name);
+
+      this.sortService.updateWith(item.param);
+    } else {
+      this.sortService.updateWith(this.config.sort_field);
+    }
+
+    this.sortChange.emit();
+  }
+
+  private generateMultipleNames() {
+    const names = this.config.name.split('/').map(el => el.replace(/_/g, ''));
+    const labels = this.config.label.split('/').map(el => el.trim());
+
+    this.multipleNamesData = names.map((name: string, index: number) => {
+      let sorted;
+      let param;
+
+      const sortData = this.config.sortMap.find(el => el.name === name);
+      const iconStream$ = this.sortService.stream$
+        .pipe(map((data: SortData) => this.icons[data[param]] || this.icons[Sort.DEFAULT]));
+
+      if (sortData) {
+        sorted = sortData.sorted;
+        param = sortData.param;
+      }
+
+      return {
+        name,
+        label: labels[index],
+        sorted,
+        param,
+        sort: !!sortData,
+        icon$: iconStream$
+      };
+    })
   }
 }

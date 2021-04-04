@@ -13,7 +13,8 @@ import {
   GenericFormService,
   FilterService,
   ListService,
-  SortService
+  SortService,
+  SortData
 } from './../../services';
 
 import { BehaviorSubject, Subject, Subscription } from 'rxjs';
@@ -191,12 +192,16 @@ export class GenericListComponent implements OnInit, OnDestroy {
         this.updateMetadataInfo(metadata, table);
 
         if (!this.delay) {
-          const sortData = this.sortService.getSortedFields(metadata.list.columns);
+          const sortData: SortData = this.sortService.getSortData(metadata.list.columns);
 
-          table.query = sortData.exist
+          if (this.inForm) {
+            this.sortService.init(sortData);
+          }
+
+          table.query = Object.keys(sortData).length > 0
             ? {
                 filter: '',
-                sort: this.sortService.getSortQuery(sortData.result),
+                sort: this.sortService.getSortQuery(sortData),
                 pagination: ''
               }
             : {};
@@ -584,6 +589,8 @@ export class GenericListComponent implements OnInit, OnDestroy {
       }
     });
     table.sorted = sorted;
+
+    this.sortService.init(sorted);
 
     Object.keys(queryList).forEach(el => {
       if (el === 'filter') {

@@ -1,4 +1,16 @@
-<a href="#" class="label" [class.disabled]="!config.sort" (click)="onSort($event)">
-  {{config.label}}
-  <fa-icon *ngIf="config.sort" class="icon" [icon]="icon$ | async"></fa-icon>
-</a>
+<ng-container *ngIf="hasMultipleNames">
+  <ng-container *ngFor="let item of multipleNamesData; let last = last">
+    <a href="#" class="label" [class.disabled]="!item.sort" (click)="onSort($event, item.name)">
+      {{item.label}}
+      <fa-icon *ngIf="item.sort" class="icon" [icon]="item.icon$ | async"></fa-icon>
+    </a>
+    <span *ngIf="!last">&nbsp;/&nbsp;</span>
+  </ng-container>
+</ng-container>
+
+<ng-container *ngIf="!hasMultipleNames">
+  <a href="#" class="label" [class.disabled]="!config.sort" (click)="onSort($event)">
+    {{config.label}}
+    <fa-icon *ngIf="config.sort" class="icon" [icon]="icon$ | async"></fa-icon>
+  </a>
+</ng-container>

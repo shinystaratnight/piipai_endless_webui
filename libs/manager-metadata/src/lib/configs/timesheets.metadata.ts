@@ -55,12 +55,10 @@ const list = {
         sort: true,
         sortMap: [{
           name: 'client',
-          param: 'job_offer__shift__date__job__customer_company__name',
-          sorted: ''
+          param: 'job_offer__shift__date__job__customer_company__name'
         }, {
           name: 'jobsite',
-          param: 'job_offer__shift__date__job__jobsite__short_name',
-          sorted: ''
+          param: 'job_offer__shift__date__job__jobsite__short_name'
         }],
         label: 'Client / Jobsite / Supervisor',
         delim: null
