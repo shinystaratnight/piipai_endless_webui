@@ -1,41 +1,9 @@
-<ng-container *ngIf="head">
-  <ng-container *ngIf="sortStream$ | async as data">
-    {{ data | json }}
-  </ng-container>
-  <ng-container *ngIf="sortView">
-    <ng-container *ngFor="let item of sortView; let index = index, let last = last">
-      <ng-container *ngTemplateOutlet="element; context: { item: item, last: last, sorted: getSortedValue(item) }"></ng-container>
-    </ng-container>
-  </ng-container>
-
-  <ng-container *ngIf="!sortView">
-    <span (click)="sort()">
-      {{ translationKey | translate: {"Default": config.label || ' '} }}
-
-      <!-- <app-sort-icon class="ml-2" *ngIf="config.sorted" [exist]="config.sort" [sort]="config.sorted"></app-sort-icon> -->
-    </span>
-  </ng-container>
+<ng-container
+  *ngFor="let field of config; let last = last"
+  appListElement
+  [last]="last"
+  [config]="field"
+  [length]="config.length"
+  (event)="eventHandler($event)"
+  (buttonAction)="buttonHandler($event)">
 </ng-container>
-
-<ng-container *ngIf="!head">
-  <ng-container
-    *ngFor="let field of config; let last = last"
-    appListElement
-    [last]="last"
-    [config]="field"
-    [length]="config.length"
-    (event)="eventHandler($event)"
-    (buttonAction)="buttonHandler($event)">
-  </ng-container>
-</ng-container>
-
-
-<ng-template #element let-item="item" let-last="last" let-sorted="sorted">
-  <span (click)="sort(item)">
-    {{item}}
-
-    <!-- <app-sort-icon class="ml-2" *ngIf="sorted" [exist]="config.sort" [sort]="sorted"></app-sort-icon> -->
-
-    <i *ngIf="!last">/</i>
-  </span>
-</ng-template>

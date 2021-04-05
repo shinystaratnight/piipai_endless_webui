@@ -5,6 +5,8 @@ import { Sort } from '../../../helpers';
 
 import { SortData, SortService } from '../../../services';
 
+import { getTranslationKey } from '@webui/utilities';
+
 type ListColumnHeaderConfig = {
   delim: string;
   label: string;
@@ -39,6 +41,7 @@ export class ListColumnHeaderComponent implements OnInit {
   hasMultipleNames: boolean;
   multipleNamesData: Name[];
   icon$: Observable<string>;
+  translationKey: string;
 
   @Output() public sortChange: EventEmitter<void> = new EventEmitter();
 
@@ -51,6 +54,8 @@ export class ListColumnHeaderComponent implements OnInit {
   constructor(private sortService: SortService) {}
 
   ngOnInit() {
+    this.translationKey = getTranslationKey(this.config.name, 'label');
+
     if (this.config.sortMap) {
       this.hasMultipleNames = true;
       this.generateMultipleNames();
