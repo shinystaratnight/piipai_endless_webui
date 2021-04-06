@@ -18,9 +18,11 @@
         <fa-icon [icon]="['fas', 'chevron-right']"></fa-icon>
       </button>
 
-      <span class="range-title" (click)="openDropdown()">{{rangeTitle}}</span>
+      <span class="range-title" (click)="openDropdown()">
+        {{rangeTitle}}
+      </span>
 
-      <fa-icon class="px-2" [icon]="['fas', 'chevron-down']"></fa-icon>
+      <fa-icon class="px-2 calendar-icon" [icon]="['fas', 'chevron-down']" (click)="openDropdown()"></fa-icon>
 
       <app-datepicker *ngIf="showCalendarDropdown" [date]="currentDate" [type]="rangeForDropdown" (update)="setDate($event)" [range]="customRange"></app-datepicker>
     </div>
