@@ -50,9 +50,9 @@
 
   .modal-dialog {
     max-width: 500px;
-
     margin: 15px auto;
     padding: 0 15px;
+    box-sizing: content-box;
 
     .form-element {
       &-content {

@@ -1,3 +1,4 @@
+import { Endpoints, Models } from '@webui/data';
 import { Form, DatepickerType, CheckboxType, InputType } from '@webui/metadata';
 
 const shiftStartField = function() {
@@ -81,8 +82,16 @@ const form = function() {
 
       new Form.group.element()
         .setMarginBottom(18)
-        .setChildren([breakStartField(), breakEndField(), signatureField()])
-    ])
+        .setChildren([breakStartField(), breakEndField(), signatureField()]),
+    ]),
+    new Form.list.element('Skill Activities', Endpoints.TimesheetRates)
+      .setQuery({
+        timesheet: '{id}'
+      })
+      .setPrefilledFields({
+        [Models.Skill]: '{position.id}',
+        [Models.Timesheet]: '{id}',
+      }),
   ];
 };
 
@@ -94,6 +103,14 @@ const mobile = function() {
     breakEndField(),
     shiftEndField(),
     totalTimeField(),
+    new Form.list.element('Skill Activities', Endpoints.TimesheetRates)
+      .setQuery({
+        timesheet: '{id}'
+      })
+      .setPrefilledFields({
+        [Models.Skill]: '{position.id}',
+        [Models.Timesheet]: '{id}',
+      }),
     signatureField()
   ];
 };

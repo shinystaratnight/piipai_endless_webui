@@ -1775,7 +1775,11 @@ export class DynamicListComponent
           contactAvatar: getContactAvatar(contact.__str__),
           name: contact.__str__,
         },
+        extendData: data,
         data: {
+          id: createAddAction({
+            value: data.id
+          }),
           shift_started_at: createAddAction({
             value: data.shift_started_at,
           }),
@@ -1839,6 +1843,7 @@ export class DynamicListComponent
           contactAvatar: getContactAvatar(contact.__str__),
           name: contact.__str__,
         },
+        extendData: data,
         timesheetData: {
           shift_started_at: createAddAction({
             value: data.shift_started_at,
