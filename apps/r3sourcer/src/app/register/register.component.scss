@@ -50,6 +50,8 @@ $content-width: 540px;
 .registration-form {
   max-width: $content-width;
   padding: 0;
+  margin-left: auto;
+  margin-right: auto;
 
   @include media-breakpoint-down('sm') {
     max-width: 100%;
