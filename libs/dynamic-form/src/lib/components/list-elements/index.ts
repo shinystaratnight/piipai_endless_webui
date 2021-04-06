@@ -9,3 +9,4 @@ export * from './list-skills/list-skills.component';
 export * from './list-table/list-table.component';
 export * from './list-tags/list-tags.component';
 export * from './list-text/list-text.component';
+export * from './list-column-header/list-column-header.component';

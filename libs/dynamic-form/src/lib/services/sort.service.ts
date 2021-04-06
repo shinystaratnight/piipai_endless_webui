@@ -1,32 +1,32 @@
 import { Injectable } from '@angular/core';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { Sort } from '../helpers';
 
-interface SortData {
+export interface SortData {
   [param: string]: Sort;
 }
 
 @Injectable()
 export class SortService {
-  data: {[list: string]: SortData};
+  private _stream = new BehaviorSubject<SortData>({});
 
-  updateSortParams(exist: SortData, param: string): SortData {
-    const sorted = exist[param];
-
-    if (sorted === undefined) {
-      exist[param] = Sort.ASC;
-    } else if (sorted === Sort.ASC) {
-      exist[param] = Sort.DESC;
-    } else if (sorted === Sort.DESC) {
-      delete exist[param];
-    }
-
-    return { ...exist };
+  get stream$(): Observable<SortData> {
+    return this._stream.asObservable();
   }
 
-  getSortQuery(params: SortData): string {
+  private initialized: boolean;
+
+  public init(data: SortData): void {
+    if (!this.initialized) {
+      this.initialized = true;
+      this.next(data);
+    }
+  }
+
+  public getSortQuery(params: SortData): string {
     const entries = Object.entries(params);
 
-    const queryMap = entries.map(entry => {
+    const queryMap = entries.map((entry) => {
       const [name, sort] = entry;
       const prefix = sort === Sort.DESC ? '-' : '';
       return `${prefix}${name}`;
@@ -35,17 +35,57 @@ export class SortService {
     return queryMap.length ? `ordering=${queryMap.join(',')}` : '';
   }
 
-  getSortedFields(columns) {
-    const result = {};
-    let exist = false;
+  updateWith(key: string): void {
+    const currentState = this.getCurrentState();
+    const nextValue = this.getNextValue(key);
 
-    columns.forEach(el => {
-      if (el.sort && el.sorted) {
-        exist = true;
+    if (!nextValue) {
+      delete currentState[key];
+      return this.next({...currentState});
+    }
+
+    this.next({...currentState, [key]: nextValue});
+  }
+
+  public getCurrentState(): SortData {
+    return this._stream.getValue();
+  }
+
+  public getSortData(config: any[]): SortData {
+    const result = {};
+
+    config.forEach((el) => {
+      if (el.sorted) {
         result[el.sort_field] = el.sorted;
+      }
+
+      if (el.sortMap) {
+        el.sortMap.forEach(item => {
+          if (item.sorted) {
+            result[item.param] = item.sorted;
+          }
+        })
       }
     });
 
-    return { result, exist };
+    return result;
+  }
+
+  private getNextValue(key: string): Sort | undefined {
+    const currentState = this.getCurrentState();
+    const currentSortValue = currentState[key];
+
+    switch(currentSortValue) {
+      case Sort.ASC:
+        return Sort.DESC;
+      case Sort.DESC:
+        return;
+      default:
+        return Sort.ASC;
+    }
+  }
+
+  private next(data: SortData): void {
+    this._stream.next(data);
   }
 }

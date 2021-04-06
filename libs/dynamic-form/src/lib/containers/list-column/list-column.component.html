@@ -1,20 +1,9 @@
-<span *ngIf="head" (click)="sort()">
-  {{ translationKey | translate: {"Default": config.label || ' '} }}
-</span>
-<!--<span *ngIf="head && config.iconLabel" (clock)="sort()">-->
-<!--  <fa-icon class="text-muted"-->
-<!--    [icon]="['fas', config.iconLabel]">-->
-<!--  </fa-icon>-->
-<!--</span>-->
-
-<ng-container *ngIf="!head">
-  <ng-container
-    *ngFor="let field of config; let last = last"
-    appListElement
-    [last]="last"
-    [config]="field"
-    [length]="config.length"
-    (event)="eventHandler($event)"
-    (buttonAction)="buttonHandler($event)">
-  </ng-container>
+<ng-container
+  *ngFor="let field of config; let last = last"
+  appListElement
+  [last]="last"
+  [config]="field"
+  [length]="config.length"
+  (event)="eventHandler($event)"
+  (buttonAction)="buttonHandler($event)">
 </ng-container>
