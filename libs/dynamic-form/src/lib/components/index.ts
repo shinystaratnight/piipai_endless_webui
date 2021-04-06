@@ -69,11 +69,11 @@ import {
   ListTextComponent,
   ListFillinTagsComponent,
   ListAvailableComponent,
-  ListFormComponent
+  ListFormComponent,
+  ListColumnHeaderComponent,
 } from './list-elements';
 
 import { ListSerachBarComponent } from './list-search-bar/list-search-bar.component';
-import { SortIconComponent } from './sort-icon/sort-icon.component';
 
 export * from './generic-form/generic-form.component';
 export * from './generic-list/generic-list.component';
@@ -131,6 +131,7 @@ export const entryComponents = [
   ListFillinTagsComponent,
   ListAvailableComponent,
   ListFormComponent,
+  ListColumnHeaderComponent,
 
   TestGeneratorComponent,
   TestListComponent,
@@ -152,7 +153,6 @@ export const components = [
   DropdownComponent,
   ImageUploaderComponent,
 
-  SortIconComponent,
   FormErrorsComponent,
 
   ...entryComponents

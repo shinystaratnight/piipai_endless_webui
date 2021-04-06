@@ -1,3 +1,5 @@
+@import '../mixins';
+
 .modal-backdrop {
   bottom: -100px;
   z-index: 3 !important;
@@ -48,9 +50,9 @@
 
   .modal-dialog {
     max-width: 500px;
-
     margin: 15px auto;
     padding: 0 15px;
+    box-sizing: content-box;
 
     .form-element {
       &-content {
@@ -649,7 +651,7 @@
     }
 
     .button-save {
-      display: block;
+      @include flex-center;
 
       margin: 0 auto;
 

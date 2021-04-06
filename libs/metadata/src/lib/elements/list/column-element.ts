@@ -5,7 +5,7 @@ export class ColumnElement {
 
   delim?: any;
   sort?: boolean;
-  sorted_field?: string;
+  sort_field?: string;
   center?: boolean;
   hide?: boolean;
   width?: number;
@@ -37,9 +37,9 @@ export class ColumnElement {
     return this;
   }
 
-  setSort(sort: boolean, sorted_field: string) {
+  setSort(sort: boolean, sort_field: string) {
     this.sort = sort;
-    this.sorted_field = sorted_field;
+    this.sort_field = sort_field;
 
     return this;
   }
