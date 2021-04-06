@@ -201,17 +201,12 @@ export class CalendarComponent implements OnInit, OnDestroy {
     return this.selectDateService.hasSelectedDates();
   }
 
-  private get trialExpired() {
-    const endTrial = this.dateService.instance(this.userService.user.data.end_trial_date);
-    return endTrial.isBefore(this.dateService.instance());
-  }
-
   get hasActions() {
-    return !this.trialExpired && (this.calendarType === 0 || this.canClientCreateJob());
+    return this.calendarType === 0 || this.canClientCreateJob();
   }
 
   get canCreateJob() {
-    return (this.isManager() || this.canClientCreateJob()) && this.hasSelectedDates && this.calendarData && !this.trialExpired;
+    return (this.isManager() || this.canClientCreateJob()) && this.hasSelectedDates && this.calendarData;
   }
 
   ngOnInit() {
