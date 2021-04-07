@@ -173,7 +173,7 @@ export class CheckPermissionService {
           ...response.group_permission_list
         ];
 
-        if (isManager() && expired && !hasActiveSubscription) {
+        if (isManager() && (!hasActiveSubscription && expired)) {
           permissions = permissions.filter(({ codename }) => codename.includes('_get'));
         }
 
