@@ -160,6 +160,13 @@ h2 {
   }
 }
 
+.calendar-icon {
+  &:hover {
+    opacity: 1;
+    cursor: pointer;
+  }
+}
+
 .next,
 .prev {
   display: inline-flex;
