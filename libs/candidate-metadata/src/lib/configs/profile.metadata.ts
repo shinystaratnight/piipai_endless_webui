@@ -102,7 +102,7 @@ const profile = function () {
                 })
               ]),
 
-            new Form.group.element('Phisical parameters', 'phisical_parameters')
+            new Form.group.element('Physical parameters', 'phisical_parameters')
               .setWidth(0.25)
               .setChildren([
                 new Form.input.element('height', 'Height, cm', InputType.Text),

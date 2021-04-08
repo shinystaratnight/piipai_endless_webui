@@ -1440,6 +1440,7 @@ const formadd = [
             read_only: false
           },
           new Form.select.element('wage_type', 'Wage Type')
+            .required()
             .setDefaultValue(0)
             .addOptions({
               0: 'Hourly wage',

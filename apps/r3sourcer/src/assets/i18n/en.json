@@ -122,7 +122,7 @@
 		"label": "Default Shift Starting Time"
 	},
 	"delete": "Delete",
-	"distance": "Distanse to the jobsite",
+	"distance": "Distance to the jobsite",
 	"distance.distance_to_jobsite.label": "Distance",
 	"distance.label": "Distance/time",
 	"distance.time_to_jobsite.label": "Time",
@@ -197,7 +197,7 @@
 		"contacts": "Contacts",
 		"emergency_contact": "Emergency contact",
 		"general": "General",
-		"phisical_parameters": "Phisical parameters",
+		"phisical_parameters": "Physical parameters",
 		"portfolio_manager": "Portfolio Manager",
 		"primary_contact": "Primary Contact",
 		"provider": "Provider",

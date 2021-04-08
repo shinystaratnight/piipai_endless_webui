@@ -192,7 +192,7 @@ export class FormBankAccountComponent implements OnInit, OnDestroy {
           field.id.toString(),
           field.description,
           InputType.Text
-        );
+        ).required();
       });
 
     if (view) {
