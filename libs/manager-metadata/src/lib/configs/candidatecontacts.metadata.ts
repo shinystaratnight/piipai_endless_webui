@@ -328,7 +328,7 @@ const list = {
         fields: ['nationality', 'contact.gender', 'transportation_to_work']
       },
       {
-        label: 'Phisical Parameters',
+        label: 'Physical Parameters',
         is_collapsed: true,
         fields: ['height', 'weight', 'bmi']
       },
@@ -740,7 +740,7 @@ const form = [
                 width: 0.25
               },
               {
-                label: 'Phisical parameters',
+                label: 'Physical parameters',
                 type: 'group',
                 children: [
                   {
@@ -1777,7 +1777,7 @@ const profile = [
                 width: 0.25
               },
               {
-                label: 'Phisical parameters',
+                label: 'Physical parameters',
                 type: 'group',
                 children: [
                   {
