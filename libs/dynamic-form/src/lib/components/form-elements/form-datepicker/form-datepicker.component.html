@@ -32,7 +32,7 @@
           [attr.id]="key"
           [attr.name]="key"
           data-role="datebox"
-          [bsConfig]="{ dateInputFormat: formats.date }"
+          [bsConfig]="{ dateInputFormat: formats.date, showClearButton: true }"
         />
 
         <div class="input-group-addon">
@@ -40,9 +40,10 @@
         </div>
       </div>
 
-      <div class="position-relative time-wrapper">
+      <div class="position-relative time-wrapper" 
+        [hidden]="((config.templateOptions.type === 'datetime' && !d.value) || config.templateOptions.type === 'date')"
+      >
         <input
-          [hidden]="!(config.templateOptions.type === 'datetime' || config.templateOptions.type === 'time')"
           class="form-control"
           #t
           date-role="datebox"
