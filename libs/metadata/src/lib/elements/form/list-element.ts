@@ -21,7 +21,7 @@ export class ListElement {
   constructor(label: string, endpoint: string, translateKey?: string) {
     this.templateOptions = {
       label,
-      add_label: '+ Add'
+      add_label: 'add'
     };
 
     this.endpoint = endpoint;

@@ -502,5 +502,10 @@
   "filled_shifts": "Заполненные смены",
   "unfilled_shifts": "Не заполненные смены",
   "pending_shifts": "Смены в обработке",
-  "submit_timesheet": "Заполните табель"
+  "submit_timesheet": "Заполните табель",
+  "worktype.label": "Вид работы",
+  "rate.label": "Ставка",
+  "value.label": "Количество",
+  "tabs.timesheetrates.label": "Виды работ",
+  "worktype.placeholder": "Выбрать"
 }
