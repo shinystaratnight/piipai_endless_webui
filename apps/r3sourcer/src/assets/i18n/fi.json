@@ -503,9 +503,9 @@
   "unfilled_shifts": "Erinomaiset työvuorot",
   "pending_shifts": "Odottaa työvuorot",
   "submit_timesheet": "Lähetä aikataulu",
-  "worktype.label": "Skill Activity",
-  "rate.label": "Rate",
-  "value.label": "Amount",
-  "tabs.timesheetrates.label": "Skill Activities",
-  "worktype.placeholder": "Select"
+  "worktype.label": "Toiminta",
+  "rate.label": "Maksu",
+  "value.label": "Määrä",
+  "tabs.timesheetrates.label": "Toiminta",
+  "worktype.placeholder": "Valitse"
 }
