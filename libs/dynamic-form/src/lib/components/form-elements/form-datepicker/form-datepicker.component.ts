@@ -187,14 +187,14 @@ export class FormDatepickerComponent extends BasicElementComponent implements On
             { value: `${hours}:${minutes}`, format: 'H:m' }
           );
 
-          if (this.validateTimesheetTime(newDateInstance)) {
+          // if (this.validateTimesheetTime(newDateInstance)) {
             const time = this.dateService.getTime(dateInstance);
 
-            this.setDatepickerValue(this.t, time);
+            // this.setDatepickerValue(this.t, time);
             this.updateForm(type, this.getValue(type));
-          } else {
-            this.setDatepickerValue(this.t, this.model.time);
-          }
+          // } else {
+          //   this.setDatepickerValue(this.t, this.model.time);
+          // }
 
           this.opened = null;
         },
@@ -209,11 +209,11 @@ export class FormDatepickerComponent extends BasicElementComponent implements On
 
   public onDateChange() {
     const { type } = this.config.templateOptions;
-    if (this.validateTimesheetTime(this.getValue(type))) {
+    // if (this.validateTimesheetTime(this.getValue(type))) {
       this.updateForm(type, this.getValue(type));
-    } else {
-      this.setDatepickerValue(this.d, this.model.date);
-    }
+    // } else {
+    //   this.setDatepickerValue(this.d, this.model.date);
+    // }
   }
 
   public updateFromMobile(data) {
@@ -511,131 +511,133 @@ export class FormDatepickerComponent extends BasicElementComponent implements On
     this.getDatepicker(element).datebox('refresh');
   }
 
-  private setDatepickerValue(element: ElementRef, value?: string): void {
-    if (!this.init) {
-      return;
-    }
+  // private setDatepickerValue(element: ElementRef, value?: string): void {
+  //   if (!this.init) {
+  //     return;
+  //   }
 
-    const dp = this.getDatepicker(element);
-    value ? dp.datebox('setTheDate', value) : dp.datebox('refresh');
-  }
+  //   console.log(value);
 
-  private setDatepickerProp(propName: string, value: any, element: ElementRef) {
-    const dp = this.getDatepicker(element);
+  //   const dp = this.getDatepicker(element);
+  //   value ? dp.datebox('setTheDate', value) : dp.datebox('refresh');
+  // }
 
-    dp.datebox({ [propName]: value });
-  }
+  // private setDatepickerProp(propName: string, value: any, element: ElementRef) {
+  //   const dp = this.getDatepicker(element);
 
-  private validateTimesheetTime(date): boolean {
-    if (!date) {
-      return;
-    }
+  //   dp.datebox({ [propName]: value });
+  // }
 
-    const dateUtc = date.utc();
+  // private validateTimesheetTime(date): boolean {
+  //   if (!date) {
+  //     return;
+  //   }
 
-    enum TimesheetTime {
-      Start = 'shift_started_at',
-      End = 'shift_ended_at',
-      BreakStart = 'break_started_at',
-      BreakEnd = 'break_ended_at',
-    }
+  //   const dateUtc = date.utc();
 
-    const timesheetKeys = [TimesheetTime.Start, TimesheetTime.BreakStart, TimesheetTime.BreakEnd, TimesheetTime.End];
+  //   enum TimesheetTime {
+  //     Start = 'shift_started_at',
+  //     End = 'shift_ended_at',
+  //     BreakStart = 'break_started_at',
+  //     BreakEnd = 'break_ended_at',
+  //   }
 
-    if (!timesheetKeys.includes(this.config.key)) {
-      return true;
-    }
+  //   const timesheetKeys = [TimesheetTime.Start, TimesheetTime.BreakStart, TimesheetTime.BreakEnd, TimesheetTime.End];
 
-    const data = this.config.formData.value.data;
+  //   if (!timesheetKeys.includes(this.config.key)) {
+  //     return true;
+  //   }
 
-    const times = {};
-    timesheetKeys.forEach((key) => {
-      times[key] = getPropValue(data, key) && this.parseValue(DateType.Datetime, getPropValue(data, key));
-    });
+  //   const data = this.config.formData.value.data;
 
-    let valid = true;
+  //   const times = {};
+  //   timesheetKeys.forEach((key) => {
+  //     times[key] = getPropValue(data, key) && this.parseValue(DateType.Datetime, getPropValue(data, key));
+  //   });
 
-    switch (this.config.key) {
-      case TimesheetTime.Start:
-        if (times[TimesheetTime.BreakStart]) {
-          valid = dateUtc.isBefore(times[TimesheetTime.BreakStart]);
-        }
+  //   let valid = true;
 
-        if (valid && times[TimesheetTime.BreakEnd]) {
-          valid = dateUtc.isBefore(times[TimesheetTime.BreakEnd]);
-        }
+  //   switch (this.config.key) {
+  //     case TimesheetTime.Start:
+  //       if (times[TimesheetTime.BreakStart]) {
+  //         valid = dateUtc.isBefore(times[TimesheetTime.BreakStart]);
+  //       }
 
-        if (valid && times[TimesheetTime.End]) {
-          valid = dateUtc.isBefore(times[TimesheetTime.End]);
-        }
+  //       if (valid && times[TimesheetTime.BreakEnd]) {
+  //         valid = dateUtc.isBefore(times[TimesheetTime.BreakEnd]);
+  //       }
 
-        break;
+  //       if (valid && times[TimesheetTime.End]) {
+  //         valid = dateUtc.isBefore(times[TimesheetTime.End]);
+  //       }
 
-      case TimesheetTime.BreakStart: {
-        if (times[TimesheetTime.Start]) {
-          valid = dateUtc.isAfter(times[TimesheetTime.Start]);
-        }
+  //       break;
 
-        if (valid && times[TimesheetTime.BreakEnd]) {
-          valid = dateUtc.isBefore(times[TimesheetTime.BreakEnd]);
-        }
+  //     case TimesheetTime.BreakStart: {
+  //       if (times[TimesheetTime.Start]) {
+  //         valid = dateUtc.isAfter(times[TimesheetTime.Start]);
+  //       }
 
-        if (valid && times[TimesheetTime.End]) {
-          valid = dateUtc.isBefore(times[TimesheetTime.End]);
-        }
-        break;
-      }
+  //       if (valid && times[TimesheetTime.BreakEnd]) {
+  //         valid = dateUtc.isBefore(times[TimesheetTime.BreakEnd]);
+  //       }
 
-      case TimesheetTime.BreakEnd: {
-        if (times[TimesheetTime.Start]) {
-          valid = dateUtc.isAfter(times[TimesheetTime.Start]);
-        }
+  //       if (valid && times[TimesheetTime.End]) {
+  //         valid = dateUtc.isBefore(times[TimesheetTime.End]);
+  //       }
+  //       break;
+  //     }
 
-        if (valid && times[TimesheetTime.BreakStart]) {
-          valid = dateUtc.isAfter(times[TimesheetTime.BreakStart]);
-        }
+  //     case TimesheetTime.BreakEnd: {
+  //       if (times[TimesheetTime.Start]) {
+  //         valid = dateUtc.isAfter(times[TimesheetTime.Start]);
+  //       }
 
-        if (valid && times[TimesheetTime.End]) {
-          valid = dateUtc.isBefore(times[TimesheetTime.End]);
-        }
-        break;
-      }
+  //       if (valid && times[TimesheetTime.BreakStart]) {
+  //         valid = dateUtc.isAfter(times[TimesheetTime.BreakStart]);
+  //       }
 
-      case TimesheetTime.End: {
-        if (times[TimesheetTime.Start]) {
-          valid = dateUtc.isAfter(times[TimesheetTime.Start]);
-        }
+  //       if (valid && times[TimesheetTime.End]) {
+  //         valid = dateUtc.isBefore(times[TimesheetTime.End]);
+  //       }
+  //       break;
+  //     }
 
-        if (valid && times[TimesheetTime.BreakStart]) {
-          valid = dateUtc.isAfter(times[TimesheetTime.BreakStart]);
-        }
+  //     case TimesheetTime.End: {
+  //       if (times[TimesheetTime.Start]) {
+  //         valid = dateUtc.isAfter(times[TimesheetTime.Start]);
+  //       }
 
-        if (valid && times[TimesheetTime.BreakEnd]) {
-          valid = dateUtc.isAfter(times[TimesheetTime.BreakEnd]);
-        }
-        break;
-      }
+  //       if (valid && times[TimesheetTime.BreakStart]) {
+  //         valid = dateUtc.isAfter(times[TimesheetTime.BreakStart]);
+  //       }
 
-      default:
-        break;
-    }
+  //       if (valid && times[TimesheetTime.BreakEnd]) {
+  //         valid = dateUtc.isAfter(times[TimesheetTime.BreakEnd]);
+  //       }
+  //       break;
+  //     }
 
-    return valid;
-  }
+  //     default:
+  //       break;
+  //   }
 
-  @HostListener('document:touchstart', ['$event'])
-  @HostListener('document:click', ['$event'])
-  public handleClick(event) {
-    let clickedComponent = event.target;
-    let inside = false;
-    do {
-      if (clickedComponent === this.el.nativeElement) {
-        inside = true;
-      }
-      clickedComponent = clickedComponent.parentNode;
-    } while (clickedComponent);
-    if (!inside && this.opened) {
-      (window as any).$(this.opened).datebox('close');
-    }
-  }
+  //   return valid;
+  // }
+
+  // @HostListener('document:touchstart', ['$event'])
+  // @HostListener('document:click', ['$event'])
+  // public handleClick(event) {
+    // let clickedComponent = event.target;
+    // let inside = false;
+    // do {
+    //   if (clickedComponent === this.el.nativeElement) {
+    //     inside = true;
+    //   }
+    //   clickedComponent = clickedComponent.parentNode;
+    // } while (clickedComponent);
+    // if (!inside && this.opened) {
+    //   (window as any).$(this.opened).datebox('close');
+    // }
+  // }
 }
