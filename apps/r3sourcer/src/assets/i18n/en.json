@@ -502,5 +502,10 @@
   "filled_shifts": "Filled shifts",
   "unfilled_shifts": "Unfilled shifts",
   "pending_shifts": "Pending shifts",
-  "submit_timesheet": "Submit your timesheet"
+  "submit_timesheet": "Submit your timesheet",
+  "worktype.label": "Skill Activity",
+  "rate.label": "Rate",
+  "value.label": "Amount",
+  "tabs.timesheetrates.label": "Skill Activities",
+  "worktype.placeholder": "Select"
 }
