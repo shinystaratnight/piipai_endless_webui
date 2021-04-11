@@ -502,5 +502,10 @@
   "filled_shifts": "Täidetud vahetusi",
   "unfilled_shifts": "Täitmata vahetusi",
   "pending_shifts": "Ootel vahetusi",
-  "submit_timesheet": "Esitage oma töögraafik"
+  "submit_timesheet": "Esitage oma töögraafik",
+  "worktype.label": "Skill Activity",
+  "rate.label": "Rate",
+  "value.label": "Amount",
+  "tabs.timesheetrates.label": "Skill Activities",
+  "worktype.placeholder": "Select"
 }

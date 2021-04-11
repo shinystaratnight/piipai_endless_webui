@@ -1808,7 +1808,7 @@ export class DynamicListComponent
         },
       };
 
-      let windowClass = 'visible-mode timesheet-submit-form';
+      let windowClass = 'timesheet-submit-form';
 
       if (isMobile()) {
         windowClass += ' mobile-device';
