@@ -4,7 +4,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Subject, Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
-import { ErrorsService } from '@webui/core';
+import { ErrorsService, ToastService, MessageType } from '@webui/core';
 import { Endpoints } from '@webui/data';
 
 export enum TimelineAction {
@@ -28,7 +28,8 @@ export class TimelineService {
 
   constructor(
     private http: HttpClient,
-    private errorsService: ErrorsService
+    private errorsService: ErrorsService,
+    private toastr: ToastService,
   ) {}
 
   emit(action: TimelineAction | any) {
@@ -55,12 +56,24 @@ export class TimelineService {
     };
 
     return this.http.post(Endpoints.WorkflowObject, body)
-      .pipe(catchError((error) => this.errorsService.parseErrors(error)));
+      .pipe(catchError((error) => this.errorsService.parseErrors(error)
+        .pipe(catchError((error) => {
+          const { non_field_errors, detail } = error.errors;
+
+          this.toastr.sendMessage(non_field_errors ? non_field_errors.join(', ') : detail, MessageType.error);
+        }))
+      ));
   }
 
   passTests(tests: any[]): Observable<any> {
     return this.http.post(Endpoints.AcceptenceTestPassAnswers, tests)
-      .pipe(catchError((error) => this.errorsService.parseErrors(error)));
+      .pipe(catchError((error) => this.errorsService.parseErrors(error)
+        .pipe(catchError((error) => {
+          const { non_field_errors, detail } = error.errors;
+
+          this.toastr.sendMessage(non_field_errors ? non_field_errors.join(', ') : detail, MessageType.error);
+        }))
+      ));
   }
 
   editContact(action) {
