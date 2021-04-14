@@ -498,7 +498,15 @@ export class SiteComponent implements OnInit, OnDestroy {
               this.getId(this.pageData.endpoint) +
               '/change',
           ]), //tslint:disable-line
-        (err: any) => (this.error = err)
+        (err: any) => {
+          const { detail } = err.errors;
+
+          if (!detail) {
+            return;
+          }
+
+          this.ts.sendMessage(detail, MessageType.error);
+        }
       );
     }
   }
