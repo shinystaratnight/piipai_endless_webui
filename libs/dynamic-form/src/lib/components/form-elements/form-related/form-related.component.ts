@@ -972,7 +972,7 @@ export class FormRelatedComponent extends BasicElementComponent
           this.updateValue(undefined);
         },
         (error) => {
-          this.toastr.sendMessage(error.errors.join(' '), MessageType.error);
+          this.toastr.sendMessage(error.errors.join(' '), MessageType.Error);
         }
       );
     }

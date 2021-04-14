@@ -1249,7 +1249,7 @@ export class DynamicListComponent
       !Object.keys(this.select).some((el) => el && this.select[el])
     ) {
       this.actionProcess = false;
-      this.toastr.sendMessage(e.action.selectionError, MessageType.error);
+      this.toastr.sendMessage(e.action.selectionError, MessageType.Error);
       return;
     }
     this.event.emit({
@@ -1565,7 +1565,7 @@ export class DynamicListComponent
           this.modalRef.close();
           this.toastr.sendMessage(
             `${rowData.__str__} has been added to your Candidate Contact list`,
-            MessageType.success
+            MessageType.Success
           );
           this.event.emit({
             type: 'update',
@@ -1576,7 +1576,7 @@ export class DynamicListComponent
           this.modalRef.close();
           this.toastr.sendMessage(
             `Please add Credit Card for paid services!`,
-            MessageType.error
+            MessageType.Error
           );
           this.router.navigate(['/billing']);
         }
@@ -2306,7 +2306,7 @@ export class DynamicListComponent
         (err: any) => {
           if (err && err.errors) {
             const { non_field_errors } = err.errors;
-            this.toastr.sendMessage(non_field_errors, MessageType.error);
+            this.toastr.sendMessage(non_field_errors, MessageType.Error);
           }
         }
       );
@@ -2531,7 +2531,7 @@ export class DynamicListComponent
           endpoint.includes('/core/invoices/') &&
           endpoint.includes('/approve/')
         ) {
-          this.toastr.sendMessage(err.errors, MessageType.error);
+          this.toastr.sendMessage(err.errors, MessageType.Error);
           this.approveInvoice = e;
           const invoice = this.getRowData(e);
           this.modalInfo = {
@@ -2672,7 +2672,7 @@ export class DynamicListComponent
         } else {
           e.el.locationDataEmpty = true;
           this.listStorage.updateTrackingInfo(e.id, false);
-          this.toastr.sendMessage('Location data is empty', MessageType.info);
+          this.toastr.sendMessage('Location data is empty', MessageType.Info);
         }
       });
   }

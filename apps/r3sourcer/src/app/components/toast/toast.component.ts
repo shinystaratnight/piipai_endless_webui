@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewContainerRef, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
@@ -9,22 +9,27 @@ import { ToastService, Message } from '@webui/core';
   selector: 'app-toast',
   template: ''
 })
-
 export class ToastComponent implements OnInit, OnDestroy {
-
   private subscription: Subscription;
 
   constructor(
     private toastr: ToastrService,
-    private ts: ToastService
+    private toastService: ToastService
   ) {}
 
   public ngOnInit() {
-    this.subscription = this.ts.message.subscribe((message: Message) => {
-      if (message && this.toastr[message.type]) {
-        this.toastr[message.type](message.message);
+    this.subscription = this.toastService.message$.subscribe(
+      (data: Message) => {
+        const { text } = data;
+        const method = this.toastr[data.type];
+
+        if (!text || !method) {
+          return;
+        }
+
+        method(text);
       }
-    });
+    );
   }
 
   public ngOnDestroy() {

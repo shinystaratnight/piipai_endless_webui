@@ -60,7 +60,7 @@ export class DashboardService {
 
         return { count, candidates };
       }),
-      catchError(errors => this.errorService.parseErrors(errors))
+      catchError(errors => this.errorService.handleError(errors))
     );
   }
 
@@ -98,7 +98,7 @@ export class DashboardService {
           };
         });
       }),
-      catchError(errors => this.errorService.parseErrors(errors))
+      catchError(errors => this.errorService.handleError(errors))
     );
   }
 
@@ -110,7 +110,7 @@ export class DashboardService {
 
     return this.http
       .post(`${Endpoints.Job}${jobId}/fillin/`, body)
-      .pipe(catchError(errors => this.errorService.parseErrors(errors)));
+      .pipe(catchError(errors => this.errorService.handleError(errors)));
   }
 
   private generateScores(scores: { [key: string]: string }) {

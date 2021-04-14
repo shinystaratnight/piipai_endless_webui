@@ -74,7 +74,7 @@ export class FillInComponent implements OnInit {
             return;
           }
 
-          this.toastr.sendMessage(detail, MessageType.error);
+          this.toastr.sendMessage(detail, MessageType.Error);
         }
       );
     }

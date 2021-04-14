@@ -209,7 +209,7 @@ export class SiteComponent implements OnInit, OnDestroy {
         this.permissionMethods = this.permission.getAllowMethods(undefined, pageData.endpoint);
       } else if (pageData.endpoint === '/' && pageData.pathData.path !== '/') {
         setTimeout(() => {
-          this.ts.sendMessage('Page not found!', MessageType.error);
+          this.ts.sendMessage('Page not found!', MessageType.Error);
         }, 2000);
 
         this.router.navigate(['']);
@@ -417,7 +417,7 @@ export class SiteComponent implements OnInit, OnDestroy {
       (res: any) => this.router.navigate([element.pathData.path]),
       (err: any) => {
         if (err.status === 'error') {
-          this.ts.sendMessage(err.errors.error, MessageType.error);
+          this.ts.sendMessage(err.errors.error, MessageType.Error);
         }
         this.errors = err.errors;
       }

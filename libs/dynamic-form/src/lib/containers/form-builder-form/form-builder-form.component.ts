@@ -12,7 +12,7 @@ import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subject, BehaviorSubject, Subscription } from 'rxjs';
 
 import { FormBuilderService } from '../../services';
-import { ToastService } from '@webui/core';
+import { MessageType, ToastService } from '@webui/core';
 import { HiddenFields } from '../../components/generic-form/generic-form.component';
 import { Field } from '@webui/data';
 import { getElementFromMetadata } from '../../helpers';
@@ -353,7 +353,7 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
     this.service.sendFormData(this.id, body).subscribe(
       (res: any) => {
         this.saveProcess = false;
-        this.toastr.sendMessage(this.config.submit_message, 'success');
+        this.toastr.sendMessage(this.config.submit_message, MessageType.Success);
         this.router.navigate(['/login']);
       },
       (err: any) => {

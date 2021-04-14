@@ -87,7 +87,7 @@ export class CompanyPurposeService {
         this.purpose = res.purpose;
       }),
       map((res: { id: string; purpose: Purpose }) => res.purpose),
-      catchError((err: HttpErrorResponse) => this.errors.parseErrors(err))
+      catchError((err: HttpErrorResponse) => this.errors.handleError(err))
     );
   }
 
@@ -97,7 +97,7 @@ export class CompanyPurposeService {
       .pipe(
         tap((res: any) => {
           this.purpose = purpose;
-          this.toastr.sendMessage(res.message, MessageType.success);
+          this.toastr.sendMessage(res.message, MessageType.Success);
         })
       );
   }

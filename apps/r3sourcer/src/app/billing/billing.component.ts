@@ -6,7 +6,7 @@ import { BillingService } from './services/billing-service';
 import { Plan, Payment, BillingSubscription } from './models';
 
 import { User } from '@webui/data';
-import { ToastService, EventService, EventType, SiteSettingsService } from '@webui/core';
+import { ToastService, EventService, EventType, SiteSettingsService, MessageType } from '@webui/core';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -102,9 +102,9 @@ export class BillingComponent implements OnInit, OnDestroy {
         this.saveProcess = false;
 
         if (changed) {
-          this.toastr.sendMessage('Subscription has been updated', 'success');
+          this.toastr.sendMessage('Subscription has been updated', MessageType.Success);
         } else {
-          this.toastr.sendMessage('Subscription has been created', 'success');
+          this.toastr.sendMessage('Subscription has been created', MessageType.Success);
         }
 
         this.getSubscriptionInformation();
@@ -139,7 +139,7 @@ export class BillingComponent implements OnInit, OnDestroy {
   public cancelPlan() {
     this.billingService.cancelSubscription().subscribe(() => {
       this.currentPlan = undefined;
-      this.toastr.sendMessage('Subscription has been canceled', 'success');
+      this.toastr.sendMessage('Subscription has been canceled', MessageType.Success);
     });
   }
 
