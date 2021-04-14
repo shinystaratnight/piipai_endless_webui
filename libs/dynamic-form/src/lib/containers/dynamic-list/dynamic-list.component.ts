@@ -1154,14 +1154,14 @@ export class DynamicListComponent
         } else {
           if (data.translations || (data.name && data.name.translations)) {
             const translations = data.translations || (data.name && data.name.translations) || [];
-            const preferLanguage = this.storage.retrieve('lang') || translationMap[this.siteSettings.settings.country_code];
+            const preferLanguage = (!isManager() && this.storage.retrieve('lang')) || translationMap[this.siteSettings.settings.country_code];
             const trans = translations.find(el => el.language ? el.language.id === preferLanguage : false);
 
             data.__str__ = trans ? trans.value : data.__str__;
           }
 
           if (data[prop] && data[prop].translations) {
-            const preferLanguage = this.storage.retrieve('lang') || translationMap[this.siteSettings.settings.country_code];
+            const preferLanguage = (!isManager() && this.storage.retrieve('lang')) || translationMap[this.siteSettings.settings.country_code];
 
             const trans = data[prop].translations.find(el => el.language.id === preferLanguage);
 
