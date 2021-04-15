@@ -51,6 +51,7 @@ export class GenericListComponent implements OnInit, OnDestroy {
   @Output() checkedObjects: EventEmitter<any> = new EventEmitter();
   @Output() event: EventEmitter<any> = new EventEmitter();
   @Output() dataLength: EventEmitter<number> = new EventEmitter();
+  @Output() listUpdated: EventEmitter<void> = new EventEmitter();
 
   public tables = [];
   public first = false;
@@ -269,6 +270,7 @@ export class GenericListComponent implements OnInit, OnDestroy {
 
     this.currentQuery = query;
     this.isLoading = true;
+    this.listUpdated.emit();
 
     this.gfs.getByQuery(endpoint, query).subscribe(data => {
       if (this.currentQuery !== query) {

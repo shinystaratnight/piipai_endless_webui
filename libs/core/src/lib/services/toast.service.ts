@@ -4,31 +4,29 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { skip } from 'rxjs/operators';
 
 export interface Message {
-  message: string;
+  text: string;
   type: string;
 }
 
-export const MessageType = {
-  success: 'success',
-  error: 'error',
-  info: 'info'
-};
+export enum MessageType {
+  Success = 'success',
+  Error = 'error',
+  Info = 'info'
+}
 
 @Injectable()
 export class ToastService {
+  private _messages: BehaviorSubject<Message> = new BehaviorSubject(
+    {} as Message
+  );
 
-  private _messages: BehaviorSubject<Message>;
-
-  get message(): Observable<Message> {
+  get message$(): Observable<Message> {
     return this._messages.asObservable().pipe(skip(1));
   }
 
-  constructor() {
-    this._messages = new BehaviorSubject(null);
-  }
+  public sendMessage(text: string, type: MessageType) {
+    const data: Message = { text, type };
 
-  public sendMessage(message: string, type: string) {
-    this._messages.next({ message, type });
+    this._messages.next(data);
   }
-
 }

@@ -53,7 +53,7 @@ export class UserService {
             setTimeout(() => {
               this.toastService.sendMessage(
                 'User is invalid',
-                MessageType.error
+                MessageType.Error
               );
             }, 1000);
             throw Error('User is invalid');
@@ -92,7 +92,7 @@ export class UserService {
 
           return this.user;
         }),
-        catchError(errors => this.errorsService.parseErrors(errors))
+        catchError(errors => this.errorsService.handleError(errors))
       );
     } else {
       return of(this.user);
@@ -104,7 +104,7 @@ export class UserService {
 
     return this.http
       .post(this.timezoneEndpoint, { user_timezone: timeZone })
-      .pipe(catchError(errors => this.errorsService.parseErrors(errors)));
+      .pipe(catchError(errors => this.errorsService.handleError(errors)));
   }
 
   public getTimeZone() {

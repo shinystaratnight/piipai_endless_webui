@@ -34,7 +34,7 @@ export class PermissionsService {
     return this.http
       .get(endpoint)
       .pipe(
-        catchError((err: HttpErrorResponse) => this.errors.parseErrors(err))
+        catchError((err: HttpErrorResponse) => this.errors.handleError(err))
       );
   }
 
@@ -43,7 +43,7 @@ export class PermissionsService {
     return this.http
       .get(endpoint)
       .pipe(
-        catchError((err: HttpErrorResponse) => this.errors.parseErrors(err))
+        catchError((err: HttpErrorResponse) => this.errors.handleError(err))
       );
   }
 
@@ -52,7 +52,7 @@ export class PermissionsService {
     return this.http
       .get(endpoint)
       .pipe(
-        catchError((err: HttpErrorResponse) => this.errors.parseErrors(err))
+        catchError((err: HttpErrorResponse) => this.errors.handleError(err))
       );
   }
 
@@ -64,7 +64,7 @@ export class PermissionsService {
     return this.http
       .post(endpoint, body)
       .pipe(
-        catchError((err: HttpErrorResponse) => this.errors.parseErrors(err))
+        catchError((err: HttpErrorResponse) => this.errors.handleError(err))
       );
   }
 
@@ -73,7 +73,7 @@ export class PermissionsService {
     return this.http
       .get(endpoint)
       .pipe(
-        catchError((err: HttpErrorResponse) => this.errors.parseErrors(err))
+        catchError((err: HttpErrorResponse) => this.errors.handleError(err))
       );
   }
 
@@ -82,7 +82,7 @@ export class PermissionsService {
     return this.http
       .get(endpoint)
       .pipe(
-        catchError((err: HttpErrorResponse) => this.errors.parseErrors(err))
+        catchError((err: HttpErrorResponse) => this.errors.handleError(err))
       );
   }
 
@@ -94,7 +94,7 @@ export class PermissionsService {
     return this.http
       .post(endpoint, body)
       .pipe(
-        catchError((err: HttpErrorResponse) => this.errors.parseErrors(err))
+        catchError((err: HttpErrorResponse) => this.errors.handleError(err))
       );
   }
 
@@ -103,7 +103,7 @@ export class PermissionsService {
     return this.http
       .get(endpoint)
       .pipe(
-        catchError((err: HttpErrorResponse) => this.errors.parseErrors(err))
+        catchError((err: HttpErrorResponse) => this.errors.handleError(err))
       );
   }
 
@@ -112,7 +112,7 @@ export class PermissionsService {
     return this.http
       .get(endpoint)
       .pipe(
-        catchError((err: HttpErrorResponse) => this.errors.parseErrors(err))
+        catchError((err: HttpErrorResponse) => this.errors.handleError(err))
       );
   }
 
@@ -122,7 +122,7 @@ export class PermissionsService {
     return this.http
       .post(endpoint, body)
       .pipe(
-        catchError((err: HttpErrorResponse) => this.errors.parseErrors(err))
+        catchError((err: HttpErrorResponse) => this.errors.handleError(err))
       );
   }
 
@@ -131,7 +131,7 @@ export class PermissionsService {
     return this.http
       .get(endpoint)
       .pipe(
-        catchError((err: HttpErrorResponse) => this.errors.parseErrors(err))
+        catchError((err: HttpErrorResponse) => this.errors.handleError(err))
       );
   }
 
@@ -143,7 +143,7 @@ export class PermissionsService {
     return this.http
       .post(endpoint, body)
       .pipe(
-        catchError((err: HttpErrorResponse) => this.errors.parseErrors(err))
+        catchError((err: HttpErrorResponse) => this.errors.handleError(err))
       );
   }
 
@@ -155,7 +155,7 @@ export class PermissionsService {
     return this.http
       .post(endpoint, body)
       .pipe(
-        catchError((err: HttpErrorResponse) => this.errors.parseErrors(err))
+        catchError((err: HttpErrorResponse) => this.errors.handleError(err))
       );
   }
 
@@ -167,7 +167,7 @@ export class PermissionsService {
     return this.http
       .post(endpoint, body)
       .pipe(
-        catchError((err: HttpErrorResponse) => this.errors.parseErrors(err))
+        catchError((err: HttpErrorResponse) => this.errors.handleError(err))
       );
   }
 
@@ -179,7 +179,7 @@ export class PermissionsService {
     return this.http
       .post(endpoint, body)
       .pipe(
-        catchError((err: HttpErrorResponse) => this.errors.parseErrors(err))
+        catchError((err: HttpErrorResponse) => this.errors.handleError(err))
       );
   }
 

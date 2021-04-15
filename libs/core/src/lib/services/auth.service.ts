@@ -57,7 +57,7 @@ export class AuthService {
     });
   }
 
-  public getRedirectUrl() {
+  public getRedirectUrl(): string {
     if (isClient()) {
       return 'cl';
     }
@@ -88,7 +88,7 @@ export class AuthService {
           refresh_token: response.refresh_token
         });
       }),
-      catchError((error: any) => this.error.parseErrors(error))
+      catchError((error: any) => this.error.handleError(error))
     );
   }
 
@@ -98,7 +98,7 @@ export class AuthService {
       tap((response: any) => {
         this.storeToken(response);
       }),
-      catchError((error: any) => this.error.parseErrors(error))
+      catchError((error: any) => this.error.handleError(error))
     );
   }
 

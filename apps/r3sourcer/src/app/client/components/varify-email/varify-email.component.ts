@@ -35,7 +35,7 @@ export class VerifyEmailComponent implements OnInit {
           (res) => {
             if (res.message) {
               setTimeout(() => {
-                this.ts.sendMessage(res.message, MessageType.success);
+                this.ts.sendMessage(res.message, MessageType.Success);
 
                 const user = this.userService.user;
                 if (user && user.currentRole && user.currentRole.__str__.includes('candidate')) {
@@ -46,7 +46,7 @@ export class VerifyEmailComponent implements OnInit {
               }, 2000);
             } else if (res.statusText) {
               setTimeout(() => {
-                this.ts.sendMessage(res.statusText, MessageType.error);
+                this.ts.sendMessage(res.statusText, MessageType.Error);
               }, 2000);
             }
 

@@ -25,7 +25,7 @@ export class GenericFormService {
 
     return this.http.get(endpoint, options)
       .pipe(
-        catchError((error: any) => this.errors.parseErrors(error))
+        catchError((error: any) => this.errors.handleError(error))
       );
   }
 
@@ -33,7 +33,7 @@ export class GenericFormService {
     return this.http
       .get(`${endpoint}${query}`)
       .pipe(
-        catchError((error: any) => this.errors.parseErrors(error))
+        catchError((error: any) => this.errors.handleError(error))
       );
   }
 
@@ -41,7 +41,7 @@ export class GenericFormService {
     return this.http
       .get(endpoint)
       .pipe(
-        catchError((error: any) => this.errors.parseErrors(error))
+        catchError((error: any) => this.errors.handleError(error))
       );
   }
 
@@ -53,7 +53,7 @@ export class GenericFormService {
     return this.http
       .post(endpoint, data)
       .pipe(
-        catchError((error: any) => this.errors.parseErrors(error))
+        catchError((error: any) => this.errors.handleError(error))
       );
   }
 
@@ -61,7 +61,7 @@ export class GenericFormService {
     return this.http
       .put(endpoint, data)
       .pipe(
-        catchError((error: any) => this.errors.parseErrors(error))
+        catchError((error: any) => this.errors.handleError(error))
       );
   }
 
@@ -69,7 +69,7 @@ export class GenericFormService {
     return this.http
       .patch(endpoint, data)
       .pipe(
-        catchError((error: any) => this.errors.parseErrors(error))
+        catchError((error: any) => this.errors.handleError(error))
       );
   }
 
@@ -77,7 +77,7 @@ export class GenericFormService {
     return this.http
       .post(endpoint, data)
       .pipe(
-        catchError((error: any) => this.errors.parseErrors(error))
+        catchError((error: any) => this.errors.handleError(error))
       );
   }
 
@@ -85,7 +85,7 @@ export class GenericFormService {
     return this.http
       .delete(`${endpoint}${id}/` + (postfix ? `${postfix}/` : ''))
       .pipe(
-        catchError((error: any) => this.errors.parseErrors(error))
+        catchError((error: any) => this.errors.handleError(error))
       );
   }
 
@@ -95,7 +95,7 @@ export class GenericFormService {
     return this.http
       .post(endpoint, data, { headers })
       .pipe(
-        catchError((error: any) => this.errors.parseErrors(error))
+        catchError((error: any) => this.errors.handleError(error))
       );
   }
 }

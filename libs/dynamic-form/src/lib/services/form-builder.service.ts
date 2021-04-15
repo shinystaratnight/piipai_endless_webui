@@ -21,7 +21,7 @@ export class FormBuilderService {
     return this.http
       .get(this.formEndpoint + id + '/render/')
       .pipe(
-        catchError((error: any) => this.errorsService.parseErrors(error))
+        catchError((error: any) => this.errorsService.handleError(error))
       );
   }
 
@@ -29,7 +29,7 @@ export class FormBuilderService {
     return this.http
       .post(this.formEndpoint + id + '/submit/', data)
       .pipe(
-        catchError((error: any) => this.errorsService.parseErrors(error))
+        catchError((error: any) => this.errorsService.handleError(error))
       );
   }
 
@@ -37,7 +37,7 @@ export class FormBuilderService {
     return this.http
       .post(this.parseAddressEndpoint, data)
       .pipe(
-        catchError((error: any) => this.errorsService.parseErrors(error))
+        catchError((error: any) => this.errorsService.handleError(error))
       );
   }
 
@@ -45,7 +45,7 @@ export class FormBuilderService {
     return this.http
       .get(this.contactEndpoint + `?${key}=${value}`)
       .pipe(
-        catchError((error: any) => this.errorsService.parseErrors(error))
+        catchError((error: any) => this.errorsService.handleError(error))
       );
   }
 }
