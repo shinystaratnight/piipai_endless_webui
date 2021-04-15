@@ -26,7 +26,7 @@ export class MasterGuideService {
       map((data: GuideProps) =>
         this.removeMYOBFlag(data, this.siteSettings.settings.country_code)
       ),
-      catchError((error: any) => this.errors.parseErrors(error))
+      catchError((error: any) => this.errors.handleError(error))
     );
   }
 
@@ -37,7 +37,7 @@ export class MasterGuideService {
   updateValue(endpoint: string, data: any) {
     return this.http
       .put(endpoint, data)
-      .pipe(catchError((error: any) => this.errors.parseErrors(error)));
+      .pipe(catchError((error: any) => this.errors.handleError(error)));
   }
 
   private removeMYOBFlag(data: GuideProps, countryCode: string): GuideProps {

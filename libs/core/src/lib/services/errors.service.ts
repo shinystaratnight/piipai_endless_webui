@@ -5,34 +5,57 @@ import { of, throwError } from 'rxjs';
 
 import { ToastService, MessageType } from './toast.service';
 
+type ParseErrorOptions = {
+  close?: boolean;
+  showMessage?: boolean;
+};
+
+type Error = {
+  status: string;
+  errors: {
+    detail?: string;
+    non_field_errors?: string[];
+    [key: string]: any;
+  };
+};
+
 @Injectable()
 export class ErrorsService {
+  constructor(private ts: ToastService) {}
 
-  constructor(
-    private ts: ToastService
-  ) {}
+  public handleError(
+    response: HttpErrorResponse,
+    { close = false, showMessage = false }: ParseErrorOptions = {}
+  ) {
+    const { status, error } = response;
 
-  public parseErrors(error: HttpErrorResponse, close = false) {
-    if (error.status === 500) {
-      this.ts.sendMessage(
-        'Server error',
-        MessageType.error
-      );
+    switch (status) {
+      case 500: {
+        this.showErrorMessage(error, 'Server error');
+        break;
+      }
+
+      case 403: {
+        this.showErrorMessage(error);
+
+        return throwError(error);
+      }
     }
 
-    if (error.status === 403) {
-      this.ts.sendMessage(
-        error.error.errors.detail,
-        MessageType.error
-      );
-      return throwError(error.error);
+    console.log(response);
+
+    if (showMessage) {
+      this.showErrorMessage(error);
     }
 
-    if (!close) {
-      return throwError(error.error);
-    } else {
-      return of([]);
-    }
+    return close ? of([]) : throwError(error);
   }
 
+  private showErrorMessage(error: Error, defaultMessage: string = '') {
+    const { detail, non_field_errors } = error.errors;
+    const message =
+      detail || non_field_errors ? non_field_errors.join(' ') : defaultMessage;
+
+    this.ts.sendMessage(message, MessageType.Error);
+  }
 }

@@ -1035,13 +1035,13 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
 
                 if (fillInBody.candidates) {
                   this.service.submitForm(`/hr/jobs/${data.id}/fillin/`, fillInBody).subscribe(() => {
-                    this.toastrService.sendMessage(message, 'success');
+                    this.toastrService.sendMessage(message, MessageType.Success);
                     this.event.emit({
                       type: 'extend',
                     });
                   });
                 } else {
-                  this.toastrService.sendMessage(message, 'success');
+                  this.toastrService.sendMessage(message, MessageType.Success);
                   this.event.emit({
                     type: 'extend',
                   });
@@ -1317,7 +1317,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
 
     if (response.message && this.showToastr) {
       setTimeout(() => {
-        this.toastrService.sendMessage(response.message, 'success');
+        this.toastrService.sendMessage(response.message, MessageType.Success);
       }, 500);
     }
 
@@ -1507,7 +1507,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
 
     this.service.submitForm(endpoint, {}).subscribe((res) => {
       if (res.message) {
-        this.toastrService.sendMessage(res.message, MessageType.success);
+        this.toastrService.sendMessage(res.message, MessageType.Success);
       }
     });
   }
@@ -1543,13 +1543,13 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
           this.modalRef.close();
           this.toastrService.sendMessage(
             `${this.strValue} has been added to your Candidate Contact list`,
-            MessageType.success
+            MessageType.Success
           );
           this.router.navigate(['/mn/candidate/candidatecontacts/pool']);
         },
         () => {
           this.modalRef.close();
-          this.toastrService.sendMessage(`Please add Credit Card for paid services!`, MessageType.error);
+          this.toastrService.sendMessage(`Please add Credit Card for paid services!`, MessageType.Error);
           this.router.navigate(['/billing']);
         }
       );
@@ -1562,7 +1562,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
       const synced_at = getElementFromMetadata(this.metadata, 'synced_at');
       synced_at.value = getTimeInstance().format();
       this.updateMetadata(this.metadata, 'synced_at');
-      this.toastrService.sendMessage('The invoice will be synchronized in a few minutes', MessageType.success);
+      this.toastrService.sendMessage('The invoice will be synchronized in a few minutes', MessageType.Success);
       if (e.el.hidden) {
         e.el.hidden.next(true);
       }
@@ -1610,7 +1610,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
           this.authService.logout();
         }
         setTimeout(() => {
-          this.toastrService.sendMessage(res.message, 'success');
+          this.toastrService.sendMessage(res.message, MessageType.Success);
         }, 500);
       });
     }

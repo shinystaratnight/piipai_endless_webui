@@ -51,7 +51,7 @@ export class WidgetService {
             return this.widgets;
           }
         }),
-        catchError(errors => this.errorService.parseErrors(errors))
+        catchError(errors => this.errorService.handleError(errors))
       );
   }
 
@@ -91,7 +91,7 @@ export class WidgetService {
           this.userWidgets = userWidgets;
           return userWidgets;
         }),
-        catchError(errors => this.errorService.parseErrors(errors))
+        catchError(errors => this.errorService.handleError(errors))
       );
   }
 
@@ -144,19 +144,19 @@ export class WidgetService {
 
     return this.http
       .post(Endpoints.UserDashboardModule, body)
-      .pipe(catchError(errors => this.errorService.parseErrors(errors)));
+      .pipe(catchError(errors => this.errorService.handleError(errors)));
   }
 
   removeWidget(id: string) {
     return this.http
       .delete(`${Endpoints.UserDashboardModule}${id}/`)
-      .pipe(catchError(errors => this.errorService.parseErrors(errors)));
+      .pipe(catchError(errors => this.errorService.handleError(errors)));
   }
 
   updateWidget(id: string, body: { ui_config: any }) {
     return this.http
       .patch(`${Endpoints.UserDashboardModule}${id}/`, body)
-      .pipe(catchError(errors => this.errorService.parseErrors(errors)));
+      .pipe(catchError(errors => this.errorService.handleError(errors)));
   }
 
   generateGrid(widgets: UserWidget[]) {

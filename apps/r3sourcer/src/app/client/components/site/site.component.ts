@@ -212,7 +212,7 @@ export class SiteComponent implements OnInit, OnDestroy {
       // } else
       if (pageData.endpoint === '/' && pageData.pathData.path !== '/') {
         setTimeout(() => {
-          this.ts.sendMessage('Page not found!', MessageType.error);
+          this.ts.sendMessage('Page not found!', MessageType.Error);
         }, 2000);
 
         this.router.navigate(['']);
@@ -427,7 +427,7 @@ export class SiteComponent implements OnInit, OnDestroy {
           if (status === 'error') {
             const message = error || (non_field_errors && non_field_errors.toString());
 
-            this.ts.sendMessage(message, MessageType.error);
+            this.ts.sendMessage(message, MessageType.Error);
           }
           this.errors = err.errors;
         }

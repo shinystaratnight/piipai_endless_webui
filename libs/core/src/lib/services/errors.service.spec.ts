@@ -26,7 +26,7 @@ describe('ErrorsService', () => {
           error: errors
         });
         let error;
-        es.parseErrors(errorResponse).pipe(
+        es.handleError(errorResponse).pipe(
           catchError((err: any) => {
             error = err;
             return of(err);

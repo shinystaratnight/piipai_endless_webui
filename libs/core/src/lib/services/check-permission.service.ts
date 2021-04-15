@@ -146,7 +146,7 @@ export class CheckPermissionService {
     return this.http.get<{subscriptions: Array<any>}>(this.subscriptionEndpoint)
       .pipe(
         map(({ subscriptions }) => subscriptions.some(el => el.active)),
-        catchError((err: any) => this.error.parseErrors(err))
+        catchError((err: any) => this.error.handleError(err))
       )
   }
 
@@ -181,7 +181,7 @@ export class CheckPermissionService {
 
         return this.permissions;
       }),
-      catchError((error: HttpErrorResponse) => this.error.parseErrors(error))
+      catchError((error: HttpErrorResponse) => this.error.handleError(error))
     )
   }
 

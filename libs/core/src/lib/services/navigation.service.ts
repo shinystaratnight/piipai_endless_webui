@@ -106,7 +106,7 @@ export class NavigationService {
               return this.navigationList[id];
             }
           }),
-          catchError((errors) => this.errorService.parseErrors(errors))
+          catchError((errors) => this.errorService.handleError(errors))
         );
       } else {
         return of(this.navigationList[id]);
