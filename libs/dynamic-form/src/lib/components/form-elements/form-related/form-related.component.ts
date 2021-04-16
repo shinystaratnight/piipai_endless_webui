@@ -9,7 +9,7 @@ import {
   AfterViewChecked,
   ElementRef,
   HostListener,
-  Optional,
+  Optional
 } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { FormBuilder, FormGroup } from '@angular/forms';
@@ -19,8 +19,6 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription, BehaviorSubject, Subject } from 'rxjs';
 import { debounceTime, skip, filter } from 'rxjs/operators';
 
-// import { GenericFormService } from '../../../services';
-// import { CheckPermissionService, ToastService, MessageType } from '@webui/core';
 import {
   NavigationService,
   AuthService,
@@ -28,21 +26,28 @@ import {
   SiteSettingsService,
   CheckPermissionService,
   ToastService,
-  MessageType,
+  MessageType
 } from '@webui/core';
-import { Field, Endpoints, CountryCodeLanguage } from '@webui/data';
+import {
+  Field,
+  Endpoints,
+  CountryCodeLanguage,
+  translationCountryName
+} from '@webui/data';
 import {
   FormatString,
   isManager,
   isClient,
   isCandidate,
   getTranslationKey,
+  checkAndReturnTranslation,
+  setPropValue
 } from '@webui/utilities';
 
 import {
   GenericFormService,
   TimelineService,
-  TimelineAction,
+  TimelineAction
 } from '../../../services';
 import { BasicElementComponent } from '../basic-element/basic-element.component';
 
@@ -64,17 +69,13 @@ export interface CustomField {
 
 const translationMap = CountryCodeLanguage;
 
-const translationCountryName = {
-  'EE': 'Estonian',
-  'FI': 'Finnish'
-}
-
 @Component({
   selector: 'app-form-related',
   templateUrl: './form-related.component.html',
-  styleUrls: ['./form-related.component.scss'],
+  styleUrls: ['./form-related.component.scss']
 })
-export class FormRelatedComponent extends BasicElementComponent
+export class FormRelatedComponent
+  extends BasicElementComponent
   implements OnInit, OnDestroy, AfterViewChecked {
   @ViewChild('search') search;
   @ViewChild('searchElement') searchElement;
@@ -153,14 +154,18 @@ export class FormRelatedComponent extends BasicElementComponent
     2: '#fc9183',
     3: '#FFA236',
     4: '#ffbf00',
-    5: '#FFD042',
+    5: '#FFD042'
   };
 
   isClient = isClient;
   getTranslationKey = getTranslationKey;
 
   get canEdit() {
-    return this.config.templateOptions.edit && this.displayValue && this.checkPermission('update');
+    return (
+      this.config.templateOptions.edit &&
+      this.displayValue &&
+      this.checkPermission('update')
+    );
   }
 
   get canCreate() {
@@ -168,13 +173,21 @@ export class FormRelatedComponent extends BasicElementComponent
   }
 
   get canDelete() {
-    return this.config.templateOptions.delete && this.displayValue && this.checkPermission('delete');
+    return (
+      this.config.templateOptions.delete &&
+      this.displayValue &&
+      this.checkPermission('delete')
+    );
   }
 
   get hasActions() {
     const { options, type, errorMessage } = this.config;
 
-    return (options || type === 'address') && (this.canCreate || this.canEdit || this.canDelete) && !(errorMessage && errorMessage.visible);
+    return (
+      (options || type === 'address') &&
+      (this.canCreate || this.canEdit || this.canDelete) &&
+      !(errorMessage && errorMessage.visible)
+    );
   }
 
   constructor(
@@ -279,7 +292,7 @@ export class FormRelatedComponent extends BasicElementComponent
   public checkDelayData() {
     if (this.config.delay) {
       this.config.data = {
-        sendData: [],
+        sendData: []
       };
       this.config.delayData[this.config.endpoint] = this.config;
     }
@@ -681,18 +694,26 @@ export class FormRelatedComponent extends BasicElementComponent
             }
 
             if (data.translations) {
-              const trans = data.translations.find(el => el.language.id === translationMap[this.settingsService.settings.country_code]);
+              const trans = data.translations.find(
+                (el) =>
+                  el.language.id ===
+                  translationMap[this.settingsService.settings.country_code]
+              );
 
               if (trans) {
-                data.__str__ = trans.value
+                data.__str__ = trans.value;
               }
             }
 
             if (data.name && data.name.translations) {
-              const trans = data.name.translations.find(el => el.language.id === translationMap[this.settingsService.settings.country_code]);
+              const trans = data.name.translations.find(
+                (el) =>
+                  el.language.id ===
+                  translationMap[this.settingsService.settings.country_code]
+              );
 
               if (trans) {
-                data.__str__ = trans.value
+                data.__str__ = trans.value;
               }
             }
 
@@ -724,10 +745,14 @@ export class FormRelatedComponent extends BasicElementComponent
           const results = [];
           this.config.options.forEach((el) => {
             if (el.translations) {
-              const trans = data.translations.find(item => item.language.id === translationMap[this.settingsService.settings.country_code]);
+              const trans = data.translations.find(
+                (item) =>
+                  item.language.id ===
+                  translationMap[this.settingsService.settings.country_code]
+              );
 
               if (trans) {
-                el.__str__ = trans.value
+                el.__str__ = trans.value;
               }
             }
 
@@ -736,10 +761,14 @@ export class FormRelatedComponent extends BasicElementComponent
             data.forEach((elem) => {
               if (elem instanceof Object) {
                 if (elem.translations) {
-                  const trans = elem.translations.find(el => el.language.id === translationMap[this.settingsService.settings.country_code]);
+                  const trans = elem.translations.find(
+                    (el) =>
+                      el.language.id ===
+                      translationMap[this.settingsService.settings.country_code]
+                  );
 
                   if (trans) {
-                    elem.__str__ = trans.value
+                    elem.__str__ = trans.value;
                   }
                 }
 
@@ -768,18 +797,30 @@ export class FormRelatedComponent extends BasicElementComponent
             data && data !== '-'
               ? data.map((el) => {
                   if (el.translations) {
-                    const trans = el.translations.find(item => item.language.id === translationMap[this.settingsService.settings.country_code]);
+                    const trans = el.translations.find(
+                      (item) =>
+                        item.language.id ===
+                        translationMap[
+                          this.settingsService.settings.country_code
+                        ]
+                    );
 
                     if (trans) {
-                      el.__str__ = trans.value
+                      el.__str__ = trans.value;
                     }
                   }
 
-                  if (el.industry && el.industry.translations)  {
-                    const trans = el.industry.translations.find(item => item.language.id === translationMap[this.settingsService.settings.country_code]);
+                  if (el.industry && el.industry.translations) {
+                    const trans = el.industry.translations.find(
+                      (item) =>
+                        item.language.id ===
+                        translationMap[
+                          this.settingsService.settings.country_code
+                        ]
+                    );
 
                     if (trans) {
-                      el.__str__ = trans.value
+                      el.__str__ = trans.value;
                     }
                   }
 
@@ -815,7 +856,10 @@ export class FormRelatedComponent extends BasicElementComponent
       !this.config.editForm
     ) {
       const formatString = new FormatString();
-      const id = formatString.format(this.config.default, this.userService.user.currentRole);
+      const id = formatString.format(
+        this.config.default,
+        this.userService.user.currentRole
+      );
 
       if (this.config.read_only) {
         this.viewMode = true;
@@ -911,7 +955,7 @@ export class FormRelatedComponent extends BasicElementComponent
       id: undefined,
       allData: undefined,
       data: this.fb.group({}),
-      metadata: [],
+      metadata: []
     };
     const format = new FormatString();
     object.metadata = metadata.map((el) => {
@@ -919,10 +963,7 @@ export class FormRelatedComponent extends BasicElementComponent
       element.mode = el.mode;
 
       if (el.endpoint) {
-        el.endpoint = format.format(
-          el.endpoint,
-          this.formData
-        );
+        el.endpoint = format.format(el.endpoint, this.formData);
       }
 
       if (el.query) {
@@ -991,7 +1032,7 @@ export class FormRelatedComponent extends BasicElementComponent
       const endpoint = `${this.config.endpoint}${object.id}/`;
       const body = {
         default_rate: true,
-        skill: object.allData.skill.id,
+        skill: object.allData.skill.id
       };
       this.genericFormService
         .editForm(endpoint, body)
@@ -1001,14 +1042,16 @@ export class FormRelatedComponent extends BasicElementComponent
 
   public updateValue(e): void {
     if (e.type !== 'create' && e.type !== 'updateValue') {
-      const value = this.dataOfList.filter(el => el.data.valid).map((el) => {
-        const object = el.data.value;
+      const value = this.dataOfList
+        .filter((el) => el.data.valid)
+        .map((el) => {
+          const object = el.data.value;
 
-        if (el.id) {
-          object.id = el.id;
-        }
-        return object;
-      });
+          if (el.id) {
+            object.id = el.id;
+          }
+          return object;
+        });
       if (this.config.delayData) {
         this.config.data.sendData = value.filter((el) => !el.id);
       }
@@ -1077,7 +1120,7 @@ export class FormRelatedComponent extends BasicElementComponent
       type: 'delete',
       endpoint: this.modalData.endpoint,
       id: this.modalData.id,
-      el: this.config,
+      el: this.config
     });
     this.group.get(this.key).patchValue('');
     delete this.config.value;
@@ -1178,8 +1221,8 @@ export class FormRelatedComponent extends BasicElementComponent
               : format.format(this.config.prefilled[el], this.formData),
             read_only: true,
             isPrefilled: true,
-            editForm: true,
-          },
+            editForm: true
+          }
         };
       });
     }
@@ -1192,7 +1235,7 @@ export class FormRelatedComponent extends BasicElementComponent
           : 'Received message',
         mode: 'view',
         edit: true,
-        metadataQuery: messageType.toLowerCase(),
+        metadataQuery: messageType.toLowerCase()
       });
 
       if (this.config.strField) {
@@ -1201,7 +1244,7 @@ export class FormRelatedComponent extends BasicElementComponent
 
       this.modalRef = this.modalService.open(this.messageDetail, {
         windowClass: 'message-detail',
-        backdrop: 'static',
+        backdrop: 'static'
       });
 
       return false;
@@ -1216,7 +1259,7 @@ export class FormRelatedComponent extends BasicElementComponent
     this.modalRef = this.modalService.open(this.modal, {
       size: 'lg',
       windowClass,
-      backdrop: 'static',
+      backdrop: 'static'
     });
 
     return false;
@@ -1323,7 +1366,7 @@ export class FormRelatedComponent extends BasicElementComponent
         relatedData.forEach((el, i) => {
           const key = this.config.relatedDataMap[i];
           mapedData[key] = el;
-        })
+        });
       }
       item.relatedData = mapedData;
     }
@@ -1373,6 +1416,8 @@ export class FormRelatedComponent extends BasicElementComponent
   public updateValueOfSingleType(item: any, update?: boolean): boolean {
     if (item[this.param] !== this.group.get(this.key).value || update) {
       const formatString = new FormatString();
+
+      console.log(item);
 
       this.displayValue = formatString.format(this.display, item);
       this.group.get(this.key).patchValue(item[this.param]);
@@ -1428,7 +1473,7 @@ export class FormRelatedComponent extends BasicElementComponent
 
     this.event.emit({
       type: 'test',
-      item,
+      item
     });
   }
 
@@ -1480,7 +1525,7 @@ export class FormRelatedComponent extends BasicElementComponent
       el: this.config,
       value,
       additionalData,
-      manual,
+      manual
     });
   }
 
@@ -1488,7 +1533,7 @@ export class FormRelatedComponent extends BasicElementComponent
     this.event.emit({
       list: this.results,
       el: this.config,
-      type: 'chenge',
+      type: 'chenge'
     });
   }
 
@@ -1500,7 +1545,7 @@ export class FormRelatedComponent extends BasicElementComponent
         this.config.sendData.forEach((key) => (result[key] = el[key]));
         return {
           [this.param]: el[this.param],
-          ...result,
+          ...result
         };
       }
       return el[this.param];
@@ -1596,7 +1641,7 @@ export class FormRelatedComponent extends BasicElementComponent
 
     this.event.emit({
       type: 'updateData',
-      el: this.config,
+      el: this.config
     });
   }
 
@@ -1697,6 +1742,8 @@ export class FormRelatedComponent extends BasicElementComponent
               this.count = res.count;
               if (res.results && res.results.length) {
                 const formatString = new FormatString();
+                const { country_code } = this.settingsService.settings;
+
                 let results = [...res.results];
 
                 if (this.config.unique) {
@@ -1704,50 +1751,39 @@ export class FormRelatedComponent extends BasicElementComponent
                 }
 
                 results.forEach((el) => {
-                  const display = this.config.templateOptions.listDisplay || this.display;
-                  if (el.translations || el.translation || (el.name && el.name.translations)) {
-                    const translations = el.translations || el.translation || el.name.translations;
-                    const coutryCode = this.settingsService.settings.country_code;
-                    const translation = [...translations].find((t) => t.language.id === translationMap[coutryCode] || t.language.name === translationCountryName[coutryCode]);
-                    el.__str__ = (translation && (translation.__str__ || translation.value)) || formatString.format(display, el);
-                  } else {
-                    el.__str__ = formatString.format(display, el);
+                  const { templateOptions } = this.config;
+                  const { listParam, listDisplay, info } = templateOptions;
+                  const display = listDisplay || this.display;
+
+                  el.__str__ =
+                    checkAndReturnTranslation(el, country_code) ||
+                    formatString.format(display, el);
+                  setPropValue(
+                    this.display.replace('{', '').replace('}', ''),
+                    el,
+                    el.__str__
+                  );
+
+                  if (listParam) {
+                    el[this.param] = FormatString.format(listParam, el);
+                    el['name'] = FormatString.format(listDisplay, el);
                   }
 
-                  if (this.config.templateOptions.listParam) {
-                    el[this.param] = FormatString.format(
-                      this.config.templateOptions.listParam,
-                      el
-                    );
-                    el['name'] = FormatString.format(
-                      this.config.templateOptions.listDisplay,
-                      el
-                    );
-                  }
-
-                  if (this.config.templateOptions.info) {
-                    el.score = formatString.format(
-                      this.config.templateOptions.info['score'],
-                      el
-                    );
-                    el.distance = formatString.format(
-                      this.config.templateOptions.info['distance'],
-                      el
-                    );
+                  if (info) {
+                    el.score = formatString.format(info['score'], el);
+                    el.distance = formatString.format(info['distance'], el);
                   }
                 });
 
-                results.forEach((el) => {
-                  if (el) {
-                    this.config.options = this.config.options || [];
-
-                    if (
-                      !this.config.options.find((item) => item.id === el.id)
-                    ) {
-                      this.config.options.push(el);
-                    }
-                  }
-                });
+                this.config.options = [
+                  ...this.config.options,
+                  ...results.filter(
+                    (element) =>
+                      !this.config.options.find(
+                        (option) => option.id === element.id
+                      )
+                  )
+                ];
 
                 if (concat && this.previewList) {
                   this.previewList.push(...results);
@@ -1822,13 +1858,9 @@ export class FormRelatedComponent extends BasicElementComponent
             .subscribe((res: any) => {
               this.loading = false;
               this.lastElement = 0;
+              const { coutry_code } = this.settingsService.settings;
               if (res) {
-                if (res.translations || res.translation || (res.name && res.name.translations)) {
-                  const translations = res.translations || res.translation || res.name.translations;
-                  const coutryCode = this.settingsService.settings.country_code;
-                  const translation = [...translations].find((t) => t.language.id === translationMap[coutryCode] || t.language.name === translationCountryName[coutryCode]);
-                  res.__str__ = (translation && (translation.__str__ || translation.value)) || res.__str__;
-                }
+                res.__str__ = checkAndReturnTranslation(res, coutry_code);
 
                 const path = this.getLinkPath(this.config.endpoint);
                 if (path) {
@@ -1957,7 +1989,7 @@ export class FormRelatedComponent extends BasicElementComponent
 
     return {
       disable,
-      messages,
+      messages
     };
   }
 

@@ -1,10 +1,42 @@
 import { Role } from '@webui/data';
 
+enum Language {
+  English = 'en',
+  Russian = 'ru',
+  Estonian = 'et',
+  Finnish = 'fi'
+}
+
+enum LanguageFullName {
+  English = 'English',
+  Russian = 'Russian',
+  Estonian = 'Estonian',
+  Finnish = 'Finnish'
+}
+
+enum CountryCodeLanguage {
+  EE = Language.Estonian,
+  FI = Language.Finnish
+}
+
+const translationCountryName = {
+  EE: LanguageFullName.Estonian,
+  FI: LanguageFullName.Finnish
+};
+
+export type Translation = {
+  language: {
+    id: Language;
+    name: LanguageFullName;
+  };
+  value: string;
+};
+
 export enum DateRange {
   Year = 'year',
   Month = 'month',
   Week = 'week',
-  Day = 'day',
+  Day = 'day'
 }
 
 export const filterDateFormat = 'YYYY-MM-DD';
@@ -16,7 +48,7 @@ export const rangeFormats = {
   [DateRange.Year]: 'YYYY',
   [DateRange.Month]: 'MMMM YYYY',
   [DateRange.Week]: 'MMM D',
-  [DateRange.Day]: 'D MMMM YYYY',
+  [DateRange.Day]: 'D MMMM YYYY'
 };
 
 export function getContactAvatar(name): string {
@@ -168,4 +200,47 @@ export function getTranslationKey(key, type) {
   }
 
   return 'without_translation';
+}
+
+export function checkAndReturnTranslation(
+  element: {
+    translations?: Translation[];
+    translation?: Translation[];
+    name?: { name: string; translations: Translation[] };
+  },
+  countryCode: string
+): string {
+  const { translations, translation, name } = element;
+  const translationList =
+    translations || translation || (name && name.translations) || [];
+
+  if (!translationList.length) {
+    return;
+  }
+
+  const target: Translation = translationList.find((element: Translation) => {
+    const { id, name } = element.language;
+    const languageCode: Language = CountryCodeLanguage[countryCode];
+    const languageFullName: LanguageFullName =
+      translationCountryName[countryCode];
+
+    return id === languageCode || name === languageFullName;
+  });
+
+  if (!target) {
+    return;
+  }
+
+  return target.value;
+}
+
+export function setPropValue(key: string, target: any, value: any): void {
+  const path = key.split('.');
+  const prop = path.pop();
+
+  if (path.length === 0) {
+    target[prop] = value;
+  } else {
+    setPropValue(path.join('.'), target[prop], value);
+  }
 }
