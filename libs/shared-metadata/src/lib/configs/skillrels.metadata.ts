@@ -491,7 +491,8 @@ const formadd = [
       delete: false,
       values: ['default_rate', '__str__', 'tranlsations', 'name'],
       type: 'related',
-      edit: true
+      edit: true,
+      display: '{name.name}'
     },
     visibleMode: true,
     collapsed: false,
