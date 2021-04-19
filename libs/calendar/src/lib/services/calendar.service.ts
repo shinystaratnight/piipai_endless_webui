@@ -79,15 +79,17 @@ export class CalendarService {
   }
 
   public generateMonth(from: Moment, data: any): CalendarData {
-    return this.datepickerService.generateMonth(from, body => {
-      return body.map(row => {
-        return row.map(day => {
-          const newData = data.filter(el => el.date === day.date);
-          const availabilityData = data.find(el => el.target_date === day.date);
+    return this.datepickerService.generateMonth(from, (body) => {
+      return body.map((row) => {
+        return row.map((day) => {
+          const newData = data.filter((el) => el.date === day.date);
+          const availabilityData = data.find(
+            (el) => el.target_date === day.date
+          );
           return {
             ...day,
             data: newData,
-            jobOffers: newData.filter(el => el.showButtons),
+            jobOffers: newData.filter((el) => el.showButtons),
             available: availabilityData
               ? availabilityData.confirmed_available
               : undefined,
@@ -107,9 +109,9 @@ export class CalendarService {
   ) {
     return this.datepickerService.generateWeek(
       from,
-      body => {
-        return body.map(day => {
-          const newData = data.filter(el => el.date === day.date);
+      (body) => {
+        return body.map((day) => {
+          const newData = data.filter((el) => el.date === day.date);
           return {
             ...day,
             data: newData,
@@ -124,10 +126,10 @@ export class CalendarService {
   }
 
   public generateDay(from: Moment, data: any) {
-    return this.datepickerService.generateDay(from, body => {
+    return this.datepickerService.generateDay(from, (body) => {
       return {
         ...body,
-        data: data.filter(el => el.date === body.date),
+        data: data.filter((el) => el.date === body.date),
         isOpen: false,
         lines: this.calculateLines()
       };
@@ -195,16 +197,29 @@ export class CalendarService {
         [Status.Pending]: [],
         [Status.Open]: [],
         [Status.Filled]: [],
-        [Status.Approved]: []
+        [Status.Approved]: [],
+        count: {
+          [Status.Unfilled]: 0,
+          [Status.Fullfilled]: 0,
+          [Status.Pending]: 0,
+          [Status.Open]: 0,
+          [Status.Filled]: 0,
+          [Status.Approved]: 0,
+        }
       };
 
       data.forEach(shift => {
-        if (Number.isInteger(shift.is_fulfilled)) {
-          result[shift.is_fulfilled].push(shift);
+        const { candidates, is_fulfilled, timesheetStatus } = shift;
+
+        if (Number.isInteger(is_fulfilled)) {
+          result.count[Status.Fullfilled] += candidates.accepted.length;
+          result.count[Status.Pending] += candidates.undefined.length;
+
+          result[is_fulfilled].push(shift);
         }
 
-        if (shift.timesheetStatus) {
-          result[shift.timesheetStatus].push(shift);
+        if (timesheetStatus) {
+          result[timesheetStatus].push(shift);
         }
       });
 
