@@ -5,6 +5,7 @@ const form = () => [
   new Form.related.element('timesheet', 'Timesheet', Endpoints.Timesheet).hideField(),
   new Form.related.element('worktype', 'Skill Activity', Endpoints.SkillWorkTypes)
     .readOnly()
+    .updateValues(['translations'])
     .setQuery({
       'company': 'currentCompany'
     }),
@@ -23,8 +24,9 @@ const formadd = () => [
     .setPerfilledFields({
       [Models.Skill]: `{${Models.Skill}.id}`
     })
+    .updateValues(['translations'])
     .setQuery({
-      'skill_name': '{skill.name.id}',
+      'skill': '{skill.id}',
       'company': 'currentCompany'
     }),
   new Form.input.element('rate', 'Rate', InputType.Number),

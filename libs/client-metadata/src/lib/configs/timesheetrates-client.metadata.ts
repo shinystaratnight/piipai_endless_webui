@@ -1,14 +1,15 @@
-import { Endpoints, SkillModel, Models, TimesheetModel } from "@webui/data";
+import { Endpoints, SkillModel, Models, TimesheetModel, SkillWorkTypeModel } from "@webui/data";
 import { List, Form, InputType } from "@webui/metadata";
 
-const getRateField = () => new Form.input.element('rate', 'Rate', InputType.Number);
+const getRateField = () => new Form.input.element('rate', 'Rate', InputType.Number).hideField();
 const getValueField = () => new Form.input.element('value', 'Value', InputType.Number);
 const getTimesheetField = () => new TimesheetModel().formElement().hideField();
 
 
 const form = () => [
   getTimesheetField(),
-  new Form.related.element('worktype', 'Skill Activity', Endpoints.SkillWorkTypes)
+  new SkillWorkTypeModel().formElement()
+    .updateValues(['translations'])
     .readOnly()
     .setQuery({
       'company': 'currentCompany'
@@ -21,15 +22,15 @@ const formadd = () => [
   new SkillModel().formElement()
     .updateValues(['name']),
   getTimesheetField(),
-  new Form.related.element('worktype', 'Skill Activity', Endpoints.SkillWorkTypes)
+  new SkillWorkTypeModel().formElement()
     .setActions({ add: true })
-    .updateValues(['default_rate'])
+    .updateValues(['translations'])
     .required()
     .setPerfilledFields({
       [Models.Skill]: `{${Models.Skill}.id}`
     })
     .setQuery({
-      'skill_name': '{skill.name.id}',
+      'skill': '{skill.id}',
       'company': 'currentCompany'
     }),
   getRateField(),
@@ -44,10 +45,6 @@ const formset = () => ({
       new List.column.element('worktype', 'Skill Activity')
         .setContent([
           new List.related.element('worktype', Endpoints.SkillWorkTypes)
-        ]),
-      new List.column.element('rate', 'Rate')
-        .setContent([
-          new List.input.element('rate')
         ]),
       new List.column.element('value', 'Value')
         .setContent([

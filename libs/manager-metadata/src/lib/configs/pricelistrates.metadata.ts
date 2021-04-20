@@ -7,9 +7,10 @@ const worktypeField = () => new SkillWorkTypeModel().formElement()
   })
   .setShowIfRule(['skill.id'])
   .setActions({ add: true })
+  .updateValues(['translations'])
   .setQuery({
-    skill_name: '{skill.name.id}'
-  });
+    skill: '{skill.id}'
+  }); 
 
 const list = {
   list: {

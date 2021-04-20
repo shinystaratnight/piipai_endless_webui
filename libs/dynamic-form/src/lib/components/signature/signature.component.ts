@@ -40,8 +40,8 @@ export class SignatureComponent implements AfterViewInit {
 
   generateParams() {
     return {
-      canvasWidth: isMobile() && getOrientation() !== 90 ? 309 : isMobile() ? 343 : 426,
-      canvasHeight: isMobile() && getOrientation() !== 90 ? 149 : isMobile() ? 165 : 208,
+      canvasWidth: isMobile() && getOrientation() !== 90 ? 309 : isMobile() ? 309 : 426,
+      canvasHeight: isMobile() && getOrientation() !== 90 ? 149 : isMobile() ? 149 : 208,
     };
   }
 
