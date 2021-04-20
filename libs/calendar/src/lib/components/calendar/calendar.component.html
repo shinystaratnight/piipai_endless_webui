@@ -179,9 +179,9 @@
         <span class="date" [class.current-date]="day.today">{{day.label}}</span>
 
         <div class="shift-groups">
-          <div *ngIf="day.tooltip[1].length" class="badge badge-success">{{getShiftCount(day.tooltip[1], 'accepted')}}</div>
+          <div *ngIf="day.tooltip.count[1]" class="badge badge-success">{{day.tooltip.count[1]}}</div>
           <div *ngIf="day.tooltip[0].length" class="badge badge-danger">{{getUnfulfilledCount(day.tooltip[0])}}</div>
-          <div *ngIf="day.tooltip[2].length" class="badge badge-warning">{{getShiftCount(day.tooltip[2], 'undefined')}}</div>
+          <div *ngIf="day.tooltip.count[2]" class="badge badge-warning">{{day.tooltip.count[2]}}</div>
           <div *ngIf="day.tooltip[3].length"><fa-icon [icon]="['fas', 'file']" class="text-primary"></fa-icon></div>
           <div *ngIf="day.tooltip[4].length"><fa-icon [icon]="['fas', 'file']" class="text-warning"></fa-icon></div>
           <div *ngIf="day.tooltip[5].length"><fa-icon [icon]="['fas', 'file']" class="text-success"></fa-icon></div>

@@ -1775,15 +1775,19 @@ export class FormRelatedComponent
                   }
                 });
 
-                this.config.options = [
-                  ...this.config.options,
-                  ...results.filter(
-                    (element) =>
-                      !this.config.options.find(
-                        (option) => option.id === element.id
-                      )
-                  )
-                ];
+                if (this.config.options) {
+                  this.config.options = [
+                    ...this.config.options,
+                    ...results.filter(
+                      (element) =>
+                        !this.config.options.find(
+                          (option) => option.id === element.id
+                        )
+                    )
+                  ];
+                } else {
+                  this.config.options = [...results];
+                }
 
                 if (concat && this.previewList) {
                   this.previewList.push(...results);
