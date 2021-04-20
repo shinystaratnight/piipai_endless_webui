@@ -63,6 +63,7 @@ export const metadata = {
             type: 'text'
           }
         ],
+        width: 450,
         name: 'invoice_url',
         label: 'Invoice url'
       },
@@ -85,6 +86,7 @@ export const smsMetadata = [
     templateOptions: {
       type: 'list',
       inlineFilters: true,
+      label: "SMS logs"
     },
     type: 'list',
   },
