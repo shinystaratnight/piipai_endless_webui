@@ -495,8 +495,8 @@ export class CalendarComponent implements OnInit, OnDestroy {
 
   getShiftCount(shifts: any[], status: string) {
     let count = 0;
-    shifts.forEach((shift) => {
-      count += shift.candidates[status].length;
+    shifts.forEach(({candidates}) => {
+      count += candidates[status].length;
     });
 
     return count;
