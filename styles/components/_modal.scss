@@ -106,7 +106,7 @@
     }
 
     @include media-breakpoint-down('sm') {
-      max-width: 375px;
+      max-width: 345px;
     }
 
     @media (max-width: 767.98px) and (orientation: landscape) {
