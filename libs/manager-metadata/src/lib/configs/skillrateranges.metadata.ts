@@ -92,9 +92,10 @@ const formadd = () => [
             .setPerfilledFields({
               [Models.Skill]: '{skill.id}'
             })
+            .updateValues(['translations'])
             .setActions({ add: true })
             .setQuery({
-              skill_name: '{skill.name.id}'
+              skill: '{skill.id}'
             }),
         ]),
       new Form.group.element('Skill Rate')
@@ -134,8 +135,9 @@ const form = () => [
             .updateValues(['name']),
           new SkillWorkTypeModel().formElement()
             .readOnly()
+            .updateValues(['translations'])
             .setQuery({
-              skill_name: '{skill.name.id}'
+              skill: '{skill.id}'
             }),
         ]),
       new Form.group.element('Skill Rate')

@@ -1417,8 +1417,6 @@ export class FormRelatedComponent
     if (item[this.param] !== this.group.get(this.key).value || update) {
       const formatString = new FormatString();
 
-      console.log(item);
-
       this.displayValue = formatString.format(this.display, item);
       this.group.get(this.key).patchValue(item[this.param]);
 
@@ -1862,9 +1860,9 @@ export class FormRelatedComponent
             .subscribe((res: any) => {
               this.loading = false;
               this.lastElement = 0;
-              const { coutry_code } = this.settingsService.settings;
+              const { country_code } = this.settingsService.settings;
               if (res) {
-                res.__str__ = checkAndReturnTranslation(res, coutry_code);
+                res.__str__ = checkAndReturnTranslation(res, country_code);
 
                 const path = this.getLinkPath(this.config.endpoint);
                 if (path) {
