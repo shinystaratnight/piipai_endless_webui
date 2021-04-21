@@ -1,4 +1,5 @@
-import { List } from '@webui/metadata';
+import { Endpoints } from '@webui/data';
+import { createFilter, List, Type } from '@webui/metadata';
 import {
   getPictureColumn,
   getPositionColumn,
@@ -11,9 +12,25 @@ import {
   getChangeButton
 } from './utils';
 
+
+
 const list = function() {
   return {
     list: new List.main.element('timesheet', 'Timesheet history')
+      .setFilters([
+        createFilter(Type.Date, {
+          key: 'shift_started_at',
+          label: 'Shift Started at',
+          yesterday: true,
+          today: true,
+        }),
+        createFilter(Type.Relared, {
+          key: 'candidate',
+          label: 'Candidate Contact',
+          endpoint: `${Endpoints.CandidateSupervisor}/?supervisor={session.data.contact.contact_id}`
+        }),
+
+      ])
       .disableEdit()
       .disableSearch()
       .removeCreateButton()
