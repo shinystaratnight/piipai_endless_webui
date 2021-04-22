@@ -1,5 +1,4 @@
 import {
-  Endpoints,
   SkillModel,
   Models,
   SkillWorkTypeModel,
@@ -16,8 +15,7 @@ const form = () => [
     .setQuery({
       company: 'currentCompany'
     }),
-  new Form.input.element('rate', 'Rate', InputType.Number)
-    .hideField(),
+  new Form.input.element('rate', 'Rate', InputType.Number).hideField(),
   new Form.input.element('value', 'Value', InputType.Number)
 ];
 
@@ -35,8 +33,7 @@ const formadd = () => [
       skill: '{skill.id}',
       company: 'currentCompany'
     }),
-  new Form.input.element('rate', 'Rate', InputType.Number)
-    .hideField(),
+  new Form.input.element('rate', 'Rate', InputType.Number).hideField(),
   new Form.input.element('value', 'Value', InputType.Number)
 ];
 
@@ -46,7 +43,7 @@ const formset = () => ({
     .disableSearch()
     .setColumns([
       new List.column.element('worktype', 'Skill Activity').setContent([
-        new List.related.element('worktype', Endpoints.SkillWorkTypes)
+        new List.text.element('worktype')
       ]),
       new List.column.element('value', 'Value').setContent([
         new List.input.element('value')
