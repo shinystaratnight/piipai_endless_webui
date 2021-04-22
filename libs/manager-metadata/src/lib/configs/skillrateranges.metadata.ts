@@ -23,7 +23,7 @@ const formset = () => {
       .setColumns([
         new List.column.element('worktype', 'Worktype')
           .setContent([
-            new List.related.element('worktype', Endpoints.SkillWorkTypes)
+            new List.text.element('worktype')
               .setShowIfRule(['worktype']),
             new List.select.element('worktype')
               .setValues({ null: 'Default' })
