@@ -17,7 +17,7 @@ const filters = {
     values: [
       {
         key: 'partialy_available',
-        label: 'Show partialy available',
+        label: 'Show partially available',
         value: 'True'
       }
     ],
