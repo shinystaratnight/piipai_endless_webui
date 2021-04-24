@@ -2703,6 +2703,14 @@ export class DynamicListComponent
     return this.config.list.list && `${this.config.list.list}.label`;
   }
 
+  get hasEditLink() {
+    if (this.checkPermission('get')) {
+      const { editEndpoint, editDisable } = this.config.list;
+
+      return this.first && !editEndpoint && !this.inForm && !editDisable;
+    }
+  }
+
   openDetails(row, e) {
     if (e.target instanceof HTMLInputElement) {
       return;
