@@ -1,4 +1,13 @@
-import { Component, ChangeDetectionStrategy, Input, Output, EventEmitter, ViewEncapsulation, OnInit } from '@angular/core';
+import {
+  Component,
+  ChangeDetectionStrategy,
+  Input,
+  Output,
+  EventEmitter,
+  ViewEncapsulation,
+  OnInit
+} from '@angular/core';
+import { Location } from '@angular/common';
 
 import { isClient, isCandidate, isManager } from '@webui/utilities';
 
@@ -10,8 +19,13 @@ import { isClient, isCandidate, isManager } from '@webui/utilities';
   encapsulation: ViewEncapsulation.None
 })
 export class BackLinkComponent implements OnInit {
-
-  public urlPrefix = isClient() ? '/cl' : isCandidate() ? '/cd' : isManager ? '/mn' : '';
+  public urlPrefix = isClient()
+    ? '/cl'
+    : isCandidate()
+    ? '/cd'
+    : isManager
+    ? '/mn'
+    : '';
 
   @Input() label: string;
   @Input() path: string;
@@ -21,6 +35,8 @@ export class BackLinkComponent implements OnInit {
 
   @Output() backEvent: EventEmitter<boolean> = new EventEmitter();
 
+  constructor(private location: Location) {}
+
   ngOnInit() {
     this.translationKey = `${this.key}`;
   }
@@ -29,6 +45,12 @@ export class BackLinkComponent implements OnInit {
     event.preventDefault();
 
     this.backEvent.emit(true);
+    return false;
+  }
+
+  backInHistory() {
+    this.location.back();
+
     return false;
   }
 }

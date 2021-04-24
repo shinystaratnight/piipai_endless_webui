@@ -218,7 +218,7 @@
 
           <thead class="thead-default">
             <tr>
-              <th *ngIf="hasSelectColumn" class="active first-cell" style="width: 2rem;">
+              <th *ngIf="hasSelectColumn || hasEditLink" class="active first-cell" style="width: 2rem;">
                 <div class="text-center" *ngIf="(!inForm && config.list.actions) || actions">
                   <label for="all-checkbox">{{ 'all' | translate }}</label>
                   <input
@@ -261,7 +261,7 @@
                 [ngStyle]="row.highlight && row.highlight.color && { 'background-color': row.highlight.color }"
                 (click)="openDetails(row, $event)"
               >
-                <td *ngIf="hasSelectColumn" class="first-cell">
+                <td *ngIf="hasSelectColumn || hasEditLink" class="first-cell">
                   <label *ngIf="config.list.actions || actions">
                     <input
                       type="checkbox"
@@ -274,6 +274,11 @@
                       (click)="toggleCheckbox($event, row)"
                     ></app-checkbox>
                   </label>
+
+                  <a class="row-link" [routerLink]="row.id + '/change'" *ngIf="hasEditLink">
+                    <fa-icon icon="pencil-alt" class="icon"></fa-icon> 
+                    Edit
+                  </a> 
 
                   <fa-icon *ngIf="!first && !config.list.editEndpoint && !config.list.editDisable && checkPermission('get')" icon="pencil-alt" class="icon" (click)="editObject(row.id, row.__str__)"></fa-icon>
                 </td>
@@ -369,9 +374,7 @@
               </tr>
               <tr *ngIf="row.additionalBody && !row.collapsed">
                 <td
-                  *ngIf="
-                    (!inForm && config.list.actions) || actions || !noneEdit
-                  "
+                  *ngIf="(!inForm && config.list.actions) || actions || !noneEdit"
                 >
                   &nbsp;
                 </td>
