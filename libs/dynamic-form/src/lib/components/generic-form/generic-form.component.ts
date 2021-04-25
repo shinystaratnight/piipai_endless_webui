@@ -554,6 +554,8 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
             this.formGroup.removeControl('non_field_errors');
             this.formGroup.updateValueAndValidity({ onlySelf: true });
             this.updateErrors(this.errors, { [key]: '  ', non_field_errors: [''] }, this.response);
+
+            this.formService.getForm(this.formId).setErrors(this.errors);
           }
 
           if (send && this.checkObject[key].cache) {
@@ -587,10 +589,10 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
                 this.formGroup.updateValueAndValidity({ onlySelf: true });
                 this.updateErrors(this.errors, { [key]: '  ', non_field_errors: [''] }, this.response);
               }
+
+              this.formService.getForm(this.formId).setErrors(this.errors);
             });
           }
-
-          this.formService.getForm(this.formId).setErrors(this.errors);
         });
       }
     }
