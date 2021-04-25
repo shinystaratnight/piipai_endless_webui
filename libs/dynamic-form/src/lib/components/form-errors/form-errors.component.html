@@ -1,8 +1,6 @@
-<div *ngIf="details.length" class="mt-1 mb-3 text-danger">
-    <ul>
-        <li *ngFor="let error of details">{{error}}</li>
-    </ul>
-</div>
+<ul *ngIf="details.length" class="mt-1 mb-3 text-danger">
+    <li *ngFor="let error of details">{{error}}</li>
+</ul>
 
 <div *ngIf="objectExistError" class="mt-1 mb-3">
     <span class="text-danger">{{objectExistError.description}}</span> <br>

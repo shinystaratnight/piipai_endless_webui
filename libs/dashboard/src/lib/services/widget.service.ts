@@ -5,7 +5,7 @@ import { map, catchError } from 'rxjs/operators';
 import { of, Observable } from 'rxjs';
 
 import { ErrorsService } from '@webui/core';
-import { Endpoints } from '@webui/data';
+import { Endpoints, ButtonWidget } from '@webui/data';
 
 import {
   Type,
@@ -20,9 +20,7 @@ import { widgetsData } from '../helpers';
 export class WidgetService {
   widgets: Widget[];
   userWidgets: UserWidget[];
-
   listsId: string[];
-
   params = new HttpParams({ fromObject: { limit: '-1' } });
 
   constructor(private http: HttpClient, private errorService: ErrorsService) {}
@@ -37,21 +35,23 @@ export class WidgetService {
       .pipe(
         map((res: any) => {
           if (res.results) {
-            const widgets = res.results.map(el => {
-              const type: Type = el.module_data.model;
+            const widgets = res.results
+              .map((el) => {
+                const type: Type = el.module_data.model;
 
-              return {
-                id: el.id,
-                type,
-                ...widgetsData[type]
-              };
-            }).filter(el => widgetsData[el.type]);
+                return {
+                  id: el.id,
+                  type,
+                  ...widgetsData[type]
+                };
+              })
+              .filter((el) => widgetsData[el.type]);
 
             this.widgets = widgets;
             return this.widgets;
           }
         }),
-        catchError(errors => this.errorService.handleError(errors))
+        catchError((errors) => this.errorService.handleError(errors))
       );
   }
 
@@ -64,18 +64,22 @@ export class WidgetService {
       .get(Endpoints.UserDashboardModule, { params: this.params })
       .pipe(
         map((res: any) => {
-          const widgets = res.results.filter(el => this.existWidget(this.widgets, el));
+          const widgets = res.results.filter((el) =>
+            this.existWidget(this.widgets, el)
+          );
 
-          const userWidgets = widgets.map(el => {
+          const userWidgets = widgets.map((el) => {
             const widget = this.widgets.find(
-              item => item.id === el.dashboard_module.id
+              (item) => item.id === el.dashboard_module.id
             );
             const defaultConfig = {
               size: this.getSizes(widget.type),
               coords: this.getPosition(widget.type),
               active: true
             };
-            const config = Object.keys(el.ui_config).length ? el.ui_config : defaultConfig;
+            const config = Object.keys(el.ui_config).length
+              ? el.ui_config
+              : defaultConfig;
             const target = {
               id: el.id,
               widgetId: el.dashboard_module.id,
@@ -91,17 +95,17 @@ export class WidgetService {
           this.userWidgets = userWidgets;
           return userWidgets;
         }),
-        catchError(errors => this.errorService.handleError(errors))
+        catchError((errors) => this.errorService.handleError(errors))
       );
   }
 
   existWidget(widgets: Widget[], userWidget: any) {
     return widgets.some((widget) => {
       return widget.id === userWidget.dashboard_module.id;
-    })
+    });
   }
 
-  getButtons() {
+  getButtons(): ButtonWidget[] {
     return [
       {
         link: '/hr/jobs/',
@@ -144,19 +148,19 @@ export class WidgetService {
 
     return this.http
       .post(Endpoints.UserDashboardModule, body)
-      .pipe(catchError(errors => this.errorService.handleError(errors)));
+      .pipe(catchError((errors) => this.errorService.handleError(errors)));
   }
 
   removeWidget(id: string) {
     return this.http
       .delete(`${Endpoints.UserDashboardModule}${id}/`)
-      .pipe(catchError(errors => this.errorService.handleError(errors)));
+      .pipe(catchError((errors) => this.errorService.handleError(errors)));
   }
 
   updateWidget(id: string, body: { ui_config: any }) {
     return this.http
       .patch(`${Endpoints.UserDashboardModule}${id}/`, body)
-      .pipe(catchError(errors => this.errorService.handleError(errors)));
+      .pipe(catchError((errors) => this.errorService.handleError(errors)));
   }
 
   generateGrid(widgets: UserWidget[]) {
@@ -167,7 +171,7 @@ export class WidgetService {
       elements: []
     };
 
-    widgets.forEach(widget => {
+    widgets.forEach((widget) => {
       const { coords, size } = widget.config;
       const widgetElement = {
         type: GridElementType.Widget,
@@ -202,7 +206,7 @@ export class WidgetService {
       [Type.Buttons]: '10',
       [Type.Calendar]: '11',
       [Type.Candidates]: '0'
-    }
+    };
 
     return coords[type];
   }
@@ -226,13 +230,13 @@ export class WidgetService {
       elements = this.removeEmptyElements(gridElement);
 
       if (elements.length > 0) {
-        elements.forEach(grid => this.parseGrid(grid));
+        elements.forEach((grid) => this.parseGrid(grid));
       }
     }
   }
 
   private removeEmptyElements(element: GridElement) {
-    return element.elements.filter(gridElement => {
+    return element.elements.filter((gridElement) => {
       if (gridElement.type === GridElementType.Widget) {
         return true;
       }

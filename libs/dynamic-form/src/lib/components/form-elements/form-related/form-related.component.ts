@@ -1999,6 +1999,44 @@ export class FormRelatedComponent
     return Math.floor(parseFloat(score));
   }
 
+  hasObjectExistError(): boolean {
+    if (!this.errors) {
+      return false;
+    }
+
+    const { key } = this.config;
+    const error = this.errors[key];
+
+    if (error && Array.isArray(error) && error.length > 1) {
+      return true;
+    }
+
+    return false;
+  }
+
+  hasError(): boolean {
+    if (!this.errors) {
+      return false;
+    }
+
+    const { key } = this.config;
+    const error = this.errors[key];
+
+    if (!error) {
+      return false;
+    }
+
+    if (typeof error === 'string') {
+      return !!error.trim();
+    }
+
+    if (Array.isArray(error)) {
+      return error.length === 1 && error.some((text) => !!text);
+    }
+
+    return false;
+  }
+
   @HostListener('document:click', ['$event'])
   public handleClick(event) {
     let clickedComponent = event.target;

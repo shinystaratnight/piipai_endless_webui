@@ -39,6 +39,7 @@ import {
 } from '../../services';
 import { getElementFromMetadata, removeValue } from '../../helpers';
 import { getCurrencySymbol } from '@angular/common';
+import { Form } from '../../models';
 
 export interface HiddenFields {
   elements: Field[];
@@ -279,6 +280,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
         this.resetData(this.response);
 
         this.toggleModeMetadata(this.mode);
+        this.formService.getForm(this.formId).setErrors(this.errors);
       }
     });
 
@@ -587,6 +589,8 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
               }
             });
           }
+
+          this.formService.getForm(this.formId).setErrors(this.errors);
         });
       }
     }
@@ -1358,7 +1362,10 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
     this.resetData(this.response);
     this.updateErrors(this.errors, errors, this.response);
     this.errorForm.emit(this.errors);
-    this.formService.getForm(this.formId).setSaveProcess(false);
+
+    const form: Form = this.formService.getForm(this.formId);
+    form.setSaveProcess(false);
+    form.setErrors(this.errors);
   }
 
   public checkDelayData() {
@@ -1416,6 +1423,8 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
         });
       });
     }
+
+    this.formService.getForm(this.formId).setErrors(this.errors);
   }
 
   public eventHandler(event) {

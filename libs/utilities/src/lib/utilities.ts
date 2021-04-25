@@ -207,15 +207,16 @@ export function checkAndReturnTranslation(
     translations?: Translation[];
     translation?: Translation[];
     name?: { name: string; translations: Translation[] };
+    __str__?: string;
   },
   countryCode: string
 ): string {
-  const { translations, translation, name } = element;
+  const { translations, translation, name, __str__ } = element;
   const translationList =
     translations || translation || (name && name.translations) || [];
 
   if (!translationList.length) {
-    return;
+    return __str__;
   }
 
   const target: Translation = translationList.find((element: Translation) => {
@@ -228,7 +229,7 @@ export function checkAndReturnTranslation(
   });
 
   if (!target) {
-    return;
+    return __str__;
   }
 
   return target.value;
