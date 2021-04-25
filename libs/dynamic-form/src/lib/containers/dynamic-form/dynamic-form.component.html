@@ -17,7 +17,7 @@
       [message]="message">
     </ng-container>
 
-    <app-form-errors [keys]="keys(errors)" [errors]="errors"></app-form-errors>
+    <app-form-errors [formId]="formId"></app-form-errors>
 
     <div class="text-success mt-1 mb-3" *ngIf="message && message.message">
       {{message.message}}

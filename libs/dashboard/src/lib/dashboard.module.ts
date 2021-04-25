@@ -16,7 +16,6 @@ import {
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
-// import { SharedModule } from '@webui/shared';
 import { CalendarModule } from '@webui/calendar';
 import { DynamicFormModule } from '@webui/dynamic-form';
 import { UiModule } from '@webui/ui';
@@ -55,7 +54,7 @@ import { DashboardComponent } from './dashboard.component';
     WidgetDirective,
     DashboardMenuComponent
   ],
-  providers: [DashboardService],
+  providers: [DashboardService, WidgetService],
   entryComponents: [ButtonsWidget, CandidateWidget, CalendarWidgetComponent],
   exports: [DashboardComponent]
 })

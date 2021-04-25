@@ -1,9 +1,13 @@
-import { ChangeDetectionStrategy, Component, Input, OnChanges } from "@angular/core";
-
-interface IFormErrors {
-  non_field_errors?: string[] | string;
-  detail?: string;
-}
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  OnDestroy,
+  OnInit
+} from '@angular/core';
+import { Form, IFormErrors } from '@webui/dynamic-form';
+import { Subscription } from 'rxjs';
+import { FormService } from '../../services';
 
 interface IObjectExistError {
   description: string;
@@ -16,41 +20,48 @@ interface IObjectExistError {
   templateUrl: './form-errors.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class FormErrorsComponent implements OnChanges {
+export class FormErrorsComponent implements OnInit, OnDestroy {
   details: string[] = [];
   objectExistError: IObjectExistError;
 
-  @Input() keys: string[];
-  @Input() errors: IFormErrors;
+  @Input() formId: number;
 
-  ngOnChanges() {
-    this.updateErrors();
+  private errorSubscription: Subscription;
+
+  constructor(private formService: FormService) {}
+
+  ngOnInit() {
+    const currentForm: Form = this.formService.getForm(this.formId);
+    this.errorSubscription = currentForm.errors$.subscribe(this.updateErrors);
   }
 
-  private updateErrors() {
-    const { detail, non_field_errors } = this.errors;
+  ngOnDestroy() {
+    this.errorSubscription.unsubscribe();
+  }
+
+  private updateErrors(errors: IFormErrors) {
+    const { detail, non_field_errors } = errors;
+    let details = [];
     this.objectExistError = null;
-    const details = [];
 
     if (Array.isArray(non_field_errors) && non_field_errors.length > 1) {
       if (non_field_errors[0]) {
-        const [exist, description, title, href] = non_field_errors;
+        const [, description, title, href] = non_field_errors;
 
         this.objectExistError = {
           description,
           href,
-          title,
+          title
         };
       } else {
-        this.details = non_field_errors.filter(el => el);
+        details = non_field_errors.filter((el) => el);
       }
     } else if (detail) {
-      this.details.push(detail);
+      details.push(detail);
     } else if (non_field_errors) {
-      this.details.push(Array.isArray(non_field_errors) ? non_field_errors[0]: non_field_errors);
+      details.push(non_field_errors as string);
     }
 
-    this.details = details.filter(el => !!el);
+    this.details = details.filter((el) => !!el);
   }
-
 }
