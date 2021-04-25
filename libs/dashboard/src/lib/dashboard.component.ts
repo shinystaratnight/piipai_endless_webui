@@ -22,7 +22,6 @@ import { WidgetItem } from './components';
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
-  providers: [WidgetService]
 })
 export class DashboardComponent implements OnInit {
   userWidgets: UserWidget[];
