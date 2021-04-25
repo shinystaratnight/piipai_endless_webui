@@ -20,14 +20,13 @@ export class ToastComponent implements OnInit, OnDestroy {
   public ngOnInit() {
     this.subscription = this.toastService.message$.subscribe(
       (data: Message) => {
-        const { text } = data;
-        const method = this.toastr[data.type];
+        const { text, type } = data;
 
-        if (!text || !method) {
+        if (!text) {
           return;
         }
 
-        method(text);
+        this.toastr[type](text);
       }
     );
   }

@@ -15,7 +15,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import isObject from 'isobject';
 
-import { BehaviorSubject, Subject, Subscription, forkJoin } from 'rxjs';
+import { BehaviorSubject, Subject, Subscription, forkJoin, of } from 'rxjs';
 import { finalize, skip, catchError } from 'rxjs/operators';
 
 import {
@@ -1029,15 +1029,24 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
 
           if (shiftsRequests.requests.length) {
             shiftsRequests.requests.forEach((request, i) => {
-              request.subscribe((response) => {
+              request
+                .pipe(
+                  catchError((err) => {
+                    return of(false);
+                  })
+                )
+                .subscribe((response) => {
+
+                if (!response) {
+                  return;
+                }
+
                 const fillInBody = {
                   candidates: shiftDatesRequests[date].shifts[i].candidates,
                   shifts: [response.id],
                 };
 
-                const message = `${shiftsRequests.date} ${getTimeInstance()(response.time, 'HH:mm:ss').format(
-                  'hh:mm A'
-                )} created`;
+                const message = `${shiftsRequests.date} ${getTimeInstance()(response.time, 'HH:mm:ss').format('hh:mm A')} created`;
 
                 if (fillInBody.candidates) {
                   this.service.submitForm(`/hr/jobs/${data.id}/fillin/`, fillInBody).subscribe(() => {
