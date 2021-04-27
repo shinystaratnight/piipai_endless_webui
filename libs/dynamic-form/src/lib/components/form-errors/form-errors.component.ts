@@ -50,7 +50,9 @@ export class FormErrorsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.errorSubscription.unsubscribe();
+    if (this.errorSubscription) {
+      this.errorSubscription.unsubscribe();
+    }
   }
 
   private updateErrors(errors: IFormErrors) {
