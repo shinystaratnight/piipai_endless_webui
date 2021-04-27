@@ -71,6 +71,8 @@ export class FormErrorsComponent implements OnInit, OnDestroy {
         } else {
           details = non_field_errors.filter((el) => !!el);
         }
+      } else {
+        details = [...non_field_errors];
       }
     }
 

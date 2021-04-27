@@ -235,11 +235,15 @@ export function checkAndReturnTranslation(
   return target.value;
 }
 
-export function setPropValue(key: string, target: any, value: any): void {
+export function setPropValue(
+  key: string,
+  target: { [key: string]: any },
+  value: any
+): void {
   const path = key.split('.');
   const prop = path.pop();
 
-  if (path.length === 1) {
+  if (!path.length) {
     target[prop] = value;
   } else {
     setPropValue(path.join('.'), target[prop], value);
