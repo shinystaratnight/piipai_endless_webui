@@ -2390,6 +2390,14 @@ export class DynamicListComponent
           endpoint = [...arr, 'supervisor_approve'].join('/') + '/';
           withoutId = true;
           label = this.format('{job_offer.candidate_contact.__str__}', rowData);
+          data = {
+            [Models.Timesheet]: {
+              action: 'add',
+              data: {
+                value: this.format('{id}', rowData),
+              },
+            }
+          };
         } else {
           id = lastElement;
           endpoint = [...arr, ''].join('/');
