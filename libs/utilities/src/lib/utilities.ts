@@ -239,7 +239,7 @@ export function setPropValue(key: string, target: any, value: any): void {
   const path = key.split('.');
   const prop = path.pop();
 
-  if (path.length === 0) {
+  if (path.length === 1) {
     target[prop] = value;
   } else {
     setPropValue(path.join('.'), target[prop], value);
