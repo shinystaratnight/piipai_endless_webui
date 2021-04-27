@@ -216,6 +216,10 @@ export function checkAndReturnTranslation(
     translations || translation || (name && name.translations) || [];
 
   if (!translationList.length) {
+    if (name) {
+      return name.name;
+    }
+    
     return __str__;
   }
 
@@ -229,6 +233,10 @@ export function checkAndReturnTranslation(
   });
 
   if (!target) {
+    if (name) {
+      return name.name;
+    }
+
     return __str__;
   }
 
