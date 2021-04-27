@@ -42,9 +42,11 @@ export class FormErrorsComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     const currentForm: Form = this.formService.getForm(this.formId);
-    this.errorSubscription = currentForm.errors$.subscribe(
-      (errors: IFormErrors) => this.updateErrors(errors)
-    );
+    if (currentForm) {
+      this.errorSubscription = currentForm.errors$.subscribe(
+        (errors: IFormErrors) => this.updateErrors(errors)
+      );
+    }
   }
 
   ngOnDestroy() {
