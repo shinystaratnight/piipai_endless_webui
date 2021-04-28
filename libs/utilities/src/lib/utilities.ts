@@ -206,21 +206,17 @@ export function checkAndReturnTranslation(
   element: {
     translations?: Translation[];
     translation?: Translation[];
-    name?: { name: string; translations: Translation[] };
+    name?: { name: string; translations: Translation[] } | string;
     __str__?: string;
   },
   countryCode: string
 ): string {
   const { translations, translation, name, __str__ } = element;
   const translationList =
-    translations || translation || (name && name.translations) || [];
+    translations || translation || (name && typeof name !== 'string' && name.translations) || [];
 
   if (!translationList.length) {
-    if (name) {
-      return name.name;
-    }
-    
-    return __str__;
+    return getDefaultValue(element);
   }
 
   const target: Translation = translationList.find((element: Translation) => {
@@ -233,14 +229,27 @@ export function checkAndReturnTranslation(
   });
 
   if (!target) {
-    if (name) {
-      return name.name;
-    }
-
-    return __str__;
+    return getDefaultValue(element);
   }
 
   return target.value;
+}
+
+function getDefaultValue(element: {
+  name?: { name: string; translations: Translation[] } | string;
+  __str__?: string;
+}) {
+  const { __str__, name } = element;
+
+  if (typeof name === 'string') {
+    return __str__ || name;
+  }
+
+  if (name) {
+    return name.name;
+  }
+
+  return __str__;
 }
 
 export function setPropValue(
