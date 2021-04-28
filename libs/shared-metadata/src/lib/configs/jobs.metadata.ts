@@ -860,7 +860,7 @@ const form = [
       status: {
         field: 'active_states'
       },
-      job: 'position',
+      job: 'position.__str__',
       jobsite: 'jobsite',
       tags: 'tags'
     },

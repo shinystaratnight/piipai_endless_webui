@@ -811,7 +811,7 @@ const jobsite_client = {
 const form = [
   {
     values: {
-      job: 'position',
+      job: 'position.__str__',
       jobsite: 'jobsite',
     },
     type: 'info',

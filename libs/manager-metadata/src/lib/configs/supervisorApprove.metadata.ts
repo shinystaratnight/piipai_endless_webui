@@ -1,3 +1,6 @@
+import { Endpoints, Models } from '@webui/data';
+import { Form } from '@webui/metadata';
+
 const form = [
   {
     key: 'shift_started_at',
@@ -76,7 +79,15 @@ const form = [
       label: 'Send confirmation message to Candidate'
     },
     read_only: false
-  }
+  },
+  new Form.list.element('Skill Activities', Endpoints.TimesheetRates)
+    .setQuery({
+      timesheet: '{id}'
+    })
+    .setPrefilledFields({
+      [Models.Skill]: '{position.id}',
+      [Models.Timesheet]: '{id}',
+    }),
 ];
 
 export const supervisorApprove = {

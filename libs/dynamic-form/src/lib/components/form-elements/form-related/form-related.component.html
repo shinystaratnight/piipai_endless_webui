@@ -330,8 +330,8 @@
 </div>
 
 <ng-container *ngIf="!config.hide">
-  <div *ngIf="hasObjectExistError()">
-    <div class="text-danger mt-1">{{ errors[config.key][0] }}</div>
+  <div class="mb-2" *ngIf="hasObjectExistError()">
+    <div class="text-danger">{{ errors[config.key][0] }}</div>
     <a *ngIf="errors[config.key][1] && errors[config.key][2]" [attr.href]="errors[config.key][2]"
       (click)="open('update', errors[config.key][3])">
       {{ errors[config.key][1] }}

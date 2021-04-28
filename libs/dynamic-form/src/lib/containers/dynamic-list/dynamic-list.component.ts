@@ -2331,6 +2331,7 @@ export class DynamicListComponent
     let id;
     let withoutId;
     let data;
+    let label;
     const rowData = this.getRowData(e);
 
     if (this.editEndpoint) {
@@ -2376,6 +2377,7 @@ export class DynamicListComponent
         } else if (lastElement === 'candidate_fill') {
           endpoint = [...arr, 'candidate_fill'].join('/') + '/';
           withoutId = true;
+          label = this.format('{job_offer.candidate_contact.__str__}', rowData);
           data = {
             [Models.Timesheet]: {
               action: 'add',
@@ -2387,6 +2389,15 @@ export class DynamicListComponent
         } else if (lastElement === 'supervisor_approve') {
           endpoint = [...arr, 'supervisor_approve'].join('/') + '/';
           withoutId = true;
+          label = this.format('{job_offer.candidate_contact.__str__}', rowData);
+          data = {
+            [Models.Timesheet]: {
+              action: 'add',
+              data: {
+                value: this.format('{id}', rowData),
+              },
+            }
+          };
         } else {
           id = lastElement;
           endpoint = [...arr, ''].join('/');
@@ -2400,6 +2411,7 @@ export class DynamicListComponent
       mode: 'edit',
       edit: true,
       data,
+      label,
       dontUseMetadataQuery: e.value === 'editModal' || e.value === 'editForm',
     };
 
