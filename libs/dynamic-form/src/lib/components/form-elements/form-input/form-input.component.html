@@ -216,18 +216,9 @@
     "
     [attr.id]="key"
     [attr.name]="key"
-    [attr.placeholder]="
-      getTranslationKey('placeholder')
-        | translate: { Default: config.templateOptions.placeholder || '' }
+    [attr.placeholder]="getTranslationKey('placeholder') | translate: { Default: config.templateOptions.placeholder || '' }
     "
     [readonly]="config.read_only"
-    [value]="
-      config.value === 0 || config.value
-        ? config.value
-        : group.get(key).value === 0 || group.get(key).value
-        ? group.get(key).value
-        : ''
-    "
     pattern="{{ config.templateOptions.pattern }}"
     (focus)="generateList()"
     (keyup)="filter(key)"
