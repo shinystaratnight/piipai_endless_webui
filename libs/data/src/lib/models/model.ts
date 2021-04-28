@@ -1,13 +1,19 @@
 import { Form } from '@webui/metadata';
 import { Endpoints, Models } from '../enums';
-import { IModel } from '../interfaces';
+import { IModel, OverrideConfig } from '../interfaces';
 
 export abstract class Model implements IModel {
   readonly key: Models;
   readonly label: string;
   readonly endpoint: Endpoints;
 
-  formElement() {
-    return new Form.related.element(this.key, this.label, this.endpoint);
+  formElement(config = {} as OverrideConfig) {
+    const { key, label } = config;
+
+    return new Form.related.element(
+      key || this.key,
+      label || this.label,
+      this.endpoint
+    );
   }
 }

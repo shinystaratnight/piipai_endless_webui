@@ -11,7 +11,7 @@ import { FormGroup } from '@angular/forms';
 import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subject, BehaviorSubject, Subscription } from 'rxjs';
 
-import { FormBuilderService } from '../../services';
+import { FormBuilderService, FormService } from '../../services';
 import { MessageType, ToastService } from '@webui/core';
 import { HiddenFields } from '../../components/generic-form/generic-form.component';
 import { Field } from '@webui/data';
@@ -22,6 +22,7 @@ import { PassTestModalComponent, PassTestModalConfig } from '../../modals';
   selector: 'app-form-builder-form',
   templateUrl: './form-builder-form.component.html',
   styleUrls: ['./form-builder-form.component.scss'],
+  providers: [FormService]
 })
 export class FormBuilderFormComponent implements OnInit, OnDestroy {
   @Input() public id: string;
@@ -32,6 +33,7 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
 
   public form: FormGroup;
   public modalRef: NgbModalRef;
+  public formId: number;
 
   public error = {};
   public hiddenFields: HiddenFields = {
@@ -121,7 +123,8 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
     private service: FormBuilderService,
     private router: Router,
     private toastr: ToastService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private formService: FormService,
   ) {}
 
   public ngOnInit() {
@@ -136,6 +139,7 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
     };
 
     this.getRenderData();
+    this.formId = this.formService.registerForm(this.service.formEndpoint, 'edit');
   }
 
   public ngOnDestroy() {
@@ -269,6 +273,7 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
   public eventHandler(event: any) {
     const { type, item, list, el, value } = event;
 
+    // TODO: update validation
     if (type === 'blur') {
       ['email', 'phone'].forEach((field) => {
         if (el.key.indexOf(field) > -1 && value) {

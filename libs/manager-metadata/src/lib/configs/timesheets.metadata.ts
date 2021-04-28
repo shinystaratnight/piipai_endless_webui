@@ -250,7 +250,6 @@ const list = {
                 resend_sms_supervisor: true
               }
             ],
-            size: 'small',
             action: 'editForm',
             type: 'button',
             text: 'Approve'

@@ -216,6 +216,10 @@ export function checkAndReturnTranslation(
     translations || translation || (name && name.translations) || [];
 
   if (!translationList.length) {
+    if (name) {
+      return name.name;
+    }
+    
     return __str__;
   }
 
@@ -229,17 +233,25 @@ export function checkAndReturnTranslation(
   });
 
   if (!target) {
+    if (name) {
+      return name.name;
+    }
+
     return __str__;
   }
 
   return target.value;
 }
 
-export function setPropValue(key: string, target: any, value: any): void {
+export function setPropValue(
+  key: string,
+  target: { [key: string]: any },
+  value: any
+): void {
   const path = key.split('.');
-  const prop = path.pop();
+  const prop = path.shift();
 
-  if (path.length === 1) {
+  if (!path.length) {
     target[prop] = value;
   } else {
     setPropValue(path.join('.'), target[prop], value);

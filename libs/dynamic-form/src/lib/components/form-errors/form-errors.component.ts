@@ -50,7 +50,9 @@ export class FormErrorsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.errorSubscription.unsubscribe();
+    if (this.errorSubscription) {
+      this.errorSubscription.unsubscribe();
+    }
   }
 
   private updateErrors(errors: IFormErrors) {
@@ -71,6 +73,8 @@ export class FormErrorsComponent implements OnInit, OnDestroy {
         } else {
           details = non_field_errors.filter((el) => !!el);
         }
+      } else {
+        details = [...non_field_errors];
       }
     }
 

@@ -693,30 +693,9 @@ export class FormRelatedComponent
               this.linkPath = '/';
             }
 
-            if (data.translations) {
-              const trans = data.translations.find(
-                (el) =>
-                  el.language.id ===
-                  translationMap[this.settingsService.settings.country_code]
-              );
+            const { country_code } = this.settingsService.settings;
 
-              if (trans) {
-                data.__str__ = trans.value;
-              }
-            }
-
-            if (data.name && data.name.translations) {
-              const trans = data.name.translations.find(
-                (el) =>
-                  el.language.id ===
-                  translationMap[this.settingsService.settings.country_code]
-              );
-
-              if (trans) {
-                data.__str__ = trans.value;
-              }
-            }
-
+            data.__str__ = checkAndReturnTranslation(data, country_code);
             this.displayValue = formatString.format(this.display, data);
           }
           value = data[this.param];
