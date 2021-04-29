@@ -384,7 +384,6 @@ export class FilterRelatedComponent
         ...this.siteSettingsService.settings,
         filter_value: value
       };
-      console.log(this.config.data.endpoint, data);
       endpoint = formatString.format(this.config.data.endpoint, data);
       this.genericFormService.getAll(endpoint).subscribe((res: any) => {
         if (res.results) {
