@@ -10,6 +10,9 @@ import {
   HostListener,
 } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
+import { defineLocale } from 'ngx-bootstrap/chronos';
+import { enGbLocale } from 'ngx-bootstrap/locale';
+defineLocale('en-gb', enGbLocale);
 
 import { Subscription, Subject } from 'rxjs';
 
@@ -18,6 +21,7 @@ import { BasicElementComponent } from './../basic-element/basic-element.componen
 
 import { FormatString, isMobile, getPropValue, getTranslationKey } from '@webui/utilities';
 import { DateService, DateInstance, Format } from '@webui/core';
+import { BsLocaleService } from 'ngx-bootstrap/datepicker';
 
 enum DateType {
   Date = 'date',
@@ -69,6 +73,7 @@ export class FormDatepickerComponent extends BasicElementComponent implements On
   public editMode = true;
 
   public currentField: boolean;
+  locale = 'en-gb';
   getTranslationKey = getTranslationKey;
 
   private subscriptions: Subscription[] = [];
@@ -77,7 +82,8 @@ export class FormDatepickerComponent extends BasicElementComponent implements On
     private fb: FormBuilder,
     private cd: ChangeDetectorRef,
     private dateService: DateService,
-    private el: ElementRef
+    private el: ElementRef,
+    private localeService: BsLocaleService,
   ) {
     super();
   }
@@ -108,6 +114,8 @@ export class FormDatepickerComponent extends BasicElementComponent implements On
         })
       }
     }
+
+    this.localeService.use(this.locale);
   }
 
   public ngOnDestroy() {
