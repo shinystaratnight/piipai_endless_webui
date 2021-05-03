@@ -50,9 +50,11 @@ const formset = () => ({
       ]),
       new List.column.element('actions', 'Actions').setContent([
         new List.button.element('id', 'editForm', 'Edit')
+          .setTranslationKey('edit')
           .setIcon('pencil-alt')
           .setTextColor('#f0ad4e'),
         new List.button.element('id', 'delete', 'Delete')
+          .setTranslationKey('delete')
           .setIcon('trash')
           .setTextColor('#fa5c46')
       ])

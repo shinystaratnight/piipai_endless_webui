@@ -50,6 +50,7 @@ import {
   TimelineAction
 } from '../../../services';
 import { BasicElementComponent } from '../basic-element/basic-element.component';
+import { LocalStorageService } from 'ngx-webstorage';
 
 export interface RelatedObject {
   id: string;
@@ -202,6 +203,7 @@ export class FormRelatedComponent
     private settingsService: SiteSettingsService,
     private sanitizer: DomSanitizer,
     private toastr: ToastService,
+    private storage: LocalStorageService,
     @Optional() private timelineService: TimelineService
   ) {
     super();
@@ -694,8 +696,9 @@ export class FormRelatedComponent
             }
 
             const { country_code } = this.settingsService.settings;
+            const lang = this.storage.retrieve('lang');
 
-            data.__str__ = checkAndReturnTranslation(data, country_code);
+            data.__str__ = checkAndReturnTranslation(data, country_code, lang);
             this.displayValue = formatString.format(this.display, data);
           }
           value = data[this.param];
@@ -1720,7 +1723,7 @@ export class FormRelatedComponent
               if (res.results && res.results.length) {
                 const formatString = new FormatString();
                 const { country_code } = this.settingsService.settings;
-
+                const lang = this.storage.retrieve('lang');
                 let results = [...res.results];
 
                 if (this.config.unique) {
@@ -1733,7 +1736,7 @@ export class FormRelatedComponent
                   const display = listDisplay || this.display;
 
                   el.__str__ =
-                    checkAndReturnTranslation(el, country_code) ||
+                    checkAndReturnTranslation(el, country_code, lang) ||
                     formatString.format(display, el);
                   setPropValue(
                     this.display.replace('{', '').replace('}', ''),
@@ -1840,8 +1843,19 @@ export class FormRelatedComponent
               this.loading = false;
               this.lastElement = 0;
               const { country_code } = this.settingsService.settings;
+              const lang = this.storage.retrieve('lang');
               if (res) {
-                res.__str__ = checkAndReturnTranslation(res, country_code);
+                res.__str__ = checkAndReturnTranslation(
+                  res,
+                  country_code,
+                  lang
+                );
+
+                setPropValue(
+                  this.display.replace('{', '').replace('}', ''),
+                  res,
+                  res.__str__
+                );
 
                 const path = this.getLinkPath(this.config.endpoint);
                 if (path) {

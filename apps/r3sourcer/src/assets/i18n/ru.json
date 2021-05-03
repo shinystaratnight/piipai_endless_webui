@@ -507,5 +507,6 @@
   "rate.label": "Ставка",
   "value.label": "Количество",
   "tabs.timesheetrates.label": "Виды работ",
+  "timesheetrates.label": "Виды работ",
   "worktype.placeholder": "Выбрать"
 }

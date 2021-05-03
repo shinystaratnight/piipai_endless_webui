@@ -1,4 +1,4 @@
-import { Endpoints, Models } from '@webui/data';
+import { Endpoints, Models, SkillModel } from '@webui/data';
 import { Form, CheckboxType, DatepickerType, InputType } from '@webui/metadata';
 
 const form = function() {
@@ -14,8 +14,16 @@ const form = function() {
         new Form.static.element('jobsite', 'Jobsite')
           .readOnly(),
 
-        new Form.static.element('position', 'Position')
-          .readOnly(),
+        new SkillModel()
+          .formElement({
+            key: 'position',
+            label: 'Position'
+          })
+          .updateValues(['name'])
+          .readOnly()
+          .updateModel({
+            editForm: true,
+          }),
       ]),
 
     new Form.row.element()
