@@ -504,8 +504,10 @@ export class CalendarComponent implements OnInit, OnDestroy {
 
   getUnfulfilledCount(shifts: any[], status: string) {
     let count = 0;
-    shifts.forEach((shift) => {
-      count += shift.shift.workers;
+    shifts.forEach(({ shift }) => {
+      const { workers_details, workers } = shift;
+      const shiftUnfilled = workers - workers_details['accepted'].length - workers_details['undefined'].length;
+      count += shiftUnfilled;
     });
 
     return count;

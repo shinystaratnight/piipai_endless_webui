@@ -1587,7 +1587,7 @@ export class DynamicListComponent
     let fillInPath;
 
     if (isManager()) {
-      fillInPath = `/cl/hr/jobs/${e.el.rowId}/fillin/`;
+      fillInPath = `/mn/hr/jobs/${e.el.rowId}/fillin/`;
     } else if (isClient()) {
       fillInPath = `/cl/hr/jobs/${e.el.rowId}/fillin/`;
     }
