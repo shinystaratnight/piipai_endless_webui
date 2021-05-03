@@ -507,5 +507,6 @@
   "rate.label": "Rate",
   "value.label": "Amount",
   "tabs.timesheetrates.label": "Skill Activities",
+  "timesheetrates.label": "Skill Activities",
   "worktype.placeholder": "Select"
 }

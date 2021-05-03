@@ -9,6 +9,7 @@ import { getContactAvatar, isCandidate, isMobile, FormatString, isClient, checkA
 import { GenericFormService, FormService } from '../../../services';
 import { Endpoints, CountryCodeLanguage } from '@webui/data';
 import { SiteSettingsService } from '@webui/core';
+import { LocalStorageService } from 'ngx-webstorage';
 
 @Component({
   selector: 'app-form-info',
@@ -81,7 +82,8 @@ export class FormInfoComponent implements OnInit, OnDestroy {
     private router: Router,
     private gfs: GenericFormService,
     private formService: FormService,
-    private siteSettings: SiteSettingsService
+    private siteSettings: SiteSettingsService,
+    private storage: LocalStorageService,
   ) {
     this.subscriptions = [];
   }
@@ -195,8 +197,9 @@ export class FormInfoComponent implements OnInit, OnDestroy {
         }
 
         const { country_code } = this.siteSettings.settings;
+        const lang = this.storage.retrieve('lang');
 
-        data.__str__ = checkAndReturnTranslation(data, country_code);
+        data.__str__ = checkAndReturnTranslation(data, country_code, lang);
 
         return data[prop];
       } else if (data[prop]) {
