@@ -124,6 +124,12 @@ const list = function () {
             .setTranslationKey('no_record')
             .setStyles(['muted'])
             .setShowIfRule([{ status: [3, 4] }]),
+
+            {
+              field: 'skill_activities',
+              type: 'skillactivity',
+              label: 'Skill Activities'
+            }
         ]),
 
         new List.column.element('status', 'Status').setContent([

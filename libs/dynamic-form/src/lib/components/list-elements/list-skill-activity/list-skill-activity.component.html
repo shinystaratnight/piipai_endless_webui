@@ -1,0 +1,8 @@
+<ng-container *ngIf="list">
+  <span class="item" *ngFor="let skillActivity of dataList" title="{{skillActivity.__str__}}">
+    <span class="label">{{skillActivity.__str__}}</span>
+
+    <span class="amount">{{skillActivity.value}}</span>
+  </span>
+  <a class="more" href *ngIf="more" (click)="showMore($event)">{{config.value.length - 4}} more</a>
+</ng-container>
