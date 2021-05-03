@@ -5,4 +5,5 @@ export const smallModalEndpoints = [
   Endpoints.SkillRateCoefficient,
   Endpoints.CandidateTag,
   Endpoints.CandidateFormalities,
+  Endpoints.JobOffer
 ];
