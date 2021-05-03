@@ -507,5 +507,6 @@
   "rate.label": "Tasu",
   "value.label": "Kogus",
   "tabs.timesheetrates.label": "Tegevused",
+  "timesheetrates.label": "Tegevused",
   "worktype.placeholder": "Vali"
 }

@@ -209,7 +209,8 @@ export function checkAndReturnTranslation(
     name?: { name: string; translations: Translation[] } | string;
     __str__?: string;
   },
-  countryCode: string
+  countryCode: string,
+  lang?: Language
 ): string {
   const { translations, translation, name, __str__ } = element;
   const translationList =
@@ -220,12 +221,10 @@ export function checkAndReturnTranslation(
   }
 
   const target: Translation = translationList.find((element: Translation) => {
-    const { id, name } = element.language;
-    const languageCode: Language = CountryCodeLanguage[countryCode];
-    const languageFullName: LanguageFullName =
-      translationCountryName[countryCode];
+    const { id } = element.language;
+    const languageCode: Language = lang || CountryCodeLanguage[countryCode];
 
-    return id === languageCode || name === languageFullName;
+    return id === languageCode;
   });
 
   if (!target) {

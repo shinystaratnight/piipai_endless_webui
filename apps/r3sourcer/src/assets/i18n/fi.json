@@ -507,5 +507,6 @@
   "rate.label": "Maksu",
   "value.label": "Määrä",
   "tabs.timesheetrates.label": "Toiminta",
+  "timesheetrates.label": "Toiminta",
   "worktype.placeholder": "Valitse"
 }
