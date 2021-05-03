@@ -941,7 +941,7 @@ export class FormRelatedComponent
     };
     const format = new FormatString();
     object.metadata = metadata.map((el) => {
-      const element = Object.assign({}, el);
+      const element = {...el};
       element.mode = el.mode;
 
       if (el.endpoint) {
@@ -981,6 +981,8 @@ export class FormRelatedComponent
   public addObject() {
     if (this.dataOfList) {
       const object = this.createObject();
+
+      console.log(object);
       this.dataOfList.push(object);
     }
   }
