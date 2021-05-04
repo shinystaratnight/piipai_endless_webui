@@ -276,9 +276,9 @@
                   </label>
 
                   <a class="row-link" [routerLink]="row.id + '/change'" *ngIf="hasEditLink">
-                    <fa-icon icon="pencil-alt" class="icon"></fa-icon> 
+                    <fa-icon icon="pencil-alt" class="icon"></fa-icon>
                     Edit
-                  </a> 
+                  </a>
 
                   <fa-icon *ngIf="!first && !config.list.editEndpoint && !config.list.editDisable && checkPermission('get')" icon="pencil-alt" class="icon" (click)="editObject(row.id, row.__str__)"></fa-icon>
                 </td>
@@ -289,7 +289,7 @@
                   <td
                     *ngIf="!cell.hide"
                     [class.text-center]="cell.center"
-                    [ngStyle]="{ 'width.px': cell.width }"
+                    [ngStyle]="{ 'width.px': cell.width, 'maxWidth.px': cell.width }"
                     [attr.data-label]="cell.label"
                     [hidden]="cell.tab && cell.tab.is_collapsed"
                   >
