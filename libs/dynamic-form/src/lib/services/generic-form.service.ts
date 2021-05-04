@@ -4,7 +4,7 @@ import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
-import { ErrorsService } from '@webui/core';
+import { ErrorsService, ParseErrorOptions } from '@webui/core';
 import { MetadataService } from '@webui/metadata';
 
 import { METADATA } from './metadata.service';
@@ -49,11 +49,11 @@ export class GenericFormService {
     return this.metadataService.get(endpoint, query, this.metadata);
   }
 
-  public submitForm(endpoint, data): Observable<any> {
+  public submitForm(endpoint, data, options?: ParseErrorOptions): Observable<any> {
     return this.http
       .post(endpoint, data)
       .pipe(
-        catchError((error: any) => this.errors.handleError(error))
+        catchError((error: any) => this.errors.handleError(error, options))
       );
   }
 

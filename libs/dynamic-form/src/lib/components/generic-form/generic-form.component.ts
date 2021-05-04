@@ -1422,7 +1422,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
         this.delayData[endpoint].data.sendData.forEach((element, index, arr) => {
           const body = Object.assign(element, this.delayData[endpoint].prefilled);
 
-          this.service.submitForm(endpoint, body).subscribe(() => {
+          this.service.submitForm(endpoint, body, { showMessage: true }).subscribe(() => {
             if (arr.length - 1 === index) {
               this.event.emit({
                 type: 'sendForm',

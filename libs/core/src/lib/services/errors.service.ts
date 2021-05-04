@@ -5,7 +5,7 @@ import { of, throwError } from 'rxjs';
 
 import { ToastService, MessageType } from './toast.service';
 
-type ParseErrorOptions = {
+export type ParseErrorOptions = {
   close?: boolean;
   showMessage?: boolean;
 };
@@ -50,9 +50,11 @@ export class ErrorsService {
   }
 
   private showErrorMessage(error: Error, defaultMessage: string = '') {
-    const { detail, non_field_errors } = error.errors;
-    const message =
+    const { detail, non_field_errors, ...fields } = error.errors;
+    let message =
       detail || non_field_errors ? non_field_errors.join(' ') : defaultMessage;
+
+    Object.keys(fields).forEach((key: string) => message += ` ${fields[key]}.`)
 
     this.ts.sendMessage(message, MessageType.Error);
   }
