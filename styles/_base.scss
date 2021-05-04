@@ -137,9 +137,9 @@ input[type=number] {
 
 .page-item.active .page-link {
   border-color: $primary;
-
   background-color: $primary;
   z-index: 1;
+  color: #fff !important;
 }
 
 @each $item in $themes {
