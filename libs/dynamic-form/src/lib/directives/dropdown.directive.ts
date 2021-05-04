@@ -33,9 +33,8 @@ export class DropdownDirective implements OnInit, OnDestroy {
   }
 
   public setPosition(el: any, dropDown: any) {
-    const dropDownHeight = dropDown.offsetHeight;
-    const elOffsetTop = el.offsetTop + el.offsetParent.offsetTop;
-
+    const { offsetHeight: dropDownHeight } = dropDown.offsetHeight;
+    const { offsetTop: elOffsetTop } = el;
     const parent = this.getParent(el);
     const bottomHeight = this.getBottomHeight(elOffsetTop, 48, parent);
 
@@ -95,7 +94,7 @@ export class DropdownDirective implements OnInit, OnDestroy {
       do {
         if (
           testParent.classList &&
-          (testParent.classList.contains('modal-content') || testParent.classList.contains('r3sourcer'))
+          (testParent.classList.contains('modal-body') || testParent.classList.contains('r3sourcer'))
         ) {
           parent = testParent;
         }
