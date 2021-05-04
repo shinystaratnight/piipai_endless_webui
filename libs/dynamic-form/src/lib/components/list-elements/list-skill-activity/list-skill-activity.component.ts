@@ -1,8 +1,14 @@
-import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
+import {
+  Component,
+  ChangeDetectionStrategy,
+  OnInit,
+  OnDestroy
+} from '@angular/core';
 import { LocalStorageService } from 'ngx-webstorage';
 
-import { SiteSettingsService } from '@webui/core';
+import { SiteSettingsService, TranslateHelperService } from '@webui/core';
 import { checkAndReturnTranslation } from '@webui/utilities';
+import { BehaviorSubject, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-list-skill-activity',
@@ -10,25 +16,58 @@ import { checkAndReturnTranslation } from '@webui/utilities';
   styleUrls: ['./list-skill-activity.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ListSkillActivityComponent implements OnInit {
-  public config: any;
-  public list: boolean;
-  public dataList: any[];
-  public more: boolean;
+export class ListSkillActivityComponent implements OnInit, OnDestroy {
+  config: any;
+  list: boolean;
+  more: boolean;
+
+  private _dataList: BehaviorSubject<any[]> = new BehaviorSubject(null);
+  private langSubscription: Subscription;
+
+  get dataList$() {
+    return this._dataList.asObservable();
+  }
 
   constructor(
     private siteSetting: SiteSettingsService,
-    private storage: LocalStorageService
+    private storage: LocalStorageService,
+    private translate: TranslateHelperService
   ) {}
 
   public ngOnInit() {
+    this.initViewData();
+
+    this.langSubscription = this.translate.langChange$.subscribe(
+      (lang: string) => {
+        this.initViewData();
+      }
+    );
+  }
+
+  public ngOnDestroy() {
+    this.langSubscription.unsubscribe();
+  }
+
+  public showMore(e: MouseEvent) {
+    e.stopPropagation();
+    e.preventDefault();
+
+    this._dataList.next([...this.config.value]);
+    this.more = false;
+
+    return false;
+  }
+
+  private initViewData() {
     const { value } = this.config;
 
     if (Array.isArray(value)) {
       this.list = true;
 
       value.forEach((el) => {
-        const { name, translations } = el;
+        const {
+          worktype: { __str__, translations }
+        } = el;
         const { country_code } = this.siteSetting.settings;
         const lang = this.storage.retrieve('lang');
 
@@ -36,7 +75,7 @@ export class ListSkillActivityComponent implements OnInit {
           {
             name: {
               translations,
-              name
+              name: __str__
             }
           },
           country_code,
@@ -45,21 +84,11 @@ export class ListSkillActivityComponent implements OnInit {
       });
 
       if (value && value.length > 4) {
-        this.dataList = value.slice(0, 4);
+        this._dataList.next(value.slice(0, 4));
         this.more = true;
       } else {
-        this.dataList = [...value];
+        this._dataList.next([...value]);
       }
     }
-  }
-
-  public showMore(e: MouseEvent) {
-    e.stopPropagation();
-    e.preventDefault();
-
-    this.dataList = this.config.value;
-    this.more = false;
-
-    return false;
   }
 }

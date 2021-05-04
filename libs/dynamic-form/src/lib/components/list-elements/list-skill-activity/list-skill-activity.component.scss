@@ -14,12 +14,12 @@
 .label {
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: calc(100% - 1.5rem);
+  max-width: calc(100% - 2.5rem);
   white-space: nowrap;
   color: $secondary;
 }
 
 .amount {
-  width: 1rem;
+  width: 2rem;
   margin-left: 0.5rem;
 }
