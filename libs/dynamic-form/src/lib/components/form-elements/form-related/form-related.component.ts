@@ -969,7 +969,7 @@ export class FormRelatedComponent
         element.prefilled = newPrefilled;
       }
 
-      if (!el.value && typeof el.default === 'string') {
+      if (!el.value && typeof el.default === 'string' && this.dataOfList.length === 0) {
         element.value = format.format(el.default, this.formData);
       }
 
