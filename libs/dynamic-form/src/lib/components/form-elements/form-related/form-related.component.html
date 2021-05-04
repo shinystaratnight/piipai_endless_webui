@@ -201,7 +201,7 @@
   </div>
 
   <div class="form-list" *ngIf="config.list">
-    <h6 class="card flex-row align-items-center" [ngClass]="{ 'bg-primary text-white': !isCollapsed }">
+    <!-- <h6 class="d-flex align-items-center">
       <fa-icon
         class="p-2"
         [icon]="['fas', isCollapsed ? 'eye' : 'eye-slash']"
@@ -216,7 +216,7 @@
       <button
         *ngIf="config.delay && checkPermission('post')"
         type="button"
-        class="btn btn-sm btn-primary ml-auto mr-2"
+        class="btn btn-sm btn-primary ml-auto mr-2 py-1"
         (click)="addObject()">
         {{'add' | translate}}
       </button>
@@ -224,13 +224,35 @@
       <button
         *ngIf="config.templateOptions.add_label && config.templateOptions.add"
         type="button"
-        class="btn btn-sm btn-primary ml-auto mr-2" (click)="addObject()">
+        class="btn btn-sm btn-primary ml-auto mr-2 py-1" (click)="addObject()">
         {{'add' | translate}}
       </button>
-    </h6>
+    </h6> -->
+
+    <div class="d-flex">
+      <div class="mr-auto d-flex flex-column justify-content-center">
+        <h4 class="mb-0">{{ getTranslationKey(config.key, 'label') | translate: {"Default": config.templateOptions.label} }}</h4>
+      </div>
+
+      <button
+        *ngIf="config.delay && checkPermission('post')"
+        type="button"
+        class="btn btn-primary btn-shadow align-self-center"
+        (click)="addObject()">
+        {{'add' | translate}}
+      </button>
+
+      <button
+        *ngIf="config.templateOptions.add_label && config.templateOptions.add"
+        type="button"
+        class="btn btn-primary btn-shadow align-self-center" (click)="addObject()">
+        {{'add' | translate}}
+      </button>
+    </div>
+
     <div #tableWrapper id="collapseExample" [ngbCollapse]="isCollapsed" class="list-related p-2 datatable">
-      <table *ngIf="dataOfList" class="table mb-1">
-        <thead>
+      <table *ngIf="dataOfList" class="table table-sm">
+        <thead class="thead-default">
           <tr>
             <ng-container *ngFor="let col of config.metadata">
               <th
