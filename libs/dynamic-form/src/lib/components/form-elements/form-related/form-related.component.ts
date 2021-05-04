@@ -982,7 +982,6 @@ export class FormRelatedComponent
     if (this.dataOfList) {
       const object = this.createObject();
 
-      console.log(object);
       this.dataOfList.push(object);
     }
   }
