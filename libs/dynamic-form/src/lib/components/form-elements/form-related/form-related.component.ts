@@ -908,7 +908,9 @@ export class FormRelatedComponent
           this.dataOfList.push(object);
         });
 
-        this.addObject();
+        if (data.length == 0) {
+          this.addObject();
+        }
         this.group.get(this.key).patchValue(data);
       }
     }
