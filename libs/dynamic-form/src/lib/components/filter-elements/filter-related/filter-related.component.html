@@ -1,51 +1,25 @@
 <div class="filter-element" [class.active]="!isCollapsed">
-  <app-filter-header
-    [label]="config.label"
-    [key]="config.key"
-    [resetButton]="query"
-    (resetEvent)="resetFilter()"
-  ></app-filter-header>
+  <app-filter-header [label]="config.label" [key]="config.key" [resetButton]="query" (resetEvent)="resetFilter()">
+  </app-filter-header>
 
   <div class="filter-related">
-    <div
-      class="d-flex justify-content-center align-items-center autocomplete-filter"
-      style="position: relative"
-    >
-      <div
-        class="form-control autocomplete-value"
-        [class.active]="
+    <div class="d-flex justify-content-center align-items-center autocomplete-filter" style="position: relative">
+      <div class="form-control autocomplete-value" [class.active]="
           (multiple && selected && selected.length) ||
           (!multiple && item && item.data)
-        "
-        (click)="openAutocomplete($event)"
-      >
+        " (click)="openAutocomplete($event)">
         <div style="overflow: hidden; white-space: nowrap">
           {{ item ? item.displayValue : '' }}
         </div>
-        <fa-icon
-          [icon]="[
+        <fa-icon [icon]="[
             'fas',
             item && item.hideAutocomplete ? 'chevron-down' : 'chevron-up'
-          ]"
-          class="text-md-white ml-2"
-        ></fa-icon>
+          ]" class="text-md-white ml-2"></fa-icon>
       </div>
 
-      <div
-        class="autocomplete"
-        [hidden]="item ? item.hideAutocomplete : true"
-        [ngStyle]="{ 'top.px': topHeight }"
-      >
-        <input
-          #search="ngModel"
-          *ngIf="!multiple"
-          name="search"
-          type="text"
-          class="form-control mb-1"
-          [(ngModel)]="searchValue"
-          [ngModelOptions]="{ standalone: true }"
-          (blur)="resetList(item)"
-        />
+      <div class="autocomplete" [hidden]="item ? item.hideAutocomplete : true" [ngStyle]="{ 'top.px': topHeight }">
+        <input #search="ngModel" *ngIf="!multiple" name="search" type="text" class="form-control mb-1"
+          [(ngModel)]="searchValue" [ngModelOptions]="{ standalone: true }" (blur)="resetList(item)" />
         <ul *ngIf="multiple" class="list-group w-100">
           <li class="autocomplete-item default-value">
             <a (click)="selectAll(previewList)">Select All</a>
@@ -53,72 +27,32 @@
           </li>
         </ul>
 
-        <input
-          #search="ngModel"
-          *ngIf="multiple"
-          name="search"
-          type="text"
-          class="form-control mt-1"
-          [(ngModel)]="searchValue"
-          [ngModelOptions]="{ standalone: true }"
-        />
+        <input #search="ngModel" *ngIf="multiple" name="search" type="text" class="form-control mt-1"
+          [(ngModel)]="searchValue" [ngModelOptions]="{ standalone: true }" />
 
-        <div
-          class="autocomplete-list"
-          infinite-scroll
-          [infiniteScrollDistance]="modalScrollDistance"
-          [infiniteScrollThrottle]="modalScrollThrottle"
-          [scrollWindow]="false"
-          (scrolled)="onModalScrollDown()"
-        >
-          <ul
-            *ngIf="!multiple && previewList && previewList.length"
-            class="list-group w-100"
-          >
-            <li
-              class="list-group-item autocomplete-item"
-              (click)="setValue(defaultValue, item)"
-            >
+        <div class="autocomplete-list" infinite-scroll [infiniteScrollDistance]="modalScrollDistance"
+          [infiniteScrollThrottle]="modalScrollThrottle" [scrollWindow]="false" (scrolled)="onModalScrollDown()">
+          <ul *ngIf="!multiple && previewList && previewList.length" class="list-group w-100">
+            <li class="list-group-item autocomplete-item" (click)="setValue(defaultValue, item)">
               All
             </li>
-            <li
-              class="list-group-item autocomplete-item"
-              *ngFor="let option of previewList"
-              (click)="setValue(option)"
-            >
+            <li class="list-group-item autocomplete-item" *ngFor="let option of previewList" (click)="setValue(option)">
               {{ option.__str__ }}
             </li>
           </ul>
 
-          <ul
-            *ngIf="multiple && previewList && previewList.length"
-            class="list-group w-100"
-          >
-            <li
-              class="list-group-item autocomplete-item form-check"
-              *ngFor="let option of previewList; let index = index"
-            >
+          <ul *ngIf="multiple && previewList && previewList.length" class="list-group w-100">
+            <li class="list-group-item autocomplete-item form-check"
+              *ngFor="let option of previewList; let index = index">
               <label class="d-flex align-items-center">
-                <input
-                  type="checkbox"
-                  class="form-check-input"
-                  [(ngModel)]="option.checked"
-                  name="checked"
-                  (ngModelChange)="setValue(option, chashValues)"
-                  hidden
-                />
-                <app-checkbox
-                  [sm]="true"
-                  [checked]="option.checked"
-                ></app-checkbox>
+                <input type="checkbox" class="form-check-input" [(ngModel)]="option.checked" name="checked"
+                  (ngModelChange)="setValue(option, chashValues)" hidden />
+                <app-checkbox [sm]="true" [checked]="option.checked"></app-checkbox>
                 {{ option[config.data.value] }}
               </label>
             </li>
           </ul>
-          <div
-            class="d-flex align-items-center justify-content-center"
-            *ngIf="skipScroll"
-          >
+          <div class="d-flex align-items-center justify-content-center" *ngIf="skipScroll">
             <app-loader></app-loader>
           </div>
         </div>
@@ -128,10 +62,7 @@
     <div *ngIf="selected && selected.length" class="filter-values">
       <span class="badge badge-outline" *ngFor="let value of selected">
         {{ value[config.data.value] }}
-        <fa-icon
-          [icon]="['fas', 'times']"
-          (click)="removeItem(value)"
-        ></fa-icon>
+        <fa-icon [icon]="['fas', 'times']" (click)="removeItem(value)"></fa-icon>
       </span>
     </div>
   </div>

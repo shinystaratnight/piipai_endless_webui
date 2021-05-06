@@ -508,5 +508,8 @@
   "value.label": "Kogus",
   "tabs.timesheetrates.label": "Tegevused",
   "timesheetrates.label": "Tegevused",
-  "worktype.placeholder": "Vali"
+  "worktype.placeholder": "Vali",
+  "filter.candidate.label": "Kandidaat",
+  "filter.jobsite.label": "Töökoht",
+  "filter.primary_contact.label": "Esmane kontakt"
 }

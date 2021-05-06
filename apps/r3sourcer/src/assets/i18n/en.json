@@ -508,5 +508,8 @@
   "value.label": "Amount",
   "tabs.timesheetrates.label": "Skill Activities",
   "timesheetrates.label": "Skill Activities",
-  "worktype.placeholder": "Select"
+  "worktype.placeholder": "Select",
+  "filter.candidate.label": "Candidate",
+  "filter.jobsite.label": "Jobsite",
+  "filter.primary_contact.label": "Primary Contact"
 }
