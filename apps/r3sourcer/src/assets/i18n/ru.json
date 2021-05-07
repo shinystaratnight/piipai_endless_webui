@@ -508,5 +508,8 @@
   "value.label": "Количество",
   "tabs.timesheetrates.label": "Виды работ",
   "timesheetrates.label": "Виды работ",
-  "worktype.placeholder": "Выбрать"
+  "worktype.placeholder": "Выбрать",
+  "filter.candidate.label": "Кандидат",
+  "filter.jobsite.label": "Место работы",
+  "filter.primary_contact.label": "Руководитель"
 }
