@@ -16,7 +16,8 @@ export const Form  = {
   static: forms.stat,
   list: forms.list,
   info: forms.info,
-  tabs: forms.tabs
+  tabs: forms.tabs,
+  collapse: forms.collapse
 };
 
 export const Filter = {

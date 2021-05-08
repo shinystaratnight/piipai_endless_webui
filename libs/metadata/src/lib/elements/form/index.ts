@@ -11,7 +11,7 @@ import { InfoElement, Info } from './info-element';
 import { GroupElement, Group } from './group-element';
 import { RowElement, Row } from './row-element';
 import { TabsElement, Tabs } from './tabs-element';
-
+import { CollapseElement, Collapse } from './collapse-element';
 
 export const select = { element: SelectElement, type: Select };
 export const textarea = { element: TextareaElement, type: Textarea };
@@ -26,4 +26,4 @@ export const info = { element: InfoElement, type: Info };
 export const group = { element: GroupElement, type: Group };
 export const row = { element: RowElement, type: Row };
 export const tabs = { element: TabsElement, type: Tabs };
-
+export const collapse = { element: CollapseElement, type: Collapse };
