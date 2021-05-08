@@ -1,3 +1,5 @@
+export * from './form-element';
+
 export interface FilterEvent {
   list: string;
   reset?: boolean;

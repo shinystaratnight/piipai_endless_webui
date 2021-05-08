@@ -1,5 +1,5 @@
-import { Endpoints, Models, SkillModel } from '@webui/data';
-import { Form, CheckboxType, DatepickerType, InputType } from '@webui/metadata';
+import { Endpoints, Models, SkillModel, WageType } from '@webui/data';
+import { Form, CheckboxType, DatepickerType, InputType, date } from '@webui/metadata';
 
 const form = function() {
   return [
@@ -30,6 +30,11 @@ const form = function() {
       .noBorder()
       .setChildren([
         new Form.collapse.element('Times', 'times', true)
+          .setIsCollapsed((data) => {
+            const { wage_type } = data;
+
+            return wage_type != WageType.Hourly;
+          })
           .setChildren([
             new Form.row.element()
               .noBorder()

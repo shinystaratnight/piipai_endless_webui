@@ -15,6 +15,7 @@ export class FormRowComponent implements OnInit {
   public errors: any;
   public message: any;
   public className: any;
+  public formId: number;
 
   public isMobileDevice = isMobile() && isCandidate();
 
