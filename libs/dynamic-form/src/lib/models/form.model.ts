@@ -13,7 +13,7 @@ export class Form {
   private _mode: BehaviorSubject<string>;
   private _saveProcess: BehaviorSubject<boolean>;
   private _id = counter++;
-  private _initialData: { [key: string]: any };
+  private _initialData: { [key: string]: any } = {};
 
   public allowMethods: string[];
   public hasTabs: boolean;
@@ -37,7 +37,7 @@ export class Form {
   }
 
   get initialData() {
-    return {...this._initialData};
+    return { ...this._initialData };
   }
 
   public endpoint: string;
@@ -62,6 +62,6 @@ export class Form {
   }
 
   public setInitialData(data: any) {
-    this._initialData = data;
+    this._initialData = { ...this._initialData, ...data };
   }
 }

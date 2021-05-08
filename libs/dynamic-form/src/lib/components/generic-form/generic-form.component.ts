@@ -516,6 +516,9 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
 
           if (this.extendData) {
             this.fillinForm(this.metadata, this.extendData);
+            this.formService
+              .getForm(this.formId)
+              .setInitialData(this.extendData);
           }
 
           if (!(this.id || this.editForm)) {
