@@ -51,5 +51,6 @@ export { InputType } from './form/input-element';
 export { CheckboxType } from './form/checkbox-element';
 export { StaticType } from './form/static-element';
 export { RelatedElement } from './form/related-element';
+export { CollapseElement } from './form/collapse-element';
 
 export * from './form/utils';

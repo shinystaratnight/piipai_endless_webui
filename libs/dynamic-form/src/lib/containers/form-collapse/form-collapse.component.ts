@@ -1,9 +1,11 @@
 import { Component, Output, EventEmitter, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { FormService } from '@webui/dynamic-form';
-import { CollapseElement } from 'libs/metadata/src/lib/elements/form/collapse-element';
+
+import { CollapseElement } from '@webui/metadata';
+
 import { IFormElement } from '../../interfaces';
 import { Form } from '../../models';
+import { FormService } from '../../services';
 
 @Component({
   selector: 'app-form-collapse',
