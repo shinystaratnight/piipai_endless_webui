@@ -1,0 +1,17 @@
+@import '../../../../../../styles/variables';
+
+:host {
+  display: block;
+  border-bottom: 1px solid $outline-color;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.title {
+  margin-bottom: 0;
+}

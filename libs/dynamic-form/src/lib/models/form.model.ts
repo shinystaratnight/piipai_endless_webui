@@ -13,6 +13,7 @@ export class Form {
   private _mode: BehaviorSubject<string>;
   private _saveProcess: BehaviorSubject<boolean>;
   private _id = counter++;
+  private _initialData: { [key: string]: any } = {};
 
   public allowMethods: string[];
   public hasTabs: boolean;
@@ -35,6 +36,10 @@ export class Form {
     return this._errors.asObservable();
   }
 
+  get initialData() {
+    return { ...this._initialData };
+  }
+
   public endpoint: string;
 
   constructor(endpoint: string, mode: string, allowMethods: string[]) {
@@ -54,5 +59,9 @@ export class Form {
 
   public setErrors(errors: IFormErrors): void {
     this._errors.next(errors);
+  }
+
+  public setInitialData(data: any) {
+    this._initialData = { ...this._initialData, ...data };
   }
 }
