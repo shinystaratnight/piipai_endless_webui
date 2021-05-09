@@ -16,7 +16,8 @@ export const Form  = {
   static: forms.stat,
   list: forms.list,
   info: forms.info,
-  tabs: forms.tabs
+  tabs: forms.tabs,
+  collapse: forms.collapse
 };
 
 export const Filter = {
@@ -50,5 +51,6 @@ export { InputType } from './form/input-element';
 export { CheckboxType } from './form/checkbox-element';
 export { StaticType } from './form/static-element';
 export { RelatedElement } from './form/related-element';
+export { CollapseElement } from './form/collapse-element';
 
 export * from './form/utils';

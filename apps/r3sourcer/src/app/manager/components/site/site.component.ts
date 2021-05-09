@@ -286,18 +286,20 @@ export class SiteComponent implements OnInit, OnDestroy {
 
     // this.userService.currentRole(role);
     this.loader = true;
+    window.location.href = '';
 
-    if (isManager()) {
-      this.router.navigate(['/']);
-    }
+    // if (isManager()) {
+    //   window.location.href = '';
+    //   this.router.navigate(['']);
+    // }
 
-    if (isClient()) {
-      this.router.navigate(['/cl']);
-    }
+    // if (isClient()) {
+    //   this.router.navigate(['/cl']);
+    // }
 
-    if (isCandidate()) {
-      this.router.navigate(['/cd']);
-    }
+    // if (isCandidate()) {
+    //   this.router.navigate(['/cd']);
+    // }
 
     // this.currentRole = role;
     // this.navigationService.getPages(role)

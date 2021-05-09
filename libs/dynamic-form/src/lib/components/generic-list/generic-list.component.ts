@@ -17,9 +17,11 @@ import {
   SortData
 } from './../../services';
 
-import { BehaviorSubject, Subject, Subscription } from 'rxjs';
-import { debounceTime, map, skip } from 'rxjs/operators';
+import { BehaviorSubject, forkJoin, Subject, Subscription } from 'rxjs';
+import { catchError, debounceTime, map, skip } from 'rxjs/operators';
 import { Sort } from '../../helpers';
+import { FormatString } from '@webui/utilities';
+import { MessageType, ToastService } from '@webui/core';
 
 @Component({
   selector: 'app-generic-list',
@@ -74,7 +76,8 @@ export class GenericListComponent implements OnInit, OnDestroy {
     private router: Router,
     private listService: ListService,
     private cd: ChangeDetectorRef,
-    private sortService: SortService
+    private sortService: SortService,
+    private toast: ToastService
   ) {}
 
   public ngOnInit() {
@@ -85,7 +88,7 @@ export class GenericListComponent implements OnInit, OnDestroy {
 
     if (this.update) {
       this.subscriptions.push(
-        this.update.subscribe(update => {
+        this.update.subscribe((update) => {
           const table = this.getFirstTable();
 
           this.updateList(table, update);
@@ -97,7 +100,7 @@ export class GenericListComponent implements OnInit, OnDestroy {
       const subscription = this.upload
         .asObservable()
         .pipe(debounceTime(200))
-        .subscribe(data => {
+        .subscribe((data) => {
           const table = this.getFirstTable();
 
           if (
@@ -127,7 +130,7 @@ export class GenericListComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy() {
-    this.subscriptions.forEach(s => s && s.unsubscribe());
+    this.subscriptions.forEach((s) => s && s.unsubscribe());
   }
 
   initTableData(table) {
@@ -137,13 +140,13 @@ export class GenericListComponent implements OnInit, OnDestroy {
       formset = !this.metaType && '?type=formset';
     }
 
-    this.getMetadata(endpoint, table, formset).subscribe(data => {
+    this.getMetadata(endpoint, table, formset).subscribe((data) => {
       const { isSkip } = data;
 
       if (!this.inForm) {
         const paramsSubscription = this.route.queryParams
           .pipe(skip(isSkip ? 1 : 0))
-          .subscribe(params => {
+          .subscribe((params) => {
             setTimeout(() => {
               if (table && table.first && !(this.cd as any).destroyed) {
                 this.parseUrl(params, table.list);
@@ -189,31 +192,34 @@ export class GenericListComponent implements OnInit, OnDestroy {
     }
 
     return this.gfs.getMetadata(endpoint, query).pipe(
-      map(metadata => {
+      map((metadata) => {
         this.updateMetadataInfo(metadata, table);
 
         if (!this.delay) {
-          const sortData: SortData = this.sortService.getSortData(metadata.list.columns);
+          const sortData: SortData = this.sortService.getSortData(
+            metadata.list.columns
+          );
 
           if (this.inForm) {
             this.sortService.init(sortData);
           }
 
-          table.query = Object.keys(sortData).length > 0
-            ? {
-                filter: '',
-                sort: this.sortService.getSortQuery(sortData),
-                pagination: ''
-              }
-            : {};
+          table.query =
+            Object.keys(sortData).length > 0
+              ? {
+                  filter: '',
+                  sort: this.sortService.getSortQuery(sortData),
+                  pagination: ''
+                }
+              : {};
         }
 
         if (endpoint.includes('fillin')) {
           const queryItems = metadata.list.filters
-            .filter(filter => {
+            .filter((filter) => {
               return filter.hasOwnProperty('default') && filter.default;
             })
-            .map(filter => `${filter.query}=${filter.default}`);
+            .map((filter) => `${filter.query}=${filter.default}`);
 
           table.query.filter = queryItems.join('&');
         }
@@ -272,7 +278,7 @@ export class GenericListComponent implements OnInit, OnDestroy {
     this.isLoading = true;
     this.listUpdated.emit();
 
-    this.gfs.getByQuery(endpoint, query).subscribe(data => {
+    this.gfs.getByQuery(endpoint, query).subscribe((data) => {
       if (this.currentQuery !== query) {
         return;
       }
@@ -314,7 +320,7 @@ export class GenericListComponent implements OnInit, OnDestroy {
     const defaultRate = 'default_rate';
 
     if (data[this.responseField]) {
-      data[this.responseField].forEach(candidate => {
+      data[this.responseField].forEach((candidate) => {
         candidate[defaultRate] = data.job && data.job[defaultRate];
       });
     }
@@ -336,7 +342,7 @@ export class GenericListComponent implements OnInit, OnDestroy {
   }
 
   public updateTables(prop) {
-    this.tables.forEach(el => {
+    this.tables.forEach((el) => {
       el[prop] = this[prop];
     });
   }
@@ -374,7 +380,7 @@ export class GenericListComponent implements OnInit, OnDestroy {
         this.updateUrl(table.query);
       } else {
         if (e.query) {
-          e.query.split('&').forEach(el => {
+          e.query.split('&').forEach((el) => {
             const propsArray = el.split('=');
             if (propsArray[0] === 'offset') {
               table['offset'] = propsArray[1];
@@ -430,7 +436,7 @@ export class GenericListComponent implements OnInit, OnDestroy {
         result = '?';
       }
       const queryList = Object.keys(queries);
-      queryList.forEach(el => {
+      queryList.forEach((el) => {
         if (queries[el]) {
           result += `${queries[el]}&`;
         }
@@ -452,15 +458,15 @@ export class GenericListComponent implements OnInit, OnDestroy {
   }
 
   public getTable(name) {
-    return this.tables.find(el => el.list === name);
+    return this.tables.find((el) => el.list === name);
   }
 
   public getFirstTable() {
-    return this.tables.find(el => el.first);
+    return this.tables.find((el) => el.first);
   }
 
   public resetActiveTable(tables) {
-    tables.forEach(el => {
+    tables.forEach((el) => {
       el.active = false;
     });
   }
@@ -488,7 +494,7 @@ export class GenericListComponent implements OnInit, OnDestroy {
   }
 
   public checkList(endpoint) {
-    const result = this.tables.filter(el => el.endpoint === endpoint);
+    const result = this.tables.filter((el) => el.endpoint === endpoint);
     return !result.length;
   }
 
@@ -496,11 +502,52 @@ export class GenericListComponent implements OnInit, OnDestroy {
     let body;
     const ids = [];
     const keys = Object.keys(data);
-    keys.forEach(el => {
+    keys.forEach((el) => {
       if (data[el]) {
         ids.push(el);
       }
     });
+
+    if (e.action.multiple) {
+      const requests = ids.map((id: string) => {
+        const url = FormatString.format(endpoint, { id });
+
+        if (e.action.method === 'delete') {
+          return this.gfs.delete(url, id);
+        }
+
+        return this.gfs.submitForm(url, {});
+      });
+
+      target.actionProcess = true;
+      forkJoin(requests)
+        .pipe(
+          catchError(
+            (responses: Array<{ status: string; detail?: string }>) => {
+              const message = responses
+                .filter(({ status }) => status === 'error')
+                .map(({ detail }) => detail)
+                .join(' ');
+              this.toast.sendMessage(message, MessageType.Error);
+              return responses;
+            }
+          )
+        )
+        .subscribe((responses: Array<{ status: string }>) => {
+          target.actionProcess = false;
+          target.refresh = true;
+          target.actionData = responses;
+          if (responses.some((response) => response === null || response.status === 'success')) {
+            this.getData(
+              target.endpoint,
+              this.generateQuery(target.query),
+              target
+            );
+          }
+        });
+
+      return;
+    }
 
     if (e.action.property) {
       body = {
@@ -512,7 +559,7 @@ export class GenericListComponent implements OnInit, OnDestroy {
 
     target.actionProcess = true;
     this.gfs.callAction(endpoint, body).subscribe(
-      res => {
+      (res) => {
         target.actionProcess = false;
         if (res.status === 'success') {
           if (e.action.reload) {
@@ -527,7 +574,7 @@ export class GenericListComponent implements OnInit, OnDestroy {
         }
         target.actionData = res;
       },
-      err => {
+      (err) => {
         target.actionProcess = false;
         this.err = err;
       }
@@ -537,7 +584,7 @@ export class GenericListComponent implements OnInit, OnDestroy {
   public updateUrl(query) {
     const queryParams = {};
     const keys = Object.keys(query);
-    keys.forEach(el => {
+    keys.forEach((el) => {
       if (query[el]) {
         const elements = query[el].split('&');
         elements.forEach((item, i) => {
@@ -565,7 +612,7 @@ export class GenericListComponent implements OnInit, OnDestroy {
     const table = this.getFirstTable();
     const keys = Object.keys(queryParams);
 
-    keys.forEach(el => {
+    keys.forEach((el) => {
       const params = el.split('.');
       if (params[0] === 'f') {
         const name = params.slice(1).join('.');
@@ -583,7 +630,7 @@ export class GenericListComponent implements OnInit, OnDestroy {
       } else if (params[0] === 's') {
         const fields = queryParams[el].split(',');
 
-        fields.forEach(elem => {
+        fields.forEach((elem) => {
           const order = elem[0] === '-' ? Sort.DESC : Sort.ASC;
           sorted[elem.substring(elem[0] === '-' ? 1 : 0)] = order;
         });
@@ -594,7 +641,7 @@ export class GenericListComponent implements OnInit, OnDestroy {
 
     this.sortService.init(sorted);
 
-    Object.keys(queryList).forEach(el => {
+    Object.keys(queryList).forEach((el) => {
       if (el === 'filter') {
         queryList[el] = queryList[el].substring(0, queryList[el].length - 1);
       }
@@ -618,7 +665,7 @@ export class GenericListComponent implements OnInit, OnDestroy {
   public checkedHandler(e) {
     this.checkedObjects.emit({
       checkedData: e,
-      filters: this.fs.queries.find(el => el.list === this.tables[0].list)
+      filters: this.fs.queries.find((el) => el.list === this.tables[0].list)
     });
   }
 

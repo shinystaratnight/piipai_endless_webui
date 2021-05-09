@@ -508,5 +508,8 @@
   "value.label": "Määrä",
   "tabs.timesheetrates.label": "Toiminta",
   "timesheetrates.label": "Toiminta",
-  "worktype.placeholder": "Valitse"
+  "worktype.placeholder": "Valitse",
+  "filter.candidate.label": "Ehdokas",
+  "filter.jobsite.label": "Työpaikka",
+  "filter.primary_contact.label": "Ensisijainen yhteyshenkilö"
 }

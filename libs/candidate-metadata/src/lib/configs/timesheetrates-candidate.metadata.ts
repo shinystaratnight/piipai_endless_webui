@@ -20,7 +20,6 @@ const form = () => [
 ];
 
 const formadd = () => [
-  new SkillModel().formElement().updateValues(['name']),
   new Form.input.element('timesheet', 'Timesheet', InputType.Text).hideField(),
   new SkillWorkTypeModel()
     .formElement()
@@ -33,6 +32,7 @@ const formadd = () => [
       skill: '{skill.id}',
       company: 'currentCompany'
     }),
+  new SkillModel().formElement().updateValues(['name']),
   new Form.input.element('rate', 'Rate', InputType.Number).hideField(),
   new Form.input.element('value', 'Value', InputType.Number)
 ];

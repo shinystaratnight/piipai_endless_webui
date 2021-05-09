@@ -1,18 +1,25 @@
-import { Component,  Output, EventEmitter, OnInit } from '@angular/core';
+import { Component, Output, EventEmitter, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+
+import { CollapseElement } from '@webui/metadata';
+
+import { IFormElement } from '../../interfaces';
+import { Form } from '../../models';
+import { FormService } from '../../services';
 
 @Component({
   selector: 'app-form-collapse',
-  templateUrl: 'form-collapse.component.html'
+  templateUrl: './form-collapse.component.html',
+  styleUrls: ['./form-collapse.component.scss']
 })
-
-export class FormCollapseComponent implements OnInit  {
-  public config: any;
+export class FormCollapseComponent implements OnInit {
+  public config: CollapseElement & IFormElement;
   public group: FormGroup;
   public errors: any;
   public message: any;
 
-  public isCollapsed = false;
+  isCollapsed: boolean;
+  translationKey: string;
 
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
@@ -20,8 +27,21 @@ export class FormCollapseComponent implements OnInit  {
   @Output()
   public buttonAction: EventEmitter<any> = new EventEmitter();
 
+  constructor(private formService: FormService) {}
+
   public ngOnInit() {
-    this.isCollapsed = this.config.collapsed;
+    const { collapsed, isCollapsed, translateKey } = this.config;
+    this.translationKey = `group.${translateKey}`;
+
+    if (isCollapsed && this.formService) {
+      const form: Form = this.formService.getForm(this.config.formId);
+
+      if (form) {
+        this.isCollapsed = isCollapsed(form.initialData);
+      }
+    } else {
+      this.isCollapsed = collapsed;
+    }
   }
 
   public eventHandler(e) {
