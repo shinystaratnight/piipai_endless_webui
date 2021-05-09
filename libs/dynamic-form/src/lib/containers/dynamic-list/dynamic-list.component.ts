@@ -186,7 +186,7 @@ export class DynamicListComponent
 
 
   get hasSelectColumn() {
-    return (!this.inForm && this.config.list.actions) || this.actions || (!this.noneEdit && !this.inForm);
+    return (this.config.list.actions) || this.actions || (!this.noneEdit && !this.inForm);
   }
 
   private subscriptions: Subscription[] = [];
@@ -273,6 +273,10 @@ export class DynamicListComponent
       if (this.actionEndpoint.indexOf('/sendsms/') > -1) {
         setTimeout(() => {
           this.openFrame(this.currentActionData.phone_number);
+          this.select = {};
+        }, 250);
+      } else {
+        setTimeout(() => {
           this.select = {};
         }, 250);
       }

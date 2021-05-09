@@ -475,7 +475,40 @@ const formset = {
     editDisable: false,
     label: 'Job Offer',
     pagination_label: 'Job Offer',
-    search_enabled: false
+    search_enabled: false,
+    actions: {
+      options: [
+        {
+          endpoint: '/hr/joboffers/{id}/accept/',
+          label: 'Accept',
+          selectionError: 'Please select at least one job offer!',
+          required: true,
+          multiple: true,
+          property: 'id'
+        },
+        {
+          endpoint: '/hr/joboffers/{id}/cancel/',
+          label: 'Cancel',
+          selectionError: 'Please select at least one job offer!',
+          required: true,
+          multiple: true,
+          property: 'id'
+        },
+        {
+          endpoint: '/hr/joboffers/',
+          label: 'Delete',
+          method: 'delete',
+          selectionError: 'Please select at least one job offer!',
+          required: true,
+          multiple: true,
+          property: 'id'
+        }
+      ],
+      label: 'Actions',
+      agree_label: 'Agree',
+      button_label: 'Go',
+      decline_label: 'Decline'
+    },
   }
 };
 
