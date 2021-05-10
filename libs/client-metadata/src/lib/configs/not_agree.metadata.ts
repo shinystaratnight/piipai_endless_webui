@@ -1,7 +1,7 @@
-import { Endpoints, Models } from '@webui/data';
+import { Endpoints, Models, WageType } from '@webui/data';
 import { Form, DatepickerType, CheckboxType, InputType } from '@webui/metadata';
 
-const shiftStartField = function() {
+const shiftStartField = function () {
   return new Form.datepicker.element(
     'shift_started_at',
     'Shift start',
@@ -11,7 +11,7 @@ const shiftStartField = function() {
     .setUpdateFromForm();
 };
 
-const shiftEndField = function() {
+const shiftEndField = function () {
   return new Form.datepicker.element(
     'shift_ended_at',
     'Shift end',
@@ -21,7 +21,7 @@ const shiftEndField = function() {
     .setUpdateFromForm();
 };
 
-const breakStartField = function() {
+const breakStartField = function () {
   return new Form.datepicker.element(
     'break_started_at',
     'Break start',
@@ -33,7 +33,7 @@ const breakStartField = function() {
     .setUpdateFromForm();
 };
 
-const breakEndField = function() {
+const breakEndField = function () {
   return new Form.datepicker.element(
     'break_ended_at',
     'Break end',
@@ -45,21 +45,21 @@ const breakEndField = function() {
     .setUpdateFromForm();
 };
 
-const totalTimeField = function() {
+const totalTimeField = function () {
   return new Form.static.element('total_time', 'Total time')
     .readOnly()
     .doNotSend()
     .setColor('text-success');
 };
 
-const noBreakField = function() {
+const noBreakField = function () {
   return new Form.checkbox.element('noBreak', 'No Break', CheckboxType.Checkbox)
     .setUpdateFromForm()
     .doNotSend()
     .updateByNull(['break_started_at', 'break_ended_at']);
 };
 
-const signatureField = function() {
+const signatureField = function () {
   return new Form.input.element(
     'supervisor_signature',
     '',
@@ -67,35 +67,42 @@ const signatureField = function() {
   ).hideField();
 };
 
-const form = function() {
+const form = function () {
   return [
-    new Form.row.element().setChildren([
-      new Form.group.element()
-        .doNotShowLabel()
-        .setMarginBottom(12)
-        .setChildren([
-          noBreakField(),
-          shiftStartField(),
-          shiftEndField(),
-          totalTimeField()
-        ]),
+    new Form.collapse.element('Times', 'times', true)
+      .setIsCollapsed((data: any) => {
+        const { wage_type } = data;
 
-      new Form.group.element()
-        .setMarginBottom(18)
-        .setChildren([breakStartField(), breakEndField(), signatureField()]),
-    ]),
+        return wage_type != WageType.Hourly;
+      })
+      .setChildren([
+        new Form.row.element().setChildren([
+          new Form.group.element()
+            .doNotShowLabel()
+            .setChildren([
+              shiftStartField(),
+              shiftEndField(),
+              noBreakField(),
+              totalTimeField()
+            ]),
+
+          new Form.group.element()
+            .doNotShowLabel()
+            .setChildren([breakStartField(), breakEndField()])
+        ])
+      ]),
     new Form.list.element('Skill Activities', Endpoints.TimesheetRates)
       .setQuery({
         timesheet: '{id}'
       })
       .setPrefilledFields({
         [Models.Skill]: '{position.id}',
-        [Models.Timesheet]: '{id}',
-      }),
+        [Models.Timesheet]: '{id}'
+      })
   ];
 };
 
-const mobile = function() {
+const mobile = function () {
   return [
     noBreakField(),
     shiftStartField(),
@@ -109,7 +116,7 @@ const mobile = function() {
       })
       .setPrefilledFields({
         [Models.Skill]: '{position.id}',
-        [Models.Timesheet]: '{id}',
+        [Models.Timesheet]: '{id}'
       }),
     signatureField()
   ];

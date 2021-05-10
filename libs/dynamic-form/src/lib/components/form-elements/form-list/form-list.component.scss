@@ -4,9 +4,20 @@
   width: 100%;
 }
 
-.title {
+.header {
+  display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  margin: .5rem 0;
+
+  &__content {
+    & > * {
+      margin-bottom: 0;
+
+      &:not(:last-child) {
+        margin-bottom: 8px;
+      }
+    }
+  }
 }
 
 h6 .btn {
@@ -14,19 +25,7 @@ h6 .btn {
   line-height: 14px;
 }
 
-h4 {
-  margin-bottom: 8px;
-
-  font-size: 24px;
-  line-height: 1;
-
-  color: #4f4f4f;
-}
-
-p {
-  margin-bottom: 8px;
-
+.description {
   color: $gray;
-
   opacity: .7;
 }
