@@ -22,7 +22,7 @@ const form = function () {
         })
     ]),
 
-    new Form.datepicker.element('shift_date', 'Shift date', DatepickerType.Date)
+    new Form.datepicker.element('shift_ended_at_utc', 'Shift date', DatepickerType.Date)
       .readOnly()
       .doNotSend(),
 

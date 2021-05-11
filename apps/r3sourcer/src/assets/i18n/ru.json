@@ -511,5 +511,6 @@
   "worktype.placeholder": "Выбрать",
   "filter.candidate.label": "Кандидат",
   "filter.jobsite.label": "Место работы",
-  "filter.primary_contact.label": "Руководитель"
+  "filter.primary_contact.label": "Руководитель",
+  "shift_ended_at_utc.label": "Смена"
 }

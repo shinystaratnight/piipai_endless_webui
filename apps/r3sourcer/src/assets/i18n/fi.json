@@ -511,5 +511,6 @@
   "worktype.placeholder": "Valitse",
   "filter.candidate.label": "Ehdokas",
   "filter.jobsite.label": "Työpaikka",
-  "filter.primary_contact.label": "Ensisijainen yhteyshenkilö"
+  "filter.primary_contact.label": "Ensisijainen yhteyshenkilö",
+  "shift_ended_at_utc.label": "Vaihtopäivä"
 }
