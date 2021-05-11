@@ -18,6 +18,7 @@ export interface InputElementTemplateOptions
   step?: number;
   min?: number;
   display?: string;
+  icon?: string;
 }
 
 export class InputElement extends BasicFormElement {
@@ -39,6 +40,12 @@ export class InputElement extends BasicFormElement {
 
   setFormatOfValue(format: string) {
     this.templateOptions.display = format;
+
+    return this;
+  }
+
+  setIcon(icon?: string) {
+    this.templateOptions.icon = icon;
 
     return this;
   }
