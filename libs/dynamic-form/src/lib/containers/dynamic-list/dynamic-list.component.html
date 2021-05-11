@@ -412,9 +412,9 @@
         </ng-container>
 
         <ng-container *ngIf="!modalInfo.label.picture">
-          <span class="contact-avatar contact-avatar-lg">{{
-            modalInfo.label.contactAvatar
-          }}</span>
+          <span class="contact-avatar contact-avatar-lg">
+            {{ modalInfo.label.contactAvatar }}
+          </span>
         </ng-container>
 
         <p class="evaluate-label">{{ modalInfo.label.name }}</p>
@@ -452,9 +452,7 @@
             </span>
           </div>
           <div class="d-flex justify-content-center flex-column">
-            {{
-              'approve_timesheet' | translate: { Default: 'Approve timesheet' }
-            }}
+            {{ 'approve_timesheet' | translate: { Default: 'Approve timesheet' } }}
             <br />
             <span class="secondary-title">for {{ modalInfo.label.name }}</span>
           </div>
@@ -561,13 +559,15 @@
           </div>
 
           <div [hidden]="!modalInfo.timesheetData" class="form-wrapper">
-            <h3 class="group-title times" [class.change-form]="modalInfo.changeEndpoint">
-              {{ 'times.label' | translate: { Default: 'Times' } }}
-            </h3>
-
-            <app-generic-form [needData]="false" [form]="modalInfo.form" [endpoint]="modalInfo.changeEndpoint"
-              [metadataQuery]="modalInfo.metadataQuery" [changeMetadata]="modalInfo.changeMetadata"
-              [data]="modalInfo.timesheetData" [extendData]="modalInfo.extendData" [edit]="modalInfo.edit"
+            <app-generic-form
+              [needData]="false"
+              [form]="modalInfo.form"
+              [endpoint]="modalInfo.changeEndpoint"
+              [metadataQuery]="modalInfo.metadataQuery"
+              [changeMetadata]="modalInfo.changeMetadata"
+              [data]="modalInfo.timesheetData"
+              [extendData]="modalInfo.extendData"
+              [edit]="modalInfo.edit"
               (event)="evaluateEvent($event, modal.close)">
               <button #sendFormButton type="submit" [hidden]="true"></button>
             </app-generic-form>
@@ -582,9 +582,9 @@
           </ng-template>
 
           <div class="flex-fill evaluation-content" [class.evaluated]="modalInfo.evaluated">
-            <h3 class="group-title">
+            <h4 class="headline-4">
               {{ 'evaluate.label' | translate: { Default: 'Evaluation' } }}
-            </h3>
+            </h4>
 
             <div class="evaluation-wrapper d-flex align-items-center text-warning">
               <div class="rating d-inline-flex" [class.filled]="modalInfo.data.evaluation_score">

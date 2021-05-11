@@ -68,6 +68,18 @@ input[type=number] {
   opacity: 0.6;
 }
 
+.readonly {
+  opacity: 0.6 !important;
+  color: $gray !important;
+  cursor: text;
+
+  &:hover,
+  &:focus {
+    color: $gray !important;
+    opacity: 0.6 !important;
+  }
+}
+
 @include media-breakpoint-up('md') {
   .btn.only-mobile {
     display: none;
@@ -399,12 +411,7 @@ iframe.send-sms {
 }
 
 .timesheet-submit-form {
-  padding: 5px 0 !important;
-
   .items {
-    padding-bottom: 2px !important;
-    margin-bottom: 6px !important;
-
     @include media-breakpoint-down('md') {
       display: block !important;
     }
@@ -433,15 +440,6 @@ iframe.send-sms {
       label.form-element-checkbox {
         margin-bottom: 0;
       }
-    }
-  }
-
-  @include media-breakpoint-down('sm') {
-    app-form-checkbox .form-group {
-      position: absolute;
-      top: 3px;
-      right: -10px;
-      min-width: 130px;
     }
   }
 }
