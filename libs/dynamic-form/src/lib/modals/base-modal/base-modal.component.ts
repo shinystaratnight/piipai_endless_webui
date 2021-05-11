@@ -7,7 +7,8 @@ import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from 
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BaseModalComponent {
-  @Input() modalName: string;
+  @Input() title: string = '';
+  @Input() modalClass: string = '';
 
   @Output() dissmisEvent: EventEmitter<void> = new EventEmitter();
 
