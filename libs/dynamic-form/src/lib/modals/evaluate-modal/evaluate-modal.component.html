@@ -8,19 +8,16 @@
       </ng-container>
 
       <ng-container *ngIf="!config.evaluate">
-        <ng-container *ngIf="config.label.picture">
           <img
+            *ngIf="config.label.picture"
             class="avatar"
             alt="Photo"
             width="40"
             height="40"
             [src]="config.label.picture"
           />
-        </ng-container>
 
-        <ng-container *ngIf="!config.label.picture">
-          <span class="contact-avatar avatar">{{ config.label.contactAvatar }}</span>
-        </ng-container>
+          <span *ngIf="!config.label.picture" class="contact-avatar avatar">{{ config.label.contactAvatar }}</span>
 
         {{ config.label.name }}
       </ng-container>
@@ -29,7 +26,6 @@
 
   <div *ngIf="!config.evaluate" class="modal-body">
     <app-generic-form
-      [needData]="config.needData"
       [endpoint]="config.endpoint"
       [data]="config.data"
       [extendData]="config.extendData"

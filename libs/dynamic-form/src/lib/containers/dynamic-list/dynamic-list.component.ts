@@ -1710,6 +1710,9 @@ export class DynamicListComponent
           id: createAddAction({
             value: data.id
           }),
+          shift_date: createAddAction({
+            value: data.shift_started_at
+          }),
           shift_started_at: createAddAction({
             value: data.shift_started_at
           }),

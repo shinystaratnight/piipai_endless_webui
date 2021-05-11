@@ -14,6 +14,9 @@ export type EvaluateModalConfig = {
     name: string;
   };
   endpoint: string;
+  edit: boolean;
+  extendData: { [key: string]: any };
+  data: { [key: string]: any };
 };
 
 @Component({
@@ -22,7 +25,7 @@ export type EvaluateModalConfig = {
   styleUrls: ['./evaluate-modal.component.scss']
 })
 export class EvaluateModalComponent extends Modal {
-  config: EvaluateModalComponent;
+  config: EvaluateModalConfig;
   saveProcess: boolean;
   approveEndpoint: string;
 
