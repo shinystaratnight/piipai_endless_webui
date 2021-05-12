@@ -187,20 +187,24 @@ export class FormInputComponent extends BasicElementComponent
         CountryISO.Australia;
     }
 
+    this.updateIcon();
+
+    if (this.config.dataList) {
+      this.dataListMap = this.generateDataListView(this.config.dataList);
+    }
+  }
+
+  updateIcon() {
     if (this.config.templateOptions.icon) {
       const currency = getCurrencySymbol(
         this.siteSettings.settings.currency,
         'wide'
       );
 
-      this.config.templateOptions.icon = FormatString.format(
+      this.config.templateOptions.iconParsed = FormatString.format(
         this.config.templateOptions.icon,
-        { currency }
+        { currency, ...this.formData }
       );
-    }
-
-    if (this.config.dataList) {
-      this.dataListMap = this.generateDataListView(this.config.dataList);
     }
   }
 
@@ -229,6 +233,7 @@ export class FormInputComponent extends BasicElementComponent
         this.checkTotalTime(data);
         this.checkIfExistDefaultValue(key);
         this.checkAttributes();
+        this.updateIcon();
       });
 
       this.subscriptions.push(subscription);

@@ -147,6 +147,7 @@ export interface Field {
     pattern?: string;
     patterError?: string;
     add_label?: string;
+    iconParsed?: string;
   };
 }
 

@@ -20,7 +20,7 @@
     <div class="form-element-content edit" [class.showAll]="viewMode || config.type === 'static'"
       [class.full]="config.templateOptions.addon">
       <span class="input-icon" *ngIf="config.templateOptions.icon">
-        {{ config.templateOptions.icon }}
+        {{ config.templateOptions.iconParsed }}
       </span>
 
       <ng-container *ngIf="!viewMode && isPhoneField">
@@ -133,7 +133,7 @@
 
 <ng-template #inputField>
   <input #input class="form-control" appInputFocus autocomplete="new-password"
-    [class.pl-2]="config.templateOptions.icon" [class.not-empty]="group.get(key).value"
+    [class.pl-3]="config.templateOptions.icon" [class.not-empty]="group.get(key).value"
     [class.addon-input]="config.templateOptions.addon" [formControl]="group.get(key)" [attr.type]="
       config.templateOptions.type
         ? (config.templateOptions.type === 'score' && 'number') ||

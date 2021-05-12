@@ -511,5 +511,6 @@
   "worktype.placeholder": "Vali",
   "filter.candidate.label": "Kandidaat",
   "filter.jobsite.label": "Töökoht",
-  "filter.primary_contact.label": "Esmane kontakt"
+  "filter.primary_contact.label": "Esmane kontakt",
+  "shift_ended_at_utc.label": "Vahetuse kuupäev"
 }
