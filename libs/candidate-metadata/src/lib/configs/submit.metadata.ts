@@ -22,6 +22,10 @@ const form = function () {
         })
     ]),
 
+    new Form.datepicker.element('shift_ended_at_utc', 'Shift date', DatepickerType.Date)
+      .readOnly()
+      .doNotSend(),
+
     new Form.collapse.element('Times', 'times', true)
       .setIsCollapsed((data) => {
         const { wage_type } = data;

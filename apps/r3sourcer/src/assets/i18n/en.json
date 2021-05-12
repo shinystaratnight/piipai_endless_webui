@@ -511,5 +511,6 @@
   "worktype.placeholder": "Select",
   "filter.candidate.label": "Candidate",
   "filter.jobsite.label": "Jobsite",
-  "filter.primary_contact.label": "Primary Contact"
+  "filter.primary_contact.label": "Primary Contact",
+  "shift_ended_at_utc.label": "Shift date"
 }

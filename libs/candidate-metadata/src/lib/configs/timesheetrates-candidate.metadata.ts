@@ -10,20 +10,21 @@ const form = () => [
   new TimesheetModel().formElement().hideField(),
   new SkillWorkTypeModel()
     .formElement()
-    .updateValues(['translations'])
+    .updateValues(['translations', 'uom'])
     .readOnly()
     .setQuery({
       company: 'currentCompany'
     }),
   new Form.input.element('rate', 'Rate', InputType.Number).hideField(),
   new Form.input.element('value', 'Value', InputType.Number)
+    .setIcon('{uom.name}')
 ];
 
 const formadd = () => [
   new Form.input.element('timesheet', 'Timesheet', InputType.Text).hideField(),
   new SkillWorkTypeModel()
     .formElement()
-    .updateValues(['default_rate', 'translations'])
+    .updateValues(['default_rate', 'translations', 'uom'])
     .required()
     .setPerfilledFields({
       [Models.Skill]: `{${Models.Skill}.id}`
@@ -35,6 +36,7 @@ const formadd = () => [
   new SkillModel().formElement().updateValues(['name']),
   new Form.input.element('rate', 'Rate', InputType.Number).hideField(),
   new Form.input.element('value', 'Value', InputType.Number)
+    .setIcon('{worktype.uom.name}')
 ];
 
 const formset = () => ({
