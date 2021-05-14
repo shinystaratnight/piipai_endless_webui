@@ -36,7 +36,7 @@ const formadd = () => [
   new SkillModel().formElement().updateValues(['name']),
   new Form.input.element('rate', 'Rate', InputType.Number).hideField(),
   new Form.input.element('value', 'Value', InputType.Number)
-    .setIcon('{worktype.uom.name}')
+    .setIcon('{worktype.uom.short_name}')
 ];
 
 const formset = () => ({

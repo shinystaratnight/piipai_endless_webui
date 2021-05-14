@@ -9,7 +9,9 @@ import { List, Form, InputType } from '@webui/metadata';
 const getRateField = () =>
   new Form.input.element('rate', 'Rate', InputType.Number).hideField();
 const getValueField = () =>
-  new Form.input.element('value', 'Value', InputType.Number);
+  new Form.input.element('value', 'Value', InputType.Number).setIcon(
+    '{worktype.uom.short_name}'
+  );
 const getTimesheetField = () => new TimesheetModel().formElement().hideField();
 
 const form = () => [
