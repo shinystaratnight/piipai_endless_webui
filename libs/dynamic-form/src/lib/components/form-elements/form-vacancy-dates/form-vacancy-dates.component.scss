@@ -24,3 +24,13 @@
     }
   }
 }
+
+.selected-date {
+  background-color: $primary !important;
+  color: #fff !important;
+}
+
+.removed-date,
+.removed-date.bg-primary {
+  background-color: #fff !important;
+}
