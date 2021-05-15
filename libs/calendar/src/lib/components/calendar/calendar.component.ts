@@ -378,7 +378,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
   public fillInJob(data) {
     const prefix = isManager() ? 'mn' : 'cl';
 
-    this.router.navigateByUrl(`/${prefix}/hr/jobs/${data.shift.date.job.id}/fillin?f.shifts-0=${data.shift.id}`);
+    this.router.navigateByUrl(`/${prefix}/hr/jobs/${data.shift.date.job.id}/fillin?f.selected_shift-0=${data.shift.id}`);
   }
 
   public formEvent(e, closeModal) {

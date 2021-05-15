@@ -12,6 +12,10 @@ import { Subscription } from 'rxjs';
 import { FilterService } from '../../../services';
 import { FormatString } from '@webui/utilities';
 
+enum FilterType {
+  Multiple = 'multiple'
+}
+
 @Component({
   selector: 'app-filter-multiple',
   templateUrl: './filter-multiple.component.html'
@@ -46,8 +50,8 @@ export class FilterMultipleComponent implements OnInit, OnDestroy {
   ) {}
 
   public ngOnInit() {
-    this.type = this.config.type === 'multiple' ? 'data' : 'options';
-    this.querySubscription = this.route.queryParams.subscribe(params => {
+    this.type = this.config.type === FilterType.Multiple ? 'data' : 'options';
+    this.querySubscription = this.route.queryParams.subscribe((params) => {
       setTimeout(() => {
         if (!(this.cd as any).destroyed) {
           this.updateFilter();
@@ -88,6 +92,8 @@ export class FilterMultipleComponent implements OnInit, OnDestroy {
     //     );
     //   }
     // }
+
+    this.updateSelectedItems();
   }
 
   public ngOnDestroy() {
@@ -95,8 +101,34 @@ export class FilterMultipleComponent implements OnInit, OnDestroy {
     this.filterSubscription.unsubscribe();
   }
 
+  updateSelectedItems() {
+    if (this.config.type === FilterType.Multiple) {
+      const { selected_shift } = this.fs._paramsOfFilters;
+
+      if (selected_shift) {
+        const targetEl = this.data.find(
+          (el) => el.data && el.data.id === selected_shift
+        );
+
+        if (!targetEl) {
+          return;
+        }
+
+        const index = this.data.indexOf(targetEl);
+
+        this.data.forEach((el) => {
+          if (targetEl !== el) {
+            el.checked = false;
+          }
+        });
+
+        this.onChange(index);
+      }
+    }
+  }
+
   public createData(type) {
-    this.data = this.config[type].map(data => {
+    this.data = this.config[type].map((data) => {
       return {
         label: type === 'data' ? data[this.config.display] : data.label,
         query: this.config.query,
@@ -130,11 +162,11 @@ export class FilterMultipleComponent implements OnInit, OnDestroy {
     const format = new FormatString();
     let result = '';
     if (data) {
-      data.forEach(el => {
+      data.forEach((el) => {
         if (el.checked) {
           if (el.query instanceof Object) {
             const queries = Object.keys(el.query);
-            queries.forEach(item => {
+            queries.forEach((item) => {
               result += `${item}=${format.format(el.query[item], el.data)}&`;
             });
           } else {
@@ -161,11 +193,11 @@ export class FilterMultipleComponent implements OnInit, OnDestroy {
     const format = new FormatString();
     this.query = query;
     if (this.data) {
-      this.data.forEach(el => {
+      this.data.forEach((el) => {
         if (el.query instanceof Object) {
           const keys = Object.keys(el.query);
           let result;
-          keys.forEach(item => {
+          keys.forEach((item) => {
             result = `${item}=${format.format(el.query[item], el.data)}`;
             el.checked = query.indexOf(result) > -1;
           });
@@ -214,7 +246,7 @@ export class FilterMultipleComponent implements OnInit, OnDestroy {
   public checkUniqueValues(unique, data, first?, index?) {
     if (unique) {
       const uniqueField = {};
-      unique.forEach(field => {
+      unique.forEach((field) => {
         if (index !== undefined && index !== null) {
           data.forEach((el, i) => {
             if (el.checked && i === index) {
@@ -245,7 +277,7 @@ export class FilterMultipleComponent implements OnInit, OnDestroy {
   }
 
   public resetValues() {
-    this.data.forEach(el => {
+    this.data.forEach((el) => {
       el.checked = false;
     });
   }
