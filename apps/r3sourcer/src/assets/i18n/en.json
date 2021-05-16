@@ -514,5 +514,8 @@
   "filter.primary_contact.label": "Primary Contact",
   "shift_ended_at_utc.label": "Shift date",
   "expand": "Expand",
-  "collapse": "Collapse"
+  "collapse": "Collapse",
+  "consent_message": "Potential employer would like to access your data in our employment database to offer you a job! Do you agree we share your data? YES / NO",
+  "button_yes": "Yes",
+  "button_no": "No"
 }
