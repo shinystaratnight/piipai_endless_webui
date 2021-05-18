@@ -15,7 +15,7 @@ export enum Calendar {
 export class CalendarDataService {
   private endpoints = {
     [Calendar.Manager]: Endpoints.Shift,
-    [Calendar.Client]: `${Endpoints.Shift}client_contact_shifts/`
+    [Calendar.Client]: `${Endpoints.Shift}client_contact_shifts/`,
   };
 
   private timesheetEndpoints = {
@@ -29,6 +29,11 @@ export class CalendarDataService {
 
   getShiftsByQuery(params: HttpParams, type: Calendar) {
     return this.http.get(this.endpoints[type], { params })
+      .pipe(catchError((errors) => this.errorsService.handleError(errors)));
+  }
+
+  getShiftDate(id: string) {
+    return this.http.get(`${Endpoints.ShiftDate}${id}/`)
       .pipe(catchError((errors) => this.errorsService.handleError(errors)));
   }
 

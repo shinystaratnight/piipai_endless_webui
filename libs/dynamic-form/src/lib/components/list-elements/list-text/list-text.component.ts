@@ -55,9 +55,10 @@ export class ListTextComponent implements OnInit {
         }
       }
     }
-    if (this.config.workers_details) {
-      this.workers = this.generateWorkers(this.config.workers_details);
-    }
+    // TODO: add details of candidates
+    // if (this.config.workers_details) {
+    //   this.workers = this.generateWorkers(this.config.workers_details);
+    // }
 
     const timeInstance = this.config.timezone
       ? getTimeInstance().tz.setDefault(this.config.timezone)

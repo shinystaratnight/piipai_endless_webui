@@ -212,8 +212,8 @@ export class CalendarService {
         const { candidates, is_fulfilled, timesheetStatus } = shift;
 
         if (Number.isInteger(is_fulfilled)) {
-          result.count[Status.Fullfilled] += candidates.accepted.length;
-          result.count[Status.Pending] += candidates.undefined.length;
+          result.count[Status.Fullfilled] += candidates.accepted;
+          result.count[Status.Pending] += candidates.undefined;
 
           result[is_fulfilled].push(shift);
         }
