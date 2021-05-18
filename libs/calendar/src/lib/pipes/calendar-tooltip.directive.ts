@@ -5,7 +5,9 @@ import {
   Renderer2,
   Input,
   OnChanges,
-  SimpleChanges
+  SimpleChanges,
+  Output,
+  EventEmitter
 } from '@angular/core';
 
 @Directive({
@@ -16,6 +18,9 @@ export class CalendarTooltipDirective implements OnChanges {
 
   @Input()
   active: boolean;
+
+  @Output()
+  show: EventEmitter<void> = new EventEmitter();
 
   constructor(private el: ElementRef, public renderer: Renderer2) {}
 
@@ -74,6 +79,8 @@ export class CalendarTooltipDirective implements OnChanges {
         -sizes.width + sizes.collapseLeft + 6 + 'px'
       );
     }
+
+    this.show.emit();
   }
 
   private getSizes(el) {

@@ -173,7 +173,7 @@
         triggers="click:click"
         [ngbTooltip]="monthTooltip"
         [placement]="getPlacement(i, week.length)"
-        (shown)="day.isOpen = true"
+        (shown)="getShiftData(day)"
         (hidden)="day.isOpen = false">
 
         <span class="date" [class.current-date]="day.today">{{day.label}}</span>
@@ -190,7 +190,9 @@
         </div>
 
         <ng-template #monthTooltip>
-          <div class="shift-tooltip">
+          <app-loader *ngIf="day.loading"></app-loader>
+
+          <div *ngIf="!day.loading" class="shift-tooltip">
             <ng-container *ngTemplateOutlet="shiftGroup; context: {shifts: day.tooltip[1], className: 'success', name: 'fulfilled', status: 'accepted', month: true}"></ng-container>
             <ng-container *ngTemplateOutlet="shiftGroup; context: {shifts: day.tooltip[0], className: 'danger', name: 'unfulfilled', status: 'cancelled', month: true}"></ng-container>
             <ng-container *ngTemplateOutlet="shiftGroup; context: {shifts: day.tooltip[2], className: 'warning', name: 'pending', status: 'undefined', month: true}"></ng-container>
@@ -241,10 +243,22 @@
       [disable]="!(isManager() || canClientCreateJob())"
       *ngFor="let day of calendarData?.body">
         <ng-container *ngFor="let shift of day.data; let index = index">
-          <div class="shift-item" [class.active]="activeShift === shift.shift.id" appCalendarTooltip [active]="activeShift === shift.shift.id" [ngStyle]="shift.timesheet" [style.margin-left.px]="index * 8" (click)="selectJob($event, shift)">
+          <div
+            class="shift-item"
+            [class.active]="activeShift === shift.shift.id"
+            appCalendarTooltip
+            [active]="activeShift === shift.shift.id"
+            [ngStyle]="shift.timesheet"
+            [style.margin-left.px]="index * 8"
+            (show)="getShiftDataWeekCalendar(shift)"
+            (click)="selectJob($event, shift)">
             <div [ngClass]="['border', getColor(shift.is_fulfilled)]"></div>
 
-            <div class="content">
+            <div class="content" *ngIf="shift.loading">
+              <app-loader></app-loader>
+            </div>
+
+            <div *ngIf="!shift.loading" class="content">
               <div class="d-flex justify-content-between mr-2">
                 <span [ngClass]="['badge', getColor(shift.is_fulfilled)]">Start - {{shift.time}}</span>
 
@@ -278,10 +292,22 @@
     </div>
     <span class="grid-item day-item" appSelectDate [class.date-selected]="isSelected(calendarData.date)" [date]="calendarData.date" [disable]="!(isManager() || canClientCreateJob())">
       <ng-container *ngFor="let shift of calendarData?.body.data; let index = index">
-        <div class="shift-item preview" [class.active]="activeShift === shift.shift.id" [active]="activeShift === shift.shift.id" appCalendarTooltip [ngStyle]="shift.timesheet" [style.margin-left.px]="index * 120 + index * 8" (click)="selectJob($event, shift)">
+        <div
+          class="shift-item preview"
+          [class.active]="activeShift === shift.shift.id"
+          [active]="activeShift === shift.shift.id"
+          appCalendarTooltip
+          [ngStyle]="shift.timesheet"
+          [style.margin-left.px]="index * 120 + index * 8"
+          (show)="getShiftDataWeekCalendar(shift)"
+          (click)="selectJob($event, shift)">
           <div [ngClass]="['border', getColor(shift.is_fulfilled)]"></div>
 
-          <div class="content">
+          <div class="content" *ngIf="shift.loading">
+            <app-loader></app-loader>
+          </div>
+
+          <div class="content" *ngIf="!shift.loading">
             <div class="d-flex justify-content-between mr-2">
               <span [ngClass]="['badge', getColor(shift.is_fulfilled)]">Start - {{shift.time}}</span>
 
