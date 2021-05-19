@@ -28,12 +28,12 @@ const form = () => [
 ];
 
 const formadd = () => [
-  new SkillModel().formElement().updateValues(['name']),
   getTimesheetField(),
   new SkillWorkTypeModel()
     .formElement()
+    .required()
     .setActions({ add: true })
-    .updateValues(['translations'])
+    .updateValues(['translations', 'uom'])
     .required()
     .setPerfilledFields({
       [Models.Skill]: `{${Models.Skill}.id}`
@@ -42,6 +42,7 @@ const formadd = () => [
       skill: '{skill.id}',
       company: 'currentCompany'
     }),
+  new SkillModel().formElement().updateValues(['name']),
   getRateField(),
   getValueField()
 ];

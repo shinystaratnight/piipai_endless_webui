@@ -24,6 +24,7 @@ const formadd = () => [
   new Form.input.element('timesheet', 'Timesheet', InputType.Text).hideField(),
   new SkillWorkTypeModel()
     .formElement()
+    .required()
     .updateValues(['default_rate', 'translations', 'uom'])
     .required()
     .setPerfilledFields({

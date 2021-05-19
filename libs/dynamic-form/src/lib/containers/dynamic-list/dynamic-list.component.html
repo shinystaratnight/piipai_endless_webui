@@ -65,7 +65,7 @@
           [poped]="poped" [allowPermissions]="allowPermissions" (event)="buttonAction($event)">
         </app-list-buttons>
       </h2>
-      <div appScroll [enable]="!inForm" *ngIf="
+      <div [enable]="!inForm" *ngIf="
           (showFilters && !(identifyDevice() || isMobileDevice)) ||
           config.list.search_enabled
         " class="datatable-header" [class.open-filters]="!filtersHidden && showFilters" [class.in-form]="inForm">
@@ -485,15 +485,9 @@
           </div>
 
           <div [hidden]="!modalInfo.timesheetData" class="form-wrapper">
-            <app-generic-form
-              [needData]="false"
-              [form]="modalInfo.form"
-              [endpoint]="modalInfo.changeEndpoint"
-              [metadataQuery]="modalInfo.metadataQuery"
-              [changeMetadata]="modalInfo.changeMetadata"
-              [data]="modalInfo.timesheetData"
-              [extendData]="modalInfo.extendData"
-              [edit]="modalInfo.edit"
+            <app-generic-form [needData]="false" [form]="modalInfo.form" [endpoint]="modalInfo.changeEndpoint"
+              [metadataQuery]="modalInfo.metadataQuery" [changeMetadata]="modalInfo.changeMetadata"
+              [data]="modalInfo.timesheetData" [extendData]="modalInfo.extendData" [edit]="modalInfo.edit"
               (event)="evaluateEvent($event, modal.close)">
               <button #sendFormButton type="submit" [hidden]="true"></button>
             </app-generic-form>
