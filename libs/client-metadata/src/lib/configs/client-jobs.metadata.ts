@@ -55,22 +55,22 @@ const list = {
       },
       {
         content: [
-          {
-            values: {
-              0: 'times-circle',
-              1: 'check-circle',
-              2: 'exclamation-circle',
-              3: 'minus-circle',
-              null: 'minus-circle'
-            },
-            field: 'is_fulfilled_today',
-            type: 'icon',
-            color: {
-              0: 'danger',
-              1: 'success',
-              2: 'warning'
-            }
-          },
+          // {
+          //   values: {
+          //     0: 'times-circle',
+          //     1: 'check-circle',
+          //     2: 'exclamation-circle',
+          //     3: 'minus-circle',
+          //     null: 'minus-circle'
+          //   },
+          //   field: 'is_fulfilled_today',
+          //   type: 'icon',
+          //   color: {
+          //     0: 'danger',
+          //     1: 'success',
+          //     2: 'warning'
+          //   }
+          // },
           {
             values: {
               0: 'times-circle',
@@ -89,9 +89,9 @@ const list = {
           }
         ],
         name: 'fulfilled',
-        title: 'today / next day',
+        // title: 'today / next day',
         label: 'Fulfilled',
-        delim: '/'
+        // delim: '/'
       },
       {
         content: [

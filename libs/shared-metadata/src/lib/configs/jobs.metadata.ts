@@ -1064,7 +1064,6 @@ const form = [
         metadata_query: {
           editable_type: 'job'
         },
-        visibleMode: true,
         add_endpoint: '/hr/shiftdates/',
         edit_endpoint: '/hr/shiftdates/{date.id}',
         templateOptions: {

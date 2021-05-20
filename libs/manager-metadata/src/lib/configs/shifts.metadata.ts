@@ -521,7 +521,7 @@ const job = {
             label: {
               0: 'Unfulfilled',
               1: 'Fulfilled',
-              2: 'Unfulfilled',
+              2: 'Pending',
               3: 'Unfulfilled',
               null: 'Unfulfilled'
             },
@@ -530,7 +530,7 @@ const job = {
             field: 'is_fulfilled'
           }
         ],
-        label: 'Fulfilled',
+        label: 'Status',
         title: null,
         delim: null
       },
@@ -545,7 +545,6 @@ const job = {
             text_color: '#f0ad4e',
             type: 'button',
             field: 'id',
-            visibleMode: true,
           },
           {
             action: 'delete',
