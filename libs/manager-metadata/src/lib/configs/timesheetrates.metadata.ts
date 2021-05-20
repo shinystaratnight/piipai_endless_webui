@@ -20,23 +20,26 @@ const form = () => [
 ];
 
 const formadd = () => [
-  new SkillModel().formElement().updateValues(['name']),
   new Form.input.element('timesheet', 'Timesheet', InputType.Text).hideField(),
   new SkillWorkTypeModel()
     .formElement()
+    .required()
     .setActions({
       add: true
     })
     .setPerfilledFields({
       [Models.Skill]: `{${Models.Skill}.id}`
     })
-    .updateValues(['translations'])
+    .updateValues(['translations', 'uom'])
     .setQuery({
       skill: '{skill.id}',
       company: 'currentCompany'
     }),
+  new SkillModel().formElement().updateValues(['name']),
   new Form.input.element('rate', 'Rate', InputType.Number),
-  new Form.input.element('value', 'Value', InputType.Number)
+  new Form.input.element('value', 'Value', InputType.Number).setIcon(
+    '{worktype.uom.short_name}'
+  )
 ];
 
 const formset = () => ({
