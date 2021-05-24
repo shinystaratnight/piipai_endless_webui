@@ -113,11 +113,13 @@ const list = function () {
 
             new List.static.element('status')
               .setDisplay('Not started yet')
+              .setTranslationKey('not_started_yet')
               .setStyles(['muted'])
               .setShowIfRule([{ status: [0, 1] }]),
 
             new List.static.element('status')
               .setDisplay('Waiting for the timesheet')
+              .setTranslationKey('waiting_for_timesheet')
               .setStyles(['muted'])
               .setShowIfRule([{ status: 2 }]),
 
@@ -161,6 +163,7 @@ const list = function () {
             .setDisplay(
               'Your shift is schedulled to start at {shift_started_at__time}'
             )
+            .setTranslationKey('will_start_at_time')
             .setStyles(['muted'])
             .setShowIfRule([{ status: 0 }]),
 
@@ -194,6 +197,7 @@ const list = function () {
 
           new List.static.element('status')
             .setDisplay('Your shift will start {shift_started_at__diff}')
+            .setTranslationKey('will_start_diff')
             .setStyles(['muted'])
             .setShowIfRule([{ status: 2 }]),
 
