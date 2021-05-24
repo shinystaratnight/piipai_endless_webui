@@ -25,7 +25,7 @@ const formadd = () => [
   new SkillWorkTypeModel()
     .formElement()
     .required()
-    .updateValues(['default_rate', 'translations', 'uom'])
+    .updateValues(['skill_rate_ranges', 'translations', 'uom'])
     .required()
     .setPerfilledFields({
       [Models.Skill]: `{${Models.Skill}.id}`
@@ -35,7 +35,9 @@ const formadd = () => [
       company: 'currentCompany'
     }),
   new SkillModel().formElement().updateValues(['name']),
-  new Form.input.element('rate', 'Rate', InputType.Number).hideField(),
+  new Form.input.element('rate', 'Rate', InputType.Number)
+    .setDefaultValue('{worktype.skill_rate_ranges.default_rate}')
+    .hideField(),
   new Form.input.element('value', 'Value', InputType.Number)
     .setIcon('{worktype.uom.short_name}')
 ];
