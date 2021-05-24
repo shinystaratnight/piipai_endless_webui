@@ -1,10 +1,10 @@
 {
-	"/hr/joboffers-candidate/": "Предложения на работу",
+	"/hr/joboffers-candidate/": "Предложения о работе",
 	"/hr/jobs/client_contact_job/": "Работы",
 	"/hr/jobsites/client_contact_jobsite/": "Места работы",
-	"/hr/timesheets-candidate/": "Табеля",
-	"/hr/timesheets/history/": "Табеля",
-	"/hr/timesheets/unapproved/": "Не подтвержденные табеля",
+	"/hr/timesheets-candidate/": "Табели",
+	"/hr/timesheets/history/": "Табели",
+	"/hr/timesheets/unapproved/": "Не подтвержденные табели",
 	"Job.back": "Назад к списку",
 	"Jobsite.back": "Назад",
 	"Scores.label": "Оценка",
@@ -235,8 +235,8 @@
 		"status": [
 			"Новый",
 			"Ожидает подтверждения перед работой",
-			"Проверка перед сменой подтверждена",
-			"Проверка перед сменой не удалась",
+			"Смена подтверждена",
+			"Смена не подтверждена",
 			"Ожидает заполнения",
 			"Ожидает подтверждения",
 			"Супервизор изменил",
@@ -350,7 +350,7 @@
 	"provider_signed_at": {
 		"label": "Принято"
 	},
-	"reference_timesheet.label": "Табель",
+	"reference_timesheet.label": "Табель учета рабочего времени",
 	"registration.fill_error": "Пожалуйста заполните обязательные поля",
 	"registration.of": "из",
 	"registration.register": "Отправить",
@@ -455,10 +455,10 @@
 	"times.shift_ended_at.label": "Конец",
 	"times.shift_started_at.date": "Дата",
 	"times.shift_started_at.label": "Начало",
-	"timesheet": "Табеля",
+	"timesheet": "Табели",
 	"timesheet.count_timesheets.label": "Всего",
 	"timesheet.days_from_last_timesheet.label": "От последнего",
-	"timesheet.label": "Табель",
+	"timesheet.label": "Табель учета рабочего времени",
 	"timesheet_will_approved": "Табель будет автоматически одобрен через 4 часа",
 	"totalTime.label": "Общее время",
 	"total_time": {
