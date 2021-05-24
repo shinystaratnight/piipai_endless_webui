@@ -472,7 +472,8 @@ const form = [
                     type: 'checkbox',
                     templateOptions: {
                       required: false,
-                      label: 'GST',
+                      label: '{vat_name}',
+                      label_default: 'VAT Name',
                       type: 'checkbox',
                       text: 'Registered'
                     },

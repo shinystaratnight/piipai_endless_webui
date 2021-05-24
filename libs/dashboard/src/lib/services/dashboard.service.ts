@@ -9,16 +9,32 @@ import { getContactAvatar } from '@webui/utilities';
 
 @Injectable()
 export class DashboardService {
-  constructor(private http: HttpClient, private errorService: ErrorsService, private siteSettings: SiteSettingsService) {}
+  private fields = [
+    'id',
+    'contact',
+    'candidate_scores',
+    'latest_state',
+    'skill_list',
+    'tag_list',
+    'average_score'
+  ];
+
+  constructor(
+    private http: HttpClient,
+    private errorService: ErrorsService,
+    private siteSettings: SiteSettingsService
+  ) {}
 
   getCandidates(query?: { [key: string]: any }) {
-    const params = new HttpParams({ fromObject: query });
+    const params = new HttpParams({
+      fromObject: { ...query, fields: this.fields }
+    });
 
     return this.http.get(Endpoints.CandidateContact, { params }).pipe(
       map((response: { count: number; results: any[] }) => {
         const { results, count } = response;
 
-        const candidates = results.map(candidate => {
+        const candidates = results.map((candidate) => {
           const {
             id,
             contact,
@@ -35,22 +51,32 @@ export class DashboardService {
             contactAvatar: getContactAvatar(contact.__str__),
             score: average_score,
             state: latest_state[0],
-            skills: skill_list.map(el => {
-              const { skill: { name } } = el;
-              const trans = name.translations.find(item => item.language.id === CountryCodeLanguage[this.siteSettings.settings.country_code]);
+            skills: skill_list.map((el) => {
+              const {
+                skill: { name }
+              } = el;
+              const trans = name.translations.find(
+                (item) =>
+                  item.language.id ===
+                  CountryCodeLanguage[this.siteSettings.settings.country_code]
+              );
 
               if (trans) {
-                el.skill.__str__ = trans.value
+                el.skill.__str__ = trans.value;
               }
 
               return { name: el.skill.__str__, score: el.score };
             }),
-            tags: tag_list.map(el => {
+            tags: tag_list.map((el) => {
               const { tag } = el;
-              const trans = tag.translations.find(item => item.language.id === CountryCodeLanguage[this.siteSettings.settings.country_code]);
+              const trans = tag.translations.find(
+                (item) =>
+                  item.language.id ===
+                  CountryCodeLanguage[this.siteSettings.settings.country_code]
+              );
 
               if (trans) {
-                el.tag.name = trans.value
+                el.tag.name = trans.value;
               }
 
               return { name: el.tag.name };
@@ -60,7 +86,7 @@ export class DashboardService {
 
         return { count, candidates };
       }),
-      catchError(errors => this.errorService.handleError(errors))
+      catchError((errors) => this.errorService.handleError(errors))
     );
   }
 
@@ -71,7 +97,7 @@ export class DashboardService {
       map((response: { list: any[]; job: any }) => {
         const candidates = response.list;
 
-        return candidates.map(candidate => {
+        return candidates.map((candidate) => {
           const {
             id,
             candidate_scores,
@@ -98,7 +124,7 @@ export class DashboardService {
           };
         });
       }),
-      catchError(errors => this.errorService.handleError(errors))
+      catchError((errors) => this.errorService.handleError(errors))
     );
   }
 
@@ -110,7 +136,7 @@ export class DashboardService {
 
     return this.http
       .post(`${Endpoints.Job}${jobId}/fillin/`, body)
-      .pipe(catchError(errors => this.errorService.handleError(errors)));
+      .pipe(catchError((errors) => this.errorService.handleError(errors)));
   }
 
   private generateScores(scores: { [key: string]: string }) {
@@ -122,7 +148,7 @@ export class DashboardService {
       loyalty: 'Loyality'
     };
 
-    return Object.keys(skillMap).map(key => {
+    return Object.keys(skillMap).map((key) => {
       return {
         name: skillMap[key],
         score: scores[key] ? scores[key].split(' ')[0] : 0,

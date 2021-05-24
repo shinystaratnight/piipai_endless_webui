@@ -30,7 +30,7 @@ const formadd = () => [
     .setPerfilledFields({
       [Models.Skill]: `{${Models.Skill}.id}`
     })
-    .updateValues(['translations', 'uom'])
+    .updateValues(['translations', 'uom', 'skill_rate_ranges'])
     .setQuery({
       skill: '{skill.id}',
       company: 'currentCompany'
