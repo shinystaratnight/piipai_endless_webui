@@ -7,7 +7,9 @@ import {
 import { List, Form, InputType } from '@webui/metadata';
 
 const getRateField = () =>
-  new Form.input.element('rate', 'Rate', InputType.Number).hideField();
+  new Form.input.element('rate', 'Rate', InputType.Number)
+    .setDefaultValue('{worktype.skill_rate_ranges.default_rate}')
+    .hideField();
 const getValueField = () =>
   new Form.input.element('value', 'Value', InputType.Number).setIcon(
     '{worktype.uom.short_name}'
@@ -33,7 +35,7 @@ const formadd = () => [
     .formElement()
     .required()
     .setActions({ add: true })
-    .updateValues(['translations', 'uom'])
+    .updateValues(['translations', 'uom', 'skill_rate_ranges'])
     .required()
     .setPerfilledFields({
       [Models.Skill]: `{${Models.Skill}.id}`

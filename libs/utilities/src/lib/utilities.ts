@@ -156,6 +156,10 @@ export function getPropValue(data, key: string): any {
     }
   } else {
     if (data) {
+      if (Array.isArray(data[prop])) {
+        return getPropValue(data[prop][0], props.join('.'));
+      }
+
       return getPropValue(data[prop], props.join('.'));
     }
   }
