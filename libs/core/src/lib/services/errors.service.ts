@@ -50,11 +50,11 @@ export class ErrorsService {
   }
 
   private showErrorMessage(error: Error, defaultMessage: string = '') {
-    const { detail, non_field_errors, ...fields } = error.errors;
-    let message =
-      detail || non_field_errors ? non_field_errors.join(' ') : defaultMessage;
+    const { detail, non_field_errors, message, ...fields } = error.errors;
+    let text =
+      detail || message || non_field_errors ? non_field_errors.join(' ') : defaultMessage;
 
-    Object.keys(fields).forEach((key: string) => message += ` ${fields[key]}.`)
+    Object.keys(fields).forEach((key: string) => text += ` ${fields[key]}.`)
 
     this.ts.sendMessage(message, MessageType.Error);
   }

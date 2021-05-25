@@ -85,7 +85,7 @@ export class GenericFormService {
     return this.http
       .delete(`${endpoint}${id}/` + (postfix ? `${postfix}/` : ''))
       .pipe(
-        catchError((error: any) => this.errors.handleError(error))
+        catchError((error: any) => this.errors.handleError(error, { showMessage: true }))
       );
   }
 

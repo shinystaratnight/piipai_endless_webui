@@ -90,8 +90,6 @@ export class FormCheckboxComponent
       this.group.get(this.key).patchValue(false);
       this.group.get(this.key).disable();
     }
-
-    console.log(this);
   }
 
   public ngOnDestroy() {
