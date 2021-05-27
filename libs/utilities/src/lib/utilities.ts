@@ -114,6 +114,10 @@ export function getRoleId(): string {
   }
 }
 
+export function getStorageLang(): Language {
+  return JSON.parse(localStorage.getItem('web.lang'));
+}
+
 export function getTotalTime(time, data) {
   const shift_ended_at = time(data.shift_ended_at);
   const shift_started_at = time(data.shift_started_at);

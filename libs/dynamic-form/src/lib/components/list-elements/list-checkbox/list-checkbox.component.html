@@ -14,7 +14,7 @@
 >
 </fa-icon>
 
-<span [ngClass]="[iconClass]" *ngIf="config.values && !config.content && value">
+<span class="mb-1 d-inline-block" [ngClass]="[iconClass]" *ngIf="config.values && !config.content && value">
   {{ getTranslationKey(config.value) | translate: {"Default": value} }}
 </span>
 

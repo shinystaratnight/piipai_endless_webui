@@ -36,6 +36,7 @@
   <app-time
     *ngIf="user"
     class="time"
+    translateKey="local_time"
     description="Local time"
     [hidden]="!initTime"
     (init)="initTime = true"
