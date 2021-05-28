@@ -11,6 +11,7 @@ import {
   getTimeInstance
 } from '@webui/utilities';
 import { DatepickerService } from './datepicker.service';
+import { TranslateHelperService } from '@webui/core';
 
 export enum Status {
   Unfilled,
@@ -59,7 +60,10 @@ export class CalendarService {
 
   private calendarHeight = 370;
 
-  constructor(private datepickerService: DatepickerService) {}
+  constructor(
+    private datepickerService: DatepickerService,
+    private language: TranslateHelperService
+  ) {}
 
   public getRangeFormatDate(
     date: Moment,
@@ -74,6 +78,8 @@ export class CalendarService {
         rangeFormats[type]
       )}`;
     }
+
+    date.locale(this.language.currentLang);
 
     return date.format(rangeFormats[type]);
   }
@@ -204,11 +210,11 @@ export class CalendarService {
           [Status.Pending]: 0,
           [Status.Open]: 0,
           [Status.Filled]: 0,
-          [Status.Approved]: 0,
+          [Status.Approved]: 0
         }
       };
 
-      data.forEach(shift => {
+      data.forEach((shift) => {
         const { candidates, is_fulfilled, timesheetStatus } = shift;
 
         if (Number.isInteger(is_fulfilled)) {

@@ -42,6 +42,8 @@ export class FormCollapseComponent implements OnInit {
     } else {
       this.isCollapsed = collapsed;
     }
+
+    this.updateAdditionalData();
   }
 
   public eventHandler(e) {
@@ -50,5 +52,17 @@ export class FormCollapseComponent implements OnInit {
 
   public buttonActionHandler(e) {
     this.buttonAction.emit(e);
+  }
+
+  public updateIsCollapsed() {
+    this.isCollapsed = !this.isCollapsed;
+
+    this.updateAdditionalData();
+  }
+
+  private updateAdditionalData() {
+    const key = `${this.config.translateKey}_collapsed`;
+
+    this.formService.getForm(this.config.formId).updateAdditionalData(key, this.isCollapsed);
   }
 }
