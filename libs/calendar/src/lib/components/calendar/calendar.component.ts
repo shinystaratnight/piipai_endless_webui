@@ -33,7 +33,9 @@ import {
   isClient,
   getRoleId,
   FormatString,
-  getTimeInstance
+  getTimeInstance,
+  checkAndReturnTranslation,
+  getStorageLang
 } from '@webui/utilities';
 import { filters } from './calendar-filters.meta';
 
@@ -585,6 +587,10 @@ export class CalendarComponent implements OnInit, OnDestroy {
       return;
     }
 
+    if (isCandidate()) {
+      return;
+    }
+
     const shiftDates = day.data.map((item) => item.shift.date.id);
     const shiftRequests = uniq(shiftDates).map((id) => this.getShift(id));
 
@@ -854,19 +860,8 @@ export class CalendarComponent implements OnInit, OnDestroy {
   }
 
   private getPositionTranslation(position): string {
-    const { translations, name } = position;
-    if (translations && translations.length) {
-      const coutryCode = this.siteSettings.settings.country_code;
-      const translation = [...translations].find((t) => {
-        return t.language.id === CountryCodeLanguage[coutryCode];
-      });
-
-      return (
-        (translation && (translation.__str__ || translation.value)) || name
-      );
-    } else {
-      return position.name;
-    }
+    const coutryCode = this.siteSettings.settings.country_code;
+    return checkAndReturnTranslation(position, coutryCode, getStorageLang());
   }
 
   private prepareTimesheetsData(jobOffers: any[], timesheetList: any[]) {

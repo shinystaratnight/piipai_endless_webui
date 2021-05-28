@@ -20,6 +20,7 @@ export class TimeComponent implements OnInit, OnDestroy {
   @Input() timezone: string;
   @Input() description: string;
   @Input() differMessage: string;
+  @Input() translateKey: string;
 
   @Output() init: EventEmitter<boolean> = new EventEmitter();
 

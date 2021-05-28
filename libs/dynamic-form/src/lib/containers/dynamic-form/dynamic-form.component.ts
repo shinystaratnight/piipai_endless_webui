@@ -11,6 +11,7 @@ import {
 import { Field } from '@webui/data';
 import { CustomEvent } from '../../models/custom-event.model';
 import { SiteSettingsService } from '@webui/core';
+import { FormService } from '../../services';
 
 @Component({
   selector: 'app-dynamic-form',
@@ -52,7 +53,12 @@ export class DynamicFormComponent implements OnInit {
   public currentForm: any;
   public fullData: any;
 
-  constructor(private fb: FormBuilder, private cd: ChangeDetectorRef, private siteSettings: SiteSettingsService) {}
+  constructor(
+    private fb: FormBuilder,
+    private cd: ChangeDetectorRef,
+    private siteSettings: SiteSettingsService,
+    private formService: FormService
+  ) {}
 
   public ngOnInit() {
     this.form = this.form || this.fb.group({});
@@ -63,7 +69,7 @@ export class DynamicFormComponent implements OnInit {
 
   addFormBuilderStatus(config) {
     if (config) {
-      config.forEach(el => {
+      config.forEach((el) => {
         el.formBuilder = this.formBuilder;
 
         if (el.children) {
@@ -76,7 +82,7 @@ export class DynamicFormComponent implements OnInit {
   public getValues(data, list) {
     const values = {};
     if (list) {
-      list.forEach(el => {
+      list.forEach((el) => {
         values[el] = this.getValue(data, el);
       });
     }
@@ -100,7 +106,12 @@ export class DynamicFormComponent implements OnInit {
     if (this.form.invalid) {
       return;
     }
-    const data = this.form.value;
+    let data = this.form.value;
+
+    if (this.formService) {
+      data = this.updateIfTimeCollapsed(data, this.formService.getForm(this.formId).additionalData);
+    }
+
     if (this.hiddenFields) {
       this.removeValuesOfHiddenFields(this.hiddenFields.elements, data);
     }
@@ -116,9 +127,9 @@ export class DynamicFormComponent implements OnInit {
   }
 
   public setNullFields(metadata: any[], data) {
-    metadata.forEach(el => {
+    metadata.forEach((el) => {
       if (el.setNull && data[el.key]) {
-        el.setNull.forEach(field => {
+        el.setNull.forEach((field) => {
           data[field] = null;
         });
       } else if (el.children) {
@@ -264,9 +275,10 @@ export class DynamicFormComponent implements OnInit {
         } else if (key === 'country_code') {
           const country_code = this.siteSettings.settings.country_code;
           if (country_code === targetValue) {
-            approvedRules += 1
+            approvedRules += 1;
           }
-        } else if (value == targetValue) { //tslint:disable-line
+        } else if (value == targetValue) {
+          //tslint:disable-line
           approvedRules += 1;
         } else {
           return;
@@ -310,7 +322,7 @@ export class DynamicFormComponent implements OnInit {
   }
 
   public filterSendData(metadata: Field[], data) {
-    metadata.forEach(el => {
+    metadata.forEach((el) => {
       if (el.send === false && !el.saveField) {
         this.removeValue(el.key, data);
       } else if (el.children) {
@@ -320,7 +332,7 @@ export class DynamicFormComponent implements OnInit {
   }
 
   public replaceByData(metadata: Field[], data) {
-    metadata.forEach(el => {
+    metadata.forEach((el) => {
       if (el.replaceByData) {
         const value = this.getValueByKey(el.key, data);
 
@@ -337,7 +349,6 @@ export class DynamicFormComponent implements OnInit {
             data['translations'] = value.id;
           }
         }
-
       } else if (el.children) {
         this.filterSendData(el.children, data);
       }
@@ -346,5 +357,18 @@ export class DynamicFormComponent implements OnInit {
 
   keys(obj: any): string[] {
     return Object.keys(obj);
+  }
+
+  private updateIfTimeCollapsed(formData: { [key: string]: any }, additionalData: { [key: string ]: any}) {
+    if (additionalData && additionalData.times_collapsed) {
+      formData.break_ended_at = null;
+      formData.break_started_at = null;
+      formData.shift_ended_at = null;
+      formData.shift_started_at = null;
+    }
+
+    return {
+      ...formData
+    }
   }
 }

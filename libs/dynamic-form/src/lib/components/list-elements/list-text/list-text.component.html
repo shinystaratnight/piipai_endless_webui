@@ -12,6 +12,7 @@
       *ngIf="config.label">{{translationKey | translate: {"Default": config.label} }}: </span>
     <span class="content" *ngIf="!iconView && !iconClass && !workers && !config.translationKey">{{value}}</span>
     <span
+      class="mb-1 d-inline-block"
       *ngIf="!iconView && !iconClass && !workers && config.translationKey">{{ config.translationKey | translate: {"Default": value} }}</span>
     <span class="py-1" *ngIf="!iconView && !iconClass && workers" [placement]="'right'" [ngbTooltip]="workersdetail"
       style="cursor: default; padding-right: 1rem">{{value}}</span>

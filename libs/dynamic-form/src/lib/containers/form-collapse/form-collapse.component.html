@@ -5,7 +5,7 @@
     <button
       class="btn btn-primary"
       type="button"
-      (click)="isCollapsed = !isCollapsed">
+      (click)="updateIsCollapsed()">
         <ng-container *ngIf="isCollapsed">{{ 'expand' | translate: { "Default": 'Expand' } }}</ng-container>
         <ng-container *ngIf="!isCollapsed">{{ 'collapse' | translate: { "Default": 'Collapse' } }}</ng-container>
     </button>
