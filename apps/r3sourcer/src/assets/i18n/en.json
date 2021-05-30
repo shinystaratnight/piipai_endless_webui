@@ -518,5 +518,6 @@
   "consent_message": "Potential employer would like to access your data in our employment database to offer you a job! Do you agree we share your data? YES / NO",
   "button_yes": "Yes",
   "button_no": "No",
-  "local_time": "Local time"
+  "local_time": "Local time",
+  "not_started_yet": "Not started yet"
 }
