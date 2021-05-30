@@ -171,7 +171,8 @@
                 <ng-container *ngFor="let cell of row.content; let first = first">
                   <td *ngIf="!cell.hide" [class.text-center]="cell.center"
                     [ngStyle]="{ 'width.px': cell.width, 'maxWidth.px': cell.width }" [attr.data-label]="cell.label"
-                    [hidden]="cell.tab && cell.tab.is_collapsed">
+                    [hidden]="cell.tab && cell.tab.is_collapsed"
+                    [class.action-cell]="cell.name === 'actions'">
                     <label class="cell-label" *ngIf="isMobileDevice">
                       {{ cell.label }}
                     </label>
@@ -189,7 +190,7 @@
                           ">
                         </ng-container>
                       </ng-template>
-                      <fa-icon class="icon-actions px-3 py-1 ml-2" icon="ellipsis-v" placement="left-bottom"
+                      <fa-icon class="icon-actions" icon="ellipsis-v" placement="left"
                         #pop="ngbPopover" triggers="manual" (click)="toggleActions($event, pop)"
                         [ngbPopover]="actionsTemplate">
                       </fa-icon>
@@ -735,9 +736,8 @@
       [length]="getElement('mobileTimes', data.content).content.length" [config]="field" (event)="eventHandler($event)"
       (buttonAction)="buttonHandler($event)">
     </ng-container>
-    <div class="mb-3 d-flex">
-      <span class="text-success mr-1" style="display: inline-block; font-size: 15px; width: 50%;">Total
-        time:&nbsp;</span>
+    <div class="mb-3">
+      <span class="text-success mr-1" style="display: inline-block; font-size: 15px; width: 50%;">{{ 'totalTime.label' | translate: {"Default": "Total time"} }}:&nbsp;</span>
       <ng-container *ngFor="let field of getElement('totalTime', data.content).content" appListElement
         [length]="getElement('totalTime', data.content).content.length" [config]="field" (event)="eventHandler($event)"
         (buttonAction)="buttonHandler($event)">
