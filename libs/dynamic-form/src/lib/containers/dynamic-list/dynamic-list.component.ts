@@ -1583,10 +1583,11 @@ export class DynamicListComponent
       .submitForm(e.el.endpoint, body)
       .pipe(finalize(() => (this.saveProcess = false)))
       .subscribe(
-        () => {
+        (response) => {
           this.modalRef.close();
+          const { candidate, message } = response;
           this.toastr.sendMessage(
-            `${rowData.__str__} has been added to your Candidate Contact list`,
+            `${candidate} has been added to your Candidate Contact list. ${message}`,
             MessageType.Success
           );
           this.event.emit({

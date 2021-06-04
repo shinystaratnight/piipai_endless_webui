@@ -61,6 +61,11 @@ export class PermissionGuard implements CanActivate {
             routeSegments = routeSegments.slice(1);
           }
 
+          if (routeSegments[0] && routeSegments[0].path === 'settings') {
+            subject.next(true);
+            return;
+          }
+
           this.checkPermissionServise
             .checkPermission(user.data.user, routeSegments, navigation)
             .subscribe((hasAccess) => {
