@@ -103,6 +103,7 @@ export class DynamicFormComponent implements OnInit {
   public handleSubmit(event: Event) {
     event.preventDefault();
     event.stopPropagation();
+    this.updateValidationIfTimeCollapsed(this.form, this.formService.getForm(this.formId).additionalData);
     if (this.form.invalid) {
       return;
     }
@@ -369,6 +370,15 @@ export class DynamicFormComponent implements OnInit {
 
     return {
       ...formData
+    }
+  }
+
+  private updateValidationIfTimeCollapsed(form: FormGroup, additionalData: { [key: string ]: any}) {
+    if (additionalData && additionalData.times_collapsed) {
+      form.controls.break_ended_at.patchValue('empty');
+      form.controls.break_started_at.patchValue('empty');
+      form.controls.shift_ended_at.patchValue('empty');
+      form.controls.shift_started_at.patchValue('empty');
     }
   }
 }

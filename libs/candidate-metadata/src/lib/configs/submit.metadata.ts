@@ -41,7 +41,7 @@ const form = function () {
                 'shift_started_at',
                 'Shift Start',
                 DatepickerType.Datetime
-              ).setWidth(0.25),
+              ).setWidth(0.25).required(),
 
               new Form.static.element('total_time', 'Total time')
                 .setWidth(0.25)
@@ -58,7 +58,7 @@ const form = function () {
                 'shift_ended_at',
                 'Shift End',
                 DatepickerType.Datetime
-              ).setWidth(0.25),
+              ).setWidth(0.25).required(),
 
               new Form.checkbox.element(
                 'noBreak',
