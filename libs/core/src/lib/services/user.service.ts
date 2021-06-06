@@ -86,7 +86,7 @@ export class UserService {
           this.user.currentRole = role || roles[0];
           this.storage.store('role', this.user.currentRole);
 
-          if (!lang && user.data.contact.default_language && !isManager()) {
+          if (!lang && user.data.contact.default_language) {
             this.storage.store('lang', user.data.contact.default_language);
           }
 
