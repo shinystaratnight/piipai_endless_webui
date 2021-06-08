@@ -26,6 +26,11 @@ export const routes: Routes = [
     component: VerifyEmailComponent,
   },
   {
+    path: 'login/:token',
+    loadChildren: () => import('./login/login.module').then((m) => m.LoginModule),
+    canActivate: [NotAuthorizedGuard],
+  },
+  {
     path: 'login',
     loadChildren: () => import('./login/login.module').then((m) => m.LoginModule),
     canActivate: [NotAuthorizedGuard],
