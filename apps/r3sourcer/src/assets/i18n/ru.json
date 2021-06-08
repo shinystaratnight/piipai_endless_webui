@@ -36,6 +36,7 @@
 	},
 	"back": "Назад",
 	"bank_and_superannuation_informatioin": "Информация о банке и пенсии",
+	"birthday": "Дата рождения",
 	"bmi.label": "Индекс массы тела",
 	"break": "Перерыв",
 	"break_ended_at": {
@@ -44,8 +45,13 @@
 	"break_started_at": {
 		"label": "Перерыв (Начало)"
 	},
+	"button_no": "No",
+	"button_yes": "Yes",
 	"calendar": "Календарь",
 	"cancel": "Отмена",
+	"candidate": {
+		"plural": "Кандидаты"
+	},
 	"candidate_contact": {
 		"label": "Рабочий"
 	},
@@ -82,6 +88,7 @@
 		"label": "Ставка"
 	},
 	"close_without_save": "Закрыть без сохранения",
+	"collapse": "Без времени",
 	"company": {
 		"label": "Компания"
 	},
@@ -89,11 +96,11 @@
 	"confirm_going_to_work": "Подтвердите что вы идете на работу",
 	"confirm_password.description": "Для подтверждения введите новый пароль",
 	"confirm_password.label": "Повторите",
+	"consent_message": "Potential employer would like to access your data in our employment database to offer you a job! Do you agree we share your data? YES / NO",
 	"contact.__str__.label": "Средняя оценка",
 	"contact.address.street_address.description": "",
 	"contact.address.street_address.label": "Адрес",
-  "contact.birthday.label": "Дата рождения",
-  "birthday": "Дата рождения",
+	"contact.birthday.label": "Дата рождения",
 	"contact.email.label": "Эл. адрес",
 	"contact.first_name.label": "Имя",
 	"contact.gender.label": "Пол",
@@ -110,8 +117,8 @@
 		"label": "Клиент"
 	},
 	"customer_representative": {
-    "label": "Представитель клиента",
-    "placeholder": "Выбрать"
+		"label": "Представитель клиента",
+		"placeholder": "Выбрать"
 	},
 	"date": "Дата",
 	"date.shift_date.label": "Дата",
@@ -140,6 +147,7 @@
 	"end_date": {
 		"label": "Дата окончания"
 	},
+	"enter_location": "Введите местоположение",
 	"evaluate": {
 		"button": "Оценить",
 		"label": "Оценка"
@@ -147,6 +155,7 @@
 	"evaluated_at.label": "Оценено",
 	"evaluation": "Оценка",
 	"evaluation_score.label": "Оценка",
+	"expand": "Установить время",
 	"extend": "Расширить",
 	"extendCandidates": {
 		"text": "Кандидаты"
@@ -165,12 +174,29 @@
 	},
 	"fill_shifts": "Заполняет смены автоматически по критериям",
 	"filled": "Заполнены",
+	"filled_shifts": "Заполненные смены",
+	"filter": {
+		"active_states.label": "Статус",
+		"client.label": "Компания",
+		"contact.gender.female": "Женский",
+		"contact.gender.label": "Пол",
+		"contact.gender.male": "Мужской",
+		"plural": "Фильтры",
+		"skill": {
+			"label": "Умения"
+		},
+		"tag.label": "Теги"
+	},
 	"filter.available.label": "Доступен",
 	"filter.available.partialy_available": "Показать частично доступных",
+	"filter.candidate.label": "Кандидат",
+	"filter.client.label": "",
 	"filter.date.label": "Смены",
 	"filter.distance_to_jobsite.label": "Расстояние",
+	"filter.jobsite.label": "Место работы",
 	"filter.overpriced.label": "Завышенная цена",
 	"filter.overpriced.show_overpriced": "Показать с завышенной ценой",
+	"filter.primary_contact.label": "Руководитель",
 	"filter.shift_started_at": "",
 	"filter.shift_started_at.from": "От",
 	"filter.shift_started_at.label": "Дата смены",
@@ -191,6 +217,8 @@
 	"filters": "Фильтры",
 	"forgot_password": "Забыли пароль?",
 	"fulfilled": "Заполнен",
+	"gender.female": "Женский",
+	"gender.male": "Мужской",
 	"group": {
 		"additional_info": "Дополнительная информация",
 		"client": "Клиент",
@@ -214,9 +242,9 @@
 		"label": "Кандидатская ставка переопределения"
 	},
 	"inactive_timesheet": "Не активные смены будут удалены через 48 часов",
-	"industry.placeholder": "Выберете или создайте",
 	"industry.description": "",
 	"industry.label": "Отрасль",
+	"industry.placeholder": "Выберете или создайте",
 	"industry_and_skills": "Промышленность и навыки",
 	"info_layers": "типа",
 	"is_available": {
@@ -230,6 +258,7 @@
 	"joboffer": "Предложение работы",
 	"joboffer.label": "Предложение работы",
 	"jobsite.label": "Место работы",
+	"jobsite.placeholder": "Выбрать",
 	"layers": "типы",
 	"list": {
 		"status": [
@@ -243,8 +272,9 @@
 			"Подтверждено"
 		]
 	},
-  "list.transportation_to_work.1": "Машина",
-  "list.transportation_to_work.2": "Общественный транспорт",
+	"list.transportation_to_work.1": "Машина",
+	"list.transportation_to_work.2": "Общественный транспорт",
+	"local_time": "Время",
 	"log_out": "Выйти",
 	"login.forgot_password": "Забыли пароль?",
 	"login.login": "Войти",
@@ -272,14 +302,15 @@
 	},
 	"month": "Месяц",
 	"more": "Еще",
-  "nationality.label": "Национальность",
-  "nationality.placeholder": "Выбрать",
+	"nationality.label": "Национальность",
+	"nationality.placeholder": "Выбрать",
 	"next": "Дальше",
 	"noBreak": {
 		"text": "Без перерыва"
 	},
 	"no_record": "Нет записи",
 	"no_tracking_data": "Нет данных",
+	"not_started_yet": "Еще не началась",
 	"note": {
 		"label": "Заметки"
 	},
@@ -300,6 +331,7 @@
 	"password.reset": "Сбросить пароль",
 	"password_reset": "Сбросить пароль",
 	"pending": "Ожидают",
+	"pending_shifts": "Смены в обработке",
 	"personal_info": {
 		"label": "Кандидат / Должность"
 	},
@@ -320,8 +352,9 @@
 		"placeholder": "Выберете или создайте"
 	},
 	"position": {
-    "label": "Позиция",
-    "position.placeholder": "Выбрать позицию"
+		"label": "Позиция",
+		"placeholder": "",
+		"position.placeholder": "Выбрать позицию"
 	},
 	"primary_contact": {
 		"contact": {
@@ -340,16 +373,17 @@
 	"prior_experience.label": "Предыдущий опыт",
 	"profile": "Профиль",
 	"provider_company": {
-    "label": "Компания-провайдер",
-    "placeholder": "Выбрать"
+		"label": "Компания-провайдер",
+		"placeholder": "Выбрать"
 	},
 	"provider_representative": {
-    "label": "Представитель провайдера",
-    "placeholder": "Выбрать"
+		"label": "Представитель провайдера",
+		"placeholder": "Выбрать"
 	},
 	"provider_signed_at": {
 		"label": "Принято"
 	},
+	"rate.label": "Ставка",
 	"reference_timesheet.label": "Табель учета рабочего времени",
 	"registration.fill_error": "Пожалуйста заполните обязательные поля",
 	"registration.of": "из",
@@ -361,6 +395,10 @@
 	"reset": "Сбросить",
 	"reset_all": "Сбросить все",
 	"reset_dates": "Сбросить выбранные даты",
+	"residency.0": "Неизвестно",
+	"residency.1": "Гражданин",
+	"residency.2": "Постоянный житель",
+	"residency.3": "Временный резидент",
 	"residency.label": "Резиденция",
 	"save": "Сохранить",
 	"save_changes": "Сохранить изменения",
@@ -375,6 +413,7 @@
 	"shift_ended_at": {
 		"label": "Смена (Конец)"
 	},
+	"shift_ended_at_utc.label": "Смена",
 	"shift_start_end": "Смена",
 	"shift_started_at": {
 		"label": "Смена (Начало)"
@@ -414,6 +453,7 @@
 	},
 	"status.label": "Статус",
 	"submit": "Отправить",
+	"submit_timesheet": "Заполните табель",
 	"supervisor.label": "Супервизор",
 	"tabs.evaluations.help": "Здесь вы можете увидеть оценки",
 	"tabs.evaluations.label": "Оценки",
@@ -440,6 +480,7 @@
 	"tabs.tags.help": "Здесь вы можете увидеть теги",
 	"tabs.tags.label": "Теги",
 	"tabs.tags.name": "Теги",
+	"tabs.timesheetrates.label": "Виды работ",
 	"tag.label": "Тег",
 	"take_a_photo": "Сделать фото",
 	"tax_file_number.label": "Номер налогового дела",
@@ -460,16 +501,20 @@
 	"timesheet.days_from_last_timesheet.label": "От последнего",
 	"timesheet.label": "Табель учета рабочего времени",
 	"timesheet_will_approved": "Табель будет автоматически одобрен через 4 часа",
+	"timesheetrates.label": "Виды работ",
 	"totalTime.label": "Общее время",
 	"total_time": {
 		"label": "Общее время"
 	},
 	"tracking.label": "Передвижение",
+	"transportation_to_work.1": "Машина",
+	"transportation_to_work.2": "Общественный транспорт",
 	"transportation_to_work.label": "Транспорт",
 	"try_again": "Попробовать еще",
 	"unavailable": {
 		"label": "Недоступен"
 	},
+	"unfilled_shifts": "Не заполненные смены",
 	"unfulfilled": "Невыполненный",
 	"update": "Обновить",
 	"updated": {
@@ -478,6 +523,7 @@
 	"upload_file": "Загрузить файл",
 	"use_camera": "Использовать камеру",
 	"username.placeholder": "Вход",
+	"value.label": "Количество",
 	"verification_evidence.label": "Доказательства проверки",
 	"verified_by.label": "Проверено",
 	"week": "Неделя",
@@ -488,36 +534,7 @@
 	"workers": {
 		"label": "Рабочих",
 		"placeholder": ""
-  },
-  "gender.male": "Мужской",
-  "gender.female": "Женский",
-  "transportation_to_work.1": "Машина",
-  "transportation_to_work.2": "Общественный транспорт",
-  "residency.1": "Гражданин",
-  "residency.2": "Постоянный житель",
-  "residency.3": "Временный резидент",
-  "residency.0": "Неизвестно",
-  "jobsite.placeholder": "Выбрать",
-  "enter_location": "Введите местоположение",
-  "filled_shifts": "Заполненные смены",
-  "unfilled_shifts": "Не заполненные смены",
-  "pending_shifts": "Смены в обработке",
-  "submit_timesheet": "Заполните табель",
-  "worktype.label": "Вид работы",
-  "rate.label": "Ставка",
-  "value.label": "Количество",
-  "tabs.timesheetrates.label": "Виды работ",
-  "timesheetrates.label": "Виды работ",
-  "worktype.placeholder": "Выбрать",
-  "filter.candidate.label": "Кандидат",
-  "filter.jobsite.label": "Место работы",
-  "filter.primary_contact.label": "Руководитель",
-  "shift_ended_at_utc.label": "Смена",
-  "expand": "Установить время",
-  "collapse": "Без времени",
-  "consent_message": "Potential employer would like to access your data in our employment database to offer you a job! Do you agree we share your data? YES / NO",
-  "button_yes": "Yes",
-  "button_no": "No",
-  "local_time": "Время",
-  "not_started_yet": "Еще не началась"
+	},
+	"worktype.label": "Вид работы",
+	"worktype.placeholder": "Выбрать"
 }

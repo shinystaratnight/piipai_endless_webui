@@ -50,6 +50,7 @@ export class FilterMultipleComponent implements OnInit, OnDestroy {
   ) {}
 
   public ngOnInit() {
+    console.log(this);
     this.type = this.config.type === FilterType.Multiple ? 'data' : 'options';
     this.querySubscription = this.route.queryParams.subscribe((params) => {
       setTimeout(() => {

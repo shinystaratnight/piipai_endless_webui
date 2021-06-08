@@ -240,6 +240,7 @@ export class CandidateWidget implements OnInit, OnDestroy {
     this.activeList = list;
     this.filterService.resetFilters(list);
     this.filtersOfList = this.filterService.getFiltersByEndpoint(endpoint);
+    console.log(this.filtersOfList);
     this.showFilters = false;
     this.filtersQuery = '';
   }

@@ -36,6 +36,7 @@
 	},
 	"back": "Back",
 	"bank_and_superannuation_informatioin": "Bank and superannuation information",
+	"birthday": "Birthday",
 	"bmi.label": "Bmi",
 	"break": "Break",
 	"break_ended_at": {
@@ -44,8 +45,13 @@
 	"break_started_at": {
 		"label": "Break Start"
 	},
+	"button_no": "No",
+	"button_yes": "Yes",
 	"calendar": "Calendar",
 	"cancel": "Cancel",
+	"candidate": {
+		"plural": "Candidates"
+	},
 	"candidate_contact": {
 		"label": "Candidate contact"
 	},
@@ -82,6 +88,7 @@
 		"label": "Rate"
 	},
 	"close_without_save": "Close without save",
+	"collapse": "Without time",
 	"company": {
 		"label": "Company"
 	},
@@ -89,11 +96,11 @@
 	"confirm_going_to_work": "Confirm if you are going to work",
 	"confirm_password.description": "To confirm, type the new password again.",
 	"confirm_password.label": "Verify",
+	"consent_message": "Potential employer would like to access your data in our employment database to offer you a job! Do you agree we share your data? YES / NO",
 	"contact.__str__.label": "Average score",
 	"contact.address.street_address.description": "Address",
 	"contact.address.street_address.label": "Street Address",
-  "contact.birthday.label": "birthday",
-  "birthday": "Birthday",
+	"contact.birthday.label": "birthday",
 	"contact.email.label": "Email",
 	"contact.first_name.label": "First Name",
 	"contact.gender.label": "Gender",
@@ -110,8 +117,8 @@
 		"label": "Client"
 	},
 	"customer_representative": {
-    "label": "Client representative",
-    "placeholder": "Select"
+		"label": "Client representative",
+		"placeholder": "Select"
 	},
 	"date": "Date",
 	"date.shift_date.label": "Date",
@@ -140,6 +147,7 @@
 	"end_date": {
 		"label": "End Date"
 	},
+	"enter_location": "Enter a location",
 	"evaluate": {
 		"button": "Evaluate",
 		"label": "Evaluate"
@@ -147,6 +155,7 @@
 	"evaluated_at.label": "Evaluated at",
 	"evaluation": "Evaluation",
 	"evaluation_score.label": "Evaluation",
+	"expand": "Set times",
 	"extend": "Extend",
 	"extendCandidates": {
 		"text": "Candidates"
@@ -165,12 +174,29 @@
 	},
 	"fill_shifts": "Fills shifts automatically using criteria",
 	"filled": "Filled",
+	"filled_shifts": "Filled shifts",
+	"filter": {
+		"active_states.label": "Status",
+		"client.label": "Client",
+		"contact.gender.female": "Female",
+		"contact.gender.label": "Gender",
+		"contact.gender.male": "Male",
+		"plural": "Filters",
+		"skill": {
+			"label": "Skill"
+		},
+		"tag.label": "Tag"
+	},
 	"filter.available.label": "Available",
 	"filter.available.partialy_available": "Show partially available",
+	"filter.candidate.label": "Candidate",
+	"filter.client.label": "",
 	"filter.date.label": "Shifts",
 	"filter.distance_to_jobsite.label": "Distance",
+	"filter.jobsite.label": "Jobsite",
 	"filter.overpriced.label": "Overpriced",
 	"filter.overpriced.show_overpriced": "Show overpriced",
+	"filter.primary_contact.label": "Primary Contact",
 	"filter.shift_started_at": "",
 	"filter.shift_started_at.from": "From",
 	"filter.shift_started_at.label": "Shift date",
@@ -191,6 +217,8 @@
 	"filters": "Filters",
 	"forgot_password": "Forgot Password?",
 	"fulfilled": "Fulfilled",
+	"gender.female": "Female",
+	"gender.male": "Male",
 	"group": {
 		"additional_info": "Additional info",
 		"client": "Client",
@@ -214,9 +242,9 @@
 		"label": "Candidate rate override"
 	},
 	"inactive_timesheet": "Inactive timesheet will be deleted in 48 hours",
-	"industry.placeholder": "Select",
 	"industry.description": "",
 	"industry.label": "Industry",
+	"industry.placeholder": "Select",
 	"industry_and_skills": "Industry and skills",
 	"info_layers": "Info layers",
 	"is_available": {
@@ -230,6 +258,7 @@
 	"joboffer": "Job Offer",
 	"joboffer.label": "Job Offer",
 	"jobsite.label": "Jobsite",
+	"jobsite.placeholder": "Select",
 	"layers": "Layers",
 	"list": {
 		"status": [
@@ -243,8 +272,9 @@
 			"Approved"
 		]
 	},
-  "list.transportation_to_work.1": "Own Car",
-  "list.transportation_to_work.2": "Public Transportation",
+	"list.transportation_to_work.1": "Own Car",
+	"list.transportation_to_work.2": "Public Transportation",
+	"local_time": "Local time",
 	"log_out": "Log out",
 	"login.forgot_password": "Forgot Password?",
 	"login.login": "Login",
@@ -272,14 +302,15 @@
 	},
 	"month": "Month",
 	"more": "More",
-  "nationality.label": "Nationality",
-  "nationality.placeholder": "Select",
+	"nationality.label": "Nationality",
+	"nationality.placeholder": "Select",
 	"next": "Next step",
 	"noBreak": {
 		"text": "No Break"
 	},
 	"no_record": "No record",
 	"no_tracking_data": "No tracking info",
+	"not_started_yet": "Not started yet",
 	"note": {
 		"label": "Notes"
 	},
@@ -300,6 +331,7 @@
 	"password.reset": "Reset password",
 	"password_reset": "Password Reset",
 	"pending": "Pending",
+	"pending_shifts": "Pending shifts",
 	"personal_info": {
 		"label": "Candidate/Position"
 	},
@@ -320,8 +352,9 @@
 		"placeholder": "Select or add new"
 	},
 	"position": {
-    "label": "Position",
-    "placeholder": "Please select role/trade"
+		"label": "Position",
+		"placeholder": "Please select role/trade",
+		"position.placeholder": ""
 	},
 	"primary_contact": {
 		"contact": {
@@ -340,16 +373,17 @@
 	"prior_experience.label": "Prior Experience",
 	"profile": "Profile",
 	"provider_company": {
-    "label": "Provider company",
-    "placeholder": "Select"
+		"label": "Provider company",
+		"placeholder": "Select"
 	},
 	"provider_representative": {
-    "label": "Provider representative",
-    "placeholder": "Select"
+		"label": "Provider representative",
+		"placeholder": "Select"
 	},
 	"provider_signed_at": {
 		"label": "Accepted at"
 	},
+	"rate.label": "Rate",
 	"reference_timesheet.label": "Related timesheet",
 	"registration.fill_error": "Please fill all the REQUIRED fields",
 	"registration.of": "of",
@@ -361,6 +395,10 @@
 	"reset": "Reset",
 	"reset_all": "Reset All",
 	"reset_dates": "Reset selected dates",
+	"residency.0": "Unknown",
+	"residency.1": "Citizen",
+	"residency.2": "Permanent Resident",
+	"residency.3": "Temporary Resident",
 	"residency.label": "Residency",
 	"save": "Save",
 	"save_changes": "Save changes",
@@ -375,6 +413,7 @@
 	"shift_ended_at": {
 		"label": "Shift End"
 	},
+	"shift_ended_at_utc.label": "Shift date",
 	"shift_start_end": "Shift start/end",
 	"shift_started_at": {
 		"label": "Shift Start"
@@ -414,6 +453,7 @@
 	},
 	"status.label": "Status",
 	"submit": "Submit",
+	"submit_timesheet": "Submit your timesheet",
 	"supervisor.label": "Supervisor",
 	"tabs.evaluations.help": "Here you can see evaluations",
 	"tabs.evaluations.label": "Evaluations",
@@ -440,6 +480,7 @@
 	"tabs.tags.help": "Here you can see tags",
 	"tabs.tags.label": "Tags",
 	"tabs.tags.name": "Tags",
+	"tabs.timesheetrates.label": "Skill Activities",
 	"tag.label": "Tag",
 	"take_a_photo": "Take a photo",
 	"tax_file_number.label": "Tax file number",
@@ -460,16 +501,20 @@
 	"timesheet.days_from_last_timesheet.label": "From last",
 	"timesheet.label": "Timesheet",
 	"timesheet_will_approved": "Timesheet will be automatically approved in 4 hours",
+	"timesheetrates.label": "Skill Activities",
 	"totalTime.label": "Total time",
 	"total_time": {
 		"label": "Total time"
 	},
 	"tracking.label": "Tracking",
+	"transportation_to_work.1": "Own Car",
+	"transportation_to_work.2": "Public Transportation",
 	"transportation_to_work.label": "Transportation to work",
 	"try_again": "Try again",
 	"unavailable": {
 		"label": "Unavailable"
 	},
+	"unfilled_shifts": "Unfilled shifts",
 	"unfulfilled": "Unfulfilled",
 	"update": "Update",
 	"updated": {
@@ -478,6 +523,7 @@
 	"upload_file": "Upload new file",
 	"use_camera": "Use camera",
 	"username.placeholder": "Login",
+	"value.label": "Amount",
 	"verification_evidence.label": "Verification Evidence",
 	"verified_by.label": "Verified by",
 	"week": "Week",
@@ -488,36 +534,7 @@
 	"workers": {
 		"label": "Workers",
 		"placeholder": "Workers"
-  },
-  "gender.male": "Male",
-  "gender.female": "Female",
-  "transportation_to_work.1": "Own Car",
-  "transportation_to_work.2": "Public Transportation",
-  "residency.1": "Citizen",
-  "residency.2": "Permanent Resident",
-  "residency.3": "Temporary Resident",
-  "residency.0": "Unknown",
-  "jobsite.placeholder": "Select",
-  "enter_location": "Enter a location",
-  "filled_shifts": "Filled shifts",
-  "unfilled_shifts": "Unfilled shifts",
-  "pending_shifts": "Pending shifts",
-  "submit_timesheet": "Submit your timesheet",
-  "worktype.label": "Skill Activity",
-  "rate.label": "Rate",
-  "value.label": "Amount",
-  "tabs.timesheetrates.label": "Skill Activities",
-  "timesheetrates.label": "Skill Activities",
-  "worktype.placeholder": "Select",
-  "filter.candidate.label": "Candidate",
-  "filter.jobsite.label": "Jobsite",
-  "filter.primary_contact.label": "Primary Contact",
-  "shift_ended_at_utc.label": "Shift date",
-  "expand": "Set times",
-  "collapse": "Without time",
-  "consent_message": "Potential employer would like to access your data in our employment database to offer you a job! Do you agree we share your data? YES / NO",
-  "button_yes": "Yes",
-  "button_no": "No",
-  "local_time": "Local time",
-  "not_started_yet": "Not started yet"
+	},
+	"worktype.label": "Skill Activity",
+	"worktype.placeholder": "Select"
 }

@@ -1,5 +1,6 @@
 import { Endpoints } from '@webui/data';
 import { createFilter, Type } from '@webui/metadata';
+import { CheckboxFilter } from 'libs/metadata/src/lib/elements/filters/checkbox-filter';
 
 const filters = {
   avarageScore: createFilter(Type.Range, {
@@ -22,23 +23,38 @@ const filters = {
   activeState: createFilter(Type.Relared, {
     key: 'active_states',
     label: 'Status',
-    endpoint: `${
-      Endpoints.WorkflowNode
-    }?company={company_settings.company}&content_type=candidate.candidatecontact&number={filter_value}`,
+    endpoint: `${Endpoints.WorkflowNode}?company={company_settings.company}&content_type=candidate.candidatecontact&number={filter_value}`,
     display: ['name_after_activation', 'name_before_activation'],
     parameter: 'number'
   }),
-  gender: createFilter(Type.Checkbox, {
+  // gender: createFilter(Type.Checkbox, {
+  //   key: 'contact.gender',
+  //   label: 'Gender',
+  //   values: [
+  //     {
+  //       value: 'male',
+  //       label: 'Male'
+  //     },
+  //     {
+  //       value: 'female',
+  //       label: 'Female'
+  //     }
+  //   ]
+  // }),
+  gender: new CheckboxFilter({
     key: 'contact.gender',
+    query: 'contact.gender',
     label: 'Gender',
     values: [
       {
         value: 'male',
-        label: 'Male'
+        label: 'Male',
+        key: 'male'
       },
       {
         value: 'female',
-        label: 'Female'
+        label: 'Female',
+        key: 'female'
       }
     ]
   }),
@@ -466,7 +482,7 @@ const form = [
                     },
                     send: false,
                     type: 'address',
-                    key: 'address',
+                    key: 'address'
                   },
                   {
                     key: 'contact.is_available',
@@ -540,7 +556,7 @@ const form = [
                       type: 'picture',
                       file: false,
                       label_photo: 'Take a photo',
-                      label_upload: 'Choose a file',
+                      label_upload: 'Choose a file'
                     },
                     send: false,
                     default: 'contact_pictures/default_picture.jpg',
@@ -732,10 +748,8 @@ const form = [
                       label: 'MYOB Card ID',
                       type: 'text'
                     },
-                    showIf: [
-                      { ['master_company.timezone']: '^Australia' }
-                    ]
-                  },
+                    showIf: [{ ['master_company.timezone']: '^Australia' }]
+                  }
                 ],
                 width: 0.25
               },
@@ -983,7 +997,7 @@ const form = [
                     send: false,
                     key: 'contact_bank_account',
                     templateOptions: {
-                      label: 'Bank account:',
+                      label: 'Bank account:'
                     }
                   }
                 ],
@@ -1034,9 +1048,10 @@ const form = [
                       required: false,
                       label: '{formality_attributes.tax_number_type}',
                       type: 'text',
-                      pattern: "formality_attributes.tax_number_regex_validation_pattern",
-                      patternError: "This is invalid number",
-                      placeholder: "Add or change actual"
+                      pattern:
+                        'formality_attributes.tax_number_regex_validation_pattern',
+                      patternError: 'This is invalid number',
+                      placeholder: 'Add or change actual'
                     },
                     showIf: ['formality_attributes.display_tax_number'],
                     read_only: false
@@ -1048,9 +1063,10 @@ const form = [
                       required: false,
                       label: '{formality_attributes.personal_id_type}',
                       type: 'text',
-                      pattern: "formality_attributes.personal_id_regex_validation_pattern",
-                      placeholder: "Add or change actual",
-                      patternError: "This is invalid number",
+                      pattern:
+                        'formality_attributes.personal_id_regex_validation_pattern',
+                      placeholder: 'Add or change actual',
+                      patternError: 'This is invalid number'
                     },
                     showIf: ['formality_attributes.display_personal_id'],
                     read_only: false
@@ -1065,9 +1081,7 @@ const form = [
                     },
                     type: 'related',
                     key: 'superannuation_fund',
-                    showIf: [
-                      { ['master_company.timezone']: '^Australia' }
-                    ]
+                    showIf: [{ ['master_company.timezone']: '^Australia' }]
                   },
                   {
                     key: 'superannuation_membership_number',
@@ -1079,13 +1093,11 @@ const form = [
                       type: 'text'
                     },
                     read_only: false,
-                    showIf: [
-                      { ['master_company.timezone']: '^Australia' }
-                    ]
+                    showIf: [{ ['master_company.timezone']: '^Australia' }]
                   }
                 ],
                 width: 0.25
-              },
+              }
               // {
               //   type: 'group',
               //   children: [
@@ -1141,27 +1153,25 @@ const form = [
               //   ],
               //   width: 0.25
               // },
-
-
             ]
           },
           {
             endpoint: Endpoints.CandidateFormalities,
             templateOptions: {
               type: 'list',
-              add_label: '+ Add',
+              add_label: '+ Add'
             },
             type: 'list',
             prefilled: {
               candidate_contact: '{id}',
-              company: '{master_company.id}',
+              company: '{master_company.id}'
             },
             query: {
               candidate: '{id}'
             },
             visibleMode: true,
             help: ''
-          },
+          }
         ]
       },
       {
@@ -1627,11 +1637,11 @@ const profile = [
                       label: 'Address',
                       add: true,
                       values: ['__str__'],
-                      type: 'address',
+                      type: 'address'
                     },
                     send: false,
                     type: 'address',
-                    key: 'address',
+                    key: 'address'
                   },
                   {
                     key: 'contact.is_available',

@@ -1,14 +1,14 @@
 <div class="widget">
   <div class="widget-header">
     <h3 class="widget-name d-flex align-items-center justify-content-between">
-      Candidates
+      {{ 'candidate.plural' | translate: {"Default": "Candidates"} }}
 
       <button
         *ngIf="selectedCandidates.size"
         class="fillin-button btn btn-success"
         (click)="sendJobOffer()"
       >
-        Send Job Offer
+        {{ 'send_job_offer' | translate: {"Default": "Send Job Offer"} }}
       </button>
 
       <button
@@ -16,7 +16,7 @@
         class="btn btn-link filter-button"
         (click)="toggleFilters()"
       >
-        Filters
+        {{ 'filter.plural' | translate: {"Default": "Candidates"} }}
         <fa-icon class="ml-2" icon="chevron-down"></fa-icon>
       </button>
     </h3>

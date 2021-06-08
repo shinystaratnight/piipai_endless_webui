@@ -19,6 +19,7 @@ import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { CalendarModule } from '@webui/calendar';
 import { DynamicFormModule } from '@webui/dynamic-form';
 import { UiModule } from '@webui/ui';
+import { TranslateModule } from '@ngx-translate/core';
 
 import { DashboardService, WidgetService } from './services';
 import {
@@ -44,7 +45,8 @@ import { DashboardComponent } from './dashboard.component';
     NgbModalModule,
     DragDropModule,
     ReactiveFormsModule,
-    UiModule
+    UiModule,
+    TranslateModule,
   ],
   declarations: [
     DashboardComponent,
