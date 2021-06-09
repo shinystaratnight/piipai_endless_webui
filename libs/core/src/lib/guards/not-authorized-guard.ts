@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, Router } from '@angular/router';
+import { ActivatedRouteSnapshot, CanActivate, Router } from '@angular/router';
 
 import { AuthService } from '../services';
 
@@ -11,7 +11,13 @@ export class NotAuthorizedGuard implements CanActivate {
     private authService: AuthService
   ) {}
 
-  public canActivate(): boolean {
+  public canActivate(route: ActivatedRouteSnapshot): boolean {
+    const { token } = route.params;
+
+    if (token) {
+      return true;
+    }
+
     const isAuthorized = this.authService.isAuthorized;
 
     if (!isAuthorized) {
