@@ -995,7 +995,7 @@ export class FormRelatedComponent
       this.genericFormService.delete(this.config.endpoint, object.id).subscribe(
         (response: any) => {
           this.dataOfList.splice(this.dataOfList.indexOf(object), 1);
-          this.updateValue(undefined);
+          this.updateValue({});
         },
         (error) => {
           this.toastr.sendMessage(error.errors.join(' '), MessageType.Error);
