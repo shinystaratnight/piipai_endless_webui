@@ -1,0 +1,41 @@
+@import '../../../../../../styles/variables';
+@import '../../../../../../styles/mixins';
+
+:host {
+  border: 1px solid #bdbdbd;
+  display: inline-flex;
+
+  &:first-child {
+    border-top-left-radius: $border-radius;
+    border-bottom-left-radius: $border-radius;
+  }
+
+  &:last-child {
+    border-top-right-radius: $border-radius;
+    border-bottom-right-radius: $border-radius;
+  }
+}
+
+label {
+  padding: 7px 18px;
+  margin-bottom: 0;
+  font-size: 16px;
+  line-height: 1.2;
+  opacity: 0.8;
+
+  @include media-breakpoint-down('sm') {
+    font-size: 14px;
+    padding: 3px 9px;
+  }
+
+  &.active {
+    background-color: $primary;
+    border-color: $primary;
+    color: white;
+  }
+
+  &.disabled {
+    opacity: 0.2;
+    cursor: not-allowed;
+  }
+}
