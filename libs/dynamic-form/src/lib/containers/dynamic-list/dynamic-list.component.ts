@@ -18,8 +18,8 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { LocalStorageService } from 'ngx-webstorage';
 
-import { Subject, Subscription, BehaviorSubject } from 'rxjs';
-import { finalize } from 'rxjs/operators';
+import { Subject, Subscription, BehaviorSubject, of } from 'rxjs';
+import { catchError, finalize } from 'rxjs/operators';
 
 import {
   ToastService,
@@ -1952,6 +1952,7 @@ export class DynamicListComponent
 
   public approveTimesheet(e) {
     const data = this.getRowData(e);
+    const { shift_started_at, shift_ended_at, break_started_at, break_ended_at } = data;
     const signature = data.company.supervisor_approved_scheme.includes(
       'SIGNATURE'
     );
@@ -2010,8 +2011,28 @@ export class DynamicListComponent
         this.evaluate(e, data);
       } else {
         this.genericFormService
-          .editForm(`${Endpoints.Timesheet}${data.id}/approve/`, {})
-          .subscribe(() => this.refreshList());
+          .editForm(`${Endpoints.Timesheet}${data.id}/approve/`, {
+            shift_started_at,
+            shift_ended_at,
+            break_started_at,
+            break_ended_at,
+            send_candidate_message: false,
+            send_supervisor_message: false,
+            no_break: false
+          })
+          .pipe(catchError((err) => {
+            const message = err.errors.non_field_errors[0];
+            this.toastr.sendMessage(message, MessageType.Error);
+
+            return of(false);
+          }))
+          .subscribe((response) => {
+            if (typeof response === 'boolean') {
+              return;
+            }
+
+            this.refreshList();
+          });
       }
     }
   }
