@@ -1,0 +1,34 @@
+<app-dashboard-widget [label]="widgetLabel">
+  <div header class="btn-group range-buttons" btnRadioGroup [formControl]="dateRangeTypeControl">
+    <app-range-button
+      *ngFor="let option of dateRangeList"
+      [active]="dateRangeTypeControl.value === option"
+      [dateRange]="option"
+      [key]="getLabel(option).key"
+      [label]="getLabel(option).value"
+      [disabled]="option === dateRange.Custom"
+    ></app-range-button>
+  </div>
+
+  <div class="body" body>
+    <table class="table" body *ngIf="data$ | async as data">
+      <thead>
+        <tr>
+          <th>Activity</th>
+          <th>Amount</th>
+          <th>Earned</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let activity of data.activities">
+          <td>{{activity.label}}</td>
+          <td>{{activity.amount}} <span class="description">{{activity.uom}}</span></td>
+          <td>{{activity.earned | currency: data.currency}}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <app-loader *ngIf="loading$ | async" class="loader"></app-loader>
+  </div>
+
+</app-dashboard-widget>
