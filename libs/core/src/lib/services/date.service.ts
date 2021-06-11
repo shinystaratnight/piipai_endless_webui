@@ -5,8 +5,8 @@ import { Moment } from 'moment';
 
 moment.updateLocale('en', {
   week: {
-    dow: 1, // Monday is the first day of the week.
-  } as any,
+    dow: 1 // Monday is the first day of the week.
+  } as any
 });
 
 export type DateInstance = moment.Moment;
@@ -14,11 +14,15 @@ export type DateInstance = moment.Moment;
 export enum Format {
   Date = 'DD/MM/YYYY',
   DateTime = 'DD/MM/YYYY hh:mm A',
-  Time = 'hh:mm A',
+  Time = 'hh:mm A'
+}
+
+export enum FormatApi {
+  Date = 'YYYY-MM-DD'
 }
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class DateService {
   get instance(): any {
