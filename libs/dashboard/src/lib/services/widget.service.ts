@@ -222,7 +222,7 @@ export class WidgetService {
     const httpParams = new HttpParams({ fromObject: params });
 
     return this.http
-      .get(`${Endpoints.CandidateCounter}/${id}/`, {
+      .get(`${Endpoints.CandidateCounter}${id}/`, {
         params: httpParams
       })
       .pipe(
