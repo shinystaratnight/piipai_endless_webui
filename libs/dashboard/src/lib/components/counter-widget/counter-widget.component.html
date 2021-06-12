@@ -14,9 +14,9 @@
     <table class="table" body *ngIf="data$ | async as data">
       <thead>
         <tr>
-          <th>Activity</th>
-          <th>Amount</th>
-          <th>Earned</th>
+          <th>{{ 'activity' | translate: {"Default": "Activity"} }}</th>
+          <th>{{ 'amount' | translate: {"Default": "Amount"} }}</th>
+          <th>{{ 'earned' | translate: {"Default": "Earned"} }}</th>
         </tr>
       </thead>
       <tbody>
