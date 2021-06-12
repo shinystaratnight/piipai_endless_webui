@@ -519,5 +519,14 @@
   "button_yes": "Yes",
   "button_no": "No",
   "local_time": "Время",
-  "not_started_yet": "Еще не началась"
+  "not_started_yet": "Еще не началась",
+  "this_month": "Текущий месяц",
+  "this_year": "Текущий год",
+  "this_week": "Текущая неделя",
+  "today": "Сегодня",
+  "custom": "Выбрать",
+  "counter": "Стастистика",
+  "activity": "Вид работы",
+  "amount": "Количество",
+  "earned": "Заработано"
 }

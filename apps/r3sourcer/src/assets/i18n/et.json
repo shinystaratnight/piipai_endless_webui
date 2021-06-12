@@ -519,5 +519,14 @@
   "button_yes": "Yes",
   "button_no": "No",
   "local_time": "Kohalik aeg",
-  "not_started_yet": "Alustatud pole veel"
+  "not_started_yet": "Alustatud pole veel",
+  "this_month": "This month",
+  "this_year": "This year",
+  "this_week": "This week",
+  "today": "Today",
+  "custom": "Custom",
+  "counter": "Counter",
+  "activity": "Activity",
+  "amount": "Amount",
+  "earned": "Earned"
 }
