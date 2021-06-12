@@ -21,11 +21,19 @@
       </thead>
       <tbody>
         <tr *ngFor="let activity of data.activities">
-          <td>{{activity.label}}</td>
+          <td *ngIf="activity.key">{{ activity.key | translate: {"Default": activity.label} }}</td>
+          <td *ngIf="!activity.key">{{ activity.label }}</td>
           <td>{{activity.amount}} <span class="description">{{activity.uom}}</span></td>
           <td>{{activity.earned | currency: data.currency}}</td>
         </tr>
       </tbody>
+      <tfoot>
+        <tr>
+          <td>{{ 'filter.date.label' | translate: {"Default": "Shifts"} }}: {{data.shifts}}</td>
+          <td class="text-right"><b>{{ 'total' | translate: {"Default": "Total"} }}:</b></td>
+          <td><b>{{ data.total | currency: data.currency }}</b></td>
+        </tr>
+      </tfoot>
     </table>
 
     <app-loader *ngIf="loading$ | async" class="loader"></app-loader>

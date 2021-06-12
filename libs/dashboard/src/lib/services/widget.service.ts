@@ -228,6 +228,7 @@ export class WidgetService {
       .pipe(
         map((data: any) => {
           const currency = data.currency.toUpperCase();
+          const shifts = data.shifts_total;
           const { total_earned, ...skillActivities } = data.skill_activities;
           const activities = [];
 
@@ -254,7 +255,11 @@ export class WidgetService {
 
           return {
             currency,
-            activities
+            activities,
+            shifts,
+            total: activities
+              .map((activity) => activity.earned)
+              .reduce((prev, next) => parseFloat(prev) + parseFloat(next), 0)
           };
         })
       );

@@ -91,7 +91,7 @@ const form = function () {
             .setChildren([breakStartField(), breakEndField()])
         ])
       ]),
-    new Form.list.element('Skill Activities', Endpoints.TimesheetRates)
+    new Form.list.element('Skill Activities', Endpoints.TimesheetRates, 'timesheetrates')
       .setQuery({
         timesheet: '{id}'
       })

@@ -528,5 +528,8 @@
   "counter": "Laskuri",
   "activity": "Toiminta",
   "amount": "Määrä",
-  "earned": "Ansaittu"
+  "earned": "Ansaittu",
+  "hourly_work": "Toimintatyypit",
+  "last_month": "Viime kuukausi",
+  "total": "Kaikki yhteensä"
 }

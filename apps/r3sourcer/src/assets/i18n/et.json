@@ -528,5 +528,8 @@
   "counter": "Loendur",
   "activity": "Tegevus",
   "amount": "Summa",
-  "earned": "Teenitud"
+  "earned": "Teenitud",
+  "hourly_work": "Tegevuse liigid",
+  "last_month": "Eelmine kuu",
+  "total": "Kokku"
 }
