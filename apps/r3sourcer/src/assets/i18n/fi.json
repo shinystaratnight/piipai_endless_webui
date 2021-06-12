@@ -520,13 +520,13 @@
   "button_no": "No",
   "local_time": "Paikallinen aika",
   "not_started_yet": "Ei vielä aloitettu",
-  "this_month": "This month",
-  "this_year": "This year",
-  "this_week": "This week",
-  "today": "Today",
-  "custom": "Custom",
-  "counter": "Counter",
-  "activity": "Activity",
-  "amount": "Amount",
-  "earned": "Earned"
+  "this_month": "Tässä kuussa",
+  "this_year": "Tämä vuosi",
+  "this_week": "Tämä viikko",
+  "today": "Tänään",
+  "custom": "Mukautettu",
+  "counter": "Laskuri",
+  "activity": "Toiminta",
+  "amount": "Määrä",
+  "earned": "Ansaittu"
 }
