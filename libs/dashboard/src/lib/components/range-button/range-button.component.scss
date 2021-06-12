@@ -4,6 +4,7 @@
 :host {
   border: 1px solid #bdbdbd;
   display: inline-flex;
+  flex: 1;
 
   &:first-child {
     border-top-left-radius: $border-radius;
@@ -22,6 +23,8 @@ label {
   font-size: 16px;
   line-height: 1.2;
   opacity: 0.8;
+  width: 100%;
+  text-align: center;
 
   @include media-breakpoint-down('sm') {
     font-size: 14px;

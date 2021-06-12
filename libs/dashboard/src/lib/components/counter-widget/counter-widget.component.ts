@@ -10,10 +10,13 @@ import {
   DateRangeService,
   DateRange,
   dateRangeLabel,
-  Label
+  Label,
+  SiteSettingsService
 } from '@webui/core';
+import { checkAndReturnTranslation } from '@webui/utilities';
+import { LocalStorageService } from 'ngx-webstorage';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
-import { debounceTime, switchMap, tap } from 'rxjs/operators';
+import { debounceTime, switchMap, tap, map } from 'rxjs/operators';
 import { WidgetService } from '../../services';
 
 type DateParams = {
@@ -55,7 +58,9 @@ export class CounterWidgetComponent implements OnInit, OnDestroy {
   constructor(
     private widgetService: WidgetService,
     private userService: UserService,
-    private dateRangeService: DateRangeService
+    private dateRangeService: DateRangeService,
+    private settingsService: SiteSettingsService,
+    private storage: LocalStorageService
   ) {}
 
   ngOnInit() {
@@ -63,9 +68,19 @@ export class CounterWidgetComponent implements OnInit, OnDestroy {
 
     this.data$ = this.dateParams$.pipe(
       switchMap((params: DateParams) =>
-        this.widgetService
-          .getCounterWidgetData(candidateId, params)
-          .pipe(tap(() => this.loading.next(false)))
+        this.widgetService.getCounterWidgetData(candidateId, params).pipe(
+          tap(() => this.loading.next(false)),
+          map((data) => {
+            const { currency, activities } = data;
+
+            return {
+              currency,
+              activities: activities.map((activity) =>
+                this.translateActivity(activity)
+              )
+            };
+          })
+        )
       )
     );
 
@@ -104,6 +119,23 @@ export class CounterWidgetComponent implements OnInit, OnDestroy {
     return {
       started_at_0: config.from,
       started_at_1: config.to
+    };
+  }
+
+  private translateActivity(activity: { label: string; translations: any[] }) {
+    const { label, translations } = activity;
+    const { country_code } = this.settingsService.settings;
+    const lang = this.storage.retrieve('lang');
+
+    const trans = checkAndReturnTranslation(
+      { __str__: label, translations },
+      country_code,
+      lang
+    );
+
+    return {
+      ...activity,
+      label: trans
     };
   }
 }

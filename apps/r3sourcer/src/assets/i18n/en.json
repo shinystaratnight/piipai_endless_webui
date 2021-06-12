@@ -519,5 +519,14 @@
   "button_yes": "Yes",
   "button_no": "No",
   "local_time": "Local time",
-  "not_started_yet": "Not started yet"
+  "not_started_yet": "Not started yet",
+  "this_month": "This month",
+  "this_year": "This year",
+  "this_week": "This week",
+  "today": "Today",
+  "custom": "Custom",
+  "counter": "Counter",
+  "activity": "Activity",
+  "amount": "Amount",
+  "earned": "Earned"
 }
