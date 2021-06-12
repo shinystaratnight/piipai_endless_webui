@@ -25,6 +25,9 @@ label {
   opacity: 0.8;
   width: 100%;
   text-align: center;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 
   @include media-breakpoint-down('sm') {
     font-size: 14px;

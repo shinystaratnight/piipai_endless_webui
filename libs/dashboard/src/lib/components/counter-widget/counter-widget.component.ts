@@ -38,6 +38,7 @@ export class CounterWidgetComponent implements OnInit, OnDestroy {
   dateRangeTypeControl: FormControl = new FormControl(DateRange.ThisMonth);
   dateRange = DateRange;
   dateRangeList = [
+    DateRange.LastMonth,
     DateRange.ThisMonth,
     DateRange.ThisWeek,
     DateRange.ThisYear,
@@ -71,10 +72,10 @@ export class CounterWidgetComponent implements OnInit, OnDestroy {
         this.widgetService.getCounterWidgetData(candidateId, params).pipe(
           tap(() => this.loading.next(false)),
           map((data) => {
-            const { currency, activities } = data;
+            const { activities } = data;
 
             return {
-              currency,
+              ...data,
               activities: activities.map((activity) =>
                 this.translateActivity(activity)
               )

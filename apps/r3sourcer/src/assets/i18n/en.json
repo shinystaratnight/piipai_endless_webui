@@ -528,5 +528,8 @@
   "counter": "Counter",
   "activity": "Activity",
   "amount": "Amount",
-  "earned": "Earned"
+  "earned": "Earned",
+  "hourly_work": "Hourly work",
+  "last_month": "Last month",
+  "total": "Total"
 }
