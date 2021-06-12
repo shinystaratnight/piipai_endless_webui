@@ -520,13 +520,13 @@
   "button_no": "No",
   "local_time": "Kohalik aeg",
   "not_started_yet": "Alustatud pole veel",
-  "this_month": "This month",
-  "this_year": "This year",
-  "this_week": "This week",
-  "today": "Today",
-  "custom": "Custom",
-  "counter": "Counter",
-  "activity": "Activity",
-  "amount": "Amount",
-  "earned": "Earned"
+  "this_month": "Sellel kuul",
+  "this_year": "Sellel aastal",
+  "this_week": "Sellel nädalal",
+  "today": "Täna",
+  "custom": "Kohandatud",
+  "counter": "Loendur",
+  "activity": "Tegevus",
+  "amount": "Summa",
+  "earned": "Teenitud"
 }
