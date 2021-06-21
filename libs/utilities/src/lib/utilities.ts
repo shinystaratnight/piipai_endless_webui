@@ -124,6 +124,10 @@ export function getTotalTime(time, data) {
 
   let breakTime = 0;
 
+  if (!data.shift_ended_at) {
+    return '0hr 0min';
+  }
+
   if (shift_ended_at.isBefore(shift_started_at)) {
     return '0hr 0min';
   }
