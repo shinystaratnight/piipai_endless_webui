@@ -262,15 +262,6 @@ const formset = {
         delim: null
       },
       {
-        name: 'hourly_rate',
-        content: [
-          { display: '{currency}{field}/h', type: 'static', field: 'hourly_rate' }
-        ],
-        label: 'Skill Rate',
-        title: null,
-        delim: null
-      },
-      {
         name: 'score',
         sort: true,
         sort_field: 'score',
@@ -426,33 +417,37 @@ const form = [
     read_only: false
   },
   {
-    key: 'hourly_rate',
-    default: '{skill.default_rate}',
-    updated: ['skill'],
-    type: 'input',
-    useValue: true,
-    templateOptions: {
-      required: true,
-      label: 'Skill Rate',
-      type: 'number',
-      step: '0.01',
-      icon: '{currency}'
-    },
-    read_only: false
-  },
-  {
     endpoint: Endpoints.SkillRateCoefficient,
     type: 'list',
     templateOptions: {
-      label: 'Candidat Skill Modifier',
+      label: 'Candidate Skill Modifier',
       type: 'list',
-      text: 'Candidat Skill Modifier',
+      text: 'Candidate Skill Modifier',
       add_label: 'Add'
     },
     collapsed: false,
     visibleMode: true,
     prefilled: {
       skill_rel: '{id}',
+    },
+    query: {
+      skill_rel: '{id}',
+    }
+  },
+  {
+    endpoint: Endpoints.SkillRate,
+    type: 'list',
+    templateOptions: {
+      label: 'Skill Rate',
+      type: 'list',
+      text: 'Skill Rate',
+      add_label: 'Add'
+    },
+    collapsed: false,
+    visibleMode: true,
+    prefilled: {
+      skill_rel: '{id}',
+      skill: '{skill.id}'
     },
     query: {
       skill_rel: '{id}',
@@ -530,20 +525,6 @@ const formadd = [
         { value: 94608000, label: '3 Years' },
         { value: 157680000, label: '5 Years or more' }
       ]
-    },
-    read_only: false
-  },
-  {
-    key: 'hourly_rate',
-    default: '{skill.default_rate}',
-    updated: ['skill'],
-    type: 'input',
-    templateOptions: {
-      required: true,
-      label: 'Skill Rate',
-      type: 'number',
-      step: '0.01',
-      icon: '{currency}'
     },
     read_only: false
   }

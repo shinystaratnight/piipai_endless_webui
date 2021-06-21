@@ -37,7 +37,8 @@ import {
   getTimeInstance,
   getPropValue,
   isManager,
-  isClient
+  isClient,
+  getTotalTime
 } from '@webui/utilities';
 import { Endpoints, CountryCodeLanguage, Models } from '@webui/data';
 
@@ -1207,22 +1208,8 @@ export class DynamicListComponent
     const timeInstance = timezone
       ? getTimeInstance().tz.setDefault(timezone)
       : getTimeInstance();
-    const shift_ended_at = timeInstance(data.shift_ended_at);
-    const shift_started_at = timeInstance(data.shift_started_at);
 
-    let breakTime = 0;
-
-    if (data.break_ended_at && data.break_started_at) {
-      const break_ended_at = timeInstance(data.break_ended_at);
-      const break_started_at = timeInstance(data.break_started_at);
-
-      breakTime = break_ended_at.diff(break_started_at);
-    }
-
-    const workTime = shift_ended_at.diff(shift_started_at);
-    const totalTime = timeInstance.duration(workTime - breakTime);
-
-    return `${Math.floor(totalTime.asHours())}hr ${totalTime.minutes()}min`;
+    return getTotalTime(timeInstance, data);
   }
 
   public checkValue(obj) {
