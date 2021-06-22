@@ -56,9 +56,9 @@ export function getTimesColumn() {
   return new List.column.element('times', 'Times')
     .setSort(true, 'shift_started_at')
     .setContent([
-      new List.static.element('shift_started_at')
+      new List.static.element('shift.date')
         .setLabel('Shift date')
-        .setDisplay('{shift_started_at__date}'),
+        .setDisplay('{shift.date.__str__}'),
 
       new List.static.element('shift_started_at')
         .setLabel('Shift start/end')

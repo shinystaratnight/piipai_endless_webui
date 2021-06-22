@@ -48,9 +48,9 @@ const list = function () {
           ]),
 
         new List.column.element('times', 'Times').setContent([
-          new List.static.element('shift_started_at')
+          new List.static.element('shift.date')
             .setLabel('Date')
-            .setDisplay('{shift_started_at__date}'),
+            .setDisplay('{shift.date.__str__}'),
 
           new List.static.element('shift_started_at')
             .setLabel('Start')
