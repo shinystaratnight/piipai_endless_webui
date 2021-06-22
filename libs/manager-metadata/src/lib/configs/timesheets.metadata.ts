@@ -112,10 +112,10 @@ const list = {
       {
         content: [
           {
-            text: '{shift_started_at__date}',
+            text: '{shift.date.__str__}',
             type: 'static',
             label: 'Dates',
-            field: 'shift_started_at'
+            field: 'shift.date'
           },
           {
             text: '{shift_started_at__time}',
@@ -1015,19 +1015,41 @@ const form = [
           },
           {
             type: 'row',
-            className: 'field',
             children: [
               {
-                type: 'static',
-                key: 'total_time',
-                send: false,
-                read_only: true,
-                templateOptions: {
-                  label: 'Total time',
-                  color: 'text-success',
-                  bold: true
-                }
-              }
+                type: 'group',
+                hideLabel: true,
+                width: 0.2,
+                children: [
+                  {
+                    type: 'static',
+                    key: 'shift.date.__str__',
+                    send: false,
+                    read_only: true,
+                    templateOptions: {
+                      label: 'Shift Date',
+                    }
+                  }
+                ]
+              },
+              {
+                type: 'group',
+                hideLabel: true,
+                width: 0.2,
+                children: [
+                  {
+                    type: 'static',
+                    key: 'total_time',
+                    send: false,
+                    read_only: true,
+                    templateOptions: {
+                      label: 'Total time',
+                      color: 'text-success',
+                      bold: true
+                    }
+                  }
+                ]
+              },
             ]
           },
           {
