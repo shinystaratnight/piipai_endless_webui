@@ -46,6 +46,7 @@ export enum Endpoints {
   Shift = '/hr/shifts/',
   JobTag = '/hr/jobtags/',
   ClientJobs = '/hr/jobs/client_contact_job/',
+  JobRates = '/hr/jobrates/',
 
   // Candidate
   CandidateContact = '/candidate/candidatecontacts/',
