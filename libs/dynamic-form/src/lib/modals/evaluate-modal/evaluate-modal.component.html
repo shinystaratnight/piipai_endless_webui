@@ -30,6 +30,7 @@
       [data]="config.data"
       [extendData]="config.extendData"
       [edit]="config.edit"
+      (errorForm)="errorEvent($event)"
       (event)="formEvent($event)"
     >
       <div class="d-flex">
