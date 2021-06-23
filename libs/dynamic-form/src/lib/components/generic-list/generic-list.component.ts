@@ -20,8 +20,9 @@ import {
 import { BehaviorSubject, forkJoin, Subject, Subscription } from 'rxjs';
 import { catchError, debounceTime, map, skip } from 'rxjs/operators';
 import { Sort } from '../../helpers';
-import { FormatString } from '@webui/utilities';
+import { FormatString, getFulfilledStatus } from '@webui/utilities';
 import { MessageType, ToastService } from '@webui/core';
+import { Endpoints } from '@webui/data';
 
 @Component({
   selector: 'app-generic-list',
@@ -285,6 +286,12 @@ export class GenericListComponent implements OnInit, OnDestroy {
 
       if (query === '?') {
         this.cashData = data;
+      }
+
+      if (endpoint === Endpoints.Shift) {
+        data.results.forEach((el) => {
+          el.is_fulfilled = getFulfilledStatus(el.is_fulfilled, el.workers_details);
+        })
       }
 
       if (endpoint.includes('/fillin/')) {

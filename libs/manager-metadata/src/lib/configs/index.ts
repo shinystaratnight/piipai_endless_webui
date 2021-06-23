@@ -98,3 +98,4 @@ export * from './formtranslations.metadata';
 export * from './skillrates.metadata';
 export * from './skillrateranges.metadata';
 export * from './timesheetrates.metadata';
+export * from './jobrates.metadata';

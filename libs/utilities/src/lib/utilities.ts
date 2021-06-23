@@ -226,7 +226,10 @@ export function checkAndReturnTranslation(
 ): string {
   const { translations, translation, name, __str__ } = element;
   const translationList =
-    translations || translation || (name && typeof name !== 'string' && name.translations) || [];
+    translations ||
+    translation ||
+    (name && typeof name !== 'string' && name.translations) ||
+    [];
 
   if (!translationList.length) {
     return getDefaultValue(element);
@@ -275,5 +278,22 @@ export function setPropValue(
     target[prop] = value;
   } else {
     setPropValue(path.join('.'), target[prop], value);
+  }
+}
+
+export function getFulfilledStatus(
+  status: number,
+  workers: { undefined: number; accepted: number; cancelled: number }
+) {
+  if (status === 1) {
+    return status;
+  }
+
+  if (status === 0 && !workers.undefined) {
+    return 0;
+  }
+
+  if (status === 0 && workers.undefined) {
+    return 2;
   }
 }

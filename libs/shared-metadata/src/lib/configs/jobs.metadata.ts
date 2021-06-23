@@ -925,19 +925,6 @@ const form = [
                       '1': 'Piecework wage',
                       '2': 'Combined wage',
                     }),
-                  {
-                    key: 'hourly_rate_default',
-                    type: 'input',
-                    attributes: {
-                      max: '{position.upper_rate_limit}',
-                      min: '{position.lower_rate_limit}'
-                    },
-                    templateOptions: {
-                      label: 'Candidate rate override',
-                      type: 'number',
-                      text: '{currency}{hourly_rate_default}/h'
-                    }
-                  }
                 ],
                 width: 0.33
               },
@@ -1056,6 +1043,25 @@ const form = [
                 width: 0.33
               }
             ]
+          },
+          {
+            endpoint: Endpoints.JobRates,
+            type: 'list',
+            templateOptions: {
+              label: 'Job Rate',
+              type: 'list',
+              text: 'Job Rate',
+              add_label: 'Add'
+            },
+            collapsed: false,
+            visibleMode: true,
+            prefilled: {
+              job: '{id}',
+              skill: '{position.id}'
+            },
+            query: {
+              job: '{id}',
+            }
           }
         ]
       },
