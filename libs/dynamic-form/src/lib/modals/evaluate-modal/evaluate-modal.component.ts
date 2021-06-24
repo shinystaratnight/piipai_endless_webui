@@ -55,6 +55,10 @@ export class EvaluateModalComponent extends Modal {
     }
   }
 
+  public errorEvent() {
+    this.saveProcess = false;
+  }
+
   public sendEvaluateData(endpoint, data) {
     this.saveProcess = true;
 
