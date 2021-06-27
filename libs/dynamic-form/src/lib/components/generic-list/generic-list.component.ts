@@ -20,9 +20,14 @@ import {
 import { BehaviorSubject, forkJoin, Subject, Subscription } from 'rxjs';
 import { catchError, debounceTime, map, skip } from 'rxjs/operators';
 import { Sort } from '../../helpers';
-import { FormatString, getFulfilledStatus } from '@webui/utilities';
+import {
+  FormatString,
+  getFulfilledStatus,
+  getPropValue
+} from '@webui/utilities';
 import { MessageType, ToastService } from '@webui/core';
 import { Endpoints } from '@webui/data';
+import isObject from 'isobject';
 
 @Component({
   selector: 'app-generic-list',
@@ -290,8 +295,11 @@ export class GenericListComponent implements OnInit, OnDestroy {
 
       if (endpoint === Endpoints.Shift) {
         data.results.forEach((el) => {
-          el.is_fulfilled = getFulfilledStatus(el.is_fulfilled, el.workers_details);
-        })
+          el.is_fulfilled = getFulfilledStatus(
+            el.is_fulfilled,
+            el.workers_details
+          );
+        });
       }
 
       if (endpoint.includes('/fillin/')) {
@@ -509,21 +517,49 @@ export class GenericListComponent implements OnInit, OnDestroy {
     let body;
     const ids = [];
     const keys = Object.keys(data);
+    const {
+      action: { multiple, bodyFields, method }
+    } = e;
     keys.forEach((el) => {
       if (data[el]) {
         ids.push(el);
       }
     });
 
-    if (e.action.multiple) {
+    if (multiple) {
       const requests = ids.map((id: string) => {
         const url = FormatString.format(endpoint, { id });
+        let body = {};
 
-        if (e.action.method === 'delete') {
-          return this.gfs.delete(url, id);
+        if (bodyFields) {
+          bodyFields.forEach((prop) => {
+            if (typeof prop === 'string') {
+              body = {
+                ...body,
+                [prop]: getPropValue(
+                  target.data.results.find((el) => el.id === id),
+                  prop
+                )
+              };
+            }
+
+            if (isObject(prop)) {
+              body = {
+                ...body,
+                ...prop
+              };
+            }
+          });
         }
 
-        return this.gfs.submitForm(url, {});
+        switch (method) {
+          case 'PUT':
+            return this.gfs.editForm(url, body);
+          case 'DELETE':
+            return this.gfs.delete(url, id);
+          default:
+            return this.gfs.submitForm(url, body);
+        }
       });
 
       target.actionProcess = true;
@@ -544,7 +580,12 @@ export class GenericListComponent implements OnInit, OnDestroy {
           target.actionProcess = false;
           target.refresh = true;
           target.actionData = responses;
-          if (responses.some((response) => response === null || response.status === 'success')) {
+          if (
+            responses.some(
+              (response) =>
+                response || response === null || response.status === 'success'
+            )
+          ) {
             this.getData(
               target.endpoint,
               this.generateQuery(target.query),
