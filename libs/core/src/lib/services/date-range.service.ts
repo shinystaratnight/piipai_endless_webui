@@ -68,6 +68,27 @@ export class DateRangeService {
     return this.formatDates(rangeInstance, FormatApi.Date);
   }
 
+  parseRange(range: { from: Date, to: Date }): Range {
+    const rangeInstance = {
+      from: this.dateService.parseDate(range.from),
+      to: this.dateService.parseDate(range.to),
+    }
+
+    return this.formatDates(rangeInstance, FormatApi.Date);
+  }
+
+  getFormDatesByRange(type: DateRange): { from: Date, to: Date } {
+    const rangeInstance = this.getRangeInstance(
+      mapRangeDateToMoment[type],
+      mapRangeDateOffset[type]
+    );
+
+    return {
+      from: rangeInstance.from.toDate(),
+      to: rangeInstance.to.toDate(),
+    }
+  }
+
   private getTodayInstance(): Moment {
     return this.dateService.instance().clone();
   }

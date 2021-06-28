@@ -4,7 +4,7 @@ import {
   OnInit,
   OnDestroy
 } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import {
   UserService,
   DateRangeService,
@@ -49,6 +49,8 @@ export class CounterWidgetComponent implements OnInit, OnDestroy {
     key: 'counter',
     value: 'Counter'
   };
+  rangeForm: FormGroup;
+  hasForm$: BehaviorSubject<boolean> = new BehaviorSubject(false);
   get loading$() {
     return this.loading.asObservable();
   }
@@ -61,7 +63,8 @@ export class CounterWidgetComponent implements OnInit, OnDestroy {
     private userService: UserService,
     private dateRangeService: DateRangeService,
     private settingsService: SiteSettingsService,
-    private storage: LocalStorageService
+    private storage: LocalStorageService,
+    private fb: FormBuilder,
   ) {}
 
   ngOnInit() {
@@ -85,10 +88,10 @@ export class CounterWidgetComponent implements OnInit, OnDestroy {
       )
     );
 
+    this.rangeForm = this.fb.group(this.dateRangeService.getFormDatesByRange(DateRange.ThisMonth));
     this.controlSubscription = this.dateRangeTypeControl.valueChanges
       .pipe(debounceTime(400))
       .subscribe((value) => {
-        this.loading.next(true);
         this.changeDateRange(value);
       });
   }
@@ -99,9 +102,13 @@ export class CounterWidgetComponent implements OnInit, OnDestroy {
 
   changeDateRange(type: DateRange) {
     if (type === DateRange.Custom) {
-      // TODO: add cutom range
+      this.hasForm$.next(true);
       return;
     }
+
+    this.hasForm$.next(false);
+    this.loading.next(true);
+    this.rangeForm.patchValue(this.dateRangeService.getFormDatesByRange(type));
 
     this.dateParams$.next(
       this.getDateParams(this.dateRangeService.getDatesByRange(type))
@@ -114,6 +121,15 @@ export class CounterWidgetComponent implements OnInit, OnDestroy {
 
   getLabel(type: DateRange): Label {
     return dateRangeLabel[type];
+  }
+
+  onRangeFormSubmit() {
+    const formValue = this.rangeForm.value;
+
+    this.loading.next(true);
+    this.dateParams$.next(
+      this.getDateParams(this.dateRangeService.parseRange(formValue))
+    );
   }
 
   private getDateParams(config: { from: string; to: string }): DateParams {
