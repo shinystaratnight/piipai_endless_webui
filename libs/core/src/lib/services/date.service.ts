@@ -29,6 +29,10 @@ export class DateService {
     return moment;
   }
 
+  public parseDate(date: Date) {
+    return this.instance(date);
+  }
+
   public parse(date: string, timezone?: string, format?: string): DateInstance {
     return this.instance.tz(date, format, timezone);
   }

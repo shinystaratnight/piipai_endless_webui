@@ -32,3 +32,30 @@
   margin-top: 1rem;
   overflow-x: auto;
 }
+
+.form {
+  $gap: 1rem;
+
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  width: calc(100% + #{$gap});
+  margin-top: 1rem;
+  margin-left: -$gap / 2;
+  margin-right: -$gap / 2;
+
+  &__item {
+    margin: 0 .5rem;
+    min-height: 42px;
+  }
+
+  &__field {
+    flex: 2;
+  }
+
+  &__button {
+    flex: 1;
+    border-radius: 4px;
+    align-self: flex-end;
+  }
+}

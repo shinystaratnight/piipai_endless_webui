@@ -1,14 +1,43 @@
 <app-dashboard-widget [label]="widgetLabel">
-  <div header class="btn-group range-buttons" btnRadioGroup [formControl]="dateRangeTypeControl">
-    <app-range-button
-      *ngFor="let option of dateRangeList"
-      [active]="dateRangeTypeControl.value === option"
-      [dateRange]="option"
-      [key]="getLabel(option).key"
-      [label]="getLabel(option).value"
-      [disabled]="option === dateRange.Custom"
-    ></app-range-button>
-  </div>
+  <ng-container header>
+    <div class="btn-group range-buttons" btnRadioGroup [formControl]="dateRangeTypeControl">
+      <app-range-button
+        *ngFor="let option of dateRangeList"
+        [active]="dateRangeTypeControl.value === option"
+        [dateRange]="option"
+        [key]="getLabel(option).key"
+        [label]="getLabel(option).value"
+      ></app-range-button>
+    </div>
+
+    <form *ngIf="hasForm$ | async" action="" class="form" (ngSubmit)="onRangeFormSubmit()">
+      <app-range-field
+        [group]="rangeForm"
+        class="form__item form__field"
+        label="From"
+        translateKey="from"
+        name="from"
+        controlName="from"
+      ></app-range-field>
+
+      <app-range-field
+        [group]="rangeForm"
+        class="form__item form__field"
+        label="To"
+        translateKey="to"
+        name="to"
+        controlName="to"
+      ></app-range-field>
+
+      <button
+        class="form__item form__button btn btn-primary"
+        type="submit"
+        [disabled]="loading$ | async"
+      >
+        Submit
+      </button>
+    </form>
+  </ng-container>
 
   <div class="body" body>
     <table class="table" body *ngIf="data$ | async as data">

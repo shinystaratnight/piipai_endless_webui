@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import {
   FontAwesomeModule,
@@ -31,6 +32,7 @@ import {
   CounterWidgetComponent,
   RangeButtonComponent,
   DashboardWidgetComponent,
+  RangeFieldComponent,
 } from './components';
 import { WidgetDirective } from './directives';
 import { DashboardComponent } from './dashboard.component';
@@ -52,6 +54,7 @@ import { DashboardComponent } from './dashboard.component';
     UiModule,
     ButtonsModule,
     TranslateModule,
+    BsDatepickerModule,
   ],
   declarations: [
     DashboardComponent,
@@ -63,6 +66,7 @@ import { DashboardComponent } from './dashboard.component';
     CounterWidgetComponent,
     RangeButtonComponent,
     DashboardWidgetComponent,
+    RangeFieldComponent,
   ],
   providers: [DashboardService, WidgetService],
   entryComponents: [ButtonsWidget, CandidateWidget, CalendarWidgetComponent],
