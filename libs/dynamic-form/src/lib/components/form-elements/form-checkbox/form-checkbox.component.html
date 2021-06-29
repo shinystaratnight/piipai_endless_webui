@@ -12,7 +12,7 @@
           [class.disabled]="isDisabled" [ngStyle]="{ color: checkboxColor }"
           [icon]="['fas', config.templateOptions.values[group.get(key).value]]"></fa-icon>
         <input type="checkbox" class="form-check-input" hidden #checkbox (change)="eventHandler($event)"
-          [formControl]="group.get(key)" [attr.id]="key" [attr.name]="key" />
+          [formControl]="group.get(key)" [attr.id]="key" [attr.name]="key" [disabled]="config.readonly" />
         <app-checkbox [sm]="true" [checked]="group.get(key).value" *ngIf="config.templateOptions.type !== 'icon'">
         </app-checkbox>
         {{ getTranslationKey(config.key, 'text') | translate: {"Default": config.templateOptions.text || config.templateOptions.label}  }}
@@ -20,7 +20,7 @@
           (click)="sendAction($event)">Resend</button>
       </label>
       <app-info *ngIf="config.templateOptions.description"
-        [description]="getTranslationKey('description') | translate: {'Default': config.templateOptions.description || ''}">
+        [description]="getTranslationKey(this.key, 'description') | translate: {'Default': config.templateOptions.description || ''}">
       </app-info>
     </div>
   </div>
@@ -62,7 +62,7 @@
             (click)="sendAction($event)">Resend</button>
         </label>
         <app-info *ngIf="config.templateOptions.description"
-          [description]="getTranslationKey('description') | translate: {'Default': config.templateOptions.description || ''}">
+          [description]="getTranslationKey(this.key, 'description') | translate: {'Default': config.templateOptions.description || ''}">
         </app-info>
       </div>
     </div>

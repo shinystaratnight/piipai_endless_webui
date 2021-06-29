@@ -8,7 +8,6 @@ import {
   ChangeDetectorRef,
   Optional
 } from '@angular/core';
-import { Router } from '@angular/router';
 
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { Subject, Subscription } from 'rxjs';

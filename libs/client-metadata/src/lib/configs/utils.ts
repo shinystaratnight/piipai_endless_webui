@@ -37,6 +37,7 @@ export function getPersonalInfoColumn() {
     .setWidth(255)
     .setContent([
       new List.info.element('id').setValues({
+        hideAvailability: true,
         title: 'job_offer.candidate_contact.contact.__str__',
         picture: 'job_offer.candidate_contact.contact.picture.origin',
         position: 'position.__str__'
