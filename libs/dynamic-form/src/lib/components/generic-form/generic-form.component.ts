@@ -1232,7 +1232,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
   }
 
   public submitForm(data) {
-    if (this.endpoint === Endpoints.Job && !this.id) {
+    if ((this.endpoint === Endpoints.Job || this.endpoint === Endpoints.ClientJobs) && !this.id) {
       data['work_start_date'] = this.getJobStartDate(data.shifts);
       this.selectedDates = data.shifts;
     }
@@ -1287,7 +1287,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
       this.createUpdateRequests(newData, this.updateDataBeforeSendForm);
 
       const subscription = forkJoin(
-        ...this.updateDataBeforeSendForm.requests
+        [...this.updateDataBeforeSendForm.requests]
       ).subscribe(() => {
         this.sendForm(newData);
       });
@@ -1438,7 +1438,9 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
             .subscribe(() => {
               const shifts = this.generateDataForJobCreation(response);
 
-              this.extendJob(shifts, false);
+              if (shifts.job_shift.length) {
+                this.extendJob(shifts, false);
+              }
             });
         }
       },
@@ -1459,8 +1461,9 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
     if (
       this.endpoint === Endpoints.Job &&
       !this.id &&
-      this.selectedDates &&
-      this.selectedDates.length
+      (this.selectedDates &&
+      this.selectedDates.length)
+      || sendData.client_contact_page
     ) {
       this.confirmJob(response.id, response);
       return;
