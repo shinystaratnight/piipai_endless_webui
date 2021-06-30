@@ -1,4 +1,4 @@
-// import { timeZoneOffset } from '../helpers';
+import { ApiMethod } from '@webui/data';
 import { getTimeZoneOffset } from '@webui/utilities';
 
 const list = {
@@ -497,7 +497,7 @@ const formset = {
         {
           endpoint: '/hr/joboffers/',
           label: 'Delete',
-          method: 'delete',
+          method: ApiMethod.DELETE,
           selectionError: 'Please select at least one job offer!',
           required: true,
           multiple: true,
