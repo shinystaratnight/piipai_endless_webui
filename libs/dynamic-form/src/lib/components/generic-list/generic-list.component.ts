@@ -26,7 +26,7 @@ import {
   getPropValue
 } from '@webui/utilities';
 import { MessageType, ToastService } from '@webui/core';
-import { Endpoints } from '@webui/data';
+import { ApiMethod, Endpoints } from '@webui/data';
 import isObject from 'isobject';
 
 @Component({
@@ -553,9 +553,9 @@ export class GenericListComponent implements OnInit, OnDestroy {
         }
 
         switch (method) {
-          case 'PUT':
+          case ApiMethod.PUT:
             return this.gfs.editForm(url, body);
-          case 'DELETE':
+          case ApiMethod.DELETE:
             return this.gfs.delete(url, id);
           default:
             return this.gfs.submitForm(url, body);
