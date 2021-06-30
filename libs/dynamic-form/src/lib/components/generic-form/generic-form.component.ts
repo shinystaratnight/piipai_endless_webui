@@ -1461,9 +1461,8 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
     if (
       this.endpoint === Endpoints.Job &&
       !this.id &&
-      (this.selectedDates &&
-      this.selectedDates.length)
-      || sendData.client_contact_page
+      (this.selectedDates && this.selectedDates.length) ||
+      sendData.client_contact_page
     ) {
       this.confirmJob(response.id, response);
       return;
