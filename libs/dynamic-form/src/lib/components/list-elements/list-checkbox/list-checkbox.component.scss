@@ -1,8 +1,16 @@
-.label {
-    display: inline-flex;
-    align-items: center;
+:host {
+  display: block;
+}
 
-    .icon {
-        margin-left: 0.5rem;
-    }
+.dropdown {
+  display: inline-flex;
+
+  .value {
+    width: 100%;
+    max-width: 100px;
+  }
+
+  .icon {
+    margin-top: 5px;
+  }
 }
