@@ -1097,6 +1097,16 @@ const formadd = [
     type: 'row',
     children: [
       {
+        type: 'checkbox',
+        hide: true,
+        readonly: true,
+        default: true,
+        key: 'client_contact_page',
+        templateOptions: {
+          label: "Client Contact Page"
+        }
+      },
+      {
         type: 'column',
         children: [
           {

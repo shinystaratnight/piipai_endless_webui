@@ -35,7 +35,8 @@ import {
   FormatString,
   getTimeInstance,
   checkAndReturnTranslation,
-  getStorageLang
+  getStorageLang,
+  getFulfilledStatus
 } from '@webui/utilities';
 import { filters } from './calendar-filters.meta';
 
@@ -849,7 +850,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
         shift,
         date: shift.date.shift_date,
         time: shift.time,
-        is_fulfilled: this.getFulfilledStatus(
+        is_fulfilled: getFulfilledStatus(
           shift.is_fulfilled,
           shift.workers_details
         ),
@@ -904,20 +905,6 @@ export class CalendarComponent implements OnInit, OnDestroy {
           }
         });
       });
-    }
-  }
-
-  private getFulfilledStatus(status: number, workers: any) {
-    if (status === 1) {
-      return status;
-    }
-
-    if (status === 0 && !workers.undefined) {
-      return 0;
-    }
-
-    if (status === 0 && workers.undefined) {
-      return 2;
     }
   }
 

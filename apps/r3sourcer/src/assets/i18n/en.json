@@ -494,7 +494,8 @@
 	"times.shift.date.shift_date.label": "Shift date",
 	"times.shift.time.label": "Shift Time",
 	"times.shift_ended_at.label": "End",
-	"times.shift_started_at.date": "Date",
+  "times.shift.date.date": "Date",
+  "times.shift.date.label": "Date",
 	"times.shift_started_at.label": "Start",
 	"timesheet": "Timesheet History",
 	"timesheet.count_timesheets.label": "Total",
@@ -535,6 +536,17 @@
 		"label": "Workers",
 		"placeholder": "Workers"
 	},
-	"worktype.label": "Skill Activity",
-	"worktype.placeholder": "Select"
+  "shift.date.__str__.label": "Shift date",
+  "this_month": "This month",
+  "this_year": "This year",
+  "this_week": "This week",
+  "today": "Today",
+  "custom": "Custom",
+  "counter": "Counter",
+  "activity": "Activity",
+  "amount": "Amount",
+  "earned": "Earned",
+  "hourly_work": "Hourly work",
+  "last_month": "Last month",
+  "total": "Total"
 }

@@ -215,6 +215,56 @@ export class WidgetService {
     this.userWidgets = undefined;
   }
 
+  getCounterWidgetData(
+    id: string,
+    params: { started_at_0: string; started_at_1: string }
+  ) {
+    const httpParams = new HttpParams({ fromObject: params });
+
+    return this.http
+      .get(`${Endpoints.CandidateCounter}${id}/`, {
+        params: httpParams
+      })
+      .pipe(
+        map((data: any) => {
+          const currency = data.currency.toUpperCase();
+          const shifts = data.shifts_total;
+          const { total_earned, ...skillActivities } = data.skill_activities;
+          const activities = [];
+
+          activities.push({
+            key: 'hourly_work',
+            label: 'Hourly work',
+            translations: [],
+            uom: '',
+            amount: `${data.hourly_work.total_hours}h ${data.hourly_work.total_minutes}m`,
+            earned: data.hourly_work.total_earned
+          });
+
+          Object.keys(skillActivities).forEach((name) => {
+            const item = skillActivities[name];
+
+            activities.push({
+              label: name,
+              translations: item.translations,
+              uom: item.uom.short_name,
+              amount: item.value_sum,
+              earned: item.earned_sum
+            });
+          });
+
+          return {
+            currency,
+            activities,
+            shifts,
+            total: activities
+              .map((activity) => activity.earned)
+              .reduce((prev, next) => parseFloat(prev) + parseFloat(next), 0)
+          };
+        })
+      );
+  }
+
   private parseGrid(gridElement: GridElement) {
     const { type, id } = gridElement;
     let { elements } = gridElement;

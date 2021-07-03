@@ -37,6 +37,7 @@ export function getPersonalInfoColumn() {
     .setWidth(255)
     .setContent([
       new List.info.element('id').setValues({
+        hideAvailability: true,
         title: 'job_offer.candidate_contact.contact.__str__',
         picture: 'job_offer.candidate_contact.contact.picture.origin',
         position: 'position.__str__'
@@ -56,9 +57,9 @@ export function getTimesColumn() {
   return new List.column.element('times', 'Times')
     .setSort(true, 'shift_started_at')
     .setContent([
-      new List.static.element('shift_started_at')
+      new List.static.element('shift.date')
         .setLabel('Shift date')
-        .setDisplay('{shift_started_at__date}'),
+        .setDisplay('{shift.date.__str__}'),
 
       new List.static.element('shift_started_at')
         .setLabel('Shift start/end')

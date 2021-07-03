@@ -12,7 +12,7 @@
       </div>
 
       <fa-icon
-        *ngIf="picture || contactAvatar"
+        *ngIf="(picture || contactAvatar) && !hideAvailability"
         class="list-info__icon"
         [class.list-info__icon--success]="available"
         [class.list-info__icon--danger]="!available"

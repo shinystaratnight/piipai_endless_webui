@@ -494,7 +494,8 @@
 	"times.shift.date.shift_date.label": "Смена",
 	"times.shift.time.label": "Время",
 	"times.shift_ended_at.label": "Конец",
-	"times.shift_started_at.date": "Дата",
+  "times.shift.date.date": "Дата",
+  "times.shift.date.label": "Дата",
 	"times.shift_started_at.label": "Начало",
 	"timesheet": "Табели",
 	"timesheet.count_timesheets.label": "Всего",
@@ -535,6 +536,17 @@
 		"label": "Рабочих",
 		"placeholder": ""
 	},
-	"worktype.label": "Вид работы",
-	"worktype.placeholder": "Выбрать"
+  "shift.date.__str__.label": "Смена",
+  "this_month": "Текущий месяц",
+  "this_year": "Текущий год",
+  "this_week": "Текущая неделя",
+  "today": "Сегодня",
+  "custom": "Выбрать",
+  "counter": "Статистика",
+  "activity": "Вид работы",
+  "amount": "Количество",
+  "earned": "Заработано",
+  "hourly_work": "Почасовая работа",
+  "last_month": "Прошлый месяц",
+  "total": "Всего"
 }

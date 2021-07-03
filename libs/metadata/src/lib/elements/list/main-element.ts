@@ -9,6 +9,7 @@ export interface Tab {
 export class MainElement {
   columns: ColumnElement[];
   filters: any[];
+  actions: any;
 
   search_enabled = true;
   pagination_label?: string;
@@ -18,7 +19,7 @@ export class MainElement {
   editEndpoint?: string;
   tabs?: Tab[];
 
-  constructor(public list: string, public label: string) { }
+  constructor(public list: string, public label: string) {}
 
   disableSearch() {
     this.search_enabled = false;
@@ -65,6 +66,12 @@ export class MainElement {
 
   setTabs(tabs: Tab[]) {
     this.tabs = tabs;
+
+    return this;
+  }
+
+  setActions(config: any) {
+    this.actions = { ...config };
 
     return this;
   }

@@ -30,6 +30,7 @@
       [data]="config.data"
       [extendData]="config.extendData"
       [edit]="config.edit"
+      (errorForm)="errorEvent($event)"
       (event)="formEvent($event)"
     >
       <div class="d-flex">
@@ -44,7 +45,7 @@
   <ng-container *ngIf="config.evaluate">
     <div class="modal-body text-center">
       <ng-container *ngIf="config.label.picture">
-        <img [src]="config.label.picture" alt="Photo" style="border-radius: 0.5rem" height="100" width="100" />
+        <img [src]="config.label.picture" alt="Photo" style="border-radius: 0.5rem; object-fit: cover;" height="100" width="100" />
       </ng-container>
 
       <ng-container *ngIf="!config.label.picture">

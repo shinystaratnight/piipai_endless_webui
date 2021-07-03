@@ -3,7 +3,7 @@ import { List, Form, InputType } from '@webui/metadata';
 
 const formset = {
   fields: [],
-  list: new List.main.element('skillrates', 'Skill Rates')
+  list: new List.main.element('jobrates', 'Job Rates')
     .disableSearch()
     .setColumns([
       new List.column.element('rate', 'Rate')
@@ -28,7 +28,7 @@ const formset = {
 }
 
 const formadd = () => [
-  new Form.related.element('skill', 'Skill Name', Endpoints.Skill)
+  new Form.related.element('skill', 'Skill', Endpoints.Skill)
     .updateValues(['name'])
     .readOnly()
     .doNotSend(),
@@ -38,8 +38,7 @@ const formadd = () => [
     }),
   new Form.input.element('rate', 'Rate', InputType.Number)
     .setNumberOptions(0.01, 0),
-  new Form.related.element('skill_rel', 'Skill', Endpoints.CandidateSkill)
-    .updateValues(['skill'])
+  new Form.related.element('job', 'Job', Endpoints.Job)
     .hideField(),
 ];
 
@@ -48,12 +47,11 @@ const form = () => [
     .readOnly(),
   new Form.input.element('rate', 'Rate', InputType.Number)
     .setNumberOptions(0.01, 0),
-  new Form.related.element('skill_rel', 'Skill', Endpoints.Skill)
-    .updateValues(['skill'])
+  new Form.related.element('job', 'Job', Endpoints.Skill)
     .hideField(),
 ];
 
-export const skillrates = {
+export const jobrates = {
   formset,
   formadd,
   form,
