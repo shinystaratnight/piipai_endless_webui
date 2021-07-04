@@ -1,5 +1,5 @@
 import { Endpoints, Color, Models } from '@webui/data';
-import { createFilter, Type, Form } from '@webui/metadata';
+import { createFilter, Type, Form, List } from '@webui/metadata';
 
 const filters = {
   shift_started_at: createFilter(Type.Date, {
@@ -379,7 +379,23 @@ const list = {
         title: null,
         label: 'Invoice',
         delim: null
-      }
+      },
+
+      new List.column.element('candidate_notes', 'Notes').setContent([
+        new List.text.element('candidate_notes', 'Notes')
+      ]),
+
+      new List.column.element('client_notes', 'Notes').setContent([
+        new List.text.element('client_notes', 'Notes')
+      ]),
+
+      new List.column.element('candidate_files', 'Files').setContent([
+        new List.text.element('candidate_files', 'Files')
+      ]),
+
+      new List.column.element('client_files', 'Files').setContent([
+        new List.text.element('client_files', 'Files')
+      ])
     ],
     tabs: [
       {
@@ -396,6 +412,16 @@ const list = {
         label: 'Invoice',
         is_collapsed: true,
         fields: ['invoice']
+      },
+      {
+        label: 'Candidate',
+        is_collapsed: true,
+        fields: ['candidate_notes', 'candidate_files']
+      },
+      {
+        label: 'Client',
+        is_collapsed: true,
+        fields: ['client_notes', 'client_files']
       }
     ],
     pagination_label: 'Timesheet Entry',
