@@ -123,7 +123,6 @@ export class FormVacancyDatesComponent
   }
 
   public selectVacancyDate(e: NgbDate, time = this.timeInstance) {
-    console.log(e);
     if (e && !this.updating) {
       this.updating = true;
       const { year, month, day } = e;

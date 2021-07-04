@@ -548,5 +548,14 @@
   "earned": "Earned",
   "hourly_work": "Hourly work",
   "last_month": "Last month",
-  "total": "Total"
+  "total": "Total",
+  "filter.recruitment_agent.label": "Recruitment agent",
+  "filter.candidate_price.undefined": "Show profiles for sale",
+  "filter.candidate_price.label": "Profile Price",
+  "filter.transportation_to_work.undefined": "",
+  "filter.created_at.yesterday": "Yesterday",
+  "filter.created_at.today": "Today",
+  "filter.created_at.from": "From",
+  "filter.created_at.to": "To",
+  "filter.created_at.label": "Created at"
 }

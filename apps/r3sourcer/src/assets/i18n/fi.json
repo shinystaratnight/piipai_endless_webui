@@ -549,5 +549,14 @@
   "earned": "Ansaittu",
   "hourly_work": "Toimintatyypit",
   "last_month": "Viime kuukausi",
-  "total": "Kaikki yhteensä"
+  "total": "Kaikki yhteensä",
+  "filter.recruitment_agent.label": "",
+  "filter.candidate_price.undefined": "",
+  "filter.candidate_price.label": "",
+  "filter.transportation_to_work.undefined": "",
+  "filter.created_at.yesterday": "",
+  "filter.created_at.today": "",
+  "filter.created_at.from": "",
+  "filter.created_at.to": "",
+  "filter.created_at.label": ""
 }

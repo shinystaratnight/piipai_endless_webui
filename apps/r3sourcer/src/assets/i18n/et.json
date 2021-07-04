@@ -549,5 +549,14 @@
   "earned": "Teenitud",
   "hourly_work": "Tegevuse liigid",
   "last_month": "Eelmine kuu",
-  "total": "Kokku"
+  "total": "Kokku",
+  "filter.recruitment_agent.label": "",
+  "filter.candidate_price.undefined": "",
+  "filter.candidate_price.label": "",
+  "filter.transportation_to_work.undefined": "",
+  "filter.created_at.yesterday": "",
+  "filter.created_at.today": "",
+  "filter.created_at.from": "",
+  "filter.created_at.to": "",
+  "filter.created_at.label": ""
 }
