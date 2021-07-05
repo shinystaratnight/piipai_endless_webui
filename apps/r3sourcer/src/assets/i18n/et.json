@@ -532,5 +532,7 @@
   "earned": "Teenitud",
   "hourly_work": "Tegevuse liigid",
   "last_month": "Eelmine kuu",
-  "total": "Kokku"
+  "total": "Kokku",
+  "candidate_notes.label": "Märkused",
+  "client_notes.label": "Märkused"
 }

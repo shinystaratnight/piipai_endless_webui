@@ -1669,15 +1669,8 @@ export class DynamicListComponent
     this.open(this.mapModal, { size: 'lg', windowClass: 'fillin-map' });
   }
 
-  handleFormClose(result: Promise<Status>) {
-    result
-      .then(() => {
-        this.event.emit({
-          type: 'update',
-          list: this.config.list.list
-        });
-      })
-      .catch(() => {});
+  handleFormClose(result: Promise<Status>, refresh: boolean = true) {
+    return result.then(() => refresh && this.refreshList()).catch(() => {});
   }
 
   public submitTimesheet(e) {
@@ -1747,7 +1740,7 @@ export class DynamicListComponent
     }
   }
 
-  public evaluate(e, data?) {
+  public evaluate(e, data?, refresh = true) {
     if (!data) {
       data = this.getRowData(e);
     }
@@ -1766,7 +1759,7 @@ export class DynamicListComponent
           name: contact.__str__
         },
         data: {
-          evaluation_score: 1
+          evaluation_score: 5
         }
       };
 
@@ -1775,7 +1768,7 @@ export class DynamicListComponent
         windowClass: 'small-modal'
       });
       this.modalRef.componentInstance.config = this.modalInfo;
-      this.handleFormClose(this.modalRef.result);
+      return this.handleFormClose(this.modalRef.result, refresh);
     }
   }
 
@@ -1939,10 +1932,43 @@ export class DynamicListComponent
 
   public approveTimesheet(e) {
     const data = this.getRowData(e);
-    const { shift_started_at, shift_ended_at, break_started_at, break_ended_at } = data;
+    const {
+      shift_started_at,
+      shift_ended_at,
+      break_started_at,
+      break_ended_at
+    } = data;
     const signature = data.company.supervisor_approved_scheme.includes(
       'SIGNATURE'
     );
+
+    const approveTimesheet = () => {
+      this.genericFormService
+        .editForm(`${Endpoints.Timesheet}${data.id}/approve/`, {
+          shift_started_at,
+          shift_ended_at,
+          break_started_at,
+          break_ended_at,
+          send_candidate_message: false,
+          send_supervisor_message: false,
+          no_break: false
+        })
+        .pipe(
+          catchError((err) => {
+            const message = err.errors.non_field_errors[0];
+            this.toastr.sendMessage(message, MessageType.Error);
+
+            return of(false);
+          })
+        )
+        .subscribe((response) => {
+          if (typeof response === 'boolean') {
+            return;
+          }
+
+          this.refreshList();
+        });
+    };
 
     if (data) {
       e.el.endpoint = this.format(this.evaluateEndpoint, data);
@@ -1995,31 +2021,11 @@ export class DynamicListComponent
         });
       } else if (!data.evaluated) {
         this.approveEndpoint = `${Endpoints.Timesheet}${data.id}/approve/`;
-        this.evaluate(e, data);
+        this.evaluate(e, data, false).then(() => {
+          approveTimesheet();
+        });
       } else {
-        this.genericFormService
-          .editForm(`${Endpoints.Timesheet}${data.id}/approve/`, {
-            shift_started_at,
-            shift_ended_at,
-            break_started_at,
-            break_ended_at,
-            send_candidate_message: false,
-            send_supervisor_message: false,
-            no_break: false
-          })
-          .pipe(catchError((err) => {
-            const message = err.errors.non_field_errors[0];
-            this.toastr.sendMessage(message, MessageType.Error);
-
-            return of(false);
-          }))
-          .subscribe((response) => {
-            if (typeof response === 'boolean') {
-              return;
-            }
-
-            this.refreshList();
-          });
+        approveTimesheet();
       }
     }
   }
