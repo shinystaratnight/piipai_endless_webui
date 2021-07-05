@@ -1905,7 +1905,7 @@ export class DynamicListComponent
         }
       };
 
-      let windowClass = 'approve-modal visible-mode';
+      let windowClass = 'approve-modal';
 
       if (signature) {
         this.modalInfo.signature = {

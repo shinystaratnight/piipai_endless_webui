@@ -55,7 +55,7 @@
     box-sizing: content-box;
 
     .form-element {
-      &-content {
+      &-content:not(.full-width) {
         flex-wrap: nowrap;
 
         max-width: 195px;
