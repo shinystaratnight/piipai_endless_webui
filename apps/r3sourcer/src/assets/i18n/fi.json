@@ -532,5 +532,7 @@
   "earned": "Ansaittu",
   "hourly_work": "Toimintatyypit",
   "last_month": "Viime kuukausi",
-  "total": "Kaikki yhteensä"
+  "total": "Kaikki yhteensä",
+  "candidate_notes.label": "Huomautuksia",
+  "client_notes.label": "Huomautuksia"
 }

@@ -532,5 +532,7 @@
   "earned": "Заработано",
   "hourly_work": "Почасовая работа",
   "last_month": "Прошлый месяц",
-  "total": "Всего"
+  "total": "Всего",
+  "candidate_notes.label": "Заметки",
+  "client_notes.label": "Заметки"
 }

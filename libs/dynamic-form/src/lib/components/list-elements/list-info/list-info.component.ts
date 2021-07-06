@@ -45,7 +45,6 @@ export class ListInfoComponent implements OnInit {
   hideAvailability: boolean;
 
   public ngOnInit() {
-    console.log(this);
     if (this.config.values) {
       const keys = Object.keys(this.config.values);
 
