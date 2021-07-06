@@ -532,5 +532,7 @@
   "earned": "Earned",
   "hourly_work": "Hourly work",
   "last_month": "Last month",
-  "total": "Total"
+  "total": "Total",
+  "candidate_notes.label": "Notes",
+  "client_notes.label": "Notes"
 }
