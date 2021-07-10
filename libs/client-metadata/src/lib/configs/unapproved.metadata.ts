@@ -1,4 +1,4 @@
-import { Endpoints } from '@webui/data';
+import { ApiMethod, Endpoints } from '@webui/data';
 import { List } from '@webui/metadata';
 
 import {
@@ -33,7 +33,7 @@ const list = function () {
             property: 'id',
             required: true,
             multiple: true,
-            method: 'PUT',
+            method: ApiMethod.PUT,
             bodyFields: [
               'shift_started_at',
               'shift_ended_at',
