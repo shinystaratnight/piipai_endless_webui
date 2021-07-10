@@ -1,7 +1,7 @@
 export enum ApiMethod {
-  DELETE,
-  PUT,
-  PATCH,
-  GET,
-  POST
+  DELETE = 'delete',
+  PUT = 'put',
+  PATCH = 'patch',
+  GET = 'get',
+  POST = 'post'
 }
