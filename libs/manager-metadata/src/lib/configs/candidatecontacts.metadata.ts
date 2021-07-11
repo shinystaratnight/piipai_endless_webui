@@ -1,4 +1,4 @@
-import { Endpoints } from '@webui/data';
+import { Endpoints, NoteModel } from '@webui/data';
 import { createFilter, Type } from '@webui/metadata';
 
 const filters = {
@@ -1348,25 +1348,7 @@ const form = [
         },
         help: 'Here you can see favorite companies for candidate'
       },
-      {
-        endpoint: Endpoints.Note,
-        templateOptions: {
-          label: 'Notes',
-          type: 'list',
-          add_label: '+ Add',
-          text: 'Notes'
-        },
-        add_form: true,
-        collapsed: false,
-        prefilled: {
-          object_id: '{id}',
-          content_type: '{model_content_type}'
-        },
-        type: 'list',
-        query: {
-          object_id: '{id}'
-        }
-      },
+      new NoteModel().formListElement(),
       {
         endpoint: `${Endpoints.JobOffer}candidate/`,
         templateOptions: {

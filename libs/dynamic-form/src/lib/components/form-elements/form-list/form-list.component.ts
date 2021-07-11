@@ -238,7 +238,7 @@ export class FormListComponent implements OnInit, OnDestroy {
     });
   }
 
-  public formEvent(e, closeModal) {
+  public formEvent(e, closeModal?) {
     if (e.type === 'saveStart') {
       this.saveProcess = true;
     }

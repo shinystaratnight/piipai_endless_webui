@@ -6,6 +6,7 @@ export abstract class Model implements IModel {
   readonly key: Models;
   readonly label: string;
   readonly endpoint: Endpoints;
+  readonly translateKey: string;
 
   formElement(config = {} as OverrideConfig) {
     const { key, label } = config;
@@ -14,6 +15,16 @@ export abstract class Model implements IModel {
       key || this.key,
       label || this.label,
       this.endpoint
+    );
+  }
+
+  protected _formListElement(config = {} as OverrideConfig) {
+    const { label } = config;
+
+    return new Form.list.element(
+      label || this.label,
+      this.endpoint,
+      this.translateKey
     );
   }
 }
