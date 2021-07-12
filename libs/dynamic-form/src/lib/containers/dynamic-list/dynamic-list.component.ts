@@ -65,6 +65,7 @@ import {
   EvaluateModalComponent,
   Status,
   ClientTimesheetModalComponent,
+  ChangeTimesheetModalComponent,
   // Change timesheet modal
 } from '../../modals';
 import { FilterEvent } from '../../interfaces';
@@ -1862,7 +1863,6 @@ export class DynamicListComponent
       const contact = data.job_offer.candidate_contact.contact;
       const score = this.getPropValue(data, 'evaluation.evaluation_score');
 
-
       this.modalInfo = {
         changeEndpoint: e.el.endpoint,
         evaluateEndpoint: `${Endpoints.Timesheet}${data.id}/evaluate/`,
@@ -1933,12 +1933,13 @@ export class DynamicListComponent
       // this.open(this.approveSignature, { size: 'lg', windowClass });
 
 
-      this.modalRef = this.modalService.open(ClientTimesheetModalComponent, {
+      this.modalRef = this.modalService.open(ChangeTimesheetModalComponent, {
         backdrop: 'static',
         size: 'lg',
         windowClass
       });
       this.modalRef.componentInstance.config = this.modalInfo;
+      this.modalRef.componentInstance.timesheet = data;
       this.handleFormClose(this.modalRef.result);
     }
   }
@@ -2036,6 +2037,15 @@ export class DynamicListComponent
         // this.open(this.approveSignature, {
         //   windowClass: 'approve-modal approve'
         // });
+
+        this.modalRef = this.modalService.open(ClientTimesheetModalComponent, {
+          // backdrop: 'static',
+          // size: 'lg',
+          windowClass: 'approve-modal approve'
+        });
+        this.modalRef.componentInstance.config = this.modalInfo;
+        this.modalRef.componentInstance.timesheet = data;
+        this.handleFormClose(this.modalRef.result);
       } else if (!data.evaluated) {
         this.approveEndpoint = `${Endpoints.Timesheet}${data.id}/approve/`;
         this.evaluate(e, data, false).then(() => {

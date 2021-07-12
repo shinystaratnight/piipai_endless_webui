@@ -66,12 +66,11 @@
                   muted: true
                 }
               "></ng-container>
-            <ng-container *ngTemplateOutlet="
-                line;
+            <ng-container *ngTemplateOutlet="line;
                 context: {
                   label: 'Total time',
                   key: 'total_time.label',
-                  value: config.timesheet.total,
+                  value: model.totalTime,
                   totalTime: true
                 }
               "></ng-container>
@@ -79,10 +78,7 @@
 
           <div class="mobile-version">
             <div class="date">
-              {{
-              config.timesheet.unformated_date
-              | dateFormat: 'DD MMM YYYY'
-              }}
+              {{ model.data.shift_started_at | dateFormat: 'DD MMM YYYY' }}
             </div>
 
             <ng-container *ngTemplateOutlet="

@@ -8,6 +8,8 @@ export abstract class Model implements IModel {
   readonly endpoint: Endpoints;
   readonly translateKey: string;
 
+  constructor(readonly data = {}) {}
+
   formElement(config = {} as OverrideConfig) {
     const { key, label } = config;
 
