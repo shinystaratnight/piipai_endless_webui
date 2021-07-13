@@ -64,9 +64,8 @@ import {
   TrackingModalComponent,
   EvaluateModalComponent,
   Status,
-  ClientTimesheetModalComponent,
   ChangeTimesheetModalComponent,
-  // Change timesheet modal
+  ApproveTimesheetModalComponent,
 } from '../../modals';
 import { FilterEvent } from '../../interfaces';
 import { formatCurrency, getCurrencySymbol } from '@angular/common';
@@ -117,7 +116,6 @@ export class DynamicListComponent
 
   @ViewChild('modal') modal;
   @ViewChild('confirmModal') confirmModal;
-  // @ViewChild('evaluateModal') evaluateModal;
   @ViewChild('sendMessageModal') sendMessageModal;
   @ViewChild('pdfDocumentModal') pdfDocumentModal;
   @ViewChild('datatable') datatable;
@@ -189,7 +187,6 @@ export class DynamicListComponent
   public sortedField: any;
   public isMobileDevice = isMobile() && isCandidate();
   public approveInvoice: boolean;
-  // public timeInstance = getTimeInstance();
 
   get hasSelectColumn() {
     return (
@@ -1774,7 +1771,7 @@ export class DynamicListComponent
     }
   }
 
-  public sendSignature(submitButton: any) {
+  public sendSignature(submitButton?: any) {
     if (this.modalInfo.signature) {
       const image = this.modalInfo.signature.value;
 
@@ -1849,9 +1846,6 @@ export class DynamicListComponent
         });
       });
   }
-
-
-  // Client Change Timesheet data
 
   public changeTimesheet(e) {
     const data = this.getRowData(e);
@@ -1930,9 +1924,6 @@ export class DynamicListComponent
         }
       });
 
-      // this.open(this.approveSignature, { size: 'lg', windowClass });
-
-
       this.modalRef = this.modalService.open(ChangeTimesheetModalComponent, {
         backdrop: 'static',
         size: 'lg',
@@ -1943,10 +1934,6 @@ export class DynamicListComponent
       this.handleFormClose(this.modalRef.result);
     }
   }
-
-  // public landscape() {
-  //   return isMobile() && getOrientation() === 90;
-  // }
 
   public approveTimesheet(e) {
     const data = this.getRowData(e);
@@ -2031,16 +2018,12 @@ export class DynamicListComponent
             evaluation_score: score
           },
           signatureStep: true,
-          approve: true
+          approve: true,
+          evaluateEvent: this.evaluateEvent.bind(this),
+          sendSignature: this.sendSignature.bind(this)
         };
 
-        // this.open(this.approveSignature, {
-        //   windowClass: 'approve-modal approve'
-        // });
-
-        this.modalRef = this.modalService.open(ClientTimesheetModalComponent, {
-          // backdrop: 'static',
-          // size: 'lg',
+        this.modalRef = this.modalService.open(ApproveTimesheetModalComponent, {
           windowClass: 'approve-modal approve'
         });
         this.modalRef.componentInstance.config = this.modalInfo;

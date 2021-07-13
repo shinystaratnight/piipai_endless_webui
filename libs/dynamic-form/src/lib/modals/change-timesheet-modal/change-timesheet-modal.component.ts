@@ -10,7 +10,6 @@ import { Modal, Status } from "../modal/modal.component";
 type ClientTimesheetModalConfig = {
   endpoint: Endpoints;
   evaluateEvent(e: any, closeModal: Function);
-  updateSignature(e: any);
   sendSignature(submitButton: any);
 
   changeEndpoint: string;
@@ -35,7 +34,7 @@ type ClientTimesheetModalConfig = {
   };
   signature: {
     endpoint: string;
-    value: '';
+    value: string;
   };
   timesheet: any;
 };
@@ -75,5 +74,9 @@ export class ChangeTimesheetModalComponent extends Modal {
 
   public errorEvent() {
     this.saveProcess = false;
+  }
+
+  public updateSignature(signature: string) {
+    this.config.signature.value = signature;
   }
 }

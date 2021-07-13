@@ -25,7 +25,6 @@
   <div class="modal-body">
     <div [class.steps]="isMobile()" [class.signature-step]="isSignatureStep">
       <div class="content-info">
-        // Not agree timesheet
         <div [hidden]="!config.timesheetData" class="form-wrapper">
           <app-generic-form
             [needData]="false"
@@ -74,7 +73,7 @@
           <app-signature
             #signatureCanvas
             [supervisorSignature]="config.supervisor_signature"
-            (signature)="config.updateSignature($event)"
+            (signature)="updateSignature($event)"
           ></app-signature>
         </div>
       </div>
