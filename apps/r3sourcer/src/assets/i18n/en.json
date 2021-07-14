@@ -9,9 +9,7 @@
 	"Jobsite.back": "Back to jobsite list",
 	"Scores.label": "Scores",
 	"Tags.label": "Tags",
-	"__str__": {
-		"label": "Job"
-	},
+  "__str__.label": "Job",
 	"accept": "Accept",
 	"actions": "Actions",
 	"actions.label": "Actions",
@@ -21,9 +19,7 @@
 	"add_shifts_and_workers": "Add shifts and workers",
 	"add_shifts_and_workers.description": "Create dates, shifts and time for tasks, add workers.",
 	"additional_information": "Additional information",
-	"address": {
-		"label": "Address"
-	},
+  "address.label": "Address",
 	"all": "All",
 	"approve": "Approve",
 	"approve.label": "Approve/Change",
@@ -31,33 +27,21 @@
 	"approved": "Approved",
 	"are_you_sure": "Are you sure?",
 	"autocomplete": "Autocomplete",
-	"available": {
-		"label": "Available"
-	},
+  "available.label": "Available",
 	"back": "Back",
 	"bank_and_superannuation_informatioin": "Bank and superannuation information",
 	"birthday": "Birthday",
 	"bmi.label": "Bmi",
 	"break": "Break",
-	"break_ended_at": {
-		"label": "Break End"
-	},
-	"break_started_at": {
-		"label": "Break Start"
-	},
+  "break_ended_at.label": "Break End",
+  "break_started_at.label": "Break Start",
 	"button_no": "No",
 	"button_yes": "Yes",
 	"calendar": "Calendar",
 	"cancel": "Cancel",
-	"candidate": {
-		"plural": "Candidates"
-	},
-	"candidate_contact": {
-		"label": "Candidate contact"
-	},
-	"candidate_rate": {
-		"label": "Candidate rate override"
-	},
+  "candidate.plural": "Candidates",
+  "candidate_contact.label": "Candidate contact",
+  "candidate_rate.label": "Candidate rate override",
 	"candidate_score": "Candidate Score",
 	"candidate_score.client_feedback.label": "Client feedback",
 	"candidate_score.loyalty.label": "Loyalty",
@@ -74,24 +58,16 @@
 	"candidate_scores.reliability.label": "Reliability",
 	"candidate_scores.skill_score": "Average skills",
 	"candidate_scores.skill_score.label": "Average skills",
-	"candidates": {
-		"label": "Select workers"
-	},
+  "candidate.label": "Select workers",
 	"change": "Change",
 	"change_password": "Change Password",
-	"city": {
-		"label": "City"
-	},
+  "city.label": "City",
 	"clear": "Clear",
 	"client.label": "Client",
-	"client/candidate_rate": {
-		"label": "Rate"
-	},
+  "client/candidate_rate.label": "Rate",
 	"close_without_save": "Close without save",
 	"collapse": "Without time",
-	"company": {
-		"label": "Company"
-	},
+  "company.label": "Company",
 	"confirm": "Confirm?",
 	"confirm_going_to_work": "Confirm if you are going to work",
 	"confirm_password.description": "To confirm, type the new password again.",
@@ -110,24 +86,16 @@
 	"contact.title.label": "Title",
 	"contact_information": "Contact information",
 	"create_job": "Create Job",
-	"created": {
-		"label": "Created"
-	},
-	"customer_company": {
-		"label": "Client"
-	},
-	"customer_representative": {
-		"label": "Client representative",
-		"placeholder": "Select"
-	},
+  "created.label": "Created",
+  "customer_company.label": "Client",
+  "customer_representative.label": "Client representative",
+  "customer_representative.placeholder": "Select",
 	"date": "Date",
 	"date.shift_date.label": "Date",
 	"day": "Day",
 	"decline": "Decline",
 	"default": "default",
-	"default_shift_starting_time": {
-		"label": "Default Shift Starting Time"
-	},
+  "default_shift_starting_time.label": "Default Shift Starting Time",
 	"delete": "Delete",
 	"distance": "Distance to the jobsite",
 	"distance.distance_to_jobsite.label": "Distance",
@@ -137,60 +105,41 @@
 	"edit": "Edit",
 	"edit_mode": "Edit mode",
 	"edit_submission": "Edit submission",
-	"email": {
-		"description": "Password reset instructions will be sent to this email address.",
-		"label": "Email"
-	},
+  "email.description": "Password reset instructions will be sent to this email address.",
+  "email.label": "Email",
 	"emergency_contact_name.label": "Name",
 	"emergency_contact_phone.label": "Phone Number",
 	"end": "End",
-	"end_date": {
-		"label": "End Date"
-	},
+  "end_date.label": "End Date",
 	"enter_location": "Enter a location",
-	"evaluate": {
-		"button": "Evaluate",
-		"label": "Evaluate"
-	},
+  "evaluate.button": "Evaluate",
+  "evaluate.label": "Evaluate",
 	"evaluated_at.label": "Evaluated at",
 	"evaluation": "Evaluation",
 	"evaluation_score.label": "Evaluation",
 	"expand": "Set times",
 	"extend": "Extend",
-	"extendCandidates": {
-		"text": "Candidates"
-	},
-	"extendDates": {
-		"text": "Dates"
-	},
-	"favourite": {
-		"label": "Favourite"
-	},
+  "extendCandidates.text": "Candidates",
+  "extendDates.text": "Dates",
+  "favourite.label": "Favourite",
 	"female": "Female",
 	"file": "file",
 	"file_size": "File size is too large!",
-	"fill_in": {
-		"label": "Fill in"
-	},
+  "fill_in.label": "Fill in",
 	"fill_shifts": "Fills shifts automatically using criteria",
 	"filled": "Filled",
 	"filled_shifts": "Filled shifts",
-	"filter": {
-		"active_states.label": "Status",
-		"client.label": "Client",
-		"contact.gender.female": "Female",
-		"contact.gender.label": "Gender",
-		"contact.gender.male": "Male",
-		"plural": "Filters",
-		"skill": {
-			"label": "Skill"
-		},
-		"tag.label": "Tag"
-	},
+  "filter.tag.label": "Tag",
+  "filter.skill.label": "Skill",
+  "filter.active_states.label": "Status",
+  "filter.client.label": "Client",
+  "filter.contact.gender.female": "Female",
+  "filter.contact.gender.label": "Gender",
+  "filter.contact.gender.male": "Male",
+  "filter.plural": "Filters",
 	"filter.available.label": "Available",
 	"filter.available.partialy_available": "Show partially available",
 	"filter.candidate.label": "Candidate",
-	"filter.client.label": "",
 	"filter.date.label": "Shifts",
 	"filter.distance_to_jobsite.label": "Distance",
 	"filter.jobsite.label": "Jobsite",
@@ -219,40 +168,30 @@
 	"fulfilled": "Fulfilled",
 	"gender.female": "Female",
 	"gender.male": "Male",
-	"group": {
-		"additional_info": "Additional info",
-		"client": "Client",
-		"contacts": "Contacts",
-		"emergency_contact": "Emergency contact",
-		"general": "General",
-		"phisical_parameters": "Physical parameters",
-		"portfolio_manager": "Portfolio Manager",
-		"primary_contact": "Primary Contact",
-		"provider": "Provider",
-		"rating": "Rating",
-		"residency": "Residency",
-		"scores": "Scores",
-		"times": "Times"
-	},
+  "group.additional_info": "Additional info",
+  "group.client": "Client",
+  "group.contacts": "Contacts",
+  "group.emergency_contact": "Emergency contact",
+  "group.general": "General",
+  "group.phisical_parameters": "Physical parameters",
+  "group.portfolio_manager": "Portfolio Manager",
+  "group.primary_contact": "Primary Contact",
+  "group.provider": "Provider",
+  "group.rating": "Rating",
+  "group.residency": "Residency",
+  "group.scores": "Scores",
+  "group.times": "Times",
 	"height.label": "Height, cm",
-	"hourly_rate": {
-		"label": "Hourly rate"
-	},
-	"hourly_rate_default": {
-		"label": "Candidate rate override"
-	},
+  "hourly_rate.label": "Hourly rate",
+  "hourly_rate_default.label": "Candidate rate override",
 	"inactive_timesheet": "Inactive timesheet will be deleted in 48 hours",
 	"industry.description": "",
 	"industry.label": "Industry",
 	"industry.placeholder": "Select",
 	"industry_and_skills": "Industry and skills",
 	"info_layers": "Info layers",
-	"is_available": {
-		"label": "Status"
-	},
-	"job": {
-		"label": "Job"
-	},
+  "is_available.label": "Status",
+  "job.label": "Job",
 	"job_site_-_map.label": "Job site - map",
 	"job_site_contact.label": "Job site contact",
 	"joboffer": "Job Offer",
@@ -260,18 +199,16 @@
 	"jobsite.label": "Jobsite",
 	"jobsite.placeholder": "Select",
 	"layers": "Layers",
-	"list": {
-		"status": [
-			"New",
-			"Pre-Shift check pending",
-			"Pre-Shift check confirmed",
-			"Pre-Shift check failed",
-			"Submit pending",
-			"Approval pending",
-			"Supervisor modified",
-			"Approved"
-		]
-	},
+  "list.status": [
+    "New",
+    "Pre-Shift check pending",
+    "Pre-Shift check confirmed",
+    "Pre-Shift check failed",
+    "Submit pending",
+    "Approval pending",
+    "Supervisor modified",
+    "Approved"
+  ],
 	"list.transportation_to_work.1": "Own Car",
 	"list.transportation_to_work.2": "Public Transportation",
 	"local_time": "Local time",
@@ -284,40 +221,24 @@
 	"login.title": "Login",
 	"make_default": "make default",
 	"male": "Male",
-	"master_company": {
-		"label": "Provider company",
-		"placeholder": "Select or add new"
-	},
+  "master_company.placeholder": "Select or add new",
+  "master_company.label": "Provider company",
 	"max_size": "Maximum allowed file size is 10 Mb.",
-	"mobileTimes": {
-		"break_started_at": {
-			"label": "Break start/end"
-		},
-		"shift_ended_at": {
-			"label": "Shift start/end"
-		},
-		"shift_started_at": {
-			"label": "Shift date"
-		}
-	},
+  "mobileTimes.break_started_at.label": "Break start/end",
+  "mobileTimes.shift_ended_at.label": "Shift start/end",
+  "mobileTimes.shift_started_at.label": "Shift date",
 	"month": "Month",
 	"more": "More",
 	"nationality.label": "Nationality",
 	"nationality.placeholder": "Select",
 	"next": "Next step",
-	"noBreak": {
-		"text": "No Break"
-	},
+  "noBreak.text": "No Break",
 	"no_record": "No record",
 	"no_tracking_data": "No tracking info",
 	"not_started_yet": "Not started yet",
-	"note": {
-		"label": "Notes"
-	},
-	"notes": {
-		"description": "Job Description/Instructions for candidate",
-		"label": "Notes"
-	},
+  "note.label": "Notes",
+  "notes.description": "Job Description/Instructions for candidate",
+  "notes.label": "Notes",
 	"old_password.label": "Current Password",
 	"open": "Open",
 	"open_in_tab": "Open in new tab",
@@ -332,66 +253,34 @@
 	"password_reset": "Password Reset",
 	"pending": "Pending",
 	"pending_shifts": "Pending shifts",
-	"personal_info": {
-		"label": "Candidate/Position"
-	},
+  "personal_info.label": "Candidate/Position",
 	"photo": "Photo",
-	"portfolio_manager": {
-		"contact": {
-			"email": {
-				"label": "E-mail"
-			},
-			"phone_mobile": {
-				"label": "Phone number"
-			}
-		},
-		"job_title": {
-			"label": "Job Title"
-		},
-		"label": "Portfolio manager",
-		"placeholder": "Select or add new"
-	},
-	"position": {
-		"label": "Position",
-		"placeholder": "Please select role/trade",
-		"position.placeholder": ""
-	},
-	"primary_contact": {
-		"contact": {
-			"email": {
-				"label": "E-mail"
-			},
-			"phone_mobile": {
-				"label": "Phone number"
-			}
-		},
-		"job_title": {
-			"label": "Job Title"
-		},
-		"label": "Name"
-	},
+  "portfolio_manager.phone_mobile.label": "Phone number",
+  "portfolio_manager.contact.email.label": "E-mail",
+  "portfolio_manager.job_title.label": "Job Title",
+  "portfolio_manager.label": "Portfolio manager",
+  "portfolio_manager.placeholder": "Select or add new",
+  "position.label": "Position",
+  "position.placeholder": "Please select role/trade",
+  "position.position.placeholder": "",
+  "primary_contact.contact.email.label": "E-mail",
+  "primary_contact.contact.phone_mobile.label": "Phone number",
+  "primary_contact.job_title.label": "Job Title",
+  "primary_contact.label": "Name",
 	"prior_experience.label": "Prior Experience",
 	"profile": "Profile",
-	"provider_company": {
-		"label": "Provider company",
-		"placeholder": "Select"
-	},
-	"provider_representative": {
-		"label": "Provider representative",
-		"placeholder": "Select"
-	},
-	"provider_signed_at": {
-		"label": "Accepted at"
-	},
+  "provider_company.label": "Provider company",
+  "provider_company.placeholder": "Select",
+  "provider_representative.label": "Provider representative",
+  "provider_representative.placeholder": "Select",
+  "provider_signed_at.label": "Accepted at",
 	"rate.label": "Rate",
 	"reference_timesheet.label": "Related timesheet",
 	"registration.fill_error": "Please fill all the REQUIRED fields",
 	"registration.of": "of",
 	"registration.register": "Register",
 	"registration.step": "step",
-	"regular_company": {
-		"label": "Client"
-	},
+  "regular_company.label": "Client",
 	"reset": "Reset",
 	"reset_all": "Reset All",
 	"reset_dates": "Reset selected dates",
@@ -410,47 +299,24 @@
 	"shift.date.job.position.label": "Position",
 	"shift.date.shift_date.label": "Shift info",
 	"shift.label": "Shift",
-	"shift_ended_at": {
-		"label": "Shift End"
-	},
+  "shift_ended_at.label": "Shift End",
 	"shift_ended_at_utc.label": "Shift date",
 	"shift_start_end": "Shift start/end",
-	"shift_started_at": {
-		"label": "Shift Start"
-	},
-	"shift_starting_time": {
-		"label": "Shift Starting Time"
-	},
+  "shift_started_at..label": "Shift Start",
+  "shift_starting_time.label": "Shift Starting Time",
 	"shifts": "Shifts",
-	"short_name": {
-		"label": "Site name"
-	},
+  "short_name.label": "Site name",
 	"show_map": "Show map",
 	"signature": "Signature",
-	"site_name": {
-		"label": "Site Name"
-	},
+  "site_name.label": "Site Name",
 	"skill.label": "Skill",
 	"skillrel.label": "Candidate Skill",
-	"sms_history": {
-		"label": "SMS History"
-	},
+  "sms_history.label": "SMS History",
 	"start": "Start",
-	"start_date": {
-		"label": "Start Date"
-	},
-	"state": {
-		"label": "State"
-	},
-	"status": {
-		"label": "Status",
-		"status": {
-			"label": "Waiting submission"
-		},
-		"supervisor_approved": {
-			"label": "Approved"
-		}
-	},
+  "start_date.label": "Start Date",
+  "state.label": "State",
+  "status.supervisor_approved.label": "Approved",
+  "status.status.label": "Waiting submission",
 	"status.label": "Status",
 	"submit": "Submit",
 	"submit_timesheet": "Submit your timesheet",
@@ -484,9 +350,7 @@
 	"tag.label": "Tag",
 	"take_a_photo": "Take a photo",
 	"tax_file_number.label": "Tax file number",
-	"time": {
-		"label": "Shift start time"
-	},
+  "time.label": "Shift start time",
 	"times.break_started_at.label": "Break",
 	"times.label": "Times",
 	"times.shift.date.job.notes.label": "Notes",
@@ -504,23 +368,17 @@
 	"timesheet_will_approved": "Timesheet will be automatically approved in 4 hours",
 	"timesheetrates.label": "Skill Activities",
 	"totalTime.label": "Total time",
-	"total_time": {
-		"label": "Total time"
-	},
+  "total_time.label": "Total time",
 	"tracking.label": "Tracking",
 	"transportation_to_work.1": "Own Car",
 	"transportation_to_work.2": "Public Transportation",
 	"transportation_to_work.label": "Transportation to work",
 	"try_again": "Try again",
-	"unavailable": {
-		"label": "Unavailable"
-	},
+  "unavailable.label": "Unavailable",
 	"unfilled_shifts": "Unfilled shifts",
 	"unfulfilled": "Unfulfilled",
 	"update": "Update",
-	"updated": {
-		"label": "Updated"
-	},
+  "updated.label": "Updated",
 	"upload_file": "Upload new file",
 	"use_camera": "Use camera",
 	"username.placeholder": "Login",
@@ -529,13 +387,9 @@
 	"verified_by.label": "Verified by",
 	"week": "Week",
 	"weight.label": "Weight, kg",
-	"work_start_date": {
-		"label": "Work Start Date"
-	},
-	"workers": {
-		"label": "Workers",
-		"placeholder": "Workers"
-	},
+  "work_start_date.label": "Work Start Date",
+  "workers.label": "Workers",
+  "workers.placeholder": "Workers",
   "shift.date.__str__.label": "Shift date",
   "this_month": "This month",
   "this_year": "This year",
