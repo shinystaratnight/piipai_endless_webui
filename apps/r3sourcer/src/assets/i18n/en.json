@@ -557,5 +557,7 @@
   "filter.created_at.today": "Today",
   "filter.created_at.from": "From",
   "filter.created_at.to": "To",
-  "filter.created_at.label": "Created at"
+  "filter.created_at.label": "Created at",
+  "candidate_notes.label": "Notes",
+  "client_notes.label": "Notes"
 }

@@ -91,6 +91,13 @@ const form = function () {
             .setChildren([breakStartField(), breakEndField()])
         ])
       ]),
+
+    new Form.row.element()
+      .setChildren([
+        new Form.textarea.element('client_notes', 'Notes')
+          .setFullWidth()
+      ]),
+
     new Form.list.element('Skill Activities', Endpoints.TimesheetRates, 'timesheetrates')
       .setQuery({
         timesheet: '{id}'

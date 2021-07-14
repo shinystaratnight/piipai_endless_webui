@@ -1,4 +1,4 @@
-import { Endpoints } from '@webui/data';
+import { ApiMethod, Endpoints } from '@webui/data';
 import { List } from '@webui/metadata';
 
 import {
@@ -33,7 +33,7 @@ const list = function () {
             property: 'id',
             required: true,
             multiple: true,
-            method: 'PUT',
+            method: ApiMethod.PUT,
             bodyFields: [
               'shift_started_at',
               'shift_ended_at',
@@ -77,7 +77,35 @@ const list = function () {
 
         new List.column.element('traking', 'Tracking')
           .setHide()
-          .setContent([getTrackingElement()])
+          .setContent([getTrackingElement()]),
+
+        new List.column.element('candidate_notes', 'Notes').setContent([
+          new List.text.element('candidate_notes', 'Notes')
+        ]),
+
+        new List.column.element('client_notes', 'Notes').setContent([
+          new List.text.element('client_notes', 'Notes')
+        ]),
+
+        new List.column.element('candidate_files', 'Files').setContent([
+          new List.text.element('candidate_files', 'Files')
+        ]),
+
+        new List.column.element('client_files', 'Files').setContent([
+          new List.text.element('client_files', 'Files')
+        ])
+      ])
+      .setTabs([
+        {
+          fields: ['candidate_notes', 'candidate_files'],
+          is_collapsed: true,
+          label: 'Candidate'
+        },
+        {
+          fields: ['client_notes', 'client_files'],
+          is_collapsed: true,
+          label: 'Client'
+        }
       ])
   };
 };

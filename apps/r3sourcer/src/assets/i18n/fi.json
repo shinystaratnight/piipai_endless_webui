@@ -558,5 +558,7 @@
   "filter.created_at.today": "",
   "filter.created_at.from": "",
   "filter.created_at.to": "",
-  "filter.created_at.label": ""
+  "filter.created_at.label": "",
+  "candidate_notes.label": "Huomautuksia",
+  "client_notes.label": "Huomautuksia"
 }

@@ -12,9 +12,7 @@ import {
   getChangeButton
 } from './utils';
 
-
-
-const list = function() {
+const list = function () {
   return {
     list: new List.main.element('timesheet', 'Timesheet history')
       .setFilters([
@@ -22,7 +20,7 @@ const list = function() {
           key: 'shift_started_at',
           label: 'Shift Started at',
           yesterday: true,
-          today: true,
+          today: true
         }),
         createFilter(Type.Relared, {
           key: 'candidate',
@@ -38,7 +36,7 @@ const list = function() {
           key: 'primary_contact',
           label: 'Primary Contact',
           endpoint: `${Endpoints.CompanyContact}?company={session.data.contact.company_id}`
-        }),
+        })
       ])
       .disableEdit()
       .disableSearch()
@@ -120,7 +118,35 @@ const list = function() {
             getApproveButton().setShowIfRule([{ status: 5 }]),
 
             getChangeButton().setShowIfRule([{ status: 5 }])
-          ])
+          ]),
+
+        new List.column.element('candidate_notes', 'Notes').setContent([
+          new List.text.element('candidate_notes', 'Notes')
+        ]),
+
+        new List.column.element('client_notes', 'Notes').setContent([
+          new List.text.element('client_notes', 'Notes')
+        ]),
+
+        new List.column.element('candidate_files', 'Files').setContent([
+          new List.text.element('candidate_files', 'Files')
+        ]),
+
+        new List.column.element('client_files', 'Files').setContent([
+          new List.text.element('client_files', 'Files')
+        ])
+      ])
+      .setTabs([
+        {
+          fields: ['candidate_notes', 'candidate_files'],
+          is_collapsed: true,
+          label: 'Candidate'
+        },
+        {
+          fields: ['client_notes', 'client_files'],
+          is_collapsed: true,
+          label: 'Client'
+        }
       ])
   };
 };
