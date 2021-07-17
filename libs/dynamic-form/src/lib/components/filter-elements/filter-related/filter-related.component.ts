@@ -49,21 +49,10 @@ export class FilterRelatedComponent
   public defaultValue: any;
   public theme: string;
   public multiple: boolean;
-  public selected: any[];
+  public selected: any[] = [];
   public selectedValues: any[];
 
   public chashValues: any[];
-
-  public icons = {
-    r3sourcer: {
-      true: 'chevron-right',
-      false: 'chevron-down'
-    },
-    default: {
-      true: 'eye',
-      false: 'eye-slash'
-    }
-  };
 
   public cashResults: any[];
   public subscription: Subscription;
@@ -101,19 +90,12 @@ export class FilterRelatedComponent
     this.filterSubscription = this.fs.reset.subscribe(() =>
       this.updateFilter()
     );
-    this.isCollapsed =
-      this.query || document.body.classList.contains('r3sourcer')
-        ? false
-        : true;
     this.defaultValue = {
       [this.config.data.key]: '',
       [this.config.data.value]: this.multiple
         ? `Select ${this.config.label}`
         : 'All'
     };
-    this.theme = document.body.classList.contains('r3sourcer')
-      ? 'r3sourcer'
-      : 'default';
   }
 
   public ngAfterViewInit() {
@@ -413,13 +395,10 @@ export class FilterRelatedComponent
   public getOptions(value, concat = false) {
     const formatString = new FormatString();
     const endpoint = this.config.data.endpoint.includes('{')
-      ? formatString.format(
-          this.config.data.endpoint,
-          {
-            ...this.siteSettingsService.settings,
-            session: this.userService.user
-          }
-        )
+      ? formatString.format(this.config.data.endpoint, {
+          ...this.siteSettingsService.settings,
+          session: this.userService.user
+        })
       : this.config.data.endpoint;
     const offset = this.item.lastElement;
     let query = '';
@@ -538,6 +517,10 @@ export class FilterRelatedComponent
   public removeItem(item) {
     item.checked = false;
     this.setValue(item, this.previewList);
+  }
+
+  public getTranslateKey() {
+    return `filter.${this.config.key}.label`;
   }
 
   @HostListener('document:click', ['$event'])

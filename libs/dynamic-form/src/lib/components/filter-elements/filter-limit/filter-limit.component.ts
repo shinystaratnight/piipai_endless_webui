@@ -32,7 +32,7 @@ export class FilterLimitComponent implements OnInit, OnDestroy {
   ) {}
 
   public ngOnInit() {
-    this.querySubscription = this.route.queryParams.subscribe(param => {
+    this.querySubscription = this.route.queryParams.subscribe((param) => {
       setTimeout(() => {
         if (!(this.cd as any).destroyed) {
           this.updateFilter();
@@ -50,7 +50,7 @@ export class FilterLimitComponent implements OnInit, OnDestroy {
   public onChange() {
     let query = '';
 
-    this.inputs.forEach(input => {
+    this.inputs.forEach((input) => {
       if (input.data || input.data === 0) {
         query += `${input.query}=${input.data}&`;
       }
@@ -67,7 +67,7 @@ export class FilterLimitComponent implements OnInit, OnDestroy {
 
   public resetFilter() {
     this.query = '';
-    this.inputs = this.inputs.map(input =>
+    this.inputs = this.inputs.map((input) =>
       Object.assign({}, input, { data: null })
     );
     this.fs.generateQuery(this.query, this.config.key, this.config.listName);
@@ -103,13 +103,13 @@ export class FilterLimitComponent implements OnInit, OnDestroy {
 
     const queryObject = this.parseQueryString(query);
 
-    this.inputs.forEach(input => {
+    this.inputs.forEach((input) => {
       input.data = queryObject[input.query];
     });
   }
 
   private createInputs() {
-    this.inputs = this.config.input.map(input => {
+    this.inputs = this.config.input.map((input) => {
       return Object.assign({}, input, { data: null });
     });
   }
@@ -117,7 +117,7 @@ export class FilterLimitComponent implements OnInit, OnDestroy {
   private parseQueryString(query: string): any {
     const queryObject = {};
 
-    query.split('&').forEach(param => {
+    query.split('&').forEach((param) => {
       const paramArray = param.split('=');
 
       queryObject[paramArray[0]] = paramArray[1];
