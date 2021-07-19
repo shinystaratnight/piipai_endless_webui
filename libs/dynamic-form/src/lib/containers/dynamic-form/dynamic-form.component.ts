@@ -108,7 +108,7 @@ export class DynamicFormComponent implements OnInit {
     }
     let data = this.form.value;
 
-    if (this.formService) {
+    if (this.formService && this.formId) {
       data = this.updateIfTimeCollapsed(data, this.formService.getForm(this.formId).additionalData);
     }
 
