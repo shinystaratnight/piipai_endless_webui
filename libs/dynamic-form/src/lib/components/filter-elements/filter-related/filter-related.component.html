@@ -21,19 +21,17 @@
         (click)="openAutocomplete($event)"
       >
         <div style="overflow: hidden; white-space: nowrap">
-          {{ item ? item.displayValue : '' }}
-
           <span *ngIf="multiple && selected.length">{{
             'selected' | translate: { Default: 'Selected' }
-          }}</span>
+          }}&nbsp;</span>
           <span *ngIf="multiple && !selected.length">{{
             'select' | translate: { Default: 'Select' }
-          }}</span>
+          }}&nbsp;</span>
           <span *ngIf="!multiple && !selected.length">{{
             'all' | translate: { Default: 'All' }
           }}</span>
 
-          <span *ngIf="multiple && selected.length">{{ selected.length }}</span>
+          <span *ngIf="multiple && selected.length">{{ selected.length }}&nbsp;</span>
 
           <span *ngIf="multiple">{{
             getTranslateKey() | translate: { Default: config.label }

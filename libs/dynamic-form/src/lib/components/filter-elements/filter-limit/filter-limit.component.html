@@ -10,7 +10,7 @@
     <input type="number" class="form-control"
       *ngFor="let el of inputs; let i = index"
       [attr.min]="config.min"
-      [attr.placeholder]="el.label"
+      [attr.placeholder]="getTranslateKey(el.key) | translate: {'Default': el.label}"
       [(ngModel)]="el.data"
       (blur)="onChange()">
     <span class="delimiter">&ndash;</span>

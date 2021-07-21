@@ -125,4 +125,8 @@ export class FilterLimitComponent implements OnInit, OnDestroy {
 
     return queryObject;
   }
+
+  public getTranslateKey(type: string): string {
+    return `filter.${this.config.key}.${type}`;
+  }
 }

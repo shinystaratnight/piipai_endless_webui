@@ -63,16 +63,19 @@ const filters = {
     label: 'Recruitment agent',
     endpoint: `${Endpoints.CompanyContact}?master_company=current`
   }),
-  transportation_to_work: createFilter(Type.Checkbox, {
+  transportation_to_work: new CheckboxFilter({
     key: 'transportation_to_work',
+    query: 'transportation_to_work',
     label: 'Transportation',
     values: [
       {
-        value: 1,
+        value: '1',
+        key: '1',
         label: 'Own Car'
       },
       {
-        value: 2,
+        value: '2',
+        key: '2',
         label: 'Public Transportation'
       }
     ]

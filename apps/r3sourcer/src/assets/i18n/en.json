@@ -406,7 +406,8 @@
   "filter.recruitment_agent.label": "Recruitment agent",
   "filter.candidate_price.undefined": "Show profiles for sale",
   "filter.candidate_price.label": "Profile Price",
-  "filter.transportation_to_work.undefined": "",
+  "filter.transportation_to_work.1": "Own Car",
+	"filter.transportation_to_work.2": "Public Transportation",
   "filter.created_at.yesterday": "Yesterday",
   "filter.created_at.today": "Today",
   "filter.created_at.from": "From",
@@ -424,5 +425,10 @@
   "candidates.description": "Open full list of candidates",
   "candidates.add": "+ Add new candidate contact",
   "filter.candidate_scores.average_score.label": "Average score",
-  "select_all": "Select All"
+  "select_all": "Select All",
+  "filter.candidate_scores.average_score.from": "From",
+  "filter.candidate_scores.average_score.to": "To",
+  "skills": "Skills",
+  "scores": "Scores",
+  "hourly_rate": "Hourly rate"
 }
