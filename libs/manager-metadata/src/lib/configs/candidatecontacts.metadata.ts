@@ -27,20 +27,6 @@ const filters = {
     display: ['name_after_activation', 'name_before_activation'],
     parameter: 'number'
   }),
-  // gender: createFilter(Type.Checkbox, {
-  //   key: 'contact.gender',
-  //   label: 'Gender',
-  //   values: [
-  //     {
-  //       value: 'male',
-  //       label: 'Male'
-  //     },
-  //     {
-  //       value: 'female',
-  //       label: 'Female'
-  //     }
-  //   ]
-  // }),
   gender: new CheckboxFilter({
     key: 'contact.gender',
     query: 'contact.gender',
