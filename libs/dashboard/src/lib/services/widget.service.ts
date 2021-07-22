@@ -108,28 +108,32 @@ export class WidgetService {
   getButtons(): ButtonWidget[] {
     return [
       {
-        link: '/hr/jobs/',
+        translateKey: 'job',
+        link: Endpoints.Job,
         label: 'Jobs',
         description: 'Open full list of jobs',
         add_label: '+ Add new job',
         is_active: true
       },
       {
-        link: '/core/companycontacts/',
+        translateKey: 'client_contact',
+        link: Endpoints.CompanyContact,
         label: 'Client contacts',
         description: 'Open full list of client contacts',
         add_label: '+ Add new client contact',
         is_active: true
       },
       {
-        link: '/core/companies/',
+        translateKey: 'client',
+        link: Endpoints.Company,
         label: 'Clients',
         description: 'Open full list of clients',
         add_label: '+ Add new client',
         is_active: true
       },
       {
-        link: '/candidate/candidatecontacts/',
+        translateKey: 'candidates',
+        link: Endpoints.CandidateContact,
         label: 'Candidates',
         description: 'Open full list of candidates',
         add_label: '+ Add new candidate contact',

@@ -1032,8 +1032,7 @@ const form = [
                     .setDefaultValue(0)
                     .addOptions({
                       '0': 'Hourly wage',
-                      '1': 'Piecework wage',
-                      '2': 'Combined wage',
+                      '1': 'Piecework wage'
                     }),
                 ]
               }

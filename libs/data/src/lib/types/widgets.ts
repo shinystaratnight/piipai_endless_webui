@@ -4,6 +4,7 @@ export type ButtonWidget = {
   add_label?: string;
   link: string;
   is_active: boolean;
+  translateKey: string;
 };
 
-export type DashboardWidget = ButtonWidget; 
+export type DashboardWidget = ButtonWidget;

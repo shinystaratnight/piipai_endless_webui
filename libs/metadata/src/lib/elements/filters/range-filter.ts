@@ -20,10 +20,18 @@ export class RangeFilter implements FilterModel {
   public label: string;
   public min: number;
   public max: number;
-  public input: { label: string, query: string }[];
+  public input: { label: string; query: string; key: string }[];
 
   constructor(options: RangeFilterOptions) {
-    const { key, label, min = null, max = null, defaultValue = null, from = 'From', to = 'To' } = options;
+    const {
+      key,
+      label,
+      min = null,
+      max = null,
+      defaultValue = null,
+      from = 'From',
+      to = 'To'
+    } = options;
 
     this.key = key;
     this.label = label;
@@ -33,11 +41,13 @@ export class RangeFilter implements FilterModel {
     this.input = [
       {
         label: from || 'From',
-        query: `${key.replace('.', '__')}_0`
+        query: `${key.replace('.', '__')}_0`,
+        key: 'from'
       },
       {
         label: to || 'To',
-        query: `${key.replace('.', '__')}_1`
+        query: `${key.replace('.', '__')}_1`,
+        key: 'to'
       }
     ];
   }
