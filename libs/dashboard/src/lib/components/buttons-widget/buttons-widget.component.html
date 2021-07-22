@@ -4,8 +4,8 @@
       <div *ngIf="button.is_active" class="widget-button">
         <a [routerLink]="[getLinkToList(button)]" class="widget-button-header">
           <div>
-            <h3 class="widget-button-title">{{ button.label }}</h3>
-            {{ button.description }}
+            <h3 class="widget-button-title">{{ getTranslateKey(button.translateKey, 'label') | translate: {"Default": button.label} }}</h3>
+            {{ getTranslateKey(button.translateKey, 'description') | translate: {"Default": button.description} }}
           </div>
 
           <svg width="612px" height="612px" viewBox="0 0 612 612" style="enable-background:new 0 0 612 612;"
@@ -15,7 +15,7 @@
           </svg>
         </a>
         <a [routerLink]="[getLinkToCreateForm(button)]" class="widget-button-footer">
-          <span *ngIf="button.add_label">{{ button.add_label }}</span>
+          <span *ngIf="button.add_label">{{ getTranslateKey(button.translateKey, 'add') | translate: {"Default": button.add_label} }}</span>
         </a>
       </div>
     </ng-container>

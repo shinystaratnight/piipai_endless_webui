@@ -52,4 +52,8 @@ export class ButtonsWidget implements OnInit, OnDestroy {
   getLinkToCreateForm(button: { link: string }): string {
     return `/mn${button.link}add`;
   }
+
+  getTranslateKey(key: string, type: 'label' | 'description' | 'add'): string {
+    return [key, type].join('.');
+  }
 }

@@ -4,7 +4,7 @@ import { Endpoints } from '@webui/data';
 const filters = {
   avarageScore: createFilter(Type.Range, {
     key: 'candidate_scores.average_score',
-    label: 'Overal score',
+    label: 'Average score',
     max: 5
   }),
   skill: createFilter(Type.Relared, {
