@@ -327,10 +327,8 @@
   "tabs.general.help": "General",
   "tabs.general.label": "General information",
   "tabs.general.name": "General Info",
-  "tabs.job.help": "",
   "tabs.job.label": "Jobs",
   "tabs.job.name": "Jobs",
-  "tabs.job_info.help": "",
   "tabs.job_info.label": "Job information",
   "tabs.job_info.name": "Job info",
   "tabs.job_offers.label": "Job Offers",
@@ -464,5 +462,9 @@
   "/billing/": "Billing",
   "/core/users/": "Users",
   "/settings/permissions/": "Permissions",
-  "/settings/company/": "General"
+  "/settings/company/": "General",
+  "settings": "Settings",
+  "accounts": "Accounts",
+  "h.r.": "H.R.",
+  "allocations": "Allocations"
 }
