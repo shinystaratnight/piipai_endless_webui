@@ -8,7 +8,8 @@ import {
   EventEmitter,
   Output,
   ViewEncapsulation,
-  OnDestroy
+  OnDestroy,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
 
@@ -34,7 +35,8 @@ import {
   selector: 'app-navigation',
   templateUrl: './navigation.component.html',
   styleUrls: ['./navigation.component.scss'],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('header') public header: any;
@@ -48,7 +50,8 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() public logo = '/assets/img/new-software.svg';
 
   // @Output() public update: EventEmitter<Role> = new EventEmitter();
-  @Output() public changePasswordEmitter: EventEmitter<any> = new EventEmitter();
+  @Output()
+  public changePasswordEmitter: EventEmitter<any> = new EventEmitter();
 
   public headerHeight: number;
   public error: any;
@@ -75,11 +78,15 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
   Language = Language;
 
   get pages(): Page[] {
-    return this.navigationService.navigationList[this.currentRole];
+    const menu = this.navigationService.navigationList[this.currentRole];
+
+    return menu;
   }
 
   get companyName(): string {
-    return !isCandidate() ? this.userService.user.currentRole.company_name : this.company;
+    return !isCandidate()
+      ? this.userService.user.currentRole.company_name
+      : this.company;
   }
 
   public resizeSubscription: Subscription;

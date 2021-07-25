@@ -17,9 +17,19 @@ export interface Page {
   url: string;
   endpoint: string;
   __str__: string;
-  childrens: Page[];
+  translateKey: string;
   disabled?: boolean;
+  active?: boolean;
+  childrens: Page[];
 }
+
+type NavigationResponse = {
+  message: string;
+  count: number;
+  results: Page[];
+};
+
+const jobEndpoints = [Endpoints.ClientJobs, Endpoints.JobsiteClient];
 
 @Injectable()
 export class NavigationService {
@@ -52,6 +62,7 @@ export class NavigationService {
   public getPages(role: Role, update?: boolean) {
     if (role) {
       const { id } = role;
+      const { country_code, allow_job_creation } = this.userService.user.data;
 
       if (!this.navigationList[id] || update) {
         const params = new HttpParams({
@@ -61,53 +72,52 @@ export class NavigationService {
           }
         });
 
-        return this.http.get(Endpoints.ExtranetNavigation, { params }).pipe(
-          mergeMap((res: any) => {
-            if (isManager()) {
-              const companyId = this.userService.companyId;
+        return this.http
+          .get<NavigationResponse>(Endpoints.ExtranetNavigation, { params })
+          .pipe(
+            mergeMap(({ results: list }) => {
+              if (isManager()) {
+                const companyId = this.userService.companyId;
 
-              return this.purposeService
-                .getPurpose(companyId)
-                .pipe(
-                  map((purpose: Purpose) => ({ purpose, list: res.results }))
-                );
-            } else {
-              return of({ list: res.results });
-            }
-          }),
-          map((res: { purpose: Purpose; list: any[] }) => {
-            this.removePrefix(res.list);
-            this.removeMYOBLink(res.list, this.userService.user.data.country_code);
-            this.hideCandidateConsentUrl(res.list);
-            if (res.list) {
-              let list = res.purpose
-                ? this.purposeService.filterNavigationByPurpose(
-                    res.purpose,
-                    res.list
-                  )
-                : res.list;
-
-              if (
-                isClient() &&
-                !this.userService.user.data.allow_job_creation
-              ) {
-                const endpoints = [
-                  Endpoints.ClientJobs,
-                  Endpoints.JobsiteClient
-                ];
-                list = list.filter((el) => !endpoints.includes(el.endpoint));
+                return this.purposeService
+                  .getPurpose(companyId)
+                  .pipe(map((purpose: Purpose) => ({ purpose, list })));
+              } else {
+                return of({ list, purpose: null });
               }
+            }),
+            map(({ purpose, list }) => {
+              this.removePrefix(list);
+              this.removeMYOBLink(list, country_code);
+              this.hideCandidateConsentUrl(list);
 
-              this.currentRole = role;
-              this.navigationList[id] = list;
-              this.linksList.length = 0;
-              this.generateLinks(this.navigationList[id], this.linksList);
+              if (list) {
+                let result;
 
-              return this.navigationList[id];
-            }
-          }),
-          catchError((errors) => this.errorService.handleError(errors))
-        );
+                if (purpose) {
+                  result = this.purposeService.filterNavigationByPurpose(
+                    purpose,
+                    list
+                  );
+                }
+
+                if (isClient() && !allow_job_creation) {
+                  result = result.filter(
+                    (el) => !jobEndpoints.includes(el.endpoint)
+                  );
+                }
+
+                this.currentRole = role;
+                this.generateTranslateKeys(result);
+                this.navigationList[id] = result;
+                this.linksList.length = 0;
+                this.generateLinks(this.navigationList[id], this.linksList);
+
+                return this.navigationList[id];
+              }
+            }),
+            catchError((errors) => this.errorService.handleError(errors))
+          );
       } else {
         return of(this.navigationList[id]);
       }
@@ -139,14 +149,24 @@ export class NavigationService {
     });
   }
 
-  public removePrefix(list: Page[]) {
-    list.forEach((page: Page) => {
+  public removePrefix(list: Page[]): void {
+    list.forEach((page) => {
       ['/mn/', '/cl/', '/cd/'].forEach((prefix) => {
         page.url = page.url.replace(prefix, '/');
       });
 
       if (page.childrens && page.childrens.length) {
         this.removePrefix(page.childrens);
+      }
+    });
+  }
+
+  private generateTranslateKeys(pages: Page[]) {
+    pages.forEach(page => {
+      page.translateKey = page.url === '/' ? page.name.toLowerCase() : page.url;
+
+      if (page.childrens) {
+        this.generateTranslateKeys(page.childrens);
       }
     });
   }
@@ -160,7 +180,7 @@ export class NavigationService {
       if (page.childrens) {
         this.hideCandidateConsentUrl(page.childrens);
       }
-    })
+    });
   }
 
   private removeMYOBLink(pages: Page[], countryCode: string) {
