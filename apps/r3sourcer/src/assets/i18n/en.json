@@ -435,5 +435,9 @@
   "portfolio_manager.contact.phone_mobile.label": "Phone mobile",
   "shift_started_at.label": "Shift Started At",
   "worktype.placeholder": "Skill Activity",
-  "selected": "Selected"
+  "selected": "Selected",
+  "dashboard": "Dashboard",
+  "widget.buttons": "Buttons",
+  "widget.candidates": "Candidates",
+  "widget.calendar": "Calendar"
 }

@@ -7,6 +7,7 @@ export interface WidgetItem {
   id?: string;
   name: string;
   active: boolean;
+  translateKey: string;
 }
 
 @Component({
