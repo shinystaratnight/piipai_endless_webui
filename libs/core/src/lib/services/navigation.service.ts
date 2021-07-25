@@ -108,6 +108,7 @@ export class NavigationService {
                 }
 
                 this.currentRole = role;
+                this.generateTranslateKeys(result);
                 this.navigationList[id] = result;
                 this.linksList.length = 0;
                 this.generateLinks(this.navigationList[id], this.linksList);
@@ -156,6 +157,16 @@ export class NavigationService {
 
       if (page.childrens && page.childrens.length) {
         this.removePrefix(page.childrens);
+      }
+    });
+  }
+
+  private generateTranslateKeys(pages: Page[]) {
+    pages.forEach(page => {
+      page.translateKey = page.url === '/' ? page.name.toLowerCase() : page.url;
+
+      if (page.childrens) {
+        this.generateTranslateKeys(page.childrens);
       }
     });
   }

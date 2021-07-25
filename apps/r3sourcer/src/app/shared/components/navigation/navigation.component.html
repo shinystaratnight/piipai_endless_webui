@@ -153,14 +153,14 @@
       class="navigation-link"
       [class.active]="p.active"
       (click)="clickAction($event, p)"
-      >{{ p.url | translate: {"Default": p.name} }}</a
+      >{{ p.translateKey | translate: {"Default": p.name} }}</a
     >
     <span
       class="navigation-link disabled"
       *ngIf="p.disabled"
       (click)="isCollapsed = false"
       [attr.title]="getDisableTitle(p.name)"
-      >{{ p.url | translate: {"Default": p.name} }}</span
+      >{{ p.translateKey | translate: {"Default": p.name} }}</span
     >
     <fa-icon
       class="icon"
