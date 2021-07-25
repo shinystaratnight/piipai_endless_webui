@@ -220,7 +220,8 @@ export class DashboardComponent implements OnInit {
         widgetId: id,
         name,
         id: userWidget ? userWidget.id : null,
-        active
+        active,
+        translateKey: `widget.${name.toLowerCase()}`
       }
     });
   }
