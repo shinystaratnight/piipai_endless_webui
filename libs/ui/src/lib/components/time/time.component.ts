@@ -5,10 +5,11 @@ import {
   OnDestroy,
   Output,
   EventEmitter,
-  ChangeDetectionStrategy
+  ChangeDetectionStrategy,
+  ChangeDetectorRef
 } from '@angular/core';
 
-import { getTimeByTomezone, getLocalTime } from '@webui/utilities';
+import { getTimeByTimezone, getLocalTime } from '@webui/utilities';
 
 @Component({
   selector: 'app-time',
@@ -30,6 +31,8 @@ export class TimeComponent implements OnInit, OnDestroy {
   private intervalId: any;
   private timeFormat = 'HH:mm DD/MM/YYYY (UTCZ)';
 
+  constructor(private cd: ChangeDetectorRef) {}
+
   ngOnInit() {
     this.intervalId = setInterval(() => {
       if (!this.time) {
@@ -38,11 +41,12 @@ export class TimeComponent implements OnInit, OnDestroy {
 
       const localTime = getLocalTime().format(this.timeFormat);
       const momentTime = this.timezone
-        ? getTimeByTomezone(this.timezone)
+        ? getTimeByTimezone(this.timezone)
         : getLocalTime();
       this.time = momentTime.format(this.timeFormat);
 
       this.differTimezone = localTime !== this.time;
+      this.cd.detectChanges();
     }, 1000);
   }
 
