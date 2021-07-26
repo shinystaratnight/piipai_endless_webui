@@ -115,7 +115,7 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
     {
       title: 'industry_and_skills',
       metadata: [],
-      content: ['industry', 'skill'],
+      content: ['industry', 'skill', 'tag'],
     },
   ];
 
