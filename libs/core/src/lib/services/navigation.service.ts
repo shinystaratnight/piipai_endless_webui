@@ -92,7 +92,7 @@ export class NavigationService {
               this.hideCandidateConsentUrl(list);
 
               if (list) {
-                let result;
+                let result = list;
 
                 if (purpose) {
                   result = this.purposeService.filterNavigationByPurpose(
@@ -103,7 +103,7 @@ export class NavigationService {
 
                 if (isClient() && !allow_job_creation) {
                   result = result.filter(
-                    (el) => !jobEndpoints.includes(el.endpoint)
+                    (el) => !jobEndpoints.includes(el.endpoint as Endpoints)
                   );
                 }
 
@@ -162,7 +162,7 @@ export class NavigationService {
   }
 
   private generateTranslateKeys(pages: Page[]) {
-    pages.forEach(page => {
+    pages.forEach((page) => {
       page.translateKey = page.url === '/' ? page.name.toLowerCase() : page.url;
 
       if (page.childrens) {
