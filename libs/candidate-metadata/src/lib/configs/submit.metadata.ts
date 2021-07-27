@@ -121,7 +121,9 @@ const form = function () {
           [Models.Timesheet]: '{id}'
         }),
 
-      new NoteModel().formListElement()
+      new NoteModel().formListElement({
+        model_content_type: '112'
+      })
     ])
   ];
 };

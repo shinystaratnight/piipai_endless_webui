@@ -4,6 +4,7 @@ import { Endpoints } from '../enums';
 export type OverrideConfig = {
   key?: string;
   label?: string;
+  model_content_type?: string;
 };
 
 export interface IModel {

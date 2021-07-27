@@ -8,14 +8,19 @@ export class NoteModel extends Model {
   readonly endpoint = Endpoints.Note;
 
   formListElement(config?: OverrideConfig) {
-    return super._formListElement(config)
+    return super
+      ._formListElement(config)
       .setQuery({
         object_id: '{id}'
       })
       .setPrefilledFields({
         object_id: '{id}',
-        content_type: '{model_content_type}'
+        contact: '{session.data.contact.contact_id}',
+        content_type:
+          config && config.model_content_type
+            ? config.model_content_type
+            : '{model_content_type}'
       })
-      .useForm()
+      .useForm();
   }
 }

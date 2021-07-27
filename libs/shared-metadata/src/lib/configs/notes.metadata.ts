@@ -184,6 +184,16 @@ const form = [
       type: 'textarea'
     },
     read_only: false
+  },
+  {
+    key: 'contact',
+    type: 'input',
+    templateOptions: {
+      required: false,
+      label: 'Contact',
+      type: 'text'
+    },
+    read_only: false
   }
 ];
 
