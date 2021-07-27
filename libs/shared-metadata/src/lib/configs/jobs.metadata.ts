@@ -922,8 +922,7 @@ const form = [
                     .setDefaultValue(0)
                     .addOptions({
                       '0': 'Hourly wage',
-                      '1': 'Piecework wage',
-                      '2': 'Combined wage',
+                      '1': 'Piecework wage'
                     }),
                 ],
                 width: 0.33
@@ -1449,8 +1448,7 @@ const formadd = [
             .setDefaultValue(0)
             .addOptions({
               0: 'Hourly wage',
-              1: 'Piecework wage',
-              2: 'Combined wage',
+              1: 'Piecework wage'
             }),
           {
             key: 'default_shift_starting_time',

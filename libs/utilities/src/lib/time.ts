@@ -25,7 +25,7 @@ export function getLocalTime() {
   return moment().clone();
 }
 
-export function getTimeByTomezone(timezone: string) {
+export function getTimeByTimezone(timezone: string) {
   return moment.tz(timezone);
 }
 
