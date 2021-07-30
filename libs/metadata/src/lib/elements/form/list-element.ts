@@ -17,6 +17,7 @@ export class ListElement {
   query?: { [key: string]: any };
   metadata_query?: { [key: string]: any };
   translateKey?: string;
+  add_form?: boolean;
 
   constructor(label: string, endpoint: string, translateKey?: string) {
     this.templateOptions = {
@@ -55,6 +56,12 @@ export class ListElement {
 
   withoutAddButton() {
     this.templateOptions.add_label = '';
+
+    return this;
+  }
+
+  useForm() {
+    this.add_form = true;
 
     return this;
   }

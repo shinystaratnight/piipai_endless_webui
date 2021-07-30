@@ -11,6 +11,7 @@ import { ToastService } from './toast.service';
 import { EventService } from './event.service';
 import { DateService } from './date.service';
 import { TranslateHelperService } from './translate-helper-service';
+import { FormatterService } from './formatter.service';
 
 export * from './navigation.service';
 export * from './user.service';
@@ -27,6 +28,7 @@ export * from './event.service';
 export * from './date.service';
 export * from './translate-helper-service';
 export * from './date-range.service';
+export * from './formatter.service';
 
 export const services = [
   NavigationService,
@@ -41,5 +43,6 @@ export const services = [
   ToastService,
   EventService,
   DateService,
-  TranslateHelperService
+  TranslateHelperService,
+  FormatterService,
 ];

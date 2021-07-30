@@ -1,4 +1,4 @@
-import { Endpoints, Color, Models } from '@webui/data';
+import { Endpoints, Color, Models, NoteModel } from '@webui/data';
 import { createFilter, Type, Form, List } from '@webui/metadata';
 
 const filters = {
@@ -1300,7 +1300,10 @@ const form = [
             ]
           }
         ]
-      }
+      },
+      new NoteModel().formListElement({
+        model_content_type: '112'
+      })
     ]
   },
   {

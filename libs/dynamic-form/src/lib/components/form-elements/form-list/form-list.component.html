@@ -1,28 +1,4 @@
-<div *ngIf="!this.config.hide">
-  <!-- <h6
-    class="card flex-row align-items-center form-element-list"
-    [ngClass]="{ 'bg-primary text-white': !isCollapsed }"
-    *ngIf="config.templateOptions.label"
-  >
-    <fa-icon
-      class="p-2"
-      [icon]="['fas', isCollapsed ? 'eye' : 'eye-slash']"
-      (click)="isCollapsed = !isCollapsed"
-      [attr.aria-expanded]="!isCollapsed"
-      aria-controls="collapseExample"
-      style="cursor: pointer"
-    ></fa-icon>
-    {{ labelTranslateKey | translate: {"Default": config.templateOptions.label}  }}
-    <button
-      *ngIf="showButton || config.delay"
-      type="button"
-      class="btn btn-sm btn-primary ml-auto mr-2"
-      (click)="addObject()"
-    >
-      {{ config?.templateOptions?.add_label || 'Add' }}
-    </button>
-  </h6> -->
-
+<ng-container *ngIf="!this.config.hide">
   <header class="header">
     <div class="header__content">
       <h4 class="headline-4 title">{{ labelTranslateKey | translate: {"Default": config.templateOptions.label} }}</h4>
@@ -40,16 +16,15 @@
   </header>
 
   <div [ngbCollapse]="isCollapsed">
-    <ng-container *ngIf="hasAddForm">
+    <div class="form" *ngIf="hasAddForm">
       <app-generic-form
         class="d-block"
-        style="margin-top: -20px; margin-bottom: 20px;"
         [delay]="config.delay"
         [endpoint]="addFormConfig.endpoint"
         [data]="addFormConfig.data"
         [metadataQuery]="config.add_metadata_query"
         (event)="formEvent($event)"
-        (errorForm)="formError($event)"
+        (errorForm)="formError()"
       >
         <div class="d-flex">
           <button
@@ -62,7 +37,7 @@
           </button>
         </div>
       </app-generic-form>
-    </ng-container>
+    </div>
 
     <app-generic-list
       [endpoint]="config.endpoint"
@@ -92,7 +67,7 @@
       {{ config.message }}
     </div>
   </div>
-</div>
+</ng-container>
 
 <ng-template #modal let-modal>
   <div class="modal-content-wrapper">

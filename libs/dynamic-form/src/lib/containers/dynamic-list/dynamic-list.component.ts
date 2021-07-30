@@ -63,7 +63,9 @@ import { environment } from '../../../../../../apps/r3sourcer/src/environments/e
 import {
   TrackingModalComponent,
   EvaluateModalComponent,
-  Status
+  Status,
+  ChangeTimesheetModalComponent,
+  ApproveTimesheetModalComponent,
 } from '../../modals';
 import { FilterEvent } from '../../interfaces';
 import { formatCurrency, getCurrencySymbol } from '@angular/common';
@@ -114,7 +116,6 @@ export class DynamicListComponent
 
   @ViewChild('modal') modal;
   @ViewChild('confirmModal') confirmModal;
-  // @ViewChild('evaluateModal') evaluateModal;
   @ViewChild('sendMessageModal') sendMessageModal;
   @ViewChild('pdfDocumentModal') pdfDocumentModal;
   @ViewChild('datatable') datatable;
@@ -126,7 +127,6 @@ export class DynamicListComponent
   @ViewChild('timesheetsCandidate', { static: true }) timesheetsCandidate;
   @ViewChild('unapproved', { static: true }) unapproved;
   @ViewChild('confirmProfileModal') confirmProfileModal;
-  @ViewChild('approveSignature') approveSignature;
 
   public selectedCount: number;
   public reason: any;
@@ -187,7 +187,6 @@ export class DynamicListComponent
   public sortedField: any;
   public isMobileDevice = isMobile() && isCandidate();
   public approveInvoice: boolean;
-  // public timeInstance = getTimeInstance();
 
   get hasSelectColumn() {
     return (
@@ -1772,7 +1771,7 @@ export class DynamicListComponent
     }
   }
 
-  public sendSignature(submitButton: any) {
+  public sendSignature(submitButton?: any) {
     if (this.modalInfo.signature) {
       const image = this.modalInfo.signature.value;
 
@@ -1857,6 +1856,7 @@ export class DynamicListComponent
     if (data) {
       const contact = data.job_offer.candidate_contact.contact;
       const score = this.getPropValue(data, 'evaluation.evaluation_score');
+
       this.modalInfo = {
         changeEndpoint: e.el.endpoint,
         evaluateEndpoint: `${Endpoints.Timesheet}${data.id}/evaluate/`,
@@ -1895,7 +1895,9 @@ export class DynamicListComponent
         changeMetadata: new Subject(),
         data: {
           evaluation_score: score
-        }
+        },
+        evaluateEvent: this.evaluateEvent.bind(this),
+        sendSignature: this.sendSignature.bind(this)
       };
 
       let windowClass = 'approve-modal';
@@ -1922,12 +1924,15 @@ export class DynamicListComponent
         }
       });
 
-      this.open(this.approveSignature, { size: 'lg', windowClass });
+      this.modalRef = this.modalService.open(ChangeTimesheetModalComponent, {
+        backdrop: 'static',
+        size: 'lg',
+        windowClass
+      });
+      this.modalRef.componentInstance.config = this.modalInfo;
+      this.modalRef.componentInstance.timesheet = data;
+      this.handleFormClose(this.modalRef.result);
     }
-  }
-
-  public landscape() {
-    return isMobile() && getOrientation() === 90;
   }
 
   public approveTimesheet(e) {
@@ -2013,12 +2018,17 @@ export class DynamicListComponent
             evaluation_score: score
           },
           signatureStep: true,
-          approve: true
+          approve: true,
+          evaluateEvent: this.evaluateEvent.bind(this),
+          sendSignature: this.sendSignature.bind(this)
         };
 
-        this.open(this.approveSignature, {
+        this.modalRef = this.modalService.open(ApproveTimesheetModalComponent, {
           windowClass: 'approve-modal approve'
         });
+        this.modalRef.componentInstance.config = this.modalInfo;
+        this.modalRef.componentInstance.timesheet = data;
+        this.handleFormClose(this.modalRef.result);
       } else if (!data.evaluated) {
         this.approveEndpoint = `${Endpoints.Timesheet}${data.id}/approve/`;
         this.evaluate(e, data, false).then(() => {
