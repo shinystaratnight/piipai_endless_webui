@@ -9,6 +9,7 @@ export class EvaluateFieldComponent implements OnInit {
   @Input() evaluated: boolean;
   @Input() evaluatedScore: number;
   score: number;
+  hovered: any;
 
   ngOnInit() {
     this.score = this.evaluatedScore
