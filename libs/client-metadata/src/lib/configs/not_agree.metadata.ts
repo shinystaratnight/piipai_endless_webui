@@ -1,4 +1,4 @@
-import { Endpoints, Models, WageType } from '@webui/data';
+import { Endpoints, Models, NoteModel, WageType } from '@webui/data';
 import { Form, DatepickerType, CheckboxType, InputType } from '@webui/metadata';
 
 const shiftStartField = function () {
@@ -99,6 +99,10 @@ const form = function () {
       .setPrefilledFields({
         [Models.Skill]: '{position.id}',
         [Models.Timesheet]: '{id}'
+      }),
+
+    new NoteModel().formListElement({
+        model_content_type: '112'
       })
   ];
 };

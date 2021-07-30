@@ -94,6 +94,8 @@ export class MetadataService {
         }
       } else if (query.includes('candidatepool')) {
         type = 'candidatepool';
+      } else if (query.includes('timesheet')) {
+        type = 'timesheet';
       } else if (query.includes('extend')) {
         type = 'extend';
       } else if (query.includes('sent')) {

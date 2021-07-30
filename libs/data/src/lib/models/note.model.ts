@@ -13,6 +13,9 @@ export class NoteModel extends Model {
       .setQuery({
         object_id: '{id}'
       })
+      .setMetadataQuery({
+        type: 'timesheet'
+      })
       .setPrefilledFields({
         object_id: '{id}',
         contact: '{session.data.contact.id}',

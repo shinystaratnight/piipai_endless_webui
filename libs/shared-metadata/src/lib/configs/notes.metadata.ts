@@ -1,3 +1,5 @@
+import { Endpoints } from "@webui/data";
+
 const list = {
   list: {
     list: 'note',
@@ -159,6 +161,115 @@ const formset = {
   }
 };
 
+const timesheet = {
+  fields: [
+    {
+      key: 'created_by',
+      read_only: true,
+      templateOptions: { required: false, label: 'Created by', type: 'static' },
+      type: 'static'
+    },
+    {
+      key: 'id',
+      templateOptions: {
+        action: 'delete',
+        label: '',
+        type: 'button',
+        text: ''
+      },
+      type: 'button'
+    },
+    {
+      key: 'note',
+      read_only: false,
+      templateOptions: { required: false, label: 'Notes', type: 'text' },
+      type: 'input'
+    },
+    {
+      key: 'updated_at',
+      read_only: true,
+      templateOptions: {
+        required: false,
+        label: 'Updated at',
+        type: 'datetime'
+      },
+      type: 'datepicker'
+    },
+    {
+      key: 'updated_by',
+      read_only: true,
+      templateOptions: { required: false, label: 'Updated by', type: 'static' },
+      type: 'static'
+    },
+    {
+      key: 'created_at',
+      read_only: true,
+      templateOptions: {
+        required: false,
+        label: 'Created at',
+        type: 'datetime'
+      },
+      type: 'datepicker'
+    }
+  ],
+  list: {
+    columns: [
+      {
+        name: 'note',
+        sort: true,
+        sort_field: 'note',
+        content: [{ type: 'input', field: 'note' }],
+        label: 'Notes'
+      },
+      {
+        name: 'contact',
+        content: [{ type: 'input', field: 'contact.__str__' }],
+        label: 'Contact'
+      },
+      {
+        name: 'id',
+        width: 75,
+        title: 'Edit',
+        content: [
+          {
+            action: 'editForm',
+            endpoint: '/core/notes/{id}',
+            icon: 'fa-pencil-alt',
+            title: 'Edit',
+            text_color: '#f0ad4e',
+            type: 'button',
+            field: 'id'
+          }
+        ],
+        label: '',
+        delim: null
+      },
+      {
+        name: 'id',
+        width: 75,
+        title: 'Delete',
+        content: [
+          {
+            action: 'delete',
+            icon: 'fa-times-circle',
+            title: 'Delete',
+            text_color: '#f32700',
+            type: 'button',
+            field: 'id'
+          }
+        ],
+        label: '',
+        delim: null
+      }
+    ],
+    list: 'note',
+    editDisable: false,
+    label: 'Contact Note',
+    pagination_label: 'Contact Note',
+    search_enabled: false
+  }
+};
+
 const form = [
   {
     endpoint: '/contenttypes/contenttypes/',
@@ -192,13 +303,14 @@ const form = [
   },
   {
     key: 'contact',
-    type: 'input',
+    type: 'related',
+    endpoint: Endpoints.Contact,
     templateOptions: {
       required: false,
       label: 'Contact',
-      type: 'text'
+      type: 'related'
     },
-    read_only: false
+    read_only: true
   }
 ];
 
@@ -304,5 +416,6 @@ export const notes = {
   formset,
   form,
   formadd,
-  candidatepool
+  candidatepool,
+  timesheet
 };
