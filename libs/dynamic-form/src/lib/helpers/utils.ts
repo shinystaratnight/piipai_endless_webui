@@ -1,4 +1,5 @@
 import { Field } from '@webui/data';
+import { isMobile } from '@webui/utilities';
 
 export function fillingForm(metadata: Field[], data): void {
   metadata.forEach((el) => {
@@ -72,6 +73,10 @@ export function createAddAction(data) {
 
 export function getEvaluationScore(score) {
   return Math.floor(parseFloat(score));
+}
+
+export function isMobileLandscape() {
+  return isMobile() && getOrientation() === 90;
 }
 
 export function getOrientation(): number {

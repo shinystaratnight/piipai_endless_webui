@@ -864,7 +864,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
           if (el.prefilled) {
             const keys = Object.keys(el.prefilled);
             keys.forEach((elem) => {
-              el.prefilled[elem] = this.format.format(el.prefilled[elem], data);
+              el.prefilled[elem] = this.format.format(el.prefilled[elem], {...data, session: this.userService.user});
             });
           }
         }
@@ -916,7 +916,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
         if (el.prefilled) {
           const keys = Object.keys(el.prefilled);
           keys.forEach((elem) => {
-            el.prefilled[elem] = this.format.format(el.prefilled[elem], data);
+            el.prefilled[elem] = this.format.format(el.prefilled[elem], {...data, session: this.userService.user});
           });
         }
       } else if (el.children) {

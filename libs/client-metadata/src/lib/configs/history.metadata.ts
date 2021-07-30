@@ -119,34 +119,6 @@ const list = function () {
 
             getChangeButton().setShowIfRule([{ status: 5 }])
           ]),
-
-        new List.column.element('candidate_notes', 'Notes').setContent([
-          new List.text.element('candidate_notes', 'Notes')
-        ]),
-
-        new List.column.element('client_notes', 'Notes').setContent([
-          new List.text.element('client_notes', 'Notes')
-        ]),
-
-        new List.column.element('candidate_files', 'Files').setContent([
-          new List.text.element('candidate_files', 'Files')
-        ]),
-
-        new List.column.element('client_files', 'Files').setContent([
-          new List.text.element('client_files', 'Files')
-        ])
-      ])
-      .setTabs([
-        {
-          fields: ['candidate_notes', 'candidate_files'],
-          is_collapsed: true,
-          label: 'Candidate'
-        },
-        {
-          fields: ['client_notes', 'client_files'],
-          is_collapsed: true,
-          label: 'Client'
-        }
       ])
   };
 };
