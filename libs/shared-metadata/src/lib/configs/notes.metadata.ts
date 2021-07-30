@@ -89,6 +89,11 @@ const formset = {
         label: 'Notes'
       },
       {
+        name: 'contact',
+        content: [{ type: 'input', field: 'contact.__str__' }],
+        label: 'Contact'
+      },
+      {
         name: 'created',
         width: 200,
         content: [
@@ -231,6 +236,16 @@ const formadd = [
       type: 'textarea'
     },
     read_only: false
+  },
+  {
+    key: 'contact',
+    type: 'input',
+    hide: true,
+    templateOptions: {
+      label: 'Contact',
+      type: 'text'
+    },
+    read_only: true
   }
 ];
 
