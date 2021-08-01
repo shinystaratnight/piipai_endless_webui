@@ -9,7 +9,6 @@ import {
   Output,
   ViewEncapsulation,
   OnDestroy,
-  ChangeDetectionStrategy
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
 
@@ -36,7 +35,6 @@ import {
   templateUrl: './navigation.component.html',
   styleUrls: ['./navigation.component.scss'],
   encapsulation: ViewEncapsulation.None,
-  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('header') public header: any;
