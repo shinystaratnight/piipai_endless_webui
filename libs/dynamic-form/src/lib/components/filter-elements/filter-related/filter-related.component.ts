@@ -364,7 +364,8 @@ export class FilterRelatedComponent
       const formatString = new FormatString();
       const data = {
         ...this.siteSettingsService.settings,
-        filter_value: value
+        filter_value: value,
+        session: this.userService.user
       };
       endpoint = formatString.format(this.config.data.endpoint, data);
       this.genericFormService.getAll(endpoint).subscribe((res: any) => {
