@@ -34,7 +34,7 @@
         type="submit"
         [disabled]="loading$ | async"
       >
-        Submit
+        {{ 'submit' | translate: {"Default": "Submit"} }}
       </button>
     </form>
   </ng-container>

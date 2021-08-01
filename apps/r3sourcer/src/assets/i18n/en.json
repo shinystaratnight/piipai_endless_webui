@@ -466,5 +466,7 @@
   "settings": "Settings",
   "accounts": "Accounts",
   "h.r.": "H.R.",
-  "allocations": "Allocations"
+  "allocations": "Allocations",
+  "from": "From",
+  "to": "To"
 }
