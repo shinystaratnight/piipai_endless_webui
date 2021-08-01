@@ -442,5 +442,7 @@
     "status.status.0.3": "Заполнен",
     "status.status.0.4": "Отклонен",
     "status.status.0.5": "Отменен заказчиком",
-    "status.status.0.6": "Отменен"
+    "status.status.0.6": "Отменен",
+    "from": "От",
+    "to": "До"
 }

@@ -473,5 +473,7 @@
     "status.status.0.3": "Already filled",
     "status.status.0.4": "Declined by Candidate",
     "status.status.0.5": "Cancelled by Job Site Contact",
-    "status.status.0.6": "Cancelled"
+    "status.status.0.6": "Cancelled",
+    "from": "Alkaen",
+    "to": "Vastaanottaja"
 }
