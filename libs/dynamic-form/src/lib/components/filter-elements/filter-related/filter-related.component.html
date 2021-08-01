@@ -27,7 +27,7 @@
           <span *ngIf="multiple && !selected.length">{{
             'select' | translate: { Default: 'Select' }
           }}&nbsp;</span>
-          <span *ngIf="!multiple && !selected.length">{{
+          <span *ngIf="!multiple && !selected.length && (item && !item.data)">{{
             'all' | translate: { Default: 'All' }
           }}</span>
 
@@ -36,6 +36,10 @@
           <span *ngIf="multiple">{{
             getTranslateKey() | translate: { Default: config.label }
           }}</span>
+
+          <span *ngIf="!multiple && item && item.data">
+            {{item.displayValue}}
+          </span>
         </div>
         <fa-icon
           [icon]="item && item.hideAutocomplete ? 'chevron-down' : 'chevron-up'"

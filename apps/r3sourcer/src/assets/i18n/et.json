@@ -466,5 +466,7 @@
     "settings": "Seaded",
     "accounts": "Raamatupidamine",
     "h.r.": "Personal",
-    "allocations": "Kliendihaldus"
+    "allocations": "Kliendihaldus",
+    "from": "Alates",
+    "to": "Kuni"
 }

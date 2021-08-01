@@ -466,5 +466,7 @@
     "settings": "asetukset",
     "accounts": "Tilit",
     "h.r.": "H.R.",
-    "allocations": "Kohdistukset"
+    "allocations": "Kohdistukset",
+    "from": "Alkaen",
+    "to": "Vastaanottaja"
 }

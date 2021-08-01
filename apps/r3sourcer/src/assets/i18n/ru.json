@@ -435,5 +435,7 @@
     "portfolio_manager.contact.phone_mobile.label": "Номер телефона",
     "shift_started_at.label": "Смена (Начало)",
     "worktype.placeholder": "",
-    "selected": "Выбрано"
+    "selected": "Выбрано",
+    "from": "От",
+    "to": "До"
 }
