@@ -856,7 +856,8 @@ export class DynamicListComponent
       translationKey: element.translationKey,
       boldClass:
         (el.endpoint === Endpoints.Tag || this.endpoint === Endpoints.Tag) &&
-        (el.owner === 'system' || (el.tag && el.tag.system === 'owner'))
+        (el.owner === 'system' || (el.tag && el.tag.system === 'owner')),
+      translated: element.translated
     };
     if (cell.timezone) {
       obj.timezone = this.getPropValue(el, cell.timezone);
