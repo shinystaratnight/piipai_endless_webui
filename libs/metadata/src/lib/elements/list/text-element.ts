@@ -7,6 +7,7 @@ export class TextElement extends BasicListElement {
   param?: string;
   score?: boolean;
   display?: string;
+  translated?: boolean;
 
   constructor(field: string, label?: string) {
     super(field, Text);
@@ -28,6 +29,12 @@ export class TextElement extends BasicListElement {
 
   setFormatValue(format: string) {
     this.display = format;
+
+    return this;
+  }
+
+  hasTranslate() {
+    this.translated = true;
 
     return this;
   }

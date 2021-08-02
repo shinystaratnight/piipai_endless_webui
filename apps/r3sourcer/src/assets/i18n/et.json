@@ -467,6 +467,13 @@
     "accounts": "Raamatupidamine",
     "h.r.": "Personal",
     "allocations": "Kliendihaldus",
+    "status.status.0.0": "Undefined",
+    "status.status.0.1": "Accepted",
+    "status.status.0.2": "Cancelled",
+    "status.status.0.3": "Already filled",
+    "status.status.0.4": "Declined by Candidate",
+    "status.status.0.5": "Cancelled by Job Site Contact",
+    "status.status.0.6": "Cancelled",
     "from": "Alates",
     "to": "Kuni"
 }
