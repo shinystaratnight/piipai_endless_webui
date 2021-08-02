@@ -15,7 +15,7 @@ const list = function () {
               .setLabel('Shift date')
               .setDisplay('{shift.date.shift_date__date}'),
 
-            new List.static.element('shift.time').setLabel('Shift Time'),
+            new List.static.element('shift.time').setLabel('Shift Time')
           ]),
 
         new List.column.element('shift.date.job.position', 'Position')
@@ -24,20 +24,20 @@ const list = function () {
             new List.text.element(
               'shift.date.job.position.name',
               Endpoints.Skill
-            ),
+            )
           ]),
 
         new List.column.element('client', 'Client').setContent([
           new List.related.element(
             'shift.date.job.customer_company',
             Endpoints.Company
-          ),
+          )
         ]),
 
         new List.column.element('job_site_-_map', 'Job Site - Map')
           .update(' ')
           .setContent([
-            new List.related.element('jobsite_address').setInline(),
+            new List.related.element('jobsite_address'),
 
             new List.button.element('id', 'openMap', 'Open Map')
               .setTextColor('#006ce5')
@@ -45,8 +45,8 @@ const list = function () {
               .setIcon('map-marker-alt')
               .setFields([
                 { type: 'static', field: 'latitude' },
-                { type: 'static', field: 'longitude' },
-              ]),
+                { type: 'static', field: 'longitude' }
+              ])
           ]),
 
         new List.column.element(
@@ -56,52 +56,56 @@ const list = function () {
           new List.related.element(
             'shift.date.job.jobsite.primary_contact',
             Endpoints.CompanyContact
-          ),
+          )
         ]),
 
         new List.column.element('shift.date.job.notes', 'Notes')
           .setSort(true, 'shift.date.job.notes')
           .setContent([new List.input.element('shift.date.job.notes')]),
 
-        new List.column.element('status', 'Status').update(' ').setContent([
-          new List.button.element('hide_buttons', 'emptyPost')
-            .setDisplay('Accept')
-            .setTranslationKey('accept')
-            .setEndpoint(`${Endpoints.JobOffer}{id}/accept/`)
-            .setStyles([
-              'success',
-              'shadow',
-              'shadow-success',
-              'size-m',
-              'mr',
-              'resize',
-            ])
-            .setHidden('hide_buttons')
-            .withoutDelim(),
+        new List.column.element('status', 'Status')
+          .update(' ')
+          .setWidth(120)
+          .setContent([
+            new List.button.element('hide_buttons', 'emptyPost')
+              .setDisplay('Accept')
+              .setTranslationKey('accept')
+              .setEndpoint(`${Endpoints.JobOffer}{id}/accept/`)
+              .setStyles([
+                'success',
+                'shadow',
+                'shadow-success',
+                'size-m',
+                'mr',
+                'resize'
+              ])
+              .setHidden('hide_buttons')
+              .withoutDelim(),
 
-          new List.button.element('hide_buttons', 'emptyPost')
-            .setDisplay('Decline')
-            .setTranslationKey('decline')
-            .setEndpoint(`${Endpoints.JobOffer}{id}/cancel/`)
-            .setHidden('hide_buttons')
-            .setStyles(['danger', 'shadow', 'shadow-danger', 'size-m']),
+            new List.button.element('hide_buttons', 'emptyPost')
+              .setDisplay('Decline')
+              .setTranslationKey('decline')
+              .setEndpoint(`${Endpoints.JobOffer}{id}/cancel/`)
+              .setHidden('hide_buttons')
+              .setStyles(['danger', 'shadow', 'shadow-danger', 'size-m']),
 
-          new List.icon.element('status_icon')
-            .setValues({
-              false: 'times',
-              true: 'check',
-              null: 'minus-circle',
-            })
-            .setShowIfRule(['hide_buttons']),
+            new List.icon.element('status_icon')
+              .setValues({
+                false: 'times',
+                true: 'check',
+                null: 'minus-circle'
+              })
+              .setShowIfRule(['hide_buttons']),
 
-          new List.text.element('status')
-            .setInline()
-            .setShowIfRule(['hide_buttons']),
-        ]),
-      ]),
+            new List.text.element('status.0')
+              .hasTranslate()
+              .setInline()
+              .setShowIfRule(['hide_buttons'])
+          ])
+      ])
   };
 };
 
 export const metadataJoboffersCandidate = {
-  list,
+  list
 };
