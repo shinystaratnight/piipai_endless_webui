@@ -71,6 +71,8 @@ const list = function () {
         new List.column.element('status', 'Status')
           .setTimezone('time_zone')
           .setContent([
+            getChangeButton().setShowIfRule([{is_30_days_old: false}]),
+
             new List.static.element('status').setHideValue(true),
 
             new List.static.element('supervisor_approved')
