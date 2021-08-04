@@ -1,4 +1,5 @@
 import { Endpoints } from "@webui/data";
+import { Form } from "@webui/metadata";
 
 const list = {
   list: {
@@ -311,7 +312,8 @@ const form = [
       type: 'related'
     },
     read_only: true
-  }
+  },
+  new Form.imageList.element('files', 'Files')
 ];
 
 const formadd = [

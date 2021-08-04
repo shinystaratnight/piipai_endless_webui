@@ -17,7 +17,8 @@ export const Form  = {
   list: forms.list,
   info: forms.info,
   tabs: forms.tabs,
-  collapse: forms.collapse
+  collapse: forms.collapse,
+  imageList: forms.image_list
 };
 
 export const Filter = {

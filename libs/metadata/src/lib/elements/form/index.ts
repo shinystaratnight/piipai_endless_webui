@@ -7,6 +7,7 @@ import { RelatedElement, Related } from './related-element';
 import { StaticElement, Static } from './static-element';
 import { ListElement, List } from './list-element';
 import { InfoElement, Info } from './info-element';
+import { ImageListElement, ImageList } from './image-list-element';
 
 import { GroupElement, Group } from './group-element';
 import { RowElement, Row } from './row-element';
@@ -22,6 +23,7 @@ export const related = { element: RelatedElement, type: Related };
 export const stat = { element: StaticElement, type: Static };
 export const list = { element: ListElement, type: List };
 export const info = { element: InfoElement, type: Info };
+export const image_list = { element: ImageListElement, type: ImageList };
 
 export const group = { element: GroupElement, type: Group };
 export const row = { element: RowElement, type: Row };
