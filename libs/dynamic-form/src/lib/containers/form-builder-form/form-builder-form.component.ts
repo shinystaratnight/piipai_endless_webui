@@ -355,6 +355,24 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
       body = this.form.value;
     }
 
+    Object.keys(body).map((key: string) => {
+      const value: any = body[key];
+
+      if (Array.isArray(value)) {
+        const newValue = value.map((item) => {
+          if (typeof item === 'string') {
+            return {
+              id: item
+            }
+          }
+
+          return item;
+        })
+
+        body[key] = newValue;
+      }
+    })
+
     this.service.sendFormData(this.id, body).subscribe(
       (res: any) => {
         this.saveProcess = false;
