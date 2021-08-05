@@ -228,9 +228,16 @@ const timesheet = {
         label: 'Contact'
       },
       {
-        name: 'id',
-        width: 75,
-        title: 'Edit',
+        name: 'created',
+        width: 200,
+        content: [
+          { type: 'datepicker', field: 'created_at' },
+        ],
+        label: 'Created',
+        title: null,
+        delim: null
+      },
+      {
         content: [
           {
             action: 'editForm',
@@ -240,16 +247,7 @@ const timesheet = {
             text_color: '#f0ad4e',
             type: 'button',
             field: 'id'
-          }
-        ],
-        label: '',
-        delim: null
-      },
-      {
-        name: 'id',
-        width: 75,
-        title: 'Delete',
-        content: [
+          },
           {
             action: 'delete',
             icon: 'fa-times-circle',
@@ -257,11 +255,14 @@ const timesheet = {
             text_color: '#f32700',
             type: 'button',
             field: 'id'
-          }
+          },
         ],
-        label: '',
+        width: 120,
+        name: 'actions',
+        title: null,
+        label: 'Actions',
         delim: null
-      }
+      },
     ],
     list: 'note',
     editDisable: false,
@@ -311,9 +312,9 @@ const form = [
       label: 'Contact',
       type: 'related'
     },
-    read_only: true
+    read_only: true,
   },
-  new Form.imageList.element('files', 'Files')
+  new Form.imageList.element('files', 'Files').doNotSend()
 ];
 
 const formadd = [
