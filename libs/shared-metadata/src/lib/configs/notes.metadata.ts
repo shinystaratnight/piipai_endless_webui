@@ -124,9 +124,6 @@ const formset = {
         delim: null
       },
       {
-        name: 'id',
-        width: 75,
-        title: 'Edit',
         content: [
           {
             action: 'editForm',
@@ -136,16 +133,7 @@ const formset = {
             text_color: '#f0ad4e',
             type: 'button',
             field: 'id'
-          }
-        ],
-        label: '',
-        delim: null
-      },
-      {
-        name: 'id',
-        width: 75,
-        title: 'Delete',
-        content: [
+          },
           {
             action: 'delete',
             icon: 'fa-times-circle',
@@ -153,11 +141,14 @@ const formset = {
             text_color: '#f32700',
             type: 'button',
             field: 'id'
-          }
+          },
         ],
-        label: '',
+        width: 120,
+        name: 'actions',
+        title: null,
+        label: 'Actions',
         delim: null
-      }
+      },
     ],
     list: 'note',
     editDisable: false,
