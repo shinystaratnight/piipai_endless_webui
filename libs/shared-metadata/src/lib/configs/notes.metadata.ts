@@ -224,6 +224,11 @@ const timesheet = {
         label: 'Contact'
       },
       {
+        name: 'files',
+        content: [{ type: 'imageList', field: 'files' }],
+        label: 'Files'
+      },
+      {
         name: 'created',
         width: 200,
         content: [

@@ -1503,6 +1503,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
         forkJoin([...requests])
           .pipe(
             finalize(() => {
+              this.formGroup.reset();
               this.event.emit({
                 type: 'sendForm',
                 viewData: response,
@@ -1519,6 +1520,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
       const subscription = forkJoin([...this.updateDataAfterSendForm.requests])
         .pipe(
           finalize(() => {
+            this.formGroup.reset();
             this.event.emit({
               type: 'sendForm',
               viewData: response,
@@ -1531,6 +1533,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
 
       this.subscriptions.push(subscription);
     } else {
+      this.formGroup.reset();
       this.event.emit({
         type: 'sendForm',
         data: { ...response, ...this.formData.value.data },
