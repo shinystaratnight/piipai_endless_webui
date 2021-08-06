@@ -17,8 +17,6 @@ export class ListImageListComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log(this);
-
     this.images = this.config.value.map((el) => {
       return {
         preview: false,
