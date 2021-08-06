@@ -5,6 +5,15 @@
         getTranslationKey(config.key, 'label') | translate: { Default: label }
       }}:
     </label>
+
+    <ng-container *ngIf="images.length">
+      <ul class="list">
+        <li *ngFor="let el of images; let index = index">
+          <img class="preview" [src]="el.image" />
+        </li>
+      </ul>
+    </ng-container>
+
     <ngx-dropzone (change)="onSelect($event)">
       <ngx-dropzone-label>Drop images</ngx-dropzone-label>
       <ngx-dropzone-image-preview

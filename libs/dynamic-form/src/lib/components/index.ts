@@ -73,6 +73,7 @@ import {
   ListFormComponent,
   ListColumnHeaderComponent,
   ListSkillActivityComponent,
+  ListImageListComponent,
 } from './list-elements';
 
 import { ListSerachBarComponent } from './list-search-bar/list-search-bar.component';
@@ -136,6 +137,7 @@ export const entryComponents = [
   ListFormComponent,
   ListColumnHeaderComponent,
   ListSkillActivityComponent,
+  ListImageListComponent,
 
   TestGeneratorComponent,
   TestListComponent,

@@ -17,6 +17,7 @@ export class FormImageListComponent
 
   label: string;
   files: File[] = [];
+  images: Array<{ preview: boolean; image: string }> = [];
 
   getTranslationKey = getTranslationKey;
 
@@ -27,6 +28,13 @@ export class FormImageListComponent
   ngOnInit() {
     this.label = this.config.templateOptions.label;
     this.addControl(this.config, this.fb);
+    if (this.config.value) {
+      this.images = this.config.value.map((el) => {
+        return {
+          image: el.file
+        };
+      });
+    }
   }
 
   onSelect(event) {
