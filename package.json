@@ -69,6 +69,7 @@
     "jtsage-datebox-bootstrap4": "4.4.1",
     "moment-timezone": "^0.5.26",
     "ngx-bootstrap": "^6.2.0",
+    "ngx-dropzone": "^3.0.0",
     "ngx-google-places-autocomplete": "^2.0.4",
     "ngx-infinite-scroll": "^9.0.0",
     "ngx-intl-tel-input": "^3.0.5",

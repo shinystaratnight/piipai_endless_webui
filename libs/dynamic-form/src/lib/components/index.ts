@@ -51,6 +51,7 @@ import {
   FormElementViewComponent,
   DropdownComponent,
   FormBankAccountComponent,
+  FormImageListComponent,
 } from './form-elements';
 
 // import { ExtendComponent } from './extend/extend.component';
@@ -72,6 +73,7 @@ import {
   ListFormComponent,
   ListColumnHeaderComponent,
   ListSkillActivityComponent,
+  ListImageListComponent,
 } from './list-elements';
 
 import { ListSerachBarComponent } from './list-search-bar/list-search-bar.component';
@@ -119,6 +121,7 @@ export const entryComponents = [
   FormTrackingComponent,
   FormListDropdownComponent,
   FormBankAccountComponent,
+  FormImageListComponent,
 
   ListCheckboxComponent,
   ListImageComponent,
@@ -134,6 +137,7 @@ export const entryComponents = [
   ListFormComponent,
   ListColumnHeaderComponent,
   ListSkillActivityComponent,
+  ListImageListComponent,
 
   TestGeneratorComponent,
   TestListComponent,

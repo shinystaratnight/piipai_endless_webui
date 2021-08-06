@@ -1302,6 +1302,7 @@ const form = [
         ]
       },
       new NoteModel().formListElement({
+        query: 'formset',
         model_content_type: '112'
       })
     ]

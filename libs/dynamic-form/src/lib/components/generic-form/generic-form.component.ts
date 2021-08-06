@@ -864,7 +864,10 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
           if (el.prefilled) {
             const keys = Object.keys(el.prefilled);
             keys.forEach((elem) => {
-              el.prefilled[elem] = this.format.format(el.prefilled[elem], {...data, session: this.userService.user});
+              el.prefilled[elem] = this.format.format(el.prefilled[elem], {
+                ...data,
+                session: this.userService.user
+              });
             });
           }
         }
@@ -916,7 +919,10 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
         if (el.prefilled) {
           const keys = Object.keys(el.prefilled);
           keys.forEach((elem) => {
-            el.prefilled[elem] = this.format.format(el.prefilled[elem], {...data, session: this.userService.user});
+            el.prefilled[elem] = this.format.format(el.prefilled[elem], {
+              ...data,
+              session: this.userService.user
+            });
           });
         }
       } else if (el.children) {
@@ -1232,7 +1238,11 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
   }
 
   public submitForm(data) {
-    if ((this.endpoint === Endpoints.Job || this.endpoint === Endpoints.ClientJobs) && !this.id) {
+    if (
+      (this.endpoint === Endpoints.Job ||
+        this.endpoint === Endpoints.ClientJobs) &&
+      !this.id
+    ) {
       data['work_start_date'] = this.getJobStartDate(data.shifts);
       this.selectedDates = data.shifts;
     }
@@ -1279,6 +1289,8 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
       return;
     }
 
+    // Here
+
     if (this.updateDataAfterSendForm.config.length) {
       this.createUpdateRequests(newData, this.updateDataAfterSendForm);
     }
@@ -1286,9 +1298,9 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
     if (this.updateDataBeforeSendForm.config.length) {
       this.createUpdateRequests(newData, this.updateDataBeforeSendForm);
 
-      const subscription = forkJoin(
-        [...this.updateDataBeforeSendForm.requests]
-      ).subscribe(() => {
+      const subscription = forkJoin([
+        ...this.updateDataBeforeSendForm.requests
+      ]).subscribe(() => {
         this.sendForm(newData);
       });
 
@@ -1301,7 +1313,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
       const requests = this.updateRelatedObjects(newData);
 
       if (requests && requests.length) {
-        const subscription = forkJoin(...requests).subscribe(() => {
+        const subscription = forkJoin([...requests]).subscribe(() => {
           this.sendForm(newData);
         });
 
@@ -1459,9 +1471,10 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
     this.parseResponse(response);
 
     if (
-      this.endpoint === Endpoints.Job &&
-      !this.id &&
-      (this.selectedDates && this.selectedDates.length) ||
+      (this.endpoint === Endpoints.Job &&
+        !this.id &&
+        this.selectedDates &&
+        this.selectedDates.length) ||
       sendData.client_contact_page
     ) {
       this.confirmJob(response.id, response);
@@ -1476,8 +1489,34 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
 
     this.timelineService.emit(TimelineAction.Reset);
 
+    if (this.endpoint === Endpoints.Note) {
+      const formData = this.formGroup.value;
+
+      if (formData.files && formData.files.length) {
+        const requests = formData.files.map((file) => {
+          const body = new FormData();
+          body.append('note', response.id);
+          body.append('file', file);
+          return this.service.uploadFile('/core/notefiles/', body);
+        });
+
+        forkJoin([...requests])
+          .pipe(
+            finalize(() => {
+              this.event.emit({
+                type: 'sendForm',
+                viewData: response,
+                sendData,
+                status: 'success'
+              });
+            })
+          )
+          .subscribe();
+      }
+    }
+
     if (this.updateDataAfterSendForm.requests.length) {
-      const subscription = forkJoin(...this.updateDataAfterSendForm.requests)
+      const subscription = forkJoin([...this.updateDataAfterSendForm.requests])
         .pipe(
           finalize(() => {
             this.event.emit({

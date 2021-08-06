@@ -15,6 +15,8 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { QuillModule } from 'ngx-quill';
 import { Angular2SignaturepadModule } from 'angular2-signaturepad';
 import { WebcamModule } from 'ngx-webcam';
+import { NgxDropzoneModule } from 'ngx-dropzone';
+
 
 import { NgxIntlTelInputModule } from 'ngx-intl-tel-input';
 
@@ -56,7 +58,8 @@ import { TranslateModule } from '@ngx-translate/core';
     TranslateModule,
 
     UiModule,
-    WebcamModule
+    WebcamModule,
+    NgxDropzoneModule,
   ],
   exports: [
     fromComponents.GenericFormComponent,
