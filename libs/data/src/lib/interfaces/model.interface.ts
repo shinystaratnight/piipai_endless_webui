@@ -5,6 +5,7 @@ export type OverrideConfig = {
   key?: string;
   label?: string;
   model_content_type?: string;
+  [key: string]: string;
 };
 
 export interface IModel {

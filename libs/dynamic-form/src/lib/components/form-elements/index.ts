@@ -23,3 +23,4 @@ export * from './form-list-dropdown/form-list-dropdown.component';
 export * from './form-element-view/form-element-view.components';
 export * from './dropdown/dropdown.component';
 export * from './form-bank-account/form-bank-account.component';
+export * from './form-image-list/form-image-list.component';
