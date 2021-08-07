@@ -35,6 +35,12 @@ export class FormImageListComponent
         };
       });
     }
+
+    this.group.get(this.key).valueChanges.subscribe((value) => {
+      if (Object.is(value, null)) {
+        this.files = [];
+      }
+    });
   }
 
   onSelect(event) {
