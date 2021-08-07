@@ -65,7 +65,7 @@ import {
   EvaluateModalComponent,
   Status,
   ChangeTimesheetModalComponent,
-  ApproveTimesheetModalComponent,
+  ApproveTimesheetModalComponent
 } from '../../modals';
 import { FilterEvent } from '../../interfaces';
 import { formatCurrency, getCurrencySymbol } from '@angular/common';
@@ -2655,8 +2655,14 @@ export class DynamicListComponent
         }
       } else if (el instanceof Object) {
         const key = Object.keys(el)[0];
-        const targetValue = el[key];
+        let targetValue = el[key];
         const value = this.getValueByKey(key, data);
+
+        if (typeof targetValue === 'string' && targetValue.includes('{')) {
+          targetValue = this.format(targetValue, {
+            session: this.userService.user
+          });
+        }
 
         if (Array.isArray(targetValue)) {
           const exist = targetValue.some((item) => item === value);
