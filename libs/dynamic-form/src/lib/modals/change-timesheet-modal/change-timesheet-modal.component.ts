@@ -57,6 +57,10 @@ export class ChangeTimesheetModalComponent extends Modal {
     super(modal);
   }
 
+  get shiftDate() {
+    return this.config.extendData.shift.date.__str__;
+  }
+
   ngOnInit() {
     this.model = new TimesheetModel(this.timesheet);
     this.isSignatureStep = this.config.signatureStep;
