@@ -5,7 +5,7 @@ import {
   OnInit,
   OnDestroy,
   ChangeDetectorRef,
-  ChangeDetectionStrategy,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 
@@ -18,7 +18,7 @@ import { generateCssStyles } from '../../../helpers';
   selector: 'app-form-button',
   templateUrl: 'form-button.component.html',
   styleUrls: ['./form-button.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FormButtonComponent implements OnInit, OnDestroy {
   private stylePrefix = 'app-button';
@@ -139,7 +139,7 @@ export class FormButtonComponent implements OnInit, OnDestroy {
         'info',
         'success',
         'warning',
-        'link',
+        'link'
       ];
 
       if (!this.config.inverse) {
@@ -174,7 +174,7 @@ export class FormButtonComponent implements OnInit, OnDestroy {
           type: e.type,
           el: this.config,
           value: this.config.templateOptions.action,
-          id,
+          id
         });
       }
     }
@@ -190,7 +190,7 @@ export class FormButtonComponent implements OnInit, OnDestroy {
         'resend_sms',
         'resend_supervisor_sms',
         'send',
-        'resend',
+        'resend'
       ];
 
       return endpointParts.some((part) => {

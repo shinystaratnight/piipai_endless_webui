@@ -1,5 +1,7 @@
 @import '../mixins';
 
+$width: 700px;
+
 .modal-backdrop {
   bottom: -100px;
   z-index: 3 !important;
@@ -8,11 +10,11 @@
 .approve-modal {
   @media (max-width: 767.98px) and (orientation: landscape) {
     &.change .modal-dialog {
-      max-width: 600px;
+      max-width: $width;
     }
 
     &.approve .modal-dialog {
-      max-width: 600px;
+      max-width: $width;
 
       .content-info {
         flex-direction: row;
@@ -49,7 +51,7 @@
   }
 
   .modal-dialog {
-    max-width: 500px;
+    max-width: $width;
     margin: 15px auto;
     padding: 0 15px;
     box-sizing: content-box;
@@ -58,11 +60,10 @@
       &-content:not(.full-width) {
         flex-wrap: nowrap;
 
-        max-width: 195px;
         width: auto;
 
         @include media-breakpoint-down('sm') {
-          max-width: none;
+          max-width: 100%;
         }
       }
 
@@ -555,7 +556,6 @@
   }
 }
 
-
 .extend-modal {
   .modal-dialog {
     max-width: 805px;
@@ -732,7 +732,7 @@
     position: sticky;
     width: 100%;
     top: 0;
-    z-index: 1200;
+    z-index: 5;
   }
 
   .modal-body {

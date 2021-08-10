@@ -1,3 +1,5 @@
+@import '../../../../../../../styles/variables';
+
 .list {
   list-style: none;
   display: flex;
@@ -14,7 +16,7 @@
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  z-index: 4;
+  z-index: 22;
 
   .image {
     width: 50vw;
@@ -49,14 +51,20 @@
   height: 48px;
   object-fit: cover;
   margin: 0.5rem;
+  border-radius: 0.25rem;
+  background-color: $outline-color;
+
+  &:hover {
+    cursor: pointer;
+  }
 }
 
 .backdrop {
-    position: fixed;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    right: 0;
-    background-color: rgba(black, .5);
-    z-index: 3;
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  background-color: rgba(black, 0.5);
+  z-index: 21;
 }

@@ -1,5 +1,5 @@
-import { Endpoints } from "@webui/data";
-import { Form } from "@webui/metadata";
+import { Endpoints } from '@webui/data';
+import { Form } from '@webui/metadata';
 
 const list = {
   list: {
@@ -132,7 +132,12 @@ const formset = {
             title: 'Edit',
             text_color: '#f0ad4e',
             type: 'button',
-            field: 'id'
+            field: 'id',
+            showIf: [
+              {
+                ['contact.id']: '{session.data.contact.id}'
+              }
+            ]
           },
           {
             action: 'delete',
@@ -140,15 +145,20 @@ const formset = {
             title: 'Delete',
             text_color: '#f32700',
             type: 'button',
-            field: 'id'
-          },
+            field: 'id',
+            showIf: [
+              {
+                ['contact.id']: '{session.data.contact.id}'
+              }
+            ]
+          }
         ],
         width: 120,
         name: 'actions',
         title: null,
         label: 'Actions',
         delim: null
-      },
+      }
     ],
     list: 'note',
     editDisable: false,
@@ -224,11 +234,14 @@ const timesheet = {
         label: 'Contact'
       },
       {
+        name: 'files',
+        content: [{ type: 'imageList', field: 'files' }],
+        label: 'Files'
+      },
+      {
         name: 'created',
         width: 200,
-        content: [
-          { type: 'datepicker', field: 'created_at' },
-        ],
+        content: [{ type: 'datepicker', field: 'created_at' }],
         label: 'Created',
         title: null,
         delim: null
@@ -242,7 +255,12 @@ const timesheet = {
             title: 'Edit',
             text_color: '#f0ad4e',
             type: 'button',
-            field: 'id'
+            field: 'id',
+            showIf: [
+              {
+                ['contact.id']: '{session.data.contact.id}'
+              }
+            ]
           },
           {
             action: 'delete',
@@ -250,15 +268,20 @@ const timesheet = {
             title: 'Delete',
             text_color: '#f32700',
             type: 'button',
-            field: 'id'
-          },
+            field: 'id',
+            showIf: [
+              {
+                ['contact.id']: '{session.data.contact.id}'
+              }
+            ]
+          }
         ],
         width: 120,
         name: 'actions',
         title: null,
         label: 'Actions',
         delim: null
-      },
+      }
     ],
     list: 'note',
     editDisable: false,
@@ -308,7 +331,7 @@ const form = [
       label: 'Contact',
       type: 'related'
     },
-    read_only: true,
+    read_only: true
   },
   new Form.imageList.element('files', 'Files').doNotSend()
 ];
@@ -336,18 +359,25 @@ const formadd = [
     },
     read_only: false
   },
-  {
-    key: 'note',
-    type: 'textarea',
-    templateOptions: {
-      full: true,
-      rows: 3,
-      required: true,
-      autofocus: true,
-      type: 'textarea'
-    },
-    read_only: false
-  },
+  new Form.row.element().setChildren([
+    new Form.group.element().setChildren([
+      {
+        key: 'note',
+        type: 'textarea',
+        templateOptions: {
+          label: 'Note',
+          rows: 10,
+          required: true,
+          autofocus: true,
+          type: 'textarea'
+        },
+        read_only: false
+      }
+    ]),
+    new Form.group.element().setChildren([
+      new Form.imageList.element('files', 'Files').doNotSend()
+    ])
+  ]),
   {
     key: 'contact',
     type: 'input',
