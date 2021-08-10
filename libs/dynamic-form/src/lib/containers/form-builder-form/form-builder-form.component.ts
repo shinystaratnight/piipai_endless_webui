@@ -4,7 +4,7 @@ import {
   Input,
   Output,
   EventEmitter,
-  OnDestroy,
+  OnDestroy
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormGroup } from '@angular/forms';
@@ -39,7 +39,7 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
   public hiddenFields: HiddenFields = {
     elements: [],
     keys: [],
-    observers: [],
+    observers: []
   };
   public process: boolean;
 
@@ -61,7 +61,7 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
       type: 'related',
       values: ['__str__', 'id', 'translations']
     },
-    query: {},
+    query: {}
   };
 
   public steps = [
@@ -77,12 +77,12 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
         'contact.gender',
         'contact.phone_mobile',
         'contact.email',
-        'contact.address.street_address',
+        'contact.address.street_address'
         // 'contact.address.city',
         // 'contact.address.postal_code',
         // 'contact.address.state',
         // 'contact.address.country'
-      ],
+      ]
     },
     {
       title: 'additional_information',
@@ -92,8 +92,8 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
         'residency',
         'tax_file_number',
         'transportation_to_work',
-        ['weight', 'height'],
-      ],
+        ['weight', 'height']
+      ]
     },
     {
       title: 'bank_and_superannuation_informatioin',
@@ -109,14 +109,14 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
         'formalities.tax_number',
         'formalities.personal_id',
         'superannuation_fund',
-        'superannuation_membership_number',
-      ],
+        'superannuation_membership_number'
+      ]
     },
     {
       title: 'industry_and_skills',
       metadata: [],
-      content: ['industry', 'skill', 'tag'],
-    },
+      content: ['industry', 'skill', 'tag']
+    }
   ];
 
   constructor(
@@ -124,7 +124,7 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
     private router: Router,
     private toastr: ToastService,
     private modalService: NgbModal,
-    private formService: FormService,
+    private formService: FormService
   ) {}
 
   public ngOnInit() {
@@ -135,11 +135,14 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
     });
 
     this.industyField.query = {
-      company: this.companyId,
+      company: this.companyId
     };
 
     this.getRenderData();
-    this.formId = this.formService.registerForm(this.service.formEndpoint, 'edit');
+    this.formId = this.formService.registerForm(
+      this.service.formEndpoint,
+      'edit'
+    );
   }
 
   public ngOnDestroy() {
@@ -173,7 +176,7 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
 
             step.metadata.push({
               type: 'row',
-              children: metadata,
+              children: metadata
             });
           }
         } else {
@@ -306,12 +309,12 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
       passTestAction.subscribe((index) => {
         const test = tests[index];
         this.modalRef = this.modalService.open(PassTestModalComponent, {
-          backdrop: 'static',
+          backdrop: 'static'
         });
         this.modalRef.componentInstance.config = {
           test,
           description: test.description,
-          send: false,
+          send: false
         } as PassTestModalConfig;
 
         this.modalRef.result
@@ -319,7 +322,7 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
             if (this.passedTests.has(item.id)) {
               this.passedTests.set(item.id, [
                 ...this.passedTests.get(item.id),
-                ...res,
+                ...res
               ]);
             } else {
               this.passedTests.set(item.id, res);
@@ -363,20 +366,23 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
           if (typeof item === 'string') {
             return {
               id: item
-            }
+            };
           }
 
           return item;
-        })
+        });
 
         body[key] = newValue;
       }
-    })
+    });
 
     this.service.sendFormData(this.id, body).subscribe(
       (res: any) => {
         this.saveProcess = false;
-        this.toastr.sendMessage(this.config.submit_message, MessageType.Success);
+        this.toastr.sendMessage(
+          this.config.submit_message,
+          MessageType.Success
+        );
         this.router.navigate(['/login']);
       },
       (err: any) => {
@@ -394,7 +400,7 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
       },
       (err: any) => {
         this.parseError(
-          Object.assign({...this.error, [el.key]: err.errors['address'] })
+          Object.assign({ ...this.error, [el.key]: err.errors['address'] })
         );
       }
     );
@@ -543,6 +549,7 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
       ...field,
       query: {
         industry: '{industry.id}',
+        company: 'currentCompany'
       },
       formData,
       many: true,
@@ -566,7 +573,7 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
         this.updateErrors(
           this.error,
           {
-            [field]: err.errors.message,
+            [field]: err.errors.message
           },
           {}
         );
