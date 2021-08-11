@@ -548,7 +548,8 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
     return {
       ...field,
       query: {
-        industry: '{industry.id}'
+        industry: '{industry.id}',
+        company: 'currentCompany'
       },
       formData,
       many: true,
