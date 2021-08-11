@@ -77,7 +77,8 @@ const translationMap = CountryCodeLanguage;
 })
 export class FormRelatedComponent
   extends BasicElementComponent
-  implements OnInit, OnDestroy, AfterViewChecked {
+  implements OnInit, OnDestroy, AfterViewChecked
+{
   @ViewChild('search') search;
   @ViewChild('searchElement') searchElement;
   @ViewChild('modal') modal;
@@ -943,7 +944,7 @@ export class FormRelatedComponent
     };
     const format = new FormatString();
     object.metadata = metadata.map((el) => {
-      const element = {...el};
+      const element = { ...el };
       element.mode = el.mode;
 
       if (el.endpoint) {
@@ -971,7 +972,11 @@ export class FormRelatedComponent
         element.prefilled = newPrefilled;
       }
 
-      if (!el.value && typeof el.default === 'string' && this.dataOfList.length === 0) {
+      if (
+        !el.value &&
+        typeof el.default === 'string' &&
+        this.dataOfList.length === 0
+      ) {
         element.value = format.format(el.default, this.formData);
       }
 
@@ -1174,9 +1179,8 @@ export class FormRelatedComponent
           : '';
 
         if (description) {
-          this.modalData.description = this.sanitizer.bypassSecurityTrustHtml(
-            description
-          );
+          this.modalData.description =
+            this.sanitizer.bypassSecurityTrustHtml(description);
           this.currentUser =
             this.formData['id'] === this.userService.user.data.user;
         }
