@@ -7,9 +7,32 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent implements OnInit {
-  public settings: any;
+  public settings: {
+    company_name: string;
+    register_form_id: string;
+    company: string;
+    logo: string;
+  };
   public config: any;
   public password: boolean;
+
+  get title() {
+    if (this.config) {
+      return this.config.title;
+    }
+
+    return '';
+  }
+
+  get logo() {
+    let logo = '/assets/img/logo.svg';
+
+    if (this.settings) {
+      logo = this.settings.logo || logo;
+    }
+
+    return logo;
+  }
 
   constructor(private route: ActivatedRoute) {}
 
@@ -20,5 +43,4 @@ export class RegisterComponent implements OnInit {
   public setFormConfig(config: any) {
     this.config = config;
   }
-
 }

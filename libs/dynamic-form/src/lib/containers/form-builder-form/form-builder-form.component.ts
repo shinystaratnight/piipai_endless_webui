@@ -14,7 +14,7 @@ import { Subject, BehaviorSubject, Subscription } from 'rxjs';
 import { FormBuilderService, FormService } from '../../services';
 import { MessageType, ToastService } from '@webui/core';
 import { HiddenFields } from '../../components/generic-form/generic-form.component';
-import { Field } from '@webui/data';
+import { Endpoints, Field } from '@webui/data';
 import { getElementFromMetadata } from '../../helpers';
 import { PassTestModalComponent, PassTestModalConfig } from '../../modals';
 
@@ -51,7 +51,7 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
 
   public passedTests: Map<string, any[]> = new Map();
 
-  public industyField = {
+  public industryField = {
     type: 'related',
     send: false,
     endpoint: '/pricing/industries/',
@@ -134,7 +134,7 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
       this.formInvalid = this.validateForm(this.currentStep);
     });
 
-    this.industyField.query = {
+    this.industryField.query = {
       company: this.companyId
     };
 
@@ -563,6 +563,13 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
     };
   }
 
+  public updateTagField(field: Field): Field {
+    return {
+      ...field,
+      endpoint: `${Endpoints.Tag}all/`
+    };
+  }
+
   public validate(key, value, field) {
     this.service.validate(key, value).subscribe(
       (res) => {
@@ -602,11 +609,18 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
 
   private updateConfigByGroups(fields: Field[], tests: any[]): void {
     const skills = this.getFields([], 'skill', fields, 0);
+    const tags = this.getFields([], 'tag', fields, 0);
+
     if (skills.length) {
       const formData = new BehaviorSubject({});
       skills[0] = this.updateSkillField(skills[0], formData, tests);
-      skills.unshift({ ...this.industyField, formData });
+      skills.unshift({ ...this.industryField, formData });
       fields.push(...skills);
+    }
+
+    if (tags.length) {
+      tags[0] = this.updateTagField(tags[0]);
+      fields.push(...tags);
     }
   }
 }
