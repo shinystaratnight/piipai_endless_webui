@@ -15,7 +15,7 @@ import { Observable, Subscriber, combineLatest } from 'rxjs';
   styleUrls: ['./image-uploader.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ImageUploaderComponent implements OnInit {
+export class ImageUploaderComponent {
   @Input() source: Array<{ src: string; id: string }> = [];
   @Input() count: number = 2;
   @Input() loading: boolean;
