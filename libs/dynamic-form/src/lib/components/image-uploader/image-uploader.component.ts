@@ -1,4 +1,12 @@
-import { Component, Input, ChangeDetectionStrategy, Output, EventEmitter, OnInit, ChangeDetectorRef } from '@angular/core';
+import {
+  Component,
+  Input,
+  ChangeDetectionStrategy,
+  Output,
+  EventEmitter,
+  OnInit,
+  ChangeDetectorRef
+} from '@angular/core';
 import { Observable, Subscriber, combineLatest } from 'rxjs';
 
 @Component({
@@ -7,52 +15,43 @@ import { Observable, Subscriber, combineLatest } from 'rxjs';
   styleUrls: ['./image-uploader.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ImageUploaderComponent implements OnInit {
-  @Input() source: string[] = [];
+export class ImageUploaderComponent {
+  @Input() source: Array<{ src: string; id: string }> = [];
   @Input() count: number = 2;
+  @Input() loading: boolean;
   @Output() images: EventEmitter<string[]> = new EventEmitter();
-
-  data: Set<string> = new Set();
-
-  constructor(private cd: ChangeDetectorRef) {}
-
-  ngOnInit() {
-    if (this.source.length) {
-      this.source.forEach((src, i) => {
-        this.data.add(src);
-      });
-    }
-  }
+  @Output() remove: EventEmitter<string> = new EventEmitter();
 
   fileChangeEvent(e) {
     const files: FileList = e.target.files;
     const observables = [];
 
-    Array.from(files).slice(0, this.count - this.source.length).forEach((file: File) => {
-      const reader = new FileReader();
+    Array.from(files)
+      .slice(0, this.count - this.source.length)
+      .forEach((file: File) => {
+        const reader = new FileReader();
 
-      observables.push(
-        new Observable((subscriber: Subscriber<string | ArrayBuffer>) => {
-          reader.onload = () => {
-            subscriber.next(reader.result);
-            subscriber.complete();
-          };
-        })
-      );
+        observables.push(
+          new Observable((subscriber: Subscriber<string | ArrayBuffer>) => {
+            reader.onload = () => {
+              subscriber.next(reader.result);
+              subscriber.complete();
+            };
+          })
+        );
 
-      reader.readAsDataURL(file);
-    });
+        reader.readAsDataURL(file);
+      });
 
     combineLatest(observables).subscribe(
       (data: string[]) => {
-        data.forEach((src, i) => {
-          this.data.add(src);
-        });
-
         this.images.emit(data);
-        this.cd.markForCheck();
       },
-      err => console.error('Image upload error')
+      (err) => console.error('Image upload error')
     );
+  }
+
+  onRemove(id: string) {
+    this.remove.emit(id);
   }
 }

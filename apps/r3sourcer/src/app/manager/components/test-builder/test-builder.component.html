@@ -10,14 +10,17 @@
         <div class="test__actions">
           <fa-icon icon="trash" class="text-danger hov-opacity"
             (click)="deleteQuestion(getId(question), questions, index)"></fa-icon>
-          <fa-icon *ngIf="getId(question)" icon="pencil-alt" class="text-warning hov-opacity ml-2" (click)="editQuestion(question)"></fa-icon>
+          <fa-icon *ngIf="getId(question)" icon="pencil-alt" class="text-warning hov-opacity ml-2"
+            (click)="editQuestion(question)"></fa-icon>
         </div>
 
         <app-dynamic-form [config]="question" (submitForm)="saveQuestion($event, index, getId(question))">
         </app-dynamic-form>
 
         <div class="images" *ngIf="getId(question)">
-          <app-image-uploader [source]="pictures.get(getId(question))" (images)="onUpload($event, getId(question))"></app-image-uploader>
+          <app-image-uploader [loading]="pictureLoading.get(getId(question))" [source]="pictures.get(getId(question))"
+            (remove)="onRemovePicture($event, getId(question))" (images)="onUpload($event, getId(question))">
+          </app-image-uploader>
         </div>
 
         <div class="test__answers" *ngIf="getId(question) && getType(question) !== 1">
@@ -25,15 +28,18 @@
             <div class="test__actions">
               <fa-icon icon="trash" class="text-danger hov-opacity"
                 (click)="deleteAnswer(getId(answer), answers[getId(question)], index)"></fa-icon>
-              <fa-icon *ngIf="getId(answer)" icon="pencil-alt" class="text-warning hov-opacity ml-2" (click)="editAnswer(answer)"></fa-icon>
+              <fa-icon *ngIf="getId(answer)" icon="pencil-alt" class="text-warning hov-opacity ml-2"
+                (click)="editAnswer(answer)"></fa-icon>
             </div>
 
-            <app-dynamic-form [config]="answer" (submitForm)="saveAnswer($event, index, getId(question), getId(answer))">
+            <app-dynamic-form [config]="answer"
+              (submitForm)="saveAnswer($event, index, getId(question), getId(answer))">
             </app-dynamic-form>
           </div>
 
-          <button class="btn btn-secondary align-self-center my-2" *ngIf="testData && checkCount(getType(question), answers[getId(question)].length)"
-            type="button" (click)="addAnswer(true, answers[getId(question)])">
+          <button class="btn btn-secondary align-self-center my-2"
+            *ngIf="testData && checkCount(getType(question), answers[getId(question)].length)" type="button"
+            (click)="addAnswer(true, answers[getId(question)])">
             <fa-icon icon="plus"></fa-icon> Answer
           </button>
         </div>
