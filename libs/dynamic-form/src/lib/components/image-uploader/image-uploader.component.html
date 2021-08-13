@@ -1,10 +1,18 @@
 <div class="wrapper">
   <div class="images">
-    <img class="image" *ngFor="let image of data.values()" [src]="image" alt="" />
+    <div class="image-wrapper" *ngFor="let image of source">
+      <img class="image" [src]="image.src" alt="" />
+
+      <button class="btn remove" type="button" (click)="onRemove(image.id)">
+        <fa-icon class="mr-0" icon="times"></fa-icon>
+      </button>
+    </div>
   </div>
 
-  <label class="btn btn-outline" *ngIf="data.size < this.count">
-    Upload Images
+  <label class="btn btn-primary upload button-save mt-3" *ngIf="source.length < this.count">
+    {{ loading ? 'Uploading' : 'Upload Images' }}
+
+    <app-spinner *ngIf="loading"></app-spinner>
 
     <input type="file" (change)="fileChangeEvent($event)" multiple accept="images/*" />
   </label>
