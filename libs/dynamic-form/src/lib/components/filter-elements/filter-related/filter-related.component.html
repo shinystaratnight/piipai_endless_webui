@@ -9,7 +9,12 @@
 
   <div class="filter-related">
     <div
-      class="d-flex justify-content-center align-items-center autocomplete-filter"
+      class="
+        d-flex
+        justify-content-center
+        align-items-center
+        autocomplete-filter
+      "
       style="position: relative"
     >
       <div
@@ -21,24 +26,26 @@
         (click)="openAutocomplete($event)"
       >
         <div style="overflow: hidden; white-space: nowrap">
-          <span *ngIf="multiple && selected.length">{{
-            'selected' | translate: { Default: 'Selected' }
-          }}&nbsp;</span>
-          <span *ngIf="multiple && !selected.length">{{
-            'select' | translate: { Default: 'Select' }
-          }}&nbsp;</span>
-          <span *ngIf="!multiple && !selected.length && (item && !item.data)">{{
+          <span *ngIf="multiple && selected.length"
+            >{{ 'selected' | translate: { Default: 'Selected' } }}&nbsp;</span
+          >
+          <span *ngIf="multiple && !selected.length"
+            >{{ 'select' | translate: { Default: 'Select' } }}&nbsp;</span
+          >
+          <span *ngIf="!multiple && !selected.length && item && !item.data">{{
             'all' | translate: { Default: 'All' }
           }}</span>
 
-          <span *ngIf="multiple && selected.length">{{ selected.length }}&nbsp;</span>
+          <span *ngIf="multiple && selected.length"
+            >{{ selected.length }}&nbsp;</span
+          >
 
           <span *ngIf="multiple">{{
             getTranslateKey() | translate: { Default: config.label }
           }}</span>
 
           <span *ngIf="!multiple && item && item.data">
-            {{item.displayValue}}
+            {{ item.displayValue }}
           </span>
         </div>
         <fa-icon

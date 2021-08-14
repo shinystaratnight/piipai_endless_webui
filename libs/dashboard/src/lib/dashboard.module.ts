@@ -32,7 +32,7 @@ import {
   CounterWidgetComponent,
   RangeButtonComponent,
   DashboardWidgetComponent,
-  RangeFieldComponent,
+  RangeFieldComponent
 } from './components';
 import { WidgetDirective } from './directives';
 import { DashboardComponent } from './dashboard.component';
@@ -54,7 +54,7 @@ import { DashboardComponent } from './dashboard.component';
     UiModule,
     ButtonsModule,
     TranslateModule,
-    BsDatepickerModule,
+    BsDatepickerModule
   ],
   declarations: [
     DashboardComponent,
@@ -66,7 +66,7 @@ import { DashboardComponent } from './dashboard.component';
     RangeButtonComponent,
     DashboardWidgetComponent,
     CounterWidgetComponent,
-    RangeFieldComponent,
+    RangeFieldComponent
   ],
   providers: [DashboardService, WidgetService],
   entryComponents: [ButtonsWidget, CandidateWidget, CalendarWidgetComponent],

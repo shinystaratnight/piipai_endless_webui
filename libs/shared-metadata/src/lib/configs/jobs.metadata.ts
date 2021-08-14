@@ -27,7 +27,8 @@ const filter = {
   active_states: createFilter(Type.Relared, {
     key: 'active_states',
     label: 'State',
-    endpoint: '/core/workflownodes/?company={company_settings.company}&content_type=hr.job&number={filter_value}',
+    endpoint:
+      '/core/workflownodes/?company={company_settings.company}&content_type=hr.job&number={filter_value}',
     display: ['name_after_activation', 'name_before_activation'],
     parameter: 'number'
   }),
@@ -35,8 +36,8 @@ const filter = {
     key: 'customer_company',
     label: 'Client',
     endpoint: Endpoints.Company
-  }),
-}
+  })
+};
 
 const list = {
   list: {
@@ -128,7 +129,7 @@ const list = {
         ],
         name: 'fulfilled',
         // title: 'today / next day',
-        label: 'Fulfilled',
+        label: 'Fulfilled'
         // delim: '/'
       },
       {
@@ -620,7 +621,7 @@ const formset = {
           }
         ],
         label: 'Actions',
-        title: null,
+        title: null
       }
     ],
     buttons: [],
@@ -843,7 +844,7 @@ const jobsite_client = {
         label: 'State',
         title: null,
         delim: null
-      },
+      }
     ],
     buttons: [],
     list: 'job',
@@ -923,7 +924,7 @@ const form = [
                     .addOptions({
                       '0': 'Hourly wage',
                       '1': 'Piecework wage'
-                    }),
+                    })
                 ],
                 width: 0.33
               },
@@ -957,7 +958,7 @@ const form = [
                     templateOptions: {
                       label: 'Client representative',
                       values: ['__str__', 'company'],
-                      type: 'related',
+                      type: 'related'
                     },
                     type: 'related',
                     query: {
@@ -1059,7 +1060,7 @@ const form = [
               skill: '{position.id}'
             },
             query: {
-              job: '{id}',
+              job: '{id}'
             }
           }
         ]
@@ -1178,7 +1179,7 @@ const form = [
         },
         help: 'Here you can see the favorite candidates for client',
         listKey: 'favouritelists'
-      },
+      }
     ]
   },
   {
@@ -1419,7 +1420,7 @@ const formadd = [
               query: {
                 jobsite: '{jobsite.id}',
                 position: '{position.id}',
-                state: ['10', '20', '40'],
+                state: ['10', '20', '40']
               }
             },
             collapsed: false,
@@ -1460,7 +1461,7 @@ const formadd = [
               type: 'time'
             },
             read_only: false
-          },
+          }
         ]
       }
     ]

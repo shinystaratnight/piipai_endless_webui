@@ -1,5 +1,5 @@
-import { Endpoints, Models } from "@webui/data";
-import { Form } from "@webui/metadata";
+import { Endpoints, Models } from '@webui/data';
+import { Form } from '@webui/metadata';
 
 const form = [
   {
@@ -78,8 +78,8 @@ const form = [
     })
     .setPrefilledFields({
       [Models.Skill]: '{position.id}',
-      [Models.Timesheet]: '{id}',
-    }),
+      [Models.Timesheet]: '{id}'
+    })
 ];
 
 export const candidateFill = {

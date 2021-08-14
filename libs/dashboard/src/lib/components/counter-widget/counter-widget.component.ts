@@ -64,7 +64,7 @@ export class CounterWidgetComponent implements OnInit, OnDestroy {
     private dateRangeService: DateRangeService,
     private settingsService: SiteSettingsService,
     private storage: LocalStorageService,
-    private fb: FormBuilder,
+    private fb: FormBuilder
   ) {}
 
   ngOnInit() {
@@ -88,7 +88,9 @@ export class CounterWidgetComponent implements OnInit, OnDestroy {
       )
     );
 
-    this.rangeForm = this.fb.group(this.dateRangeService.getFormDatesByRange(DateRange.ThisMonth));
+    this.rangeForm = this.fb.group(
+      this.dateRangeService.getFormDatesByRange(DateRange.ThisMonth)
+    );
     this.controlSubscription = this.dateRangeTypeControl.valueChanges
       .pipe(debounceTime(400))
       .subscribe((value) => {

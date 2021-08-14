@@ -26,7 +26,8 @@ import { debounceTime, skip, filter } from 'rxjs/operators';
   styleUrls: ['./filter-related.component.scss']
 })
 export class FilterRelatedComponent
-  implements OnInit, AfterViewInit, OnDestroy {
+  implements OnInit, AfterViewInit, OnDestroy
+{
   @Input() public config: any;
   public data: any;
   public item: any;

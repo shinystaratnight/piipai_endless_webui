@@ -21,10 +21,9 @@ export class NoteModel extends Model {
       .setPrefilledFields({
         object_id: '{id}',
         contact: '{session.data.contact.id}',
-        content_type:
-          model_content_type
-            ? model_content_type
-            : '{model_content_type}'
+        content_type: model_content_type
+          ? model_content_type
+          : '{model_content_type}'
       })
       .useForm();
   }

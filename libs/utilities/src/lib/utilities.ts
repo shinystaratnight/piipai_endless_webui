@@ -71,7 +71,8 @@ export function getContactAvatar(name): string {
 }
 
 export function isTouchDevice(): boolean {
-  const deviceNamesReg = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i;
+  const deviceNamesReg =
+    /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i;
 
   return deviceNamesReg.test(navigator.userAgent.toLowerCase());
 }

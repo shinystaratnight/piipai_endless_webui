@@ -369,8 +369,7 @@ const formset = {
               {
                 action: 'showMessage',
                 messageType: 'sent',
-                endpoint:
-                  '/sms-interface/smsmessages/{offer_sent_by_sms.id}',
+                endpoint: '/sms-interface/smsmessages/{offer_sent_by_sms.id}',
                 noDelim: true,
                 placement: 'left',
                 text: 'Offer',
@@ -508,7 +507,7 @@ const formset = {
       agree_label: 'Agree',
       button_label: 'Go',
       decline_label: 'Decline'
-    },
+    }
   }
 };
 

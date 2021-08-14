@@ -109,7 +109,10 @@ export class DynamicFormComponent implements OnInit {
     let data = this.form.value;
 
     if (this.formService && this.formId) {
-      data = this.updateIfTimeCollapsed(data, this.formService.getForm(this.formId).additionalData);
+      data = this.updateIfTimeCollapsed(
+        data,
+        this.formService.getForm(this.formId).additionalData
+      );
     }
 
     if (this.hiddenFields) {
@@ -359,7 +362,10 @@ export class DynamicFormComponent implements OnInit {
     return Object.keys(obj);
   }
 
-  private updateIfTimeCollapsed(formData: { [key: string]: any }, additionalData: { [key: string ]: any}) {
+  private updateIfTimeCollapsed(
+    formData: { [key: string]: any },
+    additionalData: { [key: string]: any }
+  ) {
     if (additionalData && additionalData.times_collapsed) {
       formData.break_ended_at = null;
       formData.break_started_at = null;
@@ -369,6 +375,6 @@ export class DynamicFormComponent implements OnInit {
 
     return {
       ...formData
-    }
+    };
   }
 }

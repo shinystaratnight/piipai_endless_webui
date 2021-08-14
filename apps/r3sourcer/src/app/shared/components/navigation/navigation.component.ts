@@ -8,7 +8,7 @@ import {
   EventEmitter,
   Output,
   ViewEncapsulation,
-  OnDestroy,
+  OnDestroy
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
 
@@ -34,7 +34,7 @@ import {
   selector: 'app-navigation',
   templateUrl: './navigation.component.html',
   styleUrls: ['./navigation.component.scss'],
-  encapsulation: ViewEncapsulation.None,
+  encapsulation: ViewEncapsulation.None
 })
 export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('header') public header: any;

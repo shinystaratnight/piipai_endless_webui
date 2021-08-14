@@ -1,5 +1,7 @@
 <div class="menu">
-  <h5 class="menu__title">{{'dashboard' | translate: {"Default": "Dashboard"} }}</h5>
+  <h5 class="menu__title">
+    {{ 'dashboard' | translate: { Default: 'Dashboard' } }}
+  </h5>
 
   <ul class="menu__list" [formGroup]="form">
     <li class="menu__list-item" *ngFor="let item of widgets">
@@ -10,14 +12,12 @@
           [name]="item.widgetId"
           hidden
           [formControlName]="item.widgetId"
-        >
+        />
 
-        <app-checkbox
-          [checked]="form.get(item.widgetId).value"
-          [sm]=true>
+        <app-checkbox [checked]="form.get(item.widgetId).value" [sm]="true">
         </app-checkbox>
 
-        {{ item.translateKey | translate: {"Default": item.name} }}
+        {{ item.translateKey | translate: { Default: item.name } }}
       </label>
     </li>
   </ul>

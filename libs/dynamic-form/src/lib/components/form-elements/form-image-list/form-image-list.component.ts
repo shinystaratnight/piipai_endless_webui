@@ -10,7 +10,8 @@ import { BasicElementComponent } from '../basic-element/basic-element.component'
 })
 export class FormImageListComponent
   extends BasicElementComponent
-  implements OnInit {
+  implements OnInit
+{
   group: FormGroup;
   config: any;
   key: string;

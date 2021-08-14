@@ -77,7 +77,7 @@ const list = function () {
 
         new List.column.element('traking', 'Tracking')
           .setHide()
-          .setContent([getTrackingElement()]),
+          .setContent([getTrackingElement()])
       ])
   };
 };

@@ -1,23 +1,23 @@
 <app-base-modal (dissmisEvent)="dismiss()">
-
   <header>
     <h5 class="modal-title" [class.text-center]="config.signature">
-      <ng-container
-        *ngIf="config.evaluate">
-          {{ 'evaluate.label' | translate: { Default: 'Evaluate' } }}
+      <ng-container *ngIf="config.evaluate">
+        {{ 'evaluate.label' | translate: { Default: 'Evaluate' } }}
       </ng-container>
 
       <ng-container *ngIf="!config.evaluate">
-          <img
-            *ngIf="config.label.picture"
-            class="avatar"
-            alt="Photo"
-            width="40"
-            height="40"
-            [src]="config.label.picture"
-          />
+        <img
+          *ngIf="config.label.picture"
+          class="avatar"
+          alt="Photo"
+          width="40"
+          height="40"
+          [src]="config.label.picture"
+        />
 
-          <span *ngIf="!config.label.picture" class="contact-avatar avatar">{{ config.label.contactAvatar }}</span>
+        <span *ngIf="!config.label.picture" class="contact-avatar avatar">{{
+          config.label.contactAvatar
+        }}</span>
 
         {{ config.label.name }}
       </ng-container>
@@ -45,7 +45,13 @@
   <ng-container *ngIf="config.evaluate">
     <div class="modal-body text-center">
       <ng-container *ngIf="config.label.picture">
-        <img [src]="config.label.picture" alt="Photo" style="border-radius: 0.5rem; object-fit: cover;" height="100" width="100" />
+        <img
+          [src]="config.label.picture"
+          alt="Photo"
+          style="border-radius: 0.5rem; object-fit: cover"
+          height="100"
+          width="100"
+        />
       </ng-container>
 
       <ng-container *ngIf="!config.label.picture">
@@ -72,10 +78,9 @@
         class="btn btn-shadow btn-primary button-save"
         (click)="sendEvaluateData(config.endpoint, config.data)"
       >
-          {{ 'save' | translate: { Default: 'Save' } }}
-          <app-spinner *ngIf="saveProcess"></app-spinner>
+        {{ 'save' | translate: { Default: 'Save' } }}
+        <app-spinner *ngIf="saveProcess"></app-spinner>
       </button>
     </div>
   </ng-container>
-
 </app-base-modal>

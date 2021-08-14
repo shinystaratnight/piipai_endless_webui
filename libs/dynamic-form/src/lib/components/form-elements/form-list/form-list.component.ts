@@ -451,13 +451,8 @@ export class FormListComponent implements OnInit, OnDestroy {
   }
 
   private getAddFormConfig() {
-    const {
-      endpoint,
-      add_endpoint,
-      templateOptions,
-      prefilled,
-      delay
-    } = this.config;
+    const { endpoint, add_endpoint, templateOptions, prefilled, delay } =
+      this.config;
 
     const config = {
       title: templateOptions.add_label,

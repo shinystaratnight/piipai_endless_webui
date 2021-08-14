@@ -44,5 +44,5 @@ export const services = [
   EventService,
   DateService,
   TranslateHelperService,
-  FormatterService,
+  FormatterService
 ];
