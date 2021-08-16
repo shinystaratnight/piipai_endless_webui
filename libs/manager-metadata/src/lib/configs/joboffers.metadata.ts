@@ -892,8 +892,10 @@ const formadd = [
         score: '{candidate_scores.average_score}',
         distance: '{distance}'
       },
-      values: ['__str__']
+      values: ['__str__', 'distance', 'candidate_scores']
     },
+    many: true,
+    separate: true,
     showIf: ['shift.id'],
     query: {
       shift: `{shift.date.shift_date}T{shift.time}%2B${getTimeZoneOffset()}`
