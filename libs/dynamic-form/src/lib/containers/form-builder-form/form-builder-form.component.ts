@@ -566,7 +566,8 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
   public updateTagField(field: Field): Field {
     return {
       ...field,
-      endpoint: `${Endpoints.Tag}all/`
+      endpoint: `${Endpoints.Tag}all/`,
+      many: true
     };
   }
 
