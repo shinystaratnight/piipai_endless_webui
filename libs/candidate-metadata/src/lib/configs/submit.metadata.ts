@@ -30,16 +30,16 @@ const form = function () {
             })
         ]),
 
-        new Form.static.element('shift.date.__str__', 'Shift date')
-          .readOnly()
-          .doNotSend(),
-
         new Form.row.element().setChildren([
+          new Form.static.element('shift.date.__str__', 'Shift date')
+            .readOnly()
+            .doNotSend(),
+
           new Form.checkbox.element(
             'hours',
             'Times only',
             CheckboxType.Checkbox
-          )
+          ).setDefaultValue(true)
         ]),
 
         new Form.row.element()
