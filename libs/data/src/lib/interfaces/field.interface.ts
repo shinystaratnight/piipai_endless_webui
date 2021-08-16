@@ -98,6 +98,7 @@ export interface Field {
   translateKey?: string;
   add_endpoint?: string;
   max?: number;
+  isHidden?: Function;
   templateOptions?: {
     hideLabel?: boolean;
     dontSendFields?: boolean;

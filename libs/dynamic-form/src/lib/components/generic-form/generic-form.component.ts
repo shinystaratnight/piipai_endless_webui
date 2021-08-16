@@ -724,6 +724,10 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
       if (el.key || el.type === 'list' || el.type === 'tracking') {
         el.formData = formData;
       } else if (el.children) {
+        if (el.type === 'row') {
+          el.formData = formData;
+        }
+
         this.updateFormData(el.children, formData);
       }
     });

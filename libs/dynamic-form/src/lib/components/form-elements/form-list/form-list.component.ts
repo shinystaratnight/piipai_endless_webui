@@ -336,9 +336,9 @@ export class FormListComponent implements OnInit, OnDestroy {
 
   public checkFormData() {
     if (this.config.formData) {
-      const subscription = this.config.formData.subscribe((formData) => {
-        this.formData = formData.data;
-        this.checkDefaultValues(formData.data);
+      const subscription = this.config.formData.subscribe(({ data, key }) => {
+        this.formData = data;
+        this.checkDefaultValues(data);
       });
 
       this.subscriptions.push(subscription);
