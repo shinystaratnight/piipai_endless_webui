@@ -25,7 +25,8 @@ import { getTimeInstance, getToday } from '@webui/utilities';
 })
 export class FormVacancyDatesComponent
   extends BasicElementComponent
-  implements OnInit, OnDestroy {
+  implements OnInit, OnDestroy
+{
   @Input()
   public deleteDate: BehaviorSubject<string>;
 

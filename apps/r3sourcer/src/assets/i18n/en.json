@@ -200,14 +200,14 @@
   "jobsite.placeholder": "Select",
   "layers": "Layers",
   "list.status": [
-      "New",
-      "Pre-Shift check pending",
-      "Pre-Shift check confirmed",
-      "Pre-Shift check failed",
-      "Submit pending",
-      "Approval pending",
-      "Supervisor modified",
-      "Approved"
+    "New",
+    "Pre-Shift check pending",
+    "Pre-Shift check confirmed",
+    "Pre-Shift check failed",
+    "Submit pending",
+    "Approval pending",
+    "Supervisor modified",
+    "Approved"
   ],
   "list.transportation_to_work.1": "Own Car",
   "list.transportation_to_work.2": "Public Transportation",

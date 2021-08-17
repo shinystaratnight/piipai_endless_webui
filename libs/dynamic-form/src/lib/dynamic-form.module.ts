@@ -17,7 +17,6 @@ import { Angular2SignaturepadModule } from 'angular2-signaturepad';
 import { WebcamModule } from 'ngx-webcam';
 import { NgxDropzoneModule } from 'ngx-dropzone';
 
-
 import { NgxIntlTelInputModule } from 'ngx-intl-tel-input';
 
 import { MetadataModule } from '@webui/metadata';
@@ -59,7 +58,7 @@ import { TranslateModule } from '@ngx-translate/core';
 
     UiModule,
     WebcamModule,
-    NgxDropzoneModule,
+    NgxDropzoneModule
   ],
   exports: [
     fromComponents.GenericFormComponent,
@@ -71,7 +70,7 @@ import { TranslateModule } from '@ngx-translate/core';
     fromComponents.TestGeneratorComponent,
     fromContainers.FormBuilderFormComponent,
     fromComponents.FilterRelatedComponent,
-    fromComponents.ImageUploaderComponent,
+    fromComponents.ImageUploaderComponent
   ],
   declarations: [
     fromComponents.WebcamComponent,
@@ -80,14 +79,14 @@ import { TranslateModule } from '@ngx-translate/core';
     ...directives,
     ...fromContainers.components,
     ...modals,
-    ...modalComponents,
+    ...modalComponents
   ],
   providers: [...services],
   entryComponents: [
     ...fromComponents.entryComponents,
     ...fromContainers.entryComponents,
     ...modals,
-    ...modalComponents,
+    ...modalComponents
   ]
 })
 export class DynamicFormModule {

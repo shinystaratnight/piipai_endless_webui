@@ -14,8 +14,12 @@
 >
 </fa-icon>
 
-<span class="mb-1 d-inline-block" [ngClass]="[iconClass]" *ngIf="config.values && !config.content && value">
-  {{ getTranslationKey(config.value) | translate: {"Default": value} }}
+<span
+  class="mb-1 d-inline-block"
+  [ngClass]="[iconClass]"
+  *ngIf="config.values && !config.content && value"
+>
+  {{ getTranslationKey(config.value) | translate: { Default: value } }}
 </span>
 
 <span
@@ -26,7 +30,9 @@
   [ngbPopover]="actionsTemplate"
   style="cursor: pointer"
 >
-  <span class="value">{{ getTranslationKey(config.value) | translate: {"Default": value} }}</span>
+  <span class="value">{{
+    getTranslationKey(config.value) | translate: { Default: value }
+  }}</span>
   <fa-icon class="icon" icon="chevron-down"></fa-icon>
 </span>
 

@@ -92,7 +92,11 @@ const form = function () {
         ])
       ]),
 
-    new Form.list.element('Skill Activities', Endpoints.TimesheetRates, 'timesheetrates')
+    new Form.list.element(
+      'Skill Activities',
+      Endpoints.TimesheetRates,
+      'timesheetrates'
+    )
       .setQuery({
         timesheet: '{id}'
       })
@@ -102,8 +106,8 @@ const form = function () {
       }),
 
     new NoteModel().formListElement({
-        model_content_type: '112'
-      })
+      model_content_type: '112'
+    })
   ];
 };
 

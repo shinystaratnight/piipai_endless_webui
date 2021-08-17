@@ -167,7 +167,15 @@
         *ngIf="identifyDevice() || isMobileDevice"
       >
         <button
-          class="btn btn-link text-secondary d-flex align-items-center text-uppercase fw-600 mb-0"
+          class="
+            btn btn-link
+            text-secondary
+            d-flex
+            align-items-center
+            text-uppercase
+            fw-600
+            mb-0
+          "
           (click)="toggleFilterBlock()"
           *ngIf="showFilters"
           style="font-size: 14px"
@@ -778,14 +786,14 @@
     >
     </ng-container>
     <div class="mb-3 total-time-wrapper">
-      <span
+      <!-- <span
         class="text-success mr-1"
         style="display: inline-block; font-size: 15px; width: 50%"
         >{{
           'total_time.label' | translate: { Default: 'Total time' }
         }}:&nbsp;</span
-      >
-      <ng-container
+      > -->
+      <!-- <ng-container
         *ngFor="let field of getElement('totalTime', data.content).content"
         appListElement
         [length]="getElement('totalTime', data.content).content.length"
@@ -793,7 +801,7 @@
         (event)="eventHandler($event)"
         (buttonAction)="buttonHandler($event)"
       >
-      </ng-container>
+      </ng-container> -->
     </div>
     <div class="d-flex align-items-center mb-2">
       <ng-container
@@ -894,14 +902,14 @@
     >
     </ng-container>
     <div class="mb-3">
-      <span
+      <!-- <span
         class="text-success mr-1"
         style="display: inline-block; font-size: 15px; width: 50%"
         >{{
           'totalTime.label' | translate: { Default: 'Total time' }
         }}:&nbsp;</span
-      >
-      <ng-container
+      > -->
+      <!-- <ng-container
         *ngFor="let field of getElement('totalTime', data.content).content"
         appListElement
         [length]="getElement('totalTime', data.content).content.length"
@@ -909,7 +917,7 @@
         (event)="eventHandler($event)"
         (buttonAction)="buttonHandler($event)"
       >
-      </ng-container>
+      </ng-container> -->
     </div>
     <div class="d-flex align-items-center mb-2">
       <ng-container
@@ -996,20 +1004,20 @@
     >
     </ng-container>
     <div class="mb-3 total-time-wrapper">
-      <span
+      <!-- <span
         class="text-success mr-1"
         style="display: inline-block; font-size: 15px; width: 50%"
         >Total time:&nbsp;</span
-      >
-      <ng-container
-        *ngFor="let field of getElement('totalTime', data.content).content"
+      > -->
+      <!-- <ng-container
+        *ngFor="let field of getElement('hours', data.content).content"
         appListElement
-        [length]="getElement('totalTime', data.content).content.length"
+        [length]="getElement('hours', data.content).content.length"
         [config]="field"
         (event)="eventHandler($event)"
         (buttonAction)="buttonHandler($event)"
       >
-      </ng-container>
+      </ng-container> -->
     </div>
     <div class="d-flex align-items-center mb-2">
       <ng-container

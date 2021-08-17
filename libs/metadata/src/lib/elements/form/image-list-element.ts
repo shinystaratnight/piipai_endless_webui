@@ -1,12 +1,14 @@
-import { BasicFormElement, BasicElementTemplateOptions } from './basic-form-element';
+import {
+  BasicFormElement,
+  BasicElementTemplateOptions
+} from './basic-form-element';
 
 export const ImageList = 'image_list';
 
-export interface ImageListElementTemplateOptions extends BasicElementTemplateOptions {
-}
+export interface ImageListElementTemplateOptions
+  extends BasicElementTemplateOptions {}
 
 export class ImageListElement extends BasicFormElement {
-
   templateOptions: ImageListElementTemplateOptions;
 
   constructor(key: string, label: string) {

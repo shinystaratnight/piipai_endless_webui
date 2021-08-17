@@ -3,5 +3,5 @@ export enum Models {
   UnitOfMeasurements = 'uom',
   SkillWorkType = 'worktype',
   Timesheet = 'timesheet',
-  Note = 'note',
+  Note = 'note'
 }

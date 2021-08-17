@@ -369,8 +369,7 @@ const formset = {
               {
                 action: 'showMessage',
                 messageType: 'sent',
-                endpoint:
-                  '/sms-interface/smsmessages/{offer_sent_by_sms.id}',
+                endpoint: '/sms-interface/smsmessages/{offer_sent_by_sms.id}',
                 noDelim: true,
                 placement: 'left',
                 text: 'Offer',
@@ -508,7 +507,7 @@ const formset = {
       agree_label: 'Agree',
       button_label: 'Go',
       decline_label: 'Decline'
-    },
+    }
   }
 };
 
@@ -893,8 +892,10 @@ const formadd = [
         score: '{candidate_scores.average_score}',
         distance: '{distance}'
       },
-      values: ['__str__']
+      values: ['__str__', 'distance', 'candidate_scores']
     },
+    many: true,
+    separate: true,
     showIf: ['shift.id'],
     query: {
       shift: `{shift.date.shift_date}T{shift.time}%2B${getTimeZoneOffset()}`

@@ -9,7 +9,7 @@
     *ngIf="pages && pages.length"
   >
     <button
-      class=" d-flex align-items-center hamburger hamburger--spring d-xl-none"
+      class="d-flex align-items-center hamburger hamburger--spring d-xl-none"
       type="button"
       [ngClass]="{ 'is-active': isCollapsed }"
       (click)="showNavigation($event)"
@@ -89,7 +89,10 @@
       <li class="px-3">
         <app-language-selector></app-language-selector>
       </li>
-      <li *ngIf="user && user.data.roles && user.data.roles.length > 1" class="form-inline role">
+      <li
+        *ngIf="user && user.data.roles && user.data.roles.length > 1"
+        class="form-inline role"
+      >
         <span class="mr-1">Role:</span>
         <select
           class="form-control form-control-sm"
@@ -103,18 +106,24 @@
         </select>
       </li>
       <li *ngIf="candidate">
-        <a routerLink="/cd/profile">{{ 'profile' | translate: {"Default": "Profile" } }}</a>
+        <a routerLink="/cd/profile">{{
+          'profile' | translate: { Default: 'Profile' }
+        }}</a>
       </li>
       <li class="d-xl-none description">
         <span>{{ user.data.contact.__str__ }}</span>
-        <br>
+        <br />
         <span *ngIf="company">{{ company }}</span>
       </li>
       <li>
-        <a href="" (click)="changePassword()">{{ 'change_password' | translate: {"Default": "Change password"} }}</a>
+        <a href="" (click)="changePassword()">{{
+          'change_password' | translate: { Default: 'Change password' }
+        }}</a>
       </li>
       <li>
-        <a routerLink="/" (click)="logOut()">{{ 'log_out' | translate: {"Default": "Log out"} }}</a>
+        <a routerLink="/" (click)="logOut()">{{
+          'log_out' | translate: { Default: 'Log out' }
+        }}</a>
       </li>
     </ul>
   </div>
@@ -153,14 +162,14 @@
       class="navigation-link"
       [class.active]="p.active"
       (click)="clickAction($event, p)"
-      >{{ p.translateKey | translate: {"Default": p.name} }}</a
+      >{{ p.translateKey | translate: { Default: p.name } }}</a
     >
     <span
       class="navigation-link disabled"
       *ngIf="p.disabled"
       (click)="isCollapsed = false"
       [attr.title]="getDisableTitle(p.name)"
-      >{{ p.translateKey | translate: {"Default": p.name} }}</span
+      >{{ p.translateKey | translate: { Default: p.name } }}</span
     >
     <fa-icon
       class="icon"

@@ -78,8 +78,8 @@ const list = {
             label: 'Approve',
             endpoint: `${Endpoints.CandidateContact}{id}/buy/`,
             field: 'id',
-            action: 'buyCandidate',
-          },
+            action: 'buyCandidate'
+          }
         ]
       },
       {
@@ -258,17 +258,13 @@ const list = {
         ],
         name: 'bmi',
         label: 'Bmi'
-      },
+      }
     ],
     tabs: [
       {
         label: 'Additional Info',
         is_collapsed: true,
-        fields: [
-          'nationality',
-          'contact.gender',
-          'transportation_to_work'
-        ]
+        fields: ['nationality', 'contact.gender', 'transportation_to_work']
       },
       {
         label: 'Physical Parameters',
@@ -285,7 +281,7 @@ const list = {
           'candidate_scores.client_feedback',
           'candidate_scores.reliability',
           'candidate_scores.loyalty',
-          'candidate_scores.skill_score',
+          'candidate_scores.skill_score'
         ]
       },
       {
@@ -334,10 +330,10 @@ const list = {
         default: null,
         type: 'checkbox'
       },
-      filters.created_at,
+      filters.created_at
     ],
     buttons: [],
-    editDisable: false,
+    editDisable: false
   },
   fields: []
 };
@@ -526,7 +522,7 @@ const form = [
                       danger: 'No rating'
                     },
                     read_only: true
-                  },
+                  }
                 ],
                 width: 0.25
               },
@@ -569,7 +565,7 @@ const form = [
                       danger: 'No rating'
                     },
                     read_only: true
-                  },
+                  }
                 ],
                 width: 0.25
               }
@@ -641,7 +637,7 @@ const form = [
                       type: 'date'
                     },
                     read_only: false
-                  },
+                  }
                 ],
                 width: 0.25
               },
@@ -653,10 +649,10 @@ const form = [
                     templateOptions: {
                       label: 'Nationality',
                       values: ['__str__'],
-                      type: 'related',
+                      type: 'related'
                     },
                     type: 'related',
-                    key: 'nationality',
+                    key: 'nationality'
                   },
                   {
                     key: 'vevo_checked_at',
@@ -677,7 +673,7 @@ const form = [
                 width: 0.25
               }
             ]
-          },
+          }
         ]
       },
       {
@@ -754,12 +750,17 @@ const form = [
         type: 'list',
         query: {
           contact: '{contact.id}',
-          fields: ['unavailable_from', 'unavailable_until', 'notes', 'created_at']
+          fields: [
+            'unavailable_from',
+            'unavailable_until',
+            'notes',
+            'created_at'
+          ]
         },
         templateOptions: {
           label: 'Unavailabilities',
           type: 'list',
-          text: 'Unavailabilities',
+          text: 'Unavailabilities'
         },
         prefilled: {
           contact: '{contact.id}'
@@ -767,7 +768,7 @@ const form = [
         metadata_query: {
           type: 'candidatepool'
         },
-        visibleMode: true,
+        visibleMode: true
       },
       {
         endpoint: Endpoints.CarrierList,
@@ -799,7 +800,7 @@ const form = [
         },
         prefilled: {
           object_id: '{id}',
-          content_type: '{model_content_type}',
+          content_type: '{model_content_type}'
         },
         type: 'list',
         query: {
@@ -808,13 +809,13 @@ const form = [
         },
         metadata_query: {
           type: 'candidatepool'
-        },
-      },
+        }
+      }
     ]
   }
 ];
 
 export const candidatepool = {
   list,
-  form,
+  form
 };

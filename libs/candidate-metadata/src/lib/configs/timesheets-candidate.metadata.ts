@@ -103,14 +103,9 @@ const list = function () {
             .setShowIfRule([{ status: [5, 6, 7] }])
         ]),
 
-        new List.column.element('totalTime', 'Total time')
+        new List.column.element('activity', 'Activity')
           .setWidth(150)
           .setContent([
-            new List.static.element('totalTime')
-              .setDisplay('{totalTime}')
-              .setStyles(['success'])
-              .setShowIfRule([{ status: [5, 6, 7] }]),
-
             new List.static.element('status')
               .setDisplay('Not started yet')
               .setTranslationKey('not_started_yet')
@@ -248,35 +243,7 @@ const list = function () {
           new List.picture.element('supervisor_signature', false)
             .setSignature()
             .setShowIfRule([{ status: 7 }, 'supervisor_signature.origin'])
-        ]),
-
-        new List.column.element('candidate_notes', 'Notes').setContent([
-          new List.text.element('candidate_notes', 'Notes')
-        ]),
-
-        new List.column.element('client_notes', 'Notes').setContent([
-          new List.text.element('client_notes', 'Notes')
-        ]),
-
-        new List.column.element('candidate_files', 'Files').setContent([
-          new List.text.element('candidate_files', 'Files')
-        ]),
-
-        new List.column.element('client_files', 'Files').setContent([
-          new List.text.element('client_files', 'Files')
         ])
-      ])
-      .setTabs([
-        {
-          fields: ['candidate_notes', 'candidate_files'],
-          is_collapsed: true,
-          label: 'Candidate'
-        },
-        {
-          fields: ['client_notes', 'client_files'],
-          is_collapsed: true,
-          label: 'Client'
-        }
       ])
   };
 };

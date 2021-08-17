@@ -51,7 +51,7 @@ import {
   FormElementViewComponent,
   DropdownComponent,
   FormBankAccountComponent,
-  FormImageListComponent,
+  FormImageListComponent
 } from './form-elements';
 
 // import { ExtendComponent } from './extend/extend.component';
@@ -73,7 +73,7 @@ import {
   ListFormComponent,
   ListColumnHeaderComponent,
   ListSkillActivityComponent,
-  ListImageListComponent,
+  ListImageListComponent
 } from './list-elements';
 
 import { ListSerachBarComponent } from './list-search-bar/list-search-bar.component';

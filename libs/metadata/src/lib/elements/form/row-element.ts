@@ -8,13 +8,14 @@ export class RowElement {
   label?: string;
   hideBorder?: boolean;
   showOnMobile?: boolean;
+  isHidden?: Function;
 
   constructor(label?: string) {
     this.label = label;
   }
 
   setChildren(children: any[]) {
-    this.children = [ ...children ];
+    this.children = [...children];
 
     return this;
   }
@@ -31,4 +32,9 @@ export class RowElement {
     return this;
   }
 
+  setIsHidden(rule: Function) {
+    this.isHidden = rule;
+
+    return this;
+  }
 }

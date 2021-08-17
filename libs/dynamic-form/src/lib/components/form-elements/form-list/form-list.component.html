@@ -1,8 +1,15 @@
 <ng-container *ngIf="!this.config.hide">
   <header class="header">
     <div class="header__content">
-      <h4 class="headline-4 title">{{ labelTranslateKey | translate: {"Default": config.templateOptions.label} }}</h4>
-      <p class="description" *ngIf="config.help">{{ helpTranslateKey | translate: {"Default": config.help } }}</p>
+      <h4 class="headline-4 title">
+        {{
+          labelTranslateKey
+            | translate: { Default: config.templateOptions.label }
+        }}
+      </h4>
+      <p class="description" *ngIf="config.help">
+        {{ helpTranslateKey | translate: { Default: config.help } }}
+      </p>
     </div>
 
     <button
@@ -11,7 +18,10 @@
       *ngIf="hasAddButton"
       (click)="addObject()"
     >
-      {{ config?.templateOptions?.add_label | translate: {"Default": '+ Add' } || 'Add' }}
+      {{
+        config?.templateOptions?.add_label
+          | translate: { Default: '+ Add' } || 'Add'
+      }}
     </button>
   </header>
 
@@ -74,7 +84,10 @@
     <div class="modal-header-wrapper">
       <div class="modal-header">
         <h5 class="modal-title">
-          {{ config?.templateOptions?.add_label | translate: {"Default": '+ Add' } || 'Add' }}
+          {{
+            config?.templateOptions?.add_label
+              | translate: { Default: '+ Add' } || 'Add'
+          }}
         </h5>
 
         <app-close-button
@@ -98,7 +111,7 @@
           class="btn btn-primary button-save"
           [disabled]="saveProcess"
         >
-          {{ 'save' | translate: { "Default": 'Save' } }}
+          {{ 'save' | translate: { Default: 'Save' } }}
           <app-spinner *ngIf="saveProcess"></app-spinner>
         </button>
       </app-generic-form>

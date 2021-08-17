@@ -324,7 +324,8 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
   }
 
   public isEmail(value) {
-    let reg = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,4}))$/; //tslint:disable-line
+    let reg =
+      /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,4}))$/; //tslint:disable-line
 
     return reg.test(value) ? true : false;
   }
@@ -723,6 +724,10 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
       if (el.key || el.type === 'list' || el.type === 'tracking') {
         el.formData = formData;
       } else if (el.children) {
+        if (el.type === 'row') {
+          el.formData = formData;
+        }
+
         this.updateFormData(el.children, formData);
       }
     });
@@ -1323,7 +1328,38 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
       }
     }
 
+    const separateDataKey = this.hasSeparateDataKey(this.metadata);
+
+    if (separateDataKey) {
+      const data = newData[separateDataKey];
+
+      data.map((id) => {
+        return this.sendForm({
+          ...newData,
+          [separateDataKey]: {
+            id
+          }
+        });
+      });
+
+      return;
+    }
+
     this.sendForm(newData);
+  }
+
+  public hasSeparateDataKey(metadata) {
+    let key = '';
+
+    metadata.forEach((el) => {
+      if (el.type === 'related') {
+        key = !!el.separate ? el.key : '';
+      } else if (el.children) {
+        key = this.hasSeparateDataKey(el.children);
+      }
+    });
+
+    return key;
   }
 
   public updateRelatedObjects(data): any[] {

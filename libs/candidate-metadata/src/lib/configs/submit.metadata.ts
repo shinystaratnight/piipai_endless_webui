@@ -30,96 +30,105 @@ const form = function () {
             })
         ]),
 
-        new Form.static.element('shift.date.__str__', 'Shift date')
-          .readOnly()
-          .doNotSend(),
+        new Form.row.element().setChildren([
+          new Form.static.element('shift.date.__str__', 'Shift date')
+            .readOnly()
+            .doNotSend(),
 
-        new Form.collapse.element('Times', 'times', true)
-          .setIsCollapsed((data) => {
-            const { wage_type } = data;
+          new Form.checkbox.element(
+            'hours',
+            'Times only',
+            CheckboxType.Checkbox
+          ).setDefaultValue(true)
+        ]),
 
-            return wage_type != WageType.Hourly;
+        new Form.row.element()
+          .setIsHidden((data) => {
+            return !data.hours;
           })
           .setChildren([
-            new Form.row.element().setChildren([
-              new Form.group.element()
-                .doNotShowLabel()
-                .setChildren([
-                  new Form.datepicker.element(
-                    'shift_started_at',
-                    'Shift Start',
-                    DatepickerType.Datetime
-                  )
-                    .setWidth(0.25)
-                    .required(),
-
-                  new Form.static.element('total_time', 'Total time')
-                    .setWidth(0.25)
-                    .readOnly()
-                    .doNotSend()
-                    .setColor('text-success')
-                    .inlineValue()
-                ]),
-
-              new Form.group.element()
-                .doNotShowLabel()
-                .setChildren([
-                  new Form.datepicker.element(
-                    'shift_ended_at',
-                    'Shift End',
-                    DatepickerType.Datetime
-                  )
-                    .setWidth(0.25)
-                    .required(),
-
-                  new Form.checkbox.element(
-                    'noBreak',
-                    'No Break',
-                    CheckboxType.Checkbox
-                  )
-                    .setDefaultValue(false)
-                    .updateByNull(['break_started_at', 'break_ended_at'])
-                    .setWidth(0.25)
-                    .doNotSend()
-                ]),
-
-              new Form.group.element().doNotShowLabel().setChildren([
+            new Form.group.element()
+              .doNotShowLabel()
+              .setChildren([
                 new Form.datepicker.element(
-                  'break_started_at',
-                  'Break Start',
+                  'shift_started_at',
+                  'Shift Start',
                   DatepickerType.Datetime
                 )
                   .setWidth(0.25)
-                  .saveValue()
-                  .setShowIfRule([{ noBreak: false }])
+                  .required(),
+
+                new Form.static.element('total_time', 'Total time')
+                  .setWidth(0.25)
+                  .readOnly()
+                  .doNotSend()
+                  .setColor('text-success')
+                  .inlineValue()
               ]),
 
-              new Form.group.element().doNotShowLabel().setChildren([
+            new Form.group.element()
+              .doNotShowLabel()
+              .setChildren([
                 new Form.datepicker.element(
-                  'break_ended_at',
-                  'Break End',
+                  'shift_ended_at',
+                  'Shift End',
                   DatepickerType.Datetime
                 )
                   .setWidth(0.25)
-                  .saveValue()
-                  .setShowIfRule([{ noBreak: false }])
-              ])
-            ])
-          ])
-      ]),
+                  .required(),
 
-      new Form.list.element(
-        'Skill Activities',
-        Endpoints.TimesheetRates,
-        'timesheetrates'
-      )
-        .setQuery({
-          timesheet: '{id}'
-        })
-        .setPrefilledFields({
-          [Models.Skill]: '{position.id}',
-          [Models.Timesheet]: '{id}'
-        }),
+                new Form.checkbox.element(
+                  'noBreak',
+                  'No Break',
+                  CheckboxType.Checkbox
+                )
+                  .setDefaultValue(false)
+                  .updateByNull(['break_started_at', 'break_ended_at'])
+                  .setWidth(0.25)
+                  .doNotSend()
+              ]),
+
+            new Form.group.element().doNotShowLabel().setChildren([
+              new Form.datepicker.element(
+                'break_started_at',
+                'Break Start',
+                DatepickerType.Datetime
+              )
+                .setWidth(0.25)
+                .saveValue()
+                .setShowIfRule([{ noBreak: false }])
+            ]),
+
+            new Form.group.element().doNotShowLabel().setChildren([
+              new Form.datepicker.element(
+                'break_ended_at',
+                'Break End',
+                DatepickerType.Datetime
+              )
+                .setWidth(0.25)
+                .saveValue()
+                .setShowIfRule([{ noBreak: false }])
+            ])
+          ]),
+
+        new Form.list.element(
+          'Skill Activities',
+          Endpoints.TimesheetRates,
+          'timesheetrates'
+        )
+          .setShowIfRule([
+            {
+              hours: false
+            }
+          ])
+          .setQuery({
+            timesheet: '{id}'
+          })
+          .setPrefilledFields({
+            [Models.Skill]: '{position.id}',
+            [Models.Timesheet]: '{id}'
+          })
+      ]),
 
       new NoteModel().formListElement({
         model_content_type: '112'

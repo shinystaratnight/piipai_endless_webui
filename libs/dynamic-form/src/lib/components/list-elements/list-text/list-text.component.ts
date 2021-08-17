@@ -69,7 +69,11 @@ export class ListTextComponent implements OnInit {
     this.cssClasses = generateCssStyles(this.config.styles, this.stylePrefix);
     this.translationKey = getTranslationKey(
       `${this.config.key}.${this.config.name}`,
-      typeof this.value === 'number' ? this.value : this.config.label === 'Date' ? 'date' : 'label'
+      typeof this.value === 'number'
+        ? this.value
+        : this.config.label === 'Date'
+        ? 'date'
+        : 'label'
     );
   }
 
