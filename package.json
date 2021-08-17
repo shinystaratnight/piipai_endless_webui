@@ -25,7 +25,9 @@
     "update": "nx migrate latest",
     "workspace-generator": "nx workspace-generator",
     "dep-graph": "nx dep-graph",
-    "help": "nx help"
+    "help": "nx help",
+    "prod": "ng build --prod --configuration=production",
+    "stage": "ng build --prod --configuration=stage"
   },
   "private": true,
   "dependencies": {
