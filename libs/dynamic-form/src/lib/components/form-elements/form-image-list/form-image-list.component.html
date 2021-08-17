@@ -14,7 +14,10 @@
       </ul>
     </ng-container>
 
-    <ngx-dropzone (change)="onSelect($event)" accept="image/jpeg,image/jpg,image/png">
+    <ngx-dropzone
+      (change)="onSelect($event)"
+      accept="image/jpeg,image/jpg,image/png"
+    >
       <ngx-dropzone-label>Drop images</ngx-dropzone-label>
       <ngx-dropzone-image-preview
         [file]="f"

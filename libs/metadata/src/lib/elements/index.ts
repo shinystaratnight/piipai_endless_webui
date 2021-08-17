@@ -4,7 +4,7 @@ import * as forms from './form';
 import * as filters from './filters';
 import * as datalist from './list';
 
-export const Form  = {
+export const Form = {
   select: forms.select,
   textarea: forms.textarea,
   checkbox: forms.checkbox,
@@ -44,8 +44,8 @@ export const List = {
   icon: datalist.icon,
   info: datalist.info,
   link: datalist.link,
-  checkbox: datalist.checkbox,
-}
+  checkbox: datalist.checkbox
+};
 
 export { DatepickerType } from './form/datepicker-element';
 export { InputType } from './form/input-element';

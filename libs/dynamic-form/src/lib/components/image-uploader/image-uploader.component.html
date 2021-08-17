@@ -9,11 +9,19 @@
     </div>
   </div>
 
-  <label class="btn btn-primary upload button-save mt-3" *ngIf="source.length < this.count">
+  <label
+    class="btn btn-primary upload button-save mt-3"
+    *ngIf="source.length < this.count"
+  >
     {{ loading ? 'Uploading' : 'Upload Images' }}
 
     <app-spinner *ngIf="loading"></app-spinner>
 
-    <input type="file" (change)="fileChangeEvent($event)" multiple accept="images/*" />
+    <input
+      type="file"
+      (change)="fileChangeEvent($event)"
+      multiple
+      accept="images/*"
+    />
   </label>
 </div>

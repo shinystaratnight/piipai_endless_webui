@@ -53,13 +53,16 @@ const list = {
         name: 'client_/_jobsite_/_supervisor',
         title: null,
         sort: true,
-        sortMap: [{
-          name: 'client',
-          param: 'job_offer__shift__date__job__customer_company__name'
-        }, {
-          name: 'jobsite',
-          param: 'job_offer__shift__date__job__jobsite__short_name'
-        }],
+        sortMap: [
+          {
+            name: 'client',
+            param: 'job_offer__shift__date__job__customer_company__name'
+          },
+          {
+            name: 'jobsite',
+            param: 'job_offer__shift__date__job__jobsite__short_name'
+          }
+        ],
         label: 'Client / Jobsite / Supervisor',
         delim: null
       },
@@ -718,7 +721,7 @@ const supervisor = {
         max: 255,
         type: 'picture',
         label_photo: 'Take a photo',
-        label_upload: 'Choose a file',
+        label_upload: 'Choose a file'
       },
       type: 'input'
     },
@@ -1033,7 +1036,7 @@ const form = [
                     .addOptions({
                       '0': 'Hourly wage',
                       '1': 'Piecework wage'
-                    }),
+                    })
                 ]
               }
             ]
@@ -1052,7 +1055,7 @@ const form = [
                     send: false,
                     read_only: true,
                     templateOptions: {
-                      label: 'Shift Date',
+                      label: 'Shift Date'
                     }
                   }
                 ]
@@ -1074,7 +1077,7 @@ const form = [
                     }
                   }
                 ]
-              },
+              }
             ]
           },
           {
@@ -1147,8 +1150,8 @@ const form = [
             })
             .setPrefilledFields({
               [Models.Skill]: '{position.id}',
-              [Models.Timesheet]: '{id}',
-            }),
+              [Models.Timesheet]: '{id}'
+            })
         ]
       },
       {

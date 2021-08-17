@@ -23,9 +23,7 @@ export const modals = [
   TrackingModalComponent,
   EvaluateModalComponent,
   ChangeTimesheetModalComponent,
-  ApproveTimesheetModalComponent,
+  ApproveTimesheetModalComponent
 ];
 
-export const components = [
-  EvaluateFieldComponent,
-]
+export const components = [EvaluateFieldComponent];

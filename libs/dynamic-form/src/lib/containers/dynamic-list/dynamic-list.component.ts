@@ -78,7 +78,8 @@ const translationMap = CountryCodeLanguage;
   styleUrls: ['./dynamic-list.component.scss']
 })
 export class DynamicListComponent
-  implements OnInit, OnChanges, OnDestroy, AfterContentChecked {
+  implements OnInit, OnChanges, OnDestroy, AfterContentChecked
+{
   @Input() config: any;
   @Input() data: any;
   @Input() first: boolean;
@@ -1850,9 +1851,8 @@ export class DynamicListComponent
 
   public changeTimesheet(e) {
     const data = this.getRowData(e);
-    const signature = data.company.supervisor_approved_scheme.includes(
-      'SIGNATURE'
-    );
+    const signature =
+      data.company.supervisor_approved_scheme.includes('SIGNATURE');
 
     if (data) {
       const contact = data.job_offer.candidate_contact.contact;
@@ -1944,9 +1944,8 @@ export class DynamicListComponent
       break_started_at,
       break_ended_at
     } = data;
-    const signature = data.company.supervisor_approved_scheme.includes(
-      'SIGNATURE'
-    );
+    const signature =
+      data.company.supervisor_approved_scheme.includes('SIGNATURE');
 
     const approveTimesheet = () => {
       this.genericFormService

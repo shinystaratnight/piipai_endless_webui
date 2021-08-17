@@ -8,22 +8,7 @@
     "tsconfig.base.json": "*"
   },
   "projects": {
-    "utilities": {
-      "tags": []
-    },
-    "shared": {
-      "tags": []
-    },
-    "data": {
-      "tags": []
-    },
-    "core": {
-      "tags": []
-    },
-    "metadata": {
-      "tags": []
-    },
-    "dynamic-form": {
+    "billing-metadata": {
       "tags": []
     },
     "calendar": {
@@ -32,29 +17,44 @@
     "candidate-metadata": {
       "tags": []
     },
-    "shared-metadata": {
+    "client-metadata": {
+      "tags": []
+    },
+    "core": {
+      "tags": []
+    },
+    "dashboard": {
+      "tags": []
+    },
+    "data": {
+      "tags": []
+    },
+    "dynamic-form": {
       "tags": []
     },
     "manager-metadata": {
       "tags": []
     },
-    "client-metadata": {
+    "metadata": {
+      "tags": []
+    },
+    "r3sourcer": {
       "tags": []
     },
     "r3sourcer-e2e": {
       "tags": [],
       "implicitDependencies": ["r3sourcer"]
     },
-    "r3sourcer": {
+    "shared": {
       "tags": []
     },
-    "billing-metadata": {
-      "tags": []
-    },
-    "dashboard": {
+    "shared-metadata": {
       "tags": []
     },
     "ui": {
+      "tags": []
+    },
+    "utilities": {
       "tags": []
     }
   },

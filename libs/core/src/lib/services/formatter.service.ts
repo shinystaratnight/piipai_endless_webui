@@ -6,7 +6,6 @@ import { UserService } from './user.service';
   providedIn: 'root'
 })
 export class FormatterService {
-
   constructor(private userService: UserService) {}
 
   formatString(str: string, data: { [key: string]: any }): any {

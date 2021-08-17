@@ -21,22 +21,22 @@ export type ApproveTimesheetModalConfig = {
     break_start_and: string;
     unformated_date: string;
     total: string;
-  },
-  form: any,
+  };
+  form: any;
   signature: {
     endpoint: string;
     value: string;
-  },
+  };
   label: {
     picture: string;
     contactAvatar: string;
     name: string;
-  },
+  };
   data: {
     evaluation_score: number;
-  },
+  };
   signatureStep: boolean;
-  approve: boolean
+  approve: boolean;
 };
 
 @Component({

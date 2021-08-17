@@ -1,4 +1,9 @@
-import { ChangeDetectionStrategy, Component, Input, OnInit } from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  OnInit
+} from '@angular/core';
 
 @Component({
   selector: 'app-evaluate-field',
@@ -12,6 +17,6 @@ export class EvaluateFieldComponent implements OnInit {
   hovered: any;
 
   ngOnInit() {
-    this.score = this.evaluatedScore
+    this.score = this.evaluatedScore;
   }
 }

@@ -45,8 +45,18 @@ input {
 
     @each $item in $themes {
       .#{$item}-theme & {
-        -webkit-box-shadow: 0 0 0px 1000px rgba(map-get($theme-colors, $item), 0.2) inset;
-        box-shadow: 0 0 0px 1000px rgba(map-get($theme-colors, $item), 0.2) inset;
+        -webkit-box-shadow: 0
+          0
+          0px
+          1000px
+          rgba(map-get($theme-colors, $item), 0.2)
+          inset;
+        box-shadow: 0
+          0
+          0px
+          1000px
+          rgba(map-get($theme-colors, $item), 0.2)
+          inset;
       }
     }
   }
@@ -60,7 +70,7 @@ input::-webkit-inner-spin-button {
 }
 
 /* Firefox */
-input[type=number] {
+input[type='number'] {
   -moz-appearance: textfield;
 }
 
@@ -197,7 +207,7 @@ input[type=number] {
 
   font-weight: 600;
 
-  border-radius: .5rem;
+  border-radius: 0.5rem;
 
   color: white;
 
@@ -411,11 +421,11 @@ iframe.send-sms {
 }
 
 .timesheet-submit-form {
-  .items {
-    @include media-breakpoint-down('md') {
-      display: block !important;
-    }
-  }
+  // .items {
+  //   @include media-breakpoint-down('md') {
+  //     display: block !important;
+  //   }
+  // }
 
   @include media-breakpoint-down('md') {
     .button-save {

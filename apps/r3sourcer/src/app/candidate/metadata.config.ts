@@ -4,7 +4,7 @@ import {
   metadataTimesheetsCandidate,
   metadataSubmit,
   metadataProfile,
-  timesheetratescandidate,
+  timesheetratescandidate
 } from '@webui/candidate-metadata';
 
 import {
@@ -13,7 +13,7 @@ import {
   candidateevaluations,
   passwordchange,
   passwordforgot,
-  notes,
+  notes
 } from '@webui/shared-metadata';
 
 export class Metadata {

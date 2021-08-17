@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input }  from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Format } from '@webui/core';
 
@@ -6,7 +6,7 @@ import { Format } from '@webui/core';
   selector: 'app-range-field',
   templateUrl: './range-field.component.html',
   styleUrls: ['./range-field.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RangeFieldComponent {
   @Input() controlName: string;

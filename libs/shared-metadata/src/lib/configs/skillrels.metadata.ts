@@ -428,10 +428,10 @@ const form = [
     collapsed: false,
     visibleMode: true,
     prefilled: {
-      skill_rel: '{id}',
+      skill_rel: '{id}'
     },
     query: {
-      skill_rel: '{id}',
+      skill_rel: '{id}'
     }
   },
   {
@@ -450,7 +450,7 @@ const form = [
       skill: '{skill.id}'
     },
     query: {
-      skill_rel: '{id}',
+      skill_rel: '{id}'
     }
   }
 ];
@@ -649,7 +649,7 @@ const profile = {
           {
             type: 'skills',
             field: 'score',
-            stars: true,
+            stars: true
           }
         ],
         label: 'Score'
@@ -675,7 +675,7 @@ const profile = {
           }
         ],
         label: 'Prior Experience'
-      },
+      }
       // {
       //   name: 'actions',
       //   content: [
@@ -755,7 +755,7 @@ const candidatepool = {
         type: 'select'
       },
       type: 'select'
-    },
+    }
   ],
   list: {
     columns: [
@@ -796,7 +796,7 @@ const candidatepool = {
           }
         ],
         label: 'Prior Experience'
-      },
+      }
     ],
     list: 'skillrel',
     editDisable: true,
@@ -812,5 +812,5 @@ export const skillrels = {
   form,
   formadd,
   profile,
-  candidatepool,
+  candidatepool
 };

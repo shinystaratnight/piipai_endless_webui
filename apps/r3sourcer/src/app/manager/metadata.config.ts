@@ -111,7 +111,7 @@ import {
   skillrates,
   skillrateranges,
   timesheetrates,
-  jobrates,
+  jobrates
 } from '@webui/manager-metadata';
 
 import {
@@ -125,7 +125,7 @@ import {
   notes,
   address,
   passwordforgot,
-  worktypes,
+  worktypes
 } from '@webui/shared-metadata';
 
 import { Endpoints } from '@webui/data';

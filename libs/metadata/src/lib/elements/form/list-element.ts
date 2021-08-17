@@ -18,6 +18,8 @@ export class ListElement {
   metadata_query?: { [key: string]: any };
   translateKey?: string;
   add_form?: boolean;
+  isHidden?: Function;
+  showIf: Array<string | { [key: string]: any }>;
 
   constructor(label: string, endpoint: string, translateKey?: string) {
     this.templateOptions = {
@@ -62,6 +64,12 @@ export class ListElement {
 
   useForm() {
     this.add_form = true;
+
+    return this;
+  }
+
+  setShowIfRule(showIf: Array<string | { [key: string]: any }>) {
+    this.showIf = showIf;
 
     return this;
   }

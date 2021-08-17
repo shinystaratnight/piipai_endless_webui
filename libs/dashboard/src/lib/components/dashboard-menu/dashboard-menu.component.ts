@@ -1,4 +1,14 @@
-import { Component, OnInit, Input, ChangeDetectionStrategy, OnDestroy, Output, EventEmitter, OnChanges, SimpleChanges } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  Input,
+  ChangeDetectionStrategy,
+  OnDestroy,
+  Output,
+  EventEmitter,
+  OnChanges,
+  SimpleChanges
+} from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
@@ -17,7 +27,6 @@ export interface WidgetItem {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DashboardMenuComponent implements OnInit, OnChanges, OnDestroy {
-
   @Input() widgets: WidgetItem[];
   @Output() changed: EventEmitter<WidgetItem> = new EventEmitter();
 
@@ -44,16 +53,21 @@ export class DashboardMenuComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     const form = {};
-    this.widgets.forEach(widget => {
-      form[widget.widgetId] = new FormControl(widget.active)
+    this.widgets.forEach((widget) => {
+      form[widget.widgetId] = new FormControl(widget.active);
     });
 
     this.form = new FormGroup(form);
-    this.subscription = this.form.valueChanges.subscribe(value => {
-      const changedWidget = this.widgets.find(widget => value[widget.widgetId] !== widget.active);
+    this.subscription = this.form.valueChanges.subscribe((value) => {
+      const changedWidget = this.widgets.find(
+        (widget) => value[widget.widgetId] !== widget.active
+      );
 
       if (changedWidget) {
-        this.changed.emit({...changedWidget, active: value[changedWidget.widgetId]});
+        this.changed.emit({
+          ...changedWidget,
+          active: value[changedWidget.widgetId]
+        });
       }
     });
   }

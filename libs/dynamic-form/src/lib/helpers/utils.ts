@@ -34,7 +34,11 @@ export function getValueOfData(data, key: string, obj: Field): void {
   }
 }
 
-export function getElementFromMetadata(metadata: Field[], key: string, param = 'key'): Field {
+export function getElementFromMetadata(
+  metadata: Field[],
+  key: string,
+  param = 'key'
+): Field {
   let element = null;
   metadata.forEach((el: Field) => {
     if (el[param] === key) {
@@ -84,23 +88,28 @@ export function getOrientation(): number {
   if (Number.isInteger((window as any).orientation)) {
     orientation = Math.abs((window as any).orientation);
   } else {
-    const stringOrientation = (screen as any).msOrientation
-      || (screen as any).mozOrientation
-      || ((screen as any).orientation || {} as any).type;
+    const stringOrientation =
+      (screen as any).msOrientation ||
+      (screen as any).mozOrientation ||
+      ((screen as any).orientation || ({} as any)).type;
     orientation = stringOrientation.includes('landscape') ? 90 : 0;
   }
   return orientation || 0;
 }
 
-export function generateCssStyles(styles: string[] = [], prefix: string): string[] {
-  return [styles
-    .map((modificator) => {
-      return `${prefix}__${modificator}`;
-    })
-    .reduce((prev, current) => {
-      return `${prev} ${current}`;
-    }, '')
-    .trim() || ''
+export function generateCssStyles(
+  styles: string[] = [],
+  prefix: string
+): string[] {
+  return [
+    styles
+      .map((modificator) => {
+        return `${prefix}__${modificator}`;
+      })
+      .reduce((prev, current) => {
+        return `${prev} ${current}`;
+      }, '')
+      .trim() || ''
   ];
 }
 
@@ -112,4 +121,4 @@ export const isAddressField = (field: Field) => {
   }
 
   return key === 'address' || key === 'street_address';
-}
+};

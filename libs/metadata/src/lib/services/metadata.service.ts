@@ -44,7 +44,10 @@ export class MetadataService {
       endpoint = 'password';
     }
 
-    if (endpoint.includes('/candidate_contacts/') && endpoint.includes('/languages/')) {
+    if (
+      endpoint.includes('/candidate_contacts/') &&
+      endpoint.includes('/languages/')
+    ) {
       endpoint = 'candidate_languages';
     }
 
