@@ -247,7 +247,10 @@ export class FormListComponent implements OnInit, OnDestroy {
         closeModal();
       }
 
-      this.updateList(e);
+      setTimeout(() => {
+        this.updateList(e);
+      }, 600);
+
       if (this.timelineService) {
         this.timelineService.emit(TimelineAction.Update);
       }

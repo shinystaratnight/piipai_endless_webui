@@ -1243,6 +1243,25 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
   }
 
   public submitForm(data) {
+    const separateData = this.hasSeparateDataKey(this.metadata);
+
+    if (separateData.key) {
+      const { key, type } = separateData;
+
+      const values = data[key];
+
+      if (Array.isArray(values)) {
+        values.map((value) => {
+          this.submitForm({
+            ...data,
+            [key]: type === 'related' ? { id: value } : value
+          });
+        });
+
+        return;
+      }
+    }
+
     if (
       (this.endpoint === Endpoints.Job ||
         this.endpoint === Endpoints.ClientJobs) &&
@@ -1328,38 +1347,21 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
       }
     }
 
-    const separateDataKey = this.hasSeparateDataKey(this.metadata);
-
-    if (separateDataKey) {
-      const data = newData[separateDataKey];
-
-      data.map((id) => {
-        return this.sendForm({
-          ...newData,
-          [separateDataKey]: {
-            id
-          }
-        });
-      });
-
-      return;
-    }
-
     this.sendForm(newData);
   }
 
-  public hasSeparateDataKey(metadata) {
-    let key = '';
+  public hasSeparateDataKey(metadata): { key?: string; type?: string } {
+    let result = {};
 
-    metadata.forEach((el) => {
-      if (el.type === 'related') {
-        key = !!el.separate ? el.key : '';
-      } else if (el.children) {
-        key = this.hasSeparateDataKey(el.children);
+    metadata.forEach(({ key, type, separate, children }) => {
+      if (separate) {
+        result = { key, type };
+      } else if (children) {
+        result = this.hasSeparateDataKey(children);
       }
     });
 
-    return key;
+    return result;
   }
 
   public updateRelatedObjects(data): any[] {
@@ -1638,19 +1640,23 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
         const prefilledDataKeys = Object.keys(
           this.delayData[endpoint].prefilled
         );
-        prefilledDataKeys.forEach((el) => {
-          this.delayData[endpoint].prefilled[el] = this.format.format(
-            this.delayData[endpoint].prefilled[el],
+        const prefilledData = prefilledDataKeys.map((key) => {
+          const value = this.format.format(
+            this.delayData[endpoint].prefilled[key],
             response
-          ); //tslint:disable-line
+          );
+
+          return [key, value];
+        });
+
+        const result = {};
+        prefilledData.forEach(([key, value]) => {
+          result[key] = value;
         });
 
         this.delayData[endpoint].data.sendData.forEach(
           (element, index, arr) => {
-            const body = Object.assign(
-              element,
-              this.delayData[endpoint].prefilled
-            );
+            const body = Object.assign(element, result);
 
             this.service
               .submitForm(endpoint, body, { showMessage: true })

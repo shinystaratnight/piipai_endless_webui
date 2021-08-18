@@ -175,6 +175,8 @@ const jobAdd = [
       label: 'Shift date',
       type: 'date'
     },
+    separate: true,
+    many: true,
     type: 'datepicker'
   },
   {
