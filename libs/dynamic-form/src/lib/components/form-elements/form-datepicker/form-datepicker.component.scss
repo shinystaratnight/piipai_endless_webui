@@ -38,3 +38,31 @@
   text-transform: none;
   color: #4f4f4f;
 }
+
+.dates {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 0;
+  list-style: none;
+  margin-top: -0.5rem;
+
+  .date {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.5rem;
+    border: 1px solid $primary;
+    border-radius: 20px;
+    transition: background-color 0.2s linear;
+    margin-top: 0.5rem;
+    margin-right: 0.5rem;
+
+    &:hover {
+      background-color: rgba($primary, 0.2);
+    }
+  }
+
+  .action {
+    margin-left: 1rem;
+    padding: 0;
+  }
+}

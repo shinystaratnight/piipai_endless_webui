@@ -16,11 +16,26 @@
       *ngIf="label && config.templateOptions.label"
       [attr.for]="key"
     >
-      {{ getTranslationKey(config.key, 'label') | translate: {"Default": config.templateOptions.label}  }}:
+      {{
+        getTranslationKey(config.key, 'label')
+          | translate: { Default: config.templateOptions.label }
+      }}:
     </label>
-    <app-info *ngIf="config.templateOptions.description" [description]="getTranslationKey(config.key, 'description') | translate: {'Default': config.templateOptions.description}"></app-info>
-    <div *ngIf="!mobileDevice" class="input-group form-element-content datepicker mb-2 edit">
-      <div class="input-group" [hidden]="config.templateOptions.type === 'time'">
+    <app-info
+      *ngIf="config.templateOptions.description"
+      [description]="
+        getTranslationKey(config.key, 'description')
+          | translate: { Default: config.templateOptions.description }
+      "
+    ></app-info>
+    <div
+      *ngIf="!mobileDevice"
+      class="input-group form-element-content datepicker mb-2 edit"
+    >
+      <div
+        class="input-group"
+        [hidden]="config.templateOptions.type === 'time'"
+      >
         <input
           class="form-control"
           #d
@@ -31,8 +46,10 @@
           [maxDate]="maxDate"
           [attr.id]="key"
           [attr.name]="key"
-          data-role="datebox"
-          [bsConfig]="{ dateInputFormat: formats.date, showClearButton: true }"
+          [bsConfig]="{
+            dateInputFormat: formats.date,
+            showClearButton: true
+          }"
         />
 
         <div class="input-group-addon">
@@ -40,8 +57,12 @@
         </div>
       </div>
 
-      <div class="position-relative time-wrapper" 
-        [hidden]="((config.templateOptions.type === 'datetime' && !d.value) || config.templateOptions.type === 'date')"
+      <div
+        class="position-relative time-wrapper"
+        [hidden]="
+          (config.templateOptions.type === 'datetime' && !d.value) ||
+          config.templateOptions.type === 'date'
+        "
       >
         <input
           class="form-control"
@@ -60,6 +81,17 @@
         </span>
       </div>
     </div>
+
+    <ng-container *ngIf="config.many">
+      <ul class="dates">
+        <li class="date" *ngFor="let date of formControl.value">
+          {{ date }}
+          <button class="btn action" type="button" (click)="removeDate(date)">
+            <fa-icon icon="times"></fa-icon>
+          </button>
+        </li>
+      </ul>
+    </ng-container>
 
     <div
       *ngIf="mobileDevice"
@@ -119,9 +151,18 @@
       class="form-element-label"
       *ngIf="label && config.templateOptions.label"
     >
-      {{ getTranslationKey(config.key, 'label') | translate: {'Default': config.templateOptions.label}  }}:
+      {{
+        getTranslationKey(config.key, 'label')
+          | translate: { Default: config.templateOptions.label }
+      }}:
     </label>
-    <app-info *ngIf="config.templateOptions.description" [description]="getTranslationKey(config.key, 'description') | translate: {'Default': config.templateOptions.description}"></app-info>
+    <app-info
+      *ngIf="config.templateOptions.description"
+      [description]="
+        getTranslationKey(config.key, 'description')
+          | translate: { Default: config.templateOptions.description }
+      "
+    ></app-info>
     <div [class.readonly-value]="editMode" class="form-element-content">
       {{ displayValue || '-' }}
     </div>
