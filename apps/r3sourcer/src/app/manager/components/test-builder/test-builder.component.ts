@@ -358,10 +358,11 @@ export class TestBuilderComponent implements OnInit, OnChanges {
       .delete('/acceptance-tests/acceptancetestquestionpictures/', imageId)
       .subscribe(() => {
         const pictures = this.pictures.get(id);
-        const index = pictures.findIndex((picture) => picture.id === id);
-        pictures.splice(index, 1);
+        const filteredList = pictures.filter(
+          (picture) => picture.id !== imageId
+        );
 
-        this.pictures.set(id, [...pictures]);
+        this.pictures.set(id, [...filteredList]);
       });
   }
 
