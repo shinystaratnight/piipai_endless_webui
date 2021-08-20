@@ -554,45 +554,42 @@ export class GenericListComponent implements OnInit, OnDestroy {
 
         switch (method) {
           case ApiMethod.PUT:
-            return this.gfs.editForm(url, body);
+            return this.gfs.editForm(url + 'broken', body).pipe(
+              catchError((err) => {
+                const detail = err.detail;
+
+                if (detail) {
+                  this.toast.sendMessage(detail, MessageType.Error);
+                }
+
+                return err;
+              })
+            );
           case ApiMethod.DELETE:
-            return this.gfs.delete(url, id);
+            return this.gfs.delete(url + 'broken', id);
           default:
-            return this.gfs.submitForm(url, body);
+            return this.gfs.submitForm(url + 'broken', body);
         }
       });
 
       target.actionProcess = true;
-      forkJoin(requests)
-        .pipe(
-          catchError(
-            (responses: Array<{ status: string; detail?: string }>) => {
-              const message = responses
-                .filter(({ status }) => status === 'error')
-                .map(({ detail }) => detail)
-                .join(' ');
-              this.toast.sendMessage(message, MessageType.Error);
-              return responses;
-            }
+      forkJoin(requests).subscribe((responses: Array<{ status: string }>) => {
+        target.actionProcess = false;
+        target.refresh = true;
+        target.actionData = responses;
+        if (
+          responses.some(
+            (response) =>
+              response || response === null || response.status === 'success'
           )
-        )
-        .subscribe((responses: Array<{ status: string }>) => {
-          target.actionProcess = false;
-          target.refresh = true;
-          target.actionData = responses;
-          if (
-            responses.some(
-              (response) =>
-                response || response === null || response.status === 'success'
-            )
-          ) {
-            this.getData(
-              target.endpoint,
-              this.generateQuery(target.query),
-              target
-            );
-          }
-        });
+        ) {
+          this.getData(
+            target.endpoint,
+            this.generateQuery(target.query),
+            target
+          );
+        }
+      });
 
       return;
     }
