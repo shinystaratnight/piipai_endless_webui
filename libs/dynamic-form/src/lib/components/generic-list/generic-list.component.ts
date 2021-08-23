@@ -554,7 +554,7 @@ export class GenericListComponent implements OnInit, OnDestroy {
 
         switch (method) {
           case ApiMethod.PUT:
-            return this.gfs.editForm(url + 'broken', body).pipe(
+            return this.gfs.editForm(url, body).pipe(
               catchError((err) => {
                 const detail = err.detail;
 
@@ -566,9 +566,9 @@ export class GenericListComponent implements OnInit, OnDestroy {
               })
             );
           case ApiMethod.DELETE:
-            return this.gfs.delete(url + 'broken', id);
+            return this.gfs.delete(url, id);
           default:
-            return this.gfs.submitForm(url + 'broken', body);
+            return this.gfs.submitForm(url, body);
         }
       });
 
