@@ -1170,7 +1170,6 @@ const formadd = [
           },
           {
             endpoint: '/core/companycontacts/',
-            read_only: true,
             key: 'customer_representative',
             templateOptions: {
               label: 'Client representative',
