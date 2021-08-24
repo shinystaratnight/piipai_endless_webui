@@ -124,7 +124,7 @@ const list = {
       }
     ],
     pagination_label: 'Jobsite',
-    editDisable: false,
+    editDisable: false
   },
   fields: [
     {
@@ -351,7 +351,7 @@ const form = [
                     type: 'related',
                     query: {
                       company: '{regular_company.id}'
-                    },
+                    }
                   },
                   {
                     key: 'primary_contact.job_title',
@@ -403,10 +403,10 @@ const form = [
                     templateOptions: {
                       label: 'Industry',
                       values: ['__str__', 'translations'],
-                      type: 'related',
+                      type: 'related'
                     },
                     type: 'related',
-                    key: 'industry',
+                    key: 'industry'
                   },
                   {
                     key: 'start_date',
@@ -444,12 +444,12 @@ const form = [
                     templateOptions: {
                       label: 'Name',
                       values: ['__str__'],
-                      type: 'related',
+                      type: 'related'
                     },
                     type: 'related',
                     query: {
                       company: '{master_company.id}'
-                    },
+                    }
                   },
                   {
                     key: 'portfolio_manager.job_title',
@@ -510,12 +510,12 @@ const form = [
           label: 'Notes',
           type: 'list',
           add_label: '+ Add',
-          text: 'Notes',
+          text: 'Notes'
         },
         add_form: true,
         prefilled: {
           object_id: '{id}',
-          content_type: '{model_content_type}',
+          content_type: '{model_content_type}'
         },
         type: 'list',
         query: {
@@ -568,7 +568,7 @@ const form = [
       label: 'Site short name',
       max: 63,
       type: 'text'
-    },
+    }
   },
   {
     endpoint: '/core/companies/',
@@ -576,10 +576,10 @@ const form = [
     templateOptions: {
       label: 'Provider company',
       values: ['__str__'],
-      type: 'related',
+      type: 'related'
     },
     type: 'related',
-    key: 'master_company',
+    key: 'master_company'
   },
   {
     key: 'regular_company',
@@ -590,9 +590,9 @@ const form = [
     templateOptions: {
       label: 'Client',
       values: ['__str__'],
-      type: 'related',
+      type: 'related'
     },
-    type: 'related',
+    type: 'related'
   },
   {
     endpoint: '/core/addresses/',
@@ -602,10 +602,10 @@ const form = [
       label: 'Address',
       add: true,
       values: ['__str__'],
-      type: 'address',
+      type: 'address'
     },
     type: 'address',
-    key: 'address',
+    key: 'address'
   }
 ];
 
@@ -624,9 +624,15 @@ const formadd = [
             default: '{company_id}',
             templateOptions: {
               label: 'Client',
-              values: ['industry', 'short_name', '__str__', 'master_company', 'primary_contact'],
+              values: [
+                'industry',
+                'short_name',
+                '__str__',
+                'master_company',
+                'primary_contact'
+              ],
               type: 'related',
-              required: true,
+              required: true
             },
             type: 'related',
             query: {
@@ -637,20 +643,19 @@ const formadd = [
           },
           {
             endpoint: '/core/companycontacts/',
-            read_only: true,
             key: 'primary_contact',
             templateOptions: {
               required: true,
               label: 'Primary contact',
               values: ['__str__'],
-              type: 'related',
+              type: 'related'
             },
             default: '{regular_company.primary_contact.id}',
             showIf: ['regular_company.id'],
             type: 'related',
             query: {
               company: '{regular_company.id}'
-            },
+            }
           },
           {
             list: false,
@@ -680,7 +685,7 @@ const formadd = [
               label: 'Industry',
               values: ['__str__', 'translations'],
               type: 'related',
-              required: true,
+              required: true
             },
             collapsed: false,
             default: '{regular_company.industry.id}',
@@ -748,7 +753,7 @@ const formadd = [
               values: ['__str__'],
               type: 'related',
               edit: true,
-              required: true,
+              required: true
             },
             collapsed: false,
             default: '{regular_company.master_company.id}',
