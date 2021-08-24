@@ -11,7 +11,8 @@ const worktypeField = () =>
     .setActions({ add: true })
     .updateValues(['translations'])
     .setQuery({
-      skill: '{skill.id}'
+      skill: '{skill.id}',
+      all: true
     });
 
 const list = {
