@@ -110,29 +110,16 @@ const pricelist = {
   ],
   list: {
     columns: [
-      {
-        name: 'skill',
-        sort: true,
-        sort_field: 'skill',
-        content: [
-          {
-            endpoint: '/skills/skills/',
-            type: 'text',
-            field: 'skill.name'
-          }
-        ],
-        label: 'Skill'
-      },
-      new List.column.element('rate', 'Rate')
-        .setSort(true, 'rate')
-        .setContent([new List.input.element('rate')]),
-      new List.column.element('worktype', 'Work type').setContent([
+      new List.column.element('worktype', 'Skill Activity').setContent([
         new List.text.element('worktype').setShowIfRule(['worktype']),
         new List.select.element('worktype')
           .setValues({ null: 'Default' })
           .setColors({ null: 'info' })
           .setShowIfRule([{ worktype: null }])
       ]),
+      new List.column.element('rate', 'Rate')
+        .setSort(true, 'rate')
+        .setContent([new List.input.element('rate')]),
       {
         name: 'actions',
         content: [
