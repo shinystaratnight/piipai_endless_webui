@@ -1,0 +1,9 @@
+<app-generic-form [endpoint]="config.endpoint" [data]="config.data" [extendData]="config.extendData"
+    [edit]="config.edit" (errorForm)="errorEvent()" (event)="formEvent($event)">
+    <div class="d-flex">
+        <button class="btn btn-shadow btn-primary button-save ml-lg-auto">
+            {{ 'save' | translate: { Default: 'Save' } }}
+            <app-spinner *ngIf="saveProcess"></app-spinner>
+        </button>
+    </div>
+</app-generic-form>

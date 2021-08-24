@@ -78,6 +78,8 @@ import {
 
 import { ListSerachBarComponent } from './list-search-bar/list-search-bar.component';
 
+import { SubmissionFormComponent } from './forms';
+
 export * from './generic-form/generic-form.component';
 export * from './generic-list/generic-list.component';
 export * from './action-element/action-element.component';
@@ -145,7 +147,9 @@ export const entryComponents = [
   ExtendComponent,
   SignatureComponent,
 
-  InfoComponent
+  InfoComponent,
+
+  SubmissionFormComponent
 ];
 
 export const components = [

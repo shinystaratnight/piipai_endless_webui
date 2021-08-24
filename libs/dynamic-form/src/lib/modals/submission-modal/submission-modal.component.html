@@ -1,0 +1,20 @@
+<app-base-modal (dissmisEvent)="dismiss()">
+
+    <header>
+        <h5 class="modal-title">
+            <img *ngIf="config.label.picture" class="avatar" alt="Photo" width="40" height="40"
+                [src]="config.label.picture" />
+
+            <span *ngIf="!config.label.picture" class="contact-avatar avatar">
+                {{ config.label.contactAvatar }}
+            </span>
+
+            {{ config.label.name }}
+        </h5>
+    </header>
+
+    <div class="modal-body">
+        <app-submission-form [config]="config" (event)="onFormEvent($event)"></app-submission-form>
+    </div>
+
+</app-base-modal>
