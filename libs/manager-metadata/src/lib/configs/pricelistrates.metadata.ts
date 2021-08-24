@@ -1,16 +1,19 @@
 import { Endpoints, SkillWorkTypeModel, Models } from '@webui/data';
 import { Form, List } from '@webui/metadata';
 
-const worktypeField = () => new SkillWorkTypeModel().formElement()
-  .setPerfilledFields({
-    [Models.Skill]: '{skill.id}'
-  })
-  .setShowIfRule(['skill.id'])
-  .setActions({ add: true })
-  .updateValues(['translations'])
-  .setQuery({
-    skill: '{skill.id}'
-  }); 
+const worktypeField = () =>
+  new SkillWorkTypeModel()
+    .formElement()
+    .setPerfilledFields({
+      [Models.Skill]: '{skill.id}'
+    })
+    .setShowIfRule(['skill.id'])
+    .setActions({ add: true })
+    .updateValues(['translations'])
+    .setQuery({
+      skill: '{skill.id}',
+      all: true
+    });
 
 const list = {
   list: {
@@ -122,18 +125,14 @@ const pricelist = {
       },
       new List.column.element('rate', 'Rate')
         .setSort(true, 'rate')
-        .setContent([
-          new List.input.element('rate')
-        ]),
-      new List.column.element('worktype', 'Work type')
-        .setContent([
-          new List.text.element('worktype')
-            .setShowIfRule(['worktype']),
-          new List.select.element('worktype')
-            .setValues({ null: 'Default' })
-            .setColors({ null: 'info' })
-            .setShowIfRule([{ worktype: null }])
-        ]),
+        .setContent([new List.input.element('rate')]),
+      new List.column.element('worktype', 'Work type').setContent([
+        new List.text.element('worktype').setShowIfRule(['worktype']),
+        new List.select.element('worktype')
+          .setValues({ null: 'Default' })
+          .setColors({ null: 'info' })
+          .setShowIfRule([{ worktype: null }])
+      ]),
       {
         name: 'actions',
         content: [
@@ -193,11 +192,11 @@ const form = [
       edit: true
     },
     type: 'related',
-    key: 'price_list',
+    key: 'price_list'
   },
   new Form.related.element('skill', 'Skill', Endpoints.Skill)
     .setQuery({
-      active: true,
+      active: true
     })
     .updateValues(['price_list_default_rate', 'tranlsations', 'name']),
   {
@@ -221,10 +220,10 @@ const form = [
     },
     collapsed: false,
     prefilled: {
-      price_list_rate: '{id}',
+      price_list_rate: '{id}'
     },
     query: {
-      price_list_rate: '{id}',
+      price_list_rate: '{id}'
     }
   }
 ];
@@ -253,7 +252,7 @@ const formadd = [
   },
   new Form.related.element('skill', 'Skill', Endpoints.Skill)
     .setQuery({
-      active: true,
+      active: true
     })
     .updateValues(['price_list_default_rate', 'tranlsations', 'name']),
   {
