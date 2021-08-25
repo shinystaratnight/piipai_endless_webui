@@ -1,4 +1,4 @@
-<app-generic-form [endpoint]="config.endpoint" [data]="config.data" [extendData]="config.extendData"
+<!-- <app-generic-form [endpoint]="config.endpoint" [data]="config.data" [extendData]="config.extendData"
     [edit]="config.edit" (errorForm)="errorEvent()" (event)="formEvent($event)">
     <div class="d-flex">
         <button class="btn btn-shadow btn-primary button-save ml-lg-auto">
@@ -6,4 +6,16 @@
             <app-spinner *ngIf="saveProcess"></app-spinner>
         </button>
     </div>
-</app-generic-form>
+</app-generic-form> -->
+
+<app-dynamic-form [config]="details"></app-dynamic-form>
+
+<div *ngIf="!type" class="buttons">
+    <button class="btn btn-primary" type="button" (click)="type = timesheetType.Times">
+        Time only
+    </button>
+
+    <button class="btn btn-primary" type="button" (click)="type = timesheetType.Activities">
+        Peiecework or combined
+    </button>
+</div>

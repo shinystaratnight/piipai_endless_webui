@@ -1719,6 +1719,9 @@ export class DynamicListComponent
           jobsite: createAddAction({
             value: data.jobsite
           }),
+          shift_date: createAddAction({
+            value: data.shift.date.__str__
+          }),
           time_zone: data.time_zone
         }
       };
