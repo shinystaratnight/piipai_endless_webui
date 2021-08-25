@@ -10,12 +10,18 @@
 
 <app-dynamic-form [config]="details"></app-dynamic-form>
 
+<app-dynamic-form *ngIf="type === timesheetType.Times" [config]="times"></app-dynamic-form>
+
+<app-dynamic-form *ngIf="type === timesheetType.Activities" [config]="skillActivity"></app-dynamic-form>
+
+<!-- <app-dynamic-form *ngIf="type" [config]="notes"></app-dynamic-form> -->
+
 <div *ngIf="!type" class="buttons">
-    <button class="btn btn-primary" type="button" (click)="type = timesheetType.Times">
+    <button class="btn btn-primary" type="button" (click)="setTimesheetType(timesheetType.Times)">
         Time only
     </button>
 
-    <button class="btn btn-primary" type="button" (click)="type = timesheetType.Activities">
+    <button class="btn btn-primary" type="button" (click)="setTimesheetType(timesheetType.Activities)">
         Peiecework or combined
     </button>
 </div>

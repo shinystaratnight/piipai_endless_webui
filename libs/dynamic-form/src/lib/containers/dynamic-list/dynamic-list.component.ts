@@ -1713,6 +1713,9 @@ export class DynamicListComponent
           position: createAddAction({
             value: data.position
           }),
+          skill: createAddAction({
+            value: data.position
+          }),
           company: createAddAction({
             value: data.company
           }),

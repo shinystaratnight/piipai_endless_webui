@@ -1,7 +1,13 @@
-import { SkillModel } from '@webui/data';
-import { CheckboxType, DatepickerType, Form } from '@webui/metadata';
+import {
+  Endpoints,
+  Models,
+  NoteModel,
+  SkillModel,
+  SkillWorkTypeModel
+} from '@webui/data';
+import { CheckboxType, DatepickerType, Form, InputType } from '@webui/metadata';
 
-export const details = [
+export const details = () => [
   new Form.row.element().setChildren([
     new Form.group.element()
       .doNotShowLabel()
@@ -31,7 +37,7 @@ export const details = [
   ])
 ];
 
-export const times = [
+export const times = () => [
   new Form.row.element().setChildren([
     new Form.group.element()
       .doNotShowLabel()
@@ -92,4 +98,45 @@ export const times = [
         .setShowIfRule([{ noBreak: false }])
     ])
   ])
+];
+
+export const skillActivities = () => [
+  new Form.list.element(
+    'Skill Activities',
+    Endpoints.TimesheetRates,
+    'timesheetrates'
+  )
+    .setQuery({
+      timesheet: '{id}'
+    })
+    .setPrefilledFields({
+      [Models.Skill]: '{position.id}',
+      [Models.Timesheet]: '{id}'
+    })
+];
+
+export const notes = () => [
+  new NoteModel().formListElement({
+    model_content_type: '112'
+  })
+];
+
+export const workType = () => [
+  new Form.input.element('timesheet', 'Timesheet', InputType.Text).hideField(),
+  new SkillWorkTypeModel()
+    .formElement()
+    .readOnly()
+    .required()
+    .updateValues(['translations', 'uom', 'skill_rate_ranges'])
+    .setQuery({
+      skill: '{skill.id}',
+      company: 'currentCompany'
+    }),
+  new SkillModel().formElement().updateValues(['name']),
+  new Form.input.element('rate', 'Rate', InputType.Number).setDefaultValue(
+    '{worktype.skill_rate_ranges.default_rate}'
+  ),
+  new Form.input.element('value', 'Value', InputType.Number).setIcon(
+    '{worktype.uom.short_name}'
+  )
 ];

@@ -1,7 +1,14 @@
 import { Component, EventEmitter, Input } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 import { getElementFromMetadata } from '../../../helpers/utils';
 
-import { details, times } from './submission-form.config';
+import {
+  details,
+  skillActivities,
+  times,
+  notes,
+  workType
+} from './submission-form.config';
 
 enum TimesheetType {
   Times = 'times',
@@ -19,14 +26,21 @@ export class SubmissionFormComponent {
 
   type: TimesheetType;
   timesheetType = TimesheetType;
+  formData = new BehaviorSubject<any>({ data: {} });
 
-  details = details;
-  times = times;
+  details = details();
+  times = times();
+  skillActivity = workType();
+  skillActivities = skillActivities();
+  notes = notes();
 
   saveProcess: boolean;
 
   ngOnInit() {
     this.parseMetadata(this.details, this.config.data);
+    this.formData.next({
+      data: this.config.extendData
+    });
     console.log(this);
   }
 
@@ -44,6 +58,20 @@ export class SubmissionFormComponent {
     this.saveProcess = false;
   }
 
+  setTimesheetType(type: TimesheetType) {
+    this.type = type;
+
+    if (type === TimesheetType.Times) {
+      this.parseMetadata(this.times, this.config.data);
+      this.addFormData(this.times, this.formData);
+    }
+
+    if (type === TimesheetType.Activities) {
+      this.parseMetadata(this.skillActivity, this.config.data);
+      this.addFormData(this.skillActivity, this.formData);
+    }
+  }
+
   private parseMetadata(metadata, params) {
     metadata.forEach((el) => {
       if (el && el.key && params && !!params[el.key]) {
@@ -53,6 +81,16 @@ export class SubmissionFormComponent {
         }
       } else if (el && el.children) {
         this.parseMetadata(el.children, params);
+      }
+    });
+  }
+
+  private addFormData(metadata, formData) {
+    metadata.forEach((el) => {
+      if (el.key) {
+        el.formData = formData;
+      } else if (el.children) {
+        this.addFormData(el.children, formData);
       }
     });
   }
