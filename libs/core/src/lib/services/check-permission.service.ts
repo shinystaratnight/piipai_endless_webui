@@ -57,7 +57,10 @@ export class CheckPermissionService {
     this._permissions = this.filterPermissions(permissions);
   }
 
-  public getPermissions(id: string, expired?: boolean): Observable<Permission[]> {
+  public getPermissions(
+    id: string,
+    expired?: boolean
+  ): Observable<Permission[]> {
     if (!this.permissions) {
       return this.getUserPermissions(id, expired);
     } else {
@@ -68,7 +71,7 @@ export class CheckPermissionService {
   public checkPermission(
     id: string,
     url: any[],
-    list: Page[],
+    list: Page[]
   ): Observable<boolean> {
     const permissions: Observable<Permission[]> = this.getPermissions(id);
     const page: Observable<PageData> = this.siteService.getDataOfPage(
@@ -104,13 +107,16 @@ export class CheckPermissionService {
     }
 
     if (permissions) {
-
       // TODO: Remove it after adding permissions on backend
-      if (endpoint && endpoint.includes('/companies/') && endpoint.includes('/languages/')) {
+      if (
+        endpoint &&
+        endpoint.includes('/companies/') &&
+        endpoint.includes('/languages/')
+      ) {
         return ['delete', 'get', 'post', 'update'];
       }
 
-      const allowMethods: Permission[] = permissions.filter(permission => {
+      const allowMethods: Permission[] = permissions.filter((permission) => {
         const arr = permission.codename.split('_');
         arr.pop();
 
@@ -143,11 +149,12 @@ export class CheckPermissionService {
   }
 
   public hasActiveSubscription() {
-    return this.http.get<{subscriptions: Array<any>}>(this.subscriptionEndpoint)
+    return this.http
+      .get<{ subscriptions: Array<any> }>(this.subscriptionEndpoint)
       .pipe(
-        map(({ subscriptions }) => subscriptions.some(el => el.active)),
+        map(({ subscriptions }) => subscriptions.some((el) => el.active)),
         catchError((err: any) => this.error.handleError(err))
-      )
+      );
   }
 
   private parseMethod(type: string, id?: string): string {
@@ -162,7 +169,10 @@ export class CheckPermissionService {
     return 'delete';
   }
 
-  private getUserPermissions(id: string, expired?: boolean): Observable<Permission[]> {
+  private getUserPermissions(
+    id: string,
+    expired?: boolean
+  ): Observable<Permission[]> {
     return forkJoin([
       this.hasActiveSubscription(),
       this.http.get<PermissionResponse>(this.userPermissionEndpoint + id + '/')
@@ -173,16 +183,18 @@ export class CheckPermissionService {
           ...response.group_permission_list
         ];
 
-        // if (isManager() && expired && !hasActiveSubscription) {
-        //   permissions = permissions.filter(({ codename }) => codename.includes('_get'));
-        // }
+        if (isManager() && expired && !hasActiveSubscription) {
+          permissions = permissions.filter(({ codename }) =>
+            codename.includes('_get')
+          );
+        }
 
         this.permissions = permissions;
 
         return this.permissions;
       }),
       catchError((error: HttpErrorResponse) => this.error.handleError(error))
-    )
+    );
   }
 
   private filterPermissions(array: Permission[]): Permission[] {
