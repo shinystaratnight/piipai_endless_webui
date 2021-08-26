@@ -1,9 +1,13 @@
-import { ChangeDetectionStrategy, Component, Input, OnChanges } from "@angular/core";
-
-interface IFormErrors {
-  non_field_errors?: string[] | string;
-  detail?: string;
-}
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  OnDestroy,
+  OnInit
+} from '@angular/core';
+import { Form, IFormErrors } from '@webui/dynamic-form';
+import { BehaviorSubject, Subscription } from 'rxjs';
+import { FormService } from '../../services';
 
 interface IObjectExistError {
   description: string;
@@ -16,39 +20,78 @@ interface IObjectExistError {
   templateUrl: './form-errors.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class FormErrorsComponent implements OnChanges {
-  details: string[] = [];
-  objectExistError: IObjectExistError;
+export class FormErrorsComponent implements OnInit, OnDestroy {
+  private _details$: BehaviorSubject<string[]> = new BehaviorSubject(null);
+  private _objectExistError$: BehaviorSubject<IObjectExistError> = new BehaviorSubject(
+    null
+  );
 
-  @Input() keys: string[];
-  @Input() errors: IFormErrors;
-
-  ngOnChanges() {
-    this.updateErrors();
+  get errorList$() {
+    return this._details$.asObservable();
   }
 
-  private updateErrors() {
-    const { detail, non_field_errors } = this.errors;
-    this.objectExistError = null;
-    this.details = [];
+  get objectExistError$() {
+    return this._objectExistError$.asObservable();
+  }
 
-    if (Array.isArray(non_field_errors) && non_field_errors.length > 1) {
-      if (non_field_errors[0]) {
-        const [exist, description, title, href] = non_field_errors;
+  @Input() formId: number;
 
-        this.objectExistError = {
-          description,
-          href,
-          title,
-        };
-      } else {
-        this.details = non_field_errors.filter(el => el);
-      }
-    } else if (detail) {
-      this.details.push(detail);
-    } else if (non_field_errors) {
-      this.details.push(Array.isArray(non_field_errors) ? non_field_errors[0]: non_field_errors);
+  private errorSubscription: Subscription;
+
+  constructor(private formService: FormService) {}
+
+  ngOnInit() {
+    const currentForm: Form = this.formService.getForm(this.formId);
+    if (currentForm) {
+      this.errorSubscription = currentForm.errors$.subscribe(
+        (errors: IFormErrors) => this.updateErrors(errors)
+      );
     }
   }
 
+  ngOnDestroy() {
+    if (this.errorSubscription) {
+      this.errorSubscription.unsubscribe();
+    }
+  }
+
+  private updateErrors(errors: IFormErrors) {
+    const { detail, non_field_errors } = errors;
+    let details = [];
+    let objectExistError = null;
+
+    if (Array.isArray(non_field_errors)) {
+      if (non_field_errors.length > 1) {
+        if (non_field_errors[0]) {
+          const [, description, title, href] = non_field_errors;
+
+          objectExistError = {
+            description,
+            href,
+            title
+          };
+        } else {
+          details = non_field_errors.filter((el) => !!el);
+        }
+      } else {
+        details = [...non_field_errors];
+      }
+    }
+
+    if (detail) {
+      details.push(detail);
+    }
+
+    if (
+      typeof non_field_errors === 'string' &&
+      non_field_errors.trim().length
+    ) {
+      details.push(non_field_errors);
+    }
+
+    const errorList = details.filter((el) => !!el && !!el.trim());
+
+    this._objectExistError$.next(objectExistError);
+    this._details$.next(!!errorList.length ? errorList : null);
+  }
 }

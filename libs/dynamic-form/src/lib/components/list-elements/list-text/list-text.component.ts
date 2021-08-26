@@ -7,7 +7,7 @@ import { getValueOfData, generateCssStyles } from '../../../helpers';
   selector: 'app-list-text',
   templateUrl: './list-text.component.html',
   styleUrls: ['./list-text.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ListTextComponent implements OnInit {
   private stylePrefix = 'list-text';
@@ -29,7 +29,7 @@ export class ListTextComponent implements OnInit {
     2: '#fc9183',
     3: '#FFA236',
     4: '#ffbf00',
-    5: '#FFD042',
+    5: '#FFD042'
   };
 
   public isMobile = isMobile;
@@ -55,9 +55,10 @@ export class ListTextComponent implements OnInit {
         }
       }
     }
-    if (this.config.workers_details) {
-      this.workers = this.generateWorkers(this.config.workers_details);
-    }
+    // TODO: add details of candidates
+    // if (this.config.workers_details) {
+    //   this.workers = this.generateWorkers(this.config.workers_details);
+    // }
 
     const timeInstance = this.config.timezone
       ? getTimeInstance().tz.setDefault(this.config.timezone)
@@ -68,7 +69,11 @@ export class ListTextComponent implements OnInit {
     this.cssClasses = generateCssStyles(this.config.styles, this.stylePrefix);
     this.translationKey = getTranslationKey(
       `${this.config.key}.${this.config.name}`,
-      this.config.label === 'Date' ? 'date' : 'label'
+      typeof this.value === 'number'
+        ? this.value
+        : this.config.label === 'Date'
+        ? 'date'
+        : 'label'
     );
   }
 
@@ -147,7 +152,7 @@ export class ListTextComponent implements OnInit {
         'success',
         'warning',
         'description',
-        'comment',
+        'comment'
       ];
       const color = this.config.color;
       this.iconClass = classes.indexOf(color) > -1 ? `text-${color}` : '';
@@ -164,7 +169,7 @@ export class ListTextComponent implements OnInit {
         if (candidate) {
           result.push({
             name: candidate.name,
-            status,
+            status
           });
         }
       });

@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, Router, ActivatedRouteSnapshot } from '@angular/router';
 
-import { combineLatest, forkJoin, of, Subject } from 'rxjs';
-import { tap, mergeMap, map, concatAll, mergeAll, catchError } from 'rxjs/operators';
+import { forkJoin, of, Subject } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
 import {
   UserService,
@@ -23,6 +23,10 @@ export class PermissionGuard implements CanActivate {
   ) {}
 
   isManager(role: Role): boolean {
+    if (!role) {
+      return false;
+    }
+
     const { __str__: title } = role;
 
     return title.includes('manager') || title.includes('trial');
@@ -55,6 +59,11 @@ export class PermissionGuard implements CanActivate {
 
           if (routeSegments[0].path === 'mn') {
             routeSegments = routeSegments.slice(1);
+          }
+
+          if (routeSegments[0] && routeSegments[0].path === 'settings') {
+            subject.next(true);
+            return;
           }
 
           this.checkPermissionServise

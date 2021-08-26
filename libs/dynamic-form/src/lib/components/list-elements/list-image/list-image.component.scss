@@ -13,6 +13,7 @@
 
 img:not(.signature) {
   border-radius: 0.5rem;
+  object-fit: cover;
 }
 
 .signature {

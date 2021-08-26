@@ -1,36 +1,45 @@
-import { Endpoints, SkillModel, Models } from "@webui/data";
-import { List, Form, InputType } from "@webui/metadata";
+import {
+  SkillModel,
+  Models,
+  SkillWorkTypeModel,
+  TimesheetModel
+} from '@webui/data';
+import { List, Form, InputType } from '@webui/metadata';
 
 const form = () => [
-  new Form.related.element('timesheet', 'Timesheet', Endpoints.Timesheet).hideField(),
-  new Form.related.element('worktype', 'Skill Activity', Endpoints.SkillWorkTypes)
+  new TimesheetModel().formElement().hideField(),
+  new SkillWorkTypeModel()
+    .formElement()
+    .updateValues(['translations', 'uom'])
     .readOnly()
     .setQuery({
-      'company': 'currentCompany'
+      company: 'currentCompany'
     }),
-  new Form.input.element('rate', 'Rate', InputType.Number)
-    .readOnly(),
-  new Form.input.element('value', 'Value', InputType.Number),
+  new Form.input.element('rate', 'Rate', InputType.Number).hideField(),
+  new Form.input.element('value', 'Value', InputType.Number)
+    .setIcon('{uom.name}')
 ];
 
 const formadd = () => [
-  new SkillModel().formElement()
-    .updateValues(['name']),
   new Form.input.element('timesheet', 'Timesheet', InputType.Text).hideField(),
-  new Form.related.element('worktype', 'Skill Activity', Endpoints.SkillWorkTypes)
-    .updateValues(['default_rate'])
+  new SkillWorkTypeModel()
+    .formElement()
+    .required()
+    .updateValues(['skill_rate_ranges', 'translations', 'uom'])
     .required()
     .setPerfilledFields({
       [Models.Skill]: `{${Models.Skill}.id}`
     })
     .setQuery({
-      'skill_name': '{skill.name.id}',
-      'company': 'currentCompany'
+      skill: '{skill.id}',
+      company: 'currentCompany'
     }),
+  new SkillModel().formElement().updateValues(['name']),
   new Form.input.element('rate', 'Rate', InputType.Number)
-    .readOnly()
-    .setDefaultValue('{worktype.default_rate}'),
-  new Form.input.element('value', 'Value', InputType.Number),
+    .setDefaultValue('{worktype.skill_rate_ranges.default_rate}')
+    .hideField(),
+  new Form.input.element('value', 'Value', InputType.Number)
+    .setIcon('{worktype.uom.short_name}')
 ];
 
 const formset = () => ({
@@ -38,32 +47,27 @@ const formset = () => ({
   list: new List.main.element('timesheetrates', 'Skill Activity')
     .disableSearch()
     .setColumns([
-      new List.column.element('worktype', 'Skill Activity')
-        .setContent([
-          new List.related.element('worktype', Endpoints.SkillWorkTypes)
-        ]),
-      new List.column.element('rate', 'Rate')
-        .setContent([
-          new List.input.element('rate')
-        ]),
-      new List.column.element('value', 'Value')
-        .setContent([
-          new List.input.element('value')
-        ]),
-      new List.column.element('actions', 'Actions')
-        .setContent([
-          new List.button.element('id', 'editForm', 'Edit')
-            .setIcon('pencil-alt')
-            .setTextColor('#f0ad4e'),
-          new List.button.element('id', 'delete', 'Delete')
-            .setIcon('trash')
-            .setTextColor('#fa5c46'),
-        ])
-    ]),
-})
+      new List.column.element('worktype', 'Skill Activity').setContent([
+        new List.text.element('worktype')
+      ]),
+      new List.column.element('value', 'Value').setContent([
+        new List.input.element('value')
+      ]),
+      new List.column.element('actions', 'Actions').setContent([
+        new List.button.element('id', 'editForm', 'Edit')
+          .setTranslationKey('edit')
+          .setIcon('pencil-alt')
+          .setTextColor('#f0ad4e'),
+        new List.button.element('id', 'delete', 'Delete')
+          .setTranslationKey('delete')
+          .setIcon('trash')
+          .setTextColor('#fa5c46')
+      ])
+    ])
+});
 
 export const timesheetratescandidate = {
   form,
   formadd,
-  formset,
-}
+  formset
+};

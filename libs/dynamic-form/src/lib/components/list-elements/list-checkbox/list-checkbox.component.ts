@@ -2,7 +2,8 @@ import { Component, OnInit, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-list-checkbox',
-  templateUrl: 'list-checkbox.component.html'
+  templateUrl: './list-checkbox.component.html',
+  styleUrls: ['./list-checkbox.component.scss'],
 })
 
 export class ListCheckboxComponent implements OnInit {

@@ -1,4 +1,4 @@
-// import { timeZoneOffset } from '../helpers';
+import { ApiMethod } from '@webui/data';
 import { getTimeZoneOffset } from '@webui/utilities';
 
 const list = {
@@ -369,8 +369,7 @@ const formset = {
               {
                 action: 'showMessage',
                 messageType: 'sent',
-                endpoint:
-                  '/sms-interface/smsmessages/{offer_sent_by_sms.id}',
+                endpoint: '/sms-interface/smsmessages/{offer_sent_by_sms.id}',
                 noDelim: true,
                 placement: 'left',
                 text: 'Offer',
@@ -475,7 +474,40 @@ const formset = {
     editDisable: false,
     label: 'Job Offer',
     pagination_label: 'Job Offer',
-    search_enabled: false
+    search_enabled: false,
+    actions: {
+      options: [
+        {
+          endpoint: '/hr/joboffers/{id}/accept/',
+          label: 'Accept',
+          selectionError: 'Please select at least one job offer!',
+          required: true,
+          multiple: true,
+          property: 'id'
+        },
+        {
+          endpoint: '/hr/joboffers/{id}/cancel/',
+          label: 'Cancel',
+          selectionError: 'Please select at least one job offer!',
+          required: true,
+          multiple: true,
+          property: 'id'
+        },
+        {
+          endpoint: '/hr/joboffers/',
+          label: 'Delete',
+          method: ApiMethod.DELETE,
+          selectionError: 'Please select at least one job offer!',
+          required: true,
+          multiple: true,
+          property: 'id'
+        }
+      ],
+      label: 'Actions',
+      agree_label: 'Agree',
+      button_label: 'Go',
+      decline_label: 'Decline'
+    }
   }
 };
 
@@ -860,8 +892,10 @@ const formadd = [
         score: '{candidate_scores.average_score}',
         distance: '{distance}'
       },
-      values: ['__str__']
+      values: ['__str__', 'distance', 'candidate_scores']
     },
+    many: true,
+    separate: true,
     showIf: ['shift.id'],
     query: {
       shift: `{shift.date.shift_date}T{shift.time}%2B${getTimeZoneOffset()}`

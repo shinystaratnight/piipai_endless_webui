@@ -1,0 +1,15 @@
+<ul class="list">
+  <li [class.preview]="el.preview" *ngFor="let el of images; let index = index">
+    <img
+      class="image"
+      [src]="el.image"
+      (click)="showPreview(index)"
+      title="Click for popup"
+    />
+    <button class="btn button" type="button" (click)="hidePreview(index)">
+      <fa-icon class="icon" icon="times"></fa-icon>
+    </button>
+  </li>
+</ul>
+
+<div [class.backdrop]="hasOpenPreview"></div>

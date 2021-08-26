@@ -55,22 +55,22 @@ const list = {
       },
       {
         content: [
-          {
-            values: {
-              0: 'times-circle',
-              1: 'check-circle',
-              2: 'exclamation-circle',
-              3: 'minus-circle',
-              null: 'minus-circle'
-            },
-            field: 'is_fulfilled_today',
-            type: 'icon',
-            color: {
-              0: 'danger',
-              1: 'success',
-              2: 'warning'
-            }
-          },
+          // {
+          //   values: {
+          //     0: 'times-circle',
+          //     1: 'check-circle',
+          //     2: 'exclamation-circle',
+          //     3: 'minus-circle',
+          //     null: 'minus-circle'
+          //   },
+          //   field: 'is_fulfilled_today',
+          //   type: 'icon',
+          //   color: {
+          //     0: 'danger',
+          //     1: 'success',
+          //     2: 'warning'
+          //   }
+          // },
           {
             values: {
               0: 'times-circle',
@@ -89,9 +89,9 @@ const list = {
           }
         ],
         name: 'fulfilled',
-        title: 'today / next day',
-        label: 'Fulfilled',
-        delim: '/'
+        // title: 'today / next day',
+        label: 'Fulfilled'
+        // delim: '/'
       },
       {
         content: [
@@ -145,7 +145,7 @@ const list = {
     ],
     pagination_label: 'Job',
     search_enabled: false,
-    editDisable: false,
+    editDisable: false
   },
   fields: [
     {
@@ -574,7 +574,7 @@ const formset = {
           }
         ],
         label: 'Actions',
-        title: null,
+        title: null
       }
     ],
     buttons: [],
@@ -797,7 +797,7 @@ const jobsite_client = {
         label: 'State',
         title: null,
         delim: null
-      },
+      }
     ],
     buttons: [],
     list: 'job',
@@ -811,8 +811,8 @@ const jobsite_client = {
 const form = [
   {
     values: {
-      job: 'position',
-      jobsite: 'jobsite',
+      job: 'position.__str__',
+      jobsite: 'jobsite'
     },
     type: 'info',
     key: 'id'
@@ -902,7 +902,7 @@ const form = [
                     templateOptions: {
                       label: 'Client',
                       values: ['__str__'],
-                      type: 'related',
+                      type: 'related'
                     },
                     collapsed: false,
                     type: 'related',
@@ -918,7 +918,7 @@ const form = [
                     templateOptions: {
                       label: 'Client representative',
                       values: ['__str__'],
-                      type: 'related',
+                      type: 'related'
                     },
                     additional_text: 'Or',
                     default: '{jobsite.primary_contact.id}',
@@ -965,7 +965,7 @@ const form = [
                     templateOptions: {
                       label: 'Provider company',
                       values: ['__str__'],
-                      type: 'related',
+                      type: 'related'
                     },
                     collapsed: false,
                     default: '{customer_company.master_company.id}',
@@ -985,7 +985,7 @@ const form = [
                     templateOptions: {
                       label: 'Provider representative',
                       values: ['__str__'],
-                      type: 'related',
+                      type: 'related'
                     },
                     collapsed: false,
                     visibleMode: true,
@@ -1051,7 +1051,7 @@ const form = [
           type: 'list'
         },
         listKey: 'joboffers'
-      },
+      }
     ]
   },
   {
@@ -1062,7 +1062,7 @@ const form = [
     templateOptions: {
       label: 'Jobsite',
       values: ['primary_contact', '__str__'],
-      type: 'related',
+      type: 'related'
     },
     type: 'related',
     query: {
@@ -1097,6 +1097,16 @@ const formadd = [
     type: 'row',
     children: [
       {
+        type: 'checkbox',
+        hide: true,
+        readonly: true,
+        default: true,
+        key: 'client_contact_page',
+        templateOptions: {
+          label: 'Client Contact Page'
+        }
+      },
+      {
         type: 'column',
         children: [
           {
@@ -1126,7 +1136,7 @@ const formadd = [
             templateOptions: {
               label: 'Provider company',
               values: ['__str__'],
-              type: 'related',
+              type: 'related'
             },
             collapsed: false,
             default: '{customer_company.master_company.id}',
@@ -1146,7 +1156,7 @@ const formadd = [
             templateOptions: {
               label: 'Provider representative',
               values: ['__str__'],
-              type: 'related',
+              type: 'related'
             },
             visibleMode: true,
             default: '{customer_company.manager.id}',
@@ -1160,12 +1170,11 @@ const formadd = [
           },
           {
             endpoint: '/core/companycontacts/',
-            read_only: true,
             key: 'customer_representative',
             templateOptions: {
               label: 'Client representative',
               values: ['__str__', 'company'],
-              type: 'related',
+              type: 'related'
             },
             visibleMode: true,
             default: '{customer_company.primary_contact.id}',
@@ -1259,7 +1268,7 @@ const formadd = [
               query: {
                 jobsite: '{jobsite.id}',
                 position: '{position.id}',
-                state: ['10', '20', '40'],
+                state: ['10', '20', '40']
               }
             },
             collapsed: false,
@@ -1293,7 +1302,7 @@ const formadd = [
               type: 'time'
             },
             read_only: false
-          },
+          }
         ]
       }
     ]

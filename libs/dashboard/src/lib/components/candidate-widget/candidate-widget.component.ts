@@ -96,7 +96,9 @@ export class CandidateWidget implements OnInit, OnDestroy {
         this.selectedCandidates.delete(candidate.id);
       }
     } else {
-      this.router.navigateByUrl(`/mn/candidate/candidatecontacts/${candidate.id}/change`);
+      this.router.navigateByUrl(
+        `/mn/candidate/candidatecontacts/${candidate.id}/change`
+      );
     }
   }
 
@@ -173,7 +175,7 @@ export class CandidateWidget implements OnInit, OnDestroy {
   }
 
   private subscribeEventChanges() {
-    this.subscription = this.eventService.event$.subscribe(type => {
+    this.subscription = this.eventService.event$.subscribe((type) => {
       if (type === EventType.CalendarJobSelected) {
         this.offset = 0;
         this.shift = this.eventService.payload;
@@ -218,7 +220,7 @@ export class CandidateWidget implements OnInit, OnDestroy {
         shifts: shift.id,
         ...query
       })
-      .subscribe(candidates => {
+      .subscribe((candidates) => {
         this.candidates = candidates;
       });
   }
@@ -226,7 +228,7 @@ export class CandidateWidget implements OnInit, OnDestroy {
   private parseQuery(query: string): { [key: string]: any } {
     const result = {};
     if (query.length) {
-      query.split('&').forEach(el => {
+      query.split('&').forEach((el) => {
         const parseEl = el.split('=');
         result[parseEl[0]] = parseEl[1];
       });

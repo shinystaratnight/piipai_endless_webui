@@ -45,6 +45,10 @@
 
   background-color: #fdfdfd;
 
+  &.password-field {
+    padding-right: 45px !important;
+  }
+
   &:focus,
   &:hover {
     border-color: #4f4f4f;
@@ -119,6 +123,7 @@ button.password {
 
 .input-icon {
   position: absolute;
+  opacity: .3;
 }
 
 .list {

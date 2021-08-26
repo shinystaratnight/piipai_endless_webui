@@ -5,17 +5,11 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 import { Subscription } from 'rxjs';
 
-import { getContactAvatar, isCandidate, isMobile, FormatString, isClient } from '@webui/utilities';
+import { getContactAvatar, isCandidate, isMobile, FormatString, isClient, checkAndReturnTranslation } from '@webui/utilities';
 import { GenericFormService, FormService } from '../../../services';
 import { Endpoints, CountryCodeLanguage } from '@webui/data';
 import { SiteSettingsService } from '@webui/core';
-
-const translationMap = CountryCodeLanguage;
-
-const translationCountryName = {
-  'EE': 'Estonian',
-  'FI': 'Finnish'
-}
+import { LocalStorageService } from 'ngx-webstorage';
 
 @Component({
   selector: 'app-form-info',
@@ -88,7 +82,8 @@ export class FormInfoComponent implements OnInit, OnDestroy {
     private router: Router,
     private gfs: GenericFormService,
     private formService: FormService,
-    private siteSettings: SiteSettingsService
+    private siteSettings: SiteSettingsService,
+    private storage: LocalStorageService,
   ) {
     this.subscriptions = [];
   }
@@ -201,12 +196,10 @@ export class FormInfoComponent implements OnInit, OnDestroy {
           return data[prop].origin;
         }
 
-        if (data.translations || data.translation || (data.name && data.name.translations)) {
-          const translations = data.translations || data.translation || data.name.translations;
-          const coutryCode = this.siteSettings.settings.country_code;
-          const translation = [...translations].find((t) => t.language.id === translationMap[coutryCode] || t.language.name === translationCountryName[coutryCode]);
-          data.__str__ = (translation && (translation.__str__ || translation.value)) || data.__str__;
-        }
+        const { country_code } = this.siteSettings.settings;
+        const lang = this.storage.retrieve('lang');
+
+        data.__str__ = checkAndReturnTranslation(data, country_code, lang);
 
         return data[prop];
       } else if (data[prop]) {

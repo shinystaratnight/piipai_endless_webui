@@ -1,0 +1,16 @@
+:host {
+  display: block;
+}
+
+.dropdown {
+  display: inline-flex;
+
+  .value {
+    width: 100%;
+    max-width: 100px;
+  }
+
+  .icon {
+    margin-top: 5px;
+  }
+}

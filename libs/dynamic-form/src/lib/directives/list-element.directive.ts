@@ -20,7 +20,9 @@ import {
   ListSkillsComponent,
   ListFillinTagsComponent,
   ListAvailableComponent,
-  ListFormComponent
+  ListFormComponent,
+  ListSkillActivityComponent,
+  ListImageListComponent
 } from '../components/list-elements';
 
 import { InfoComponent } from '../components/info/info.component';
@@ -52,7 +54,9 @@ const components = {
   fillintags: ListFillinTagsComponent,
   available: ListAvailableComponent,
   buttonGroup: ButtonGroupComponent,
-  form: ListFormComponent
+  form: ListFormComponent,
+  skillactivity: ListSkillActivityComponent,
+  imageList: ListImageListComponent
 };
 
 @Directive({

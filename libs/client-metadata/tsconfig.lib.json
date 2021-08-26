@@ -4,6 +4,9 @@
     "outDir": "../../dist/out-tsc",
     "types": []
   },
+  "angularCompilerOptions": {
+    "sctrictTemplates": true
+  },
   "exclude": ["**/*.spec.ts"],
   "include": ["**/*.ts"]
 }

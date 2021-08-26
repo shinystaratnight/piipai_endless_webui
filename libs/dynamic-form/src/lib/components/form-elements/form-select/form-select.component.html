@@ -10,9 +10,18 @@
       *ngIf="label && config.templateOptions.label"
       [attr.for]="key"
     >
-      {{ getTranslationKey(config.key, 'label') | translate: {"Default": config.templateOptions.label} }}
+      {{
+        getTranslationKey(config.key, 'label')
+          | translate: { Default: config.templateOptions.label }
+      }}
     </label>
-    <app-info *ngIf="config.templateOptions.description" [description]="getTranslationKey('description') | translate: {'Default': config.templateOptions.description || ''}"></app-info>
+    <app-info
+      *ngIf="config.templateOptions.description"
+      [description]="
+        getTranslationKey(this.key, 'description')
+          | translate: { Default: config.templateOptions.description || '' }
+      "
+    ></app-info>
     <div class="form-element-content edit">
       <select
         class="form-control custom-select"
@@ -22,11 +31,17 @@
         [attr.id]="key"
         [attr.name]="key"
       >
-        <option class="text-muted" value="" selected disabled>
-          {{ 'select' | translate: {"Default" : "Select"} }}
+        <option class="text-muted" [value]="null" selected disabled>
+          {{ 'select' | translate: { Default: 'Select' } }}
         </option>
-        <option *ngFor="let option of config.templateOptions.options" [ngValue]="option.value">
-          {{ getOptionTranslationKey(option.value) | translate: {"Default": option.label } }}
+        <option
+          *ngFor="let option of config.templateOptions.options"
+          [value]="option.value"
+        >
+          {{
+            getOptionTranslationKey(option.value)
+              | translate: { Default: option.label }
+          }}
         </option>
       </select>
     </div>
@@ -48,14 +63,17 @@
     class="form-element-label"
     *ngIf="label && config.templateOptions.label"
   >
-    {{ getTranslationKey(config.key, 'label') | translate: {"Default": config.templateOptions.label} }}:
+    {{
+      getTranslationKey(config.key, 'label')
+        | translate: { Default: config.templateOptions.label }
+    }}:
   </label>
   <div
     class="form-element-content"
     [ngClass]="textColor"
     [class.readonly-value]="!textColor && config.read_only"
   >
-    {{ displayValueKey | translate : {"Default": displayValue} }}
+    {{ displayValueKey | translate: { Default: displayValue } }}
   </div>
   <small class="text-muted" *ngIf="config.templateOptions.description">
     {{ config.templateOptions.description }}

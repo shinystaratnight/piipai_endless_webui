@@ -15,6 +15,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { QuillModule } from 'ngx-quill';
 import { Angular2SignaturepadModule } from 'angular2-signaturepad';
 import { WebcamModule } from 'ngx-webcam';
+import { NgxDropzoneModule } from 'ngx-dropzone';
 
 import { NgxIntlTelInputModule } from 'ngx-intl-tel-input';
 
@@ -24,7 +25,7 @@ import { UiModule } from '@webui/ui';
 import { services, METADATA } from './services';
 import * as fromComponents from './components';
 import * as fromContainers from './containers';
-import { modals } from './modals';
+import { modals, components as modalComponents } from './modals';
 import { directives } from './directives';
 
 import { SharedModule } from '@webui/shared';
@@ -56,7 +57,8 @@ import { TranslateModule } from '@ngx-translate/core';
     TranslateModule,
 
     UiModule,
-    WebcamModule
+    WebcamModule,
+    NgxDropzoneModule
   ],
   exports: [
     fromComponents.GenericFormComponent,
@@ -68,7 +70,7 @@ import { TranslateModule } from '@ngx-translate/core';
     fromComponents.TestGeneratorComponent,
     fromContainers.FormBuilderFormComponent,
     fromComponents.FilterRelatedComponent,
-    fromComponents.ImageUploaderComponent,
+    fromComponents.ImageUploaderComponent
   ],
   declarations: [
     fromComponents.WebcamComponent,
@@ -76,13 +78,15 @@ import { TranslateModule } from '@ngx-translate/core';
     ...fromComponents.components,
     ...directives,
     ...fromContainers.components,
-    ...modals
+    ...modals,
+    ...modalComponents
   ],
   providers: [...services],
   entryComponents: [
     ...fromComponents.entryComponents,
     ...fromContainers.entryComponents,
-    ...modals
+    ...modals,
+    ...modalComponents
   ]
 })
 export class DynamicFormModule {

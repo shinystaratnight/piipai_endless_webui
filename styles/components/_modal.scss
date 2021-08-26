@@ -1,5 +1,7 @@
 @import '../mixins';
 
+$width: 700px;
+
 .modal-backdrop {
   bottom: -100px;
   z-index: 3 !important;
@@ -8,11 +10,11 @@
 .approve-modal {
   @media (max-width: 767.98px) and (orientation: landscape) {
     &.change .modal-dialog {
-      max-width: 600px;
+      max-width: $width;
     }
 
     &.approve .modal-dialog {
-      max-width: 600px;
+      max-width: $width;
 
       .content-info {
         flex-direction: row;
@@ -49,25 +51,25 @@
   }
 
   .modal-dialog {
-    max-width: 500px;
+    max-width: $width;
     margin: 15px auto;
     padding: 0 15px;
     box-sizing: content-box;
 
     .form-element {
-      &-content {
+      &-content:not(.full-width) {
         flex-wrap: nowrap;
 
-        max-width: 195px;
         width: auto;
 
         @include media-breakpoint-down('sm') {
-          max-width: none;
+          max-width: 100%;
         }
       }
 
       &-label {
         color: #4f4f4f;
+        margin-bottom: 3px;
       }
     }
 
@@ -106,7 +108,7 @@
     }
 
     @include media-breakpoint-down('sm') {
-      max-width: 375px;
+      max-width: 345px;
     }
 
     @media (max-width: 767.98px) and (orientation: landscape) {
@@ -305,25 +307,8 @@
       opacity: 0.4;
     }
 
-    app-form-input .form-element {
-      display: flex;
-      align-items: center;
-
-      &-label {
-        padding: 0;
-
-        color: $success;
-      }
-    }
-
-    app-form-checkbox .form-element-content {
-      position: relative;
-
-      .form-element-checkbox {
-        position: absolute;
-        left: 214px;
-        white-space: nowrap;
-      }
+    app-form-input .form-element-label {
+      color: $success;
     }
 
     @include media-breakpoint-up('md') {
@@ -383,14 +368,6 @@
         padding-left: 16px;
         @media (max-width: 767.98px) and (orientation: landscape) {
           height: 36px;
-        }
-      }
-
-      app-form-checkbox .form-element-content {
-        .form-element-checkbox {
-          left: calc(100% - 120px);
-          font-size: 14px;
-          line-height: 16px;
         }
       }
 
@@ -579,7 +556,6 @@
   }
 }
 
-
 .extend-modal {
   .modal-dialog {
     max-width: 805px;
@@ -756,7 +732,7 @@
     position: sticky;
     width: 100%;
     top: 0;
-    z-index: 1200;
+    z-index: 5;
   }
 
   .modal-body {

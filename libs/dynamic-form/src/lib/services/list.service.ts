@@ -176,7 +176,7 @@ export class ListService {
   private post(url: string, body: any): Observable<any> {
     return this.http.post(url, body).pipe(
       catchError(
-        (error: any) => this.errorsService.parseErrors(error)
+        (error: any) => this.errorsService.handleError(error)
       )
     )
   }

@@ -44,7 +44,10 @@ export class MetadataService {
       endpoint = 'password';
     }
 
-    if (endpoint.includes('/candidate_contacts/') && endpoint.includes('/languages/')) {
+    if (
+      endpoint.includes('/candidate_contacts/') &&
+      endpoint.includes('/languages/')
+    ) {
       endpoint = 'candidate_languages';
     }
 
@@ -94,6 +97,8 @@ export class MetadataService {
         }
       } else if (query.includes('candidatepool')) {
         type = 'candidatepool';
+      } else if (query.includes('timesheet')) {
+        type = 'timesheet';
       } else if (query.includes('extend')) {
         type = 'extend';
       } else if (query.includes('sent')) {

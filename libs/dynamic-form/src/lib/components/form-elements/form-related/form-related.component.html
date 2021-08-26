@@ -201,67 +201,146 @@
   </div>
 
   <div class="form-list" *ngIf="config.list">
-    <h6 class="card flex-row align-items-center" [ngClass]="{ 'bg-primary text-white': !isCollapsed }">
-      <fa-icon class="p-2" [icon]="['fas', isCollapsed ? 'eye' : 'eye-slash']" (click)="isCollapsed = !isCollapsed"
-        [attr.aria-expanded]="!isCollapsed" aria-controls="collapseExample" style="cursor: pointer"></fa-icon>
+    <!-- <h6 class="d-flex align-items-center">
+      <fa-icon
+        class="p-2"
+        [icon]="['fas', isCollapsed ? 'eye' : 'eye-slash']"
+        (click)="isCollapsed = !isCollapsed"
+        [attr.aria-expanded]="!isCollapsed"
+        aria-controls="collapseExample"
+        style="cursor: pointer">
+      </fa-icon>
+
       {{ getTranslationKey(config.key, 'label') | translate: {"Default": config.templateOptions.label} }}
-      <button *ngIf="config.delay && checkPermission('post')" type="button" class="btn btn-sm btn-primary ml-auto mr-2"
+
+      <button
+        *ngIf="config.delay && checkPermission('post')"
+        type="button"
+        class="btn btn-sm btn-primary ml-auto mr-2 py-1"
         (click)="addObject()">
         {{'add' | translate}}
       </button>
 
-      <button *ngIf="config.templateOptions.add_label && config.templateOptions.add" type="button"
-        class="btn btn-sm btn-primary ml-auto mr-2" (click)="addObject()">
+      <button
+        *ngIf="config.templateOptions.add_label && config.templateOptions.add"
+        type="button"
+        class="btn btn-sm btn-primary ml-auto mr-2 py-1" (click)="addObject()">
         {{'add' | translate}}
       </button>
-    </h6>
+    </h6> -->
+
+    <div class="d-flex">
+      <div class="mr-auto d-flex flex-column justify-content-center">
+        <h4 class="mb-0">{{ getTranslationKey(config.key, 'label') | translate: {"Default": config.templateOptions.label} }}</h4>
+      </div>
+
+      <button
+        *ngIf="config.delay && checkPermission('post')"
+        type="button"
+        class="btn btn-primary btn-shadow align-self-center"
+        (click)="addObject()">
+        {{'add' | translate}}
+      </button>
+
+      <button
+        *ngIf="config.templateOptions.add_label && config.templateOptions.add"
+        type="button"
+        class="btn btn-primary btn-shadow align-self-center" (click)="addObject()">
+        {{'add' | translate}}
+      </button>
+    </div>
+
     <div #tableWrapper id="collapseExample" [ngbCollapse]="isCollapsed" class="list-related p-2 datatable">
-      <table *ngIf="dataOfList" class="table mb-1">
-        <thead>
+      <table *ngIf="dataOfList" class="table table-sm">
+        <thead class="thead-default">
           <tr>
             <ng-container *ngFor="let col of config.metadata">
-              <th *ngIf="!col.hide" [class.required]="col.templateOptions.required" [style.width.px]="col.width">
+              <th
+                *ngIf="!col.hide"
+                [class.required]="col.templateOptions.required"
+                [style.width.px]="col.width"
+              >
                 <span class="opacity-15">{{ col.templateOptions.label }}</span>
               </th>
             </ng-container>
+
             <th style="width: 100px">
               <span class="opacity-15">{{'actions' | translate}}</span>
             </th>
           </tr>
         </thead>
+
         <tbody>
           <tr *ngFor="let object of dataOfList; let index = index">
             <ng-container *ngFor="let field of object.metadata">
               <td *ngIf="!field.hide">
-                <ng-container appFormElement [label]="false" [config]="field" [group]="object.data"
-                  (event)="updateValue($event)">
-                </ng-container>
+                <ng-container
+                  appFormElement
+                  [label]="false"
+                  [config]="field"
+                  [group]="object.data"
+                  (event)="updateValue($event)"
+                ></ng-container>
               </td>
             </ng-container>
             <td>
               <span *ngIf="object.id" class="d-flex align-items-center">
-                <fa-icon class="icon px-3 py-1" style="opacity: .3; margin-left: 8px" [icon]="['fas', 'ellipsis-v']"
-                  placement="bottom" #pop="ngbPopover" [ngbPopover]="actionsTemplate">
+                <fa-icon
+                  class="icon px-3 py-1"
+                  style="opacity: .3; margin-left: 8px"
+                  [icon]="['fas', 'ellipsis-v']"
+                  placement="bottom"
+                  #pop="ngbPopover"
+                  [ngbPopover]="actionsTemplate">
                 </fa-icon>
 
                 <ng-template #actionsTemplate>
-                  <span class="custom-button d-flex align-items-center" *ngIf="config.templateOptions.delete && checkPermission('delete')" (click)="deleteObject(object, $event)">
-                    <fa-icon class="icon text-danger mr-2" title="Delete" [icon]="['fas', 'trash']"></fa-icon>
+                  <span
+                    class="custom-button d-flex align-items-center"
+                    *ngIf="config.templateOptions.delete && checkPermission('delete')"
+                    (click)="deleteObject(object, $event)">
+                    <fa-icon
+                      class="icon text-danger mr-2"
+                      title="Delete"
+                      [icon]="['fas', 'trash']">
+                    </fa-icon>
+
                     {{'delete' | translate}}
                   </span>
-                  <span class="custom-button d-flex align-items-center" *ngIf="config.templateOptions.edit && checkPermission('update')" (click)="editObject(object, $event)">
-                    <fa-icon class="icon text-warning mr-2" title="Edit" [icon]="['fas', 'pencil-alt']"></fa-icon>
+                  <span
+                    class="custom-button d-flex align-items-center"
+                    *ngIf="config.templateOptions.edit && checkPermission('update')"
+                    (click)="editObject(object, $event)">
+                    <fa-icon
+                      class="icon text-warning mr-2"
+                      title="Edit"
+                      [icon]="['fas', 'pencil-alt']">
+                    </fa-icon>
+
                     {{'edit' | translate}}
                   </span>
-                  <span class="custom-button d-flex align-items-center"
-                    *ngIf="skillEndpoint && !object.allData.default_rate" (click)="setAsDefault(object)">
-                    <fa-icon class="icon text-primary mr-2" title="Set as default" [icon]="['fas', 'check']"></fa-icon>
+                  <span
+                    class="custom-button d-flex align-items-center"
+                    *ngIf="skillEndpoint && !object.allData.default_rate"
+                    (click)="setAsDefault(object)">
+                    <fa-icon
+                      class="icon text-primary mr-2"
+                      title="Set as default"
+                      [icon]="['fas', 'check']">
+                    </fa-icon>
                   </span>
                 </ng-template>
               </span>
-              <span *ngIf="!object.id" class="custom-button d-flex align-items-center"
+              <span
+                *ngIf="!object.id"
+                class="custom-button d-flex align-items-center"
                 (click)="removeItem(index, $event)">
-                <fa-icon class="icon text-danger mr-2" title="Delete" [icon]="['fas', 'trash']"></fa-icon>
+                <fa-icon
+                  class="icon text-danger mr-2"
+                  title="Delete"
+                  [icon]="['fas', 'trash']">
+                </fa-icon>
+
                 {{'delete' | translate}}
               </span>
             </td>
@@ -330,23 +409,14 @@
 </div>
 
 <ng-container *ngIf="!config.hide">
-  <div *ngIf="
-      errors &&
-      errors[config.key] &&
-      isArray(errors[config.key]) &&
-      errors[config.key].length > 1
-    ">
-    <div class="text-danger mt-1">{{ errors[config.key][0] }}</div>
+  <div class="mb-2" *ngIf="hasObjectExistError()">
+    <div class="text-danger">{{ errors[config.key][0] }}</div>
     <a *ngIf="errors[config.key][1] && errors[config.key][2]" [attr.href]="errors[config.key][2]"
       (click)="open('update', errors[config.key][3])">
       {{ errors[config.key][1] }}
     </a>
   </div>
-  <div *ngIf="
-      errors &&
-      errors[config.key] &&
-      (errors[config.key].length === 1 || !isArray(errors[config.key]))
-    ">
+  <div *ngIf="hasError()">
     <div class="text-danger mt-1 mb-2">{{ errors[config.key] }}</div>
   </div>
   <div *ngIf="message">

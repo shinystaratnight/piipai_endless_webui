@@ -1,19 +1,18 @@
 <div class="site-page">
   <div class="form-page">
-
     <div class="header">
-      <img class="logo" [src]="settings.logo || '/assets/img/logo.svg'">
+      <img class="logo" [src]="logo" />
 
-      <h3 class="title">{{settings.company_name}}</h3>
-      <h4 *ngIf="config" class="form-name">{{config.title}}</h4>
+      <h3 class="company">{{ settings.company_name }}</h3>
+      <h4 *ngIf="title" class="form-name">{{ title }}</h4>
     </div>
-
 
     <div class="form-content registration-form">
       <app-form-builder-form
         [id]="settings.register_form_id"
         [companyId]="settings.company"
-        (formConfig)="setFormConfig($event)">
+        (formConfig)="setFormConfig($event)"
+      >
       </app-form-builder-form>
     </div>
   </div>

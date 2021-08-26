@@ -1,10 +1,42 @@
 import { Role } from '@webui/data';
 
+enum Language {
+  English = 'en',
+  Russian = 'ru',
+  Estonian = 'et',
+  Finnish = 'fi'
+}
+
+enum LanguageFullName {
+  English = 'English',
+  Russian = 'Russian',
+  Estonian = 'Estonian',
+  Finnish = 'Finnish'
+}
+
+enum CountryCodeLanguage {
+  EE = Language.Estonian,
+  FI = Language.Finnish
+}
+
+const translationCountryName = {
+  EE: LanguageFullName.Estonian,
+  FI: LanguageFullName.Finnish
+};
+
+export type Translation = {
+  language: {
+    id: Language;
+    name: LanguageFullName;
+  };
+  value: string;
+};
+
 export enum DateRange {
   Year = 'year',
   Month = 'month',
   Week = 'week',
-  Day = 'day',
+  Day = 'day'
 }
 
 export const filterDateFormat = 'YYYY-MM-DD';
@@ -16,7 +48,7 @@ export const rangeFormats = {
   [DateRange.Year]: 'YYYY',
   [DateRange.Month]: 'MMMM YYYY',
   [DateRange.Week]: 'MMM D',
-  [DateRange.Day]: 'D MMMM YYYY',
+  [DateRange.Day]: 'D MMMM YYYY'
 };
 
 export function getContactAvatar(name): string {
@@ -39,7 +71,8 @@ export function getContactAvatar(name): string {
 }
 
 export function isTouchDevice(): boolean {
-  const deviceNamesReg = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i;
+  const deviceNamesReg =
+    /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i;
 
   return deviceNamesReg.test(navigator.userAgent.toLowerCase());
 }
@@ -82,11 +115,19 @@ export function getRoleId(): string {
   }
 }
 
+export function getStorageLang(): Language {
+  return JSON.parse(localStorage.getItem('web.lang'));
+}
+
 export function getTotalTime(time, data) {
   const shift_ended_at = time(data.shift_ended_at);
   const shift_started_at = time(data.shift_started_at);
 
   let breakTime = 0;
+
+  if (!data.shift_ended_at) {
+    return '0hr 0min';
+  }
 
   if (shift_ended_at.isBefore(shift_started_at)) {
     return '0hr 0min';
@@ -124,6 +165,10 @@ export function getPropValue(data, key: string): any {
     }
   } else {
     if (data) {
+      if (Array.isArray(data[prop])) {
+        return getPropValue(data[prop][0], props.join('.'));
+      }
+
       return getPropValue(data[prop], props.join('.'));
     }
   }
@@ -168,4 +213,88 @@ export function getTranslationKey(key, type) {
   }
 
   return 'without_translation';
+}
+
+export function checkAndReturnTranslation(
+  element: {
+    translations?: Translation[];
+    translation?: Translation[];
+    name?: { name: string; translations: Translation[] } | string;
+    __str__?: string;
+  },
+  countryCode: string,
+  lang?: Language
+): string {
+  const { translations, translation, name, __str__ } = element;
+  const translationList =
+    translations ||
+    translation ||
+    (name && typeof name !== 'string' && name.translations) ||
+    [];
+
+  if (!translationList.length) {
+    return getDefaultValue(element);
+  }
+
+  const target: Translation = translationList.find((element: Translation) => {
+    const { id } = element.language;
+    const languageCode: Language = lang || CountryCodeLanguage[countryCode];
+
+    return id === languageCode;
+  });
+
+  if (!target) {
+    return getDefaultValue(element);
+  }
+
+  return target.value;
+}
+
+function getDefaultValue(element: {
+  name?: { name: string; translations: Translation[] } | string;
+  __str__?: string;
+}) {
+  const { __str__, name } = element;
+
+  if (typeof name === 'string') {
+    return __str__ || name;
+  }
+
+  if (name) {
+    return name.name;
+  }
+
+  return __str__;
+}
+
+export function setPropValue(
+  key: string,
+  target: { [key: string]: any },
+  value: any
+): void {
+  const path = key.split('.');
+  const prop = path.shift();
+
+  if (!path.length) {
+    target[prop] = value;
+  } else {
+    setPropValue(path.join('.'), target[prop], value);
+  }
+}
+
+export function getFulfilledStatus(
+  status: number,
+  workers: { undefined: number; accepted: number; cancelled: number }
+) {
+  if (status === 1) {
+    return status;
+  }
+
+  if (status === 0 && !workers.undefined) {
+    return 0;
+  }
+
+  if (status === 0 && workers.undefined) {
+    return 2;
+  }
 }

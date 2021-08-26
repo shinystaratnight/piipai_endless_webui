@@ -35,7 +35,8 @@ import {
   FormEditorComponent,
   FormTrackingComponent,
   FormListDropdownComponent,
-  FormBankAccountComponent
+  FormBankAccountComponent,
+  FormImageListComponent
 } from '../components/form-elements';
 
 import { TestListComponent } from '../components/test-list/test-list.component';
@@ -81,6 +82,7 @@ const components = {
   tracking: FormTrackingComponent,
   listdropdown: FormListDropdownComponent,
   bank_account: FormBankAccountComponent,
+  image_list: FormImageListComponent
 };
 
 @Directive({

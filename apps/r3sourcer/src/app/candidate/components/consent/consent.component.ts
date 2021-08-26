@@ -32,12 +32,12 @@ export class ConsentComponent {
       .pipe(catchError((err) => {
         const message = err.errors.detail;
 
-        this.toast.sendMessage(message, MessageType.error);
+        this.toast.sendMessage(message, MessageType.Error);
         return of(err);
       }))
       .subscribe((res) => {
         if (res.status == 'success') {
-          this.toast.sendMessage('Thank you!', MessageType.success);
+          this.toast.sendMessage('Thank you!', MessageType.Success);
           this.router.navigate(['/']);
         }
       })

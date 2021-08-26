@@ -1,14 +1,20 @@
-<div class="filter-element" [class.active]="!isCollapsed">
+<div class="filter-element">
   <app-filter-header
     [label]="config.label"
     [key]="config.key"
     [resetButton]="query"
     (resetEvent)="resetFilter()"
-  ></app-filter-header>
+  >
+  </app-filter-header>
 
   <div class="filter-related">
     <div
-      class="d-flex justify-content-center align-items-center autocomplete-filter"
+      class="
+        d-flex
+        justify-content-center
+        align-items-center
+        autocomplete-filter
+      "
       style="position: relative"
     >
       <div
@@ -20,13 +26,30 @@
         (click)="openAutocomplete($event)"
       >
         <div style="overflow: hidden; white-space: nowrap">
-          {{ item ? item.displayValue : '' }}
+          <span *ngIf="multiple && selected.length"
+            >{{ 'selected' | translate: { Default: 'Selected' } }}&nbsp;</span
+          >
+          <span *ngIf="multiple && !selected.length"
+            >{{ 'select' | translate: { Default: 'Select' } }}&nbsp;</span
+          >
+          <span *ngIf="!multiple && !selected.length && item && !item.data">{{
+            'all' | translate: { Default: 'All' }
+          }}</span>
+
+          <span *ngIf="multiple && selected.length"
+            >{{ selected.length }}&nbsp;</span
+          >
+
+          <span *ngIf="multiple">{{
+            getTranslateKey() | translate: { Default: config.label }
+          }}</span>
+
+          <span *ngIf="!multiple && item && item.data">
+            {{ item.displayValue }}
+          </span>
         </div>
         <fa-icon
-          [icon]="[
-            'fas',
-            item && item.hideAutocomplete ? 'chevron-down' : 'chevron-up'
-          ]"
+          [icon]="item && item.hideAutocomplete ? 'chevron-down' : 'chevron-up'"
           class="text-md-white ml-2"
         ></fa-icon>
       </div>
@@ -48,8 +71,12 @@
         />
         <ul *ngIf="multiple" class="list-group w-100">
           <li class="autocomplete-item default-value">
-            <a (click)="selectAll(previewList)">Select All</a>
-            <a (click)="resetAll(previewList)">Reset All</a>
+            <a (click)="selectAll(previewList)">{{
+              'select_all' | translate: { Default: 'Select All' }
+            }}</a>
+            <a (click)="resetAll(previewList)">{{
+              'reset_all' | translate: { Default: 'Reset All' }
+            }}</a>
           </li>
         </ul>
 
@@ -79,7 +106,7 @@
               class="list-group-item autocomplete-item"
               (click)="setValue(defaultValue, item)"
             >
-              All
+              {{ 'all' | translate: { Default: 'All' } }}
             </li>
             <li
               class="list-group-item autocomplete-item"

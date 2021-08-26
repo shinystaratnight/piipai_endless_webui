@@ -46,6 +46,7 @@ export enum Endpoints {
   Shift = '/hr/shifts/',
   JobTag = '/hr/jobtags/',
   ClientJobs = '/hr/jobs/client_contact_job/',
+  JobRates = '/hr/jobrates/',
 
   // Candidate
   CandidateContact = '/candidate/candidatecontacts/',
@@ -60,6 +61,7 @@ export enum Endpoints {
   CandidateJobOffer = '/hr/joboffers/candidate/',
   CandidateLocation = '/candidate/location/',
   CandidateFormalities = '/candidate/formalities/',
+  CandidateSupervisor = '/candidate/candidatecontacts/get_candidates_by_supervisor/',
 
   BlackList = '/hr/blacklists/',
   FavouriteList = '/hr/favouritelists/',
@@ -168,8 +170,9 @@ export enum Endpoints {
   MYOB = '/company-settings/myobsettings/',
   ApplicationFormTranslations = '/core/formtranlations/',
   UnitOfMeasurements = '/core/unitofmeasurements/',
+  CandidateCounter = '/candidate/statistics/'
 }
 
 export const getBankAccountLayoutEndpoint = (countryCode: string) => {
   return `/bank_account_layouts/${countryCode}/`;
-}
+};

@@ -123,6 +123,6 @@ export class WorkflowService {
   }
 
   public errorHandler(error) {
-    return this.errors.parseErrors(error);
+    return this.errors.handleError(error);
   }
 }

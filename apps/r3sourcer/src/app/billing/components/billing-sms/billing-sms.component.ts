@@ -41,7 +41,7 @@ export class BillingSmsComponent implements OnInit, OnDestroy {
     this.billingService.getCreditDetails().subscribe((res: any) => {
       if (message) {
         if (this.smsBalance !== res.sms_balance) {
-          this.toastr.sendMessage('Balance has been updated', MessageType.success);
+          this.toastr.sendMessage('Balance has been updated', MessageType.Success);
         }
       }
 
@@ -59,7 +59,7 @@ export class BillingSmsComponent implements OnInit, OnDestroy {
     this.billingService.addFunds({ amount: this.amount }).subscribe((res: any) => {
       this.amount = 20;
       this.modalRef.close();
-      this.toastr.sendMessage('Please wait a few seconds', MessageType.info);
+      this.toastr.sendMessage('Please wait a few seconds', MessageType.Info);
       setTimeout(() => {
         this.getSmsBalance(true);
       }, 10000);

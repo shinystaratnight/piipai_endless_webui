@@ -8,7 +8,7 @@
   </ng-container>
 
   <ng-container *ngIf="path">
-    <a [routerLink]="urlPrefix + path">
+    <a href="" (click)="backInHistory()">
       <ng-container *ngTemplateOutlet="arrow"></ng-container>
 
       {{ translationKey | translate: {"Default": label} }}

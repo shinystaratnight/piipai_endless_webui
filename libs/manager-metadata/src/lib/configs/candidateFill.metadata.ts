@@ -1,5 +1,5 @@
-import { Endpoints, Models } from "@webui/data";
-import { Form } from "@webui/metadata";
+import { Endpoints, Models } from '@webui/data';
+import { Form } from '@webui/metadata';
 
 const form = [
   {
@@ -54,8 +54,7 @@ const form = [
     .setDefaultValue(0)
     .addOptions({
       '0': 'Hourly wage',
-      '1': 'Piecework wage',
-      '2': 'Combined wage',
+      '1': 'Piecework wage'
     }),
   {
     key: 'total_worked',
@@ -79,8 +78,8 @@ const form = [
     })
     .setPrefilledFields({
       [Models.Skill]: '{position.id}',
-      [Models.Timesheet]: '{id}',
-    }),
+      [Models.Timesheet]: '{id}'
+    })
 ];
 
 export const candidateFill = {

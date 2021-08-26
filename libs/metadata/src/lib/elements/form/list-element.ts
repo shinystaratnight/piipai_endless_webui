@@ -17,11 +17,14 @@ export class ListElement {
   query?: { [key: string]: any };
   metadata_query?: { [key: string]: any };
   translateKey?: string;
+  add_form?: boolean;
+  isHidden?: Function;
+  showIf: Array<string | { [key: string]: any }>;
 
   constructor(label: string, endpoint: string, translateKey?: string) {
     this.templateOptions = {
       label,
-      add_label: '+ Add'
+      add_label: 'add'
     };
 
     this.endpoint = endpoint;
@@ -55,6 +58,18 @@ export class ListElement {
 
   withoutAddButton() {
     this.templateOptions.add_label = '';
+
+    return this;
+  }
+
+  useForm() {
+    this.add_form = true;
+
+    return this;
+  }
+
+  setShowIfRule(showIf: Array<string | { [key: string]: any }>) {
+    this.showIf = showIf;
 
     return this;
   }

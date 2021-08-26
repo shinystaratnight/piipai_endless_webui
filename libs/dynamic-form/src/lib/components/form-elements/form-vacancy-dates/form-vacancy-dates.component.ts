@@ -6,12 +6,11 @@ import {
   ElementRef,
   Input,
   OnDestroy,
-  AfterContentInit,
   ViewEncapsulation,
-  ChangeDetectionStrategy,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
-import { NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
+import { NgbCalendar, NgbDate } from '@ng-bootstrap/ng-bootstrap';
 import { BehaviorSubject, Subscription } from 'rxjs';
 
 import { BasicElementComponent } from './../basic-element/basic-element.component';
@@ -24,7 +23,10 @@ import { getTimeInstance, getToday } from '@webui/utilities';
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class FormVacancyDatesComponent extends BasicElementComponent implements OnInit, OnDestroy, AfterContentInit {
+export class FormVacancyDatesComponent
+  extends BasicElementComponent
+  implements OnInit, OnDestroy
+{
   @Input()
   public deleteDate: BehaviorSubject<string>;
 
@@ -41,11 +43,11 @@ export class FormVacancyDatesComponent extends BasicElementComponent implements 
   public dateFormat = 'YYYY-MM-DD';
   public minDate: any;
   public markDisabled: Function;
-  // public vacancyDate: any;
   public vacancyDates: string[];
   public dates: any = {};
   public todayElement: any;
   public timeInstance = getTimeInstance();
+  public updating: boolean;
 
   @ViewChild('calendar')
   public calendar: ElementRef;
@@ -80,22 +82,6 @@ export class FormVacancyDatesComponent extends BasicElementComponent implements 
     if (this.subscription) {
       this.subscription.unsubscribe();
     }
-  }
-
-  public ngAfterContentInit() {
-    setTimeout(() => {
-      if (this.calendar) {
-        const today = this.calendar.nativeElement.querySelector('.today');
-
-        if (today) {
-          this.todayElement = today.parentElement;
-
-          if (this.todayElement) {
-            this.todayElement.classList.add('current-day');
-          }
-        }
-      }
-    }, 500);
   }
 
   public markDisabledDates(dates: any[] = []) {
@@ -133,35 +119,38 @@ export class FormVacancyDatesComponent extends BasicElementComponent implements 
     this.minDate = {
       year: time().year(),
       month: time().month() + 1,
-      day: time().date(),
+      day: time().date()
     };
   }
 
-  public selectVacancyDate(e, time = this.timeInstance) {
-    if (e) {
-      const date = time([e.year, e.month - 1, e.day]).format(this.dateFormat);
+  public selectVacancyDate(e: NgbDate, time = this.timeInstance) {
+    if (e && !this.updating) {
+      this.updating = true;
+      const { year, month, day } = e;
+      const date = time([year, month - 1, day]).format(this.dateFormat);
 
-      this.vacancyDates = this.vacancyDates || [];
-      if (this.vacancyDates.indexOf(date) === -1) {
+      let dates = this.vacancyDates || [];
+
+      if (dates.indexOf(date) === -1) {
         this.dates[date] = null;
-
-        this.vacancyDates.push(date);
+        dates.push(date);
 
         setTimeout(() => {
           this.markSelectedDates(date);
         }, 150);
       } else {
-        this.vacancyDates.splice(this.vacancyDates.indexOf(date), 1);
+        dates = [...dates.filter((el) => el !== date)];
 
         setTimeout(() => {
           this.markSelectedDates(date, true);
-        }, 150);
+        });
       }
 
+      this.vacancyDates = [...dates];
       this.group.get(this.key).patchValue(this.vacancyDates);
       this.event.emit({
         el: this.config,
-        type: 'change',
+        type: 'change'
       });
     }
   }
@@ -171,12 +160,12 @@ export class FormVacancyDatesComponent extends BasicElementComponent implements 
 
     setTimeout(() => {
       this.markSelectedDates(date, true);
-    }, 150);
+    });
   }
 
   public markSelectedDates(date?, remove?) {
     const calendar = this.calendar.nativeElement;
-    const selectedDate = calendar.querySelectorAll(`.bg-primary:not(.not-current)`);
+    const selectedDate = calendar.querySelectorAll(`.bg-primary`);
     const currentDate = selectedDate[0];
 
     if (currentDate && date && !this.dates[date]) {
@@ -185,9 +174,8 @@ export class FormVacancyDatesComponent extends BasicElementComponent implements 
 
     if (remove) {
       if (this.dates[date]) {
-        this.dates[date].children[0].classList.remove('bg-primary');
-        this.dates[date].children[0].classList.remove('text-white');
-        this.dates[date].children[0].classList.remove('not-current');
+        this.dates[date].children[0].classList.remove('selected-date');
+        this.dates[date].children[0].classList.add('removed-date');
       }
 
       delete this.dates[date];
@@ -198,16 +186,13 @@ export class FormVacancyDatesComponent extends BasicElementComponent implements 
         const element = this.dates[el].children[0];
 
         if (element) {
-          element.classList.add('bg-primary');
-          element.classList.add('text-white');
-          element.classList.add('not-current');
+          element.classList.add('selected-date');
+          element.classList.remove('removed-date');
         }
       }
     });
 
-    if (this.todayElement) {
-      this.todayElement.classList.add('current-day');
-    }
+    this.updating = false;
   }
 
   public isToday(month: number, day: number): boolean {

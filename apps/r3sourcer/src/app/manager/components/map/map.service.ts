@@ -99,7 +99,7 @@ export class MapService {
     return this.http
       .get(this.endpoint + query)
       .pipe(
-        catchError((error: any) => this.errors.parseErrors(error))
+        catchError((error: any) => this.errors.handleError(error))
       );
   }
 

@@ -10,3 +10,5 @@ export * from './list-table/list-table.component';
 export * from './list-tags/list-tags.component';
 export * from './list-text/list-text.component';
 export * from './list-column-header/list-column-header.component';
+export * from './list-skill-activity/list-skill-activity.component';
+export * from './list-image-list/list-image-list.component';

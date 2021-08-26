@@ -1,4 +1,4 @@
-<div class="filter-element" [class.active]="!isCollapsed">
+<div class="filter-element">
   <app-filter-header
     [label]="config.label"
     [key]="config.key"
@@ -17,7 +17,7 @@
         [(ngModel)]="toggle"
       />
       <app-checkbox [sm]="true" [checked]="toggle"></app-checkbox>
-      {{'search_by_distance' | translate: {"Default": "Search by distance"} }}
+      {{ 'search_by_distance' | translate: { Default: 'Search by distance' } }}
     </label>
     <div class="px-2 my-3" [hidden]="!toggle">
       <div id="slider"></div>

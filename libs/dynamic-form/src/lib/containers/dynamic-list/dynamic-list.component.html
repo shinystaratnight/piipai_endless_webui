@@ -49,7 +49,8 @@
         [key]="config.list.list"
         [config]="filtersOfList"
         (event)="filterHandler($event)"
-      ></app-filter-block>
+      >
+      </app-filter-block>
     </div>
     <div class="background" (click)="toggleFilterBlock()"></div>
     <div
@@ -70,9 +71,9 @@
         *ngIf="
           (config.list &&
             inForm &&
-              (config.list.search_enabled ||
-                (config.list.buttons && config.list.buttons.length)) &&
-              !delay) ||
+            (config.list.search_enabled ||
+              (config.list.buttons && config.list.buttons.length)) &&
+            !delay) ||
           (!inForm && !poped)
         "
       >
@@ -98,7 +99,6 @@
         </app-list-buttons>
       </h2>
       <div
-        appScroll
         [enable]="!inForm"
         *ngIf="
           (showFilters && !(identifyDevice() || isMobileDevice)) ||
@@ -154,7 +154,7 @@
       <div class="background" (click)="toggleFilterBlock()"></div>
 
       <app-action-element
-        *ngIf="config.list.actions && !inForm"
+        *ngIf="config.list.actions"
         [actionProcess]="actionProcess"
         [count]="selectedCount"
         [config]="config.list.actions"
@@ -167,10 +167,18 @@
         *ngIf="identifyDevice() || isMobileDevice"
       >
         <button
-          class="btn btn-link text-secondary d-flex align-items-center text-uppercase fw-600 mb-0"
+          class="
+            btn btn-link
+            text-secondary
+            d-flex
+            align-items-center
+            text-uppercase
+            fw-600
+            mb-0
+          "
           (click)="toggleFilterBlock()"
           *ngIf="showFilters"
-          style="font-size: 14px;"
+          style="font-size: 14px"
         >
           <svg class="mr-1" width="16" height="12" viewBox="0 0 20 15">
             <path
@@ -181,45 +189,30 @@
           </svg>
           {{ 'filters' | translate: { Default: 'Filters' } }}
         </button>
-
-        <!-- TODO: fix dropdown -->
-        <!-- <div ngbDropdown placement="bottom-right" class="sort-dropdown text-right">
-          <label ngbDropdownToggle class="mb-0">
-            Sort by
-          </label>
-          <fa-icon class="sort-icon"
-            icon="chevron-down">
-          </fa-icon>
-          <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-            <div *ngFor="let field of config.list.columns">
-              <span ngbDropdownItem
-                class="dropdown-item"
-                [class.activated]="field.sorted"
-                *ngIf="field.sort"
-                (click)="sorting(field, field.sorted === 'desc' ? 'asc' : 'desc', $event)">
-                  {{field.label}}
-                  <fa-icon class="sort-icon"
-                    [icon]="['fas', field.sorted === 'asc' ? 'chevron-up' : 'chevron-down']">
-                  </fa-icon>
-              </span>
-            </div>
-          </div>
-        </div> -->
       </div>
 
       <ng-container *ngIf="identifyDevice()">
         <div class="mobile-item" *ngFor="let row of body">
-          <ng-container *ngTemplateOutlet=" getView(); context: { data: row, status: getElement('status', row.content) }"></ng-container>
+          <ng-container
+            *ngTemplateOutlet="
+              getView();
+              context: { data: row, status: getElement('status', row.content) }
+            "
+          >
+          </ng-container>
         </div>
       </ng-container>
 
       <div #tableWrapper [hidden]="identifyDevice()" class="table-wrapper">
         <table class="table table-sm" *ngIf="config.list">
-
           <thead class="thead-default">
             <tr>
-              <th *ngIf="hasSelectColumn" class="active first-cell" style="width: 2rem;">
-                <div class="text-center" *ngIf="(!inForm && config.list.actions) || actions">
+              <th
+                *ngIf="hasSelectColumn || hasEditLink"
+                class="active first-cell"
+                style="width: 2rem"
+              >
+                <div class="text-center" *ngIf="config.list.actions || actions">
                   <label for="all-checkbox">{{ 'all' | translate }}</label>
                   <input
                     id="all-checkbox"
@@ -234,8 +227,14 @@
 
               <ng-container *ngFor="let field of config.list.columns">
                 <ng-container *ngIf="!field.hide">
-                  <th [class.text-center]="field.center" *ngIf="!(field.tab && field.tab.is_collapsed)">
-                    <app-list-column-header [config]="field" (sortChange)="onSortChange()"></app-list-column-header>
+                  <th
+                    [class.text-center]="field.center"
+                    *ngIf="!(field.tab && field.tab.is_collapsed)"
+                  >
+                    <app-list-column-header
+                      [config]="field"
+                      (sortChange)="onSortChange()"
+                    ></app-list-column-header>
                   </th>
                 </ng-container>
               </ng-container>
@@ -258,10 +257,15 @@
                 *ngIf="!row.hide"
                 [class.main]="row.additionalBody && !row.collapsed"
                 [class.table-warning]="row.highlight && row.highlight.highlight"
-                [ngStyle]="row.highlight && row.highlight.color && { 'background-color': row.highlight.color }"
+                [ngStyle]="
+                  row.highlight &&
+                  row.highlight.color && {
+                    'background-color': row.highlight.color
+                  }
+                "
                 (click)="openDetails(row, $event)"
               >
-                <td *ngIf="hasSelectColumn" class="first-cell">
+                <td *ngIf="hasSelectColumn || hasEditLink" class="first-cell">
                   <label *ngIf="config.list.actions || actions">
                     <input
                       type="checkbox"
@@ -275,7 +279,26 @@
                     ></app-checkbox>
                   </label>
 
-                  <fa-icon *ngIf="!first && !config.list.editEndpoint && !config.list.editDisable && checkPermission('get')" icon="pencil-alt" class="icon" (click)="editObject(row.id, row.__str__)"></fa-icon>
+                  <a
+                    class="row-link"
+                    [routerLink]="row.id + '/change'"
+                    *ngIf="hasEditLink"
+                  >
+                    <fa-icon icon="pencil-alt" class="icon"></fa-icon>
+                    Edit
+                  </a>
+
+                  <fa-icon
+                    *ngIf="
+                      !first &&
+                      !config.list.editEndpoint &&
+                      !config.list.editDisable &&
+                      checkPermission('get')
+                    "
+                    icon="pencil-alt"
+                    class="icon"
+                    (click)="editObject(row.id, row.__str__)"
+                  ></fa-icon>
                 </td>
 
                 <ng-container
@@ -284,9 +307,13 @@
                   <td
                     *ngIf="!cell.hide"
                     [class.text-center]="cell.center"
-                    [ngStyle]="{ 'width.px': cell.width }"
+                    [ngStyle]="{
+                      'width.px': cell.width,
+                      'maxWidth.px': cell.width
+                    }"
                     [attr.data-label]="cell.label"
                     [hidden]="cell.tab && cell.tab.is_collapsed"
+                    [class.action-cell]="cell.name === 'actions'"
                   >
                     <label class="cell-label" *ngIf="isMobileDevice">
                       {{ cell.label }}
@@ -315,9 +342,9 @@
                         </ng-container>
                       </ng-template>
                       <fa-icon
-                        class="icon-actions px-3 py-1 ml-2"
+                        class="icon-actions"
                         icon="ellipsis-v"
-                        placement="bottom"
+                        placement="left"
                         #pop="ngbPopover"
                         triggers="manual"
                         (click)="toggleActions($event, pop)"
@@ -596,434 +623,6 @@
   </div>
 </ng-template>
 
-<ng-template #evaluateModal let-modal>
-  <div class="modal-content-wrapper">
-    <div class="modal-header-wrapper">
-      <div class="modal-header">
-        <h5 class="modal-title" [class.text-center]="modalInfo.signature">
-          <ng-container *ngIf="modalInfo.evaluate">{{
-            'evaluate.label' | translate: { Default: 'Evaluate' }
-          }}</ng-container>
-
-          <ng-container *ngIf="!modalInfo.evaluate">
-            <ng-container *ngIf="modalInfo.label.picture">
-              <img
-                class="mr-2"
-                alt="Photo"
-                style="border-radius: 0.5rem"
-                width="40"
-                height="40"
-                [src]="modalInfo.label.picture"
-              />
-            </ng-container>
-
-            <ng-container *ngIf="!modalInfo.label.picture">
-              <span class="mr-2 contact-avatar avatar">{{
-                modalInfo.label.contactAvatar
-              }}</span>
-            </ng-container>
-
-            {{ modalInfo.label.name }}
-          </ng-container>
-        </h5>
-
-        <app-close-button
-          class="close-button ml-auto"
-          (click)="modal.dismiss()"
-        ></app-close-button>
-      </div>
-    </div>
-    <div *ngIf="!modalInfo.evaluate" class="modal-body">
-      <app-generic-form
-        [needData]="modalInfo.needData"
-        [endpoint]="modalInfo.endpoint"
-        [data]="modalInfo.data"
-        [extendData]="modalInfo.extendData"
-        [edit]="modalInfo.edit"
-        (event)="evaluateEvent($event, modal.close)"
-      >
-        <div class="d-flex">
-          <button class="btn btn-shadow btn-primary button-save ml-lg-auto">
-            {{ 'save' | translate: { Default: 'Save' } }}
-          </button>
-        </div>
-      </app-generic-form>
-    </div>
-
-    <ng-container *ngIf="modalInfo.evaluate">
-      <div class="modal-body text-center">
-        <ng-container *ngIf="modalInfo.label.picture">
-          <img
-            [src]="modalInfo.label.picture"
-            alt="Photo"
-            style="border-radius: 0.5rem"
-            height="100"
-            width="100"
-          />
-        </ng-container>
-
-        <ng-container *ngIf="!modalInfo.label.picture">
-          <span class="contact-avatar contact-avatar-lg">{{
-            modalInfo.label.contactAvatar
-          }}</span>
-        </ng-container>
-
-        <p class="evaluate-label">{{ modalInfo.label.name }}</p>
-        <hr width="100" />
-
-        <ngb-rating
-          max="5"
-          min="1"
-          [(ngModel)]="modalInfo.data.evaluation_score"
-        >
-          <ng-template let-fill="fill" let-index="index">
-            <span *ngIf="fill === 100" class="star star-lg full">&#9733;</span>
-            <span *ngIf="fill === 0" class="star star-lg">
-              {{ modalInfo.data.evaluation_score ? '&#9733;' : '&#9734;' }}
-            </span>
-          </ng-template>
-        </ngb-rating>
-      </div>
-      <div class="modal-footer justify-content-center">
-        <button
-          type="button"
-          class="btn btn-shadow btn-primary button-save"
-          (click)="sendEvaluateData(modalInfo.endpoint, modalInfo.data)"
-        >
-          {{ 'save' | translate: { Default: 'Save' } }}
-          <app-spinner *ngIf="saveProcess"></app-spinner>
-        </button>
-      </div>
-    </ng-container>
-  </div>
-</ng-template>
-
-<ng-template #approveSignature let-modal>
-  <div class="approve-signature-modal modal-content-wrapper">
-    <div class="modal-header-wrapper">
-      <div class="modal-header">
-        <img
-          alt="Photo"
-          width="54"
-          height="54"
-          *ngIf="modalInfo.label.picture"
-          [src]="modalInfo.label.picture"
-        />
-        <h2 class="modal-title d-flex align-items-center">
-          <div class="mr-3">
-            <span
-              class="contact-avatar avatar"
-              *ngIf="!modalInfo.label.picture"
-            >
-              {{ modalInfo.label.contactAvatar }}
-            </span>
-          </div>
-          <div class="d-flex justify-content-center flex-column">
-            {{
-              'approve_timesheet' | translate: { Default: 'Approve timesheet' }
-            }}
-            <br />
-            <span class="secondary-title">for {{ modalInfo.label.name }}</span>
-          </div>
-        </h2>
-
-        <app-close-button
-          class="close-button ml-auto"
-          (click)="modal.dismiss()"
-        ></app-close-button>
-      </div>
-    </div>
-
-    <div class="modal-body pt-0">
-      <div
-        [class.steps]="
-          (modalInfo.changeEndpoint && identifyDevice()) ||
-          (landscape() && !modalInfo.approve)
-        "
-        [class.signature-step]="modalInfo.signatureStep"
-      >
-        <div class="content-info">
-          <div *ngIf="modalInfo.timesheet" class="flex-fill">
-            <div class="desktop-version">
-              <h3 class="group-title hide-sm">
-                {{ 'times.label' | translate: { Default: 'Times' } }}
-              </h3>
-
-              <ng-container
-                *ngTemplateOutlet="
-                  line;
-                  context: {
-                    label: 'Date',
-                    key: 'date',
-                    value: modalInfo.timesheet.date
-                  }
-                "
-              ></ng-container>
-              <ng-container
-                *ngTemplateOutlet="
-                  line;
-                  context: {
-                    label: 'Start',
-                    key: 'start',
-                    value: modalInfo.timesheet.started_at,
-                    muted: true
-                  }
-                "
-              ></ng-container>
-              <ng-container
-                *ngTemplateOutlet="
-                  line;
-                  context: {
-                    label: 'Break',
-                    key: 'break',
-                    value: modalInfo.timesheet.break,
-                    muted: true
-                  }
-                "
-              ></ng-container>
-              <ng-container
-                *ngTemplateOutlet="
-                  line;
-                  context: {
-                    label: 'End',
-                    key: 'end',
-                    value: modalInfo.timesheet.ended_at,
-                    muted: true
-                  }
-                "
-              ></ng-container>
-              <ng-container
-                *ngTemplateOutlet="
-                  line;
-                  context: {
-                    label: 'Total time',
-                    key: 'total_time.label',
-                    value: modalInfo.timesheet.total,
-                    totalTime: true
-                  }
-                "
-              ></ng-container>
-            </div>
-
-            <div class="mobile-version">
-              <div class="date">
-                {{
-                  modalInfo.timesheet.unformated_date
-                    | dateFormat: 'DD MMM YYYY'
-                }}
-              </div>
-
-              <ng-container
-                *ngTemplateOutlet="
-                  line;
-                  context: {
-                    label: 'Shift start/end',
-                    key: 'shift_start_end',
-                    value: modalInfo.timesheet.shift_start_end,
-                    muted: true
-                  }
-                "
-              ></ng-container>
-              <ng-container
-                *ngTemplateOutlet="
-                  line;
-                  context: {
-                    label: 'Break start/end',
-                    key: 'break',
-                    value: modalInfo.timesheet.break_start_and,
-                    muted: true
-                  }
-                "
-              ></ng-container>
-              <ng-container
-                *ngTemplateOutlet="
-                  line;
-                  context: {
-                    label: 'Total time',
-                    key: 'total_time.label',
-                    value: modalInfo.timesheet.total,
-                    totalTime: true
-                  }
-                "
-              ></ng-container>
-            </div>
-          </div>
-
-          <div [hidden]="!modalInfo.timesheetData" class="form-wrapper">
-            <h3
-              class="group-title times"
-              [class.change-form]="modalInfo.changeEndpoint"
-            >
-              {{ 'times.label' | translate: { Default: 'Times' } }}
-            </h3>
-
-            <app-generic-form
-              [needData]="false"
-              [form]="modalInfo.form"
-              [endpoint]="modalInfo.changeEndpoint"
-              [metadataQuery]="modalInfo.metadataQuery"
-              [changeMetadata]="modalInfo.changeMetadata"
-              [data]="modalInfo.timesheetData"
-              [extendData]="modalInfo.extendData"
-              [edit]="modalInfo.edit"
-              (event)="evaluateEvent($event, modal.close)"
-            >
-              <button #sendFormButton type="submit" [hidden]="true"></button>
-            </app-generic-form>
-          </div>
-
-          <ng-template
-            #line
-            let-label="label"
-            let-value="value"
-            let-total="totalTime"
-            let-muted="muted"
-            let-key="key"
-          >
-            <div
-              class="time-line d-flex align-items-center flex-wrap"
-              [class.text-success]="total"
-            >
-              <span class="label" [class.description]="muted">
-                {{ key | translate: { Default: label } }}:
-              </span> <span>{{ value }}</span>
-            </div>
-          </ng-template>
-
-          <div
-            class="flex-fill evaluation-content"
-            [class.evaluated]="modalInfo.evaluated"
-          >
-            <h3 class="group-title">
-              {{ 'evaluate.label' | translate: { Default: 'Evaluation' } }}
-            </h3>
-
-            <div
-              class="evaluation-wrapper d-flex align-items-center text-warning"
-            >
-              <div
-                class="rating d-inline-flex"
-                [class.filled]="modalInfo.data.evaluation_score"
-              >
-                <ngb-rating
-                  min="1"
-                  max="5"
-                  [(ngModel)]="modalInfo.data.evaluation_score"
-                  [rate]="modalInfo.data.evaluation_score"
-                  [readonly]="modalInfo.evaluated"
-                  (hover)="hovered = $event"
-                  (leave)="hovered = undefined"
-                  (rateChange)="hovered = undefined"
-                >
-                  <ng-template let-fill="fill" let-index="index">
-                    <span *ngIf="fill === 100" class="star star-lg full">&#9733;</span>
-                    <span *ngIf="fill === 0" class="star star-lg">{{ modalInfo.data.evaluation_score ? '&#9733;' : '&#9734;' }}</span>
-                  </ng-template>
-                </ngb-rating>
-              </div>
-              &nbsp;{{ modalInfo.data.evaluation_score }}
-            </div>
-          </div>
-        </div>
-
-        <div
-          class="d-flex justify-content-center align-items-center flex-column"
-        >
-          <div [hidden]="!modalInfo.signature" class="signature-content">
-            <app-back-link
-              *ngIf="
-                (modalInfo.changeEndpoint && identifyDevice()) ||
-                (landscape() && !modalInfo.approve)
-              "
-              label="Back to times"
-              key="back"
-              (backEvent)="modalInfo.signatureStep = false"
-            >
-            </app-back-link>
-
-            <h3
-              class="group-title signature-title d-flex align-items-center w-100"
-            >
-              {{ 'signature' | translate: { Default: 'Signature' } }}
-              <button
-                *ngIf="modalInfo.signature"
-                type="button"
-                class="btn btn-link text-danger ml-auto pr-0 py-0 only-mobile"
-                (click)="signatureCanvas.clear()"
-              >
-                {{ 'clear' | translate: { Default: 'Clear area' } }}
-              </button>
-            </h3>
-            <app-signature
-              #signatureCanvas
-              [supervisorSignature]="modalInfo.supervisor_signature"
-              (signature)="updateSignature($event)"
-            ></app-signature>
-          </div>
-        </div>
-      </div>
-
-      <div
-        class="modal-footer"
-        [class.signature-step-footer]="modalInfo.signature"
-      >
-        <button
-          *ngIf="modalInfo.signature"
-          type="button"
-          class="btn clear-button"
-          [class.signature-step]="modalInfo.signatureStep"
-          (click)="signatureCanvas.clear()"
-        >
-          {{ 'clear' | translate: { Default: 'Clear' } }}
-        </button>
-        <button
-          type="button"
-          class="btn btn-shadow btn-success"
-          *ngIf="
-            (modalInfo.changeEndpoint && identifyDevice()) || landscape()
-              ? modalInfo.signatureStep
-              : true
-          "
-          (click)="sendSignature(sendFormButton)"
-        >
-          {{ 'approve' | translate: { Default: 'Approve' } }}
-          <app-spinner *ngIf="saveProcess"></app-spinner>
-        </button>
-
-        <button
-          type="button"
-          class="btn btn-shadow btn-primary next-button"
-          *ngIf="
-            (modalInfo.changeEndpoint && identifyDevice()) || landscape()
-              ? !modalInfo.signatureStep
-              : false
-          "
-          (click)="modalInfo.signatureStep = true"
-        >
-          {{ 'next' | translate: { Default: 'Next' } }}
-          <svg
-            class="ml-1"
-            width="16"
-            height="11"
-            viewBox="0 0 16 11"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M11.1816 10.5377C11.0345 10.5377 10.8138 10.5377 10.7402 10.3906C10.5195 10.1699 10.5195 9.80213 10.7402 9.58144L14.639 5.68265C14.8597 5.46196 14.8597 5.09415 14.639 4.87346L10.7402 0.974695C10.5195 0.754009 10.5195 0.386195 10.7402 0.16551C10.9609 -0.0551759 11.3287 -0.0551759 11.5494 0.16551L15.4482 4.0643C16.1838 4.79992 16.1838 5.82978 15.4482 6.5654L11.5494 10.4642C11.5494 10.5377 11.4023 10.5377 11.1816 10.5377Z"
-              fill="white"
-            />
-            <path
-              d="M14.7124 5.82983H0.588497C0.220688 5.82983 0 5.60913 0 5.24132C0 4.87351 0.220688 4.65283 0.588497 4.65283H14.7124C15.0802 4.65283 15.3009 4.87351 15.3009 5.24132C15.3009 5.60913 15.0802 5.82983 14.7124 5.82983Z"
-              fill="white"
-            />
-          </svg>
-        </button>
-      </div>
-    </div>
-  </div>
-</ng-template>
-
 <ng-template #confirmProfileModal let-modal>
   <div class="modal-content-wrapper">
     <div class="modal-header-wrapper">
@@ -1035,7 +634,7 @@
       </div>
     </div>
     <div class="modal-body">
-      <p style="text-indent: 12px;">
+      <p style="text-indent: 12px">
         Your will buy profile of this candidate on your own risk! R3sourcer will
         not take any responsibility on accuracy of this profile and actual
         availability of this candidate! Your saved CC will be charged
@@ -1088,7 +687,7 @@
     <object
       type="application/pdf"
       [data]="modalInfo.url"
-      style="width: 100%; height: 80vh;"
+      style="width: 100%; height: 80vh"
     ></object>
   </div>
 </ng-template>
@@ -1119,7 +718,7 @@
           type="button"
           class="btn btn-sm btn-success"
           (click)="markerClick(marker)"
-          style="font-size: 10px;"
+          style="font-size: 10px"
         >
           {{ marker.selected ? 'Selected' : 'Select' }}
         </button>
@@ -1187,14 +786,14 @@
     >
     </ng-container>
     <div class="mb-3 total-time-wrapper">
-      <span
+      <!-- <span
         class="text-success mr-1"
-        style="display: inline-block; font-size: 15px; width: 50%;"
+        style="display: inline-block; font-size: 15px; width: 50%"
         >{{
           'total_time.label' | translate: { Default: 'Total time' }
         }}:&nbsp;</span
-      >
-      <ng-container
+      > -->
+      <!-- <ng-container
         *ngFor="let field of getElement('totalTime', data.content).content"
         appListElement
         [length]="getElement('totalTime', data.content).content.length"
@@ -1202,7 +801,7 @@
         (event)="eventHandler($event)"
         (buttonAction)="buttonHandler($event)"
       >
-      </ng-container>
+      </ng-container> -->
     </div>
     <div class="d-flex align-items-center mb-2">
       <ng-container
@@ -1302,13 +901,15 @@
       (buttonAction)="buttonHandler($event)"
     >
     </ng-container>
-    <div class="mb-3 d-flex">
-      <span
+    <div class="mb-3">
+      <!-- <span
         class="text-success mr-1"
-        style="display: inline-block; font-size: 15px; width: 50%;"
-        >Total time:&nbsp;</span
-      >
-      <ng-container
+        style="display: inline-block; font-size: 15px; width: 50%"
+        >{{
+          'totalTime.label' | translate: { Default: 'Total time' }
+        }}:&nbsp;</span
+      > -->
+      <!-- <ng-container
         *ngFor="let field of getElement('totalTime', data.content).content"
         appListElement
         [length]="getElement('totalTime', data.content).content.length"
@@ -1316,7 +917,7 @@
         (event)="eventHandler($event)"
         (buttonAction)="buttonHandler($event)"
       >
-      </ng-container>
+      </ng-container> -->
     </div>
     <div class="d-flex align-items-center mb-2">
       <ng-container
@@ -1403,20 +1004,20 @@
     >
     </ng-container>
     <div class="mb-3 total-time-wrapper">
-      <span
+      <!-- <span
         class="text-success mr-1"
-        style="display: inline-block; font-size: 15px; width: 50%;"
+        style="display: inline-block; font-size: 15px; width: 50%"
         >Total time:&nbsp;</span
-      >
-      <ng-container
-        *ngFor="let field of getElement('totalTime', data.content).content"
+      > -->
+      <!-- <ng-container
+        *ngFor="let field of getElement('hours', data.content).content"
         appListElement
-        [length]="getElement('totalTime', data.content).content.length"
+        [length]="getElement('hours', data.content).content.length"
         [config]="field"
         (event)="eventHandler($event)"
         (buttonAction)="buttonHandler($event)"
       >
-      </ng-container>
+      </ng-container> -->
     </div>
     <div class="d-flex align-items-center mb-2">
       <ng-container

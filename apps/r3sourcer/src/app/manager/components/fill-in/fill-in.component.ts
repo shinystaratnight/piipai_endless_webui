@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { GenericFormService } from '@webui/dynamic-form';
+import { ToastService, MessageType } from '@webui/core';
 
 @Component({
   selector: 'app-fill-in',
@@ -23,7 +24,8 @@ export class FillInComponent implements OnInit {
 
   constructor(
     private gfs: GenericFormService,
-    private router: Router
+    private router: Router,
+    private toastr: ToastService
   ) {}
 
   public ngOnInit() {
@@ -65,7 +67,15 @@ export class FillInComponent implements OnInit {
     if (this.data) {
       this.gfs.submitForm(this.endpoint, this.data).subscribe(
         () => this.back(),
-        (err) => this.err = err
+        (err) => {
+          const { detail } = err.errors;
+
+          if (!detail) {
+            return;
+          }
+
+          this.toastr.sendMessage(detail, MessageType.Error);
+        }
       );
     }
   }

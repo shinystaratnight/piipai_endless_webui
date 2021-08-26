@@ -4,7 +4,7 @@ import * as forms from './form';
 import * as filters from './filters';
 import * as datalist from './list';
 
-export const Form  = {
+export const Form = {
   select: forms.select,
   textarea: forms.textarea,
   checkbox: forms.checkbox,
@@ -16,7 +16,9 @@ export const Form  = {
   static: forms.stat,
   list: forms.list,
   info: forms.info,
-  tabs: forms.tabs
+  tabs: forms.tabs,
+  collapse: forms.collapse,
+  imageList: forms.image_list
 };
 
 export const Filter = {
@@ -42,13 +44,14 @@ export const List = {
   icon: datalist.icon,
   info: datalist.info,
   link: datalist.link,
-  checkbox: datalist.checkbox,
-}
+  checkbox: datalist.checkbox
+};
 
 export { DatepickerType } from './form/datepicker-element';
 export { InputType } from './form/input-element';
 export { CheckboxType } from './form/checkbox-element';
 export { StaticType } from './form/static-element';
 export { RelatedElement } from './form/related-element';
+export { CollapseElement } from './form/collapse-element';
 
 export * from './form/utils';

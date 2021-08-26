@@ -16,7 +16,7 @@ const filters = {
     label: 'Available',
     values: [
       {
-        label: 'Show partialy available',
+        label: 'Show partially available',
         value: 'True'
       }
     ],

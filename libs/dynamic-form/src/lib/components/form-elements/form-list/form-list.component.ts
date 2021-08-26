@@ -8,7 +8,6 @@ import {
   ChangeDetectorRef,
   Optional
 } from '@angular/core';
-import { Router } from '@angular/router';
 
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { Subject, Subscription } from 'rxjs';
@@ -239,7 +238,7 @@ export class FormListComponent implements OnInit, OnDestroy {
     });
   }
 
-  public formEvent(e, closeModal) {
+  public formEvent(e, closeModal?) {
     if (e.type === 'saveStart') {
       this.saveProcess = true;
     }
@@ -248,7 +247,10 @@ export class FormListComponent implements OnInit, OnDestroy {
         closeModal();
       }
 
-      this.updateList(e);
+      setTimeout(() => {
+        this.updateList(e);
+      }, 600);
+
       if (this.timelineService) {
         this.timelineService.emit(TimelineAction.Update);
       }
@@ -337,9 +339,9 @@ export class FormListComponent implements OnInit, OnDestroy {
 
   public checkFormData() {
     if (this.config.formData) {
-      const subscription = this.config.formData.subscribe((formData) => {
-        this.formData = formData.data;
-        this.checkDefaultValues(formData.data);
+      const subscription = this.config.formData.subscribe(({ data, key }) => {
+        this.formData = data;
+        this.checkDefaultValues(data);
       });
 
       this.subscriptions.push(subscription);
@@ -452,13 +454,8 @@ export class FormListComponent implements OnInit, OnDestroy {
   }
 
   private getAddFormConfig() {
-    const {
-      endpoint,
-      add_endpoint,
-      templateOptions,
-      prefilled,
-      delay
-    } = this.config;
+    const { endpoint, add_endpoint, templateOptions, prefilled, delay } =
+      this.config;
 
     const config = {
       title: templateOptions.add_label,

@@ -21,8 +21,7 @@ import { WidgetItem } from './components';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.scss'],
-  providers: [WidgetService]
+  styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit {
   userWidgets: UserWidget[];
@@ -36,7 +35,7 @@ export class DashboardComponent implements OnInit {
 
   constructor(
     private userService: UserService,
-    private widgetService: WidgetService,
+    private widgetService: WidgetService
   ) {}
 
   ngOnInit() {
@@ -104,7 +103,7 @@ export class DashboardComponent implements OnInit {
     const ids = this.widgetService.listsId;
 
     return [
-      ...ids.sort((p, n) => (p > n ? -1 : 1)).map(el => `list-${el}`),
+      ...ids.sort((p, n) => (p > n ? -1 : 1)).map((el) => `list-${el}`),
       'main-list'
     ];
   }
@@ -130,7 +129,7 @@ export class DashboardComponent implements OnInit {
     widget.tooltip = false;
 
     this.widgetService.removeWidget(widget.id).subscribe(() => {
-      this.userWidgets = this.userWidgets.filter(el => el.id !== widget.id);
+      this.userWidgets = this.userWidgets.filter((el) => el.id !== widget.id);
       this.grid = this.generateDashboard(this.userWidgets);
       this.widgetService.updateCoords(this.grid);
       this.updateWidgetsConfig();
@@ -144,21 +143,19 @@ export class DashboardComponent implements OnInit {
       coords: this.grid.elements.length.toString(),
       size: this.widgetService.getSizes(widget.type),
       active: true
-    }
+    };
 
     this.grid = null;
-    this.widgetService
-      .addWidget(widget.id, contactId, config)
-      .subscribe(
-        () => {
-          this.widgetService.updateDashboard();
-          this.updateWidgetsConfig();
-          this.initializeDashboard();
-        },
-        () => {
-          this.initializeDashboard();
-        }
-      );
+    this.widgetService.addWidget(widget.id, contactId, config).subscribe(
+      () => {
+        this.widgetService.updateDashboard();
+        this.updateWidgetsConfig();
+        this.initializeDashboard();
+      },
+      () => {
+        this.initializeDashboard();
+      }
+    );
   }
 
   isArray(el: any) {
@@ -182,7 +179,7 @@ export class DashboardComponent implements OnInit {
     }
 
     this.widgetService.updateCoords(this.grid);
-    this.userWidgets.forEach(el => {
+    this.userWidgets.forEach((el) => {
       el.move = false;
     });
     this.dragging = false;
@@ -194,7 +191,9 @@ export class DashboardComponent implements OnInit {
   }
 
   updateUserWidgets(target: WidgetItem) {
-    const userWidget = this.userWidgets.find(el => el.widgetId === target.widgetId);
+    const userWidget = this.userWidgets.find(
+      (el) => el.widgetId === target.widgetId
+    );
 
     if (userWidget) {
       userWidget.config.active = target.active;
@@ -203,26 +202,28 @@ export class DashboardComponent implements OnInit {
         .updateWidget(userWidget.id, { ui_config: userWidget.config })
         .subscribe(() => {
           this.updateWidgetList();
-        })
+        });
     } else {
-      const widget = this.widgets.find(el => el.id === target.widgetId);
+      const widget = this.widgets.find((el) => el.id === target.widgetId);
 
       this.addWidget(widget);
     }
   }
 
   private updateWidgetList() {
-    this.widgetList = this.widgets.map(widget => {
-      const {name, id} = widget;
-      const userWidget = this.userWidgets.find(el => el.widgetId === id);
-      const active = userWidget && userWidget.config ? userWidget.config.active : false;
+    this.widgetList = this.widgets.map((widget) => {
+      const { name, id } = widget;
+      const userWidget = this.userWidgets.find((el) => el.widgetId === id);
+      const active =
+        userWidget && userWidget.config ? userWidget.config.active : false;
 
       return {
         widgetId: id,
         name,
         id: userWidget ? userWidget.id : null,
-        active
-      }
+        active,
+        translateKey: `widget.${name.toLowerCase()}`
+      };
     });
   }
 
@@ -243,13 +244,15 @@ export class DashboardComponent implements OnInit {
 
   private updateWidgetsConfig() {
     this.userWidgets.forEach((widget: UserWidget) => {
-      this.widgetService.updateWidget(widget.id, { ui_config: widget.config }).subscribe();
+      this.widgetService
+        .updateWidget(widget.id, { ui_config: widget.config })
+        .subscribe();
     });
   }
 
   private generateDashboard(widgets: UserWidget[]): any {
     const types = Object.values(Type);
-    const availableWidgets = widgets.filter(el => types.includes(el.type));
+    const availableWidgets = widgets.filter((el) => types.includes(el.type));
 
     availableWidgets.sort((p, n) =>
       p.config.coords > n.config.coords ? 1 : -1

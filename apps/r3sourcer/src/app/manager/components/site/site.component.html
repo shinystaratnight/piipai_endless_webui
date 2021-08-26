@@ -246,6 +246,7 @@
             [allowPermissions]="permissionMethods"
             [endpoint]="pageData.endpoint"
             (checkedObjects)="checkedObjects($event)"
+            (listUpdated)="data = null"
           >
             <app-back-link label="Back to job info" (backEvent)="back()">
             </app-back-link>
@@ -257,9 +258,11 @@
             <button
               type="button"
               class="btn btn-primary pr-3"
+              [disabled]="!data || fillInDataSending"
               (click)="sendData()"
             >
               Fill in
+              <app-spinner *ngIf="fillInDataSending"></app-spinner>
             </button>
           </div>
         </div>

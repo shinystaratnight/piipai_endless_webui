@@ -27,7 +27,8 @@ const filter = {
   active_states: createFilter(Type.Relared, {
     key: 'active_states',
     label: 'State',
-    endpoint: '/core/workflownodes/?company={company_settings.company}&content_type=hr.job&number={filter_value}',
+    endpoint:
+      '/core/workflownodes/?company={company_settings.company}&content_type=hr.job&number={filter_value}',
     display: ['name_after_activation', 'name_before_activation'],
     parameter: 'number'
   }),
@@ -35,8 +36,8 @@ const filter = {
     key: 'customer_company',
     label: 'Client',
     endpoint: Endpoints.Company
-  }),
-}
+  })
+};
 
 const list = {
   list: {
@@ -93,22 +94,22 @@ const list = {
       },
       {
         content: [
-          {
-            values: {
-              0: 'times-circle',
-              1: 'check-circle',
-              2: 'exclamation-circle',
-              3: 'minus-circle',
-              null: 'minus-circle'
-            },
-            field: 'is_fulfilled_today',
-            type: 'icon',
-            color: {
-              0: 'danger',
-              1: 'success',
-              2: 'warning'
-            }
-          },
+          // {
+          //   values: {
+          //     0: 'times-circle',
+          //     1: 'check-circle',
+          //     2: 'exclamation-circle',
+          //     3: 'minus-circle',
+          //     null: 'minus-circle'
+          //   },
+          //   field: 'is_fulfilled_today',
+          //   type: 'icon',
+          //   color: {
+          //     0: 'danger',
+          //     1: 'success',
+          //     2: 'warning'
+          //   }
+          // },
           {
             values: {
               0: 'times-circle',
@@ -127,9 +128,9 @@ const list = {
           }
         ],
         name: 'fulfilled',
-        title: 'today / next day',
-        label: 'Fulfilled',
-        delim: '/'
+        // title: 'today / next day',
+        label: 'Fulfilled'
+        // delim: '/'
       },
       {
         content: [
@@ -620,7 +621,7 @@ const formset = {
           }
         ],
         label: 'Actions',
-        title: null,
+        title: null
       }
     ],
     buttons: [],
@@ -843,7 +844,7 @@ const jobsite_client = {
         label: 'State',
         title: null,
         delim: null
-      },
+      }
     ],
     buttons: [],
     list: 'job',
@@ -860,7 +861,7 @@ const form = [
       status: {
         field: 'active_states'
       },
-      job: 'position',
+      job: 'position.__str__',
       jobsite: 'jobsite',
       tags: 'tags'
     },
@@ -922,22 +923,8 @@ const form = [
                     .setDefaultValue(0)
                     .addOptions({
                       '0': 'Hourly wage',
-                      '1': 'Piecework wage',
-                      '2': 'Combined wage',
-                    }),
-                  {
-                    key: 'hourly_rate_default',
-                    type: 'input',
-                    attributes: {
-                      max: '{position.upper_rate_limit}',
-                      min: '{position.lower_rate_limit}'
-                    },
-                    templateOptions: {
-                      label: 'Candidate rate override',
-                      type: 'number',
-                      text: '{currency}{hourly_rate_default}/h'
-                    }
-                  }
+                      '1': 'Piecework wage'
+                    })
                 ],
                 width: 0.33
               },
@@ -971,7 +958,7 @@ const form = [
                     templateOptions: {
                       label: 'Client representative',
                       values: ['__str__', 'company'],
-                      type: 'related',
+                      type: 'related'
                     },
                     type: 'related',
                     query: {
@@ -1056,6 +1043,25 @@ const form = [
                 width: 0.33
               }
             ]
+          },
+          {
+            endpoint: Endpoints.JobRates,
+            type: 'list',
+            templateOptions: {
+              label: 'Job Rate',
+              type: 'list',
+              text: 'Job Rate',
+              add_label: 'Add'
+            },
+            collapsed: false,
+            visibleMode: true,
+            prefilled: {
+              job: '{id}',
+              skill: '{position.id}'
+            },
+            query: {
+              job: '{id}'
+            }
           }
         ]
       },
@@ -1064,7 +1070,6 @@ const form = [
         metadata_query: {
           editable_type: 'job'
         },
-        visibleMode: true,
         add_endpoint: '/hr/shiftdates/',
         edit_endpoint: '/hr/shiftdates/{date.id}',
         templateOptions: {
@@ -1174,7 +1179,7 @@ const form = [
         },
         help: 'Here you can see the favorite candidates for client',
         listKey: 'favouritelists'
-      },
+      }
     ]
   },
   {
@@ -1415,7 +1420,7 @@ const formadd = [
               query: {
                 jobsite: '{jobsite.id}',
                 position: '{position.id}',
-                state: ['10', '20', '40'],
+                state: ['10', '20', '40']
               }
             },
             collapsed: false,
@@ -1440,11 +1445,11 @@ const formadd = [
             read_only: false
           },
           new Form.select.element('wage_type', 'Wage Type')
+            .required()
             .setDefaultValue(0)
             .addOptions({
               0: 'Hourly wage',
-              1: 'Piecework wage',
-              2: 'Combined wage',
+              1: 'Piecework wage'
             }),
           {
             key: 'default_shift_starting_time',
@@ -1456,7 +1461,7 @@ const formadd = [
               type: 'time'
             },
             read_only: false
-          },
+          }
         ]
       }
     ]

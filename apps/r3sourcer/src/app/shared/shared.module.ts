@@ -6,13 +6,19 @@ import { TranslateModule } from '@ngx-translate/core';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 import { NavigationComponent } from './components/navigation/navigation.component';
-// import { SpinnerComponent } from './components/spinner/spinner.component';
 import { UiModule } from '@webui/ui';
-// import { TimeComponent } from './components/time/time.component';
 
 @NgModule({
   declarations: [NavigationComponent],
-  imports: [CommonModule, ReactiveFormsModule, RouterModule, TranslateModule, FormsModule, FontAwesomeModule, UiModule],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    RouterModule,
+    TranslateModule,
+    FormsModule,
+    FontAwesomeModule,
+    UiModule
+  ],
   exports: [NavigationComponent]
 })
 export class SharedModule {}

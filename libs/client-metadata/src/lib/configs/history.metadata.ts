@@ -1,4 +1,5 @@
-import { List } from '@webui/metadata';
+import { Endpoints } from '@webui/data';
+import { createFilter, List, Type } from '@webui/metadata';
 import {
   getPictureColumn,
   getPositionColumn,
@@ -11,9 +12,32 @@ import {
   getChangeButton
 } from './utils';
 
-const list = function() {
+const list = function () {
   return {
     list: new List.main.element('timesheet', 'Timesheet history')
+      .setFilters([
+        createFilter(Type.Date, {
+          key: 'shift_started_at',
+          label: 'Shift Started at',
+          yesterday: true,
+          today: true
+        }),
+        createFilter(Type.Relared, {
+          key: 'candidate',
+          label: 'Candidate Contact',
+          endpoint: `${Endpoints.CandidateSupervisor}?supervisor={session.data.contact.contact_id}`
+        }),
+        createFilter(Type.Relared, {
+          key: 'jobsite',
+          label: 'Jobsite',
+          endpoint: `${Endpoints.Jobsite}?regular_company={session.data.contact.company_id}`
+        }),
+        createFilter(Type.Relared, {
+          key: 'primary_contact',
+          label: 'Primary Contact',
+          endpoint: `${Endpoints.CompanyContact}?company={session.data.contact.company_id}`
+        })
+      ])
       .disableEdit()
       .disableSearch()
       .removeCreateButton()
@@ -47,6 +71,8 @@ const list = function() {
         new List.column.element('status', 'Status')
           .setTimezone('time_zone')
           .setContent([
+            getChangeButton().setShowIfRule([{ is_30_days_old: false }]),
+
             new List.static.element('status').setHideValue(true),
 
             new List.static.element('supervisor_approved')

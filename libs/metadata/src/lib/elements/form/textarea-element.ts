@@ -1,12 +1,24 @@
-import { BasicFormElement, BasicElementTemplateOptions } from './basic-form-element';
+import {
+  BasicFormElement,
+  BasicElementTemplateOptions
+} from './basic-form-element';
 
 export const Textarea = 'textarea';
 
-export class TextareaElement extends BasicFormElement {
+type TextareaTemplateOptions = {
+  full?: boolean;
+};
 
-  templateOptions: BasicElementTemplateOptions;
+export class TextareaElement extends BasicFormElement {
+  templateOptions: BasicElementTemplateOptions & TextareaTemplateOptions;
 
   constructor(key: string, label: string) {
     super(key, label, Textarea);
+  }
+
+  setFullWidth() {
+    this.templateOptions.full = true;
+
+    return this;
   }
 }

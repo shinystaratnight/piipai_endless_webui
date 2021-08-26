@@ -1,14 +1,22 @@
 <div class="widget">
   <div class="widget-header">
-    <h3 class="widget-name d-flex align-items-center justify-content-between">
-      Candidates
+    <h3
+      class="
+        widget-name
+        d-flex
+        align-items-center
+        justify-content-between
+        w-100
+      "
+    >
+      {{ 'candidate.plural' | translate: { Default: 'Candidates' } }}
 
       <button
         *ngIf="selectedCandidates.size"
         class="fillin-button btn btn-success"
         (click)="sendJobOffer()"
       >
-        Send Job Offer
+        {{ 'send_job_offer' | translate: { Default: 'Send Job Offer' } }}
       </button>
 
       <button
@@ -16,7 +24,7 @@
         class="btn btn-link filter-button"
         (click)="toggleFilters()"
       >
-        Filters
+        {{ 'filter.plural' | translate: { Default: 'Candidates' } }}
         <fa-icon class="ml-2" icon="chevron-down"></fa-icon>
       </button>
     </h3>
@@ -98,7 +106,9 @@
 
     <div class="list-item-content" *ngIf="candidate.extend">
       <div *ngIf="candidate.state" class="list-item-status">
-        <span class="title">Status</span>
+        <span class="title">{{
+          'status.label' | translate: { Default: 'Status' }
+        }}</span>
         <span
           class="badge badge-outline"
           [ngClass]="[checkClass(candidate.state)]"
@@ -107,7 +117,9 @@
       </div>
 
       <ng-container *ngIf="candidate.skills && candidate.skills.length">
-        <div class="list-item-group-title">Skills</div>
+        <div class="list-item-group-title">
+          {{ 'skills' | translate: { Default: 'Skills' } }}
+        </div>
 
         <div *ngFor="let skill of candidate.skills">
           {{ skill.name }}
@@ -123,22 +135,28 @@
 
       <div class="d-flex justify-content-between">
         <div *ngIf="candidate.hourly_rate">
-          <div class="list-item-group-title">Hourly rate</div>
+          <div class="list-item-group-title">
+            {{ 'hourly_rate' | translate: { Default: 'Hourly rate' } }}
+          </div>
 
-          <span [class.text-danger]="candidate.overpriced"
-            >${{ candidate.hourly_rate }}/h</span
-          >
+          <span [class.text-danger]="candidate.overpriced">
+            ${{ candidate.hourly_rate }}/h
+          </span>
         </div>
 
         <div *ngIf="candidate.distance">
-          <div class="list-item-group-title">Distance</div>
+          <div class="list-item-group-title">
+            {{ 'distance' | translate: { Default: 'Distance' } }}
+          </div>
 
           {{ candidate.distance }} km
         </div>
       </div>
 
       <ng-container *ngIf="candidate.scores">
-        <div class="list-item-group-title">Scores</div>
+        <div class="list-item-group-title">
+          {{ 'scores' | translate: { Default: 'Scores' } }}
+        </div>
 
         <div *ngFor="let item of candidate.scores">
           <span>{{ item.name }}</span>
@@ -153,7 +171,9 @@
       </ng-container>
 
       <ng-container *ngIf="candidate.tags && candidate.tags.length">
-        <div class="list-item-group-title">Tags</div>
+        <div class="list-item-group-title">
+          {{ 'tags' | translate: { Default: 'Tags' } }}
+        </div>
 
         <div class="tags-wrapper">
           <span class="badge" *ngFor="let tag of candidate.tags">

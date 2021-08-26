@@ -1,24 +1,36 @@
-import { Component, OnInit, Input, OnChanges, SimpleChanges, ViewChild, TemplateRef } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  OnChanges,
+  SimpleChanges,
+  ViewChild,
+  TemplateRef
+} from '@angular/core';
 
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { BehaviorSubject, Observable, of } from 'rxjs';
+import { finalize, map } from 'rxjs/operators';
 
 import {
   GenericFormService,
   fillingForm,
   getElementFromMetadata,
   PassTestModalComponent,
-  PassTestModalConfig,
+  PassTestModalConfig
 } from '@webui/dynamic-form';
 import { Field, Endpoints } from '@webui/data';
 
-import { testMetadata, questionMetadata, answerMetadata } from './test-builder.config';
+import {
+  testMetadata,
+  questionMetadata,
+  answerMetadata
+} from './test-builder.config';
 
 @Component({
   selector: 'app-test-builder',
   templateUrl: './test-builder.component.html',
-  styleUrls: ['./test-builder.component.scss'],
+  styleUrls: ['./test-builder.component.scss']
 })
 export class TestBuilderComponent implements OnInit, OnChanges {
   @Input() public testData: any;
@@ -36,15 +48,19 @@ export class TestBuilderComponent implements OnInit, OnChanges {
   public questions = [];
   public answers = {};
 
-  pictures: Map<string, string[]> = new Map();
+  pictures: Map<string, Array<{ id: string; src: string }>> = new Map();
+  pictureLoading: Map<string, boolean> = new Map();
 
   public configMap = {
     [Endpoints.AcceptenceTest]: testMetadata,
     [Endpoints.AcceptenceTestQuestion]: questionMetadata,
-    [Endpoints.AcceptenceTestAnswers]: answerMetadata,
+    [Endpoints.AcceptenceTestAnswers]: answerMetadata
   };
 
-  constructor(private genericFormService: GenericFormService, private modalService: NgbModal) {}
+  constructor(
+    private genericFormService: GenericFormService,
+    private modalService: NgbModal
+  ) {}
 
   public ngOnInit() {
     this.questionId = 1;
@@ -72,12 +88,18 @@ export class TestBuilderComponent implements OnInit, OnChanges {
 
   public updateTestForm(data) {
     this.testId = data.id;
-    this.createMetadata(Endpoints.AcceptenceTest, 'form', data).subscribe((config: Field[]) => {
-      this.testMetadata = config;
-    });
+    this.createMetadata(Endpoints.AcceptenceTest, 'form', data).subscribe(
+      (config: Field[]) => {
+        this.testMetadata = config;
+      }
+    );
   }
 
-  public createMetadata(endpoint: string, metadataType: string, data?): Observable<Field[]> {
+  public createMetadata(
+    endpoint: string,
+    metadataType: string,
+    data?
+  ): Observable<Field[]> {
     return of(this.configMap[endpoint][metadataType]).pipe(
       map((config: Field[]) => {
         config = JSON.parse(JSON.stringify(config));
@@ -103,7 +125,11 @@ export class TestBuilderComponent implements OnInit, OnChanges {
 
   public addQuestion(create: boolean, data?) {
     const metadataType = create ? 'formadd' : 'form';
-    this.createMetadata(Endpoints.AcceptenceTestQuestion, metadataType, data).subscribe((config: Field[]) => {
+    this.createMetadata(
+      Endpoints.AcceptenceTestQuestion,
+      metadataType,
+      data
+    ).subscribe((config: Field[]) => {
       if (create) {
         const order = getElementFromMetadata(config, 'order');
 
@@ -127,7 +153,11 @@ export class TestBuilderComponent implements OnInit, OnChanges {
   public addAnswer(create: boolean, target, data?) {
     const metadataType = create ? 'formadd' : 'form';
 
-    this.createMetadata(Endpoints.AcceptenceTestAnswers, metadataType, data).subscribe((config: Field[]) => {
+    this.createMetadata(
+      Endpoints.AcceptenceTestAnswers,
+      metadataType,
+      data
+    ).subscribe((config: Field[]) => {
       if (create) {
         const order = getElementFromMetadata(config, 'order');
         const value = this.getLastOrder(target);
@@ -155,7 +185,9 @@ export class TestBuilderComponent implements OnInit, OnChanges {
 
   public checkQuestions(data: any) {
     if (data && data.acceptance_test_questions) {
-      const questions = data.acceptance_test_questions.sort((prev, next) => (prev.order > next.order ? 1 : -1));
+      const questions = data.acceptance_test_questions.sort((prev, next) =>
+        prev.order > next.order ? 1 : -1
+      );
 
       questions.forEach((question) => {
         this.addQuestion(false, question);
@@ -184,15 +216,20 @@ export class TestBuilderComponent implements OnInit, OnChanges {
       action = 'submitForm';
     }
 
-    this.genericFormService[action](Endpoints.AcceptenceTestQuestion + (update ? data.id + '/' : ''), data).subscribe(
-      (res) => {
-        this.createMetadata(Endpoints.AcceptenceTestQuestion, 'form', res).subscribe((config: Field[]) => {
-          this.answers[res.id] = this.answers[res.id] || [];
-          this.questions.splice(index, 1, config);
-          this.pictures.set(res.id, []);
-        });
-      }
-    );
+    this.genericFormService[action](
+      Endpoints.AcceptenceTestQuestion + (update ? data.id + '/' : ''),
+      data
+    ).subscribe((res) => {
+      this.createMetadata(
+        Endpoints.AcceptenceTestQuestion,
+        'form',
+        res
+      ).subscribe((config: Field[]) => {
+        this.answers[res.id] = this.answers[res.id] || [];
+        this.questions.splice(index, 1, config);
+        this.pictures.set(res.id, []);
+      });
+    });
   }
 
   public deleteQuestion(id: string, target: any[], index: number) {
@@ -203,7 +240,12 @@ export class TestBuilderComponent implements OnInit, OnChanges {
     this.deleteObject(Endpoints.AcceptenceTestAnswers, target, index, id);
   }
 
-  public deleteObject(endpoint: string, target: any[], index: number, id: string) {
+  public deleteObject(
+    endpoint: string,
+    target: any[],
+    index: number,
+    id: string
+  ) {
     if (id) {
       this.genericFormService.delete(endpoint, id).subscribe(() => {
         target.splice(index, 1);
@@ -223,13 +265,18 @@ export class TestBuilderComponent implements OnInit, OnChanges {
       action = 'submitForm';
     }
 
-    this.genericFormService[action](Endpoints.AcceptenceTestAnswers + (update ? data.id + '/' : ''), data).subscribe(
-      (res) => {
-        this.createMetadata(Endpoints.AcceptenceTestAnswers, 'form', res).subscribe((config: Field[]) => {
-          this.answers[id].splice(index, 1, config);
-        });
-      }
-    );
+    this.genericFormService[action](
+      Endpoints.AcceptenceTestAnswers + (update ? data.id + '/' : ''),
+      data
+    ).subscribe((res) => {
+      this.createMetadata(
+        Endpoints.AcceptenceTestAnswers,
+        'form',
+        res
+      ).subscribe((config: Field[]) => {
+        this.answers[id].splice(index, 1, config);
+      });
+    });
   }
 
   public getId(metadata: Field[]): string {
@@ -249,11 +296,13 @@ export class TestBuilderComponent implements OnInit, OnChanges {
   }
 
   public showPreview() {
-    this.modalRef = this.modalService.open(PassTestModalComponent, { backdrop: 'static' });
+    this.modalRef = this.modalService.open(PassTestModalComponent, {
+      backdrop: 'static'
+    });
     this.modalRef.componentInstance.config = {
       testId: this.testData.id,
       send: false,
-      description: this.testData.description,
+      description: this.testData.description
     } as PassTestModalConfig;
   }
 
@@ -284,16 +333,47 @@ export class TestBuilderComponent implements OnInit, OnChanges {
   }
 
   public onUpload(images: string[], id: string) {
-    images.forEach(el => {
+    this.pictureLoading.set(id, true);
+
+    images.forEach((el) => {
       this.genericFormService
-      .submitForm('/acceptance-tests/acceptancetestquestionpictures/', { acceptance_test_question: { id }, picture: el })
-      .subscribe(() => {})
+        .submitForm('/acceptance-tests/acceptancetestquestionpictures/', {
+          acceptance_test_question: { id },
+          picture: el
+        })
+        .pipe(finalize(() => this.pictureLoading.set(id, false)))
+        .subscribe((res) => {
+          if (this.pictures.has(id)) {
+            this.pictures.set(id, [
+              ...this.pictures.get(id),
+              { id: res.id, src: res.picture.origin }
+            ]);
+          }
+        });
     });
+  }
+
+  public onRemovePicture(imageId: string, id: string) {
+    this.genericFormService
+      .delete('/acceptance-tests/acceptancetestquestionpictures/', imageId)
+      .subscribe(() => {
+        const pictures = this.pictures.get(id);
+        const filteredList = pictures.filter(
+          (picture) => picture.id !== imageId
+        );
+
+        this.pictures.set(id, [...filteredList]);
+      });
   }
 
   setPictures(data: any): void {
     data.acceptance_test_questions.forEach((question) => {
-      this.pictures.set(question.id, question.pictures.map(el => el.picture.origin));
+      this.pictures.set(
+        question.id,
+        question.pictures.map((el) => {
+          return { src: el.picture.origin, id: el.id };
+        })
+      );
     });
   }
 }

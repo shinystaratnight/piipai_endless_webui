@@ -1,5 +1,5 @@
-import { Endpoints, Color, Models } from '@webui/data';
-import { createFilter, Type, Form } from '@webui/metadata';
+import { Endpoints, Color, Models, NoteModel } from '@webui/data';
+import { createFilter, Type, Form, List } from '@webui/metadata';
 
 const filters = {
   shift_started_at: createFilter(Type.Date, {
@@ -53,13 +53,16 @@ const list = {
         name: 'client_/_jobsite_/_supervisor',
         title: null,
         sort: true,
-        sortMap: [{
-          name: 'client',
-          param: 'job_offer__shift__date__job__customer_company__name'
-        }, {
-          name: 'jobsite',
-          param: 'job_offer__shift__date__job__jobsite__short_name'
-        }],
+        sortMap: [
+          {
+            name: 'client',
+            param: 'job_offer__shift__date__job__customer_company__name'
+          },
+          {
+            name: 'jobsite',
+            param: 'job_offer__shift__date__job__jobsite__short_name'
+          }
+        ],
         label: 'Client / Jobsite / Supervisor',
         delim: null
       },
@@ -112,10 +115,10 @@ const list = {
       {
         content: [
           {
-            text: '{shift_started_at__date}',
+            text: '{shift.date.__str__}',
             type: 'static',
             label: 'Dates',
-            field: 'shift_started_at'
+            field: 'shift.date'
           },
           {
             text: '{shift_started_at__time}',
@@ -250,7 +253,6 @@ const list = {
                 resend_sms_supervisor: true
               }
             ],
-            size: 'small',
             action: 'editForm',
             type: 'button',
             text: 'Approve'
@@ -380,7 +382,23 @@ const list = {
         title: null,
         label: 'Invoice',
         delim: null
-      }
+      },
+
+      new List.column.element('candidate_notes', 'Notes').setContent([
+        new List.text.element('candidate_notes', 'Notes')
+      ]),
+
+      new List.column.element('client_notes', 'Notes').setContent([
+        new List.text.element('client_notes', 'Notes')
+      ]),
+
+      new List.column.element('candidate_files', 'Files').setContent([
+        new List.text.element('candidate_files', 'Files')
+      ]),
+
+      new List.column.element('client_files', 'Files').setContent([
+        new List.text.element('client_files', 'Files')
+      ])
     ],
     tabs: [
       {
@@ -397,6 +415,16 @@ const list = {
         label: 'Invoice',
         is_collapsed: true,
         fields: ['invoice']
+      },
+      {
+        label: 'Candidate',
+        is_collapsed: true,
+        fields: ['candidate_notes', 'candidate_files']
+      },
+      {
+        label: 'Client',
+        is_collapsed: true,
+        fields: ['client_notes', 'client_files']
       }
     ],
     pagination_label: 'Timesheet Entry',
@@ -693,7 +721,7 @@ const supervisor = {
         max: 255,
         type: 'picture',
         label_photo: 'Take a photo',
-        label_upload: 'Choose a file',
+        label_upload: 'Choose a file'
       },
       type: 'input'
     },
@@ -1007,27 +1035,48 @@ const form = [
                     .setDefaultValue(0)
                     .addOptions({
                       '0': 'Hourly wage',
-                      '1': 'Piecework wage',
-                      '2': 'Combined wage',
-                    }),
+                      '1': 'Piecework wage'
+                    })
                 ]
               }
             ]
           },
           {
             type: 'row',
-            className: 'field',
             children: [
               {
-                type: 'static',
-                key: 'total_time',
-                send: false,
-                read_only: true,
-                templateOptions: {
-                  label: 'Total time',
-                  color: 'text-success',
-                  bold: true
-                }
+                type: 'group',
+                hideLabel: true,
+                width: 0.2,
+                children: [
+                  {
+                    type: 'static',
+                    key: 'shift.date.__str__',
+                    send: false,
+                    read_only: true,
+                    templateOptions: {
+                      label: 'Shift Date'
+                    }
+                  }
+                ]
+              },
+              {
+                type: 'group',
+                hideLabel: true,
+                width: 0.2,
+                children: [
+                  {
+                    type: 'static',
+                    key: 'total_time',
+                    send: false,
+                    read_only: true,
+                    templateOptions: {
+                      label: 'Total time',
+                      color: 'text-success',
+                      bold: true
+                    }
+                  }
+                ]
               }
             ]
           },
@@ -1101,8 +1150,8 @@ const form = [
             })
             .setPrefilledFields({
               [Models.Skill]: '{position.id}',
-              [Models.Timesheet]: '{id}',
-            }),
+              [Models.Timesheet]: '{id}'
+            })
         ]
       },
       {
@@ -1254,7 +1303,11 @@ const form = [
             ]
           }
         ]
-      }
+      },
+      new NoteModel().formListElement({
+        query: 'formset',
+        model_content_type: '112'
+      })
     ]
   },
   {

@@ -32,7 +32,7 @@ export class BillingService {
     return this.http
       .get(this.endpoints.countryAccount)
       .pipe(
-        catchError((err: any) => this.errorService.parseErrors(err))
+        catchError((err: any) => this.errorService.handleError(err))
       );
   }
 
@@ -40,7 +40,7 @@ export class BillingService {
     return this.http
       .post(this.endpoints.cardInfo, body)
       .pipe(
-        catchError((err: any) => this.errorService.parseErrors(err))
+        catchError((err: any) => this.errorService.handleError(err))
       );
   }
 
@@ -48,7 +48,7 @@ export class BillingService {
     return this.http
       .put(this.endpoints.cardInfo, body)
       .pipe(
-        catchError((err: any) => this.errorService.parseErrors(err))
+        catchError((err: any) => this.errorService.handleError(err))
       );
   }
 
@@ -56,7 +56,7 @@ export class BillingService {
     return this.http
       .get(this.endpoints.subscriptionInfo)
       .pipe(
-        catchError((err: any) => this.errorService.parseErrors(err))
+        catchError((err: any) => this.errorService.handleError(err))
       );
   }
 
@@ -64,7 +64,7 @@ export class BillingService {
     return this.http
       .get(this.endpoints.subscriptionStatus)
       .pipe(
-        catchError((err: any) => this.errorService.parseErrors(err))
+        catchError((err: any) => this.errorService.handleError(err))
       );
   }
 
@@ -72,7 +72,7 @@ export class BillingService {
     return this.http
       .post(this.endpoints.plan, body)
       .pipe(
-        catchError((err: any) => this.errorService.parseErrors(err))
+        catchError((err: any) => this.errorService.handleError(err))
       );
   }
 
@@ -80,7 +80,7 @@ export class BillingService {
     return this.http
       .get(this.endpoints.checkPaymentInformation)
       .pipe(
-        catchError((err: any) => this.errorService.parseErrors(err))
+        catchError((err: any) => this.errorService.handleError(err))
       );
   }
 
@@ -88,7 +88,7 @@ export class BillingService {
     return this.http
       .get(this.endpoints.cancelSubscription)
       .pipe(
-        catchError((err: any) => this.errorService.parseErrors(err, true))
+        catchError((err: any) => this.errorService.handleError(err, { close: true }))
       );
   }
 
@@ -96,7 +96,7 @@ export class BillingService {
     return this.http
       .get(this.endpoints.payments)
       .pipe(
-        catchError((err: any) => this.errorService.parseErrors(err))
+        catchError((err: any) => this.errorService.handleError(err))
       );
   }
 
@@ -104,7 +104,7 @@ export class BillingService {
     return this.http
       .get(this.endpoints.autoCharge)
       .pipe(
-        catchError((err: any) => this.errorService.parseErrors(err))
+        catchError((err: any) => this.errorService.handleError(err))
       );
   }
 
@@ -112,7 +112,7 @@ export class BillingService {
     return this.http
       .post(this.endpoints.autoCharge, body)
       .pipe(
-        catchError((err: any) => this.errorService.parseErrors(err))
+        catchError((err: any) => this.errorService.handleError(err))
       );
   }
 
@@ -120,7 +120,7 @@ export class BillingService {
     return this.http
       .post(this.endpoints.fund, body)
       .pipe(
-        catchError((err: any) => this.errorService.parseErrors(err))
+        catchError((err: any) => this.errorService.handleError(err))
       );
   }
 
@@ -128,7 +128,7 @@ export class BillingService {
     return this.http
       .get(this.endpoints.subscriptionTypes)
       .pipe(
-        catchError((err: any) => this.errorService.parseErrors(err))
+        catchError((err: any) => this.errorService.handleError(err))
        );
   }
 }

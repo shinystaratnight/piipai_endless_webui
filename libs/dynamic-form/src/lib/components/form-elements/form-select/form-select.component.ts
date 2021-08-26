@@ -6,7 +6,7 @@ import {
   Output,
   EventEmitter,
   OnDestroy,
-  ChangeDetectorRef,
+  ChangeDetectorRef
 } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 
@@ -17,10 +17,12 @@ import { getTranslationKey } from '@webui/utilities';
 
 @Component({
   selector: 'app-form-select',
-  templateUrl: 'form-select.component.html',
+  templateUrl: 'form-select.component.html'
 })
-export class FormSelectComponent extends BasicElementComponent
-  implements OnInit, AfterViewInit, OnDestroy {
+export class FormSelectComponent
+  extends BasicElementComponent
+  implements OnInit, AfterViewInit, OnDestroy
+{
   @ViewChild('select')
   public select;
 
@@ -108,13 +110,13 @@ export class FormSelectComponent extends BasicElementComponent
   public getValue(
     options: any[],
     value: string
-  ): { value: string; color?: string, key?: string } {
+  ): { value: string; color?: string; key?: string } {
     let element = options.find((el) => el.value == value); // tslint:disable-line
     if (element) {
       return {
         key: element.value,
         value: element.label,
-        color: element.color,
+        color: element.color
       };
     } else {
       return { value: '-' };
@@ -133,7 +135,7 @@ export class FormSelectComponent extends BasicElementComponent
     if (value != undefined) {
       this.group.get(this.key).patchValue(value);
     } else {
-      this.group.get(this.key).patchValue('');
+      this.group.get(this.key).patchValue(null);
     }
     if ((this.viewMode || this.config.read_only) && !this.config.hide) {
       const option = this.getValue(this.options, value);
@@ -155,7 +157,7 @@ export class FormSelectComponent extends BasicElementComponent
     this.event.emit({
       type: e.type,
       el: this.config,
-      value: this.group.get(this.key).value,
+      value: this.group.get(this.key).value
     });
   }
 

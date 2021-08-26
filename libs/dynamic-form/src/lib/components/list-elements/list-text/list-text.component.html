@@ -1,7 +1,12 @@
-<label class="label"
+<label
+  class="label"
   [class.inline]="config.templateOptions.inlineLabel"
-  *ngIf="config.templateOptions && config.templateOptions.listLabel || config.listLabel">
-    {{config.listLabel || config.templateOptions.listLabel}}:
+  *ngIf="
+    (config.templateOptions && config.templateOptions.listLabel) ||
+    config.listLabel
+  "
+>
+  {{ config.listLabel || config.templateOptions.listLabel }}:
 </label>
 
 <ng-container *ngIf="!arrayValue && !config.hideValue && !config.score">
@@ -15,64 +20,150 @@
     [class.flex-wrap]="!config.inline"
     [class.bold]="config.boldClass"
     [class.mr-1]="!config.inline"
-    [class.text-description]="config.muted">
-      <span [ngClass]="{'label mr-1': length > 1}" *ngIf="config.label">{{translationKey | translate: {"Default": config.label} }}: </span>
-      <span *ngIf="!iconView && !iconClass && !workers && !config.translationKey">{{value}}</span>
-      <span *ngIf="!iconView && !iconClass && !workers && config.translationKey">{{ config.translationKey | translate: {"Default": value} }}</span>
-      <span class="py-1" *ngIf="!iconView && !iconClass && workers" [placement]="'right'" [ngbTooltip]="workersdetail" style="cursor: default; padding-right: 1rem">{{value}}</span>
-      <span [ngClass]="[iconClass]" *ngIf="!iconView && iconClass">{{ translationKey | translate: {"Default": value} }}</span>
-      <fa-icon *ngIf="iconView" [icon]="['fas', value]" [ngClass]="[iconClass]" [ngStyle]="{'color': iconColor}"></fa-icon>
-      <app-info *ngIf="config.info" [description]="config.info" placement="bottom"></app-info>
+    [class.text-description]="config.muted"
+  >
+    <span [ngClass]="{ 'label mr-1': length > 1 }" *ngIf="config.label">
+      {{ translationKey | translate: { Default: config.label } }}:
+    </span>
+    <span
+      class="content"
+      *ngIf="!iconView && !iconClass && !workers && !config.translationKey"
+    >
+      <ng-container *ngIf="config.translated">
+        {{ translationKey | translate: { Default: value } }}
+      </ng-container>
+
+      <ng-container *ngIf="!config.translated">
+        {{ value }}
+      </ng-container>
+    </span>
+    <span
+      class="mb-1 d-inline-block"
+      *ngIf="!iconView && !iconClass && !workers && config.translationKey"
+    >
+      {{ config.translationKey | translate: { Default: value } }}
+    </span>
+    <span
+      class="py-1"
+      *ngIf="!iconView && !iconClass && workers"
+      [placement]="'right'"
+      [ngbTooltip]="workersdetail"
+      style="cursor: default; padding-right: 1rem"
+    >
+      {{ value }}
+    </span>
+    <span [ngClass]="[iconClass]" *ngIf="!iconView && iconClass">
+      {{ translationKey | translate: { Default: value } }}
+    </span>
+    <fa-icon
+      *ngIf="iconView"
+      [icon]="['fas', value]"
+      [ngClass]="[iconClass]"
+      [ngStyle]="{ color: iconColor }"
+    >
+    </fa-icon>
+    <app-info
+      *ngIf="config.info"
+      [description]="config.info"
+      placement="bottom"
+    ></app-info>
   </span>
 
-  <span class="d-inline-flex align-items-center flex-wrap"
+  <span
+    class="d-inline-flex align-items-center flex-wrap"
     [class.description]="config.description"
-    *ngIf="!value && value !== 0 && !(config.templateOptions && config.templateOptions.listLabel || config.listLabel)">
-      -
+    *ngIf="
+      !value &&
+      value !== 0 &&
+      !(
+        (config.templateOptions && config.templateOptions.listLabel) ||
+        config.listLabel
+      )
+    "
+  >
+    -
   </span>
-  <span [class.description]="config.help" *ngIf="(value || value === 0) && config.help">{{config.help}}</span>
+  <span
+    [class.description]="config.help"
+    *ngIf="(value || value === 0) && config.help"
+  >
+    {{ config.help }}
+  </span>
 </ng-container>
 
 <ng-container *ngIf="arrayValue">
-  <span [class.description]="config.description" *ngFor="let item of value; let l = last">
-    <span class="d-inline-flex align-items-center flex-wrap" *ngIf="item || item === 0">
+  <span
+    [class.description]="config.description"
+    *ngFor="let item of value; let l = last"
+  >
+    <span
+      class="d-inline-flex align-items-center flex-wrap"
+      *ngIf="item || item === 0"
+    >
       <span [title]="config.title || ''">
-        <span [ngClass]="{'label': length > 1}" *ngIf="config.label">{{config.label + ':'}} </span>
-        {{item && item.__str__ ? item.__str__ : item}}
+        <span [ngClass]="{ label: length > 1 }" *ngIf="config.label">
+          {{ config.label + ':' }}
+        </span>
+        {{ item && item.__str__ ? item.__str__ : item }}
       </span>
     </span>
-    <span class="d-inline-flex align-items-center flex-wrap" *ngIf="!item && item !== 0">-</span>
-    <span *ngIf="config.delim && !l">{{config.delim}}</span>
-    <br *ngIf="!config.delim && !l">
+    <span
+      class="d-inline-flex align-items-center flex-wrap"
+      *ngIf="!item && item !== 0"
+    >
+      -
+    </span>
+    <span *ngIf="config.delim && !l">{{ config.delim }}</span>
+    <br *ngIf="!config.delim && !l" />
   </span>
 </ng-container>
 
-<span class="score-text d-block"
+<span
+  class="score-text d-block"
   [class.my-2]="isMobile()"
   *ngIf="config.score && getScore(value)"
-  [style.color]="colors[getScore(value)]">
-    <div class="rating" [style.borderColor]="colors[getScore(value)]">
-      <ngb-rating [rate]="config.value" max="5" [readonly]="true">
-        <ng-template let-fill="fill" let-index="index">
-          <span *ngIf="fill === 100" class="star full">&#9733;</span>
-          <span *ngIf="fill === 0" class="star">&#9733;</span>
-          <span *ngIf="fill < 100 && fill > 0" class="star">
-            <span class="half" [style.width.%]="fill">&#9733;</span>&#9733;
-          </span>
-        </ng-template>
-      </ngb-rating>
-    </div>
-    &nbsp;{{value | number:'1.1-1'}}
+  [style.color]="colors[getScore(value)]"
+>
+  <div class="rating" [style.borderColor]="colors[getScore(value)]">
+    <ngb-rating [rate]="config.value" max="5" [readonly]="true">
+      <ng-template let-fill="fill" let-index="index">
+        <span *ngIf="fill === 100" class="star full">&#9733;</span>
+        <span *ngIf="fill === 0" class="star">&#9733;</span>
+        <span *ngIf="fill < 100 && fill > 0" class="star">
+          <span class="half" [style.width.%]="fill">&#9733;</span>&#9733;
+        </span>
+      </ng-template>
+    </ngb-rating>
+  </div>
+  &nbsp;{{ value | number: '1.1-1' }}
 </span>
 
-<span [class.mr-1]="config.delim !== ' '" *ngIf="config.delim && !last">{{config.delim}}</span>
-<br *ngIf="!config.delim && config.name !== 'credit_approved' && !config.hideValue">
+<span [class.mr-1]="config.delim !== ' '" *ngIf="config.delim && !last">
+  {{ config.delim }}
+</span>
+<br
+  *ngIf="
+    !config.delim && config.name !== 'credit_approved' && !config.hideValue
+  "
+/>
 
 <ng-template #workersdetail>
   <div class="worker" *ngFor="let worker of workers">
-    <fa-icon class="text-success" *ngIf="worker.status === 'accepted'" icon="check"></fa-icon>
-    <fa-icon class="text-danger" *ngIf="worker.status === 'cancelled'" icon="times"></fa-icon>
-    <fa-icon class="text-warning" *ngIf="worker.status === 'undefined'" icon="minus-circle"></fa-icon>
-    {{worker.name}}
+    <fa-icon
+      class="text-success"
+      *ngIf="worker.status === 'accepted'"
+      icon="check"
+    ></fa-icon>
+    <fa-icon
+      class="text-danger"
+      *ngIf="worker.status === 'cancelled'"
+      icon="times"
+    ></fa-icon>
+    <fa-icon
+      class="text-warning"
+      *ngIf="worker.status === 'undefined'"
+      icon="minus-circle"
+    ></fa-icon>
+    {{ worker.name }}
   </div>
 </ng-template>

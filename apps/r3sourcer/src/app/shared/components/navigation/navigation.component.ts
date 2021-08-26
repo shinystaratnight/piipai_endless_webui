@@ -48,7 +48,8 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() public logo = '/assets/img/new-software.svg';
 
   // @Output() public update: EventEmitter<Role> = new EventEmitter();
-  @Output() public changePasswordEmitter: EventEmitter<any> = new EventEmitter();
+  @Output()
+  public changePasswordEmitter: EventEmitter<any> = new EventEmitter();
 
   public headerHeight: number;
   public error: any;
@@ -75,11 +76,15 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
   Language = Language;
 
   get pages(): Page[] {
-    return this.navigationService.navigationList[this.currentRole];
+    const menu = this.navigationService.navigationList[this.currentRole];
+
+    return menu;
   }
 
   get companyName(): string {
-    return !isCandidate() ? this.userService.user.currentRole.company_name : this.company;
+    return !isCandidate()
+      ? this.userService.user.currentRole.company_name
+      : this.company;
   }
 
   public resizeSubscription: Subscription;

@@ -1,2 +1,2 @@
-<ng-container *ngIf="time">{{description}} {{time}}</ng-container>
+<ng-container *ngIf="time">{{translateKey | translate: { "Default": description } }} {{time}}</ng-container>
 <div *ngIf="differTimezone" class="f-size-12 text-danger">{{differMessage}}</div>

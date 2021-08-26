@@ -69,25 +69,21 @@ a:hover {
       align-items: center;
       padding: 12px 24px;
       flex: 2;
+      color: #fff;
 
       @include media-breakpoint-down('sm') {
         padding-top: 12px;
         padding-bottom: 12px;
       }
 
-      &:hover svg path {
-        fill: $gray;
-        opacity: 0.6;
+      &:hover:not(:disabled) {
+        color: rgba($gray, 0.6);
       }
 
       svg {
         height: 24px;
         width: 24px;
         transform: rotate(-90deg);
-
-        path {
-          fill: white;
-        }
       }
     }
 

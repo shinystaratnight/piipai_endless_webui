@@ -8,7 +8,7 @@ import {
 import { of, Observable } from 'rxjs';
 import { catchError, tap, map } from 'rxjs/operators';
 
-import { Endpoints, Purpose } from '@webui/data';
+import { Endpoints, Purpose, DashboardWidget } from '@webui/data';
 import { ErrorsService } from './errors.service';
 import { ToastService, MessageType } from './toast.service';
 
@@ -29,14 +29,14 @@ export class CompanyPurposeService {
     private toastr: ToastService
   ) {}
 
-  public filterModules(modules: any[]) {
+  public filterModules(widgets: DashboardWidget[]) {
     switch (this.purpose) {
       case Purpose.Recruitment:
-        return this.filterByEndpoint([Endpoints.CandidateContact], modules);
+        return this.filterByEndpoint([Endpoints.CandidateContact], widgets);
       case Purpose.SelfUse:
         return this.filterByEndpoint(
           [Endpoints.CompanyContact, Endpoints.Job, Endpoints.CandidateContact],
-          modules
+          widgets
         );
       case Purpose.Hire:
         return this.filterByEndpoint(
@@ -46,7 +46,7 @@ export class CompanyPurposeService {
             Endpoints.CompanyContact,
             Endpoints.CandidateContact
           ],
-          modules
+          widgets
         );
     }
   }
@@ -87,7 +87,7 @@ export class CompanyPurposeService {
         this.purpose = res.purpose;
       }),
       map((res: { id: string; purpose: Purpose }) => res.purpose),
-      catchError((err: HttpErrorResponse) => this.errors.parseErrors(err))
+      catchError((err: HttpErrorResponse) => this.errors.handleError(err))
     );
   }
 
@@ -97,7 +97,7 @@ export class CompanyPurposeService {
       .pipe(
         tap((res: any) => {
           this.purpose = purpose;
-          this.toastr.sendMessage(res.message, MessageType.success);
+          this.toastr.sendMessage(res.message, MessageType.Success);
         })
       );
   }
@@ -118,14 +118,11 @@ export class CompanyPurposeService {
     });
   }
 
-  private filterByEndpoint(endpoints: string[], modules) {
-    modules.forEach(el => {
-      const { link } = el;
-
-      if (endpoints.includes(link)) {
-        el.is_active = true;
-      } else {
-        el.is_active = false;
+  private filterByEndpoint(endpoints: string[], widgets: DashboardWidget[]): DashboardWidget[] {
+    return widgets.map(el => {
+      return {
+        ...el,
+        is_active: endpoints.includes(el.link)
       }
     });
   }

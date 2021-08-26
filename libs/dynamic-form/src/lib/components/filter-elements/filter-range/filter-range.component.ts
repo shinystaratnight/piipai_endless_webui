@@ -23,18 +23,6 @@ export class FilterRangeComponent implements OnInit, OnDestroy, AfterViewInit {
   public config: any;
   public query: string;
   public data: any;
-  public isCollapsed = true;
-  public icons = {
-    r3sourcer: {
-      true: 'chevron-right',
-      false: 'chevron-down'
-    },
-    default: {
-      true: 'eye',
-      false: 'eye-slash'
-    }
-  };
-  public theme: string;
   public slider: any;
   public noUiSlider: any;
   public toggle: boolean;
@@ -64,13 +52,6 @@ export class FilterRangeComponent implements OnInit, OnDestroy, AfterViewInit {
     this.filterSubscription = this.fs.reset.subscribe(() =>
       this.updateFilter()
     );
-    this.isCollapsed =
-      this.query || document.body.classList.contains('r3sourcer')
-        ? false
-        : true;
-    this.theme = document.body.classList.contains('r3sourcer')
-      ? 'r3sourcer'
-      : 'default';
   }
 
   public ngOnDestroy() {

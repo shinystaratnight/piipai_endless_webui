@@ -9,12 +9,12 @@ import {
   OnDestroy,
   HostListener,
   ElementRef,
-  ChangeDetectorRef,
+  ChangeDetectorRef
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { GenericFormService, FilterService } from '../../../services';
-import { SiteSettingsService } from '@webui/core';
+import { SiteSettingsService, UserService } from '@webui/core';
 import { FormatString } from '@webui/utilities';
 
 import { Subscription } from 'rxjs';
@@ -23,9 +23,11 @@ import { debounceTime, skip, filter } from 'rxjs/operators';
 @Component({
   selector: 'app-filter-related',
   templateUrl: 'filter-related.component.html',
-  styleUrls: ['./filter-related.component.scss'],
+  styleUrls: ['./filter-related.component.scss']
 })
-export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy {
+export class FilterRelatedComponent
+  implements OnInit, AfterViewInit, OnDestroy
+{
   @Input() public config: any;
   public data: any;
   public item: any;
@@ -48,21 +50,10 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
   public defaultValue: any;
   public theme: string;
   public multiple: boolean;
-  public selected: any[];
+  public selected: any[] = [];
   public selectedValues: any[];
 
   public chashValues: any[];
-
-  public icons = {
-    r3sourcer: {
-      true: 'chevron-right',
-      false: 'chevron-down',
-    },
-    default: {
-      true: 'eye',
-      false: 'eye-slash',
-    },
-  };
 
   public cashResults: any[];
   public subscription: Subscription;
@@ -81,6 +72,7 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
     private genericFormService: GenericFormService,
     private elementRef: ElementRef,
     private siteSettingsService: SiteSettingsService,
+    private userService: UserService,
     private cd: ChangeDetectorRef
   ) {}
 
@@ -96,13 +88,15 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
         }
       }, 200);
     });
-    this.filterSubscription = this.fs.reset.subscribe(() => this.updateFilter());
-    this.isCollapsed = this.query || document.body.classList.contains('r3sourcer') ? false : true;
+    this.filterSubscription = this.fs.reset.subscribe(() =>
+      this.updateFilter()
+    );
     this.defaultValue = {
       [this.config.data.key]: '',
-      [this.config.data.value]: this.multiple ? `Select ${this.config.label}` : 'All',
+      [this.config.data.value]: this.multiple
+        ? `Select ${this.config.label}`
+        : 'All'
     };
-    this.theme = document.body.classList.contains('r3sourcer') ? 'r3sourcer' : 'default';
   }
 
   public ngAfterViewInit() {
@@ -196,7 +190,9 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
         filteredList = this.chashValues.filter((el) => {
           const val = el[this.config.data.value];
           if (val) {
-            return val.toLowerCase().indexOf(this.searchValue.toLowerCase()) > -1;
+            return (
+              val.toLowerCase().indexOf(this.searchValue.toLowerCase()) > -1
+            );
           }
         });
         this.previewList = filteredList;
@@ -218,7 +214,9 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
   public setValue(value, list?) {
     if (this.multiple) {
       this.selected = list.filter((item) => item.checked);
-      this.item.data = this.selected.map((el) => this.getValue(el, this.config.data.key));
+      this.item.data = this.selected.map((el) =>
+        this.getValue(el, this.config.data.key)
+      );
       this.item.displayValue = this.selected.length
         ? `Selected ${this.selected.length} ${this.config.label}`
         : `Select ${this.config.label}`;
@@ -248,13 +246,18 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
     const element = {
       data,
       lastElement: 0,
-      hideAutocomplete: true,
+      hideAutocomplete: true
     };
     return element;
   }
 
   public onChange() {
-    this.fs.generateQuery(this.genericQuery(this.config.query), this.config.key, this.config.listName, this.item);
+    this.fs.generateQuery(
+      this.genericQuery(this.config.query),
+      this.config.key,
+      this.config.listName,
+      this.item
+    );
     this.changeQuery();
   }
 
@@ -275,7 +278,7 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
     this.event.emit({
       list: this.config.listName,
       key: this.config.query,
-      value: this.item,
+      value: this.item
     });
   }
 
@@ -330,7 +333,9 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
           el.checked = false;
         });
         this.selected = this.previewList.filter((item) => item.checked);
-        this.item.data = this.selected.map((el) => this.getValue(el, this.config.data.key));
+        this.item.data = this.selected.map((el) =>
+          this.getValue(el, this.config.data.key)
+        );
         this.item.displayValue =
           this.selected && this.selected.length
             ? `Selected ${this.selected.length} ${this.config.label}`
@@ -361,17 +366,24 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
       const data = {
         ...this.siteSettingsService.settings,
         filter_value: value,
+        session: this.userService.user
       };
       endpoint = formatString.format(this.config.data.endpoint, data);
       this.genericFormService.getAll(endpoint).subscribe((res: any) => {
         if (res.results) {
-          this.item.displayValue = this.getValue(res.results[0], this.config.data.value);
+          this.item.displayValue = this.getValue(
+            res.results[0],
+            this.config.data.value
+          );
         }
       });
     } else {
       const index = this.config.data.endpoint.indexOf('?');
       if (index !== -1) {
-        endpoint = this.config.data.endpoint.slice(0, index) + `${value}/` + this.config.data.endpoint.slice(index);
+        endpoint =
+          this.config.data.endpoint.slice(0, index) +
+          `${value}/` +
+          this.config.data.endpoint.slice(index);
       } else {
         endpoint = `${this.config.data.endpoint}${value}/`;
       }
@@ -385,58 +397,67 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
   public getOptions(value, concat = false) {
     const formatString = new FormatString();
     const endpoint = this.config.data.endpoint.includes('{')
-      ? formatString.format(this.config.data.endpoint, this.siteSettingsService.settings)
+      ? formatString.format(this.config.data.endpoint, {
+          ...this.siteSettingsService.settings,
+          session: this.userService.user
+        })
       : this.config.data.endpoint;
     const offset = this.item.lastElement;
     let query = '';
 
     if (value) {
-      query += endpoint.indexOf('?') === -1 ? `?search=${value}` : `&search=${value}`;
+      query +=
+        endpoint.indexOf('?') === -1 ? `?search=${value}` : `&search=${value}`;
     }
     query += !query && endpoint.indexOf('?') === -1 ? '?' : '&';
     query += `&limit=${this.limit}&offset=${offset}`;
     query += this.generateFields(this.config.data);
-    if (!this.item.count || (this.item.count && offset < this.item.count && concat)) {
+    if (
+      !this.item.count ||
+      (this.item.count && offset < this.item.count && concat)
+    ) {
       this.item.lastElement += this.limit;
-      this.genericFormService.getByQuery(endpoint, query).subscribe((res: any) => {
-        this.skipScroll = false;
-        this.item.count = res.count;
-        if (res.results) {
-          if (concat) {
-            if (this.previewList) {
+      this.genericFormService
+        .getByQuery(endpoint, query)
+        .subscribe((res: any) => {
+          this.skipScroll = false;
+          this.item.count = res.count;
+          if (res.results) {
+            if (concat) {
+              if (this.previewList) {
+                res.results.forEach((el) => {
+                  if (el) {
+                    el.__str__ = this.getValue(el, this.config.data.value);
+                  }
+                });
+
+                this.previewList.push(...res.results);
+              }
+            } else {
+              if (!this.chashValues && this.multiple) {
+                if (this.selected) {
+                  res.results.forEach((el) => {
+                    if (this.selected.indexOf(el[this.config.data.key]) > -1) {
+                      el.checked = true;
+                    }
+                  });
+                }
+                this.chashValues = res.results;
+                this.previewList = this.chashValues;
+                this.selected = this.filterSelectedValues(this.previewList);
+                return;
+              }
               res.results.forEach((el) => {
                 if (el) {
                   el.__str__ = this.getValue(el, this.config.data.value);
                 }
               });
 
-              this.previewList.push(...res.results);
+              this.previewList = res.results;
+              this.cd.detectChanges();
             }
-          } else {
-            if (!this.chashValues && this.multiple) {
-              if (this.selected) {
-                res.results.forEach((el) => {
-                  if (this.selected.indexOf(el[this.config.data.key]) > -1) {
-                    el.checked = true;
-                  }
-                });
-              }
-              this.chashValues = res.results;
-              this.previewList = this.chashValues;
-              this.selected = this.filterSelectedValues(this.previewList);
-              return;
-            }
-            res.results.forEach((el) => {
-              if (el) {
-                el.__str__ = this.getValue(el, this.config.data.value);
-              }
-            });
-
-            this.previewList = res.results;
-            this.cd.detectChanges();
           }
-        }
-      });
+        });
     } else {
       this.skipScroll = false;
     }
@@ -490,12 +511,18 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   public filterSelectedValues(list) {
-    return list.filter((el) => this.selected && this.selected.indexOf(el.id) > -1);
+    return list.filter(
+      (el) => this.selected && this.selected.indexOf(el.id) > -1
+    );
   }
 
   public removeItem(item) {
     item.checked = false;
     this.setValue(item, this.previewList);
+  }
+
+  public getTranslateKey() {
+    return `filter.${this.config.key}.label`;
   }
 
   @HostListener('document:click', ['$event'])

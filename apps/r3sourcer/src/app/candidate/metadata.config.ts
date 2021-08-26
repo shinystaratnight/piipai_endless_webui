@@ -4,7 +4,7 @@ import {
   metadataTimesheetsCandidate,
   metadataSubmit,
   metadataProfile,
-  timesheetratescandidate,
+  timesheetratescandidate
 } from '@webui/candidate-metadata';
 
 import {
@@ -13,6 +13,7 @@ import {
   candidateevaluations,
   passwordchange,
   passwordforgot,
+  notes
 } from '@webui/shared-metadata';
 
 export class Metadata {
@@ -26,4 +27,5 @@ export class Metadata {
   [Endpoints.ContactChangePassword] = passwordchange;
   [Endpoints.ContactForgotPassword] = passwordforgot;
   [Endpoints.TimesheetRates] = timesheetratescandidate;
+  [Endpoints.Note] = notes;
 }

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import {
   FontAwesomeModule,
@@ -16,17 +17,22 @@ import {
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
-// import { SharedModule } from '@webui/shared';
 import { CalendarModule } from '@webui/calendar';
 import { DynamicFormModule } from '@webui/dynamic-form';
 import { UiModule } from '@webui/ui';
+import { ButtonsModule } from 'ngx-bootstrap/buttons';
+import { TranslateModule } from '@ngx-translate/core';
 
 import { DashboardService, WidgetService } from './services';
 import {
   ButtonsWidget,
   CandidateWidget,
   CalendarWidgetComponent,
-  DashboardMenuComponent
+  DashboardMenuComponent,
+  CounterWidgetComponent,
+  RangeButtonComponent,
+  DashboardWidgetComponent,
+  RangeFieldComponent
 } from './components';
 import { WidgetDirective } from './directives';
 import { DashboardComponent } from './dashboard.component';
@@ -45,7 +51,10 @@ import { DashboardComponent } from './dashboard.component';
     NgbModalModule,
     DragDropModule,
     ReactiveFormsModule,
-    UiModule
+    UiModule,
+    ButtonsModule,
+    TranslateModule,
+    BsDatepickerModule
   ],
   declarations: [
     DashboardComponent,
@@ -53,11 +62,15 @@ import { DashboardComponent } from './dashboard.component';
     CandidateWidget,
     CalendarWidgetComponent,
     WidgetDirective,
-    DashboardMenuComponent
+    DashboardMenuComponent,
+    RangeButtonComponent,
+    DashboardWidgetComponent,
+    CounterWidgetComponent,
+    RangeFieldComponent
   ],
-  providers: [DashboardService],
+  providers: [DashboardService, WidgetService],
   entryComponents: [ButtonsWidget, CandidateWidget, CalendarWidgetComponent],
-  exports: [DashboardComponent]
+  exports: [DashboardComponent, CounterWidgetComponent]
 })
 export class DashboardModule {
   constructor(library: FaIconLibrary) {

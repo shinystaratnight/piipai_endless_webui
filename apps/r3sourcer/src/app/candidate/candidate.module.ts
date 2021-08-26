@@ -20,6 +20,7 @@ import { Metadata } from './metadata.config';
 import { CommonModule } from '@angular/common';
 import { SharedModule } from '../shared/shared.module';
 import { SharedModule as LibSharedModule } from '@webui/shared';
+import { DashboardModule } from '@webui/dashboard';
 
 @NgModule({
   declarations: [CandidateComponent, ...components],
@@ -35,7 +36,8 @@ import { SharedModule as LibSharedModule } from '@webui/shared';
     SharedModule,
     TranslateModule,
     LibSharedModule,
-    UiModule
+    UiModule,
+    DashboardModule,
   ]
 })
 export class CandidateModule {}

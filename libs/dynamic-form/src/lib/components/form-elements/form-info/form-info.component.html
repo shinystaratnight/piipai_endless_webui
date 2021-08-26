@@ -92,7 +92,7 @@
       </ng-container>
     </div>
 
-    <p class="job" *ngIf="!titlePath && job">{{job.__str__}}</p>
+    <p class="job" *ngIf="!titlePath && job">{{job}}</p>
     <p class="jobsite" *ngIf="!titlePath && jobsite && config && config.metadata['jobsite']">
       <ng-container appFormElement
         [config]="getConfig('jobsite')"

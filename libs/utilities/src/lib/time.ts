@@ -5,19 +5,27 @@ import * as moment from 'moment-timezone';
 // setTimeZone(timeZone);
 moment.updateLocale('en', {
   week: {
-    dow: 1, // Monday is the first day of the week.
-  } as any,
+    dow: 1 // Monday is the first day of the week.
+  } as any
 });
 
 export function getTimeInstance(): any {
   return moment;
 }
 
+export function getTimeInstanceByTimezone(timezone: string) {
+  if (!timezone) {
+    return getTimeInstance();
+  }
+
+  return moment.tz.setDefault(timezone);
+}
+
 export function getLocalTime() {
   return moment().clone();
 }
 
-export function getTimeByTomezone(timezone: string) {
+export function getTimeByTimezone(timezone: string) {
   return moment.tz(timezone);
 }
 

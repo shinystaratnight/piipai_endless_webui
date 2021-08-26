@@ -472,7 +472,8 @@ const form = [
                     type: 'checkbox',
                     templateOptions: {
                       required: false,
-                      label: 'GST',
+                      label: '{vat_name}',
+                      label_default: 'VAT Name',
                       type: 'checkbox',
                       text: 'Registered'
                     },
@@ -511,19 +512,13 @@ const form = [
                     many: false
                   },
                   {
-                    list: false,
                     endpoint: '/core/companies/',
                     read_only: true,
                     key: 'master_company',
                     templateOptions: {
                       label: 'Master company',
-                      add: true,
-                      delete: false,
-                      values: ['__str__'],
                       type: 'related',
-                      edit: true
                     },
-                    collapsed: false,
                     showIf: [
                       {
                         type: 'regular'
@@ -533,7 +528,6 @@ const form = [
                     query: {
                       type: 'master'
                     },
-                    many: false
                   }
                 ],
                 width: 0.25

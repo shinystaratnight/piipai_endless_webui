@@ -45,8 +45,18 @@ input {
 
     @each $item in $themes {
       .#{$item}-theme & {
-        -webkit-box-shadow: 0 0 0px 1000px rgba(map-get($theme-colors, $item), 0.2) inset;
-        box-shadow: 0 0 0px 1000px rgba(map-get($theme-colors, $item), 0.2) inset;
+        -webkit-box-shadow: 0
+          0
+          0px
+          1000px
+          rgba(map-get($theme-colors, $item), 0.2)
+          inset;
+        box-shadow: 0
+          0
+          0px
+          1000px
+          rgba(map-get($theme-colors, $item), 0.2)
+          inset;
       }
     }
   }
@@ -60,12 +70,24 @@ input::-webkit-inner-spin-button {
 }
 
 /* Firefox */
-input[type=number] {
+input[type='number'] {
   -moz-appearance: textfield;
 }
 
 .readonly-value {
   opacity: 0.6;
+}
+
+.readonly {
+  opacity: 0.6 !important;
+  color: $gray !important;
+  cursor: text;
+
+  &:hover,
+  &:focus {
+    color: $gray !important;
+    opacity: 0.6 !important;
+  }
 }
 
 @include media-breakpoint-up('md') {
@@ -137,9 +159,9 @@ input[type=number] {
 
 .page-item.active .page-link {
   border-color: $primary;
-
   background-color: $primary;
   z-index: 1;
+  color: #fff !important;
 }
 
 @each $item in $themes {
@@ -185,7 +207,7 @@ input[type=number] {
 
   font-weight: 600;
 
-  border-radius: .5rem;
+  border-radius: 0.5rem;
 
   color: white;
 
@@ -399,16 +421,11 @@ iframe.send-sms {
 }
 
 .timesheet-submit-form {
-  padding: 5px 0 !important;
-
-  .items {
-    padding-bottom: 2px !important;
-    margin-bottom: 6px !important;
-
-    @include media-breakpoint-down('md') {
-      display: block !important;
-    }
-  }
+  // .items {
+  //   @include media-breakpoint-down('md') {
+  //     display: block !important;
+  //   }
+  // }
 
   @include media-breakpoint-down('md') {
     .button-save {
@@ -433,15 +450,6 @@ iframe.send-sms {
       label.form-element-checkbox {
         margin-bottom: 0;
       }
-    }
-  }
-
-  @include media-breakpoint-down('sm') {
-    app-form-checkbox .form-group {
-      position: absolute;
-      top: 3px;
-      right: -10px;
-      min-width: 130px;
     }
   }
 }
