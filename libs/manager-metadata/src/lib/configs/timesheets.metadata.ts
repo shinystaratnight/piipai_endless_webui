@@ -1150,7 +1150,8 @@ const form = [
             })
             .setPrefilledFields({
               [Models.Skill]: '{position.id}',
-              [Models.Timesheet]: '{id}'
+              [Models.Timesheet]: '{id}',
+              company: '{company.id}'
             })
         ]
       },

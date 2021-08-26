@@ -13,15 +13,17 @@ const form = () => [
     .updateValues(['translations', 'uom'])
     .readOnly()
     .setQuery({
-      company: 'currentCompany'
+      company: '{company}'
     }),
   new Form.input.element('rate', 'Rate', InputType.Number).hideField(),
-  new Form.input.element('value', 'Value', InputType.Number)
-    .setIcon('{uom.name}')
+  new Form.input.element('value', 'Value', InputType.Number).setIcon(
+    '{uom.name}'
+  )
 ];
 
 const formadd = () => [
   new Form.input.element('timesheet', 'Timesheet', InputType.Text).hideField(),
+  new Form.input.element('company', 'Company', InputType.Text).hideField(),
   new SkillWorkTypeModel()
     .formElement()
     .required()
@@ -32,14 +34,15 @@ const formadd = () => [
     })
     .setQuery({
       skill: '{skill.id}',
-      company: 'currentCompany'
+      company: '{company}'
     }),
   new SkillModel().formElement().updateValues(['name']),
   new Form.input.element('rate', 'Rate', InputType.Number)
     .setDefaultValue('{worktype.skill_rate_ranges.default_rate}')
     .hideField(),
-  new Form.input.element('value', 'Value', InputType.Number)
-    .setIcon('{worktype.uom.short_name}')
+  new Form.input.element('value', 'Value', InputType.Number).setIcon(
+    '{worktype.uom.short_name}'
+  )
 ];
 
 const formset = () => ({
