@@ -92,6 +92,8 @@ const form = function () {
         ])
       ]),
 
+    new Form.input.element('company', 'Company', InputType.Text).hideField(),
+
     new Form.list.element(
       'Skill Activities',
       Endpoints.TimesheetRates,
@@ -102,7 +104,8 @@ const form = function () {
       })
       .setPrefilledFields({
         [Models.Skill]: '{position.id}',
-        [Models.Timesheet]: '{id}'
+        [Models.Timesheet]: '{id}',
+        company: '{company.id}'
       }),
 
     new NoteModel().formListElement({

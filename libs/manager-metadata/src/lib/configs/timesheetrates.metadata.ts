@@ -13,7 +13,7 @@ const form = () => [
     .readOnly()
     .updateValues(['translations'])
     .setQuery({
-      company: 'currentCompany'
+      company: '{company}'
     }),
   new Form.input.element('rate', 'Rate', InputType.Number),
   new Form.input.element('value', 'Value', InputType.Number)
@@ -21,6 +21,7 @@ const form = () => [
 
 const formadd = () => [
   new Form.input.element('timesheet', 'Timesheet', InputType.Text).hideField(),
+  new Form.input.element('company', 'Company', InputType.Text).hideField(),
   new SkillWorkTypeModel()
     .formElement()
     .required()
@@ -33,7 +34,7 @@ const formadd = () => [
     .updateValues(['translations', 'uom', 'skill_rate_ranges'])
     .setQuery({
       skill: '{skill.id}',
-      company: 'currentCompany'
+      company: '{company}'
     }),
   new SkillModel().formElement().updateValues(['name']),
   new Form.input.element('rate', 'Rate', InputType.Number).setDefaultValue(
