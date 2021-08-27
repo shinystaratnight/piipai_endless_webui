@@ -103,6 +103,7 @@ export class DynamicFormComponent implements OnInit {
   public handleSubmit(event: Event) {
     event.preventDefault();
     event.stopPropagation();
+
     if (this.form.invalid) {
       return;
     }
