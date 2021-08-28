@@ -1057,7 +1057,8 @@ const form = [
             visibleMode: true,
             prefilled: {
               job: '{id}',
-              skill: '{position.id}'
+              skill: '{position.id}',
+              company: '{customer_company.id}'
             },
             query: {
               job: '{id}'
