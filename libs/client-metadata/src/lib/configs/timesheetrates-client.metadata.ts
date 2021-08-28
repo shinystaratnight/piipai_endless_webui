@@ -23,7 +23,8 @@ const form = () => [
     .updateValues(['translations'])
     .readOnly()
     .setQuery({
-      company: '{company}'
+      company: '{company}',
+      priced: true
     }),
   getRateField(),
   getValueField()
@@ -43,7 +44,8 @@ const formadd = () => [
     })
     .setQuery({
       skill: '{skill.id}',
-      company: '{company}'
+      company: '{company}',
+      priced: true
     }),
   new SkillModel().formElement().updateValues(['name']),
   getRateField(),

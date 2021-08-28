@@ -13,7 +13,8 @@ const form = () => [
     .updateValues(['translations', 'uom'])
     .readOnly()
     .setQuery({
-      company: '{company}'
+      company: '{company}',
+      priced: true
     }),
   new Form.input.element('rate', 'Rate', InputType.Number).hideField(),
   new Form.input.element('value', 'Value', InputType.Number).setIcon(
@@ -34,7 +35,8 @@ const formadd = () => [
     })
     .setQuery({
       skill: '{skill.id}',
-      company: '{company}'
+      company: '{company}',
+      priced: true
     }),
   new SkillModel().formElement().updateValues(['name']),
   new Form.input.element('rate', 'Rate', InputType.Number)
