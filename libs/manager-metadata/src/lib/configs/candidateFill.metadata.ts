@@ -1,7 +1,12 @@
 import { Endpoints, Models } from '@webui/data';
-import { Form } from '@webui/metadata';
+import { CheckboxType, Form } from '@webui/metadata';
 
 const form = [
+  new Form.checkbox.element(
+    'hours',
+    'Times only',
+    CheckboxType.Checkbox
+  ).setDefaultValue(true),
   {
     key: 'shift_started_at',
     type: 'datepicker',
@@ -10,7 +15,8 @@ const form = [
       required: false,
       label: 'Shift Started at'
     },
-    read_only: false
+    read_only: false,
+    showIf: [{ hours: true }]
   },
   {
     key: 'shift_ended_at',
@@ -20,13 +26,15 @@ const form = [
       required: false,
       label: 'Shift Ended at'
     },
-    read_only: false
+    read_only: false,
+    showIf: [{ hours: true }]
   },
   {
     key: 'no_break',
     type: 'checkbox',
     templateOptions: { type: 'checkbox', required: false, label: 'No Break' },
-    read_only: false
+    read_only: false,
+    showIf: [{ hours: true }]
   },
   {
     key: 'break_started_at',
@@ -37,7 +45,7 @@ const form = [
       label: 'Break Started at'
     },
     read_only: false,
-    showIf: [{ no_break: false }]
+    showIf: [{ hours: true }]
   },
   {
     key: 'break_ended_at',
@@ -48,7 +56,7 @@ const form = [
       label: 'Break Ended at'
     },
     read_only: false,
-    showIf: [{ no_break: false }]
+    showIf: [{ hours: true }]
   },
   new Form.select.element('wage_type', 'Wage Type')
     .setDefaultValue(0)
@@ -60,7 +68,8 @@ const form = [
     key: 'total_worked',
     type: 'static',
     templateOptions: { type: 'static', required: false, label: 'Total' },
-    read_only: true
+    read_only: true,
+    showIf: [{ hours: true }]
   },
   {
     key: 'send_supervisor_message',
@@ -73,12 +82,18 @@ const form = [
     read_only: false
   },
   new Form.list.element('Skill Activities', Endpoints.TimesheetRates)
+    .setShowIfRule([
+      {
+        hours: false
+      }
+    ])
     .setQuery({
       timesheet: '{id}'
     })
     .setPrefilledFields({
       [Models.Skill]: '{position.id}',
-      [Models.Timesheet]: '{id}'
+      [Models.Timesheet]: '{id}',
+      company: '{company.id}'
     })
 ];
 

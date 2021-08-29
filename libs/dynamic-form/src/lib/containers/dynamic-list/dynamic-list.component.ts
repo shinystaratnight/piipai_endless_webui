@@ -1898,6 +1898,9 @@ export class DynamicListComponent
           noBreak: createAddAction({
             value: !data.break_started_at && !data.break_ended_at
           }),
+          company: createAddAction({
+            value: this.format('{company.id}', data)
+          }),
           time_zone: data.time_zone
         },
         changeMetadata: new Subject(),
@@ -2464,6 +2467,12 @@ export class DynamicListComponent
               data: {
                 value: this.format('{id}', rowData)
               }
+            },
+            company: {
+              action: 'add',
+              data: {
+                value: this.format('{company.id}', rowData)
+              }
             }
           };
         } else if (lastElement === 'supervisor_approve') {
@@ -2475,6 +2484,12 @@ export class DynamicListComponent
               action: 'add',
               data: {
                 value: this.format('{id}', rowData)
+              }
+            },
+            company: {
+              action: 'add',
+              data: {
+                value: this.format('{company.id}', rowData)
               }
             }
           };
