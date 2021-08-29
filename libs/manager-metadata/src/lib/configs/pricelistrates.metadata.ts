@@ -12,7 +12,7 @@ const worktypeField = () =>
     .updateValues(['translations'])
     .setQuery({
       skill: '{skill.id}',
-      all: true
+      limited: true
     });
 
 const list = {
