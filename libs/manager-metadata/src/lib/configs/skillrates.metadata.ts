@@ -33,7 +33,8 @@ const formadd = () => [
     'Work Type',
     Endpoints.SkillWorkTypes
   ).setQuery({
-    skill: '{skill.id}'
+    skill: '{skill.id}',
+    limited: true
   }),
   new Form.input.element('rate', 'Rate', InputType.Number).setNumberOptions(
     0.01,
