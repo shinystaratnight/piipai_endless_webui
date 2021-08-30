@@ -111,7 +111,8 @@ export const skillActivities = () => [
     })
     .setPrefilledFields({
       [Models.Skill]: '{position.id}',
-      [Models.Timesheet]: '{id}'
+      [Models.Timesheet]: '{id}',
+      company: '{company.id}'
     })
 ];
 
@@ -122,7 +123,9 @@ export const notes = () => [
 ];
 
 export const workType = () => [
-  new Form.input.element('timesheet', 'Timesheet', InputType.Text).hideField(),
+  new Form.input.element('timesheet', 'Timesheet', InputType.Text)
+    .setDefaultValue('{id}')
+    .hideField(),
   new SkillWorkTypeModel()
     .formElement()
     .readOnly()
@@ -130,12 +133,13 @@ export const workType = () => [
     .updateValues(['translations', 'uom', 'skill_rate_ranges'])
     .setQuery({
       skill: '{skill.id}',
-      company: 'currentCompany'
+      company: '{company.id}',
+      priced: true
     }),
   new SkillModel().formElement().updateValues(['name']),
-  new Form.input.element('rate', 'Rate', InputType.Number).setDefaultValue(
-    '{worktype.skill_rate_ranges.default_rate}'
-  ),
+  new Form.input.element('rate', 'Rate', InputType.Number)
+    .setDefaultValue('{worktype.skill_rate_ranges.default_rate}')
+    .hideField(),
   new Form.input.element('value', 'Value', InputType.Number).setIcon(
     '{worktype.uom.short_name}'
   )

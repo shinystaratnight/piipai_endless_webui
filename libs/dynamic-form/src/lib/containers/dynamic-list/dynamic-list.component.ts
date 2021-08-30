@@ -79,7 +79,8 @@ const translationMap = CountryCodeLanguage;
   styleUrls: ['./dynamic-list.component.scss']
 })
 export class DynamicListComponent
-  implements OnInit, OnChanges, OnDestroy, AfterContentChecked {
+  implements OnInit, OnChanges, OnDestroy, AfterContentChecked
+{
   @Input() config: any;
   @Input() data: any;
   @Input() first: boolean;
@@ -1693,7 +1694,7 @@ export class DynamicListComponent
             value: data.id
           }),
           shift_ended_at_utc: createAddAction({
-            value: data.shift_ended_at_utc
+            value: data.shift_ended_at_utc || data.shift_started_at
           }),
           shift_started_at: createAddAction({
             value: data.shift_started_at
@@ -1705,7 +1706,7 @@ export class DynamicListComponent
             value: data.break_ended_at
           }),
           shift_ended_at: createAddAction({
-            value: data.shift_ended_at
+            value: data.shift_ended_at || data.shift_started_at
           }),
           supervisor: createAddAction({
             value: data.supervisor
@@ -1857,9 +1858,8 @@ export class DynamicListComponent
 
   public changeTimesheet(e) {
     const data = this.getRowData(e);
-    const signature = data.company.supervisor_approved_scheme.includes(
-      'SIGNATURE'
-    );
+    const signature =
+      data.company.supervisor_approved_scheme.includes('SIGNATURE');
 
     if (data) {
       const contact = data.job_offer.candidate_contact.contact;
@@ -1954,9 +1954,8 @@ export class DynamicListComponent
       break_started_at,
       break_ended_at
     } = data;
-    const signature = data.company.supervisor_approved_scheme.includes(
-      'SIGNATURE'
-    );
+    const signature =
+      data.company.supervisor_approved_scheme.includes('SIGNATURE');
 
     const approveTimesheet = () => {
       this.genericFormService

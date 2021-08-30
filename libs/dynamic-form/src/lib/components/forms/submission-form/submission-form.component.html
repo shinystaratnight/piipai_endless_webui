@@ -8,20 +8,36 @@
     </div>
 </app-generic-form> -->
 
-<app-dynamic-form [config]="details"></app-dynamic-form>
+<app-dynamic-form *ngIf="!type" [config]="details"></app-dynamic-form>
 
 <app-dynamic-form *ngIf="type === timesheetType.Times" [config]="times"></app-dynamic-form>
 
-<app-dynamic-form *ngIf="type === timesheetType.Activities" [config]="skillActivity"></app-dynamic-form>
+<app-dynamic-form *ngIf="type === timesheetType.Activity" [config]="skillActivity"
+    (submitForm)="saveSkillActivity($event)" [errors]="errors">
+    <div class="footer">
+        <div *ngIf="errors" class="text-danger mb-2">{{errors.non_field_errors}}</div>
+        <button class="btn btn-primary" type="submit">
+            Save
+            <app-spinner *ngIf="saveProcess"></app-spinner>
+        </button>
+    </div>
 
-<!-- <app-dynamic-form *ngIf="type" [config]="notes"></app-dynamic-form> -->
+</app-dynamic-form>
+
+<app-dynamic-form *ngIf="type === timesheetType.Activities" [config]="skillActivities"></app-dynamic-form>
+
+<app-dynamic-form *ngIf="formFilled" [config]="notes"></app-dynamic-form>
 
 <div *ngIf="!type" class="buttons">
     <button class="btn btn-primary" type="button" (click)="setTimesheetType(timesheetType.Times)">
         Time only
     </button>
 
-    <button class="btn btn-primary" type="button" (click)="setTimesheetType(timesheetType.Activities)">
+    <button class="btn btn-primary" type="button" (click)="setTimesheetType(timesheetType.Activity)">
         Peiecework or combined
+    </button>
+
+    <button class="btn btn-primary" type="button" (click)="setTimesheetType(timesheetType.Activities)">
+        Skill Activities
     </button>
 </div>
