@@ -1,5 +1,5 @@
 import { Endpoints } from '@webui/data';
-import { List, Form, InputType } from '@webui/metadata';
+import { Form, InputType, List } from '@webui/metadata';
 
 const formset = {
   fields: [],
@@ -24,6 +24,7 @@ const formset = {
 };
 
 const formadd = () => [
+  new Form.related.element('company', 'Company', Endpoints.Company),
   new Form.related.element('skill', 'Skill', Endpoints.Skill)
     .updateValues(['name'])
     .readOnly()
@@ -33,7 +34,9 @@ const formadd = () => [
     'Work Type',
     Endpoints.SkillWorkTypes
   ).setQuery({
-    skill: '{skill.id}'
+    skill: '{skill.id}',
+    company: '{company.id}',
+    priced: true
   }),
   new Form.input.element('rate', 'Rate', InputType.Number).setNumberOptions(
     0.01,
