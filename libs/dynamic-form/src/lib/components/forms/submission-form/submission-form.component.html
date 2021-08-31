@@ -1,19 +1,23 @@
-<!-- <app-generic-form [endpoint]="config.endpoint" [data]="config.data" [extendData]="config.extendData"
-    [edit]="config.edit" (errorForm)="errorEvent()" (event)="formEvent($event)">
-    <div class="d-flex">
-        <button class="btn btn-shadow btn-primary button-save ml-lg-auto">
-            {{ 'save' | translate: { Default: 'Save' } }}
-            <app-spinner *ngIf="saveProcess"></app-spinner>
-        </button>
-    </div>
-</app-generic-form> -->
-
-<app-dynamic-form *ngIf="!type" [config]="details"></app-dynamic-form>
+<app-dynamic-form
+  *ngIf="!type && !formFilled"
+  [config]="details"
+></app-dynamic-form>
 
 <app-dynamic-form
   *ngIf="type === timesheetType.Times"
   [config]="times"
-></app-dynamic-form>
+  (submitForm)="saveTimesheet($event, true)"
+>
+  <div class="footer">
+    <div *ngIf="errors" class="text-danger mb-2">
+      {{ errors.non_field_errors }}
+    </div>
+    <button class="btn btn-primary" type="submit">
+      Save
+      <app-spinner *ngIf="saveProcess"></app-spinner>
+    </button>
+  </div>
+</app-dynamic-form>
 
 <app-dynamic-form
   *ngIf="type === timesheetType.Activity"
@@ -35,11 +39,22 @@
 <app-dynamic-form
   *ngIf="type === timesheetType.Activities"
   [config]="skillActivities"
-></app-dynamic-form>
+  (submitForm)="saveTimesheet($event)"
+>
+  <div class="footer">
+    <div *ngIf="errors" class="text-danger mb-2">
+      {{ errors.non_field_errors }}
+    </div>
+    <button class="btn btn-primary" type="submit">
+      Save
+      <app-spinner *ngIf="saveProcess"></app-spinner>
+    </button>
+  </div>
+</app-dynamic-form>
 
 <app-dynamic-form *ngIf="formFilled" [config]="notes"></app-dynamic-form>
 
-<div *ngIf="!type" class="buttons">
+<div *ngIf="!type && !formFilled" class="buttons">
   <button
     class="btn btn-primary"
     type="button"
@@ -55,18 +70,10 @@
   >
     Peiecework or combined
   </button>
-
-  <button
-    class="btn btn-primary"
-    type="button"
-    (click)="setTimesheetType(timesheetType.Activities)"
-  >
-    Skill Activities
-  </button>
 </div>
 
-<div class="footer">
-  <button class="btn btn-primary" type="submit">
+<div class="footer" *ngIf="formFilled">
+  <button class="btn btn-primary" type="submit" (click)="close()">
     Save
     <app-spinner *ngIf="saveProcess"></app-spinner>
   </button>

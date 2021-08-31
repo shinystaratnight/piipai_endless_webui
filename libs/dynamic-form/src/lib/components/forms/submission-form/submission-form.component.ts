@@ -1,10 +1,10 @@
-import { Component, EventEmitter, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { UserService } from '@webui/core';
 import { Endpoints } from '@webui/data';
 import { FormatString } from '@webui/utilities';
-import { BehaviorSubject, pipe } from 'rxjs';
-import { catchError, finalize, tap } from 'rxjs/operators';
+import { BehaviorSubject } from 'rxjs';
+import { catchError, finalize } from 'rxjs/operators';
 import { getElementFromMetadata } from '../../../helpers/utils';
 import { GenericFormService } from '../../../services';
 
@@ -29,7 +29,8 @@ enum TimesheetType {
 })
 export class SubmissionFormComponent {
   @Input() config: any;
-  @Input() event: EventEmitter<void> = new EventEmitter();
+  @Output() event: EventEmitter<{ type: string; status: string }> =
+    new EventEmitter();
 
   type: TimesheetType;
   timesheetType = TimesheetType;
@@ -80,7 +81,6 @@ export class SubmissionFormComponent {
     if (type === TimesheetType.Times) {
       this.parseMetadata(this.times, this.config.data);
       this.updateMetadata(this.getMetadataConfig(this.times));
-      this.formFilled = true;
     }
 
     if (type === TimesheetType.Activity) {
@@ -91,7 +91,6 @@ export class SubmissionFormComponent {
     if (type === TimesheetType.Activities) {
       this.parseMetadata(this.skillActivities, this.config.data);
       this.updateMetadata(this.getMetadataConfig(this.skillActivities));
-      console.log(this.skillActivities);
     }
   }
 
@@ -109,12 +108,37 @@ export class SubmissionFormComponent {
       )
       .subscribe(() => {
         this.setTimesheetType(TimesheetType.Activities);
-        this.formFilled = true;
+        this.updateMetadata(this.getMetadataConfig(this.notes));
       });
-    console.log(data);
   }
 
-  saveTimesheet() {}
+  saveTimesheet(data, hours = false) {
+    const body = {
+      ...data,
+      hours: true
+    };
+
+    this.gfs
+      .editForm(this.config.endpoint, body)
+      .pipe(
+        catchError((err) => {
+          this.errors = err.errors;
+          return err;
+        })
+      )
+      .subscribe(() => {
+        this.formFilled = true;
+        this.type = null;
+        this.updateMetadata(this.getMetadataConfig(this.notes));
+      });
+  }
+
+  close() {
+    this.event.emit({
+      type: 'sendForm',
+      status: 'success'
+    });
+  }
 
   private getMetadataConfig(metadata) {
     return {

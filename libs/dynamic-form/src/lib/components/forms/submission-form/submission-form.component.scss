@@ -5,3 +5,12 @@
     margin-right: 1rem;
   }
 }
+
+.footer {
+  display: flex;
+  flex-direction: column;
+
+  .btn {
+    align-self: flex-end;
+  }
+}
