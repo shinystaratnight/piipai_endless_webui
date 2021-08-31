@@ -114,6 +114,8 @@ export class SubmissionFormComponent {
     console.log(data);
   }
 
+  saveTimesheet() {}
+
   private getMetadataConfig(metadata) {
     return {
       metadata,

@@ -136,7 +136,7 @@ export const workType = () => [
       company: '{company.id}',
       priced: true
     }),
-  new SkillModel().formElement().updateValues(['name']),
+  new SkillModel().formElement().updateValues(['name']).hideField(),
   new Form.input.element('rate', 'Rate', InputType.Number)
     .setDefaultValue('{worktype.skill_rate_ranges.default_rate}')
     .hideField(),
