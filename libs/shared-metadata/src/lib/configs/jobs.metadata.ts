@@ -1428,7 +1428,8 @@ const formadd = [
             type: 'related',
             query: {
               company: '{customer_company.id}',
-              active: true
+              active: true,
+              priced: true
             },
             many: false
           },

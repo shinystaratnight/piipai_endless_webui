@@ -1,4 +1,5 @@
 import { Role } from '@webui/data';
+import { getTimeInstanceByTimezone } from './time';
 
 enum Language {
   English = 'en',
@@ -193,6 +194,31 @@ export function format(str, data) {
       }
       break;
     }
+
+    if (data) {
+      const shift_started_at = getTimeInstanceByTimezone(
+        data.timezone || data.time_zone
+      )(data.shift_started_at);
+
+      switch (key) {
+        case 'shift_ended_at': {
+          data['shift_ended_at'] =
+            data['shift_ended_at'] ||
+            shift_started_at.clone().add(9, 'hour').add(30, 'minute').format();
+        }
+        case 'break_started_at': {
+          data['break_started_at'] =
+            data['break_started_at'] ||
+            shift_started_at.clone().add(5, 'hour').format();
+        }
+        case 'break_ended_at': {
+          data['break_ended_at'] =
+            data['break_ended_at'] ||
+            shift_started_at.clone().add(5, 'hour').add(30, 'minute').format();
+        }
+      }
+    }
+
     propValue = getPropValue(data, key);
     before = str.substring(pos, start);
     pieces.push(before);

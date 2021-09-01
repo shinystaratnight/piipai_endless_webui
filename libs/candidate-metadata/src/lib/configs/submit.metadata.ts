@@ -74,6 +74,7 @@ const form = function () {
                   'Shift End',
                   DatepickerType.Datetime
                 )
+                  .setDefaultValue('{shift_ended_at}')
                   .setWidth(0.25)
                   .required(),
 
@@ -94,6 +95,7 @@ const form = function () {
                 'Break Start',
                 DatepickerType.Datetime
               )
+                .setDefaultValue('{break_started_at}')
                 .setWidth(0.25)
                 .saveValue()
                 .setShowIfRule([{ noBreak: false }])
@@ -105,6 +107,7 @@ const form = function () {
                 'Break End',
                 DatepickerType.Datetime
               )
+                .setDefaultValue('{break_ended_at}')
                 .setWidth(0.25)
                 .saveValue()
                 .setShowIfRule([{ noBreak: false }])
