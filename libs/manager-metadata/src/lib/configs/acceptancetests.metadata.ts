@@ -38,14 +38,13 @@ const list = function () {
           })
         ]),
 
-        new List.column.element(
-          'acceptance_tests_skills',
-          'Skills'
-        ).setContent([
-          new List.text.element('acceptance_tests_skills').update({
-            param: 'skill.name'
-          })
-        ]),
+        new List.column.element('acceptance_tests_skills', 'Skills').setContent(
+          [
+            new List.text.element('acceptance_tests_skills').update({
+              param: 'skill.name'
+            })
+          ]
+        ),
 
         new List.column.element('acceptance_tests_tags', 'Tags').setContent([
           new List.text.element('acceptance_tests_tags').update({
@@ -111,6 +110,9 @@ const form = function () {
         )
           .updateModel({ many: true, useOptions: true })
           .setActions({ delete: true })
+          .setQuery({
+            company: 'currentCompany'
+          })
           .setRelatedObjects(
             'skill',
             { acceptance_test: '{id}' },
