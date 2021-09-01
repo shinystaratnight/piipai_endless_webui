@@ -48,6 +48,12 @@ export class SubmissionFormComponent {
 
   errors: { [key: string]: any };
 
+  hiddenFields = {
+    elements: [],
+    keys: [],
+    observers: []
+  };
+
   constructor(
     private gfs: GenericFormService,
     private userService: UserService
@@ -109,6 +115,7 @@ export class SubmissionFormComponent {
       .subscribe(() => {
         this.setTimesheetType(TimesheetType.Activities);
         this.updateMetadata(this.getMetadataConfig(this.notes));
+        this.errors = null;
       });
   }
 
@@ -168,6 +175,18 @@ export class SubmissionFormComponent {
       this.parseParams(el.prefilled, data);
       this.parseParams(el.query, data);
 
+      if (el.showIf && el.showIf.length) {
+        if (this.hiddenFields.keys.indexOf(el.key) === -1) {
+          this.hiddenFields.keys.push(el.key);
+          this.hiddenFields.elements.push(el);
+          this.hiddenFields.observers = this.observeFields(
+            el.showIf,
+            this.hiddenFields.observers
+          );
+          el.hidden = new BehaviorSubject(true);
+        }
+      }
+
       if (el.key) {
         el.formData = formData;
       } else if (el.children) {
@@ -197,5 +216,23 @@ export class SubmissionFormComponent {
     });
 
     return params;
+  }
+
+  private observeFields(fields: any[], observers) {
+    fields.forEach((field: any) => {
+      if (field instanceof Object) {
+        const keys = Object.keys(field);
+        keys.forEach((key) => {
+          if (observers.indexOf(key) === -1) {
+            observers.push(key);
+          }
+        });
+      } else {
+        if (observers.indexOf(field) === -1) {
+          observers.push(field);
+        }
+      }
+    });
+    return observers;
   }
 }

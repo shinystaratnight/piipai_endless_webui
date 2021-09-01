@@ -6,6 +6,7 @@
 <app-dynamic-form
   *ngIf="type === timesheetType.Times"
   [config]="times"
+  [hiddenFields]="hiddenFields"
   (submitForm)="saveTimesheet($event, true)"
 >
   <div class="footer">
@@ -22,8 +23,8 @@
 <app-dynamic-form
   *ngIf="type === timesheetType.Activity"
   [config]="skillActivity"
+  [hiddenFields]="hiddenFields"
   (submitForm)="saveSkillActivity($event)"
-  [errors]="errors"
 >
   <div class="footer">
     <div *ngIf="errors" class="text-danger mb-2">
