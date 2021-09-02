@@ -204,17 +204,17 @@ export function format(str, data) {
         case 'shift_ended_at': {
           data['shift_ended_at'] =
             data['shift_ended_at'] ||
-            shift_started_at.clone().add(9, 'hour').add(30, 'minute').format();
+            shift_started_at.clone().add(8, 'hour').add(30, 'minute').format();
         }
         case 'break_started_at': {
           data['break_started_at'] =
             data['break_started_at'] ||
-            shift_started_at.clone().add(5, 'hour').format();
+            shift_started_at.clone().add(4, 'hour').format();
         }
         case 'break_ended_at': {
           data['break_ended_at'] =
             data['break_ended_at'] ||
-            shift_started_at.clone().add(5, 'hour').add(30, 'minute').format();
+            shift_started_at.clone().add(4, 'hour').add(30, 'minute').format();
         }
       }
     }
