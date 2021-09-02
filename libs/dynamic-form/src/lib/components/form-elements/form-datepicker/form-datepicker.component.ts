@@ -378,6 +378,10 @@ export class FormDatepickerComponent
         : defaultValue;
     }
 
+    if (value === this.group.get(this.key).value && !shouldUpdate) {
+      return;
+    }
+
     if (value) {
       const dateInstance = this.parseValue(type, value);
       this.updateModel(dateInstance);
