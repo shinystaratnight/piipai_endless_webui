@@ -86,6 +86,7 @@ export class SubmissionFormComponent {
 
     if (type === TimesheetType.Times) {
       this.parseMetadata(this.times, this.config.data);
+      this.updateDatepickerByTimezone(this.times, this.config.data);
       this.updateMetadata(this.getMetadataConfig(this.times));
     }
 
@@ -122,7 +123,7 @@ export class SubmissionFormComponent {
   saveTimesheet(data, hours = false) {
     const body = {
       ...data,
-      hours: true
+      hours
     };
 
     this.gfs
@@ -234,5 +235,17 @@ export class SubmissionFormComponent {
       }
     });
     return observers;
+  }
+
+  private updateDatepickerByTimezone(metadata, data) {
+    metadata.forEach((el) => {
+      if (el.type === 'datepicker') {
+        if (data && (data.time_zone || data.timezone)) {
+          el.time_zone = data.time_zone || data.timezone;
+        }
+      } else if (el.children) {
+        this.updateDatepickerByTimezone(el.children, data);
+      }
+    });
   }
 }
