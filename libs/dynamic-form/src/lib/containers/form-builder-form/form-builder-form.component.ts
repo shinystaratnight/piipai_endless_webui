@@ -277,13 +277,13 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
     const { type, item, list, el, value } = event;
 
     // TODO: update validation
-    if (type === 'blur') {
-      ['email', 'phone'].forEach((field) => {
-        if (el.key.indexOf(field) > -1 && value) {
-          this.validate(field, value, el.key);
-        }
-      });
-    }
+    // if (type === 'blur') {
+    //   ['email', 'phone'].forEach((field) => {
+    //     if (el.key.indexOf(field) > -1 && value) {
+    //       this.validate(field, value, el.key);
+    //     }
+    //   });
+    // }
 
     if (type === 'address') {
       this.parseAddress(value, el);
@@ -423,14 +423,14 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
 
   public updateErrors(error, errors, response, field = '') {
     if (errors) {
-      const keyss = Object.keys(errors);
-      keyss.forEach((el) => {
+      const keys = Object.keys(errors);
+      keys.forEach((el) => {
         if (errors[el].length) {
           if (field) {
             error[`${field}.${el}`] = errors[el];
             delete response[`${field}.${el}`];
           } else {
-            error[el] = errors[el];
+            error[el] = errors[el].toString();
             delete response[el];
           }
         } else {

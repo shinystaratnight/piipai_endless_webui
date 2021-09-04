@@ -21,6 +21,7 @@ const form = [
   {
     key: 'shift_ended_at',
     type: 'datepicker',
+    default: '{shift_ended_at}',
     templateOptions: {
       type: 'datetime',
       required: false,
@@ -39,6 +40,7 @@ const form = [
   {
     key: 'break_started_at',
     type: 'datepicker',
+    default: '{break_started_at}',
     templateOptions: {
       type: 'datetime',
       required: false,
@@ -50,6 +52,7 @@ const form = [
   {
     key: 'break_ended_at',
     type: 'datepicker',
+    default: '{break_ended_at}',
     templateOptions: {
       type: 'datetime',
       required: false,
