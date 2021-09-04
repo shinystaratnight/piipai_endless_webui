@@ -1694,7 +1694,7 @@ export class DynamicListComponent
             value: data.id
           }),
           shift_ended_at_utc: createAddAction({
-            value: data.shift_ended_at_utc
+            value: data.shift_ended_at_utc || data.shift_started_at
           }),
           shift_started_at: createAddAction({
             value: data.shift_started_at
@@ -1706,7 +1706,7 @@ export class DynamicListComponent
             value: data.break_ended_at
           }),
           shift_ended_at: createAddAction({
-            value: data.shift_ended_at
+            value: data.shift_ended_at || data.shift_started_at
           }),
           supervisor: createAddAction({
             value: data.supervisor
