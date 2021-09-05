@@ -133,7 +133,7 @@ export const workType = () => [
     .required()
     .updateValues(['translations', 'uom', 'skill_rate_ranges'])
     .setQuery({
-      skill: '{skill.id}',
+      skill: '{position.id}',
       company: '{company.id}',
       priced: true
     }),
