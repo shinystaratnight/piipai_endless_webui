@@ -475,5 +475,7 @@
   "status.status.0.5": "Cancelled by Job Site Contact",
   "status.status.0.6": "Cancelled",
   "from": "From",
-  "to": "To"
+  "to": "To",
+  "times_only": "Times only",
+  "piecework_or_combined": "Piecework or combined"
 }

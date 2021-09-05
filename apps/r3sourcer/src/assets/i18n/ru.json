@@ -444,5 +444,7 @@
   "status.status.0.5": "Отменен заказчиком",
   "status.status.0.6": "Отменен",
   "from": "От",
-  "to": "До"
+  "to": "До",
+  "times_only": "Только время",
+  "piecework_or_combined": "Сдельная работа"
 }

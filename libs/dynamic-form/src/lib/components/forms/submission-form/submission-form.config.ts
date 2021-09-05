@@ -57,23 +57,25 @@ export const times = () => [
           .doNotSend()
       ]),
 
-    new Form.group.element().doNotShowLabel().setChildren([
-      new Form.datepicker.element(
-        'shift_ended_at',
-        'Shift End',
-        DatepickerType.Datetime
-      )
-        .setDefaultValue('{shift_ended_at}')
-        .setWidth(0.25)
-        .required()
+    new Form.group.element()
+      .doNotShowLabel()
+      .setChildren([
+        new Form.datepicker.element(
+          'shift_ended_at',
+          'Shift End',
+          DatepickerType.Datetime
+        )
+          .setDefaultValue('{shift_ended_at}')
+          .setWidth(0.25)
+          .required(),
 
-      // new Form.static.element('total_time', 'Total time')
-      //   .setWidth(0.25)
-      //   .readOnly()
-      //   .doNotSend()
-      //   .setColor('text-success')
-      //   .inlineValue()
-    ]),
+        new Form.static.element('total_time', 'Total time')
+          .setWidth(0.25)
+          .readOnly()
+          .doNotSend()
+          .setColor('text-success')
+          .inlineValue()
+      ]),
 
     new Form.group.element().doNotShowLabel().setChildren([
       new Form.datepicker.element(
@@ -133,7 +135,7 @@ export const workType = () => [
     .required()
     .updateValues(['translations', 'uom', 'skill_rate_ranges'])
     .setQuery({
-      skill: '{skill.id}',
+      skill: '{position.id}',
       company: '{company.id}',
       priced: true
     }),
