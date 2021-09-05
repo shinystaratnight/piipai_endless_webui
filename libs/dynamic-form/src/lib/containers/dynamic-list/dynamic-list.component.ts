@@ -1730,7 +1730,7 @@ export class DynamicListComponent
         }
       };
 
-      let windowClass = 'timesheet-submit-form';
+      let windowClass = 'timesheet-submit-form visible-mode';
 
       if (isMobile()) {
         windowClass += ' mobile-device';

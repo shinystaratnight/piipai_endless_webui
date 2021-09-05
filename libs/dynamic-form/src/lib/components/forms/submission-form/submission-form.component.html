@@ -1,7 +1,26 @@
-<app-dynamic-form *ngIf="!type && !formFilled" [config]="details"></app-dynamic-form>
+<app-dynamic-form
+  *ngIf="isShowHeadSection"
+  [config]="details"
+></app-dynamic-form>
 
-<app-dynamic-form *ngIf="type === timesheetType.Times" [config]="times" [hiddenFields]="hiddenFields"
-  (submitForm)="saveTimesheet($event, true)">
+<div *ngIf="isShowHeadSection" class="buttons">
+  <button
+    *ngFor="let typeItem of types"
+    class="btn btn-primary"
+    [class.active]="type === typeItem.key"
+    type="button"
+    (click)="setTimesheetType(typeItem.key)"
+  >
+    {{ typeItem.translateKey | translate: { Default: typeItem.label } }}
+  </button>
+</div>
+
+<app-dynamic-form
+  *ngIf="type === timesheetType.Times"
+  [config]="times"
+  [hiddenFields]="hiddenFields"
+  (submitForm)="saveTimesheet($event, true)"
+>
   <div class="footer">
     <div *ngIf="errors" class="text-danger mb-2">
       {{ errors.non_field_errors }}
@@ -13,8 +32,12 @@
   </div>
 </app-dynamic-form>
 
-<app-dynamic-form *ngIf="type === timesheetType.Activity" [config]="skillActivity" [hiddenFields]="hiddenFields"
-  (submitForm)="saveSkillActivity($event)">
+<app-dynamic-form
+  *ngIf="type === timesheetType.Activity"
+  [config]="skillActivity"
+  [hiddenFields]="hiddenFields"
+  (submitForm)="saveSkillActivity($event)"
+>
   <div class="footer">
     <div *ngIf="errors" class="text-danger mb-2">
       {{ errors.non_field_errors }}
@@ -26,8 +49,11 @@
   </div>
 </app-dynamic-form>
 
-<app-dynamic-form *ngIf="type === timesheetType.Activities" [config]="skillActivities"
-  (submitForm)="saveTimesheet($event)">
+<app-dynamic-form
+  *ngIf="type === timesheetType.Activities"
+  [config]="skillActivities"
+  (submitForm)="saveTimesheet($event)"
+>
   <div class="footer">
     <div *ngIf="errors" class="text-danger mb-2">
       {{ errors.non_field_errors }}
@@ -40,20 +66,6 @@
 </app-dynamic-form>
 
 <app-dynamic-form *ngIf="formFilled" [config]="notes"></app-dynamic-form>
-
-<div *ngIf="!type && !formFilled" class="buttons">
-  <button class="btn btn-primary" type="button" (click)="setTimesheetType(timesheetType.Times)">
-    Time only
-  </button>
-
-  <button class="btn btn-primary" type="button" (click)="setTimesheetType(timesheetType.Activity)">
-    Peiecework or combined
-  </button>
-
-  <button class="btn btn-primary" type="button" (click)="setTimesheetType(timesheetType.Activities)">
-    Skill Activities
-  </button>
-</div>
 
 <div class="footer" *ngIf="formFilled">
   <button class="btn btn-primary" type="submit" (click)="close()">

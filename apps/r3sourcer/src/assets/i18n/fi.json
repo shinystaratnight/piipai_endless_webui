@@ -475,5 +475,7 @@
   "status.status.0.5": "Asiakas peruutti",
   "status.status.0.6": "Peruutettu",
   "from": "Alkaen",
-  "to": "Vastaanottaja"
+  "to": "Vastaanottaja",
+  "times_only": "Vain aikatyötä",
+  "piecework_or_combined": "Osatyö tai yhdistelmä"
 }

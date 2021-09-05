@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, FormControl } from '@angular/forms';
 import { UserService } from '@webui/core';
 import { Endpoints } from '@webui/data';
 import { FormatString } from '@webui/utilities';
@@ -32,7 +32,7 @@ export class SubmissionFormComponent {
   @Output() event: EventEmitter<{ type: string; status: string }> =
     new EventEmitter();
 
-  type: TimesheetType;
+  typeControl: FormControl;
   timesheetType = TimesheetType;
   formData = new BehaviorSubject<any>({ data: {} });
   formGroup = new FormGroup({});
@@ -54,12 +54,42 @@ export class SubmissionFormComponent {
     observers: []
   };
 
+  types = [
+    {
+      key: TimesheetType.Times,
+      label: 'Time only',
+      translateKey: 'times_only'
+    },
+    {
+      key: TimesheetType.Activity,
+      label: 'Piecework or combined',
+      translateKey: 'piecework_or_combined'
+    }
+  ];
+
+  get isShowHeadSection(): boolean {
+    if (
+      !this.type ||
+      this.type === TimesheetType.Times ||
+      this.type === TimesheetType.Activity
+    ) {
+      return true;
+    }
+
+    return false;
+  }
+
+  get type(): TimesheetType {
+    return this.typeControl.value;
+  }
+
   constructor(
     private gfs: GenericFormService,
     private userService: UserService
   ) {}
 
   ngOnInit() {
+    this.typeControl = new FormControl('');
     this.parseMetadata(this.details, this.config.data);
     this.formData.next({
       data: this.config.extendData
@@ -82,7 +112,7 @@ export class SubmissionFormComponent {
   }
 
   setTimesheetType(type: TimesheetType) {
-    this.type = type;
+    this.typeControl.patchValue(type);
 
     if (type === TimesheetType.Times) {
       this.parseMetadata(this.times, this.config.data);
@@ -136,7 +166,7 @@ export class SubmissionFormComponent {
       )
       .subscribe(() => {
         this.formFilled = true;
-        this.type = null;
+        this.typeControl.patchValue('');
         this.updateMetadata(this.getMetadataConfig(this.notes));
       });
   }
