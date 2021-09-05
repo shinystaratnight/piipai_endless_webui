@@ -475,5 +475,7 @@
   "status.status.0.5": "Tühistatud kliendi poolt",
   "status.status.0.6": "Tühistatud",
   "from": "Alates",
-  "to": "Kuni"
+  "to": "Kuni",
+  "times_only": "Ainult ajatöö",
+  "piecework_or_combined": "Kombineeritud või tükitöö"
 }

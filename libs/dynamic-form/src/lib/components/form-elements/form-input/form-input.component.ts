@@ -9,21 +9,26 @@ import {
   HostListener,
   ViewEncapsulation,
   OnDestroy,
-  ChangeDetectorRef,
+  ChangeDetectorRef
 } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 import {
   SearchCountryField,
   TooltipLabel,
-  CountryISO,
+  CountryISO
 } from 'ngx-intl-tel-input';
 
 import { Subscription } from 'rxjs';
 import { distinctUntilChanged, debounceTime } from 'rxjs/operators';
 
 import { Field } from '@webui/data';
-import { FormatString, getTotalTime, getTimeInstance, getPropValue } from '@webui/utilities';
+import {
+  FormatString,
+  getTotalTime,
+  getTimeInstance,
+  getPropValue
+} from '@webui/utilities';
 
 import { BasicElementComponent } from '../basic-element/basic-element.component';
 import { SiteSettingsService } from '@webui/core';
@@ -33,10 +38,12 @@ import { isAddressField } from '../../../helpers';
 @Component({
   selector: 'app-form-input',
   templateUrl: './form-input.component.html',
-  styleUrls: ['./form-input.component.scss'],
+  styleUrls: ['./form-input.component.scss']
 })
-export class FormInputComponent extends BasicElementComponent
-  implements OnInit, AfterViewInit, OnDestroy {
+export class FormInputComponent
+  extends BasicElementComponent
+  implements OnInit, AfterViewInit, OnDestroy
+{
   public config: Field;
   public group: FormGroup;
   public errors: any;
@@ -72,7 +79,7 @@ export class FormInputComponent extends BasicElementComponent
     CountryISO.Australia,
     CountryISO.Estonia,
     CountryISO.Finland,
-    CountryISO.Ukraine,
+    CountryISO.Ukraine
   ];
   selectedCountryISO: CountryISO;
 
@@ -82,7 +89,7 @@ export class FormInputComponent extends BasicElementComponent
     2: '#fc9183',
     3: '#FFA236',
     4: '#ffbf00',
-    5: '#FFD042',
+    5: '#FFD042'
   };
 
   public requiredField: boolean;
@@ -112,7 +119,7 @@ export class FormInputComponent extends BasicElementComponent
     private fb: FormBuilder,
     public elementRef: ElementRef,
     private cd: ChangeDetectorRef,
-    private siteSettings: SiteSettingsService,
+    private siteSettings: SiteSettingsService
   ) {
     super();
     this.subscriptions = [];
@@ -149,7 +156,7 @@ export class FormInputComponent extends BasicElementComponent
             if (value) {
               this.group.get(this.key).patchValue(parseFloat(value), {
                 onlySelf: true,
-                emitEvent: false,
+                emitEvent: false
               });
             }
           })
@@ -252,7 +259,7 @@ export class FormInputComponent extends BasicElementComponent
 
       this.displayValue = formatString.format('{totalTime}', {
         ...newData,
-        totalTime: getTotalTime(this.timeInstance, newData),
+        totalTime: getTotalTime(this.timeInstance, newData)
       });
     }
   }
@@ -282,7 +289,7 @@ export class FormInputComponent extends BasicElementComponent
       'shift_started_at',
       'shift_ended_at',
       'break_started_at',
-      'break_ended_at',
+      'break_ended_at'
     ];
 
     if (keys.indexOf(data.key) > -1) {
@@ -347,7 +354,10 @@ export class FormInputComponent extends BasicElementComponent
           this.config.hide = hide;
 
           if (this.config.templateOptions.pattern) {
-            const pattern = getPropValue(this.config.formData.value.data, this.config.templateOptions.pattern);
+            const pattern = getPropValue(
+              this.config.formData.value.data,
+              this.config.templateOptions.pattern
+            );
             const control = this.group.get(this.key);
 
             control.setValidators(Validators.pattern(pattern));
@@ -496,7 +506,7 @@ export class FormInputComponent extends BasicElementComponent
         );
         const text = format.format(this.config.templateOptions.text, {
           [this.config.key]: value,
-          currency,
+          currency
         });
         this.displayValue = text || (value || value === 0 ? value : '-');
 
@@ -524,7 +534,7 @@ export class FormInputComponent extends BasicElementComponent
         this.displayValue = this.config.value.__str__ || '-';
       } else {
         const text = format.format(this.config.templateOptions.text, {
-          [this.config.key]: this.config.value,
+          [this.config.key]: this.config.value
         });
 
         this.displayValue = text || this.config.value || '-';
@@ -550,7 +560,7 @@ export class FormInputComponent extends BasicElementComponent
     this.event.emit({
       type: e.type,
       el: this.config,
-      value: this.group.get(this.key).value,
+      value: this.group.get(this.key).value
     });
   }
 
@@ -624,13 +634,13 @@ export class FormInputComponent extends BasicElementComponent
     this.event.emit({
       type: 'change',
       el: this.config,
-      value: data,
+      value: data
     });
 
     this.event.emit({
       type: 'address',
       el: this.config,
-      value: data,
+      value: data
     });
 
     setTimeout(() => {
