@@ -47,6 +47,7 @@ export class SubmissionFormComponent {
   formFilled: boolean;
 
   errors: { [key: string]: any };
+  mode = new BehaviorSubject('edit');
 
   hiddenFields = {
     elements: [],
@@ -66,18 +67,6 @@ export class SubmissionFormComponent {
       translateKey: 'piecework_or_combined'
     }
   ];
-
-  get isShowHeadSection(): boolean {
-    if (
-      !this.type ||
-      this.type === TimesheetType.Times ||
-      this.type === TimesheetType.Activity
-    ) {
-      return true;
-    }
-
-    return false;
-  }
 
   get type(): TimesheetType {
     return this.typeControl.value;
@@ -131,6 +120,29 @@ export class SubmissionFormComponent {
     }
   }
 
+  saveTimes(data) {
+    this.saveProcess = true;
+    const body = {
+      ...data,
+      hours: true
+    };
+
+    this.gfs
+      .editForm(this.config.endpoint, body)
+      .pipe(
+        finalize(() => (this.saveProcess = false)),
+        catchError((err) => {
+          this.errors = err.errors;
+          return err;
+        })
+      )
+      .subscribe(() => {
+        this.formFilled = true;
+        this.mode.next('view');
+        this.updateMetadata(this.getMetadataConfig(this.notes));
+      });
+  }
+
   saveSkillActivity(data) {
     const body = { ...data };
     this.saveProcess = true;
@@ -147,27 +159,33 @@ export class SubmissionFormComponent {
         this.setTimesheetType(TimesheetType.Activities);
         this.updateMetadata(this.getMetadataConfig(this.notes));
         this.errors = null;
+        this.formFilled = true;
       });
   }
 
-  saveTimesheet(data, hours = false) {
+  saveTimesheet() {
+    if (this.type !== TimesheetType.Activities) {
+      this.close();
+      return;
+    }
+
     const body = {
-      ...data,
-      hours
+      hours: false
     };
+
+    this.saveProcess = true;
 
     this.gfs
       .editForm(this.config.endpoint, body)
       .pipe(
+        finalize(() => (this.saveProcess = false)),
         catchError((err) => {
           this.errors = err.errors;
           return err;
         })
       )
       .subscribe(() => {
-        this.formFilled = true;
-        this.typeControl.patchValue('');
-        this.updateMetadata(this.getMetadataConfig(this.notes));
+        this.close();
       });
   }
 
@@ -182,7 +200,8 @@ export class SubmissionFormComponent {
     return {
       metadata,
       formData: this.formData,
-      data: this.config.extendData
+      data: this.config.extendData,
+      mode: this.type === TimesheetType.Times ? this.mode : null
     };
   }
 
@@ -200,7 +219,7 @@ export class SubmissionFormComponent {
   }
 
   private updateMetadata(config) {
-    const { metadata, formData, data } = config;
+    const { metadata, formData, data, mode } = config;
 
     metadata.forEach((el) => {
       this.parseParams(el.prefilled, data);
@@ -220,8 +239,9 @@ export class SubmissionFormComponent {
 
       if (el.key) {
         el.formData = formData;
+        el.mode = mode;
       } else if (el.children) {
-        this.updateMetadata({ metadata: el.children, formData, data });
+        this.updateMetadata({ metadata: el.children, formData, data, mode });
       }
     });
   }

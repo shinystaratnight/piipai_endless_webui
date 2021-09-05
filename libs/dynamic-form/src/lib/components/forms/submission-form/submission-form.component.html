@@ -1,27 +1,15 @@
-<app-dynamic-form
-  *ngIf="isShowHeadSection"
-  [config]="details"
-></app-dynamic-form>
+<app-dynamic-form [config]="details"></app-dynamic-form>
 
-<div *ngIf="isShowHeadSection" class="buttons">
-  <button
-    *ngFor="let typeItem of types"
-    class="btn btn-primary"
-    [class.active]="type === typeItem.key"
-    type="button"
-    (click)="setTimesheetType(typeItem.key)"
-  >
+<div *ngIf="!formFilled" class="buttons">
+  <button *ngFor="let typeItem of types" class="btn btn-primary" [class.active]="type === typeItem.key" type="button"
+    (click)="setTimesheetType(typeItem.key)">
     {{ typeItem.translateKey | translate: { Default: typeItem.label } }}
   </button>
 </div>
 
-<app-dynamic-form
-  *ngIf="type === timesheetType.Times"
-  [config]="times"
-  [hiddenFields]="hiddenFields"
-  (submitForm)="saveTimesheet($event, true)"
->
-  <div class="footer">
+<app-dynamic-form *ngIf="type === timesheetType.Times" [config]="times" [hiddenFields]="hiddenFields"
+  (submitForm)="saveTimes($event)">
+  <div *ngIf="!formFilled" class="footer">
     <div *ngIf="errors" class="text-danger mb-2">
       {{ errors.non_field_errors }}
     </div>
@@ -32,13 +20,9 @@
   </div>
 </app-dynamic-form>
 
-<app-dynamic-form
-  *ngIf="type === timesheetType.Activity"
-  [config]="skillActivity"
-  [hiddenFields]="hiddenFields"
-  (submitForm)="saveSkillActivity($event)"
->
-  <div class="footer">
+<app-dynamic-form *ngIf="type === timesheetType.Activity" [config]="skillActivity" [hiddenFields]="hiddenFields"
+  (submitForm)="saveSkillActivity($event)">
+  <div *ngIf="!formFilled" class="footer">
     <div *ngIf="errors" class="text-danger mb-2">
       {{ errors.non_field_errors }}
     </div>
@@ -49,26 +33,12 @@
   </div>
 </app-dynamic-form>
 
-<app-dynamic-form
-  *ngIf="type === timesheetType.Activities"
-  [config]="skillActivities"
-  (submitForm)="saveTimesheet($event)"
->
-  <div class="footer">
-    <div *ngIf="errors" class="text-danger mb-2">
-      {{ errors.non_field_errors }}
-    </div>
-    <button class="btn btn-primary" type="submit">
-      Save
-      <app-spinner *ngIf="saveProcess"></app-spinner>
-    </button>
-  </div>
-</app-dynamic-form>
+<app-dynamic-form *ngIf="type === timesheetType.Activities" [config]="skillActivities"></app-dynamic-form>
 
 <app-dynamic-form *ngIf="formFilled" [config]="notes"></app-dynamic-form>
 
 <div class="footer" *ngIf="formFilled">
-  <button class="btn btn-primary" type="submit" (click)="close()">
+  <button class="btn btn-primary" type="button" (click)="saveTimesheet()">
     Save
     <app-spinner *ngIf="saveProcess"></app-spinner>
   </button>
