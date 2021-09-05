@@ -6,7 +6,7 @@
   padding: 0 1rem;
   margin-bottom: 1em;
 
-  @include media-breakpoint-up('sm') {
+  @include media-breakpoint-up('md') {
     & > *:not(:last-child) {
       margin-right: 1rem;
     }
@@ -14,7 +14,7 @@
 
   .btn.active {
     background-color: darken($primary, 10%);
-    box-shadow: 1px 1px 6px rgba(0, 0, 0, .5);
+    box-shadow: 1px 1px 6px rgba(0, 0, 0, 0.5);
   }
 
   @include media-breakpoint-down('sm') {
