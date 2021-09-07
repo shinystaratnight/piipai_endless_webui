@@ -1,14 +1,23 @@
 <app-dynamic-form [config]="details"></app-dynamic-form>
 
-<div *ngIf="!formFilled" class="buttons">
-  <button *ngFor="let typeItem of types" class="btn btn-primary" [class.active]="type === typeItem.key" type="button"
-    (click)="setTimesheetType(typeItem.key)">
+<div class="buttons">
+  <button
+    *ngFor="let typeItem of types"
+    class="btn btn-primary"
+    [class.active]="type === typeItem.key"
+    type="button"
+    (click)="setTimesheetType(typeItem.key)"
+  >
     {{ typeItem.translateKey | translate: { Default: typeItem.label } }}
   </button>
 </div>
 
-<app-dynamic-form *ngIf="type === timesheetType.Times" [config]="times" [hiddenFields]="hiddenFields"
-  (submitForm)="saveTimes($event)">
+<app-dynamic-form
+  *ngIf="type === timesheetType.Times"
+  [config]="times"
+  [hiddenFields]="hiddenFields"
+  (submitForm)="saveTimes($event)"
+>
   <div *ngIf="!formFilled" class="footer">
     <div *ngIf="errors" class="text-danger mb-2">
       {{ errors.non_field_errors }}
@@ -20,8 +29,13 @@
   </div>
 </app-dynamic-form>
 
-<app-dynamic-form *ngIf="type === timesheetType.Activity" [config]="skillActivity" [hiddenFields]="hiddenFields"
-  (submitForm)="saveSkillActivity($event)">
+<app-dynamic-form
+  *ngIf="type === timesheetType.Activity"
+  [config]="skillActivity"
+  [hiddenFields]="hiddenFields"
+  (event)="eventHandler($event)"
+  (submitForm)="saveSkillActivity($event)"
+>
   <div *ngIf="!formFilled" class="footer">
     <div *ngIf="errors" class="text-danger mb-2">
       {{ errors.non_field_errors }}
@@ -33,7 +47,26 @@
   </div>
 </app-dynamic-form>
 
-<app-dynamic-form *ngIf="type === timesheetType.Activities" [config]="skillActivities"></app-dynamic-form>
+<!--<app-dynamic-form *ngIf="type === timesheetType.Activities" [config]="skillActivities"></app-dynamic-form>-->
+
+<ng-container *ngIf="type === timesheetType.Activities">
+  <table class="table">
+    <tr>
+      <th>Skill Activity</th>
+      <th>Value</th>
+    </tr>
+
+    <tr>
+      <td>{{ eventData.worktype.__str__ }}</td>
+      <td>
+        {{ eventData.value.value }}
+        <small class="description">{{
+          eventData.worktype.uom.short_name
+        }}</small>
+      </td>
+    </tr>
+  </table>
+</ng-container>
 
 <app-dynamic-form *ngIf="formFilled" [config]="notes"></app-dynamic-form>
 

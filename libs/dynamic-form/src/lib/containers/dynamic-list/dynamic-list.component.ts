@@ -1688,7 +1688,7 @@ export class DynamicListComponent
           contactAvatar: getContactAvatar(contact.__str__),
           name: contact.__str__
         },
-        extendData: data,
+        extendData: { ...data },
         data: {
           id: createAddAction({
             value: data.id
