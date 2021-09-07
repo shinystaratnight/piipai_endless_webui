@@ -83,7 +83,13 @@ export class SubmissionFormComponent {
     this.formData.next({
       data: this.config.extendData
     });
-    console.log(this);
+    if (this.config.status === 5) {
+      this.typeControl.patchValue(TimesheetType.Activities);
+      this.parseMetadata(this.skillActivities, this.config.data);
+      this.updateMetadata(this.getMetadataConfig(this.skillActivities));
+      this.updateMetadata(this.getMetadataConfig(this.notes));
+      this.formFilled = true;
+    }
   }
 
   public formEvent(e) {
