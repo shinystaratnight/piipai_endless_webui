@@ -45,6 +45,7 @@ export const meta = [
       {
         type: 'group',
         label: 'Company Setting',
+        translateKey: 'company_settings',
         children: [
           {
             type: 'input',
@@ -188,6 +189,7 @@ export const meta = [
       {
         label: 'Invoice Rule',
         type: 'group',
+        translateKey: 'invoice_rule',
         children: [
           new Form.select.element('invoice_rule.period', 'Period')
             .addOptions(periodOptions)
