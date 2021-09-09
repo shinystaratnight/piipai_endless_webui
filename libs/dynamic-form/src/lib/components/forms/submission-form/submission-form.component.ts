@@ -55,6 +55,7 @@ export class SubmissionFormComponent {
 
   errors: { [key: string]: any };
   mode = new BehaviorSubject('edit');
+  isEditTimesheet: boolean;
 
   hiddenFields = {
     elements: [],
@@ -87,10 +88,13 @@ export class SubmissionFormComponent {
   ngOnInit() {
     this.typeControl = new FormControl('');
     this.parseMetadata(this.details, this.config.data);
+
     this.formData.next({
       data: this.config.extendData
     });
-    if (this.config.status === 5) {
+
+    if (this.config.extendData.status === 5) {
+      this.isEditTimesheet = true;
       this.typeControl.patchValue(TimesheetType.Activities);
       this.parseMetadata(this.skillActivities, this.config.data);
       this.updateMetadata(this.getMetadataConfig(this.skillActivities));
