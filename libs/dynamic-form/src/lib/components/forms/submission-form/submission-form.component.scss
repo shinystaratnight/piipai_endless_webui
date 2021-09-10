@@ -26,6 +26,11 @@
   }
 }
 
+.table {
+  margin: 0 20px;
+  width: calc(100% - 40px);
+}
+
 .footer {
   display: flex;
   flex-direction: column;

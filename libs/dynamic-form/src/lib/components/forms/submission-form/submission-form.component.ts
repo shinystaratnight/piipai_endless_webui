@@ -4,8 +4,11 @@ import { UserService } from '@webui/core';
 import { Endpoints } from '@webui/data';
 import { FormatString } from '@webui/utilities';
 import { BehaviorSubject } from 'rxjs';
-import { catchError, finalize } from 'rxjs/operators';
-import { getElementFromMetadata } from '../../../helpers/utils';
+import { catchError, finalize, switchMap } from 'rxjs/operators';
+import {
+  createAddAction,
+  getElementFromMetadata
+} from '../../../helpers/utils';
 import { GenericFormService } from '../../../services';
 
 import {
@@ -37,6 +40,10 @@ export class SubmissionFormComponent {
   formData = new BehaviorSubject<any>({ data: {} });
   formGroup = new FormGroup({});
 
+  skillActivityData: any;
+  timesData: any;
+  eventData: { [key: string]: any } = {};
+
   details = details();
   times = times();
   skillActivity = workType();
@@ -48,6 +55,7 @@ export class SubmissionFormComponent {
 
   errors: { [key: string]: any };
   mode = new BehaviorSubject('edit');
+  isEditTimesheet: boolean;
 
   hiddenFields = {
     elements: [],
@@ -80,10 +88,19 @@ export class SubmissionFormComponent {
   ngOnInit() {
     this.typeControl = new FormControl('');
     this.parseMetadata(this.details, this.config.data);
+
     this.formData.next({
       data: this.config.extendData
     });
-    console.log(this);
+
+    if (this.config.extendData.status === 5) {
+      this.isEditTimesheet = true;
+      this.typeControl.patchValue(TimesheetType.Activities);
+      this.parseMetadata(this.skillActivities, this.config.data);
+      this.updateMetadata(this.getMetadataConfig(this.skillActivities));
+      this.updateMetadata(this.getMetadataConfig(this.notes));
+      this.formFilled = true;
+    }
   }
 
   public formEvent(e) {
@@ -102,8 +119,12 @@ export class SubmissionFormComponent {
 
   setTimesheetType(type: TimesheetType) {
     this.typeControl.patchValue(type);
+    this.formFilled = false;
+    this.timesData = null;
+    this.skillActivityData = null;
 
     if (type === TimesheetType.Times) {
+      this.mode.next('edit');
       this.parseMetadata(this.times, this.config.data);
       this.updateDatepickerByTimezone(this.times, this.config.data);
       this.updateMetadata(this.getMetadataConfig(this.times));
@@ -113,70 +134,57 @@ export class SubmissionFormComponent {
       this.parseMetadata(this.skillActivity, this.config.data);
       this.updateMetadata(this.getMetadataConfig(this.skillActivity));
     }
+  }
 
-    if (type === TimesheetType.Activities) {
-      this.parseMetadata(this.skillActivities, this.config.data);
-      this.updateMetadata(this.getMetadataConfig(this.skillActivities));
+  eventHandler(event) {
+    if (event.type === 'change' || event.type === 'blur') {
+      this.eventData[event.el.key] = {
+        ...(event.additionalData || {}),
+        value: event.value
+      };
     }
   }
 
   saveTimes(data) {
-    this.saveProcess = true;
-    const body = {
-      ...data,
-      hours: true
-    };
-
-    this.gfs
-      .editForm(this.config.endpoint, body)
-      .pipe(
-        finalize(() => (this.saveProcess = false)),
-        catchError((err) => {
-          this.errors = err.errors;
-          return err;
-        })
-      )
-      .subscribe(() => {
-        this.formFilled = true;
-        this.mode.next('view');
-        this.updateMetadata(this.getMetadataConfig(this.notes));
+    this.timesData = { ...data };
+    this.formFilled = true;
+    Object.keys(this.timesData).forEach((key) => {
+      this.config.data[key] = createAddAction({
+        value: this.timesData[key]
       });
+    });
+    this.parseMetadata(this.times, this.config.data);
+    this.mode.next('view');
+    this.updateMetadata(this.getMetadataConfig(this.notes));
   }
 
   saveSkillActivity(data) {
-    const body = { ...data };
-    this.saveProcess = true;
-    this.gfs
-      .submitForm(Endpoints.TimesheetRates, body)
-      .pipe(
-        finalize(() => (this.saveProcess = false)),
-        catchError((err) => {
-          this.errors = err.errors;
-          return err;
-        })
-      )
-      .subscribe(() => {
-        this.setTimesheetType(TimesheetType.Activities);
-        this.updateMetadata(this.getMetadataConfig(this.notes));
-        this.errors = null;
-        this.formFilled = true;
-      });
+    this.skillActivityData = { ...data };
+    this.typeControl.patchValue(TimesheetType.Activities);
+    this.formFilled = true;
+    this.updateMetadata(this.getMetadataConfig(this.notes));
   }
 
   saveTimesheet() {
-    if (this.type !== TimesheetType.Activities) {
-      this.close();
-      return;
+    let request;
+
+    if (this.type === TimesheetType.Activities) {
+      request = this.createSkillActivity().pipe(
+        switchMap((skillActivity) => {
+          return this.gfs.editForm(this.config.endpoint, { hours: false });
+        })
+      );
     }
 
-    const body = {
-      hours: false
-    };
+    if (this.type === TimesheetType.Times) {
+      request = this.gfs.editForm(this.config.endpoint, {
+        ...this.timesData,
+        hours: true
+      });
+    }
 
     this.saveProcess = true;
-
-    this.gfs
-      .editForm(this.config.endpoint, body)
+    request
       .pipe(
         finalize(() => (this.saveProcess = false)),
         catchError((err) => {
@@ -297,5 +305,12 @@ export class SubmissionFormComponent {
         this.updateDatepickerByTimezone(el.children, data);
       }
     });
+  }
+
+  private createSkillActivity() {
+    return this.gfs.submitForm(
+      Endpoints.TimesheetRates,
+      this.skillActivityData
+    );
   }
 }

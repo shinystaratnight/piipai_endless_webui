@@ -14,10 +14,6 @@ export class SubmissionModalComponent extends Modal {
     super(modal);
   }
 
-  ngOnInit() {
-    console.log(this.config);
-  }
-
   dismiss() {
     this.modal.dismiss();
   }
