@@ -7,9 +7,9 @@
   </button>
 </div>
 
-<app-dynamic-form *ngIf="type === timesheetType.Times" [config]="times" [hiddenFields]="hiddenFields"
+<app-dynamic-form *ngIf="type === timesheetType.Times && !formFilled" [config]="times" [hiddenFields]="hiddenFields"
   (submitForm)="saveTimes($event)">
-  <div *ngIf="!formFilled" class="footer">
+  <div class="footer">
     <div *ngIf="errors" class="text-danger mb-2">
       {{ errors.non_field_errors }}
     </div>
@@ -18,6 +18,10 @@
       <app-spinner *ngIf="saveProcess"></app-spinner>
     </button>
   </div>
+</app-dynamic-form>
+
+<app-dynamic-form *ngIf="type === timesheetType.Times && formFilled" [config]="timesFilled"
+  [hiddenFields]="hiddenFields" (submitForm)="saveTimes($event)">
 </app-dynamic-form>
 
 <app-dynamic-form *ngIf="type === timesheetType.Activity" [config]="skillActivity" [hiddenFields]="hiddenFields"
