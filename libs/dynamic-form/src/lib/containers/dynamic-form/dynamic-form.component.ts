@@ -299,8 +299,11 @@ export class DynamicFormComponent implements OnInit {
     if (keysArray.length === 0) {
       return data && data[firstKey];
     } else if (keysArray.length > 0) {
-      const combineKeys = keysArray.join('.');
-      return this.getValueByKey(combineKeys, data[firstKey]);
+      if (data[firstKey]) {
+        return this.getValueByKey(keysArray.join('.'), data[firstKey]);
+      }
+
+      return null;
     }
   }
 

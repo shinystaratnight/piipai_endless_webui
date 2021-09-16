@@ -555,7 +555,7 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
       many: true,
       unique: true,
       tests,
-      // showIf: ['industry.id'],
+      showIf: ['industry.id'],
       templateOptions: {
         ...field.templateOptions,
         values: ['__str__', 'id', 'translations', 'name']
