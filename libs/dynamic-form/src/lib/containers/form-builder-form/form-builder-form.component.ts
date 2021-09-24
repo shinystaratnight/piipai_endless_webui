@@ -78,10 +78,6 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
         'contact.phone_mobile',
         'contact.email',
         'contact.address.street_address'
-        // 'contact.address.city',
-        // 'contact.address.postal_code',
-        // 'contact.address.state',
-        // 'contact.address.country'
       ]
     },
     {
@@ -131,7 +127,7 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
     this.form = new FormGroup({});
 
     this.formChangeSubscription = this.form.valueChanges.subscribe(() => {
-      this.formInvalid = this.validateForm(this.currentStep);
+      this.formInvalid = this.isInvalid(this.currentStep);
     });
 
     this.industryField.query = {
@@ -139,6 +135,7 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
     };
 
     this.getRenderData();
+
     this.formId = this.formService.registerForm(
       this.service.formEndpoint,
       'edit'
@@ -221,12 +218,14 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
     this.service.getRenderData(this.id).subscribe((res: any) => {
       this.updatePhoneField(res.ui_config);
       this.updateConfigByGroups(res.ui_config, res.tests || []);
+      this.updateHiddenFields(res.ui_config);
+      const formData = new BehaviorSubject({ data: {} });
 
       this.config = res;
       this.formConfig.emit(res);
 
-      this.updateConfig(this.config.ui_config);
-      this.addAutocompleteProperty(this.config.ui_config);
+      // this.updateConfig(this.config.ui_config);
+      // this.addAutocompleteProperty(this.config.ui_config);
 
       this.changeType('contact.title', 'radio');
       this.changeType('contact.gender', 'radio');
@@ -234,6 +233,24 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
 
       this.generateSteps();
     });
+  }
+
+  updateHiddenFields(config) {
+    config.forEach((field) => {
+      if (field.showIf && field.showIf.length) {
+        if (this.hiddenFields.keys.indexOf(field.key) === -1) {
+          this.hiddenFields.keys.push(field.key);
+          this.hiddenFields.elements.push(field);
+
+          this.hiddenFields.observers = this.observeFields(
+            field.showIf,
+            this.hiddenFields.observers
+          );
+
+          field.hidden = new BehaviorSubject(true);
+        }
+      }
+    })
   }
 
   updatePhoneField(fields: any[]) {
@@ -285,67 +302,90 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
     //   });
     // }
 
-    if (type === 'address') {
-      this.parseAddress(value, el);
-    }
+    // if (type === 'address') {
+    //   this.parseAddress(value, el);
+    // }
 
-    if (type === 'chenge' && el.key === 'skill') {
-      const ids = list.map((skill: any) => skill.id);
-      if (!list.length) {
-        this.passedTests.clear();
-      } else {
+    if (type === 'chenge' && (el.key === 'skill' || el.key === 'tag')) {
+      const ids = list.map((item: any) => item.id);
+
+      // if (!list.length) {
+      //   this.passedTests.clear();
+      // } else {
         Array.from(this.passedTests.keys(), (key: string) => {
           if (!ids.includes(key)) {
             this.passedTests.delete(key);
           }
         });
-      }
+      // }
     }
 
     if (type === 'test') {
-      const tests = item.tests;
-      const passTestAction = new BehaviorSubject(0);
-
-      passTestAction.subscribe((index) => {
-        const test = tests[index];
-        this.modalRef = this.modalService.open(PassTestModalComponent, {
-          backdrop: 'static'
-        });
-        this.modalRef.componentInstance.config = {
-          test,
-          description: test.description,
-          send: false
-        } as PassTestModalConfig;
-
-        this.modalRef.result
-          .then((res: any[]) => {
-            if (this.passedTests.has(item.id)) {
-              this.passedTests.set(item.id, [
-                ...this.passedTests.get(item.id),
-                ...res
-              ]);
-            } else {
-              this.passedTests.set(item.id, res);
-            }
-
-            item.passed = true;
-
-            if (tests[index + 1]) {
-              passTestAction.next(index + 1);
-            }
-          })
-          .catch(() => {
-            if (tests[index + 1]) {
-              passTestAction.next(index + 1);
-            }
-          });
-      });
+      // const tests = item.tests;
+      this.passTests(item.tests, item.id, item);
     }
   }
 
+  passTests(tests, id?, item?) {
+    const passTestAction = new BehaviorSubject(0);
+
+    passTestAction.subscribe((index) => {
+      const test = tests[index];
+      this.modalRef = this.modalService.open(PassTestModalComponent, {
+        backdrop: 'static'
+      });
+      this.modalRef.componentInstance.config = {
+        test,
+        description: test.description,
+        send: false
+      } as PassTestModalConfig;
+
+      this.modalRef.result
+        .then((res: any[]) => {
+          if (this.passedTests.has(id)) {
+            this.passedTests.set(id, [
+              ...this.passedTests.get(id),
+              ...res
+            ]);
+          } else {
+            this.passedTests.set(id, res);
+          }
+
+          if (item) {
+            item.passed = true;
+          }
+
+          if (tests[index + 1]) {
+            passTestAction.next(index + 1);
+          }
+        })
+        .catch(() => {
+          if (tests[index + 1]) {
+            passTestAction.next(index + 1);
+          }
+        });
+    });
+  }
+
   public submitForm() {
+    const data = this.form.value;
+
+    if (data.industry && data.industry.id && !this.passedTests.has(data.industry.id)) {
+      const industryTests = this.config.tests.filter((test) => {
+        return test.acceptance_tests_industries
+          .some((relation) => relation.industry.id === data.industry.id);
+      })
+
+      if (industryTests.length) {
+        this.passTests(industryTests, data.industry.id);
+        return;
+      }
+    }
+
+
     this.saveProcess = true;
     let body;
+
     if (this.passedTests.size) {
       const tests = [];
       Array.from(this.passedTests.values()).forEach((el) => {
@@ -375,6 +415,17 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
         body[key] = newValue;
       }
     });
+
+    // if (body.industry && body.industry.id) {
+    //   const industryTests = this.config.tests.filter((test) => {
+    //     return test.acceptance_tests_industries
+    //       .some((relation) => relation.industry.id === body.industry.id);
+    //   })
+
+    //   if (industryTests.length) {
+    //     this.passTests(industryTests, body.industry.id);
+    //   }
+    // }
 
     this.service.sendFormData(this.id, body).subscribe(
       (res: any) => {
@@ -440,19 +491,19 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
     }
   }
 
-  public addAutocompleteProperty(metadata: any, property?: Subject<any>) {
-    property = property || new Subject<any>();
-    metadata.forEach((element) => {
-      if (element.key) {
-        element.autocompleteData = property;
-      } else if (element.children) {
-        this.addAutocompleteProperty(element.children, property);
-      }
-    });
-  }
+  // public addAutocompleteProperty(metadata: any, property?: Subject<any>) {
+  //   property = property || new Subject<any>();
+  //   metadata.forEach((element) => {
+  //     if (element.key) {
+  //       element.autocompleteData = property;
+  //     } else if (element.children) {
+  //       this.addAutocompleteProperty(element.children, property);
+  //     }
+  //   });
+  // }
 
   public updateConfig(config: Field[]) {
-    this.hideDatepickerError(config);
+    // this.hideDatepickerError(config);
 
     const streetAddress = config.find((field) => {
       if (field.key) {
@@ -563,11 +614,14 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
     };
   }
 
-  public updateTagField(field: Field): Field {
+  public updateTagField(field: Field, formData: BehaviorSubject<any>, tests: any[]): Field {
     return {
       ...field,
       endpoint: `${Endpoints.Tag}all/`,
-      many: true
+      many: true,
+      unique: true,
+      tests,
+      formData
     };
   }
 
@@ -590,18 +644,25 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
     );
   }
 
-  public validateForm(step: number) {
-    const fields = this.steps[step].content;
+  public isInvalid(step: number) {
+    const keys = this.steps[step].content;
     let result = false;
 
-    fields.forEach((key) => {
+    keys.forEach((key) => {
       if (Array.isArray(key)) {
-        key.forEach((field) => {
-          result =
-            (this.form.get(field) && this.form.get(field).invalid) || result;
+        key.forEach((el) => {
+          const control = this.form.get(el);
+
+          if (control) {
+            result = control.invalid;
+          }
         });
       } else {
-        result = (this.form.get(key) && this.form.get(key).invalid) || result;
+        const control = this.form.get(key);
+
+        if (control) {
+          result = control.invalid;
+        }
       }
     });
 
@@ -611,16 +672,18 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
   private updateConfigByGroups(fields: Field[], tests: any[]): void {
     const skills = this.getFields([], 'skill', fields, 0);
     const tags = this.getFields([], 'tag', fields, 0);
+    const industry = this.getFields([], 'industry', fields, 0);
+
+    const formData = new BehaviorSubject({});
 
     if (skills.length) {
-      const formData = new BehaviorSubject({});
       skills[0] = this.updateSkillField(skills[0], formData, tests);
       skills.unshift({ ...this.industryField, formData });
       fields.push(...skills);
     }
 
     if (tags.length) {
-      tags[0] = this.updateTagField(tags[0]);
+      tags[0] = this.updateTagField(tags[0], formData, tests);
       fields.push(...tags);
     }
   }
