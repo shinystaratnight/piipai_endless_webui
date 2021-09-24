@@ -1442,14 +1442,19 @@ export class FormRelatedComponent
 
   public addTests(item: any) {
     if (this.config.tests) {
-      return this.config.tests.filter((test) => {
-        const skills = test.acceptance_tests_skills;
+      const testsMap = {
+        skill: 'acceptance_tests_skills',
+        tag: 'acceptance_tests_tags'
+      }
 
-        if (!skills.length) {
+      return this.config.tests.filter((test) => {
+        const list = test[testsMap[this.config.key]];
+
+        if (!list.length) {
           return false;
         }
 
-        return skills.some((skillRel) => skillRel.skill.id === item.id);
+        return list.some((el) => el[this.config.key].id === item.id);
       });
     }
   }
