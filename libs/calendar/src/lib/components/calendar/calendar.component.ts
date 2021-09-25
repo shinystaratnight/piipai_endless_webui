@@ -253,9 +253,8 @@ export class CalendarComponent implements OnInit, OnDestroy {
     });
 
     const activeStatuses = this.statusFilterData.map((el) => el.type);
-    this.timesheetCounter = this.timesheetCounter.filter(
-      (el) => activeStatuses.indexOf(el.type) > -1
-    );
+    this.timesheetCounter = this.timesheetCounter
+      .filter((el) => activeStatuses.indexOf(el.type) > -1);
 
     const rangeSubscription = this.currentRange.valueChanges.subscribe(
       (value: DateRange) => {
@@ -537,7 +536,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
     return count;
   }
 
-  getUnfulfilledCount(shifts: any[], status: string) {
+  getUnfulfilledCount(shifts: any[]) {
     let count = 0;
     shifts.forEach(({ shift }) => {
       const { workers_details, workers } = shift;
@@ -828,6 +827,9 @@ export class CalendarComponent implements OnInit, OnDestroy {
       this.shifts.forEach((shift) => {
         this.timesheetCounter.forEach((counter) => {
           counter.count += shift.candidates[this.shiftStatus[counter.type].key];
+          if (shift.is_fulfilled === 0) {
+            counter.count += 1;
+          }
         });
       });
     }

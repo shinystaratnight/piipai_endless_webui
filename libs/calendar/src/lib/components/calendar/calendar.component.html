@@ -4,12 +4,12 @@
     <h3 class="widget-name">{{ 'calendar' | translate: {"Default": "Calendar"} }}</h3>
 
     <div *ngIf="calendarType !== 2" class="btn-group range-buttons" btnRadioGroup [formControl]="currentRange">
-      <label [btnRadio]="range.Month" role="button"
-        [class.active]="isMonthRange">{{ 'month' | translate: {"Default": "Month"} }}</label>
-      <label [btnRadio]="range.Week" role="button"
-        [class.active]="isWeekRange">{{ 'week' | translate: {"Default": "Week"} }}</label>
-      <label [btnRadio]="range.Day" role="button"
-        [class.active]="isDayRange">{{ 'day' | translate: {"Default": "Day"} }}</label>
+      <label [btnRadio]="range.Month" role="button" [class.active]="isMonthRange">{{ 'month' | translate: {"Default":
+        "Month"} }}</label>
+      <label [btnRadio]="range.Week" role="button" [class.active]="isWeekRange">{{ 'week' | translate: {"Default":
+        "Week"} }}</label>
+      <label [btnRadio]="range.Day" role="button" [class.active]="isDayRange">{{ 'day' | translate: {"Default": "Day"}
+        }}</label>
     </div>
 
     <div class="range-title-wrapper">
@@ -92,9 +92,11 @@
                 <fa-icon [icon]="['fas', calendarType === 2 ? 'file' : 'circle']" [ngClass]="layer.cssClass"
                   [ngStyle]="{fontSize: calendarType === 2 ? '16px' : '8px'}"></fa-icon>
                 {{layer.count}}
-              </span><br>
-              <span class="count-description">{{layer.text.replace(' ', '_') | lowercase | translate}} /
-                {{currentRange.value | translate}}</span>
+              </span>
+              <br>
+              <span class="count-description">
+                {{layer.text.replace(' ', '_') | lowercase | translate}} / {{currentRange.value | translate}}
+              </span>
             </div>
           </ng-container>
         </div>
@@ -143,7 +145,8 @@
         <ng-template #availabilityTooltip>
           <div class="shift-tooltip">
             <h5 class="text-center">
-              {{ day.availableId ? ('update' | translate: {"Default": "Update"}) : ('confirm' | translate: {"Default": "Confirm"}) }}
+              {{ day.availableId ? ('update' | translate: {"Default": "Update"}) : ('confirm' | translate: {"Default":
+              "Confirm"}) }}
             </h5>
             <div class="d-flex align-items-center justify-content-between">
               <button type="button" class="btn btn-sm btn-primary mr-3" (click)="setAvailability($event, day, true)">
@@ -335,8 +338,8 @@
 <ng-template #shiftGroup let-shifts="shifts" let-className="className" let-name="name" let-status="status">
   <div class="mb-3" *ngIf="shifts.length">
     <p *ngIf="status" class="shift-tooltip-title">
-      <span class="mr-1"
-        [ngClass]="'badge badge-' + className">{{status === 'cancelled' ? shifts.length : getShiftCount(shifts, status)}}</span>
+      <span class="mr-1" [ngClass]="'badge badge-' + className">{{status === 'cancelled' ? shifts.length :
+        getShiftCount(shifts, status)}}</span>
       {{name | translate}}
     </p>
 
@@ -344,8 +347,8 @@
       *ngFor="let shift of shifts">
       <fa-icon *ngIf="status" [icon]="['fas', 'circle']" [ngClass]="'text-' + className"></fa-icon>
 
-      <span class="p-1 mb-2 rounded" [ngClass]="[getColor(shift.timesheetStatus)]"
-        *ngIf="!status">{{ 'start' | translate: { "Default": "Start" } }} - {{shift.time}}</span>
+      <span class="p-1 mb-2 rounded" [ngClass]="[getColor(shift.timesheetStatus)]" *ngIf="!status">{{ 'start' |
+        translate: { "Default": "Start" } }} - {{shift.time}}</span>
 
       <ng-container *ngTemplateOutlet="shiftItem; context: { shift: shift, status: status }"></ng-container>
     </div>
@@ -367,8 +370,8 @@
     <span *ngIf="shift.shift">Workers: {{shift.shift.workers}}</span>
     <div *ngIf="status && ((shift.candidates[status].length || shift.candidates[getStatus(1)].length))"
       class="shift-candidates">
-      <span
-        class="mr-1">Candidate&nbsp;({{shift.candidates[status].length || shift.candidates[getStatus(1)].length}}):</span>
+      <span class="mr-1">Candidate&nbsp;({{shift.candidates[status].length ||
+        shift.candidates[getStatus(1)].length}}):</span>
       <div>
         <div *ngFor="let candidate of shift.candidates[status]">
           <fa-icon *ngIf="getStatus(0) === status" [icon]="['fas', 'times']" class="candidate-icon text-danger">
