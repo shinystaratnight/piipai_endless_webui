@@ -119,6 +119,9 @@ const formadd = [
       type: 'related',
       edit: true
     },
+    query: {
+      comapny: 'currentCompany'
+    },
     collapsed: false,
     type: 'related',
     key: 'skills',

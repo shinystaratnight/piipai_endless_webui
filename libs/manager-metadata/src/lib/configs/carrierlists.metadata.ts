@@ -1,5 +1,3 @@
-// import { yesterdayFormatDate, todayFormatDate, tomorrowFormatDate } from '../helpers';
-
 import { getYesterday, getToday, getTommorrow } from '@webui/utilities';
 
 const yesterdayFormatDate = getYesterday();
@@ -363,6 +361,9 @@ const formadd = [
       values: ['__str__', 'tranlsations', 'name'],
       type: 'related',
       edit: true
+    },
+    query: {
+      company: 'currentCompany',
     },
     type: 'related',
     key: 'skill',
