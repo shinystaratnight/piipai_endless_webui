@@ -380,7 +380,7 @@ const form = [
     visibleMode: true,
     collapsed: false,
     type: 'related',
-    query: { exclude: '{candidate_contact.id}' },
+    query: { exclude: '{candidate_contact.id}', company: 'currentCompany' },
     many: false
   },
   {
@@ -492,7 +492,7 @@ const formadd = [
     visibleMode: true,
     collapsed: false,
     type: 'related',
-    query: { exclude: '{candidate_contact.id}' },
+    query: { exclude: '{candidate_contact.id}', company: 'currentCompany' },
     many: false
   },
   {

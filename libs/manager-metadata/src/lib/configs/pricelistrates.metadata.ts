@@ -291,6 +291,9 @@ const pricelistForm = [
       label: 'Skill',
       delete: false
     },
+    query: {
+      company: 'currentCompany'
+    },
     endpoint: '/skills/skills/',
     key: 'skill',
     many: false

@@ -79,6 +79,9 @@ const form = [
       edit: true,
       delete: false
     },
+    query: {
+      company: 'currentCompany'
+    },
     read_only: true,
     collapsed: false,
     many: false,
@@ -150,6 +153,9 @@ const formadd = [
       type: 'related',
       edit: true,
       delete: false
+    },
+    query: {
+      company: 'currentCompany'
     },
     read_only: true,
     collapsed: false,

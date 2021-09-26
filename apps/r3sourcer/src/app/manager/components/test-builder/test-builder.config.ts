@@ -105,7 +105,10 @@ export const testMetadata = {
                 values: ['__str__', 'tranlsations', 'name'],
                 delete: true,
                 add: false
-              }
+              },
+              query: {
+                company: 'currentCompany',
+              },
             },
             {
               type: 'related',

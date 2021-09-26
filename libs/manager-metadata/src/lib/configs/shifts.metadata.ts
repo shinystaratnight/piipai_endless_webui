@@ -50,6 +50,9 @@ const form = [
         'tranlsations',
         'name'
       ],
+      query: {
+        company: 'currentCompany'
+      },
       type: 'related',
       edit: true
     },
@@ -134,6 +137,9 @@ const formadd = [
       ],
       type: 'related',
       edit: true
+    },
+    query: {
+      company: 'currentCompany'
     },
     type: 'related',
     key: 'skill'
