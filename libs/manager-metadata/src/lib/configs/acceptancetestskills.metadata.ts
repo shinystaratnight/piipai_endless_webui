@@ -93,6 +93,9 @@ const form = [
       type: 'related',
       edit: true
     },
+    query: {
+      company: 'currentCompany'
+    },
     collapsed: false,
     type: 'related',
     key: 'skill',
@@ -129,6 +132,9 @@ const formadd = [
       values: ['__str__', 'tranlsations', 'name'],
       type: 'related',
       edit: true
+    },
+    query: {
+      company: 'currentCompany'
     },
     collapsed: false,
     type: 'related',
