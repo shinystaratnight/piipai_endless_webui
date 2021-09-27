@@ -16,7 +16,8 @@ import {
   skillActivities,
   times,
   notes,
-  workType
+  workType,
+  timesFilled
 } from './submission-form.config';
 
 enum TimesheetType {
@@ -46,6 +47,7 @@ export class SubmissionFormComponent {
 
   details = details();
   times = times();
+  timesFilled = timesFilled();
   skillActivity = workType();
   skillActivities = skillActivities();
   notes = notes();
@@ -55,6 +57,7 @@ export class SubmissionFormComponent {
 
   errors: { [key: string]: any };
   mode = new BehaviorSubject('edit');
+  isEditTimesheet: boolean;
 
   hiddenFields = {
     elements: [],
@@ -87,10 +90,13 @@ export class SubmissionFormComponent {
   ngOnInit() {
     this.typeControl = new FormControl('');
     this.parseMetadata(this.details, this.config.data);
+
     this.formData.next({
       data: this.config.extendData
     });
-    if (this.config.status === 5) {
+
+    if (this.config.extendData.status === 5) {
+      this.isEditTimesheet = true;
       this.typeControl.patchValue(TimesheetType.Activities);
       this.parseMetadata(this.skillActivities, this.config.data);
       this.updateMetadata(this.getMetadataConfig(this.skillActivities));
@@ -146,10 +152,14 @@ export class SubmissionFormComponent {
     this.formFilled = true;
     Object.keys(this.timesData).forEach((key) => {
       this.config.data[key] = createAddAction({
-        value: this.timesData[key]
+        value: this.timesData[key],
+        hide: !this.timesData[key]
       });
     });
-    this.parseMetadata(this.times, this.config.data);
+    this.parseMetadata(this.timesFilled, this.config.data);
+    this.updateDatepickerByTimezone(this.timesFilled, this.config.data);
+    this.updateMetadata(this.getMetadataConfig(this.timesFilled));
+    this.parseMetadata(this.timesFilled, this.config.data);
     this.mode.next('view');
     this.updateMetadata(this.getMetadataConfig(this.notes));
   }

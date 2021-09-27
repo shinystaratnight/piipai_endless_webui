@@ -1,23 +1,31 @@
 <app-dynamic-form [config]="details"></app-dynamic-form>
 
-<div class="buttons">
-  <button
-    *ngFor="let typeItem of types"
-    class="btn btn-primary"
-    [class.active]="type === typeItem.key"
-    type="button"
-    (click)="setTimesheetType(typeItem.key)"
-  >
+<div class="buttons" *ngIf="!isEditTimesheet">
+  <button *ngFor="let typeItem of types" class="btn btn-primary" [class.active]="type === typeItem.key" type="button"
+    (click)="setTimesheetType(typeItem.key)">
     {{ typeItem.translateKey | translate: { Default: typeItem.label } }}
   </button>
 </div>
 
-<app-dynamic-form
-  *ngIf="type === timesheetType.Times"
-  [config]="times"
-  [hiddenFields]="hiddenFields"
-  (submitForm)="saveTimes($event)"
->
+<app-dynamic-form *ngIf="type === timesheetType.Times && !formFilled" [config]="times" [hiddenFields]="hiddenFields"
+  (submitForm)="saveTimes($event)">
+  <div class="footer">
+    <div *ngIf="errors" class="text-danger mb-2">
+      {{ errors.non_field_errors }}
+    </div>
+    <button class="btn btn-primary" type="submit">
+      Save
+      <app-spinner *ngIf="saveProcess"></app-spinner>
+    </button>
+  </div>
+</app-dynamic-form>
+
+<app-dynamic-form *ngIf="type === timesheetType.Times && formFilled" [config]="timesFilled"
+  [hiddenFields]="hiddenFields" (submitForm)="saveTimes($event)">
+</app-dynamic-form>
+
+<app-dynamic-form *ngIf="type === timesheetType.Activity" [config]="skillActivity" [hiddenFields]="hiddenFields"
+  (event)="eventHandler($event)" (submitForm)="saveSkillActivity($event)">
   <div *ngIf="!formFilled" class="footer">
     <div *ngIf="errors" class="text-danger mb-2">
       {{ errors.non_field_errors }}
@@ -29,27 +37,10 @@
   </div>
 </app-dynamic-form>
 
-<app-dynamic-form
-  *ngIf="type === timesheetType.Activity"
-  [config]="skillActivity"
-  [hiddenFields]="hiddenFields"
-  (event)="eventHandler($event)"
-  (submitForm)="saveSkillActivity($event)"
->
-  <div *ngIf="!formFilled" class="footer">
-    <div *ngIf="errors" class="text-danger mb-2">
-      {{ errors.non_field_errors }}
-    </div>
-    <button class="btn btn-primary" type="submit">
-      Save
-      <app-spinner *ngIf="saveProcess"></app-spinner>
-    </button>
-  </div>
+<app-dynamic-form *ngIf="type === timesheetType.Activities && isEditTimesheet" [config]="skillActivities">
 </app-dynamic-form>
 
-<!--<app-dynamic-form *ngIf="type === timesheetType.Activities" [config]="skillActivities"></app-dynamic-form>-->
-
-<ng-container *ngIf="type === timesheetType.Activities">
+<ng-container *ngIf="type === timesheetType.Activities && !isEditTimesheet">
   <table class="table">
     <tr>
       <th>Skill Activity</th>
@@ -62,7 +53,7 @@
         {{ eventData.value.value }}
         <small class="description">{{
           eventData.worktype.uom.short_name
-        }}</small>
+          }}</small>
       </td>
     </tr>
   </table>
