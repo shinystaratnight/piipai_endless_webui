@@ -8,12 +8,12 @@ const statuses = {
   ['FAILED']: 'Failed',
   ['DELIVERED']: 'Delivered',
   ['UNDELIVERED']: 'Undelivered',
-  ['RECEIVED']: 'Received',
+  ['RECEIVED']: 'Received'
 };
 
 const smsTypes = {
   ['SENT']: 'SMS sent',
-  ['RECEIVED']: 'SMS received',
+  ['RECEIVED']: 'SMS received'
 };
 
 const formset = {
@@ -95,7 +95,7 @@ const formset = {
         name: 'segments',
         sort_field: 'segments',
         label: 'Number of segments',
-        sort: true,
+        sort: true
       },
       {
         content: [
@@ -129,7 +129,7 @@ const formset = {
           }
         ],
         name: 'cost',
-        label: 'Cost',
+        label: 'Cost'
       }
     ],
     pagination_label: 'SMS message',
@@ -154,7 +154,7 @@ const formset = {
         key: 'type',
         label: 'Type',
         values: generateOptions(smsTypes)
-      }),
+      })
     ]
   },
   fields: [
@@ -168,5 +168,5 @@ const formset = {
 };
 
 export const smslogs = {
-  formset,
+  formset
 };

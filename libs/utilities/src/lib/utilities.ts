@@ -234,11 +234,7 @@ export class FormatString {
 }
 
 export function getTranslationKey(key, type) {
-  if (!isManager()) {
-    return `${key}.${type}`;
-  }
-
-  return 'without_translation';
+  return `${key}.${type}`;
 }
 
 export function checkAndReturnTranslation(
