@@ -98,7 +98,7 @@ const list = {
         ],
         query: 'role',
         type: 'select'
-      },
+      }
     ]
   },
   fields: [
@@ -197,13 +197,14 @@ const form = [
   {
     type: 'collapse',
     name: 'Password',
+    translateKey: 'password',
     children: [
       {
         type: 'related',
         key: 'password',
         value: {
           id: true,
-          __str__: '******',
+          __str__: '******'
         },
         endpoint: '/core/contacts/{id}/password/',
         editEndpoint: '/core/contacts/{contact.id}/password/',
@@ -213,13 +214,15 @@ const form = [
         templateOptions: {
           label: 'Password',
           editLabel: 'Change password',
-          editDescription: 'Enter a new password for the user: <b style="color: black; font-weight: bold"> {contact.__str__} </b>', //tslint:disable-line
+          editDescription:
+            'Enter a new password for the user: <b style="color: black; font-weight: bold"> {contact.__str__} </b>', //tslint:disable-line
           edit: true
         }
       },
       {
         label: 'Auto generate',
         type: 'group',
+        translateKey: 'auto_generate',
         children: [
           {
             key: 'by_email',
@@ -258,7 +261,7 @@ const form = [
             }
           }
         ]
-      },
+      }
     ]
   },
   {

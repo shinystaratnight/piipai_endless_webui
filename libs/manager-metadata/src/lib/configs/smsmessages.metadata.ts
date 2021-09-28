@@ -1,3 +1,4 @@
+import { createFilter, Type } from '@webui/metadata';
 import { getYesterday, getToday } from '@webui/utilities';
 
 const yesterdayFormatDate = getYesterday();
@@ -195,49 +196,47 @@ const list = {
         },
         query: 'template'
       },
-      {
-        list: [
-          {
-            label: 'Yesterday',
-            query: `created_at_0=${yesterdayFormatDate}&created_at_1=${yesterdayFormatDate}`
-          },
-          {
-            label: 'Today',
-            query: `created_at_0=${todayFormatDate}&created_at_1=${todayFormatDate}`
-          }
-        ],
+      createFilter(Type.Date, {
         key: 'created_at',
         label: 'Created at',
-        type: 'date',
-        input: [
-          {
-            label: 'From',
-            query: 'created_at_0'
-          },
-          {
-            label: 'To',
-            query: 'created_at_1'
-          }
-        ]
-      },
-      {
+        yesterday: true,
+        today: true,
+      }),
+      createFilter(Type.Checkbox, {
         key: 'check_reply',
         label: 'Check reply status after timeout',
-        options: [
+        multiple: true,
+        values: [
           {
+            key: 'yes',
             value: 'True',
             label: 'Yes'
           },
           {
+            key: 'no',
             value: 'False',
             label: 'No'
           }
-        ],
-        query: 'check_reply',
-        multiple: false,
-        default: null,
-        type: 'checkbox'
-      },
+        ]
+      })
+      // {
+      //   key: 'check_reply',
+      //   label: 'Check reply status after timeout',
+      //   options: [
+      //     {
+      //       value: 'True',
+      //       label: 'Yes'
+      //     },
+      //     {
+      //       value: 'False',
+      //       label: 'No'
+      //     }
+      //   ],
+      //   query: 'check_reply',
+      //   multiple: false,
+      //   default: null,
+      //   type: 'checkbox'
+      // },
     ],
     buttons: [
       {

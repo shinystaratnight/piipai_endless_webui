@@ -1,4 +1,11 @@
-import { getYesterday, getToday, getWeekEnd, getWeekStart, getMonthStart, getMonthEnd } from '@webui/utilities';
+import {
+  getYesterday,
+  getToday,
+  getWeekEnd,
+  getWeekStart,
+  getMonthStart,
+  getMonthEnd
+} from '@webui/utilities';
 
 const yesterdayFormatDate = getYesterday();
 const todayFormatDate = getToday().format();
@@ -86,7 +93,7 @@ const formset = {
         name: 'segments',
         sort_field: 'segments',
         label: 'Number of segments',
-        sort: true,
+        sort: true
       },
       {
         content: [
@@ -119,7 +126,7 @@ const formset = {
           }
         ],
         name: 'cost',
-        label: 'Cost',
+        label: 'Cost'
       }
     ],
     pagination_label: 'SMS message',
@@ -144,7 +151,7 @@ const formset = {
           {
             label: 'This month',
             query: `created_at_0=${monthStart}&created_at_1=${monthEnd}`
-          },
+          }
         ],
         key: 'created_at',
         label: 'Created at',
@@ -207,10 +214,12 @@ const formset = {
         options: [
           {
             value: 'SENT',
+            key: 'sent',
             label: 'SMS sent'
           },
           {
             value: 'RECEIVED',
+            key: 'received',
             label: 'SMS received'
           }
         ],
@@ -232,5 +241,5 @@ const formset = {
 };
 
 export const smslogs = {
-  formset,
+  formset
 };

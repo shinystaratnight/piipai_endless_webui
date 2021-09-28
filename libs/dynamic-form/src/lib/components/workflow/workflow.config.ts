@@ -9,7 +9,8 @@ export const config = [
       {
         type: 'group',
         label: 'Workflow settings',
-        children: [ workflowEl ]
+        translateKey: 'workflow_settings',
+        children: [workflowEl]
       },
       {
         type: 'group',
@@ -26,4 +27,4 @@ export const config = [
       }
     ]
   }
-]
+];
