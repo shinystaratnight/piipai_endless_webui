@@ -1,4 +1,5 @@
 import { BasicFormElement, BasicElementTemplateOptions } from './basic-form-element';
+import { Endpoints } from '@webui/data';
 
 export const Related = 'related';
 
@@ -26,6 +27,7 @@ export class RelatedElement extends BasicFormElement {
   visibleMode?: boolean;
   send?: boolean;
   withoutIdField?: boolean;
+  addEndpoint?: string;
 
   relatedObjects?: {
     field: string;
@@ -83,6 +85,11 @@ export class RelatedElement extends BasicFormElement {
   updateTemplateOptions(key: string, value: any) {
     this.templateOptions[key] = value;
 
+    return this;
+  }
+
+  setAddEndpoint(endpoint: Endpoints) {
+    this.addEndpoint = endpoint;
     return this;
   }
 }
