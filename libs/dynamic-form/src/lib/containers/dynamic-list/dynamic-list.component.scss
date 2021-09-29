@@ -24,6 +24,15 @@
   }
 }
 
+.actions-btn {
+  opacity: .3;
+
+  &:hover {
+    opacity: 1;
+    cursor: pointer;
+  }
+}
+
 .more {
   &__header {
     white-space: nowrap;
