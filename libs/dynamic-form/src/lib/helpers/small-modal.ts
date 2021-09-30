@@ -5,5 +5,6 @@ export const smallModalEndpoints = [
   Endpoints.CandidateTag,
   Endpoints.CandidateFormalities,
   Endpoints.JobOffer,
-  Endpoints.TimesheetRates
+  Endpoints.TimesheetRates,
+  Endpoints.PriceListRate
 ];

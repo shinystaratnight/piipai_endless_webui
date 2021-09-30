@@ -4,16 +4,16 @@ import { Form, List } from '@webui/metadata';
 const worktypeField = () =>
   new SkillWorkTypeModel()
     .formElement()
-    .setPerfilledFields({
-      [Models.Skill]: '{skill.id}'
+    .setActions({
+      add: true
     })
     .setShowIfRule(['skill.id'])
-    .setActions({ add: true })
     .updateValues(['translations'])
     .setQuery({
       skill: '{skill.id}',
       limited: true
-    });
+    })
+    .setAddEndpoint(Endpoints.SkillRateRanges);
 
 const list = {
   list: {

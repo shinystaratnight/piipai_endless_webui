@@ -96,7 +96,11 @@ const formset = () => {
 const formadd = () => [
   new Form.row.element().setChildren([
     new Form.group.element().setChildren([
-      new SkillModel().formElement().updateValues(['name']),
+      new SkillModel().formElement()
+        .updateValues(['name', 'translations'])
+        .setQuery({
+          company: 'currentCompany'
+        }),
       new SkillWorkTypeModel()
         .formElement()
         .setShowIfRule(['skill.id'])

@@ -1138,7 +1138,7 @@ export class FormRelatedComponent
       return false;
     }
 
-    if (!this.checkPermission(type) && this.config.endpoint) {
+    if (!this.checkPermission(type) && (this.config.addEndpoint || this.config.endpoint)) {
       return;
     }
     this.modalData = {};
@@ -1152,8 +1152,10 @@ export class FormRelatedComponent
     } else {
       let endpoint;
       if (this.config.editEndpoint) {
-        const formatString = new FormatString();
-        endpoint = formatString.format(this.config.editEndpoint, this.formData);
+        endpoint = format.format(this.config.editEndpoint, this.formData);
+      }
+      if (this.config.addEndpoint) {
+        endpoint = format.format(this.config.addEndpoint, this.formData);
       }
 
       this.modalData.endpoint = endpoint || this.config.endpoint;
@@ -1574,26 +1576,29 @@ export class FormRelatedComponent
         }
         return;
       }
-      this.group
-        .get(this.key)
-        .patchValue(
-          this.config.useValue
-            ? this.config.value[this.param]
-            : e.data[this.param]
-        );
-      this.config.value = this.config.useValue
-        ? this.config.value
-        : e.data[this.param];
-      this.displayValue = this.config.useValue
-        ? formatString.format(this.display, this.config.value)
-        : formatString.format(this.display, e.data);
-      this.eventHandler({ type: 'change' }, e.data[this.param], e.data);
 
-      if (this.config.candidateForm) {
-        this.eventHandler(
-          { type: 'patchAddress' },
-          this.group.get(this.key).value
-        );
+      if (this.modalData.endpoint !== this.config.addEndpoint) {
+        this.group
+          .get(this.key)
+          .patchValue(
+            this.config.useValue
+              ? this.config.value[this.param]
+              : e.data[this.param]
+          );
+        this.config.value = this.config.useValue
+          ? this.config.value
+          : e.data[this.param];
+        this.displayValue = this.config.useValue
+          ? formatString.format(this.display, this.config.value)
+          : formatString.format(this.display, e.data);
+        this.eventHandler({ type: 'change' }, e.data[this.param], e.data);
+
+        if (this.config.candidateForm) {
+          this.eventHandler(
+            { type: 'patchAddress' },
+            this.group.get(this.key).value
+          );
+        }
       }
     } else if (
       e.type === 'sendForm' &&
