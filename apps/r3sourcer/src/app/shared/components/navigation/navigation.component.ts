@@ -196,8 +196,13 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
     this.authService.logout();
   }
 
-  public changeRole(id: string) {
-    const role = this.user.data.roles.find((el: Role) => el.id === id);
+  public changeRole(role: Role, event) {
+    if (role.domain === location.hostname) {
+      event.preventDefault();
+      event.stopPropagation();
+    } else {
+      return;
+    }
 
     this.checkCandidateRole(role);
 
