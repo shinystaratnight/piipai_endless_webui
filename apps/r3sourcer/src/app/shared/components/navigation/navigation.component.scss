@@ -376,6 +376,21 @@ $header-bg: #fdfdfd;
       flex-direction: column;
       justify-content: space-between;
       align-items: flex-end;
+
+      .role {
+        text-transform: capitalize;
+      }
+
+      a {
+        display: inline;
+        color: $primary;
+        padding: 0;
+        text-transform: lowercase;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
     }
 
     &-icon {
@@ -411,6 +426,24 @@ $header-bg: #fdfdfd;
 
         flex-wrap: nowrap;
       }
+    }
+  }
+}
+
+.roles {
+  padding: 1rem;
+  padding-left: 2rem;
+  margin: 0;
+
+  & > *:not(:last-child) {
+    margin-bottom: 0.5rem;
+  }
+
+  a {
+    color: $primary;
+
+    &:hover {
+      text-decoration: underline;
     }
   }
 }

@@ -11,6 +11,7 @@ import {
   OnDestroy
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 import { Subscription, fromEvent } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
@@ -19,7 +20,8 @@ import {
   AuthService,
   NavigationService,
   TranslateHelperService,
-  UserService
+  UserService,
+  DateService,
 } from '@webui/core';
 import { User, Page, Role, Language } from '@webui/data';
 import {
@@ -43,6 +45,7 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('nav') public nav: any;
   @ViewChild('userBlock') public userBlock: any;
   @ViewChild('modal') public modal: any;
+  @ViewChild('roles') public rolesTemplate: any;
 
   @Input() public user: User;
   @Input() public logo = '/assets/img/new-software.svg';
@@ -75,16 +78,31 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
   language = new FormControl(Language.English);
   Language = Language;
 
+  private modalRef: NgbModalRef;
+
   get pages(): Page[] {
     const menu = this.navigationService.navigationList[this.currentRole];
 
     return menu;
   }
 
-  get companyName(): string {
-    return !isCandidate()
-      ? this.userService.user.currentRole.company_name
-      : this.company;
+  get fullName(): string {
+    return this.user.currentRole.__str__.split(':').map(el => el.trim()).slice(0, 2).join(' - ');
+  }
+
+  get trialMessage() {
+    const date = this.dateService.instance;
+    const expires = date(this.user.data.end_trial_date, 'YYYY-MM-DD hh:mm:ss');
+
+    if (expires.isAfter(date())) {
+      return `Trail version expires ${expires.format()}`;
+    } else {
+      return null;
+    }
+  }
+
+  get roleList() {
+    return this.user.data.roles.filter((el) => el.id !== this.user.currentRole.id)
   }
 
   public resizeSubscription: Subscription;
@@ -94,7 +112,9 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
     private authService: AuthService,
     private navigationService: NavigationService,
     private userService: UserService,
-    private translate: TranslateHelperService
+    private translate: TranslateHelperService,
+    private dateService: DateService,
+    private modalService: NgbModal
   ) {}
 
   public ngOnInit() {
@@ -217,6 +237,13 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public getDisableTitle(menu: string): string {
     return `You do not have permission to access ${menu}. Please contact your administrator.`;
+  }
+
+  public chooseRole(event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    this.modalRef = this.modalService.open(this.rolesTemplate);
   }
 
   @HostListener('document:click', ['$event'])
