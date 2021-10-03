@@ -4,4 +4,5 @@ export interface Role {
   company_id: string;
   company_name: string;
   client_contact_id: string;
+  domain: string;
 }
