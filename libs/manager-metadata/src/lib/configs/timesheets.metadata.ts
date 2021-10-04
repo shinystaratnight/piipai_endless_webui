@@ -139,7 +139,7 @@ const list = {
             field: 'shift_ended_at'
           },
           {
-            text: '{totalTime}',
+            text: '{field}',
             color: 'success',
             setColor: 'shift_ended_at',
             type: 'static',
