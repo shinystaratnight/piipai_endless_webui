@@ -196,8 +196,8 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
     this.authService.logout();
   }
 
-  public changeRole(role: Role, event) {
-    if (role.domain === location.hostname) {
+  public changeRole(role: Role, event?) {
+    if (role.domain === location.hostname && event) {
       event.preventDefault();
       event.stopPropagation();
     } else {
