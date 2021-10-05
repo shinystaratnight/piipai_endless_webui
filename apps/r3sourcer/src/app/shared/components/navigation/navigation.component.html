@@ -204,7 +204,13 @@
 <ng-template #roles>
   <ol class="roles">
     <li *ngFor="let item of roleList">
-      <a href="https://{{item.domain}}/loginas/{{user.data.user}}" target="_blank" (click)="changeRole(item)">{{item.__str__}}</a>
+      <a
+        href="https://{{item.domain}}/loginas/{{user.data.user}}"
+        target="_blank"
+        (click)="changeRole(item, $event)"
+      >
+        {{item.__str__}}
+      </a>
     </li>
   </ol>
 </ng-template>
