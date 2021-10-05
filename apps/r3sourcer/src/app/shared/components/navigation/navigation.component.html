@@ -33,6 +33,7 @@
       </ng-container>
     </ul>
   </nav>
+
   <app-time
     *ngIf="user"
     class="time"
@@ -41,14 +42,16 @@
     [hidden]="!initTime"
     (init)="initTime = true"
   ></app-time>
+
   <div #userBlock class="user order-1" *ngIf="user">
     <div class="user-block">
       <div class="user-info d-xl-flex">
-        <span>{{ user.data.contact.__str__ }}</span>
-        <span class="description">{{ companyName }}</span>
-        <span *ngIf="user.data.end_trial_date.length" class="description">
-          Trail version expires
-          {{ formatDate(user.data.end_trial_date) }}
+        <span>{{ fullName }}</span>
+
+        <span *ngIf="trialMessage" class="description">{{ trialMessage }}</span>
+
+        <span class="description role" *ngIf="user.data.roles.length > 1">
+          {{ user.currentRole.name }} <a href="#" (click)="chooseRole($event)">Change</a>
         </span>
       </div>
       <img
@@ -89,7 +92,7 @@
       <li class="px-3">
         <app-language-selector></app-language-selector>
       </li>
-      <li
+      <!-- <li
         *ngIf="user && user.data.roles && user.data.roles.length > 1"
         class="form-inline role"
       >
@@ -104,7 +107,7 @@
             <small>{{ role.__str__ }}</small>
           </option>
         </select>
-      </li>
+      </li> -->
       <li *ngIf="candidate">
         <a routerLink="/cd/profile">{{
           'profile' | translate: { Default: 'Profile' }
@@ -196,4 +199,18 @@
       ></ng-container>
     </ng-container>
   </li>
+</ng-template>
+
+<ng-template #roles>
+  <ol class="roles">
+    <li *ngFor="let item of roleList">
+      <a
+        href="https://{{item.domain}}/loginas/{{user.data.user}}"
+        target="_blank"
+        (click)="changeRole(item, $event)"
+      >
+        {{item.__str__}}
+      </a>
+    </li>
+  </ol>
 </ng-template>

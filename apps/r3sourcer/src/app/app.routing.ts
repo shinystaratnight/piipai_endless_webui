@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 
-import { VerifyEmailComponent } from './components';
+import { VerifyEmailComponent, LoginasComponent } from './components';
 import { RedirectComponent } from './redirect.component';
 
 import {
@@ -24,6 +24,11 @@ export const routes: Routes = [
   {
     path: 'contacts/verify_email',
     component: VerifyEmailComponent
+  },
+  {
+    path: 'loginas/:id',
+    component: LoginasComponent,
+    canActivate: [NotAuthorizedGuard]
   },
   {
     path: 'login/:token',
