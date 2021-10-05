@@ -14,4 +14,4 @@ trim_trailing_whitespace = false
 
 [**/i18n/*.json]
 indent_style = space
-indent_size = 4
+indent_size = 2

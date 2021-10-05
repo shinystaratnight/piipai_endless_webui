@@ -70,14 +70,6 @@ const list = function () {
 
           changeButton()
         ]),
-
-        new List.column.element('change', 'Change')
-          .setHide()
-          .setContent([changeButton()]),
-
-        new List.column.element('traking', 'Tracking')
-          .setHide()
-          .setContent([getTrackingElement()])
       ])
   };
 };
