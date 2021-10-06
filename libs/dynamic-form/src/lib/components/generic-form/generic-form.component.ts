@@ -1313,8 +1313,6 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
       return;
     }
 
-    // Here
-
     if (this.updateDataAfterSendForm.config.length) {
       this.createUpdateRequests(newData, this.updateDataAfterSendForm);
     }
