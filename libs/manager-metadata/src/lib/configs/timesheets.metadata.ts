@@ -1051,11 +1051,12 @@ const form = [
                 children: [
                   {
                     type: 'static',
-                    key: 'shift.date.__str__',
+                    key: 'shift',
                     send: false,
                     read_only: true,
                     templateOptions: {
-                      label: 'Shift Date'
+                      label: 'Shift Date',
+                      display: '{date.__str__}'
                     }
                   }
                 ]
