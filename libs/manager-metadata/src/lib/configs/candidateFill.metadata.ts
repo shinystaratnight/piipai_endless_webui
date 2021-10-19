@@ -5,7 +5,7 @@ const form = [
   new Form.checkbox.element(
     'hours',
     'Times only',
-    CheckboxType.Checkbox
+    CheckboxType.Button
   ).setDefaultValue(true),
   {
     key: 'shift_started_at',

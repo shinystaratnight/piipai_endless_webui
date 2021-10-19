@@ -339,13 +339,10 @@ export class FormInputComponent
   }
 
   public checkHiddenProperty() {
-    if (
-      this.config &&
-      this.config.hidden &&
-      (this.config.type !== 'static' ||
-        (this.config.type === 'static' && !this.config.read_only))
-    ) {
-      const subscription = this.config.hidden.subscribe((hide) => {
+    const { hidden, type, read_only, templateOptions, formData } = this.config;
+
+    if (hidden && (type !== 'static' || (type === 'static' && !read_only))) {
+      const subscription = hidden.subscribe((hide) => {
         if (hide) {
           this.config.hide = hide;
           this.group.get(this.key).patchValue(undefined);
@@ -354,10 +351,7 @@ export class FormInputComponent
           this.config.hide = hide;
 
           if (this.config.templateOptions.pattern) {
-            const pattern = getPropValue(
-              this.config.formData.value.data,
-              this.config.templateOptions.pattern
-            );
+            const pattern = getPropValue(formData.value.data, templateOptions.pattern);
             const control = this.group.get(this.key);
 
             control.setValidators(Validators.pattern(pattern));
