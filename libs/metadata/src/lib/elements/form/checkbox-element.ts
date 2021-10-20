@@ -4,7 +4,9 @@ export const Checkbox = 'checkbox';
 
 export enum CheckboxType {
   Checkbox = 'checkbox',
-  Icon = 'icon'
+  Icon = 'icon',
+  Button = 'button',
+  Text = 'text',
 }
 
 export interface CheckboxElementTemplateOptions extends BasicElementTemplateOptions {

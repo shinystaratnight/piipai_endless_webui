@@ -15,6 +15,7 @@ import { Subscription } from 'rxjs';
 import { BasicElementComponent } from './../basic-element/basic-element.component';
 import { SiteSettingsService } from '@webui/core';
 import { getTranslationKey } from '@webui/utilities';
+import { CheckboxType } from '@webui/metadata';
 
 @Component({
   selector: 'app-form-checkbox',
@@ -61,14 +62,6 @@ export class FormCheckboxComponent
   ) {
     super();
     this.subscriptions = [];
-  }
-
-  get hasButton() {
-    const { showButtonIf } = this.config.templateOptions;
-
-    if (typeof showButtonIf === 'boolean') {
-      return this.config.templateOptions.showButtonIf === this.config.value;
-    }
   }
 
   public ngOnInit() {
@@ -219,5 +212,44 @@ export class FormCheckboxComponent
       el: this.config,
       value: this.config.templateOptions.action
     });
+  }
+
+  public patchValue(value: boolean): void {
+    this.group.get(this.key).patchValue(value);
+    this.eventHandler({ type: 'change' });
+  }
+
+  public get isIconType(): boolean {
+    return this.config.templateOptions.type === CheckboxType.Icon;
+  }
+
+  public get isCheckboxType(): boolean {
+    return this.config.templateOptions.type === CheckboxType.Checkbox;
+  }
+
+  public get isButtonType(): boolean {
+    return this.config.templateOptions.type === CheckboxType.Button;
+  }
+
+  public get isTextType(): boolean {
+    return this.config.templateOptions.type === CheckboxType.Text;
+  }
+
+  public get currentValue(): boolean {
+    return this.group.get(this.key).value;
+  }
+
+  public get hasButton() {
+    const { showButtonIf } = this.config.templateOptions;
+
+    if (typeof showButtonIf === 'boolean') {
+      return this.config.templateOptions.showButtonIf === this.config.value;
+    }
+  }
+
+  public get hasLabel(): boolean {
+    const { label, text, label_default } = this.config.templateOptions;
+
+    return (!!this.label && !!label && !!text) || !!label_default;
   }
 }
