@@ -14,7 +14,9 @@ export enum MessageType {
   Info = 'info'
 }
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class ToastService {
   private _messages: BehaviorSubject<Message> = new BehaviorSubject(
     {} as Message

@@ -4,7 +4,9 @@ import { of } from 'rxjs';
 
 import { Page, PageData, PathData } from '@webui/data';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class SiteService {
 
   public list: Page[];

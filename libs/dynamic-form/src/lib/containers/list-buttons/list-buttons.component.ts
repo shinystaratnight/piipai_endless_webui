@@ -33,6 +33,7 @@ export class ListButtonsComponent {
   public poped: boolean;
 
   @Input() public allowPermissions: string[];
+  @Input() public endpoint: string;
 
   @Output()
   public event: EventEmitter<any> = new EventEmitter();

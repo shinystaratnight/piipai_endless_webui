@@ -12,7 +12,9 @@ import { ToastService, MessageType } from './toast.service';
 import { EventService, EventType } from './event.service';
 import { isManager } from '@webui/utilities';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class UserService {
   public authEndpoint = '/auth/restore_session/';
   public rolesEndpoint = '/core/users/roles/';

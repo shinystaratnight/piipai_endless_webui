@@ -46,7 +46,7 @@ export class PermissionGuard implements CanActivate {
         if (this.isManager(user.currentRole)) {
           const endTrial = this.dateService.instance(user.data.end_trial_date);
           const trielExpired = endTrial.isBefore(this.dateService.instance());
-          requests.push(this.checkPermissionServise.getPermissions(user.data.user, trielExpired));
+          requests.push(this.checkPermissionServise.getPermissions(user.data.user));
         }
 
         forkJoin(requests).subscribe(([ navigation ]) => {

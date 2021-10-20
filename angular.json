@@ -16,7 +16,10 @@
               "libs/billing-metadata/tsconfig.lib.json",
               "libs/billing-metadata/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/billing-metadata/**/*"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/billing-metadata/**/*"
+            ]
           }
         },
         "test": {
@@ -41,7 +44,10 @@
               "libs/calendar/tsconfig.lib.json",
               "libs/calendar/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/calendar/**/*"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/calendar/**/*"
+            ]
           }
         },
         "test": {
@@ -67,7 +73,10 @@
               "libs/candidate-metadata/tsconfig.lib.json",
               "libs/candidate-metadata/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/candidate-metadata/**/*"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/candidate-metadata/**/*"
+            ]
           }
         },
         "test": {
@@ -92,7 +101,10 @@
               "libs/client-metadata/tsconfig.lib.json",
               "libs/client-metadata/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/client-metadata/**/*"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/client-metadata/**/*"
+            ]
           }
         },
         "test": {
@@ -117,7 +129,10 @@
               "libs/core/tsconfig.lib.json",
               "libs/core/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/core/**/*"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/core/**/*"
+            ]
           }
         },
         "test": {
@@ -143,7 +158,10 @@
               "libs/dashboard/tsconfig.lib.json",
               "libs/dashboard/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/dashboard/**/*"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/dashboard/**/*"
+            ]
           }
         },
         "test": {
@@ -169,7 +187,10 @@
               "libs/data/tsconfig.lib.json",
               "libs/data/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/data/**/*"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/data/**/*"
+            ]
           }
         },
         "test": {
@@ -194,7 +215,10 @@
               "libs/dynamic-form/tsconfig.lib.json",
               "libs/dynamic-form/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/dynamic-form/**/*"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/dynamic-form/**/*"
+            ]
           }
         },
         "test": {
@@ -220,7 +244,10 @@
               "libs/manager-metadata/tsconfig.lib.json",
               "libs/manager-metadata/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/manager-metadata/**/*"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/manager-metadata/**/*"
+            ]
           }
         },
         "test": {
@@ -245,7 +272,10 @@
               "libs/metadata/tsconfig.lib.json",
               "libs/metadata/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/metadata/**/*"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/metadata/**/*"
+            ]
           }
         },
         "test": {
@@ -282,7 +312,6 @@
               "apps/r3sourcer/src/assets"
             ],
             "styles": [
-              "./node_modules/bootstrap/dist/css/bootstrap.min.css",
               "./node_modules/ngx-bootstrap/datepicker/bs-datepicker.css",
               "node_modules/ngx-toastr/toastr.css",
               "node_modules/jtsage-datebox-bootstrap4/jtsage-datebox.css",
@@ -346,8 +375,17 @@
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true
+            },
+            "development": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true
             }
-          }
+          },
+          "defaultConfiguration": "production"
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
@@ -358,8 +396,12 @@
           "configurations": {
             "production": {
               "browserTarget": "r3sourcer:build:production"
+            },
+            "development": {
+              "browserTarget": "r3sourcer:build:development"
             }
-          }
+          },
+          "defaultConfiguration": "development"
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
@@ -374,7 +416,10 @@
               "apps/r3sourcer/tsconfig.app.json",
               "apps/r3sourcer/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!apps/r3sourcer/**/*"]
+            "exclude": [
+              "**/node_modules/**",
+              "!apps/r3sourcer/**/*"
+            ]
           }
         },
         "test": {
@@ -412,7 +457,10 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": "apps/r3sourcer-e2e/tsconfig.e2e.json",
-            "exclude": ["**/node_modules/**", "!apps/r3sourcer-e2e/**/*"]
+            "exclude": [
+              "**/node_modules/**",
+              "!apps/r3sourcer-e2e/**/*"
+            ]
           }
         }
       }
@@ -430,7 +478,10 @@
               "libs/shared/tsconfig.lib.json",
               "libs/shared/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/shared/**/*"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/shared/**/*"
+            ]
           }
         },
         "test": {
@@ -456,7 +507,10 @@
               "libs/shared-metadata/tsconfig.lib.json",
               "libs/shared-metadata/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/shared-metadata/**/*"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/shared-metadata/**/*"
+            ]
           }
         },
         "test": {
@@ -481,7 +535,10 @@
               "libs/ui/tsconfig.lib.json",
               "libs/ui/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/ui/**/*"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/ui/**/*"
+            ]
           }
         },
         "test": {
@@ -513,7 +570,10 @@
               "libs/utilities/tsconfig.lib.json",
               "libs/utilities/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/utilities/**/*"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/utilities/**/*"
+            ]
           }
         },
         "test": {

@@ -752,5 +752,6 @@
   "skill_rel.label": "Skill",
   "rate_coefficient.placeholder": "Select",
   "rate_coefficient_modifier.placeholder": "Select",
-  "rate_coefficient_modifier.label": "Rate coefficient modifier"
+  "rate_coefficient_modifier.label": "Rate coefficient modifier",
+  "should_have_subscription": "You should have an active subscription!"
 }

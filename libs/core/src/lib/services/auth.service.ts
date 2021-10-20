@@ -17,7 +17,9 @@ interface AuthResponse {
   refresh_token: string;
 }
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class AuthService {
   private _role: Role;
 

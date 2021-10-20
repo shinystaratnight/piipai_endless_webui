@@ -9,7 +9,9 @@ export enum EventType {
   RefreshCalendar,
 }
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class EventService {
   get event$() {
     return this.event.asObservable();
