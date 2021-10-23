@@ -22,6 +22,7 @@ import { DynamicFormModule } from '@webui/dynamic-form';
 import { UiModule } from '@webui/ui';
 import { ButtonsModule } from 'ngx-bootstrap/buttons';
 import { TranslateModule } from '@ngx-translate/core';
+import { SharedModule } from '@webui/shared';
 
 import { DashboardService, WidgetService } from './services';
 import {
@@ -43,7 +44,7 @@ import { DashboardComponent } from './dashboard.component';
     RouterModule,
     FontAwesomeModule,
     InfiniteScrollModule,
-    // SharedModule,
+    SharedModule,
     CalendarModule,
     DynamicFormModule,
     NgbTooltipModule,

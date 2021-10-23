@@ -33,6 +33,10 @@ export class SubscriptionService {
       })
   }
 
+  public useTrialPermissions() {
+    this._subscription.next({} as Billing.Subscription);
+  }
+
   private getActiveSubscription(): Observable<Billing.Subscription | null> {
     return this.http
       .get<Payload>(this._endpoint)

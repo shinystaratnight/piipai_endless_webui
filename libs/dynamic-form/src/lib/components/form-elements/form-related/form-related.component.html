@@ -7,7 +7,7 @@
       </label>
 
       <app-info *ngIf="config.templateOptions.description"
-        [description]="getTranslationKey('description') | translate: {'Default': config.templateOptions.description || ''}">
+        [description]="getTranslationKey(this.key, 'description') | translate: {'Default': config.templateOptions.description || ''}">
       </app-info>
       <app-info *ngIf="!viewMode && config.errorMessage && config.errorMessage.visible"
         [description]="getTranslationKey(config.key, 'error_message') | translate: {'Default': config.errorMessage.message}"
@@ -26,13 +26,13 @@
           <button *ngIf="displayValue" class="clear-button mr-1" type="button" (click)="clearField()">
             <fa-icon class="text-secondary" [icon]="['fas', 'times']"></fa-icon>
           </button>
-          <button type="button" class="btn btn-primary text-white" [class.alone]="!canEdit && !canDelete" *ngIf="canCreate" (click)="open('post')">
+          <button appSubscriptionRequired type="button" class="btn btn-primary text-white" [class.alone]="!canEdit && !canDelete" *ngIf="canCreate" (click)="open('post')">
             {{'add_new' | translate}}
           </button>
-          <button type="button" class="btn btn-warning text-white mr-1" *ngIf="canEdit" (click)="open('update')">
+          <button appSubscriptionRequired type="button" class="btn btn-warning text-white mr-1" *ngIf="canEdit" (click)="open('update')">
             {{'edit' | translate}}
           </button>
-          <button type="button" class="btn btn-danger text-white" *ngIf="" (click)="open('delete')">
+          <button appSubscriptionRequired type="button" class="btn btn-danger text-white" *ngIf="" (click)="open('delete')">
             {{'delete' | translate}}
           </button>
         </div>
@@ -75,7 +75,7 @@
         {{ getTranslationKey(config.key, 'label') | translate: {"Default": config.templateOptions.label} }}:
       </label>
       <app-info *ngIf="config.templateOptions.description"
-        [description]="getTranslationKey('description') | translate: {'Default': config.templateOptions.description || ''}">
+        [description]="getTranslationKey(this.key, 'description') | translate: {'Default': config.templateOptions.description || ''}">
       </app-info>
       <div #autocomplete *ngIf="config.many && results && !config.useOptions"
         class="form-element-content flex-column align-items-start edit" [class.many]="config.many && results"
@@ -86,7 +86,7 @@
             placeholder="{{ 'select' | translate: {'Default': 'Select'} }}" (focus)="generateList()" />
 
           <div class="form-element-content-actions" *ngIf="config.options && config.templateOptions.add">
-            <button type="button" class="btn btn-primary text-white alone"
+            <button appSubscriptionRequired type="button" class="btn btn-primary text-white alone"
               *ngIf="config.templateOptions.add && checkPermission('post')" (click)="open('post')">
               <!-- <i class="text-white mr-1" fa name="plus"></i>  -->
               {{'add_new' | translate}}
@@ -201,40 +201,13 @@
   </div>
 
   <div class="form-list" *ngIf="config.list">
-    <!-- <h6 class="d-flex align-items-center">
-      <fa-icon
-        class="p-2"
-        [icon]="['fas', isCollapsed ? 'eye' : 'eye-slash']"
-        (click)="isCollapsed = !isCollapsed"
-        [attr.aria-expanded]="!isCollapsed"
-        aria-controls="collapseExample"
-        style="cursor: pointer">
-      </fa-icon>
-
-      {{ getTranslationKey(config.key, 'label') | translate: {"Default": config.templateOptions.label} }}
-
-      <button
-        *ngIf="config.delay && checkPermission('post')"
-        type="button"
-        class="btn btn-sm btn-primary ml-auto mr-2 py-1"
-        (click)="addObject()">
-        {{'add' | translate}}
-      </button>
-
-      <button
-        *ngIf="config.templateOptions.add_label && config.templateOptions.add"
-        type="button"
-        class="btn btn-sm btn-primary ml-auto mr-2 py-1" (click)="addObject()">
-        {{'add' | translate}}
-      </button>
-    </h6> -->
-
     <div class="d-flex">
       <div class="mr-auto d-flex flex-column justify-content-center">
         <h4 class="mb-0">{{ getTranslationKey(config.key, 'label') | translate: {"Default": config.templateOptions.label} }}</h4>
       </div>
 
       <button
+        appSubscriptionRequired
         *ngIf="config.delay && checkPermission('post')"
         type="button"
         class="btn btn-primary btn-shadow align-self-center"
@@ -243,6 +216,7 @@
       </button>
 
       <button
+        appSubscriptionRequired
         *ngIf="config.templateOptions.add_label && config.templateOptions.add"
         type="button"
         class="btn btn-primary btn-shadow align-self-center" (click)="addObject()">
@@ -295,7 +269,8 @@
                 </fa-icon>
 
                 <ng-template #actionsTemplate>
-                  <span
+                  <button
+                    appSubscriptionRequired
                     class="custom-button d-flex align-items-center"
                     *ngIf="config.templateOptions.delete && checkPermission('delete')"
                     (click)="deleteObject(object, $event)">
@@ -306,8 +281,9 @@
                     </fa-icon>
 
                     {{'delete' | translate}}
-                  </span>
-                  <span
+                  </button>
+                  <button
+                    appSubscriptionRequired
                     class="custom-button d-flex align-items-center"
                     *ngIf="config.templateOptions.edit && checkPermission('update')"
                     (click)="editObject(object, $event)">
@@ -318,8 +294,9 @@
                     </fa-icon>
 
                     {{'edit' | translate}}
-                  </span>
-                  <span
+                  </button>
+                  <button
+                    appSubscriptionRequired
                     class="custom-button d-flex align-items-center"
                     *ngIf="skillEndpoint && !object.allData.default_rate"
                     (click)="setAsDefault(object)">
@@ -328,10 +305,11 @@
                       title="Set as default"
                       [icon]="['fas', 'check']">
                     </fa-icon>
-                  </span>
+                  </button>
                 </ng-template>
               </span>
-              <span
+              <button
+                appSubscriptionRequired
                 *ngIf="!object.id"
                 class="custom-button d-flex align-items-center"
                 (click)="removeItem(index, $event)">
@@ -342,7 +320,7 @@
                 </fa-icon>
 
                 {{'delete' | translate}}
-              </span>
+              </button>
             </td>
           </tr>
         </tbody>

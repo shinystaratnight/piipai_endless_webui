@@ -373,7 +373,7 @@ app-datepicker {
       padding-left: 10px;
     }
 
-    &:hover {
+    &:not(:disabled):hover {
       background-color: #e0e0e0;
     }
   }

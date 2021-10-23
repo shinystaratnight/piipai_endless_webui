@@ -8,7 +8,8 @@ import {
   UserService,
   NavigationService,
   CheckPermissionService,
-  DateService
+  DateService,
+  SubscriptionService
 } from '../services';
 import { User, Role } from '@webui/data';
 
@@ -16,10 +17,11 @@ import { User, Role } from '@webui/data';
 export class PermissionGuard implements CanActivate {
   constructor(
     private router: Router,
-    private userServise: UserService,
-    private checkPermissionServise: CheckPermissionService,
+    private userService: UserService,
+    private checkPermissionService: CheckPermissionService,
     private navigationService: NavigationService,
-    private dateService: DateService
+    private dateService: DateService,
+    private subscriptionService: SubscriptionService
   ) {}
 
   isManager(role: Role): boolean {
@@ -36,7 +38,7 @@ export class PermissionGuard implements CanActivate {
     const subject = new Subject<boolean>();
 
     setTimeout(() => {
-      this.userServise.getUserData()
+      this.userService.getUserData()
       .pipe(
         catchError(() => of(false))
       )
@@ -45,8 +47,15 @@ export class PermissionGuard implements CanActivate {
 
         if (this.isManager(user.currentRole)) {
           const endTrial = this.dateService.instance(user.data.end_trial_date);
-          const trielExpired = endTrial.isBefore(this.dateService.instance());
-          requests.push(this.checkPermissionServise.getPermissions(user.data.user));
+          const trialExpired = endTrial.isBefore(this.dateService.instance());
+
+          if (trialExpired) {
+            this.subscriptionService.update();
+          } else {
+            this.subscriptionService.useTrialPermissions();
+          }
+
+          requests.push(this.checkPermissionService.getPermissions(user.data.user));
         }
 
         forkJoin(requests).subscribe(([ navigation ]) => {
@@ -66,7 +75,7 @@ export class PermissionGuard implements CanActivate {
             return;
           }
 
-          this.checkPermissionServise
+          this.checkPermissionService
             .checkPermission(user.data.user, routeSegments, navigation)
             .subscribe((hasAccess) => {
               if (hasAccess) {
