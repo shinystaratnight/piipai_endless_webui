@@ -224,7 +224,7 @@ export class FormCheckboxComponent
   }
 
   public get isCheckboxType(): boolean {
-    return this.config.templateOptions.type === CheckboxType.Checkbox;
+    return this.config.templateOptions.type === CheckboxType.Checkbox || !this.config.templateOptions.type;
   }
 
   public get isButtonType(): boolean {
