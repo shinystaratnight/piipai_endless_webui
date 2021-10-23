@@ -21,6 +21,7 @@ import {
 
 // import { SharedModule } from '@webui/shared';
 import { DynamicFormModule } from '@webui/dynamic-form';
+import { SharedModule } from '@webui/shared';
 import { UiModule } from '@webui/ui';
 
 @NgModule({
@@ -35,7 +36,8 @@ import { UiModule } from '@webui/ui';
     // SharedModule,
     DynamicFormModule,
     TranslateModule,
-    UiModule
+    UiModule,
+    SharedModule
   ],
   declarations: [
     CalendarComponent,

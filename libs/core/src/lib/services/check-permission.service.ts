@@ -9,7 +9,6 @@ import { SiteService } from './site.service';
 import { NavigationService } from './navigation.service';
 import { Page, PageData } from '@webui/data';
 import { EventService, EventType } from './event.service';
-import { isManager } from '@webui/utilities';
 
 export interface Permission {
   id: number;
@@ -23,7 +22,9 @@ export interface PermissionResponse {
   group_permission_list: Permission[];
 }
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class CheckPermissionService {
   private _permissions: Permission[];
   private userPermissionEndpoint = `/permissions/user/`;
@@ -58,11 +59,10 @@ export class CheckPermissionService {
   }
 
   public getPermissions(
-    id: string,
-    expired?: boolean
+    id: string
   ): Observable<Permission[]> {
     if (!this.permissions) {
-      return this.getUserPermissions(id, expired);
+      return this.getUserPermissions(id);
     } else {
       return of(this.permissions);
     }
@@ -157,6 +157,10 @@ export class CheckPermissionService {
       );
   }
 
+  public hasPermission(type: string, endpoint): boolean {
+    return this.getAllowMethods(this.permissions, endpoint).includes(type);
+  }
+
   private parseMethod(type: string, id?: string): string {
     if (type === 'list' || (type === 'form' && id)) {
       return 'get';
@@ -171,23 +175,15 @@ export class CheckPermissionService {
 
   private getUserPermissions(
     id: string,
-    expired?: boolean
   ): Observable<Permission[]> {
     return forkJoin([
-      this.hasActiveSubscription(),
       this.http.get<PermissionResponse>(this.userPermissionEndpoint + id + '/')
     ]).pipe(
-      map(([hasActiveSubscription, response]) => {
+      map(([response]) => {
         let permissions: Permission[] = [
           ...response.permission_list,
           ...response.group_permission_list
         ];
-
-        if (isManager() && expired && !hasActiveSubscription) {
-          permissions = permissions.filter(({ codename }) =>
-            codename.includes('_get')
-          );
-        }
 
         this.permissions = permissions;
 

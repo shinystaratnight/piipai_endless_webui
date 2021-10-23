@@ -19,7 +19,9 @@ type Error = {
   };
 };
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class ErrorsService {
   constructor(private ts: ToastService) {}
 

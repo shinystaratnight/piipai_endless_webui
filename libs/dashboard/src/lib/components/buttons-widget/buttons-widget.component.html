@@ -30,13 +30,11 @@
           </svg>
         </a>
         <a
+          appSubscriptionRequired
           [routerLink]="[getLinkToCreateForm(button)]"
           class="widget-button-footer"
         >
-          <span *ngIf="button.add_label">{{
-            getTranslateKey(button.translateKey, 'add')
-              | translate: { Default: button.add_label }
-          }}</span>
+          <span *ngIf="button.add_label">{{ getTranslateKey(button.translateKey, 'add') | translate: { Default: button.add_label } }}</span>
         </a>
       </div>
     </ng-container>
