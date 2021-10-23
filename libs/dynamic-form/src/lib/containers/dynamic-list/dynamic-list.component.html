@@ -212,6 +212,7 @@
                     id="all-checkbox"
                     type="checkbox"
                     hidden
+                    appSubscriptionRequired
                     *ngIf="config.list.actions || actions"
                     [(ngModel)]="selectedAll"
                     (ngModelChange)="selectAll()"
@@ -266,6 +267,7 @@
                       class="form-check-input"
                       [checked]="select[row.id]"
                       hidden
+                      appSubscriptionRequired
                     />
                     <app-checkbox
                       [checked]="select[row.id]"

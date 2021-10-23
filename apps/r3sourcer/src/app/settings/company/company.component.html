@@ -37,7 +37,7 @@
   (submitForm)="submitForm($event)"
   (event)="eventHandler($event)">
   <div class="d-flex">
-    <button type="submit" class="btn btn-primary ml-auto" [disabled]="saveProcess || form.disableSaveButton">
+    <button appSubscriptionRequired type="submit" class="btn btn-primary ml-auto" [disabled]="saveProcess || form.disableSaveButton">
       Save
       <app-spinner *ngIf="saveProcess"></app-spinner>
     </button>

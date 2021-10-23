@@ -311,8 +311,8 @@ iframe.send-sms {
       right: 4px;
     }
 
-    &:hover,
-    &:focus {
+    &:not(:disabled):hover,
+    &:not(:disabled):focus {
       color: $gray;
 
       background-color: white;

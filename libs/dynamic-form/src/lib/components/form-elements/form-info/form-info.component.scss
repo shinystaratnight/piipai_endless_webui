@@ -265,26 +265,13 @@ p {
 
 .extend-block {
   padding: 28px;
-
   text-align: center;
-
   background-color: rgba(40, 163, 252, 0.1);
-
   border: solid 1px rgba(40, 163, 252, 0.15);
-
-  b {
-    font-size: 28px;
-    line-height: 1.07;
-
-    color: #4f4f4f;
-  }
 
   p {
     padding-bottom: 20px;
-
-    font-size: 16px;
-    line-height: 1.25;
-
+    margin-bottom: 0;
     opacity: 0.7;
   }
 }
@@ -329,4 +316,19 @@ p {
 
 .contact-avatar {
   @include image;
+}
+
+.actions {
+  display: flex;
+  justify-content: center;
+
+  & > *:not(:last-child) {
+    margin-right: 0.5rem;
+  }
+}
+
+.section {
+  &-title {
+    margin-bottom: 4px;
+  }
 }

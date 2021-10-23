@@ -10,9 +10,10 @@
     }}</option>
   </select>
   <button
-    class="btn btn-primary btn-shadow mb-0"
+    class="btn btn-primary mb-0"
     type="button"
     (click)="toDoAction()"
+    appSubscriptionRequired
     [attr.title]="getSmsTitle(action.endpoint)"
     [disabled]="isDisableSmsButton(action.endpoint)"
   >

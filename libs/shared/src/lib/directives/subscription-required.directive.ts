@@ -1,6 +1,6 @@
 import { AfterViewInit, Directive, ElementRef, HostListener, OnDestroy, OnInit, Optional, Renderer2, TemplateRef } from '@angular/core';
 import { SubscriptionService } from '@webui/core';
-import { FakeMissingTranslationHandler, TranslateService } from '@ngx-translate/core';
+import { TranslateService } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
 import { RouterLink, RouterLinkWithHref } from '@angular/router';
 
@@ -22,17 +22,19 @@ export class SubscriptionRequiredDirective implements OnInit, OnDestroy, AfterVi
   ) {
     const link =  routerLink || routerLinkWithHref;
 
-    // Save original method
-    const onClick = link.onClick;
+    if (link) {
+      // Save original method
+      const onClick = link.onClick;
 
-    // Replace method
-    link.onClick = (...args) => {
-      if (this.disabled) {
-          return routerLinkWithHref ? false : true;
-      } else {
-          return onClick.apply(link, args);
-      }
-    };
+      // Replace method
+      link.onClick = (...args) => {
+        if (this.disabled) {
+            return routerLinkWithHref ? false : true;
+        } else {
+            return onClick.apply(link, args);
+        }
+      };
+    }
   }
 
   public ngOnInit() {
@@ -53,21 +55,16 @@ export class SubscriptionRequiredDirective implements OnInit, OnDestroy, AfterVi
         this.disabled = true;
         this.renderer.setAttribute(this.el.nativeElement, 'disabled', 'disabled');
         this.renderer.addClass(this.el.nativeElement, 'disabled');
+        this.renderer.setAttribute(
+          this.el.nativeElement,
+          'title',
+          this.translateService.instant('should_have_subscription')
+        );
 
         if (this.el.nativeElement instanceof HTMLAnchorElement) {
           this.renderer.setAttribute(this.el.nativeElement, 'href', '#');
         }
       }
     });
-  }
-
-  @HostListener('mouseover', ['$event']) onHover(event: PointerEvent) {
-    if (this.disabled) {
-      this.renderer.setAttribute(
-        this.el.nativeElement,
-        'title',
-        this.translateService.instant('should_have_subscription')
-      );
-    }
   }
 }

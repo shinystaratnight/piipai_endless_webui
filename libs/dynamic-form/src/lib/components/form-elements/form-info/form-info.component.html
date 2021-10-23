@@ -222,10 +222,17 @@
     </ng-container>
 
     <div *ngIf="job && !config.disableButtons && !disableButtons" class="extend-block">
-      <b>{{ 'add_shifts_and_workers' | translate: {"Default": "Add shifts and workers"} }}</b>
-      <p>{{ 'add_shifts_and_workers.description' | translate: {"Default": "Create dates, shifts and time for tasks, add workers."} }}</p>
-      <button class="btn btn-primary btn-shadow" type="button" (click)="extendJob()">{{ 'add_shifts_and_workers' | translate: {"Default": "Add shifts and workers"} }}</button>
-      <button class="btn btn-primary btn-shadow ml-2" type="button" (click)="fillInJob()">{{ 'fill_in.label' | translate: {"Default": "Fill In"} }}</button>
+      <h4 class="headline-3 section-title">{{ 'add_shifts_and_workers' | translate: {"Default": "Add shifts and workers"} }}</h4>
+      <p class="body">{{ 'add_shifts_and_workers.description' | translate: {"Default": "Create dates, shifts and time for tasks, add workers."} }}</p>
+
+      <div class="actions">
+        <button appSubscriptionRequired class="btn btn-primary" type="button" (click)="extendJob()">
+          {{ 'add_shifts_and_workers' | translate: {"Default": "Add shifts and workers"} }}
+        </button>
+        <button appSubscriptionRequired class="btn btn-primary" type="button" (click)="fillInJob()">
+          {{ 'fill_in.label' | translate: {"Default": "Fill In"} }}
+        </button>
+      </div>
     </div>
   </div>
 
