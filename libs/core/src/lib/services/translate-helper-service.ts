@@ -5,7 +5,9 @@ import { Language } from '@webui/data';
 
 import { LocalStorageService } from 'ngx-webstorage';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class TranslateHelperService {
   private _lang = new BehaviorSubject('en');
 

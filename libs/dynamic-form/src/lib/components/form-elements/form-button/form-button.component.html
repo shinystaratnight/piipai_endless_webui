@@ -16,6 +16,7 @@
   </div>
 
   <button
+    appSubscriptionRequired
     [type]="
       config.templateOptions.type ? config.templateOptions.type : 'button'
     "
@@ -92,7 +93,8 @@
     {{ config.translationKey && config.templateOptions.text ? (config.translationKey | translate: {"Default": config.templateOptions.text}) : config.templateOptions.text }}
   </button>
   <span class="postfix mr-1" *ngIf="config.postfix">{{ config.postfix }}</span>
-  <span
+  <button
+    appSubscriptionRequired
     class="custom-button"
     *ngIf="
       !config.hidden &&
@@ -114,7 +116,7 @@
     >
     </fa-icon>
     {{ config.translationKey ? (config.translationKey | translate: {"Default": config.title}) : config.title }}
-  </span>
+  </button>
   <div *ngIf="config.customLink && config.image" class="image-wrapper">
     <div class="tracking-mobile">
       <button

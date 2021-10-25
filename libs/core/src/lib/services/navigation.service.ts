@@ -31,7 +31,9 @@ type NavigationResponse = {
 
 const jobEndpoints = [Endpoints.ClientJobs, Endpoints.JobsiteClient];
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class NavigationService {
   public currentRole: Role;
   public error;

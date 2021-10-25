@@ -12,7 +12,9 @@ import { Endpoints, Purpose, DashboardWidget } from '@webui/data';
 import { ErrorsService } from './errors.service';
 import { ToastService, MessageType } from './toast.service';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class CompanyPurposeService {
   public purpose: Purpose;
 

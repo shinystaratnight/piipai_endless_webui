@@ -26,8 +26,11 @@ a.active {
 
 a.disabled {
   color: inherit;
-  pointer-events: none;
   cursor: default;
+
+  &.btn {
+    pointer-events: unset;
+  }
 }
 
 fa-icon {
@@ -308,8 +311,8 @@ iframe.send-sms {
       right: 4px;
     }
 
-    &:hover,
-    &:focus {
+    &:not(:disabled):hover,
+    &:not(:disabled):focus {
       color: $gray;
 
       background-color: white;

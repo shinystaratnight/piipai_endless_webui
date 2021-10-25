@@ -20,7 +20,9 @@ interface CompanySettings {
   [key: string]: any;
 }
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class SiteSettingsService {
   settings: CompanySettings;
 
