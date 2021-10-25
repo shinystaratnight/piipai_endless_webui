@@ -41,7 +41,8 @@ type ClientTimesheetModalConfig = {
 
 @Component({
   selector: 'app-change-timesheet-modal',
-  templateUrl: './change-timesheet-modal.component.html'
+  templateUrl: './change-timesheet-modal.component.html',
+  styleUrls: ['./change-timesheet-modal.component.scss']
 })
 export class ChangeTimesheetModalComponent extends Modal {
   config: ClientTimesheetModalConfig;

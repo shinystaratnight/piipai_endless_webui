@@ -56,6 +56,8 @@ export class PermissionGuard implements CanActivate {
           }
 
           requests.push(this.checkPermissionService.getPermissions(user.data.user));
+        } else {
+          this.subscriptionService.useClientPermissions();
         }
 
         forkJoin(requests).subscribe(([ navigation ]) => {
