@@ -33,7 +33,11 @@ export class SubscriptionService {
       })
   }
 
-  public useTrialPermissions() {
+  public useTrialPermissions(): void {
+    this._subscription.next({} as Billing.Subscription);
+  }
+
+  public useClientPermissions(): void {
     this._subscription.next({} as Billing.Subscription);
   }
 
