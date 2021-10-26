@@ -1,5 +1,5 @@
 import { Directive, Input, TemplateRef, ViewContainerRef } from '@angular/core';
-import { CheckPermissionService, SubscriptionService } from '@webui/core';
+import { CheckPermissionService } from '@webui/core';
 import { Endpoints } from '@webui/data';
 
 type Action = 'post' | 'update' | 'delete' | 'get';
