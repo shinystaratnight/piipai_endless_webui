@@ -58,7 +58,7 @@ const formset = () => ({
       new List.column.element('value', 'Value').setContent([
         new List.input.element('value')
       ]),
-      new List.column.element('actions', 'Actions').setContent([
+      new List.column.element('buttons', 'Actions').setContent([
         new List.button.element('id', 'editForm', 'Edit')
           .setTranslationKey('edit')
           .setIcon('pencil-alt')
