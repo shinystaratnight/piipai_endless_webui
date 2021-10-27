@@ -3,7 +3,7 @@ import { FormGroup, FormControl } from '@angular/forms';
 import { UserService } from '@webui/core';
 import { Endpoints } from '@webui/data';
 import { FormatString } from '@webui/utilities';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, of } from 'rxjs';
 import { catchError, finalize, switchMap } from 'rxjs/operators';
 import {
   createAddAction,
@@ -314,6 +314,10 @@ export class SubmissionFormComponent {
   }
 
   private createSkillActivity() {
+    if (this.config.edit) {
+      return of({});
+    }
+
     return this.gfs.submitForm(
       Endpoints.TimesheetRates,
       this.skillActivityData
