@@ -96,12 +96,20 @@ export class SubmissionFormComponent {
     });
 
     if (this.config.extendData.status === 5) {
+      const type = this.config.extendData.wage_type === 0 ? TimesheetType.Times : TimesheetType.Activities;
       this.isEditTimesheet = true;
-      this.typeControl.patchValue(TimesheetType.Activities);
-      this.parseMetadata(this.skillActivities, this.config.data);
-      this.updateMetadata(this.getMetadataConfig(this.skillActivities));
-      this.updateMetadata(this.getMetadataConfig(this.notes));
-      this.formFilled = true;
+      this.typeControl.patchValue(type);
+
+      if (type === TimesheetType.Times) {
+        this.mode.next('edit');
+        this.parseMetadata(this.times, this.config.data);
+        this.updateDatepickerByTimezone(this.times, this.config.data);
+        this.updateMetadata(this.getMetadataConfig(this.times));
+      } else {
+        this.updateMetadata(this.getMetadataConfig(this.skillActivities));
+        this.updateMetadata(this.getMetadataConfig(this.notes));
+        this.formFilled = true;
+      }
     }
   }
 
@@ -176,7 +184,7 @@ export class SubmissionFormComponent {
 
     if (this.type === TimesheetType.Activities) {
       request = this.createSkillActivity().pipe(
-        switchMap((skillActivity) => {
+        switchMap(() => {
           return this.gfs.editForm(this.config.endpoint, { hours: false });
         })
       );
@@ -315,7 +323,7 @@ export class SubmissionFormComponent {
 
   private createSkillActivity() {
     if (this.config.edit) {
-      return of({});
+      return of(null);
     }
 
     return this.gfs.submitForm(
