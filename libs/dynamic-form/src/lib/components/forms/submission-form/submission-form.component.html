@@ -20,9 +20,12 @@
   </div>
 </app-dynamic-form>
 
-<app-dynamic-form *ngIf="type === timesheetType.Times && formFilled" [config]="timesFilled"
-  [hiddenFields]="hiddenFields" (submitForm)="saveTimes($event)">
-</app-dynamic-form>
+<app-dynamic-form
+  *ngIf="type === timesheetType.Times && formFilled"
+  [config]="timesFilled"
+  [hiddenFields]="hiddenFields"
+  (submitForm)="saveTimes($event)"
+></app-dynamic-form>
 
 <app-dynamic-form *ngIf="type === timesheetType.Activity" [config]="skillActivity" [hiddenFields]="hiddenFields"
   (event)="eventHandler($event)" (submitForm)="saveSkillActivity($event)">
@@ -37,8 +40,10 @@
   </div>
 </app-dynamic-form>
 
-<app-dynamic-form *ngIf="type === timesheetType.Activities && isEditTimesheet" [config]="skillActivities">
-</app-dynamic-form>
+<app-dynamic-form
+  *ngIf="type === timesheetType.Activities && isEditTimesheet"
+  [config]="skillActivities"
+></app-dynamic-form>
 
 <ng-container *ngIf="type === timesheetType.Activities && !isEditTimesheet">
   <table class="table">
