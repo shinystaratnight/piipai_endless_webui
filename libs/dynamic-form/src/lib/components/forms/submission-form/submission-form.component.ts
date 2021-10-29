@@ -97,15 +97,11 @@ export class SubmissionFormComponent {
 
     if (this.config.extendData.status === 5) {
       const type = this.config.extendData.wage_type === 0 ? TimesheetType.Times : TimesheetType.Activities;
-      this.isEditTimesheet = true;
-      this.typeControl.patchValue(type);
 
-      if (type === TimesheetType.Times) {
-        this.mode.next('edit');
-        this.parseMetadata(this.times, this.config.data);
-        this.updateDatepickerByTimezone(this.times, this.config.data);
-        this.updateMetadata(this.getMetadataConfig(this.times));
-      } else {
+      if (type === TimesheetType.Activities) {
+        this.isEditTimesheet = true;
+        this.typeControl.patchValue(type);
+
         this.updateMetadata(this.getMetadataConfig(this.skillActivities));
         this.updateMetadata(this.getMetadataConfig(this.notes));
         this.formFilled = true;
