@@ -48,7 +48,18 @@ export class UserService {
             user.data.country_code = 'GB';
           }
 
+          user.data.roles = user.data.roles.map((role: Role) => {
+
+            return {
+              ...role,
+              company_id: role.company_contact_rel.company.id,
+              client_contact_id: role.company_contact_rel.company_contact.id
+            }
+          });
           const roles = user.data.roles;
+
+
+
           if (!user.data.contact.contact_type || !roles.length) {
             this.authService.logout();
 

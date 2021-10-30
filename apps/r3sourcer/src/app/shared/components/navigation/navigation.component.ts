@@ -87,6 +87,10 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   get fullName(): string {
+    if (this.user.currentRole.name === 'candidate') {
+      return this.user.data.contact.name;
+    }
+
     return this.user.currentRole.__str__.split(':').map(el => el.trim()).slice(0, 2).join(' - ');
   }
 
