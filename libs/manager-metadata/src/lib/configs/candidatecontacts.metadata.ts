@@ -416,12 +416,14 @@ const form = [
         name: 'Personal Info',
         type: 'group',
         label: 'Personal information',
+        translateKey: 'personal_info',
         children: [
           {
             type: 'row',
             children: [
               {
                 label: 'Contacts',
+                translateKey: 'contacts',
                 type: 'group',
                 children: [
                   {
@@ -556,6 +558,7 @@ const form = [
               },
               {
                 label: 'Notify',
+                translateKey: 'notify',
                 type: 'group',
                 children: [
                   {
@@ -605,6 +608,7 @@ const form = [
               },
               {
                 label: 'Recruitment agent',
+                translateKey: 'recruitment_agent',
                 type: 'group',
                 children: [
                   {
@@ -661,6 +665,7 @@ const form = [
             children: [
               {
                 label: 'Additional info',
+                translateKey: 'additional_info',
                 type: 'group',
                 children: [
                   {
@@ -744,6 +749,7 @@ const form = [
               },
               {
                 label: 'Physical parameters',
+                translateKey: 'physical_parameters',
                 type: 'group',
                 children: [
                   {
@@ -783,6 +789,7 @@ const form = [
               },
               {
                 label: 'Scores',
+                translateKey: 'scores',
                 type: 'group',
                 children: [
                   {
@@ -826,6 +833,7 @@ const form = [
               },
               {
                 label: 'Rating',
+                translateKey: 'rating',
                 type: 'group',
                 children: [
                   {
@@ -874,6 +882,7 @@ const form = [
             children: [
               {
                 label: 'Residency',
+                translateKey: 'residency',
                 type: 'group',
                 children: [
                   {
@@ -979,6 +988,7 @@ const form = [
               },
               {
                 label: 'Bank Account',
+                translateKey: 'bank_account',
                 type: 'group',
                 children: [
                   {
@@ -994,6 +1004,7 @@ const form = [
               },
               {
                 label: 'Emergency',
+                translateKey: 'emergency',
                 type: 'group',
                 children: [
                   {
@@ -1028,6 +1039,7 @@ const form = [
             children: [
               {
                 label: 'Formalities',
+                translateKey: 'formalities',
                 type: 'group',
                 children: [
                   {
@@ -1172,6 +1184,7 @@ const form = [
           text: 'Candidate Addresses'
         },
         collapsed: false,
+        translateKey: 'addresses',
         prefilled: {
           contact: '{contact.id}'
         },
@@ -1190,6 +1203,7 @@ const form = [
           text: 'Candidate skills'
         },
         collapsed: false,
+        translateKey: 'skills',
         prefilled: {
           candidate_contact: '{id}'
         },
@@ -1208,6 +1222,7 @@ const form = [
           text: 'Candidate tags'
         },
         visibleMode: true,
+        translateKey: 'tags',
         prefilled: {
           candidate_contact: '{id}'
         },
@@ -1220,6 +1235,7 @@ const form = [
       {
         name: 'Tests',
         type: 'testList',
+        translateKey: 'tests',
         endpoint: `${Endpoints.CandidateContact}{id}/tests/`
       },
       {
@@ -1230,6 +1246,7 @@ const form = [
           text: 'Evaluations'
         },
         collapsed: false,
+        translateKey: 'evaluations',
         prefilled: {
           candidate_contact: '{id}'
         },
@@ -1241,6 +1258,7 @@ const form = [
       },
       {
         name: 'States',
+        translateKey: 'states',
         type: 'group',
         children: [
           {
@@ -1292,6 +1310,7 @@ const form = [
         prefilled: {
           contact: '{contact.id}'
         },
+        translateKey: 'unavailability',
         visibleMode: true
       },
       {
@@ -1307,6 +1326,7 @@ const form = [
           candidate_contact: '{id}'
         },
         type: 'list',
+        translateKey: 'carrier_list',
         query: {
           candidate_contact: '{id}'
         },
@@ -1324,6 +1344,7 @@ const form = [
         prefilled: {
           candidate_contact: '{id}'
         },
+        translateKey: 'black_list',
         type: 'list',
         query: {
           candidate_contact: '{id}'
@@ -1342,6 +1363,7 @@ const form = [
           candidate_contact: '{id}'
         },
         type: 'list',
+        translateKey: 'favorite_list',
         query: {
           candidate_contact: '{id}'
         },
@@ -1356,6 +1378,7 @@ const form = [
           text: 'Job offers'
         },
         collapsed: false,
+        translateKey: 'job_offers',
         type: 'list',
         query: {
           candidate_contact: '{id}'
@@ -1369,6 +1392,7 @@ const form = [
           type: 'list',
           text: 'Timesheets'
         },
+        translateKey: 'timesheets',
         collapsed: false,
         type: 'list',
         query: {
