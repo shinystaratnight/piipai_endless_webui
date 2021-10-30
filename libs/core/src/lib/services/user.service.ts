@@ -57,9 +57,6 @@ export class UserService {
             }
           });
           const roles = user.data.roles;
-
-
-
           if (!user.data.contact.contact_type || !roles.length) {
             this.authService.logout();
 
