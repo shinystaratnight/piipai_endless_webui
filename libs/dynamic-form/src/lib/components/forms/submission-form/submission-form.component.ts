@@ -181,6 +181,10 @@ export class SubmissionFormComponent {
     if (this.type === TimesheetType.Activities) {
       request = this.createSkillActivity().pipe(
         switchMap(() => {
+          if (this.config.extendData.status === 5) {
+            return of({});
+          }
+
           return this.gfs.editForm(this.config.endpoint, { hours: false });
         })
       );
