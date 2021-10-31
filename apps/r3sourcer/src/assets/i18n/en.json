@@ -836,7 +836,6 @@
   "is_active.text": "Active",
   "valid_from.label": "Valid From",
   "valid_until.label": "Valid Until",
-  "group.undefined": "Relationships",
   "filter.company_contact.label": "Recruitment Agent",
   "filter.candidate_contact.label": "Candidate contact",
   "filter.client_contact.label": "Client Contact",

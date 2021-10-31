@@ -28,9 +28,8 @@ export type ApproveTimesheetModalConfig = {
     value: string;
   };
   label: {
-    picture: string;
-    contactAvatar: string;
-    name: string;
+    avatar: { origin: string, thumb: string };
+    fullName: string;
   };
   data: {
     evaluation_score: number;
@@ -41,7 +40,8 @@ export type ApproveTimesheetModalConfig = {
 
 @Component({
   selector: 'app-approve-timesheet-modal',
-  templateUrl: './approve-timesheet-modal.component.html'
+  templateUrl: './approve-timesheet-modal.component.html',
+  styleUrls: ['./approve-timesheet-modal.component.scss']
 })
 export class ApproveTimesheetModalComponent extends Modal implements OnInit {
   config: ApproveTimesheetModalConfig;

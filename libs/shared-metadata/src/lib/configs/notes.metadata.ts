@@ -359,25 +359,22 @@ const formadd = [
     },
     read_only: false
   },
-  new Form.row.element().setChildren([
-    new Form.group.element().setChildren([
-      {
-        key: 'note',
-        type: 'textarea',
-        templateOptions: {
-          label: 'Note',
-          rows: 10,
-          required: true,
-          autofocus: true,
-          type: 'textarea'
-        },
-        read_only: false
-      }
-    ]),
-    new Form.group.element().setChildren([
-      new Form.imageList.element('files', 'Files').doNotSend()
-    ])
-  ]),
+  {
+    key: 'note',
+    type: 'textarea',
+    templateOptions: {
+      label: 'Note',
+      rows: 10,
+      required: true,
+      autofocus: true,
+      type: 'textarea',
+      full: true
+    },
+    read_only: false
+  },
+  new Form.imageList
+    .element('files', 'Files')
+    .doNotSend(),
   {
     key: 'contact',
     type: 'input',

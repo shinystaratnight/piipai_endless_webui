@@ -2020,9 +2020,8 @@ export class DynamicListComponent
             value: ''
           },
           label: {
-            picture: contact.picture && contact.picture.origin,
-            contactAvatar: getContactAvatar(contact.__str__),
-            name: contact.__str__
+            avatar: contact.picture,
+            fullName: contact.__str__,
           },
           data: {
             evaluation_score: score
