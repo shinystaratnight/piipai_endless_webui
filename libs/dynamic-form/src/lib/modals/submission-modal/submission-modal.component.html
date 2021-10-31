@@ -1,16 +1,12 @@
 <app-base-modal (dissmisEvent)="dismiss()">
 
-    <header>
-        <h5 class="modal-title">
-            <img *ngIf="config.label.picture" class="avatar" alt="Photo" width="40" height="40"
-                [src]="config.label.picture" />
+    <header class="header">
+      <app-user-avatar
+        [source]="config.label.avatar"
+        [fullName]="config.label.fullName"
+      ></app-user-avatar>
 
-            <span *ngIf="!config.label.picture" class="contact-avatar avatar">
-                {{ config.label.contactAvatar }}
-            </span>
-
-            {{ config.label.name }}
-        </h5>
+      <h3 class="title">{{ config.label.fullName }}</h3>
     </header>
 
     <div class="modal-body">

@@ -1,27 +1,17 @@
 <app-base-modal modalClass="approve-signature-modal" (dissmisEvent)="dismiss()">
-  <header class="header">
-    <img
-      alt="Photo"
-      width="54"
-      height="54"
-      *ngIf="config.label.picture"
-      [src]="config.label.picture"
-    />
 
-    <h2 class="modal-title d-flex align-items-center">
-      <div class="mr-3">
-        <span class="contact-avatar avatar" *ngIf="!config.label.picture">
-          {{ config.label.contactAvatar }}
-        </span>
-      </div>
-      <div class="d-flex justify-content-center flex-column">
-        {{ 'approve_timesheet' | translate: { Default: 'Approve timesheet' } }}
-        <br />
-        <span class="secondary-title"
-          >for {{ config.label.name }} ({{ shiftDate }})</span
-        >
-      </div>
-    </h2>
+  <header class="header">
+    <app-user-avatar
+      [source]="config.label.avatar"
+      [fullName]="config.label.fullName"
+    ></app-user-avatar>
+
+    <h3 class="title">
+      <span>{{ 'approve_timesheet' | translate: { Default: 'Approve timesheet' } }}</span>
+      <span class="subtitle">
+        for {{ config.label.fullName }} <small>({{ shiftDate }})</small>
+      </span>
+    </h3>
   </header>
 
   <div class="modal-body">
