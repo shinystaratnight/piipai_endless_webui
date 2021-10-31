@@ -206,6 +206,7 @@ const form = [
         main: true,
         name: 'General Info',
         type: 'group',
+        translateKey: 'general_info',
         label: 'General information',
         children: [
           {
@@ -314,6 +315,7 @@ const form = [
               {
                 label: 'Notify',
                 type: 'group',
+                translateKey: 'notify',
                 children: [
                   {
                     key: 'message_by_email',
@@ -362,6 +364,7 @@ const form = [
               },
               {
                 label: 'Contacts',
+                translateKey: 'contacts',
                 type: 'group',
                 children: [
                   {
@@ -403,6 +406,7 @@ const form = [
           text: 'Jobsites'
         },
         collapsed: false,
+        translateKey: 'jobsites',
         prefilled: {
           regular_company: '{company.id}',
           primary_contact: '{id}'
@@ -421,6 +425,7 @@ const form = [
           text: 'Jobs'
         },
         collapsed: false,
+        translateKey: 'jobs',
         prefilled: {
           customer_company: '{company.id}',
           customer_representative: '{id}'
@@ -441,6 +446,7 @@ const form = [
           text: 'Timesheets'
         },
         collapsed: false,
+        translateKey: 'timesheets',
         type: 'list',
         query: {
           supervisor: '{id}'
@@ -455,6 +461,7 @@ const form = [
           text: 'Notes',
         },
         add_form: true,
+        translateKey: 'notes',
         collapsed: false,
         prefilled: {
           object_id: '{id}',

@@ -180,6 +180,7 @@ const form = [
         main: true,
         name: 'Skill Info',
         type: 'group',
+        translateKey: 'skill_info',
         label: 'Skill information',
         children: [
           {
@@ -187,6 +188,7 @@ const form = [
             children: [
               {
                 label: 'Additional Info',
+                translateKey: 'additional_info',
                 type: 'group',
                 children: [
                   {
@@ -219,7 +221,7 @@ const form = [
           }
         ]
       },
-      new Form.list.element('Skill Rate Ranges', Endpoints.SkillRateRanges)
+      new Form.list.element('Skill Rate Ranges', Endpoints.SkillRateRanges, 'skill_rate_range')
         .setQuery({
           skill: '{id}'
         })
@@ -234,6 +236,7 @@ const form = [
           add_label: '+ Add',
           text: 'Skill tags'
         },
+        translateKey: 'skill_tags',
         visibleMode: true,
         prefilled: {
           skill: '{id}'
