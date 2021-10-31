@@ -106,14 +106,13 @@
 
     <div class="list-item-content" *ngIf="candidate.extend">
       <div *ngIf="candidate.state" class="list-item-status">
-        <span class="title">{{
-          'status.label' | translate: { Default: 'Status' }
-        }}</span>
+        <span class="title">{{ 'status.label' | translate: { Default: 'Status' } }}</span>
         <span
           class="badge badge-outline"
           [ngClass]="[checkClass(candidate.state)]"
-          >{{ candidate.state.__str__ }}</span
         >
+          {{ candidate.state.number | workflowState: candidate.state.__str__ : 'active' }}
+        </span>
       </div>
 
       <ng-container *ngIf="candidate.skills && candidate.skills.length">
@@ -186,12 +185,8 @@
 </ng-template>
 
 <ng-template #score let-score="score" let-value="value" let-right="right">
-  <span
-    class="score d-inline-flex align-items-center"
-    [style.color]="score ? colors[score] : colors[1]"
-    [style.borderColor]="score ? colors[score] : colors[1]"
-  >
-    {{ score ? (value | number: '1.1-1') : 'No rating' }}
+  <span class="score d-inline-flex align-items-center" [appAverageScore]="value">
+    {{ value | averageScore }}
     <ng-container *ngIf="score">
       <fa-icon class="ml-1" icon="star"></fa-icon>
     </ng-container>
