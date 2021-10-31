@@ -874,6 +874,7 @@ const form = [
       {
         main: true,
         name: 'Job info',
+        translateKey: 'job_info',
         type: 'group',
         label: 'Job information',
         children: [
@@ -882,6 +883,7 @@ const form = [
             children: [
               {
                 label: 'General',
+                translateKey: 'general',
                 type: 'group',
                 children: [
                   {
@@ -930,6 +932,7 @@ const form = [
               },
               {
                 label: 'Client',
+                translateKey: 'client',
                 type: 'group',
                 children: [
                   {
@@ -991,6 +994,7 @@ const form = [
               },
               {
                 label: 'Provider',
+                translateKey: 'provider',
                 type: 'group',
                 children: [
                   {
@@ -1053,6 +1057,7 @@ const form = [
               text: 'Job Rate',
               add_label: 'Add'
             },
+            translateKey: 'jobrates',
             collapsed: false,
             visibleMode: true,
             prefilled: {
@@ -1073,6 +1078,7 @@ const form = [
         },
         add_endpoint: '/hr/shiftdates/',
         edit_endpoint: '/hr/shiftdates/{date.id}',
+        translateKey: 'shifts',
         templateOptions: {
           label: 'Shift Dates',
           type: 'list',
@@ -1103,6 +1109,7 @@ const form = [
           text: 'Job Offers'
         },
         visibleMode: true,
+        translateKey: 'job_offers',
         type: 'list',
         query: {
           job: '{id}'
@@ -1117,6 +1124,7 @@ const form = [
       },
       {
         name: 'Job states',
+        translateKey: 'job_states',
         type: 'group',
         children: [
           {
@@ -1167,6 +1175,7 @@ const form = [
           text: 'Favourite List'
         },
         collapsed: false,
+        translateKey: 'favorite_list',
         prefilled: {
           job: '{id}',
           jobsite: '{jobsite.id}',
@@ -1193,6 +1202,7 @@ const form = [
       values: ['__str__', 'id', 'owner', 'translation'],
       type: 'related'
     },
+    translateKey: 'tags',
     query: {
       skill: '{position.id}'
     },
