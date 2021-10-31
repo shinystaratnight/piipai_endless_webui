@@ -354,6 +354,7 @@ const form = [
       {
         main: true,
         name: 'General Info',
+        translateKey: 'general_info',
         type: 'group',
         label: 'General information',
         children: [
@@ -529,6 +530,7 @@ const form = [
           add_label: '+ Add',
           text: 'Jobs'
         },
+        translateKey: 'jobs',
         collapsed: false,
         prefilled: {
           customer_representative: '{primary_contact.id}',
@@ -549,6 +551,7 @@ const form = [
           text: 'Notes'
         },
         add_form: true,
+        translateKey: 'notes',
         collapsed: false,
         prefilled: {
           object_id: '{id}',

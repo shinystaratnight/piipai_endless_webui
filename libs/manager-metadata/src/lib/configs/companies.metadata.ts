@@ -159,11 +159,13 @@ const list = {
         options: [
           {
             value: 'True',
-            label: 'Approved'
+            label: 'Approved',
+            key: 'approved'
           },
           {
             value: 'False',
-            label: 'Unapproved'
+            label: 'Unapproved',
+            key: 'unapproved'
           }
         ],
         query: 'credit_check',
@@ -336,6 +338,7 @@ const form = [
         main: true,
         name: 'General Info',
         type: 'group',
+        translateKey: 'general_info',
         label: 'General information',
         children: [
           {
@@ -344,6 +347,7 @@ const form = [
               {
                 label: 'Primary Contact',
                 type: 'group',
+                translateKey: 'primary_contact',
                 children: [
                   {
                     list: false,
@@ -389,6 +393,7 @@ const form = [
               },
               {
                 label: 'Additional Info',
+                translateKey: 'additional_contact',
                 type: 'group',
                 children: [
                   {
@@ -484,6 +489,7 @@ const form = [
               },
               {
                 label: 'Portfolio Manager',
+                translateKey: 'portfolio_manager',
                 type: 'group',
                 children: [
                   {
@@ -556,6 +562,7 @@ const form = [
               {
                 label: 'Credit Info and billing terms',
                 type: 'group',
+                translateKey: 'credit_info',
                 children: [
                   {
                     key: 'credit_check',
@@ -951,6 +958,7 @@ const form = [
           text: 'Company Address'
         },
         collapsed: false,
+        translateKey: 'addresses',
         prefilled: {
           company: '{id}'
         },
@@ -977,6 +985,7 @@ const form = [
           }
         },
         visibleMode: true,
+        translateKey: 'company_contacts',
         prefilled: {
           company: '{id}'
         },
@@ -994,6 +1003,7 @@ const form = [
           text: 'Jobsites'
         },
         visibleMode: true,
+        translateKey: 'jobsites',
         prefilled: {
           regular_company: '{id}'
         },
@@ -1015,6 +1025,7 @@ const form = [
           add_label: '+ Add',
           text: 'Price list'
         },
+        translateKey: 'pricelists',
         collapsed: false,
         prefilled: {
           company: '{id}'
@@ -1026,6 +1037,7 @@ const form = [
       },
       {
         name: 'States',
+        translateKey: 'states',
         type: 'group',
         children: [
           {
@@ -1068,6 +1080,7 @@ const form = [
         query: {
           customer_company: '{id}'
         },
+        translateKey: 'invoices',
         templateOptions: {
           label: 'Invoices',
           type: 'list',
@@ -1084,6 +1097,7 @@ const form = [
           add_label: '+ Add',
           text: 'Languages'
         },
+        translateKey: 'languages',
         prefilled: {
           company_id: '{id}'
         },
@@ -1099,6 +1113,7 @@ const form = [
         },
         add_form: true,
         collapsed: false,
+        translateKey: 'notes',
         prefilled: {
           object_id: '{id}',
           content_type: '{model_content_type}'
