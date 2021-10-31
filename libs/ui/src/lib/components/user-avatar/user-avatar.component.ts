@@ -31,7 +31,7 @@ export class UserAvatarComponent {
     const parts = this.fullName.split(' ');
 
     if (parts.length > 2) {
-      parts.shift;
+      parts.shift();
     }
 
     return this.getInitials(parts);
