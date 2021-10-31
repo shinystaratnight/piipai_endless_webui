@@ -15,3 +15,4 @@ export * from './translate-helper-service';
 export * from './date-range.service';
 export * from './formatter.service';
 export * from './subscription.service';
+export * from './local_env.service';
