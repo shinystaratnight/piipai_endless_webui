@@ -83,16 +83,7 @@
       <b class="name">{{ candidate.name }}</b>
 
       <div class="ml-auto">
-        <ng-container
-          *ngTemplateOutlet="
-            score;
-            context: {
-              score: getScore(candidate.score),
-              value: candidate.score,
-              right: true
-            }
-          "
-        ></ng-container>
+        <ng-container *ngTemplateOutlet="score; context: { value: candidate.score, right: true }"></ng-container>
       </div>
 
       <fa-icon
@@ -126,7 +117,7 @@
           <ng-container
             *ngTemplateOutlet="
               score;
-              context: { score: getScore(skill.score), value: skill.score }
+              context: { value: skill.score }
             "
           ></ng-container>
         </div>
@@ -163,7 +154,7 @@
           <ng-container
             *ngTemplateOutlet="
               score;
-              context: { score: getScore(item.score), value: item.score }
+              context: { value: item.score }
             "
           ></ng-container>
         </div>
@@ -184,10 +175,10 @@
   </div>
 </ng-template>
 
-<ng-template #score let-score="score" let-value="value" let-right="right">
+<ng-template #score let-value="value" let-right="right">
   <span class="score d-inline-flex align-items-center" [appAverageScore]="value">
     {{ value | averageScore }}
-    <ng-container *ngIf="score">
+    <ng-container *ngIf="value">
       <fa-icon class="ml-1" icon="star"></fa-icon>
     </ng-container>
   </span>
