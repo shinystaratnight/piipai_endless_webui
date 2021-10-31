@@ -299,11 +299,13 @@ const list = {
         options: [
           {
             value: 'male',
-            label: 'Male'
+            label: 'Male',
+            key: 'male'
           },
           {
             value: 'female',
-            label: 'Female'
+            label: 'Female',
+            key: 'female'
           }
         ],
         query: 'contact__gender',
@@ -318,10 +320,12 @@ const list = {
         options: [
           {
             value: 1,
+            key: '1',
             label: 'Own Car'
           },
           {
             value: 2,
+            key: '2',
             label: 'Public Transportation'
           }
         ],
@@ -371,6 +375,7 @@ const form = [
       {
         main: true,
         name: 'Personal Info',
+        translateKey: 'personal_info',
         type: 'group',
         label: 'Personal information',
         children: [
@@ -379,6 +384,7 @@ const form = [
             children: [
               {
                 label: 'Additional info',
+                translateKey: 'additional_info',
                 type: 'group',
                 children: [
                   {
@@ -448,6 +454,7 @@ const form = [
               },
               {
                 label: 'Physical parameters',
+                translateKey: 'physical_parameters',
                 type: 'group',
                 children: [
                   {
@@ -485,6 +492,7 @@ const form = [
               },
               {
                 label: 'Scores',
+                translateKey: 'scores',
                 type: 'group',
                 children: [
                   {
@@ -528,6 +536,7 @@ const form = [
               },
               {
                 label: 'Rating',
+                translateKey: 'rating',
                 type: 'group',
                 children: [
                   {
@@ -576,6 +585,7 @@ const form = [
             children: [
               {
                 label: 'Residency',
+                translateKey: 'residency',
                 type: 'group',
                 children: [
                   {
@@ -687,6 +697,7 @@ const form = [
           candidate_contact: '{id}'
         },
         type: 'list',
+        translateKey: 'skills',
         query: {
           candidate_contact: '{id}',
           fields: ['skill', 'score', 'prior_experience']
@@ -707,6 +718,7 @@ const form = [
           candidate_contact: '{id}'
         },
         type: 'list',
+        translateKey: 'tags',
         query: {
           candidate_contact: '{id}',
           fields: ['tag']
@@ -718,6 +730,7 @@ const form = [
       },
       {
         name: 'Tests',
+        translateKey: 'tests',
         type: 'testList',
         endpoint: `${Endpoints.CandidateContact}{id}/tests/`,
         hideQuestions: true,
@@ -736,6 +749,7 @@ const form = [
           candidate_contact: '{id}'
         },
         type: 'list',
+        translateKey: 'evaluations',
         query: {
           candidate_contact: '{id}',
           fields: ['jobsite', 'position', 'evaluation_score', 'evaluated_at']
@@ -757,6 +771,7 @@ const form = [
             'created_at'
           ]
         },
+        translateKey: 'unavailability',
         templateOptions: {
           label: 'Unavailabilities',
           type: 'list',
@@ -782,6 +797,7 @@ const form = [
           candidate_contact: '{id}'
         },
         type: 'list',
+        translateKey: 'carrier_list',
         query: {
           candidate_contact: '{id}',
           fields: ['target_date', 'confirmed_available']
@@ -803,6 +819,7 @@ const form = [
           content_type: '{model_content_type}'
         },
         type: 'list',
+        translateKey: 'notes',
         query: {
           object_id: '{id}',
           fields: ['created_at', 'note']
