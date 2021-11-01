@@ -325,6 +325,11 @@
               "node_modules/jquery-ui-dist/jquery-ui.js",
               "node_modules/jtsage-datebox-bootstrap4/jtsage-datebox.js"
             ],
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "./styles"
+              ]
+            },
             "allowedCommonJsDependencies": [
               "angular2-signaturepad",
               "ngx-google-places-autocomplete",

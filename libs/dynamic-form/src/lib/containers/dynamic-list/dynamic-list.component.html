@@ -1055,7 +1055,7 @@
     </div>
     <div class="button-wrapper">
       <ng-container
-        *ngFor="let field of getElement('change', data.content).content"
+        *ngFor="let field of getElement('approve', data.content).content.slice(1, 2)"
         appListElement
         [config]="inverseButton(field)"
         (event)="eventHandler($event)"

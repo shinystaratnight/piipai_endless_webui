@@ -1,10 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 
-import { EventService, EventType } from '@webui/core';
+import { EventService, EventType, LocalEnvService } from '@webui/core';
 import { candidatecontacts, fillin } from '@webui/manager-metadata';
 import { FilterService } from '@webui/dynamic-form';
-import { Endpoints } from '@webui/data';
+import { AverageScoreColor, Endpoints } from '@webui/data';
 
 import { DashboardService } from '../../services';
 import { Router } from '@angular/router';
@@ -19,16 +19,9 @@ const enum Lists {
   selector: 'app-candidate-widget',
   templateUrl: './candidate-widget.component.html',
   styleUrls: ['./candidate-widget.component.scss'],
-  providers: [FilterService]
+  providers: [FilterService, LocalEnvService]
 })
 export class CandidateWidget implements OnInit, OnDestroy {
-  public colors = {
-    1: '#FA5C46',
-    2: '#fc9183',
-    3: '#FFA236',
-    4: '#ffbf00',
-    5: '#FFD042'
-  };
   public modalScrollDistance = 2;
   public modalScrollThrottle = 50;
   public selectedCandidates: Set<string> = new Set();
@@ -65,21 +58,19 @@ export class CandidateWidget implements OnInit, OnDestroy {
     private widgetService: DashboardService,
     private eventService: EventService,
     private filterService: FilterService,
-    private router: Router
+    private router: Router,
+    private localEnv: LocalEnvService
   ) {}
 
   ngOnInit() {
     this.getCandidateContacts();
     this.subscribeEventChanges();
     this.initFilters();
+    this.localEnv.register('workflowType', 'candidate');
   }
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
-  }
-
-  public getScore(score) {
-    return Math.floor(parseFloat(score));
   }
 
   public checkClass(item) {
