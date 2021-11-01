@@ -1739,7 +1739,7 @@ export class DynamicListComponent
 
       this.modalRef = this.modalService.open(SubmissionModalComponent, {
         backdrop: 'static',
-        size: 'lg',
+        size: 'md',
         windowClass
       });
       this.modalRef.componentInstance.config = this.modalInfo;

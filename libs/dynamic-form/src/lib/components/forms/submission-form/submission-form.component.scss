@@ -26,9 +26,21 @@
   }
 }
 
-.table {
+.table,
+.table-footer {
   margin: 0 20px;
   width: calc(100% - 40px);
+}
+
+.table-footer {
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+}
+
+.table td {
+  font-size: 14px;
+  vertical-align: inherit;
+  padding: 0 0.75rem;
 }
 
 .footer {
