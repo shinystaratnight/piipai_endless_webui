@@ -322,7 +322,7 @@ export class SubmissionFormComponent {
   }
 
   private createSkillActivity() {
-    if (this.config.edit) {
+    if (this.config.extendData.status === 5) {
       return of(null);
     }
 
