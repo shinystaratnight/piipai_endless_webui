@@ -1138,7 +1138,10 @@ export class FormRelatedComponent
       return false;
     }
 
-    if (!this.checkPermission(type) && (this.config.addEndpoint || this.config.endpoint)) {
+    if (
+      !this.checkPermission(type) &&
+      (this.config.addEndpoint || this.config.endpoint)
+    ) {
       return;
     }
     this.modalData = {};
@@ -1447,7 +1450,7 @@ export class FormRelatedComponent
       const testsMap = {
         skill: 'acceptance_tests_skills',
         tag: 'acceptance_tests_tags'
-      }
+      };
 
       return this.config.tests.filter((test) => {
         const list = test[testsMap[this.config.key]];
@@ -1730,6 +1733,7 @@ export class FormRelatedComponent
         this.lastElement += this.limit;
         this.currentQuery = query;
         this.currentId = id;
+        this.cd.detectChanges();
         if (!id) {
           this.genericFormService
             .getByQuery(endpoint, query)
@@ -1849,6 +1853,7 @@ export class FormRelatedComponent
                 }
               }
               this.updatePosition();
+              this.cd.detectChanges();
             });
         } else {
           this.genericFormService
@@ -1884,6 +1889,7 @@ export class FormRelatedComponent
 
                 callback.call(this, res, false, true);
               }
+              this.cd.detectChanges();
             });
         }
       }

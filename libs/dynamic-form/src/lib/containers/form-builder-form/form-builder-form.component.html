@@ -5,7 +5,10 @@
     </div>
 
     <header class="form__header" *ngIf="steps.length > 1">
-      <span class="form__steps">{{'registration.step' | translate}} {{ currentStep + 1 }} {{'registration.of' | translate}} {{ steps.length }}</span>
+      <span class="form__steps"
+        >{{ 'registration.step' | translate }} {{ currentStep + 1 }}
+        {{ 'registration.of' | translate }} {{ steps.length }}</span
+      >
       <h3 class="form__name">{{ steps[currentStep].title | translate }}</h3>
     </header>
 
@@ -27,40 +30,52 @@
       </div>
     </div>
 
-    <footer class="form__footer" *ngIf="!process" [class.justify-content-center]="steps.length === 1">
+    <footer
+      class="form__footer"
+      *ngIf="!process"
+      [class.justify-content-center]="steps.length === 1"
+    >
       <button
         type="button"
         class="form__button btn btn-default"
         (click)="back()"
       >
-        {{'back' | translate}}
+        {{ 'back' | translate }}
       </button>
 
-      <div class="button-wrapper d-flex flex-column align-items-center" *ngIf="currentStep + 1 !== steps.length">
+      <div
+        class="button-wrapper d-flex flex-column align-items-center"
+        *ngIf="currentStep + 1 !== steps.length"
+      >
         <button
           type="button"
           class="form__button btn btn-primary w-100"
-          [disabled]="disableNextButton || formInvalid"
+          [disabled]="invalid | async"
           (click)="next()"
         >
           {{ 'next' | translate }}
         </button>
-        <span class="error-message" *ngIf="formInvalid">
-          {{'registration.fill_error' | translate}}
+        <span class="error-message" *ngIf="invalid | async">
+          {{ 'registration.fill_error' | translate }}
         </span>
       </div>
 
-      <div class="button-wrapper d-flex flex-column align-items-center" *ngIf="currentStep + 1 === steps.length">
+      <div
+        class="button-wrapper d-flex flex-column align-items-center"
+        *ngIf="currentStep + 1 === steps.length"
+      >
         <button
           type="submit"
           class="form__button btn btn-primary w-100"
           [disabled]="form.invalid || saveProcess"
           (click)="submitForm()"
         >
-          {{'registration.register' | translate}}
+          {{ 'registration.register' | translate }}
           <app-spinner *ngIf="saveProcess"></app-spinner>
         </button>
-        <span class="error-message" *ngIf="form.invalid">{{'registration.fill_error' | translate}}</span>
+        <span class="error-message" *ngIf="form.invalid">{{
+          'registration.fill_error' | translate
+        }}</span>
       </div>
     </footer>
   </section>
