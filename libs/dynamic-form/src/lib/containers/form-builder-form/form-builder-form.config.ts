@@ -1,6 +1,6 @@
 import { Field } from '@webui/data';
 
-type FormSteps = {
+export type FormStep = {
   title: string;
   metadata: Field[];
   content: Array<string | string[]>;
@@ -19,7 +19,7 @@ export const industryField: Field = {
   query: {}
 };
 
-export const steps: FormSteps[] = [
+export const steps: FormStep[] = [
   {
     title: 'contact_information',
     metadata: [],
