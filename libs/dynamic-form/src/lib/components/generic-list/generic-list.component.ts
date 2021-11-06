@@ -75,6 +75,8 @@ export class GenericListComponent implements OnInit, OnDestroy {
 
   private subscriptions: Subscription[] = [];
 
+  private results: any[];
+
   constructor(
     private gfs: GenericFormService,
     private fs: FilterService,
@@ -317,8 +319,10 @@ export class GenericListComponent implements OnInit, OnDestroy {
     if (add) {
       table.offset += table.limit;
       table.addData = data;
+      this.results = [...this.results, ...data[this.responseField]];
     } else {
       table.data = data;
+      this.results = [...data[this.responseField]];
     }
     // if (this.paginated === 'on') {
     //   this.calcPagination(data);
@@ -537,7 +541,7 @@ export class GenericListComponent implements OnInit, OnDestroy {
               body = {
                 ...body,
                 [prop]: getPropValue(
-                  target.data.results.find((el) => el.id === id),
+                  this.results.find((el) => el.id === id),
                   prop
                 )
               };
