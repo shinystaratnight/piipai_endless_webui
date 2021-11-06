@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-register',
   templateUrl: 'register.component.html',
-  styleUrls: ['./register.component.scss']
+  styleUrls: ['./register.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RegisterComponent implements OnInit {
   public settings: {
@@ -14,33 +15,22 @@ export class RegisterComponent implements OnInit {
     logo: string;
   };
   public config: any;
-  public password: boolean;
 
-  get title() {
-    if (this.config) {
-      return this.config.title;
-    }
-
-    return '';
+  get title(): string {
+    return this.config ? this.config.title : '';
   }
 
-  get logo() {
-    let logo = '/assets/img/logo.svg';
-
-    if (this.settings) {
-      logo = this.settings.logo || logo;
-    }
-
-    return logo;
+  get logo(): string {
+    return this.settings.logo || '/assets/img/logo.svg';
   }
 
   constructor(private route: ActivatedRoute) {}
 
-  public ngOnInit() {
+  public ngOnInit(): void {
     this.settings = this.route.snapshot.data['settings'];
   }
 
-  public setFormConfig(config: any) {
+  public setFormConfig(config: any): void {
     this.config = config;
   }
 }
