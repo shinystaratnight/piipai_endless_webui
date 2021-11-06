@@ -19,7 +19,7 @@
 
     background-color: transparent;
 
-    transition: border 0.7s linear;
+    transition: border 0.2s linear;
 
     .registration-form *:not(.ui-datebox-container) & {
       height: auto;
@@ -32,6 +32,10 @@
 
       border: 1px solid rgba($gray, 0.2);
       border-radius: 4px;
+
+      &.ng-touched.ng-invalid {
+        border-color: $danger;
+      }
     }
 
     &:focus {
@@ -378,6 +382,10 @@
       color: $danger;
     }
   }
+}
+
+.registration-form ngx-intl-tel-input.ng-touched.ng-invalid input {
+  border-color: $danger;
 }
 
 @each $item in $themes {

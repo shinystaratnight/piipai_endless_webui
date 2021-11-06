@@ -122,3 +122,21 @@ export const isAddressField = (field: Field) => {
 
   return key === 'address' || key === 'street_address';
 };
+
+export function convertPhoneNumber(data: any): void {
+  if (!data) {
+    return;
+  }
+
+  const phoneFieldKey = 'phone_mobile';
+
+  Object.keys(data).forEach((key) => {
+    if (key === phoneFieldKey) {
+      data[key] = data[key].internationalNumber;
+    }
+
+    if (typeof data[key] === 'object' && !Array.isArray(data[key])) {
+      convertPhoneNumber(data[key]);
+    }
+  });
+}

@@ -12,6 +12,7 @@ import { Field } from '@webui/data';
 import { CustomEvent } from '../../models/custom-event.model';
 import { SiteSettingsService } from '@webui/core';
 import { FormService } from '../../services';
+import { convertPhoneNumber } from '../../helpers';
 
 @Component({
   selector: 'app-dynamic-form',
@@ -126,6 +127,8 @@ export class DynamicFormComponent implements OnInit {
     if (data.hasOwnProperty('skill_name') && data.skill_name === null) {
       data.skill_name = '';
     }
+
+    convertPhoneNumber(data);
 
     this.submitForm.emit(data);
   }
