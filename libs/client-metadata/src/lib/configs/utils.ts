@@ -75,10 +75,6 @@ export function getTotalTimeColumn() {
   return new List.column.element('totalTime', 'Total time')
     .setWidth(150)
     .setContent([
-      new List.static.element('totalTime')
-        .setDisplay('{totalTime}')
-        .changeColor('success', 'shift_ended_at'),
-
       {
         field: 'timesheet_rates',
         type: 'skillactivity',
