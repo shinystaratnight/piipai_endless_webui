@@ -896,6 +896,7 @@ const formadd = [
     },
     many: true,
     separate: true,
+    unique: true,
     showIf: ['shift.id'],
     query: {
       shift: `{shift.date.shift_date}T{shift.time}%2B${getTimeZoneOffset()}`
