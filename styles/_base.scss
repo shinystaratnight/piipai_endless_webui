@@ -99,26 +99,6 @@ input[type='number'] {
   }
 }
 
-.candidate-tabs {
-  & > .nav-tabs {
-    justify-content: center !important;
-
-    .nav-item:nth-child(13),
-    .nav-item:nth-child(14) {
-      width: 50%;
-      font-weight: bold;
-
-      a.nav-link {
-        display: inline-flex;
-      }
-    }
-
-    .nav-item:nth-child(13) {
-      text-align: right;
-    }
-  }
-}
-
 .shifts-header .tooltip.bs-tooltip-bottom {
   left: auto !important;
   right: 15px !important;

@@ -1,14 +1,19 @@
 <div class="form-tabs">
-  <ngb-tabset
-    [activeId]="config.activeId"
-    [class.candidate-tabs]="config.candidateTabs"
-  >
+  <ngb-tabset [activeId]="config.activeId">
     <ng-container *ngFor="let field of config.children; let i = index">
       <ngb-tab
         [id]="'ngb-tab-' + i"
         *ngIf="!field.hide && (!config.editForm ? field.main : true)"
         title="
-          {{ getTranslateKey(field.translateKey, 'name') | translate: {'Default': field.name || (field.templateOptions && field.templateOptions.label) } }}
+          {{
+          getTranslateKey(field.translateKey, 'name')
+            | translate
+              : {
+                  Default:
+                    field.name ||
+                    (field.templateOptions && field.templateOptions.label)
+                }
+        }}
         "
       >
         <ng-template ngbTabContent>
@@ -16,7 +21,10 @@
             class="label"
             *ngIf="field.main && !isMobileDevice && !config.notEdit"
           >
-            {{ getTranslateKey(field.translateKey, 'label') | translate: {"Default": field.label} }}
+            {{
+              getTranslateKey(field.translateKey, 'label')
+                | translate: { Default: field.label }
+            }}
             <button
               type="button"
               class="btn edit-mode"
@@ -25,7 +33,7 @@
               (click)="changeMode('edit')"
             >
               <fa-icon icon="pencil-alt"></fa-icon>
-              {{'edit_mode' | translate: {"Default": "Edit mode"} }}
+              {{ 'edit_mode' | translate: { Default: 'Edit mode' } }}
             </button>
 
             <button
@@ -35,7 +43,10 @@
               *ngIf="mode === 'edit'"
               (click)="changeMode('view')"
             >
-              {{ 'close_without_save' | translate: {"Default": "Close without save"} }}
+              {{
+                'close_without_save'
+                  | translate: { Default: 'Close without save' }
+              }}
             </button>
 
             <button
@@ -46,7 +57,11 @@
               *ngIf="mode === 'edit' || !config.editForm"
               [disabled]="form && form.disableSaveButton"
             >
-              {{ mode !== 'edit' ? ('save' | translate: {"Default": "Save"}) : ('save_changes' | translate: {"Default": "Save changes"}) }}
+              {{
+                mode !== 'edit'
+                  ? ('save' | translate: { Default: 'Save' })
+                  : ('save_changes' | translate: { Default: 'Save changes' })
+              }}
               <app-spinner *ngIf="saving"></app-spinner>
             </button>
           </div>
