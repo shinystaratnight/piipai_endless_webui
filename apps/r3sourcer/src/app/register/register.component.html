@@ -1,10 +1,10 @@
-<div class="site-page">
+<div *ngIf="settings" class="site-page">
   <div class="form-page">
     <div class="header">
       <img class="logo" [src]="logo" />
 
-      <h3 class="company">{{ settings.company_name }}</h3>
-      <h4 *ngIf="title" class="form-name">{{ title }}</h4>
+      <p class="company">{{ settings.company_name }}</p>
+      <h1 class="form-name">{{ title }}</h1>
     </div>
 
     <div class="form-content registration-form">

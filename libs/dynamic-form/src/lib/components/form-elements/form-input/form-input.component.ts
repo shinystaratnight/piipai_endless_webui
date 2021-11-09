@@ -34,6 +34,7 @@ import { BasicElementComponent } from '../basic-element/basic-element.component'
 import { SiteSettingsService } from '@webui/core';
 import { formatCurrency, getCurrencySymbol } from '@angular/common';
 import { isAddressField } from '../../../helpers';
+import { FormEvent } from '../../../interfaces';
 
 @Component({
   selector: 'app-form-input',
@@ -107,8 +108,8 @@ export class FormInputComponent
     );
   }
 
-  @ViewChild('input')
-  public input;
+  @ViewChild('input') public input;
+  @ViewChild('inputPhone') public inputPhone;
 
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
@@ -169,9 +170,9 @@ export class FormInputComponent
       this.subscriptions.push(
         this.group
           .get(this.key)
-          .valueChanges.pipe(distinctUntilChanged(), debounceTime(400))
+          .valueChanges.pipe(distinctUntilChanged())
           .subscribe(() => {
-            this.eventHandler({ type: 'blur' });
+            this.eventHandler({ type: FormEvent.Change });
           })
       );
     }
@@ -351,7 +352,10 @@ export class FormInputComponent
           this.config.hide = hide;
 
           if (this.config.templateOptions.pattern) {
-            const pattern = getPropValue(formData.value.data, templateOptions.pattern);
+            const pattern = getPropValue(
+              formData.value.data,
+              templateOptions.pattern
+            );
             const control = this.group.get(this.key);
 
             control.setValidators(Validators.pattern(pattern));
@@ -654,14 +658,14 @@ export class FormInputComponent
 
   // Phone field
 
-  onChangePhoneNumber(number) {
-    if (number) {
-      const { internationalNumber = '' } = number;
-      this.intl = number.number;
-      this.config.value = internationalNumber;
-      this.group.get(this.key).patchValue(internationalNumber);
-    }
-  }
+  // onChangePhoneNumber(number) {
+  //   if (number) {
+  //     const { internationalNumber = '' } = number;
+  //     this.intl = number.number;
+  //     this.config.value = internationalNumber;
+  //     this.group.get(this.key).patchValue(internationalNumber);
+  //   }
+  // }
 
   getTranslationKey(type) {
     return `${this.config.key}.${type}`;

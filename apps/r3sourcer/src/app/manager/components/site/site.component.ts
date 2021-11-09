@@ -417,20 +417,7 @@ export class SiteComponent implements OnInit, OnDestroy {
 
           this.router.navigate([path]);
         },
-        (err: any) => {
-          const {
-            status,
-            errors: { error, non_field_errors }
-          } = err;
-
-          if (status === 'error') {
-            const message =
-              error || (non_field_errors && non_field_errors.toString());
-
-            this.ts.sendMessage(message, MessageType.Error);
-          }
-          this.errors = err.errors;
-        }
+        (err: any) => (this.errors = err.errors)
       );
   }
 
