@@ -1,4 +1,12 @@
-import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  Output,
+  EventEmitter,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef
+} from '@angular/core';
 import { FormGroup } from '@angular/forms';
 
 import { GenericFormService } from '../../services/generic-form.service';
@@ -20,6 +28,7 @@ export class TestGeneratorComponent implements OnInit {
   @Input() public send = true;
   @Input() public workflowObject: string;
   @Input() test: any;
+  @Input() skipScore: boolean;
 
   @Output() public sended: EventEmitter<any> = new EventEmitter();
 
@@ -32,7 +41,10 @@ export class TestGeneratorComponent implements OnInit {
   reload: boolean;
   QuestionType = QuestionType;
 
-  constructor(private genericFormService: GenericFormService, private cd: ChangeDetectorRef) {}
+  constructor(
+    private genericFormService: GenericFormService,
+    private cd: ChangeDetectorRef
+  ) {}
 
   public ngOnInit() {
     this.form = new FormGroup({});
@@ -52,14 +64,14 @@ export class TestGeneratorComponent implements OnInit {
     this.testData = {
       name: data.test_name,
       description: data.description,
-      questions: [],
+      questions: []
     };
 
     data.acceptance_test_questions.forEach((question) => {
       this.testData.questions.push(this.generateQuestion(question));
     });
 
-    this.testData.questions.sort((p, n) => p.order > n.order ? 1 : -1);
+    this.testData.questions.sort((p, n) => (p.order > n.order ? 1 : -1));
     this.cd.detectChanges();
   }
 
@@ -85,11 +97,12 @@ export class TestGeneratorComponent implements OnInit {
       type: data.type,
       order: data.order,
       workflow_object: this.workflowObject,
-      answerMetadata: data.type === QuestionType.Text
-        ? this.getTextMetadata()
-        : this.getOptionsMetadata(answerOptions),
+      answerMetadata:
+        data.type === QuestionType.Text
+          ? this.getTextMetadata()
+          : this.getOptionsMetadata(answerOptions),
       group: this.form.get(data.id),
-      pictures: data.pictures.map(el => el.picture.origin)
+      pictures: data.pictures.map((el) => el.picture.origin)
     };
 
     if (question.type === QuestionType.Text) {
@@ -114,7 +127,8 @@ export class TestGeneratorComponent implements OnInit {
     });
 
     if (this.send) {
-      this.genericFormService.submitForm(this.answerEndpoint, body)
+      this.genericFormService
+        .submitForm(this.answerEndpoint, body)
         .subscribe(() => {
           this.sended.emit(true);
         });
@@ -123,7 +137,7 @@ export class TestGeneratorComponent implements OnInit {
     }
   }
 
-  getOptionsMetadata(options: { value: string, label: string }) {
+  getOptionsMetadata(options: { value: string; label: string }) {
     return {
       type: 'radio',
       key: 'answer',
@@ -141,7 +155,7 @@ export class TestGeneratorComponent implements OnInit {
       key: 'answer_text',
       type: 'textarea',
       templateOptions: {
-        full: true,
+        full: true
       },
       read_only: false
     };
@@ -178,5 +192,4 @@ export class TestGeneratorComponent implements OnInit {
       this.cd.detectChanges();
     }, 400);
   }
-
 }

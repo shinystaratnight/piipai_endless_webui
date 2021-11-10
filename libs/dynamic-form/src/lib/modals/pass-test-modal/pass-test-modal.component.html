@@ -1,9 +1,14 @@
-<app-close-button class="close mt-3 mr-3" (click)="dismiss()"></app-close-button>
+<app-close-button
+  class="close mt-3 mr-3"
+  (click)="dismiss()"
+></app-close-button>
 
 <app-test-generator
   [workflowObject]="config.workflowObject"
   [send]="config.send"
   [id]="config.testId"
   [test]="config.test"
-  (sended)="close($event)">
+  [skipScore]="config.skipScoreForTest"
+  (sended)="close($event)"
+>
 </app-test-generator>
