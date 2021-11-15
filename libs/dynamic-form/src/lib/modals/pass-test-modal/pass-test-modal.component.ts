@@ -7,6 +7,7 @@ export interface PassTestModalConfig {
   testId?: string;
   description?: string;
   test?: any;
+  skipScoreForTest?: boolean;
 }
 
 @Component({
@@ -16,10 +17,9 @@ export interface PassTestModalConfig {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PassTestModalComponent {
-
   config: PassTestModalConfig;
 
-  constructor(private modal: NgbActiveModal) { }
+  constructor(private modal: NgbActiveModal) {}
 
   close(data: any) {
     this.modal.close(data);

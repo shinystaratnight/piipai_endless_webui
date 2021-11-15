@@ -598,7 +598,8 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
         this.modalRef.componentInstance.config = {
           test,
           description: test.description,
-          send: false
+          send: false,
+          skipScoreForTest: true
         } as PassTestModalConfig;
 
         this.modalRef.result
