@@ -92,14 +92,6 @@ export class BillingService {
       );
   }
 
-  public payments() {
-    return this.http
-      .get(this.endpoints.payments)
-      .pipe(
-        catchError((err: any) => this.errorService.handleError(err))
-      );
-  }
-
   public getCreditDetails() {
     return this.http
       .get(this.endpoints.autoCharge)
