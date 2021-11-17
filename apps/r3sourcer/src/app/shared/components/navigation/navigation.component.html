@@ -51,7 +51,7 @@
         <span *ngIf="trialMessage" class="description">{{ trialMessage }}</span>
 
         <span class="description role" *ngIf="user.data.roles.length > 1">
-          {{ user.currentRole.name }} <a href="#" (click)="chooseRole($event)">Change</a>
+          {{ user.currentRole.name | translate : { "Default": user.currentRole.name } }} <a href="#" (click)="chooseRole($event)">Change</a>
         </span>
       </div>
       <img
