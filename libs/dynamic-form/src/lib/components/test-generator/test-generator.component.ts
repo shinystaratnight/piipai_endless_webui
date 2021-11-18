@@ -122,7 +122,7 @@ export class TestGeneratorComponent implements OnInit {
         workflow_object: question.workflow_object,
         answer: value.answer,
         answer_text: value.answer_text,
-        score: value.score
+        score: this.skipScore && value.answer_text ? 5 : value.score
       };
     });
 
