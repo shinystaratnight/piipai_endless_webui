@@ -5,11 +5,13 @@ import {
   OnChanges,
   SimpleChanges,
   ViewChild,
-  TemplateRef
+  TemplateRef,
+  ViewChildren,
+  QueryList
 } from '@angular/core';
 
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { BehaviorSubject, forkJoin, Observable, of } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 
 import {
@@ -26,6 +28,8 @@ import {
   questionMetadata,
   answerMetadata
 } from './test-builder.config';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { DynamicFormComponent } from 'libs/dynamic-form/src/lib/containers';
 
 @Component({
   selector: 'app-test-builder',
@@ -36,6 +40,7 @@ export class TestBuilderComponent implements OnInit, OnChanges {
   @Input() public testData: any;
 
   @ViewChild('preview') public previewModal: TemplateRef<any>;
+  @ViewChildren('question') public questionList: QueryList<DynamicFormComponent>;
 
   public testMetadata: Field[];
 
@@ -374,6 +379,28 @@ export class TestBuilderComponent implements OnInit, OnChanges {
           return { src: el.picture.origin, id: el.id };
         })
       );
+    });
+  }
+
+  public drop(event: CdkDragDrop<string[]>) {
+    moveItemInArray(this.questions, event.previousIndex, event.currentIndex);
+
+    setTimeout(() => {
+      const orderRequests = this.questionList.map((el, i) => {
+        const id = el.form.value.id;
+
+        return {
+          id,
+          order: i + 1
+        }
+      }).map((el) => {
+        return this.genericFormService.updateForm(
+          Endpoints.AcceptenceTestQuestion + el.id + '/',
+          el
+        );
+      });
+
+      forkJoin(orderRequests).subscribe();
     });
   }
 }

@@ -4,19 +4,28 @@ import {
   Input,
   Output,
   EventEmitter,
-  OnDestroy
+  OnDestroy,
+  ChangeDetectorRef
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormGroup } from '@angular/forms';
 import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { Subject, BehaviorSubject, Subscription } from 'rxjs';
+import { BehaviorSubject, Subscription, Observable, of, Subject } from 'rxjs';
 
 import { FormBuilderService, FormService } from '../../services';
 import { MessageType, ToastService } from '@webui/core';
 import { HiddenFields } from '../../components/generic-form/generic-form.component';
 import { Endpoints, Field } from '@webui/data';
-import { getElementFromMetadata } from '../../helpers';
+import { convertPhoneNumber, getElementFromMetadata } from '../../helpers';
 import { PassTestModalComponent, PassTestModalConfig } from '../../modals';
+import { FormStep, industryField, steps } from './form-builder-form.config';
+import { delay, finalize } from 'rxjs/operators';
+import { FormEvent } from '../../interfaces';
+
+type Step = {
+  key: number;
+  position: number;
+} & FormStep;
 
 @Component({
   selector: 'app-form-builder-form',
@@ -34,100 +43,48 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
   public form: FormGroup;
   public modalRef: NgbModalRef;
   public formId: number;
-
   public error = {};
   public hiddenFields: HiddenFields = {
     elements: [],
     keys: [],
     observers: []
   };
-  public process: boolean;
-
-  public currentStep = 0;
-  public saveProcess = false;
-  public disableNextButton = false;
-  public formInvalid = true;
   public formChangeSubscription: Subscription;
 
   public passedTests: Map<string, any[]> = new Map();
 
-  public industryField = {
-    type: 'related',
-    send: false,
-    endpoint: '/pricing/industries/',
-    key: 'industry',
-    templateOptions: {
-      label: 'Industry',
-      type: 'related',
-      values: ['__str__', 'id', 'translations']
-    },
-    query: {}
-  };
-
-  public steps = [
-    {
-      title: 'contact_information',
-      metadata: [],
-      content: [
-        'contact.picture',
-        'contact.title',
-        'contact.first_name',
-        'contact.last_name',
-        'contact.birthday',
-        'contact.gender',
-        'contact.phone_mobile',
-        'contact.email',
-        'contact.address.street_address'
-      ]
-    },
-    {
-      title: 'additional_information',
-      metadata: [],
-      content: [
-        'nationality',
-        'residency',
-        'tax_file_number',
-        'transportation_to_work',
-        ['weight', 'height']
-      ]
-    },
-    {
-      title: 'bank_and_superannuation_informatioin',
-      metadata: [],
-      content: [
-        'contact.bank_accounts.bank_account_number',
-        'contact.bank_accounts.bank_account_name',
-        'contact.bank_accounts.bsb_number',
-        'contact.bank_accounts.AccountholdersName',
-        'contact.bank_accounts.bank_name',
-        'contact.bank_accounts.IBAN',
-        'contact.bank_accounts.TestBankAccountField',
-        'formalities.tax_number',
-        'formalities.personal_id',
-        'superannuation_fund',
-        'superannuation_membership_number'
-      ]
-    },
-    {
-      title: 'industry_and_skills',
-      metadata: [],
-      content: ['industry', 'skill', 'tag']
-    }
-  ];
+  private industryField = industryField;
+  private steps = steps;
+  private invalid: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  private saving: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  private _step: BehaviorSubject<Step> = new BehaviorSubject({} as Step);
 
   constructor(
     private service: FormBuilderService,
     private router: Router,
     private toastr: ToastService,
     private modalService: NgbModal,
-    private formService: FormService
+    private formService: FormService,
+    private cd: ChangeDetectorRef
   ) {}
+
+  public get step$(): Observable<Step> {
+    return this._step.asObservable();
+  }
+
+  public get saving$(): Observable<boolean> {
+    return this.saving.asObservable();
+  }
+
+  public get invalid$(): Observable<boolean> {
+    return this.invalid.asObservable();
+  }
 
   public ngOnInit() {
     this.form = new FormGroup({});
 
     this.formChangeSubscription = this.form.valueChanges.subscribe(() => {
-      this.formInvalid = this.isInvalid(this.currentStep);
+      this.validate();
     });
 
     this.industryField.query = {
@@ -148,7 +105,128 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
     }
   }
 
-  public generateSteps() {
+  public back(): void {
+    const currentStep = this._step.getValue();
+
+    if (currentStep.key === 0) {
+      this.router.navigate(['/login']);
+      return;
+    }
+
+    this.changeStep(currentStep.key - 1);
+  }
+
+  public next(): void {
+    const currentStep = this._step.getValue();
+    this.changeStep(currentStep.key + 1);
+  }
+
+  // public eventHandler(event: any) {
+  //   const { type, el, value } = event;
+  //
+  //   // TODO: update validation
+  //   if (type === 'blur') {
+  //     ['email'].forEach((field) => {
+  //       if (el.key.indexOf(field) > -1 && value) {
+  //         this.validateField(field, value, el.key);
+  //       }
+  //     });
+  //   }
+  // }
+
+  public submitForm() {
+    const data = this.form.value;
+    this.saving.next(true);
+
+    this.passTests(data).subscribe((success) => {
+      let body;
+
+      if (this.passedTests.size) {
+        const tests = [];
+        Array.from(this.passedTests.values()).forEach((el) => {
+          if (el) {
+            tests.push(...el);
+          }
+        });
+        body = { ...this.form.value, tests };
+      } else {
+        body = this.form.value;
+      }
+
+      Object.keys(body).map((key: string) => {
+        const value: any = body[key];
+
+        if (Array.isArray(value)) {
+          const newValue = value.map((item) => {
+            if (typeof item === 'string') {
+              return {
+                id: item
+              };
+            }
+
+            return item;
+          });
+
+          body[key] = newValue;
+        }
+      });
+
+      convertPhoneNumber(body);
+
+      this.service.sendFormData(this.id, body).subscribe(
+        (res: any) => {
+          this.saving.next(false);
+          this.toastr.sendMessage(
+            this.config.submit_message,
+            MessageType.Success
+          );
+          this.router.navigate(['/login']);
+        },
+        (err: any) => {
+          this.saving.next(false);
+          this.parseError(err.errors);
+        }
+      );
+    });
+  }
+
+  // private validateField(key, value, field) {
+  //   console.log(key, value);
+  //
+  //   this.service
+  //     .validate(key, value)
+  //     .pipe(finalize(() => this.cd.detectChanges()))
+  //     .subscribe(
+  //       (res) => {
+  //         delete this.error[field];
+  //       },
+  //       (err) => {
+  //         this.updateErrors(
+  //           this.error,
+  //           {
+  //             [field]: err.errors.message
+  //           },
+  //           {}
+  //         );
+  //       }
+  //     );
+  // }
+
+  private changeType(key: string, to: string): void {
+    const field = getElementFromMetadata(this.config.ui_config, key);
+    if (field) {
+      field.type = to;
+    }
+  }
+
+  private changeTemplateType(key: string, to: string): void {
+    const field = getElementFromMetadata(this.config.ui_config, key);
+    if (field) {
+      field.templateOptions.type = to;
+    }
+  }
+
+  private generateSteps() {
     this.steps.forEach((step) => {
       step.metadata = [];
       step.content.forEach((key: string | string[]) => {
@@ -196,7 +274,7 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
     this.steps = this.steps.filter((step) => !step['empty']);
   }
 
-  public getErrorStep(errors) {
+  private getErrorStep(errors) {
     let step = 3;
     this.steps.forEach((el, i) => {
       el.content.forEach((field) => {
@@ -214,12 +292,12 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
     return step;
   }
 
-  public getRenderData() {
+  private getRenderData() {
     this.service.getRenderData(this.id).subscribe((res: any) => {
       this.updatePhoneField(res.ui_config);
       this.updateConfigByGroups(res.ui_config, res.tests || []);
       this.updateHiddenFields(res.ui_config);
-      const formData = new BehaviorSubject({ data: {} });
+      // const formData = new BehaviorSubject({ data: {} });
 
       this.config = res;
       this.formConfig.emit(res);
@@ -230,12 +308,14 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
       this.changeType('contact.title', 'radio');
       this.changeType('contact.gender', 'radio');
       this.changeType('transportation_to_work', 'radio');
+      this.changeTemplateType('contact.email', 'email');
 
       this.generateSteps();
+      this.changeStep(0);
     });
   }
 
-  updateHiddenFields(config) {
+  private updateHiddenFields(config) {
     config.forEach((field) => {
       if (field.showIf && field.showIf.length) {
         if (this.hiddenFields.keys.indexOf(field.key) === -1) {
@@ -250,10 +330,10 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
           field.hidden = new BehaviorSubject(true);
         }
       }
-    })
+    });
   }
 
-  updatePhoneField(fields: any[]) {
+  private updatePhoneField(fields: any[]) {
     fields.forEach((el) => {
       if (el.key === 'contact.phone_mobile') {
         el.intl = true;
@@ -261,206 +341,11 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
     });
   }
 
-  back() {
-    if (this.currentStep !== 0) {
-      this.process = true;
-      this.currentStep -= 1;
-
-      setTimeout(() => {
-        this.process = false;
-      }, 1000);
-    } else {
-      this.router.navigate(['/login']);
-    }
-  }
-
-  next() {
-    this.currentStep += 1;
-    this.process = true;
-
-    setTimeout(() => {
-      this.process = false;
-    }, 1000);
-  }
-
-  public changeType(key: string, to: string) {
-    const field = getElementFromMetadata(this.config.ui_config, key);
-    if (field) {
-      field.type = to;
-    }
-  }
-
-  public eventHandler(event: any) {
-    const { type, item, list, el, value } = event;
-
-    // TODO: update validation
-    // if (type === 'blur') {
-    //   ['email', 'phone'].forEach((field) => {
-    //     if (el.key.indexOf(field) > -1 && value) {
-    //       this.validate(field, value, el.key);
-    //     }
-    //   });
-    // }
-
-    // if (type === 'address') {
-    //   this.parseAddress(value, el);
-    // }
-
-    if (type === 'chenge' && (el.key === 'skill' || el.key === 'tag')) {
-      const ids = list.map((item: any) => item.id);
-
-      // if (!list.length) {
-      //   this.passedTests.clear();
-      // } else {
-        Array.from(this.passedTests.keys(), (key: string) => {
-          if (!ids.includes(key)) {
-            this.passedTests.delete(key);
-          }
-        });
-      // }
-    }
-
-    if (type === 'test') {
-      // const tests = item.tests;
-      this.passTests(item.tests, item.id, item);
-    }
-  }
-
-  passTests(tests, id?, item?) {
-    const passTestAction = new BehaviorSubject(0);
-
-    passTestAction.subscribe((index) => {
-      const test = tests[index];
-      this.modalRef = this.modalService.open(PassTestModalComponent, {
-        backdrop: 'static'
-      });
-      this.modalRef.componentInstance.config = {
-        test,
-        description: test.description,
-        send: false
-      } as PassTestModalConfig;
-
-      this.modalRef.result
-        .then((res: any[]) => {
-          if (this.passedTests.has(id)) {
-            this.passedTests.set(id, [
-              ...this.passedTests.get(id),
-              ...res
-            ]);
-          } else {
-            this.passedTests.set(id, res);
-          }
-
-          if (item) {
-            item.passed = true;
-          }
-
-          if (tests[index + 1]) {
-            passTestAction.next(index + 1);
-          }
-        })
-        .catch(() => {
-          if (tests[index + 1]) {
-            passTestAction.next(index + 1);
-          }
-        });
-    });
-  }
-
-  public submitForm() {
-    const data = this.form.value;
-
-    if (data.industry && data.industry.id && !this.passedTests.has(data.industry.id)) {
-      const industryTests = this.config.tests.filter((test) => {
-        return test.acceptance_tests_industries
-          .some((relation) => relation.industry.id === data.industry.id);
-      })
-
-      if (industryTests.length) {
-        this.passTests(industryTests, data.industry.id);
-        return;
-      }
-    }
-
-
-    this.saveProcess = true;
-    let body;
-
-    if (this.passedTests.size) {
-      const tests = [];
-      Array.from(this.passedTests.values()).forEach((el) => {
-        if (el) {
-          tests.push(...el);
-        }
-      });
-      body = { ...this.form.value, tests };
-    } else {
-      body = this.form.value;
-    }
-
-    Object.keys(body).map((key: string) => {
-      const value: any = body[key];
-
-      if (Array.isArray(value)) {
-        const newValue = value.map((item) => {
-          if (typeof item === 'string') {
-            return {
-              id: item
-            };
-          }
-
-          return item;
-        });
-
-        body[key] = newValue;
-      }
-    });
-
-    // if (body.industry && body.industry.id) {
-    //   const industryTests = this.config.tests.filter((test) => {
-    //     return test.acceptance_tests_industries
-    //       .some((relation) => relation.industry.id === body.industry.id);
-    //   })
-
-    //   if (industryTests.length) {
-    //     this.passTests(industryTests, body.industry.id);
-    //   }
-    // }
-
-    this.service.sendFormData(this.id, body).subscribe(
-      (res: any) => {
-        this.saveProcess = false;
-        this.toastr.sendMessage(
-          this.config.submit_message,
-          MessageType.Success
-        );
-        this.router.navigate(['/login']);
-      },
-      (err: any) => {
-        this.parseError(err.errors);
-        this.saveProcess = false;
-      }
-    );
-  }
-
-  public parseAddress(data, el) {
-    this.service.parseAddress(data).subscribe(
-      (res) => {
-        this.parseError({ [el.key]: [] });
-        el.autocompleteData.next(res);
-      },
-      (err: any) => {
-        this.parseError(
-          Object.assign({ ...this.error, [el.key]: err.errors['address'] })
-        );
-      }
-    );
-  }
-
-  public parseError(errors) {
+  private parseError(errors) {
     this.resetData(this.error);
     this.updateErrors(this.error, errors, {});
-    this.currentStep = this.getErrorStep(errors);
+
+    this.changeStep(this.getErrorStep(errors));
   }
 
   public resetData(data) {
@@ -472,7 +357,7 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
     }
   }
 
-  public updateErrors(error, errors, response, field = '') {
+  private updateErrors(error, errors, response, field = '') {
     if (errors) {
       const keys = Object.keys(errors);
       keys.forEach((el) => {
@@ -491,18 +376,7 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
     }
   }
 
-  // public addAutocompleteProperty(metadata: any, property?: Subject<any>) {
-  //   property = property || new Subject<any>();
-  //   metadata.forEach((element) => {
-  //     if (element.key) {
-  //       element.autocompleteData = property;
-  //     } else if (element.children) {
-  //       this.addAutocompleteProperty(element.children, property);
-  //     }
-  //   });
-  // }
-
-  public updateConfig(config: Field[]) {
+  private updateConfig(config: Field[]) {
     // this.hideDatepickerError(config);
 
     const streetAddress = config.find((field) => {
@@ -543,7 +417,7 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
     }
   }
 
-  public hideDatepickerError(config: Field[]) {
+  private hideDatepickerError(config: Field[]) {
     const pickers = config.filter((el) => el.type === 'datepicker');
     if (pickers.length) {
       pickers.forEach((el) => {
@@ -552,7 +426,7 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
     }
   }
 
-  public observeFields(fields: any[], observers) {
+  private observeFields(fields: any[], observers) {
     fields.forEach((field: any) => {
       if (field instanceof Object) {
         const keys = Object.keys(field);
@@ -570,7 +444,7 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
     return observers;
   }
 
-  public getFields(
+  private getFields(
     result: Field[],
     key: string,
     target: Field[],
@@ -591,10 +465,9 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
     return this.getFields(result, key, target, index);
   }
 
-  public updateSkillField(
+  private updateSkillField(
     field: Field,
-    formData: BehaviorSubject<any>,
-    tests: any[]
+    formData: BehaviorSubject<any>
   ): Field {
     return {
       ...field,
@@ -605,7 +478,7 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
       formData,
       many: true,
       unique: true,
-      tests,
+      // tests,
       showIf: ['industry.id'],
       templateOptions: {
         ...field.templateOptions,
@@ -614,77 +487,133 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
     };
   }
 
-  public updateTagField(field: Field, formData: BehaviorSubject<any>, tests: any[]): Field {
+  private updateTagField(field: Field, formData: BehaviorSubject<any>): Field {
     return {
       ...field,
       endpoint: `${Endpoints.Tag}all/`,
       many: true,
       unique: true,
-      tests,
+      // tests,
       formData
     };
   }
 
-  public validate(key, value, field) {
-    this.service.validate(key, value).subscribe(
-      (res) => {
-        delete this.error[field];
-        this.disableNextButton = false;
-      },
-      (err) => {
-        this.updateErrors(
-          this.error,
-          {
-            [field]: err.errors.message
-          },
-          {}
-        );
-        this.disableNextButton = true;
-      }
-    );
+  private changeStep(nextStep: number): void {
+    const step: Step = {
+      ...this.steps[nextStep],
+      key: nextStep,
+      position: nextStep + 1
+    };
+
+    this._step.next(step);
+    this.validate();
   }
 
-  public isInvalid(step: number) {
-    const keys = this.steps[step].content;
-    let result = false;
-
-    keys.forEach((key) => {
-      if (Array.isArray(key)) {
-        key.forEach((el) => {
-          const control = this.form.get(el);
-
-          if (control) {
-            result = control.invalid;
-          }
-        });
-      } else {
-        const control = this.form.get(key);
-
-        if (control) {
-          result = control.invalid;
-        }
-      }
+  private validate(): void {
+    let keys = [];
+    const currentStep = this._step.getValue();
+    currentStep.content.forEach((el) => {
+      keys = Array.isArray(el) ? [...keys, ...el] : [...keys, el];
     });
 
-    return result;
+    const invalid = keys.some((key) => {
+      const control = this.form.get(key);
+
+      return Boolean(control) ? control.invalid : false;
+    });
+
+    this.invalid.next(invalid);
   }
 
   private updateConfigByGroups(fields: Field[], tests: any[]): void {
     const skills = this.getFields([], 'skill', fields, 0);
     const tags = this.getFields([], 'tag', fields, 0);
-    const industry = this.getFields([], 'industry', fields, 0);
 
     const formData = new BehaviorSubject({});
 
     if (skills.length) {
-      skills[0] = this.updateSkillField(skills[0], formData, tests);
+      skills[0] = this.updateSkillField(skills[0], formData);
       skills.unshift({ ...this.industryField, formData });
       fields.push(...skills);
     }
 
     if (tags.length) {
-      tags[0] = this.updateTagField(tags[0], formData, tests);
+      tags[0] = this.updateTagField(tags[0], formData);
       fields.push(...tags);
     }
+  }
+
+  private passTests(formData: any): Observable<boolean> {
+    const currentTest: BehaviorSubject<number> = new BehaviorSubject<number>(0);
+    const success: Subject<boolean> = new Subject();
+    const chosenIndustry = formData.industry.id;
+    const chosenSkills = formData.skill;
+    const chosenTags = formData.tag;
+
+    let testsForPassing = this.config.tests.filter((test) => {
+      const industries = test.acceptance_tests_industries.map(
+        ({ industry }) => industry.id
+      );
+      const skills = test.acceptance_tests_skills.map(({ skill }) => skill.id);
+      const tags = test.acceptance_tests_tags.map(({ tag }) => tag.id);
+
+      if (!industries.length && !skills.length && !tags.length) {
+        return true;
+      }
+
+      return (
+        industries.includes(chosenIndustry) ||
+        chosenSkills.some((id) => skills.includes(id)) ||
+        chosenTags.some((id) => tags.includes(id))
+      );
+    });
+
+    const notRelevantTests = Array.from(this.passedTests.keys()).filter(
+      (id) => !testsForPassing.some((test) => test.id === id)
+    );
+    notRelevantTests.forEach((id) => {
+      this.passedTests.delete(id);
+    });
+
+    testsForPassing = testsForPassing.filter(
+      (test) => !this.passedTests.has(test.id)
+    );
+
+    if (!testsForPassing.length) {
+      return of(true);
+    } else {
+      const onModalResult = (index: number) => {
+        if (testsForPassing[index + 1]) {
+          currentTest.next(index + 1);
+        } else {
+          success.next(true);
+        }
+      };
+
+      currentTest.subscribe((index) => {
+        const test = testsForPassing[index];
+        this.modalRef = this.modalService.open(PassTestModalComponent, {
+          backdrop: 'static'
+        });
+        this.modalRef.componentInstance.config = {
+          test,
+          description: test.description,
+          send: false,
+          skipScoreForTest: true
+        } as PassTestModalConfig;
+
+        this.modalRef.result
+          .then((res: any[]) => {
+            this.passedTests.set(test.id, [...res]);
+
+            onModalResult(index);
+          })
+          .catch(() => {
+            onModalResult(index);
+          });
+      });
+    }
+
+    return success.asObservable();
   }
 }

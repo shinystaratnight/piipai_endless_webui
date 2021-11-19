@@ -2,8 +2,8 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { UserService } from '@webui/core';
 import { Endpoints } from '@webui/data';
-import { FormatString } from '@webui/utilities';
-import { BehaviorSubject, of } from 'rxjs';
+import { FormatString, getPropValue } from '@webui/utilities';
+import { BehaviorSubject, forkJoin, of } from 'rxjs';
 import { catchError, finalize, switchMap } from 'rxjs/operators';
 import {
   createAddAction,
@@ -41,9 +41,9 @@ export class SubmissionFormComponent {
   formData = new BehaviorSubject<any>({ data: {} });
   formGroup = new FormGroup({});
 
-  skillActivityData: any;
+  skillActivityData: any[];
   timesData: any;
-  eventData: { [key: string]: any } = {};
+  eventData: Map<any, any> = new Map();
 
   details = details();
   times = times();
@@ -96,12 +96,16 @@ export class SubmissionFormComponent {
     });
 
     if (this.config.extendData.status === 5) {
-      this.isEditTimesheet = true;
-      this.typeControl.patchValue(TimesheetType.Activities);
-      this.parseMetadata(this.skillActivities, this.config.data);
-      this.updateMetadata(this.getMetadataConfig(this.skillActivities));
-      this.updateMetadata(this.getMetadataConfig(this.notes));
-      this.formFilled = true;
+      const type = this.config.extendData.wage_type === 0 ? TimesheetType.Times : TimesheetType.Activities;
+
+      if (type === TimesheetType.Activities) {
+        this.isEditTimesheet = true;
+        this.typeControl.patchValue(type);
+
+        this.updateMetadata(this.getMetadataConfig(this.skillActivities));
+        this.updateMetadata(this.getMetadataConfig(this.notes));
+        this.formFilled = true;
+      }
     }
   }
 
@@ -123,7 +127,7 @@ export class SubmissionFormComponent {
     this.typeControl.patchValue(type);
     this.formFilled = false;
     this.timesData = null;
-    this.skillActivityData = null;
+    this.skillActivityData = [];
 
     if (type === TimesheetType.Times) {
       this.mode.next('edit');
@@ -140,11 +144,22 @@ export class SubmissionFormComponent {
 
   eventHandler(event) {
     if (event.type === 'change' || event.type === 'blur') {
-      this.eventData[event.el.key] = {
-        ...(event.additionalData || {}),
-        value: event.value
-      };
+      if (event.el.key === 'worktype') {
+        this.eventData.set(event.value, {
+          ...(event.additionalData || {}),
+        });
+      }
     }
+  }
+
+  public getWorkTypeDetails(id: string, key: string): unknown {
+    const el = this.eventData.get(id);
+
+    if (!el) {
+      return '';
+    }
+
+    return getPropValue(el, key);
   }
 
   saveTimes(data) {
@@ -165,7 +180,10 @@ export class SubmissionFormComponent {
   }
 
   saveSkillActivity(data) {
-    this.skillActivityData = { ...data };
+    this.skillActivityData = [
+      ...this.skillActivityData,
+      data,
+    ];
     this.typeControl.patchValue(TimesheetType.Activities);
     this.formFilled = true;
     this.updateMetadata(this.getMetadataConfig(this.notes));
@@ -176,7 +194,11 @@ export class SubmissionFormComponent {
 
     if (this.type === TimesheetType.Activities) {
       request = this.createSkillActivity().pipe(
-        switchMap((skillActivity) => {
+        switchMap(() => {
+          if (this.config.extendData.status === 5) {
+            return this.gfs.editForm(this.config.endpoint, {});
+          }
+
           return this.gfs.editForm(this.config.endpoint, { hours: false });
         })
       );
@@ -208,6 +230,17 @@ export class SubmissionFormComponent {
       type: 'sendForm',
       status: 'success'
     });
+  }
+
+  public showSkillActivityForm() {
+    this.formFilled = false;
+    this.typeControl.patchValue(TimesheetType.Activity);
+    this.parseMetadata(this.skillActivity, this.config.data);
+    this.updateMetadata(this.getMetadataConfig(this.skillActivity));
+  }
+
+  public deleteSkillActivity(activity: unknown): void {
+    this.skillActivityData.splice(this.skillActivityData.indexOf(activity), 1);
   }
 
   private getMetadataConfig(metadata) {
@@ -314,13 +347,17 @@ export class SubmissionFormComponent {
   }
 
   private createSkillActivity() {
-    if (this.config.edit) {
-      return of({});
+    if (this.config.extendData.status === 5) {
+      return of(null);
     }
 
-    return this.gfs.submitForm(
-      Endpoints.TimesheetRates,
-      this.skillActivityData
+    return forkJoin(
+      this.skillActivityData.map(
+        (activity) => this.gfs.submitForm(
+          Endpoints.TimesheetRates,
+          activity
+        )
+      )
     );
   }
 }

@@ -6,12 +6,15 @@ export class NoteModel extends Model {
   readonly key = Models.Note;
   readonly label = 'Notes';
   readonly endpoint = Endpoints.Note;
+  readonly translateKey = 'notes';
 
   formListElement(config: OverrideConfig = {}) {
     const { query, model_content_type } = config;
 
     return super
-      ._formListElement(config)
+      ._formListElement({
+        ...config,
+      })
       .setQuery({
         object_id: '{id}'
       })

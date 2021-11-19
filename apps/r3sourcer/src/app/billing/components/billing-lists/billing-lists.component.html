@@ -1,14 +1,8 @@
 <div class="form-tabs">
   <ngb-tabset>
-    <ngb-tab *ngIf="payments" title="Payments">
+    <ngb-tab title="Payments">
       <ng-template ngbTabContent>
-        <app-dynamic-list
-          [first]="true"
-          [config]="config"
-          [data]="{ results: payments }"
-          [responseField]="'results'"
-          [allowPermissions]="['get']">
-        </app-dynamic-list>
+        <app-dynamic-form [config]="paymentConfig"></app-dynamic-form>
       </ng-template>
     </ngb-tab>
 

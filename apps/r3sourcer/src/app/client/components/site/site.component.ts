@@ -13,18 +13,24 @@ import {
   SiteSettingsService,
   CompanyPurposeService,
   EventService,
-  EventType,
+  EventType
 } from '@webui/core';
 import { PageData, User, Role } from '@webui/data';
 import { GenericFormService, FormMode } from '@webui/dynamic-form';
 import { CheckPermissionService, ToastService, MessageType } from '@webui/core';
-import { isMobile, isCandidate, isClient, isManager, getCurrentRole } from '@webui/utilities';
+import {
+  isMobile,
+  isCandidate,
+  isClient,
+  isManager,
+  getCurrentRole
+} from '@webui/utilities';
 import { Endpoints } from '@webui/data';
 
 @Component({
   selector: 'app-site',
   templateUrl: './site.component.html',
-  styleUrls: ['./site.component.scss'],
+  styleUrls: ['./site.component.scss']
 })
 export class SiteComponent implements OnInit, OnDestroy {
   public pageData: PageData;
@@ -42,7 +48,7 @@ export class SiteComponent implements OnInit, OnDestroy {
     paginated: 'off',
     supportData: 'job',
     metaType: true,
-    actions: true,
+    actions: true
   };
   public FormMode = FormMode;
 
@@ -75,7 +81,11 @@ export class SiteComponent implements OnInit, OnDestroy {
 
   public modalRef: NgbModalRef;
 
-  public mobileDesign = ['/hr/timesheets/approved/', '/hr/timesheets/history/', '/hr/timesheets/unapproved/'];
+  public mobileDesign = [
+    '/hr/timesheets/approved/',
+    '/hr/timesheets/history/',
+    '/hr/timesheets/unapproved/'
+  ];
 
   public loader: boolean;
 
@@ -187,58 +197,63 @@ export class SiteComponent implements OnInit, OnDestroy {
   }
 
   public getPageData(url) {
-    this.siteService.getDataOfPage(url, this.pagesList).subscribe((pageData: PageData) => {
-      this.loader = false;
-      // if (pageData.endpoint === '/core/workflownodes/') {
-      //   this.additionalData = {
-      //     company: {
-      //       action: 'add',
-      //       data: {
-      //         value: {
-      //           id: this.siteSettingsService.settings.company_settings.company
-      //         }
-      //       }
-      //     }
-      //   };
-      //   this.pageData = pageData;
-      //   this.permissionMethods = this.permission.getAllowMethods(undefined, pageData.endpoint);
-      // } else
-      // if (this.isProfilePage(pageData)) {
-      //   pageData.pathData.id = this.user.data.contact.candidate_contact;
-      //   pageData.endpoint = '/candidate/candidatecontacts/';
-      //   this.formMode = FormMode.View;
-      //   this.pageData = pageData;
-      //   this.permissionMethods = this.permission.getAllowMethods(undefined, pageData.endpoint);
-      // } else
-      if (pageData.endpoint === '/' && pageData.pathData.path !== '/') {
-        setTimeout(() => {
-          this.ts.sendMessage('Page not found!', MessageType.Error);
-        }, 2000);
+    this.siteService
+      .getDataOfPage(url, this.pagesList)
+      .subscribe((pageData: PageData) => {
+        this.loader = false;
+        // if (pageData.endpoint === '/core/workflownodes/') {
+        //   this.additionalData = {
+        //     company: {
+        //       action: 'add',
+        //       data: {
+        //         value: {
+        //           id: this.siteSettingsService.settings.company_settings.company
+        //         }
+        //       }
+        //     }
+        //   };
+        //   this.pageData = pageData;
+        //   this.permissionMethods = this.permission.getAllowMethods(undefined, pageData.endpoint);
+        // } else
+        // if (this.isProfilePage(pageData)) {
+        //   pageData.pathData.id = this.user.data.contact.candidate_contact;
+        //   pageData.endpoint = '/candidate/candidatecontacts/';
+        //   this.formMode = FormMode.View;
+        //   this.pageData = pageData;
+        //   this.permissionMethods = this.permission.getAllowMethods(undefined, pageData.endpoint);
+        // } else
+        if (pageData.endpoint === '/' && pageData.pathData.path !== '/') {
+          setTimeout(() => {
+            this.ts.sendMessage('Page not found!', MessageType.Error);
+          }, 2000);
 
-        this.router.navigate(['']);
-        return;
-      } else {
-        setTimeout(() => {
-          this.pageData = pageData;
-          if (pageData.pathData.id && this.endpointWithoutViewMode.indexOf(pageData.endpoint) === -1) {
-            this.formMode = FormMode.View;
-          }
-          // if (isClient()) {
-          this.permissionMethods = ['delete', 'get', 'post', 'update'];
-          // } else {
-          //   this.permissionMethods = this.permission.getAllowMethods(undefined, pageData.endpoint);
-          // }
-          // if (pageData.endpoint === '/core/formstorages/') {
-          //   this.formStorage = true;
-          // } else {
-          this.formStorage = false;
-          // }
-        }, 0);
-      }
-      this.setActivePage(this.pagesList, pageData.pathData.path);
+          this.router.navigate(['']);
+          return;
+        } else {
+          setTimeout(() => {
+            this.pageData = pageData;
+            if (
+              pageData.pathData.id &&
+              this.endpointWithoutViewMode.indexOf(pageData.endpoint) === -1
+            ) {
+              this.formMode = FormMode.View;
+            }
+            // if (isClient()) {
+            this.permissionMethods = ['delete', 'get', 'post', 'update'];
+            // } else {
+            //   this.permissionMethods = this.permission.getAllowMethods(undefined, pageData.endpoint);
+            // }
+            // if (pageData.endpoint === '/core/formstorages/') {
+            //   this.formStorage = true;
+            // } else {
+            this.formStorage = false;
+            // }
+          }, 0);
+        }
+        this.setActivePage(this.pagesList, pageData.pathData.path);
 
-      this.getNameOfList(pageData);
-    });
+        this.getNameOfList(pageData);
+      });
   }
 
   public getNameOfList(pageData: PageData) {
@@ -248,12 +263,14 @@ export class SiteComponent implements OnInit, OnDestroy {
         return;
       }
 
-      this.genericFormService.getMetadata(pageData.endpoint).subscribe((list) => {
-        if (list && list.list && list.list.label) {
-          this.listName = list.list.label;
-          this.listNameCache[pageData.endpoint] = list.list.label;
-        }
-      });
+      this.genericFormService
+        .getMetadata(pageData.endpoint)
+        .subscribe((list) => {
+          if (list && list.list && list.list.label) {
+            this.listName = list.list.label;
+            this.listNameCache[pageData.endpoint] = list.list.label;
+          }
+        });
     }
   }
 
@@ -392,7 +409,9 @@ export class SiteComponent implements OnInit, OnDestroy {
         return;
       }
       if (!this.pageData.pathData.id) {
-        this.router.navigate([this.pageData.pathData.path + e.data.id + '/change']);
+        this.router.navigate([
+          this.pageData.pathData.path + e.data.id + '/change'
+        ]);
         this.saveProcess = false;
         return;
       }
@@ -414,23 +433,17 @@ export class SiteComponent implements OnInit, OnDestroy {
   }
 
   public deleteElement(element) {
-    this.genericFormService.delete(element.endpoint, element.pathData.id)
+    this.genericFormService
+      .delete(element.endpoint, element.pathData.id)
       .subscribe(
         () => {
-          const path = `/${this.authService.getRedirectUrl()}${element.pathData.path}`;
+          const path = `/${this.authService.getRedirectUrl()}${
+            element.pathData.path
+          }`;
 
           this.router.navigate([path]);
         },
-        (err: any) => {
-          const { status, errors: { error, non_field_errors } } = err;
-
-          if (status === 'error') {
-            const message = error || (non_field_errors && non_field_errors.toString());
-
-            this.ts.sendMessage(message, MessageType.Error);
-          }
-          this.errors = err.errors;
-        }
+        (err: any) => (this.errors = err.errors)
       );
   }
 
@@ -490,12 +503,14 @@ export class SiteComponent implements OnInit, OnDestroy {
         action: 'add',
         data: {
           value: this.user.data.contact.email,
-          read_only: true,
-        },
-      },
+          read_only: true
+        }
+      }
     };
 
-    this.modalRef = this.modalService.open(this.forgotPasswordModal, { backdrop: 'static' });
+    this.modalRef = this.modalService.open(this.forgotPasswordModal, {
+      backdrop: 'static'
+    });
 
     return false;
   }
@@ -510,23 +525,35 @@ export class SiteComponent implements OnInit, OnDestroy {
     const shifts = e.filters.keys.date.value.filter((el) => el.checked);
     this.data = {
       candidates: e.checkedData,
-      shifts: shifts.map((el) => el.data.id),
+      shifts: shifts.map((el) => el.data.id)
     };
   }
 
   public back() {
-    this.router.navigate([this.pageData.pathData.path + '/' + this.getId(this.pageData.endpoint) + '/change']); //tslint:disable-line
+    this.router.navigate([
+      this.pageData.pathData.path +
+        '/' +
+        this.getId(this.pageData.endpoint) +
+        '/change'
+    ]); //tslint:disable-line
 
     return false;
   }
 
   public sendData() {
     if (this.data) {
-      this.genericFormService.submitForm(this.pageData.endpoint, this.data).subscribe(
-        (res: any) =>
-          this.router.navigate([this.pageData.pathData.path + '/' + this.getId(this.pageData.endpoint) + '/change']), //tslint:disable-line
-        (err: any) => (this.error = err)
-      );
+      this.genericFormService
+        .submitForm(this.pageData.endpoint, this.data)
+        .subscribe(
+          (res: any) =>
+            this.router.navigate([
+              this.pageData.pathData.path +
+                '/' +
+                this.getId(this.pageData.endpoint) +
+                '/change'
+            ]), //tslint:disable-line
+          (err: any) => (this.error = err)
+        );
     }
   }
 
@@ -538,14 +565,21 @@ export class SiteComponent implements OnInit, OnDestroy {
 
   public identifyDevice() {
     if (this.pageData) {
-      if (this.user.currentRole.__str__.includes('client') && this.pageData.pathData.path === '/') {
+      if (
+        this.user.currentRole.__str__.includes('client') &&
+        this.pageData.pathData.path === '/'
+      ) {
         return isMobile();
       }
     }
   }
 
   public permissionErrorHandler() {
-    const path = (this.pageData && this.pageData.pathData && this.pageData.pathData.path) || '/';
+    const path =
+      (this.pageData &&
+        this.pageData.pathData &&
+        this.pageData.pathData.path) ||
+      '/';
     this.router.navigate([path]);
   }
 

@@ -20,9 +20,12 @@
   </div>
 </app-dynamic-form>
 
-<app-dynamic-form *ngIf="type === timesheetType.Times && formFilled" [config]="timesFilled"
-  [hiddenFields]="hiddenFields" (submitForm)="saveTimes($event)">
-</app-dynamic-form>
+<app-dynamic-form
+  *ngIf="type === timesheetType.Times && formFilled"
+  [config]="timesFilled"
+  [hiddenFields]="hiddenFields"
+  (submitForm)="saveTimes($event)"
+></app-dynamic-form>
 
 <app-dynamic-form *ngIf="type === timesheetType.Activity" [config]="skillActivity" [hiddenFields]="hiddenFields"
   (event)="eventHandler($event)" (submitForm)="saveSkillActivity($event)">
@@ -37,26 +40,34 @@
   </div>
 </app-dynamic-form>
 
-<app-dynamic-form *ngIf="type === timesheetType.Activities && isEditTimesheet" [config]="skillActivities">
-</app-dynamic-form>
+<app-dynamic-form
+  *ngIf="type === timesheetType.Activities && isEditTimesheet"
+  [config]="skillActivities"
+></app-dynamic-form>
 
 <ng-container *ngIf="type === timesheetType.Activities && !isEditTimesheet">
   <table class="table">
     <tr>
-      <th>Skill Activity</th>
-      <th>Value</th>
+      <th>{{ 'worktype.label' | translate }}</th>
+      <th>{{ 'amount' | translate }}</th>
+      <th>{{ 'actions' | translate }}</th>
     </tr>
 
-    <tr>
-      <td>{{ eventData.worktype.__str__ }}</td>
+    <tr *ngFor="let item of skillActivityData">
+      <td>{{ getWorkTypeDetails(item.worktype.id, '__str__') }}</td>
+      <td>{{ item.value }} {{ getWorkTypeDetails(item.worktype.id, 'uom.short_name') }}</td>
       <td>
-        {{ eventData.value.value }}
-        <small class="description">{{
-          eventData.worktype.uom.short_name
-          }}</small>
+        <button class="btn text-danger" type="button" (click)="deleteSkillActivity(item)">
+          <fa-icon icon="trash"></fa-icon>
+          {{ 'delete' | translate }}
+        </button>
       </td>
     </tr>
   </table>
+
+  <div class="table-footer">
+    <button class="btn btn-primary" type="button" (click)="showSkillActivityForm()">{{'add' | translate}}</button>
+  </div>
 </ng-container>
 
 <app-dynamic-form *ngIf="formFilled" [config]="notes"></app-dynamic-form>

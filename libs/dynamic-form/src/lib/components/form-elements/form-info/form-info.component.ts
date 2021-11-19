@@ -95,7 +95,6 @@ export class FormInfoComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
-    console.log(this);
     setTimeout(() => {
       this.disableButtons = false;
     }, 500);

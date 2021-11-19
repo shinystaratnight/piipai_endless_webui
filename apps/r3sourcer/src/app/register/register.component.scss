@@ -39,12 +39,14 @@ $content-width: 540px;
 }
 
 .form-name {
-  margin-bottom: 20px;
-
+  margin-bottom: 0;
   font-size: 32px;
   line-height: 36px;
-
   color: #4f4f4f;
+
+  &:not(:empty) {
+    margin-bottom: 20px;
+  }
 }
 
 .registration-form {

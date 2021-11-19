@@ -8,6 +8,7 @@ export class TextElement extends BasicListElement {
   score?: boolean;
   display?: string;
   translated?: boolean;
+  currency?: boolean;
 
   constructor(field: string, label?: string) {
     super(field, Text);
@@ -35,6 +36,12 @@ export class TextElement extends BasicListElement {
 
   hasTranslate() {
     this.translated = true;
+
+    return this;
+  }
+
+  setCurrency() {
+    this.currency = true;
 
     return this;
   }

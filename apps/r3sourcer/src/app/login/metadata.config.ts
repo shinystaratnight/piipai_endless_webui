@@ -47,19 +47,6 @@ const formadd = [
       label: 'Grant Type'
     },
     read_only: false
-  },
-  {
-    key: 'country_code',
-    type: 'input',
-    value: 'AU',
-    hide: true,
-    templateOptions: {
-      max: 128,
-      required: false,
-      type: 'text',
-      label: 'Country Code'
-    },
-    read_only: false
   }
 ];
 

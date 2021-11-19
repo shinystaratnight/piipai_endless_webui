@@ -12,7 +12,8 @@ import {
   CheckboxComponent,
   LoaderComponent,
   SpinnerComponent,
-  LanguageSelectorComponent
+  LanguageSelectorComponent,
+  UserAvatarComponent
 } from './components';
 import { IconComponent } from './components/icon/icon.component';
 
@@ -25,14 +26,15 @@ import { IconComponent } from './components/icon/icon.component';
     LoaderComponent,
     SpinnerComponent,
     LanguageSelectorComponent,
-    IconComponent
+    IconComponent,
+    UserAvatarComponent
   ],
   imports: [
     CommonModule,
     RouterModule,
     TranslateModule,
     FontAwesomeModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ],
   exports: [
     CloseButtonComponent,
@@ -42,7 +44,8 @@ import { IconComponent } from './components/icon/icon.component';
     LoaderComponent,
     SpinnerComponent,
     LanguageSelectorComponent,
-    IconComponent
+    IconComponent,
+    UserAvatarComponent,
   ]
 })
 export class UiModule {}

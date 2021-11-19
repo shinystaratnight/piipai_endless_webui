@@ -121,30 +121,9 @@ const list = {
             field: 'shift.date'
           },
           {
-            text: '{shift_started_at__time}',
-            type: 'static',
-            label: 'Start',
-            field: 'shift_started_at'
-          },
-          {
-            text: '{break_started_at__time} - {break_ended_at__time}',
-            type: 'static',
-            label: 'Break',
-            field: 'break_started_at'
-          },
-          {
-            text: '{shift_ended_at__time}',
-            type: 'static',
-            label: 'End',
-            field: 'shift_ended_at'
-          },
-          {
-            text: '{field}',
-            color: 'success',
-            setColor: 'shift_ended_at',
-            type: 'static',
-            label: 'Total time',
-            field: 'totalTime'
+            field: 'timesheet_rates',
+            type: 'skillactivity',
+            label: 'Skill Activities'
           }
         ],
         name: 'time',

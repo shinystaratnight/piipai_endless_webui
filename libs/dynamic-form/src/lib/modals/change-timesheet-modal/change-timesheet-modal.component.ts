@@ -22,9 +22,8 @@ type ClientTimesheetModalConfig = {
   form: any;
   supervisor_signature: string;
   label: {
-    picture: string;
-    contactAvatar(string);
-    name: string;
+    avatar: { origin: string, fullName: string };
+    fullName: string;
   };
   extendData: any;
   timesheetData: any;

@@ -19,7 +19,6 @@ export class BillingComponent implements OnInit, OnDestroy {
   public user: User;
   public pagesList: any[];
   public currentPlan: BillingSubscription;
-  public payments: Payment[];
   public checkInformation: boolean;
   public saveProcess: boolean;
   public cancelProcess: boolean;
@@ -49,7 +48,6 @@ export class BillingComponent implements OnInit, OnDestroy {
 
     this.currentPlan = subscriptions && subscriptions.find(el => el.active);
 
-    this.getPaymets();
     this.checkPaymentInformation();
 
     this.setActivePage(this.pagesList, `${this.router.url}/`);
@@ -119,12 +117,6 @@ export class BillingComponent implements OnInit, OnDestroy {
     this.billingService.getSubscriptionInfo().subscribe((data: any) => {
       this.currentPlan = data.subscriptions.find(el => el.active);
     });
-  }
-
-  public getPaymets() {
-    this.billingService
-      .payments()
-      .subscribe((data: any) => (this.payments = data.payments));
   }
 
   public checkPaymentInformation() {

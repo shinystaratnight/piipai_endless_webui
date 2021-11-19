@@ -71,8 +71,6 @@ const list = function () {
         new List.column.element('status', 'Status')
           .setTimezone('time_zone')
           .setContent([
-            getChangeButton().setShowIfRule([{ is_30_days_old: false }]),
-
             new List.static.element('status').setHideValue(true),
 
             new List.static.element('supervisor_approved')
@@ -115,11 +113,12 @@ const list = function () {
               .setStyles(['muted'])
               .setShowIfRule([{ status: 6 }, 'supervisor_modified_at']),
 
-            getChangeButton().setShowIfRule([{ status: 6 }]),
-
             getApproveButton().setShowIfRule([{ status: 5 }]),
 
-            getChangeButton().setShowIfRule([{ status: 5 }])
+            getChangeButton().setShowIfRule([
+              { status: [5, 6] }, 
+              { is_30_days_old: false }
+            ]),
           ])
       ])
   };

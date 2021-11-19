@@ -50,8 +50,7 @@ export class PermissionGuard implements CanActivate {
           const trialExpired = endTrial.isBefore(this.dateService.instance());
 
           if (trialExpired) {
-            // this.subscriptionService.update();
-            this.subscriptionService.useTrialPermissions();
+            this.subscriptionService.update();
           } else {
             this.subscriptionService.useTrialPermissions();
           }

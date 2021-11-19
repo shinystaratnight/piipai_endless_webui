@@ -1684,9 +1684,8 @@ export class DynamicListComponent
         endpoint: e.el.endpoint,
         edit: true,
         label: {
-          picture: contact.picture && contact.picture.origin,
-          contactAvatar: getContactAvatar(contact.__str__),
-          name: contact.__str__
+          avatar: contact.picture,
+          fullName: contact.__str__,
         },
         extendData: { ...data },
         data: {
@@ -1740,7 +1739,7 @@ export class DynamicListComponent
 
       this.modalRef = this.modalService.open(SubmissionModalComponent, {
         backdrop: 'static',
-        size: 'lg',
+        size: 'md',
         windowClass
       });
       this.modalRef.componentInstance.config = this.modalInfo;
@@ -1877,9 +1876,8 @@ export class DynamicListComponent
         form: {},
         supervisor_signature: data.supervisor_signature.origin,
         label: {
-          picture: contact.picture && contact.picture.origin,
-          contactAvatar: getContactAvatar(contact.__str__),
-          name: contact.__str__
+          avatar: contact.picture,
+          fullName: contact.__str__,
         },
         extendData: data,
         timesheetData: {
@@ -2020,9 +2018,8 @@ export class DynamicListComponent
             value: ''
           },
           label: {
-            picture: contact.picture && contact.picture.origin,
-            contactAvatar: getContactAvatar(contact.__str__),
-            name: contact.__str__
+            avatar: contact.picture,
+            fullName: contact.__str__,
           },
           data: {
             evaluation_score: score

@@ -4,7 +4,7 @@
 $site-background: #f5f5f5;
 
 body {
-  font-family: 'Source Sans Pro', sans-serif;
+  // font-family: 'Source Sans Pro', sans-serif;
   font-size: 16px;
   line-height: 20px;
   color: $gray;
@@ -96,26 +96,6 @@ input[type='number'] {
 @include media-breakpoint-up('md') {
   .btn.only-mobile {
     display: none;
-  }
-}
-
-.candidate-tabs {
-  & > .nav-tabs {
-    justify-content: center !important;
-
-    .nav-item:nth-child(13),
-    .nav-item:nth-child(14) {
-      width: 50%;
-      font-weight: bold;
-
-      a.nav-link {
-        display: inline-flex;
-      }
-    }
-
-    .nav-item:nth-child(13) {
-      text-align: right;
-    }
   }
 }
 

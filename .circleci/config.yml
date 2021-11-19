@@ -3,7 +3,7 @@ version: 2
 defaults: &defaults
   working_directory: /home/circleci/endless_webui
   docker:
-    - image: circleci/node:current
+    - image: circleci/node:16
 
 jobs:
   dependencies:
