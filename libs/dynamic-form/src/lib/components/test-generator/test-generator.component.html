@@ -13,34 +13,25 @@
       {{ testData.questions.length }}</span
     >
     <ng-container *ngIf="!reload">
-      <p class="test__question">
-        {{ testData.questions[currentQuestion].name }}
-      </p>
-      <p
-        class="test__question-details"
-        *ngIf="testData.questions[currentQuestion].details"
-      >
-        {{ testData.questions[currentQuestion].details }}
+      <p class="test__question">{{testData.questions[currentQuestion].name}}</p>
+      <p class="test__question-details" *ngIf="testData.questions[currentQuestion].details">
+        {{testData.questions[currentQuestion].details}}
       </p>
 
       <div>
-        <div
-          *ngIf="testData.questions[currentQuestion].pictures.length"
-          class="images"
-        >
-          <img
-            class="image"
-            *ngFor="let image of testData.questions[currentQuestion].pictures"
-            [src]="image"
-            alt=""
+        <div *ngIf="testData.questions[currentQuestion].pictures.length" class="images">
+          <img 
+            class="image" 
+            *ngFor="let image of testData.questions[currentQuestion].pictures" 
+            [src]="image" 
+            alt="" 
           />
         </div>
 
         <ng-container
           appFormElement
           [config]="testData.questions[currentQuestion].answerMetadata"
-          [group]="testData.questions[currentQuestion].group"
-        >
+          [group]="testData.questions[currentQuestion].group">
         </ng-container>
 
         <ng-container
