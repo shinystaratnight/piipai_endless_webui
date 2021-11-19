@@ -1,12 +1,14 @@
 import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { CheckboxType, Form, InputType } from '@webui/metadata';
 
 import { GenericFormService } from '../../services/generic-form.service';
 
 enum QuestionType {
   Options,
   Text,
-  YesNo
+  YesNo,
+  Checkboxes
 }
 
 @Component({
@@ -85,15 +87,13 @@ export class TestGeneratorComponent implements OnInit {
       type: data.type,
       order: data.order,
       workflow_object: this.workflowObject,
-      answerMetadata: data.type === QuestionType.Text
-        ? this.getTextMetadata()
-        : this.getOptionsMetadata(answerOptions),
+      answerMetadata: this.getAnswerMetadata(data.type, answerOptions),
       group: this.form.get(data.id),
       pictures: data.pictures.map(el => el.picture.origin)
     };
 
     if (question.type === QuestionType.Text) {
-      question['scoreMetadata'] = this.getScoreMetadata();
+      question['scoreMetadata'] = new Form.input.element('score', 'Score', InputType.Number);
     }
 
     return question;
@@ -103,11 +103,16 @@ export class TestGeneratorComponent implements OnInit {
     const formValue = this.form.value;
     const body = this.testData.questions.map((question) => {
       const value = formValue[question.acceptance_test_question];
+      let answer = value.answer;
+
+      if (question.type === QuestionType.Checkboxes) {
+        answer = Object.entries(value).filter(([_, value]) => value).map(([key]) => key);
+      }
 
       return {
         acceptance_test_question: question.acceptance_test_question,
         workflow_object: question.workflow_object,
-        answer: value.answer,
+        answer,
         answer_text: value.answer_text,
         score: value.score
       };
@@ -127,33 +132,10 @@ export class TestGeneratorComponent implements OnInit {
     return {
       type: 'radio',
       key: 'answer',
-      default: 'Source Sans Pro',
       templateOptions: {
         type: 'text',
         column: true,
         options
-      }
-    };
-  }
-
-  getTextMetadata() {
-    return {
-      key: 'answer_text',
-      type: 'textarea',
-      templateOptions: {
-        full: true,
-      },
-      read_only: false
-    };
-  }
-
-  getScoreMetadata() {
-    return {
-      type: 'input',
-      key: 'score',
-      templateOptions: {
-        label: 'Score',
-        type: 'number'
       }
     };
   }
@@ -177,6 +159,27 @@ export class TestGeneratorComponent implements OnInit {
       this.currentQuestion += 1;
       this.cd.detectChanges();
     }, 400);
+  }
+
+  private getAnswerMetadata(type: QuestionType, options?: any) {
+    switch (type) {
+      case QuestionType.Text: {
+        return new Form.textarea.element('answer_text', '').setFullWidth();
+      }
+
+      case QuestionType.Checkboxes: {
+        return new Form.group.element('', '')
+          .doNotShowLabel()
+          .setChildren(options.map((option: { label: string; value: string }) => {
+            return new Form.checkbox.element(option.value, option.label, CheckboxType.Checkbox)
+          }));
+      }
+
+      case QuestionType.Options:
+      case QuestionType.YesNo: {
+        return this.getOptionsMetadata(options);
+      }
+    }
   }
 
 }

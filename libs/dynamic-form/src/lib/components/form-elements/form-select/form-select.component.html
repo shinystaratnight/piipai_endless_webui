@@ -10,17 +10,11 @@
       *ngIf="label && config.templateOptions.label"
       [attr.for]="key"
     >
-      {{
-        getTranslationKey(config.key, 'label')
-          | translate: { Default: config.templateOptions.label }
-      }}
+      {{ getTranslationKey(translateKey, 'label') | translate: { Default: config.templateOptions.label } }}
     </label>
     <app-info
       *ngIf="config.templateOptions.description"
-      [description]="
-        getTranslationKey(this.key, 'description')
-          | translate: { Default: config.templateOptions.description || '' }
-      "
+      [description]="getTranslationKey(translateKey, 'description') | translate: { Default: config.templateOptions.description || '' }"
     ></app-info>
     <div class="form-element-content edit">
       <select
@@ -38,10 +32,7 @@
           *ngFor="let option of config.templateOptions.options"
           [value]="option.value"
         >
-          {{
-            getOptionTranslationKey(option.value)
-              | translate: { Default: option.label }
-          }}
+          {{ getOptionTranslationKey(option.value) | translate: { Default: option.label } }}
         </option>
       </select>
     </div>
@@ -63,10 +54,7 @@
     class="form-element-label"
     *ngIf="label && config.templateOptions.label"
   >
-    {{
-      getTranslationKey(config.key, 'label')
-        | translate: { Default: config.templateOptions.label }
-    }}:
+    {{ getTranslationKey(translateKey, 'label') | translate: { Default: config.templateOptions.label } }}:
   </label>
   <div
     class="form-element-content"

@@ -40,6 +40,8 @@ export class FormSelectComponent
 
   public viewMode: boolean;
 
+  private translateKey: string;
+
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
 
@@ -63,6 +65,8 @@ export class FormSelectComponent
     this.checkModeProperty();
     this.checkHiddenProperty();
     this.createEvent();
+
+    this.translateKey = this.config.translateKey || this.key;
   }
 
   public ngOnDestroy() {
@@ -162,6 +166,6 @@ export class FormSelectComponent
   }
 
   getOptionTranslationKey(optionKey: string): string {
-    return `${this.key}.${optionKey}`;
+    return `${this.translateKey}.${optionKey}`;
   }
 }

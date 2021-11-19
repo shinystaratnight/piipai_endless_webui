@@ -307,7 +307,7 @@ export class TestBuilderComponent implements OnInit, OnChanges {
   }
 
   public checkCount(type: number, length: number) {
-    if (type === 0) {
+    if (type === 0 || type === 3) {
       return true;
     }
 
