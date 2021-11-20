@@ -6,7 +6,7 @@ const filters = {
     key: 'date',
     label: 'Shifts',
     query: 'shifts',
-    unique: ['date'],
+    unique: ['name'],
     data: {
       data: 'shifts'
     }
