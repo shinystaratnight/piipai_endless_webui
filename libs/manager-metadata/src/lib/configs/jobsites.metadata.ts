@@ -701,6 +701,7 @@ const formadd = [
             endpoint: '/core/companycontacts/',
             read_only: false,
             key: 'primary_contact',
+            default: '{regular_company.primary_contact.id}',
             templateOptions: {
               required: true,
               label: 'Primary contact',
