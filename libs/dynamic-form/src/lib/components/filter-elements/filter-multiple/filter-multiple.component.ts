@@ -10,7 +10,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 
 import { FilterService } from '../../../services';
-import { FormatString } from '@webui/utilities';
+import { FormatString, getTimeInstance } from '@webui/utilities';
 
 enum FilterType {
   Multiple = 'multiple'
@@ -24,18 +24,6 @@ export class FilterMultipleComponent implements OnInit, OnDestroy {
   public config: any;
   public query: string;
   public data: any[];
-  public isCollapsed = true;
-  public icons = {
-    r3sourcer: {
-      true: 'chevron-right',
-      false: 'chevron-down'
-    },
-    default: {
-      true: 'eye',
-      false: 'eye-slash'
-    }
-  };
-  public theme: string;
   public type: string;
   public filterSubscription: Subscription;
   public querySubscription: Subscription;
@@ -61,13 +49,6 @@ export class FilterMultipleComponent implements OnInit, OnDestroy {
     this.filterSubscription = this.fs.reset.subscribe(() =>
       this.updateFilter()
     );
-    this.isCollapsed =
-      this.query || document.body.classList.contains('r3sourcer')
-        ? false
-        : true;
-    this.theme = document.body.classList.contains('r3sourcer')
-      ? 'r3sourcer'
-      : 'default';
     if (!this.data) {
       this.createData(this.type);
     }
@@ -259,7 +240,24 @@ export class FilterMultipleComponent implements OnInit, OnDestroy {
           if (!uniqueField[field]) {
             uniqueField[field] = [];
           }
-          if (uniqueField[field].indexOf(el.data[field]) > -1) {
+
+          const condition = () => {
+            if (field === 'name' && el.data.date) {
+              const timeInstance = getTimeInstance();
+              const currentValue = timeInstance(el.data[field], 'DD/MM/YYYY hh:mm a');
+
+              const result = uniqueField[field].some((name) => {
+                const elValue = timeInstance(name, 'DD/MM/YYYY hh:mm a');
+                return Math.abs(elValue.diff(currentValue, 'hours')) < 4;
+              });
+
+              return result;
+            } else {
+              return uniqueField[field].indexOf(el.data[field]) > -1;
+            }
+          };
+
+          if (condition()) {
             if (i !== index) {
               el.checked = false;
             }
