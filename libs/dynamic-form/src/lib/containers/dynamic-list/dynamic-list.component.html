@@ -100,11 +100,7 @@
         </app-list-buttons>
       </h2>
       <div
-        [enable]="!inForm"
-        *ngIf="
-          (showFilters && !(identifyDevice() || isMobileDevice)) ||
-          config.list.search_enabled
-        "
+        *ngIf="(showFilters && !(identifyDevice() || isMobileDevice)) || config.list.search_enabled"
         class="datatable-header"
         [class.open-filters]="!filtersHidden && showFilters"
         [class.in-form]="inForm"
