@@ -1,0 +1,26 @@
+<app-base-modal (dissmisEvent)="dismiss()" title="Signature">
+
+  <div class="modal-body">
+    <app-signature
+      #signatureCanvas
+      (signature)="updateSignature($event)"
+    ></app-signature>
+  </div>
+
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn clear-button"
+      (click)="signatureCanvas.clear()"
+    >
+      {{ 'clear' | translate: { Default: 'Clear' } }}
+    </button>
+    <button
+      type="button"
+      class="btn btn-shadow btn-success"
+      (click)="saveSignature()"
+    >
+      {{ 'save' | translate: { Default: 'Save' } }}
+    </button>
+  </div>
+</app-base-modal>

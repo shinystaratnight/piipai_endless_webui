@@ -521,8 +521,8 @@ export class GenericListComponent implements OnInit, OnDestroy {
     let body;
     const ids = [];
     const keys = Object.keys(data);
-    const {
-      action: { multiple, bodyFields, method }
+    let {
+      action: { multiple, bodyFields, method, bodySignature, signature_endpoint }
     } = e;
     keys.forEach((el) => {
       if (data[el]) {
@@ -532,18 +532,20 @@ export class GenericListComponent implements OnInit, OnDestroy {
 
     if (multiple) {
       const requests = ids.map((id: string) => {
-        const url = FormatString.format(endpoint, { id });
+        let url = FormatString.format(endpoint, { id });
+        const rowData = this.results.find((el) => el.id === id);
         let body = {};
 
-        if (bodyFields) {
+        const isSignatureApproving = rowData.company && rowData.company.supervisor_approved_scheme === 'SIGNATURE'
+        console.log(rowData);
+
+
+        if (bodyFields && !isSignatureApproving) {
           bodyFields.forEach((prop) => {
             if (typeof prop === 'string') {
               body = {
                 ...body,
-                [prop]: getPropValue(
-                  this.results.find((el) => el.id === id),
-                  prop
-                )
+                [prop]: getPropValue(rowData, prop)
               };
             }
 
@@ -554,6 +556,12 @@ export class GenericListComponent implements OnInit, OnDestroy {
               };
             }
           });
+        } else if (isSignatureApproving) {
+          method = ApiMethod.POST;
+          url = FormatString.format(signature_endpoint, { id });
+          body = {
+            ...bodySignature
+          };
         }
 
         switch (method) {

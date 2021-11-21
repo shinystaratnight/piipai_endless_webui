@@ -19,7 +19,10 @@ export class Modal {
     this.modal.dismiss(reason);
   }
 
-  close(status?: Status) {
-    this.modal.close(status);
+  close(status?: Status, result?: any): void {
+    this.modal.close({
+      status,
+      result
+    });
   }
 }
