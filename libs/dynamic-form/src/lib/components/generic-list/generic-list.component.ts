@@ -536,9 +536,7 @@ export class GenericListComponent implements OnInit, OnDestroy {
         const rowData = this.results.find((el) => el.id === id);
         let body = {};
 
-        const isSignatureApproving = rowData.company && rowData.company.supervisor_approved_scheme === 'SIGNATURE'
-        console.log(rowData);
-
+        const isSignatureApproving = rowData.company && rowData.company.supervisor_approved_scheme === 'SIGNATURE';
 
         if (bodyFields && !isSignatureApproving) {
           bodyFields.forEach((prop) => {
