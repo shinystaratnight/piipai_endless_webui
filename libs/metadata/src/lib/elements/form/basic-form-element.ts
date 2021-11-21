@@ -27,6 +27,7 @@ export class BasicFormElement {
   showIf?: Array<string | { [key: string]: any }>;
   saveField?: boolean;
   updateFromForm?: boolean;
+  translateKey?: string;
 
   templateOptions: BasicElementTemplateOptions;
 
@@ -107,6 +108,12 @@ export class BasicFormElement {
 
   setUpdateFromForm() {
     this.updateFromForm = true;
+
+    return this;
+  }
+
+  setTranslateKey(key: string) {
+    this.translateKey = key;
 
     return this;
   }

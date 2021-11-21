@@ -38,11 +38,11 @@ export function getToday() {
 }
 
 export function getYesterday() {
-  return getToday().clone().add(-1, 'day').format();
+  return getLocalTime().add(-1, 'day').format();
 }
 
 export function getTommorrow() {
-  return getToday().clone().add(1, 'day').format();
+  return getLocalTime().add(1, 'day').format();
 }
 
 export function getTimeZoneOffset() {

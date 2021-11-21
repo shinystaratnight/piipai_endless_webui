@@ -170,7 +170,8 @@ export enum Endpoints {
   MYOB = '/company-settings/myobsettings/',
   ApplicationFormTranslations = '/core/formtranlations/',
   UnitOfMeasurements = '/core/unitofmeasurements/',
-  CandidateCounter = '/candidate/statistics/'
+  CandidateCounter = '/candidate/statistics/',
+  Payments = '/billing/payments/'
 }
 
 export const getBankAccountLayoutEndpoint = (countryCode: string) => {

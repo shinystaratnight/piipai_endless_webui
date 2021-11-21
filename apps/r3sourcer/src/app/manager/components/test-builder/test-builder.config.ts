@@ -1,3 +1,14 @@
+import { Form } from "@webui/metadata";
+
+const questionType = () => new Form.select.element('type', 'Question Type')
+  .setTranslateKey('question_type')
+  .addOptions({
+    0: 'Options',
+    1: 'Text',
+    2: 'Yes/No',
+    3: 'Checkboxes'
+  });
+
 export const testMetadata = {
   form: [
     {
@@ -260,15 +271,9 @@ export const questionMetadata = {
             label: 'Details'
           }
         },
-        {
-          key: 'type',
-          type: 'select',
-          templateOptions: {
-            required: false,
-            label: 'Question Type',
-            options: [{ value: 0, label: 'Options' }, { value: 1, label: 'Text' }, { value: 2, label: 'Yes/No' }]
-          }
-        },
+
+        questionType(),
+
         {
           key: 'order',
           type: 'input',
@@ -311,15 +316,9 @@ export const questionMetadata = {
             label: 'Details'
           }
         },
-        {
-          key: 'type',
-          type: 'select',
-          templateOptions: {
-            required: false,
-            label: 'Question Type',
-            options: [{ value: 0, label: 'Options' }, { value: 1, label: 'Text' }, { value: 2, label: 'Yes/No' }]
-          }
-        },
+
+        questionType(),
+
         {
           key: 'order',
           type: 'input',
