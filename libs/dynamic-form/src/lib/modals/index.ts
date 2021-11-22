@@ -7,6 +7,7 @@ import { ChangeTimesheetModalComponent } from './change-timesheet-modal/change-t
 import { EvaluateFieldComponent } from './evaluate-field/evaluate-field.component';
 import { ApproveTimesheetModalComponent } from './approve-timesheet-modal/approve-timesheet-modal.component';
 import { SubmissionModalComponent } from './submission-modal/submission-modal.component';
+import { SignatureModalComponent } from './signature-modal/signature-modal.component';
 
 export * from './base-modal/base-modal.component';
 export * from './pass-test-modal/pass-test-modal.component';
@@ -17,6 +18,7 @@ export * from './modal/modal.component';
 export * from './change-timesheet-modal/change-timesheet-modal.component';
 export * from './approve-timesheet-modal/approve-timesheet-modal.component';
 export * from './submission-modal/submission-modal.component';
+export * from './signature-modal/signature-modal.component';
 
 export const modals = [
   BaseModalComponent,
@@ -26,7 +28,8 @@ export const modals = [
   EvaluateModalComponent,
   ChangeTimesheetModalComponent,
   ApproveTimesheetModalComponent,
-  SubmissionModalComponent
+  SubmissionModalComponent,
+  SignatureModalComponent,
 ];
 
 export const components = [EvaluateFieldComponent];

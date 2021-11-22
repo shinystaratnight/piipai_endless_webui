@@ -79,7 +79,7 @@ import { TranslateModule } from '@ngx-translate/core';
     ...directives,
     ...fromContainers.components,
     ...modals,
-    ...modalComponents
+    ...modalComponents,
   ],
   providers: [...services],
   entryComponents: [

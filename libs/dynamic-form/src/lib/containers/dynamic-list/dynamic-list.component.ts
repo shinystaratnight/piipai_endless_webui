@@ -66,7 +66,9 @@ import {
   Status,
   ChangeTimesheetModalComponent,
   ApproveTimesheetModalComponent,
-  SubmissionModalComponent
+  SubmissionModalComponent,
+  SignatureModalComponent,
+  Reason
 } from '../../modals';
 import { FilterEvent } from '../../interfaces';
 import { formatCurrency, getCurrencySymbol } from '@angular/common';
@@ -1254,21 +1256,40 @@ export class DynamicListComponent
   }
 
   public actionHandler(e) {
-    this.actionEndpoint = e.action.endpoint;
-    if (
-      e.action.required &&
-      !Object.keys(this.select).some((el) => el && this.select[el])
-    ) {
+    const { action } = e;
+    this.actionEndpoint = action.endpoint;
+
+    if (action.required && Object.keys(this.select).every((el) => el && !this.select[el])) {
       this.actionProcess = false;
-      this.toastr.sendMessage(e.action.selectionError, MessageType.Error);
+      this.toastr.sendMessage(action.selectionError, MessageType.Error);
       return;
     }
-    this.event.emit({
-      type: 'action',
-      list: this.config.list.list,
-      action: e.action,
-      data: this.select
-    });
+
+    if (action.signature_endpoint) {
+      this.open(SignatureModalComponent);
+
+      this.modalRef.result
+        .then(({ status, result: signature }) => {
+          if (status === Status.Success) {
+            action.bodySignature.supervisor_signature = signature;
+
+            this.event.emit({
+              type: 'action',
+              list: this.config.list.list,
+              action: e.action,
+              data: this.select
+            });
+          }
+        })
+        .catch(() => {});
+    } else {
+      this.event.emit({
+        type: 'action',
+        list: this.config.list.list,
+        action: e.action,
+        data: this.select
+      });
+    }
   }
 
   public filterHandler(e: FilterEvent) {

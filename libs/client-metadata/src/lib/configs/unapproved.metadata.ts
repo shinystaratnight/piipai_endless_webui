@@ -27,6 +27,7 @@ const list = function () {
         options: [
           {
             endpoint: `${Endpoints.Timesheet}{id}/approve/`,
+            signature_endpoint: `${Endpoints.Timesheet}{id}/approve_by_signature/`,
             label: 'Approve',
             selectionError: 'Please select at least one timesheet!',
             confirm: false,
@@ -42,7 +43,10 @@ const list = function () {
               { send_candidate_message: false },
               { send_supervisor_message: false },
               { no_break: false }
-            ]
+            ],
+            bodySignature: {
+              supervisor_signature: ''
+            }
           }
         ],
         label: 'Actions',
