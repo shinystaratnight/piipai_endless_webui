@@ -1,4 +1,4 @@
-import { Endpoints, Models, NoteModel, WageType } from '@webui/data';
+import { Endpoints, Models, NoteModel } from '@webui/data';
 import { Form, DatepickerType, CheckboxType, InputType } from '@webui/metadata';
 
 const shiftStartField = function () {
@@ -69,28 +69,20 @@ const signatureField = function () {
 
 const form = function () {
   return [
-    new Form.collapse.element('Times', 'times', true)
-      .setIsCollapsed((data: any) => {
-        const { wage_type } = data;
+    new Form.row.element().setChildren([
+      new Form.group.element()
+        .doNotShowLabel()
+        .setChildren([
+          shiftStartField(),
+          shiftEndField(),
+          noBreakField(),
+          totalTimeField()
+        ]),
 
-        return wage_type != WageType.Hourly;
-      })
-      .setChildren([
-        new Form.row.element().setChildren([
-          new Form.group.element()
-            .doNotShowLabel()
-            .setChildren([
-              shiftStartField(),
-              shiftEndField(),
-              noBreakField(),
-              totalTimeField()
-            ]),
-
-          new Form.group.element()
-            .doNotShowLabel()
-            .setChildren([breakStartField(), breakEndField()])
-        ])
-      ]),
+      new Form.group.element()
+        .doNotShowLabel()
+        .setChildren([breakStartField(), breakEndField()])
+    ]),
 
     new Form.input.element('company', 'Company', InputType.Text).hideField(),
 
