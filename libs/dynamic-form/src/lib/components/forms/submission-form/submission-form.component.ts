@@ -96,7 +96,7 @@ export class SubmissionFormComponent {
     });
 
     if (this.config.extendData.status === 5) {
-      const type = this.config.extendData.wage_type === 0 ? TimesheetType.Times : TimesheetType.Activities;
+      const type = TimesheetType.Activities;
 
       if (type === TimesheetType.Activities) {
         this.isEditTimesheet = true;
