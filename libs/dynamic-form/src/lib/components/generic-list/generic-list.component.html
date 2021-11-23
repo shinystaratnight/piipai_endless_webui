@@ -32,6 +32,7 @@
     [disableActions]="disableActions"
     [inlineFilters]="inlineFilters"
     [actionProcess]="tables[0].actionProcess"
+    [uploadAll]="tables[0].uploadAll"
     (checkedObjects)="checkedHandler($event)"
     (list)="listHandler($event)"
     (event)="eventHandler($event)">
@@ -40,7 +41,7 @@
       <div class="list-actions">
         <div class="load-more-wrapper">
           <button title="Load more" class="load-more"
-            *ngIf="!isLoading && tables[0].data && !inForm && (tables[0].offset + tables[0].limit < tables[0].data.count) && (tables[0].data.count > tables[0].limit)"
+            *ngIf="!isLoading && tables[0].data && !inForm && (tables[0].offset + tables[0].limit < tables[0].data.count) && (tables[0].data.count > tables[0].limit) && !tables[0].uploadAll"
             (click)="loadMoreHandler()">
               <fa-icon icon="chevron-down" class="text-white"></fa-icon>
           </button>
