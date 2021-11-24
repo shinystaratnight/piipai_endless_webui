@@ -1,4 +1,4 @@
-import { Form } from "@webui/metadata";
+import { CheckboxType, Form } from "@webui/metadata";
 
 const questionType = () => new Form.select.element('type', 'Question Type')
   .setTranslateKey('question_type')
@@ -274,6 +274,8 @@ export const questionMetadata = {
 
         questionType(),
 
+        new Form.checkbox.element('exclude_from_score', 'Exclude score', CheckboxType.Checkbox),
+
         {
           key: 'order',
           type: 'input',
@@ -318,6 +320,8 @@ export const questionMetadata = {
         },
 
         questionType(),
+
+        new Form.checkbox.element('exclude_from_score', 'Exclude score', CheckboxType.Checkbox),
 
         {
           key: 'order',
@@ -384,7 +388,7 @@ export const answerMetadata = {
           key: 'score',
           type: 'input',
           templateOptions: {
-            required: true,
+            required: false,
             label: 'Score',
             max: 5,
             type: 'number',
@@ -435,7 +439,7 @@ export const answerMetadata = {
           key: 'score',
           type: 'input',
           templateOptions: {
-            required: true,
+            required: false,
             label: 'Score',
             max: 5,
             type: 'number',

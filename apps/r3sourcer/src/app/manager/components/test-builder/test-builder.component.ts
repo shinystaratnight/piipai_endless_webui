@@ -155,13 +155,14 @@ export class TestBuilderComponent implements OnInit, OnChanges {
     });
   }
 
-  public addAnswer(create: boolean, target, data?) {
+  public addAnswer(create: boolean, target, answerData?, questionData?) {
     const metadataType = create ? 'formadd' : 'form';
+    const exclude_from_score = questionData ? getElementFromMetadata(questionData, 'exclude_from_score') : null;
 
     this.createMetadata(
       Endpoints.AcceptenceTestAnswers,
       metadataType,
-      data
+      answerData
     ).subscribe((config: Field[]) => {
       if (create) {
         const order = getElementFromMetadata(config, 'order');
@@ -169,6 +170,17 @@ export class TestBuilderComponent implements OnInit, OnChanges {
 
         if (order) {
           order.value = value;
+        }
+      }
+
+      const score = getElementFromMetadata(config, 'score');
+
+      if (exclude_from_score && score) {
+        score.hide = exclude_from_score.value;
+
+        if (score.hide) {
+          score.value = 5;
+          score.templateOptions.required = false;
         }
       }
 
@@ -205,9 +217,11 @@ export class TestBuilderComponent implements OnInit, OnChanges {
   public checkAnswers(data: any) {
     if (data && data.acceptance_test_answers) {
       const answers = data.acceptance_test_answers;
-
-      answers.forEach((answer) => {
-        this.addAnswer(false, this.answers[data.id], answer);
+      const questionMetadataObservable = this.createMetadata(Endpoints.AcceptenceTestQuestion, 'form', data);
+      questionMetadataObservable.subscribe((questionMetadata) => {
+        answers.forEach((answer) => {
+          this.addAnswer(false, this.answers[data.id], answer, questionMetadata);
+        });
       });
     }
   }
