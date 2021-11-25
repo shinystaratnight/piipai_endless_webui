@@ -1009,13 +1009,7 @@ const form = [
                     templateOptions: {
                       label: 'Accounting Integration'
                     }
-                  },
-                  new Form.select.element('wage_type', 'Wage Type')
-                    .setDefaultValue(0)
-                    .addOptions({
-                      '0': 'Hourly wage',
-                      '1': 'Piecework wage'
-                    })
+                  }
                 ]
               }
             ]

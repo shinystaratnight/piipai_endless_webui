@@ -61,12 +61,6 @@ const form = [
     read_only: false,
     showIf: [{ hours: true }]
   },
-  // new Form.select.element('wage_type', 'Wage Type')
-  //   .setDefaultValue(0)
-  //   .addOptions({
-  //     '0': 'Hourly wage',
-  //     '1': 'Piecework wage'
-  //   }),
   {
     key: 'total_worked',
     type: 'static',

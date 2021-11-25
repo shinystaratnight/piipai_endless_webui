@@ -113,6 +113,7 @@ export class DynamicListComponent
   @Input() disableActions: boolean;
   @Input() inlineFilters: boolean;
   @Input() actionProcess: boolean;
+  @Input() uploadAll: boolean;
 
   @Output() event: EventEmitter<any> = new EventEmitter();
   @Output() list: EventEmitter<any> = new EventEmitter();
@@ -352,6 +353,14 @@ export class DynamicListComponent
     this.listService.data = this.fullData && this.fullData[this.responseField];
     this.listService.config = this.config.list;
     this.listService.updateActions = listUpdateActions[this.endpoint];
+
+    if (changes.uploadAll?.currentValue) {
+      const keys = Object.keys(this.select);
+      keys.forEach((el) => {
+        this.select[el] = true;
+      });
+      this.emitSelect();
+    }
   }
 
   public getFormat(property: string, data, config): string {
@@ -1230,10 +1239,17 @@ export class DynamicListComponent
     }
   }
 
-  public selectAll() {
+  public selectAll(selected) {
+    if (!this.uploadAll) {
+      this.event.emit(this.createEvent('uploadAll'));
+      this.selectedAll = false;
+      return;
+    }
+
+    this.selectedAll = selected;
     const keys = Object.keys(this.select);
     keys.forEach((el) => {
-      this.select[el] = this.selectedAll;
+      this.select[el] = selected;
     });
     this.emitSelect();
   }
@@ -2877,5 +2893,12 @@ export class DynamicListComponent
         value
       }
     };
+  }
+
+  private createEvent(type: string) {
+    return {
+      list: this.config.list.list,
+      type
+    }
   }
 }

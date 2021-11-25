@@ -70,7 +70,7 @@
               class="btn btn-secondary align-self-center my-2"
               *ngIf="testData && checkCount(getType(question), answers[getId(question)].length)"
               type="button"
-              (click)="addAnswer(true, answers[getId(question)])"
+              (click)="addAnswer(true, answers[getId(question)], null, question)"
             >
               <fa-icon icon="plus"></fa-icon> Answer
             </button>
@@ -78,7 +78,7 @@
         </div>
       </div>
     </div>
-  
+
     <button
       class="btn btn-secondary mr-2"
       *ngIf="testData"

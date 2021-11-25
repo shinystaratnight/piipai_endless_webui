@@ -920,13 +920,7 @@ const form = [
                       type: 'time'
                     },
                     read_only: false
-                  },
-                  new Form.select.element('wage_type', 'Wage Type')
-                    .setDefaultValue(0)
-                    .addOptions({
-                      '0': 'Hourly wage',
-                      '1': 'Piecework wage'
-                    })
+                  }
                 ],
                 width: 0.33
               },
@@ -977,17 +971,6 @@ const form = [
                       type: 'datetime'
                     },
                     read_only: true
-                  },
-                  {
-                    key: 'notes',
-                    type: 'textarea',
-                    templateOptions: {
-                      required: false,
-                      label: 'Notes',
-                      type: 'textarea',
-                      description: 'Job Description/Instructions for candidate'
-                    },
-                    read_only: false
                   }
                 ],
                 width: 0.33
@@ -1048,6 +1031,14 @@ const form = [
               }
             ]
           },
+          new Form.row.element()
+            .setChildren([
+              new Form.textarea.element('notes', 'Notes')
+                .setFullWidth()
+                .updateTemplate({
+                  description: 'Job Description/Instructions for candidate'
+                }),
+            ]),
           {
             endpoint: Endpoints.JobRates,
             type: 'list',
@@ -1456,13 +1447,6 @@ const formadd = [
             },
             read_only: false
           },
-          new Form.select.element('wage_type', 'Wage Type')
-            .required()
-            .setDefaultValue(0)
-            .addOptions({
-              0: 'Hourly wage',
-              1: 'Piecework wage'
-            }),
           {
             key: 'default_shift_starting_time',
             default: '07:00:00',

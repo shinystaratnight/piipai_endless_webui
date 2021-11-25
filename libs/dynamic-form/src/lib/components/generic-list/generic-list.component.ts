@@ -114,6 +114,7 @@ export class GenericListComponent implements OnInit, OnDestroy {
           if (
             table.offset + table.limit < (table.data && table.data.count) &&
             table.data.count > table.limit
+            && !table.uploadAll
           ) {
             if (data && !this.isLoading) {
               setTimeout(() => {
@@ -269,7 +270,7 @@ export class GenericListComponent implements OnInit, OnDestroy {
     }
   }
 
-  public getData(endpoint, query = '?', table, target = null, add = false) {
+  public getData(endpoint, query = '?', table, target = null, add = false, all?: boolean) {
     if (this.clientId) {
       query += `&role=${this.clientId}`;
     }
@@ -309,6 +310,9 @@ export class GenericListComponent implements OnInit, OnDestroy {
       }
       this.isLoading = false;
       this.updateTable(data, table, target, add);
+      if (all) {
+        table.uploadAll = true;
+      }
     });
   }
 
@@ -378,6 +382,7 @@ export class GenericListComponent implements OnInit, OnDestroy {
       e.type === 'update'
     ) {
       table.refresh = true;
+      table.uploadAll = false;
       if (e.type === 'update') {
         table.offset = 0;
         table.query.pagination = '';
@@ -419,6 +424,9 @@ export class GenericListComponent implements OnInit, OnDestroy {
       table.minimized = true;
       table.maximize = false;
       this.minimizedTable.push(table);
+    } else if (e.type === 'uploadAll') {
+      table.refresh = true;
+      this.uploadAll();
     }
   }
 
@@ -726,5 +734,19 @@ export class GenericListComponent implements OnInit, OnDestroy {
 
   public loadMoreHandler() {
     this.upload.next(true);
+  }
+
+  private uploadAll() {
+    const table = this.getFirstTable();
+    table.query.pagination = `limit=-1&offset=0`;
+
+    this.getData(
+      table.endpoint,
+      this.generateQuery(table.query),
+      table,
+      null,
+      false,
+      true
+    );
   }
 }
