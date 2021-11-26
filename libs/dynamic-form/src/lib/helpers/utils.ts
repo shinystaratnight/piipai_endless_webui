@@ -123,15 +123,23 @@ export const isAddressField = (field: Field) => {
   return key === 'address' || key === 'street_address';
 };
 
+export const isPhoneField = (key: string): boolean => {
+  const phoneFieldKeys = ['phone_mobile', 'emergency_contact_phone'];
+
+  if (key.includes('.')) {
+    return key.split('.').some((part) => phoneFieldKeys.includes(part));
+  }
+
+  return phoneFieldKeys.includes(key);
+}
+
 export function convertPhoneNumber(data: any): void {
   if (!data) {
     return;
   }
 
-  const phoneFieldKey = 'phone_mobile';
-
   Object.keys(data).forEach((key) => {
-    if (key === phoneFieldKey) {
+    if (isPhoneField(key)) {
       data[key] = data[key].internationalNumber;
     }
 
