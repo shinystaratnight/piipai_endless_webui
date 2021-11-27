@@ -1,5 +1,15 @@
-import { createFilter, Type } from '@webui/metadata';
+import { createFilter, Type, Form } from '@webui/metadata';
 import { Endpoints } from '@webui/data';
+
+const weekOptions = [
+  { value: 1, label: 'Monday' },
+  { value: 2, label: 'Tuesday' },
+  { value: 3, label: 'Wednesday' },
+  { value: 4, label: 'Thursday' },
+  { value: 5, label: 'Friday' },
+  { value: 6, label: 'Saturday' },
+  { value: 7, label: 'Sunday' }
+];
 
 const filters = {
   status: createFilter(Type.Relared, {
@@ -426,10 +436,7 @@ const form = [
                       label: 'MYOB Card ID',
                       type: 'text'
                     },
-                    showIf: [
-                      { type: 'regular' },
-                      { country_code: 'AU' }
-                    ]
+                    showIf: [{ type: 'regular' }, { country_code: 'AU' }]
                   },
                   {
                     key: 'company_settings.allow_job_creation',
@@ -438,15 +445,13 @@ const form = [
                       label: 'Allow Job/Jobsite creation',
                       type: 'checkbox'
                     },
-                    showIf: [
-                      { type: 'regular' }
-                    ]
+                    showIf: [{ type: 'regular' }]
                   },
                   {
                     key: 'company_settings.id',
                     type: 'related',
                     templateOptions: {
-                      label: 'Company Settings',
+                      label: 'Company Settings'
                     },
                     hide: true
                   }
@@ -523,7 +528,7 @@ const form = [
                     key: 'master_company',
                     templateOptions: {
                       label: 'Master company',
-                      type: 'related',
+                      type: 'related'
                     },
                     showIf: [
                       {
@@ -533,7 +538,7 @@ const form = [
                     type: 'related',
                     query: {
                       type: 'master'
-                    },
+                    }
                   }
                 ],
                 width: 0.25
@@ -876,52 +881,21 @@ const form = [
                     },
                     read_only: false
                   },
-                  {
-                    type: 'select',
-                    key: 'invoice_rule.period_zero_reference_weekly',
-                    default: 1,
-                    templateOptions: {
-                      label: 'Invoice generation time',
-                      doNotSort: true,
-                      options: [
-                        { value: 1, label: 'Monday' },
-                        { value: 2, label: 'Tuesday' },
-                        { value: 3, label: 'Wednesday' },
-                        { value: 4, label: 'Thursday' },
-                        { value: 5, label: 'Friday' },
-                        { value: 6, label: 'Saturday' },
-                        { value: 7, label: 'Sunday' }
-                      ]
-                    },
-                    showIf: [
-                      {
-                        'invoice_rule.period': 'weekly'
-                      }
-                    ]
-                  },
-                  {
-                    type: 'select',
-                    key: 'invoice_rule.period_zero_reference_fortnightly',
-                    default: 1,
-                    templateOptions: {
-                      label: 'Invoice generation time',
-                      doNotSort: true,
-                      options: [
-                        { value: 1, label: 'Monday' },
-                        { value: 2, label: 'Tuesday' },
-                        { value: 3, label: 'Wednesday' },
-                        { value: 4, label: 'Thursday' },
-                        { value: 5, label: 'Friday' },
-                        { value: 6, label: 'Saturday' },
-                        { value: 7, label: 'Sunday' }
-                      ]
-                    },
-                    showIf: [
-                      {
-                        'invoice_rule.period': 'fortnightly'
-                      }
-                    ]
-                  },
+
+                  new Form.select.element(
+                    'invoice_rule.period_zero_reference_weekly',
+                    'Invoice generation time'
+                  )
+                    .addOptions(weekOptions)
+                    .setShowIfRule([{ 'invoice_rule.period': 'weekly' }]),
+
+                  new Form.select.element(
+                    'invoice_rule.period_zero_reference_fortnightly',
+                    'Invoice generation time'
+                  )
+                    .addOptions(weekOptions)
+                    .setShowIfRule([{ 'invoice_rule.period': 'fortnightly' }]),
+
                   {
                     type: 'datepicker',
                     key: 'invoice_rule.period_zero_reference_date',
@@ -1101,7 +1075,7 @@ const form = [
         prefilled: {
           company_id: '{id}'
         },
-        type: 'list',
+        type: 'list'
       },
       {
         endpoint: '/core/notes/',
@@ -1109,7 +1083,7 @@ const form = [
           label: 'Notes',
           type: 'list',
           add_label: '+ Add',
-          text: 'Notes',
+          text: 'Notes'
         },
         add_form: true,
         collapsed: false,

@@ -953,5 +953,9 @@
   "workflow.candidate.40.inactive": "Immigration Information",
   "workflow.candidate.40.active": "Immigration Information Filled",
   "workflow.candidate.22.inactive": "Theory Test",
-  "workflow.candidate.22.active": "Theory Test Passed"
+  "workflow.candidate.22.active": "Theory Test Passed",
+  "question_type.0": "Options",
+  "question_type.1": "Text",
+  "question_type.2": "Yes/No",
+  "question_type.3": "Checkboxes"
 }
