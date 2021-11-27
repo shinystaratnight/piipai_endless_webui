@@ -131,7 +131,7 @@ export const isPhoneField = (key: string): boolean => {
   }
 
   return phoneFieldKeys.includes(key);
-}
+};
 
 export function convertPhoneNumber(data: any): void {
   if (!data) {

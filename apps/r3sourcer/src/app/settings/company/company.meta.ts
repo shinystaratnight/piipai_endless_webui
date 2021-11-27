@@ -209,8 +209,7 @@ export const meta = [
                   'invoice_rule.period': 'weekly'
                 }
               ]
-            })
-            .updateTemplate({ doNotSort: true }),
+            }),
 
           new Form.select.element(
             'invoice_rule.period_zero_reference_fortnightly',
@@ -225,8 +224,7 @@ export const meta = [
                   'invoice_rule.period': 'fortnightly'
                 }
               ]
-            })
-            .updateTemplate({ doNotSort: true }),
+            }),
 
           {
             type: 'datepicker',
