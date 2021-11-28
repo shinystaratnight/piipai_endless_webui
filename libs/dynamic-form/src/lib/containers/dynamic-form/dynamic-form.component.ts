@@ -45,8 +45,6 @@ export class DynamicFormComponent implements OnInit {
   @Output()
   public buttonAction: EventEmitter<any> = new EventEmitter();
   @Output()
-  public resourseData: EventEmitter<any> = new EventEmitter();
-  @Output()
   public changeValue: EventEmitter<any> = new EventEmitter();
   @Output()
   public formGroup: EventEmitter<FormGroup> = new EventEmitter();
@@ -242,10 +240,6 @@ export class DynamicFormComponent implements OnInit {
     this.buttonAction.emit({ ...e, data: this.form.value });
   }
 
-  public resourseDataHandler(e) {
-    this.resourseData.emit(e);
-  }
-
   public checkHiddenFields(field: Field): void {
     const rule = field.showIf;
     const show = this.checkShowRules(rule);
@@ -285,7 +279,11 @@ export class DynamicFormComponent implements OnInit {
             approvedRules += 1;
           }
         } else if (value == targetValue) {
-          //tslint:disable-line
+          approvedRules += 1;
+        } else if (
+          Array.isArray(targetValue) &&
+          targetValue.some((el) => el.toString() === value.toString())
+        ) {
           approvedRules += 1;
         } else {
           return;

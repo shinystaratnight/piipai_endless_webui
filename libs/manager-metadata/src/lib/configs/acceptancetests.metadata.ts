@@ -100,7 +100,7 @@ const form = function () {
           .setRelatedObjects(
             'industry',
             { acceptance_test: '{id}' },
-            Endpoints.AcceptenceTestIndustry
+            Endpoints.AcceptanceTestIndustry
           ),
 
         new Form.related.element(
@@ -116,7 +116,7 @@ const form = function () {
           .setRelatedObjects(
             'skill',
             { acceptance_test: '{id}' },
-            Endpoints.AcceptenceTestSkill
+            Endpoints.AcceptanceTestSkill
           ),
 
         new Form.related.element('acceptance_tests_tags', 'Tags', Endpoints.Tag)
@@ -125,13 +125,13 @@ const form = function () {
           .setRelatedObjects(
             'tag',
             { acceptance_test: '{id}' },
-            Endpoints.AcceptenceTestTag
+            Endpoints.AcceptanceTestTag
           ),
 
         new Form.related.element(
           'acceptance_tests_workflow_nodes',
           'Workflow Node',
-          Endpoints.AcceptenceTestWorkflowNode
+          Endpoints.AcceptanceTestWorkflowNode
         )
           .doNotSend()
           .updateModel({
