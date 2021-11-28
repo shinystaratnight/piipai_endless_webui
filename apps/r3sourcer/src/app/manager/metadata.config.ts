@@ -163,9 +163,9 @@ export class Metadata {
   [Endpoints.FormField] = formfields;
   [Endpoints.FormFieldGroup] = formfieldgroups;
   [Endpoints.FormStorage] = formstorages;
-  [Endpoints.AcceptenceTestQuestion] = acceptancetestquestions;
-  [Endpoints.AcceptenceTestAnswers] = acceptancetestanswers;
-  [Endpoints.AcceptenceTestSkill] = acceptancetestskills;
+  [Endpoints.AcceptanceTestQuestion] = acceptancetestquestions;
+  [Endpoints.AcceptanceTestAnswers] = acceptancetestanswers;
+  [Endpoints.AcceptanceTestSkill] = acceptancetestskills;
   [Endpoints.CandidateInterviewSchedule] = interviewschedules;
   [Endpoints.User] = users;
   [Endpoints.SmsMessages] = smsmessages;
@@ -220,10 +220,10 @@ export class Metadata {
   [Endpoints.JobsiteMap] = jobsiteMap;
   'supervisorApprove' = supervisorApprove;
   'candidateFill' = candidateFill;
-  [Endpoints.AcceptenceTest] = acceptancetests;
-  [Endpoints.AcceptenceTestIndustry] = acceptancetestindustries;
-  [Endpoints.AcceptenceTestTag] = acceptancetesttags;
-  [Endpoints.AcceptenceTestWorkflowNode] = acceptancetestworkflownodes;
+  [Endpoints.AcceptanceTest] = acceptancetests;
+  [Endpoints.AcceptanceTestIndustry] = acceptancetestindustries;
+  [Endpoints.AcceptanceTestTag] = acceptancetesttags;
+  [Endpoints.AcceptanceTestWorkflowNode] = acceptancetestworkflownodes;
   [Endpoints.SkillBaseRate] = skillbaserates;
   [Endpoints.BillingCompany] = billingcompanies;
   [Endpoints.BillingDiscount] = billingdoscounts;

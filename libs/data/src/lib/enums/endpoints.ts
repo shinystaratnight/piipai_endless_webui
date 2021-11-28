@@ -97,15 +97,15 @@ export enum Endpoints {
   FormFieldGroup = '/core/formfieldgroups/',
   FormStorage = '/core/formstorages/',
 
-  // Acceptence Test
-  AcceptenceTest = '/acceptance-tests/acceptancetests/',
-  AcceptenceTestIndustry = '/acceptance-tests/acceptancetestindustries/',
-  AcceptenceTestTag = '/acceptance-tests/acceptancetesttags/',
-  AcceptenceTestWorkflowNode = '/acceptance-tests/acceptancetestworkflownodes/',
-  AcceptenceTestQuestion = '/acceptance-tests/acceptancetestquestions/',
-  AcceptenceTestAnswers = '/acceptance-tests/acceptancetestanswers/',
-  AcceptenceTestSkill = '/acceptance-tests/acceptancetestskills/',
-  AcceptenceTestPassAnswers = '/acceptance-tests/workflowobjectanswers/',
+  // Acceptance Test
+  AcceptanceTest = '/acceptance-tests/acceptancetests/',
+  AcceptanceTestIndustry = '/acceptance-tests/acceptancetestindustries/',
+  AcceptanceTestTag = '/acceptance-tests/acceptancetesttags/',
+  AcceptanceTestWorkflowNode = '/acceptance-tests/acceptancetestworkflownodes/',
+  AcceptanceTestQuestion = '/acceptance-tests/acceptancetestquestions/',
+  AcceptanceTestAnswers = '/acceptance-tests/acceptancetestanswers/',
+  AcceptanceTestSkill = '/acceptance-tests/acceptancetestskills/',
+  AcceptanceTestPassAnswers = '/acceptance-tests/workflowobjectanswers/',
 
   // Rate coefficient
   RateCoefficient = '/pricing/ratecoefficients/',

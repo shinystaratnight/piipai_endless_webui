@@ -26,7 +26,9 @@ export class ToastComponent implements OnInit, OnDestroy {
           return;
         }
 
-        this.toastr[type](text);
+        this.toastr[type](text, '', {
+          timeOut: 10000
+        });
       }
     );
   }

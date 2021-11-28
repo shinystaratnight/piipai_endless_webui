@@ -66,7 +66,7 @@ export class TimelineService {
 
   passTests(tests: any[]): Observable<any> {
     return this.http
-      .post(Endpoints.AcceptenceTestPassAnswers, tests)
+      .post(Endpoints.AcceptanceTestPassAnswers, tests)
       .pipe(
         catchError((error) =>
           this.errorsService.handleError(error, { showMessage: true })
