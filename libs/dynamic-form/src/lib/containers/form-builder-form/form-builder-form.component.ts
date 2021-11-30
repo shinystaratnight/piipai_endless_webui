@@ -546,9 +546,9 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
   private passTests(formData: any): Observable<boolean> {
     const currentTest: BehaviorSubject<number> = new BehaviorSubject<number>(0);
     const success: Subject<boolean> = new Subject();
-    const chosenIndustry = formData.industry.id;
-    const chosenSkills = formData.skill;
-    const chosenTags = formData.tag;
+    const chosenIndustry = formData.industry.id || [];
+    const chosenSkills = formData.skill || [];
+    const chosenTags = formData.tag || [];
 
     let testsForPassing = this.config.tests.filter((test) => {
       const industries = test.acceptance_tests_industries.map(
