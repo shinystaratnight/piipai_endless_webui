@@ -12,11 +12,11 @@
       >
         <div class="test__question">
           <div class="test__actions">
-            <button type="button" class="btn hov-opacity" (click)="deleteQuestion(getId(question), questions, index)">
+            <button type="button" class="btn hov-opacity" (click)="deleteQuestion(question.id, questions, index)">
               <fa-icon icon="trash" class="text-danger"></fa-icon>
               Delete
             </button>
-            <button *ngIf="getId(question)" type="button" class="btn hov-opacity" (click)="editQuestion(question)">
+            <button *ngIf="question.id" type="button" class="btn hov-opacity" (click)="editQuestion(question.config)">
               <fa-icon icon="pencil-alt" class="text-warning"></fa-icon>
               Edit
             </button>
@@ -24,33 +24,34 @@
 
           <app-dynamic-form
             #question
-            [config]="question"
-            (submitForm)="saveQuestion($event, index, getId(question))"
+            [hiddenFields]="question.hiddenFields"
+            [config]="question.config"
+            (submitForm)="saveQuestion($event, index, question.id)"
           >
           </app-dynamic-form>
 
-          <div class="images" *ngIf="getId(question)">
+          <div class="images" *ngIf="question.id">
             <app-image-uploader
-              [loading]="pictureLoading.get(getId(question))"
-              [source]="pictures.get(getId(question))"
-              (remove)="onRemovePicture($event, getId(question))"
-              (images)="onUpload($event, getId(question))"
+              [loading]="pictureLoading.get(question.id)"
+              [source]="pictures.get(question.id)"
+              (remove)="onRemovePicture($event, question.id)"
+              (images)="onUpload($event, question.id)"
             ></app-image-uploader>
           </div>
 
           <div
             class="test__answers"
-            *ngIf="getId(question) && getType(question) !== 1"
+            *ngIf="question.id && getType(question.config) !== 1"
           >
             <div
               class="test__answer"
-              *ngFor="let answer of answers[getId(question)]; let index = index"
+              *ngFor="let answer of answers[question.id]; let index = index"
             >
               <div class="test__actions">
                 <fa-icon
                   icon="trash"
                   class="text-danger hov-opacity"
-                  (click)="deleteAnswer(getId(answer), answers[getId(question)], index)"
+                  (click)="deleteAnswer(getId(answer), answers[question.id], index)"
                 ></fa-icon>
                 <fa-icon
                   *ngIf="getId(answer)"
@@ -62,15 +63,15 @@
 
               <app-dynamic-form
                 [config]="answer"
-                (submitForm)="saveAnswer($event, index, getId(question), getId(answer))"
+                (submitForm)="saveAnswer($event, index, question.id, getId(answer))"
               ></app-dynamic-form>
             </div>
 
             <button
               class="btn btn-secondary align-self-center my-2"
-              *ngIf="testData && checkCount(getType(question), answers[getId(question)].length)"
+              *ngIf="testData && checkCount(getType(question.config), answers[question.id].length)"
               type="button"
-              (click)="addAnswer(true, answers[getId(question)], null, question)"
+              (click)="addAnswer(true, answers[question.id], null, question)"
             >
               <fa-icon icon="plus"></fa-icon> Answer
             </button>

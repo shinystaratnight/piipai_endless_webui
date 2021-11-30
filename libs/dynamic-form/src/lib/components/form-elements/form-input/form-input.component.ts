@@ -33,7 +33,7 @@ import {
 import { BasicElementComponent } from '../basic-element/basic-element.component';
 import { SiteSettingsService } from '@webui/core';
 import { formatCurrency, getCurrencySymbol } from '@angular/common';
-import { isAddressField } from '../../../helpers';
+import { isAddressField, isPhoneField } from '../../../helpers';
 import { FormEvent } from '../../../interfaces';
 
 @Component({
@@ -101,11 +101,8 @@ export class FormInputComponent
 
   get isPhoneField() {
     const { key, intl } = this.config;
-    return (
-      (key.includes('phone_mobile') ||
-        key.includes('emergency_contact_phone')) &&
-      intl
-    );
+
+    return isPhoneField(key) && intl;
   }
 
   @ViewChild('input') public input;
