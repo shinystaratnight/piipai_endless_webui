@@ -718,11 +718,12 @@ export class CalendarComponent implements OnInit, OnDestroy {
       this.getCandidateTimesheets(
         this.generateCandidateTimesheetQuery(range.start, range.end)
       ),
-      this.getJobOffers(this.generateJobOffersQuery(range.start, range.end))
+      this.getJobOffers(this.generateJobOffersQuery(range.start, range.end)),
+      this.data.getHolidaysForPeriod(range.start.format(filterDateFormat), range.end.format(filterDateFormat))
     ];
 
     combineLatest(requests).subscribe((data) => {
-      const [availability, timesheets, jobOffers] = data;
+      const [availability, timesheets, jobOffers, holidays] = data;
 
       this.prepareTimesheetsData(
         (jobOffers as any).results,
@@ -732,6 +733,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
       this.availability = (availability as any).results;
 
       this.shifts.push(...this.availability);
+      this.shifts.push(...holidays as Array<{ name: string, holiday_date: string }>);
 
       this.updateCalendar(this.currentDate, rangeType);
       this.cd.detectChanges();
@@ -739,12 +741,18 @@ export class CalendarComponent implements OnInit, OnDestroy {
   }
 
   private getData(rangeType: DateRange, range: { start: Moment; end: Moment }) {
-    const request = this.getShifts(
-      this.generateQuery(range.start, range.end, this.client, this.candidate)
-    );
+    const requests = [
+      this.getShifts(
+        this.generateQuery(range.start, range.end, this.client, this.candidate)
+      ),
+      this.data
+        .getHolidaysForPeriod(range.start.format(filterDateFormat), range.end.format(filterDateFormat))
+    ];
 
-    request.subscribe((data) => {
-      this.prepareShiftsData(data);
+    forkJoin(requests).subscribe((data) => {
+      const [shifts, holidays] = data;
+
+      this.prepareShiftsData(shifts, holidays);
       this.updateCalendar(this.currentDate, rangeType);
       this.cd.detectChanges();
     });
@@ -812,7 +820,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
     return filterList;
   }
 
-  private prepareShiftsData(data) {
+  private prepareShiftsData(data, holidays?) {
     this.shifts = [];
     data = Array.isArray(data) ? data : data.results;
 
@@ -832,6 +840,10 @@ export class CalendarComponent implements OnInit, OnDestroy {
           }
         });
       });
+    }
+
+    if (holidays) {
+      this.shifts.push(...holidays);
     }
   }
 
