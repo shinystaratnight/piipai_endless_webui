@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { DateFormat } from '@webui/data';
 import { getTimeInstance, isCandidate, isMobile } from '@webui/utilities';
 import { UserService } from './user.service';
 
@@ -60,10 +61,10 @@ export class FormatterService {
 
               return timeInstance(data[field]).format(
                 format === 'time'
-                  ? 'hh:mm A'
+                  ? DateFormat.Time
                   : format === 'datetime'
-                  ? 'DD/MM/YYYY hh:mm A'
-                  : 'DD/MM/YYYY'
+                  ? DateFormat.DateTime
+                  : DateFormat.Date
               );
             } else {
               return isMobile() && isCandidate() ? '-' : '';

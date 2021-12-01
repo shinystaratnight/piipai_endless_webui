@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 
 import * as moment from 'moment-timezone';
-import { Moment } from 'moment';
 
 moment.updateLocale('en', {
   week: {
@@ -13,8 +12,8 @@ export type DateInstance = moment.Moment;
 
 export enum Format {
   Date = 'DD/MM/YYYY',
-  DateTime = 'DD/MM/YYYY hh:mm A',
-  Time = 'hh:mm A'
+  DateTime = 'DD/MM/YYYY HH:mm',
+  Time = 'HH:mm'
 }
 
 export enum FormatApi {
