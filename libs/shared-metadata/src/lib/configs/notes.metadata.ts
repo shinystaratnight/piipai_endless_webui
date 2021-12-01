@@ -365,7 +365,6 @@ const formadd = [
     templateOptions: {
       label: 'Note',
       rows: 10,
-      required: true,
       autofocus: true,
       type: 'textarea',
       full: true

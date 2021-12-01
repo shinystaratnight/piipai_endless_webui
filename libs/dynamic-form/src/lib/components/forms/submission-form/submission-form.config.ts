@@ -47,60 +47,52 @@ export const times = () => [
           'Shift Start',
           DatepickerType.Datetime
         )
-          .setWidth(0.25)
+          .setDropdonLeft()
+          .required(),
+
+        new Form.datepicker.element(
+          'shift_ended_at',
+          'Shift End',
+          DatepickerType.Datetime
+        )
+          .setDropdonLeft()
+          .setDefaultValue('{shift_ended_at}')
           .required(),
 
         new Form.checkbox.element('noBreak', 'No Break', CheckboxType.Checkbox)
           .setDefaultValue(false)
           .updateByNull(['break_started_at', 'break_ended_at'])
-          .setWidth(0.25)
+          .doNotSend(),
+
+        new Form.static.element('total_time', 'Total time')
+          .readOnly()
           .doNotSend()
+          .setColor('text-success')
+          .inlineValue(),
       ]),
 
     new Form.group.element()
       .doNotShowLabel()
       .setChildren([
         new Form.datepicker.element(
-          'shift_ended_at',
-          'Shift End',
+          'break_started_at',
+          'Break Start',
           DatepickerType.Datetime
         )
-          .setDefaultValue('{shift_ended_at}')
-          .setWidth(0.25)
-          .required(),
+          .setDefaultValue('{break_started_at}')
+          .saveValue()
+          .setShowIfRule([{ noBreak: false }]),
 
-        new Form.static.element('total_time', 'Total time')
-          .setWidth(0.25)
-          .readOnly()
-          .doNotSend()
-          .setColor('text-success')
-          .inlineValue()
+        new Form.datepicker.element(
+          'break_ended_at',
+          'Break End',
+          DatepickerType.Datetime
+        )
+          .setDefaultValue('{break_ended_at}')
+          .saveValue()
+          .setShowIfRule([{ noBreak: false }])
       ]),
-
-    new Form.group.element().doNotShowLabel().setChildren([
-      new Form.datepicker.element(
-        'break_started_at',
-        'Break Start',
-        DatepickerType.Datetime
-      )
-        .setDefaultValue('{break_started_at}')
-        .setWidth(0.25)
-        .saveValue()
-        .setShowIfRule([{ noBreak: false }])
-    ]),
-
-    new Form.group.element().doNotShowLabel().setChildren([
-      new Form.datepicker.element(
-        'break_ended_at',
-        'Break End',
-        DatepickerType.Datetime
-      )
-        .setDefaultValue('{break_ended_at}')
-        .setWidth(0.25)
-        .saveValue()
-        .setShowIfRule([{ noBreak: false }])
-    ])
-  ])
+  ]),
 ];
 
 export const timesFilled = () => [
@@ -113,54 +105,45 @@ export const timesFilled = () => [
           'Shift Start',
           DatepickerType.Datetime
         )
-          .setWidth(0.25)
           .required(),
 
-        new Form.static.element('total_time', 'Total time')
-          .setWidth(0.25)
-          .readOnly()
-          .doNotSend()
-          .setColor('text-success')
-          .inlineValue()
-      ]),
-
-    new Form.group.element()
-      .doNotShowLabel()
-      .setChildren([
         new Form.datepicker.element(
           'shift_ended_at',
           'Shift End',
           DatepickerType.Datetime
         )
           .setDefaultValue('{shift_ended_at}')
-          .setWidth(0.25)
-          .required()
+          .required(),
+
+        new Form.static.element('total_time', 'Total time')
+          .readOnly()
+          .doNotSend()
+          .setColor('text-success')
+          .inlineValue(),
       ]),
 
-    new Form.group.element().doNotShowLabel().setChildren([
-      new Form.datepicker.element(
-        'break_started_at',
-        'Break Start',
-        DatepickerType.Datetime
-      )
-        .setDefaultValue('{break_started_at}')
-        .setWidth(0.25)
-        .saveValue()
-        .setShowIfRule([{ noBreak: false }])
-    ]),
+    new Form.group.element()
+      .doNotShowLabel()
+      .setChildren([
+        new Form.datepicker.element(
+          'break_started_at',
+          'Break Start',
+          DatepickerType.Datetime
+        )
+          .setDefaultValue('{break_started_at}')
+          .saveValue()
+          .setShowIfRule([{ noBreak: false }]),
 
-    new Form.group.element().doNotShowLabel().setChildren([
-      new Form.datepicker.element(
-        'break_ended_at',
-        'Break End',
-        DatepickerType.Datetime
-      )
-        .setDefaultValue('{break_ended_at}')
-        .setWidth(0.25)
-        .saveValue()
-        .setShowIfRule([{ noBreak: false }])
-    ])
-  ])
+        new Form.datepicker.element(
+          'break_ended_at',
+          'Break End',
+          DatepickerType.Datetime
+        )
+          .setDefaultValue('{break_ended_at}')
+          .saveValue()
+          .setShowIfRule([{ noBreak: false }])
+      ]),
+  ]),
 ];
 
 export const skillActivities = () => [
