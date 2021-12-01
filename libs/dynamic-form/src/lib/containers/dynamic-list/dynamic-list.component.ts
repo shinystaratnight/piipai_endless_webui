@@ -2864,6 +2864,8 @@ export class DynamicListComponent
 
     if (this.checkPermission('get')) {
       const { editEndpoint, editDisable } = this.config.list;
+      // set temp flag in localstorage
+      localStorage.setItem('flagAfterEditRecord', 'true');
 
       if (this.first && !editEndpoint && !this.inForm && !editDisable) {
         this.router.navigate([row.id, 'change'], { relativeTo: this.route });

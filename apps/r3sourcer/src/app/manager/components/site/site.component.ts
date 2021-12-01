@@ -87,6 +87,8 @@ export class SiteComponent implements OnInit, OnDestroy {
   public loader: boolean;
 
   private subscriptions: Subscription[] = [];
+  
+  public rowId: any = "";
 
   get isMobileDevice() {
     return isMobile() && isCandidate();
@@ -366,6 +368,8 @@ export class SiteComponent implements OnInit, OnDestroy {
   }
 
   public formEvent(e) {
+	let rowId = this.pageData.pathData.id;
+	localStorage.setItem('rowId', rowId);
     if (e.type === 'saveStart') {
       this.saveProcess = true;
       return;
