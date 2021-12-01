@@ -306,6 +306,11 @@ app-datepicker {
       );
     }
 
+    &.holiday {
+      background: rgba(#ccc, .4);
+      opacity: 0.4;
+    }
+
     &.unavailable {
       background: linear-gradient(
         45deg,

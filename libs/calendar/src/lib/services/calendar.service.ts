@@ -89,6 +89,9 @@ export class CalendarService {
       return body.map((row) => {
         return row.map((day) => {
           const newData = data.filter((el) => el.date === day.date);
+          const holidayData = data.find(
+            (el) => el.holiday_date === day.date
+          );
           const availabilityData = data.find(
             (el) => el.target_date === day.date
           );
@@ -96,6 +99,7 @@ export class CalendarService {
             ...day,
             data: newData,
             jobOffers: newData.filter((el) => el.showButtons),
+            holiday: holidayData ? holidayData.name : undefined,
             available: availabilityData
               ? availabilityData.confirmed_available
               : undefined,
