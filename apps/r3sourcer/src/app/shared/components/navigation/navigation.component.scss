@@ -86,11 +86,7 @@ $header-bg: #fdfdfd;
     }
 
     &-img {
-      height: 40px;
-
-      @include media-breakpoint-down('lg') {
-        height: 32px;
-      }
+      height: 60px;
     }
   }
 
