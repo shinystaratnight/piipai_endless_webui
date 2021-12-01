@@ -16,7 +16,9 @@ export const industryField: Field = {
     type: 'related',
     values: ['__str__', 'id', 'translations']
   },
-  query: {}
+  query: {
+    company: '{session.company}'
+  }
 };
 
 export const steps: FormStep[] = [
