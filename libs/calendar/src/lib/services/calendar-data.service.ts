@@ -2,8 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpParams, HttpClient } from '@angular/common/http';
 
 import { Endpoints } from '@webui/data';
-import { catchError } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 import { ErrorsService } from '@webui/core';
+import { Observable } from 'rxjs';
 
 export enum Calendar {
   Manager,
@@ -29,7 +30,10 @@ export class CalendarDataService {
 
   getShiftsByQuery(params: HttpParams, type: Calendar) {
     return this.http.get(this.endpoints[type], { params })
-      .pipe(catchError((errors) => this.errorsService.handleError(errors)));
+      .pipe(
+        map((response: any) => response.results ? response.results : response),
+        catchError((errors) => this.errorsService.handleError(errors))
+      );
   }
 
   getShiftDate(id: string) {
@@ -72,5 +76,22 @@ export class CalendarDataService {
 
     return this.http.put(endpoint, data)
       .pipe(catchError((errors) => this.errorsService.handleError(errors)));;
+  }
+
+  public getHolidaysForPeriod(
+    from: string,
+    to: string
+  ): Observable<Array<{ name: string, holiday_date: string }>> {
+    const params = {
+      date_0: from,
+      date_1: to,
+      limit: -1
+    };
+
+    return this.http
+      .get('/core/publicholidays/', { params: new HttpParams({ fromObject: params }) })
+      .pipe(
+        map((response: any) => response.results.map((el) => ({ holiday_date: el.date, name: el.name })))
+      );
   }
 }
