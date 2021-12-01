@@ -1,4 +1,5 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { DateFormat } from '@webui/data';
 
 import { isMobile, getTimeInstance, getTranslationKey } from '@webui/utilities';
 import { getValueOfData, generateCssStyles } from '../../../helpers';
@@ -101,24 +102,24 @@ export class ListTextComponent implements OnInit {
       if (type === 'date') {
         if (this.arrayValue) {
           const result = this.value.map((el) => {
-            return el ? moment(el, 'YYYY-MM-DD').format('DD/MM/YYYY') : ' ';
+            return el ? moment(el, 'YYYY-MM-DD').format(DateFormat.Date) : ' ';
           });
           this.value = result;
         } else {
           this.value = this.value
-            ? moment(this.value, 'YYYY-MM-DD').format('DD/MM/YYYY')
+            ? moment(this.value, 'YYYY-MM-DD').format(DateFormat.Date)
             : ' ';
         }
       }
       if (type === 'datetime') {
         if (this.arrayValue) {
           const result = this.value.map((el) => {
-            return el ? moment(el).format('DD/MM/YYYY hh:mm A') : ' ';
+            return el ? moment(el).format(DateFormat.DateTime) : ' ';
           });
           this.value = result;
         } else {
           this.value = this.value
-            ? moment(this.value).format('DD/MM/YYYY hh:mm A')
+            ? moment(this.value).format(DateFormat.DateTime)
             : ' '; //tslint:disable-line
         }
       }

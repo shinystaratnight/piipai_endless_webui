@@ -526,7 +526,10 @@ export class FormInputComponent
       }
     } else {
       if (this.config.value instanceof Object) {
-        this.displayValue = this.config.value.__str__ || '-';
+        const displayFormat = this.config.templateOptions.display
+        this.displayValue = displayFormat
+          ? format.format(displayFormat, this.config.value)
+          : this.config.value.__str__ || '-';
       } else {
         const text = format.format(this.config.templateOptions.text, {
           [this.config.key]: this.config.value

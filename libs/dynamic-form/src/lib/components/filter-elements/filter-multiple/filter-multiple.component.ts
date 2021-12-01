@@ -11,6 +11,7 @@ import { Subscription } from 'rxjs';
 
 import { FilterService } from '../../../services';
 import { FormatString, getTimeInstance } from '@webui/utilities';
+import { DateFormat } from '@webui/data';
 
 enum FilterType {
   Multiple = 'multiple'
@@ -244,10 +245,10 @@ export class FilterMultipleComponent implements OnInit, OnDestroy {
           const condition = () => {
             if (field === 'name' && el.data.date) {
               const timeInstance = getTimeInstance();
-              const currentValue = timeInstance(el.data[field], 'DD/MM/YYYY hh:mm a');
+              const currentValue = timeInstance(el.data[field], DateFormat.DateTime);
 
               const result = uniqueField[field].some((name) => {
-                const elValue = timeInstance(name, 'DD/MM/YYYY hh:mm a');
+                const elValue = timeInstance(name, DateFormat.DateTime);
                 return Math.abs(elValue.diff(currentValue, 'hours')) < 4;
               });
 

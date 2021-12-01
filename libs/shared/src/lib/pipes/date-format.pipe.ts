@@ -1,4 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
+import { DateFormat } from '@webui/data';
 import { getTimeInstance } from '@webui/utilities';
 
 @Pipe({
@@ -8,9 +9,9 @@ export class DateFormatPipe implements PipeTransform {
 
   public transform(value: string, format: string): string {
     const formats = {
-      date: 'DD/MM/YYYY',
-      datetime: 'DD/MM/YYYY hh:mm A',
-      time: 'hh:mm A',
+      date: DateFormat.Date,
+      datetime: DateFormat.DateTime,
+      time: DateFormat.Time,
     };
 
     if (!value) {

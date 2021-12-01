@@ -40,7 +40,7 @@ import {
   isClient,
   getTotalTime
 } from '@webui/utilities';
-import { Endpoints, CountryCodeLanguage, Models } from '@webui/data';
+import { Endpoints, CountryCodeLanguage, Models, DateFormat } from '@webui/data';
 
 import {
   FilterService,
@@ -2270,10 +2270,10 @@ export class DynamicListComponent
 
               return timeInstance(data[field]).format(
                 format === 'time'
-                  ? 'hh:mm A'
+                  ? DateFormat.Time
                   : format === 'datetime'
-                  ? 'DD/MM/YYYY hh:mm A'
-                  : 'DD/MM/YYYY'
+                  ? DateFormat.DateTime
+                  : DateFormat.Date
               );
             } else {
               return isMobile() && isCandidate() ? '-' : '';

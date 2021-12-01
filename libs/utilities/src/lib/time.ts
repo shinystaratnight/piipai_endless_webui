@@ -1,3 +1,4 @@
+import { DateFormat } from '@webui/data';
 import * as moment from 'moment-timezone';
 
 // export const timeZone = 'Australia/Sydney';
@@ -65,6 +66,6 @@ export function getMonthEnd() {
   return getToday().endOf('month').format();
 }
 
-export const dateFormat = 'DD/MM/YYYY';
-export const datetimeFormat = 'DD/MM/YYYY hh:mm A';
-export const timeFormat = 'hh:mm A';
+export const dateFormat = DateFormat.Date;
+export const datetimeFormat = DateFormat.DateTime;
+export const timeFormat = DateFormat.Time;
