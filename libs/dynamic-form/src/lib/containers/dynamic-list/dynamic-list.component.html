@@ -255,6 +255,7 @@
                   }
                 "
                 (click)="openDetails(row, $event)"
+                [id]="row.id"
               >
                 <td *ngIf="hasSelectColumn || hasEditLink" class="first-cell">
                   <label *ngIf="config.list.actions || actions">

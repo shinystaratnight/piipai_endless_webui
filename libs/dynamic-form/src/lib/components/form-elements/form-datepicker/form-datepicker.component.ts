@@ -7,7 +7,6 @@ import {
   ChangeDetectorRef,
   ElementRef,
   HostBinding,
-  HostListener
 } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { defineLocale } from 'ngx-bootstrap/chronos';
@@ -17,7 +16,6 @@ defineLocale('en-gb', enGbLocale);
 import { Subscription, Subject } from 'rxjs';
 
 import {
-  getDatePickerConfig,
   getTimePickerConfig
 } from './form-datepicker.config';
 import { BasicElementComponent } from './../basic-element/basic-element.component';
@@ -25,7 +23,6 @@ import { BasicElementComponent } from './../basic-element/basic-element.componen
 import {
   FormatString,
   isMobile,
-  getPropValue,
   getTranslationKey
 } from '@webui/utilities';
 import { DateService, DateInstance, Format } from '@webui/core';
@@ -97,7 +94,6 @@ export class FormDatepickerComponent
     private fb: FormBuilder,
     private cd: ChangeDetectorRef,
     private dateService: DateService,
-    private el: ElementRef,
     private localeService: BsLocaleService
   ) {
     super();

@@ -76,6 +76,10 @@ export class GenericListComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
 
   private results: any[];
+  
+  public afterEditLimit: any = 10;
+  public afterEditOffset: any = 0;
+  public isEditRecord: any = false;
 
   constructor(
     private gfs: GenericFormService,
@@ -95,6 +99,8 @@ export class GenericListComponent implements OnInit, OnDestroy {
     this.initTableData(mainTable);
 
     if (this.update) {
+		// set temp flag in localstorage
+      localStorage.setItem('flagAfterEditRecord', 'true');
       this.subscriptions.push(
         this.update.subscribe((update) => {
           const table = this.getFirstTable();
@@ -182,9 +188,14 @@ export class GenericListComponent implements OnInit, OnDestroy {
   public uploadMore() {
     const table = this.getFirstTable();
     const limit = table.limit;
-    const offset = table.offset + limit;
+    const offset = this.afterEditOffset != 0 ? parseInt(this.afterEditOffset) + limit :  table.offset + limit;
     table.query.pagination = `limit=${limit}&offset=${offset}`;
-
+	
+	// Here we handlig pagination in after edit record
+    const afterEditLimit = offset + limit;
+    this.afterEditOffset = parseInt(this.afterEditOffset) + limit;
+    localStorage.setItem('afterEditLimit', afterEditLimit);
+	
     this.getData(
       table.endpoint,
       this.generateQuery(table.query),
@@ -313,7 +324,23 @@ export class GenericListComponent implements OnInit, OnDestroy {
       if (all) {
         table.uploadAll = true;
       }
-    });
+    },
+    // The 2nd callback handles errors.
+    (err) => console.error(err),
+    // The 3rd callback handles the "complete" event.
+    () => {
+      setTimeout(() => {
+        const rowId = localStorage.getItem('rowId');
+        if(rowId != ""){
+          const selectedRow = (document.getElementById(rowId)) as HTMLTableElement;
+          if(selectedRow) {
+            selectedRow.scrollIntoView({behavior: "smooth", block: "center", inline: "center"});localStorage.removeItem('rowId');
+
+          }
+        }
+      }, 500);
+      }
+      );
   }
 
   updateTable(data, table, target, add) {
@@ -672,6 +699,17 @@ export class GenericListComponent implements OnInit, OnDestroy {
       sort: '',
       pagination: ''
     };
+    
+    // Here we handlig pagination in after edit record
+    const flagAfterEditRecord = localStorage.getItem('flagAfterEditRecord');
+    if(flagAfterEditRecord == 'true' && parseInt(localStorage.getItem('afterEditLimit')) > this.limit){ 
+      queryList['pagination'] = "limit="+ localStorage.getItem('afterEditLimit') + "&offset=" + this.afterEditOffset;
+      this.afterEditOffset = localStorage.getItem('afterEditLimit');
+      
+    }
+    localStorage.removeItem('flagAfterEditRecord');
+    localStorage.removeItem('afterEditLimit');
+    
     const table = this.getFirstTable();
     const keys = Object.keys(queryParams);
 
