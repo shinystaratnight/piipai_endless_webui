@@ -35,6 +35,10 @@
 
       &.ng-touched.ng-invalid {
         border-color: $danger;
+
+        & + .error-message {
+          display: block;
+        }
       }
     }
 
@@ -384,8 +388,14 @@
   }
 }
 
-.registration-form ngx-intl-tel-input.ng-touched.ng-invalid input {
-  border-color: $danger;
+.registration-form ngx-intl-tel-input {
+  &.ng-touched.ng-invalid input {
+    border-color: $danger;
+  }
+
+  &.ng-touched.ng-invalid + .error-message {
+    display: block;
+  }
 }
 
 @each $item in $themes {
