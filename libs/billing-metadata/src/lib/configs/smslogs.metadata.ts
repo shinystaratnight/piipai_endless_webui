@@ -28,6 +28,7 @@ const formset = {
             type: 'datepicker'
           }
         ],
+        width: 140,
         name: 'sent_at',
         sort_field: 'sent_at',
         label: 'Sent at',
@@ -68,6 +69,7 @@ const formset = {
             type: 'input'
           }
         ],
+        width: 100,
         name: 'from_number',
         sort_field: 'from_number',
         label: 'From number',
@@ -80,6 +82,7 @@ const formset = {
             type: 'input'
           }
         ],
+        width: 100,
         name: 'to_number',
         sort_field: 'to_number',
         label: 'To number',
@@ -128,6 +131,7 @@ const formset = {
             currency: true
           }
         ],
+        width: 60,
         name: 'cost',
         label: 'Cost'
       }
