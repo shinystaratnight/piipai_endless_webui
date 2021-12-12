@@ -205,7 +205,7 @@
   <ol class="roles">
     <li *ngFor="let item of roleList">
       <a
-        href="https://{{item.domain}}/loginas/{{user.data.user}}"
+        href="https://{{item.domain}}"
         target="_blank"
         (click)="changeRole(item, $event)"
       >
