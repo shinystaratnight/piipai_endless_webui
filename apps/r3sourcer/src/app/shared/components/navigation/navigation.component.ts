@@ -214,6 +214,7 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
 
     // this.update.emit(role);
     this.userService.currentRole(role);
+    this.modalRef.close();
   }
 
   public clickAction(e, p) {

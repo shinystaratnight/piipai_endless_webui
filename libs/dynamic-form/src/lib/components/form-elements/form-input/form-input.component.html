@@ -41,6 +41,7 @@
       class="form-element-content edit"
       [class.showAll]="viewMode || config.type === 'static'"
       [class.full]="config.templateOptions.addon"
+      [class.flex-column]="(!viewMode && isPhoneField) || config.templateOptions.type === 'email'"
       (blur)="onBlur($event)"
     >
       <span class="input-icon" *ngIf="config.templateOptions.icon">
@@ -229,6 +230,8 @@
     (focus)="generateList()"
     (keyup)="filter(key)"
   />
+
+  <div *ngIf="config.templateOptions.type === 'email' && (!errors || !errors[config.key])" class="error-message">Invalid e-mail address</div>
 </ng-template>
 
 <ng-template #addressField>
@@ -332,6 +335,8 @@
     name="phone"
   >
   </ngx-intl-tel-input>
+
+  <div *ngIf="!errors || !errors[config.key]" class="error-message">Invalid phone number</div>
 </ng-template>
 
 <ng-template #dataListTemplate>
