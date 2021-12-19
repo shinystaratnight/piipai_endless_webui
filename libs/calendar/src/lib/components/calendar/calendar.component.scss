@@ -320,6 +320,11 @@ app-datepicker {
         $danger 100%
       );
     }
+
+    &.date-selected {
+      background-color: rgba($success, 0.2);
+      opacity: 1;
+    }
   }
 
   &-body {
