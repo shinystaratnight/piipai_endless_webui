@@ -138,7 +138,7 @@
         appSelectDate
         [class.holiday]="day.holiday"
         [attr.title]="day.holiday"
-        [disable]="!(isManager() || canClientCreateJob()) || day.holiday"
+        [disable]="!(isManager() || canClientCreateJob())"
         [date]="day.date">
         <span class="date" [class.current-date]="day.today">{{day.label}}</span>
       </span>
@@ -149,7 +149,7 @@
         [class.unavailable]="day.available === false"
         triggers="click:click"
         [attr.title]="day.holiday"
-        [ngbTooltip]="!day.holiday ? availabilityTooltip : ''"
+        [ngbTooltip]="availabilityTooltip"
         [placement]="getPlacement(i, week.length)" *ngIf="!day.tooltip && calendarType === 2">
         <span class="date" [class.current-date]="day.today">{{day.label}}</span>
 
@@ -177,12 +177,12 @@
         [class.date-selected]="isSelected(day.date)"
         appSelectDate
         [date]="day.date"
-        [disable]="!(isManager() || canClientCreateJob()) || day.holiday"
+        [disable]="!(isManager() || canClientCreateJob())"
         *ngIf="day.tooltip"
         [class.active]="day.isOpen"
         triggers="click:click"
         [attr.title]="day.holiday"
-        [ngbTooltip]="!day.holiday ? monthTooltip : ''"
+        [ngbTooltip]="monthTooltip"
         [placement]="getPlacement(i, week.length)"
         (shown)="getShiftData(day)"
         (hidden)="day.isOpen = false">
