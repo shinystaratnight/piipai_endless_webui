@@ -27,20 +27,25 @@ export const steps: FormStep[] = [
     metadata: [],
     content: [
       'contact.picture',
-      'contact.title',
       'contact.first_name',
       'contact.last_name',
-      'contact.birthday',
+      'contact.title',
       'contact.gender',
-      'contact.phone_mobile',
+      'contact.birthday',
       'contact.email',
-      'contact.address.street_address'
+      'contact.phone_mobile',
+      
     ]
   },
   {
     title: 'additional_information',
     metadata: [],
     content: [
+      'contact.address.street_address',
+      "contact.address.city",
+      "contact.address.state",
+      "contact.address.postal_code",
+      "contact.address.country",
       'nationality',
       'residency',
       'tax_file_number',

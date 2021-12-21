@@ -1,18 +1,19 @@
 @import '../../../../../styles/variables';
 @import '../../../../../styles/mixins';
 
-$content-width: 540px;
+$content-width: 729px;
 
 .header {
   max-width: $content-width;
-
-  margin: 0 auto 16px;
+  background-color: #ffffff;
+  margin: 0 auto 0px;
 
   line-height: 1;
   font-weight: 400;
   text-align: center;
-
+  border-bottom: 1px solid #D3DEEA;
   color: #4f4f4f;
+  height:102px;
 
   @include media-breakpoint-down('sm') {
     max-width: 100%;
@@ -20,12 +21,9 @@ $content-width: 540px;
 }
 
 .logo {
-  height: 80px;
-
-  border-radius: 0.5rem;
-  border: 1px solid #e0e0e0;
-
-  margin-bottom: 8px;
+  height: 62px;
+  width:  193px;
+  margin:22px 0px 0px 0px;
   object-fit: cover;
 }
 
@@ -39,10 +37,16 @@ $content-width: 540px;
 }
 
 .form-name {
-  margin-bottom: 0;
-  font-size: 32px;
-  line-height: 36px;
-  color: #4f4f4f;
+  padding-top:22px;
+  font-family: Roboto;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 28px;
+  letter-spacing: 0em;
+  text-align: center;
+  color: #2F363D;
+
 
   &:not(:empty) {
     margin-bottom: 20px;

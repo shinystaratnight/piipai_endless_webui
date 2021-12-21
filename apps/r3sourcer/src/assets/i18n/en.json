@@ -458,7 +458,7 @@
   "/email-interface/emailtemplates/": "Email Templates",
   "/sms-interface/templates/": "SMS Templates",
   "/sms-interface/messages/": "SMS Messages",
-  "/core/forms/": "Application Form",
+  "/core/forms/": "Registration",
   "/billing/": "Billing",
   "/core/users/": "Users",
   "/settings/permissions/": "Permissions",
@@ -957,5 +957,13 @@
   "question_type.0": "Options",
   "question_type.1": "Text",
   "question_type.2": "Yes/No",
-  "question_type.3": "Checkboxes"
+  "question_type.3": "Checkboxes",
+  "registration.registration": "Registration",
+ "registration.general_info": "General Info",
+ "registration.additional_info": "Additional Info",
+"registration.financial_info": "Financial Info",
+"registration.industry_info": "Industry & Skills",
+"registration.already_account": "Already have an account",
+"registration.login_here": "Login here!",
+"next_step": "Next"
 }

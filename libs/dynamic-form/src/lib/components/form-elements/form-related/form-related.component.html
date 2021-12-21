@@ -1,4 +1,4 @@
-<div appDropDown element=".autocomplete" [update]="update" *ngIf="(!viewMode || config.list) && !config.hide">
+<div appDropDown element=".autocomplete" [update]="update" *ngIf="(!viewMode || config.list) && !config.hide"  class="input_type_autocomplete" [ngClass]="['input_type_'+this.key]">
   <div *ngIf="!config.list" class="form-group" [formGroup]="group">
     <div class="form-element" *ngIf="!config.many">
       <label class="form-element-label" [attr.for]="key" [class.required]="config.templateOptions.required"

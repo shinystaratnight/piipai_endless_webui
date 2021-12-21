@@ -58,7 +58,7 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
   private invalid: BehaviorSubject<boolean> = new BehaviorSubject(false);
   private saving: BehaviorSubject<boolean> = new BehaviorSubject(false);
   private _step: BehaviorSubject<Step> = new BehaviorSubject({} as Step);
-
+  barWidth: any = 0;
   constructor(
     private service: FormBuilderService,
     private router: Router,
@@ -119,6 +119,7 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
   public next(): void {
     const currentStep = this._step.getValue();
     this.changeStep(currentStep.key + 1);
+    this.updateStepProgressBar(currentStep.position);
   }
 
   // public eventHandler(event: any) {
@@ -615,5 +616,15 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
     }
 
     return success.asObservable();
+  }
+  updateStepProgressBar(step){ 
+   
+    if(step == 1){
+      this.barWidth = 30;
+    }else if(step == 2){
+      this.barWidth = 65;
+    }else if(step == 3){
+      this.barWidth = 96;
+    }
   }
 }

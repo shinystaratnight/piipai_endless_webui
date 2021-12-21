@@ -4,6 +4,7 @@
   [class.mb-0]="config.templateOptions.bottom"
   [formGroup]="group"
   style="position: relative"
+  [ngClass]="['input_type_'+key]"
 >
   <div class="form-element" [class.inline]="config.templateOptions.inline">
     <label
@@ -30,7 +31,7 @@
       "
     ></app-info>
     <i
-      class="data-list-trigger"
+      class="data-list-trigger info-icon"
       *ngIf="dataListMap"
       triggers="mouseover:mouseout"
       [placement]="'bottom'"
