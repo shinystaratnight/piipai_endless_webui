@@ -22,6 +22,7 @@ export class FormRadioComponent extends BasicElementComponent
   public event: EventEmitter<any> = new EventEmitter();
 
   getTranslationKey = getTranslationKey;
+  isChecked: any;
 
   constructor(private fb: FormBuilder) {
     super();
@@ -45,6 +46,7 @@ export class FormRadioComponent extends BasicElementComponent
   }
 
   public eventHandler(e) {
+    this.isChecked= e.target.id;
     this.event.emit({
       type: e.type,
       el: this.config,

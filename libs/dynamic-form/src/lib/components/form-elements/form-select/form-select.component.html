@@ -2,6 +2,7 @@
   class="form-group"
   [formGroup]="group"
   *ngIf="!viewMode && !config.hide && !config.read_only"
+  [ngClass]="['input_type_'+key]"
 >
   <div class="form-element">
     <label
