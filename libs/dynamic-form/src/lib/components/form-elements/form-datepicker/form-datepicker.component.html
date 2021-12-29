@@ -8,6 +8,7 @@
   [hidden]="config.hide || viewMode || config.read_only"
   (mouseover)="currentField = true"
   (mouseleave)="currentField = false"
+  [ngClass]="['input_type_'+key]"
 >
   <div class="form-element">
     <label

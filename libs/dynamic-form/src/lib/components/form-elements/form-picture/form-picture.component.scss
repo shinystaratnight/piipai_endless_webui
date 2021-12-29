@@ -92,19 +92,21 @@ img.signature {
 }
 
 .dropzone {
-  width: 100px;
-  height: 100px;
-
+  width: 80px;
+  height: 80px;
+  background: #EEF6FF;
   border: 1px dashed #ccc;
-  border-radius: .5rem;
-
-  background: url('/assets/img/specialist-user.svg') 0 12px no-repeat;
-  background-image: attr(data-label);
+  border-radius: 50%;
+  
 
   overflow: hidden;
-
+  .fa-user{
+    color: #2196F3;
+    font-size: 58px;
+    margin-top: 10px;
+  }
   &-wrapper {
-    margin-right: 46px;
+    margin-right: 15px;
   }
 
   &-name {
@@ -129,6 +131,7 @@ img.signature {
   img {
     object-fit: cover;
     object-position: center;
+    margin-top: -76px;
   }
 }
 
