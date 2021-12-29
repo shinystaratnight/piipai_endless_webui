@@ -2,6 +2,7 @@
   class="form-group form-radio"
   [formGroup]="group"
   *ngIf="!config.read_only"
+  [ngClass]="['input_type_'+key]"
 >
   <div class="form-element">
     <label
@@ -17,6 +18,7 @@
           <label
             [attr.for]="radio.value"
             class="form-check-label d-flex align-items-center"
+            [ngClass]="radio.value === isChecked ? 'checked' : ''"
           >
             <input
               class="form-check-input mr-2"
@@ -41,7 +43,7 @@
               [ngStyle]="{ backgroundColor: radio.label }"
             ></span>
             <ng-container *ngIf="config.templateOptions.type !== 'color'">
-              {{ getTranslationKey(key, radio.value) | translate: {"Default": radio.label} }}
+              <span class="radio-label">{{ getTranslationKey(key, radio.value) | translate: {"Default": radio.label} }}</span>
             </ng-container>
           </label>
         </div>
