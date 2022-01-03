@@ -1,4 +1,9 @@
-import { getTimeInstance, getTimeInstanceByTimezone } from '@webui/utilities';
+import {
+  checkAndReturnTranslation,
+  getLocalStorageItem,
+  getTimeInstance,
+  getTimeInstanceByTimezone
+} from '@webui/utilities';
 import { Endpoints, Models } from '../enums';
 import { Model } from './model';
 
@@ -99,6 +104,16 @@ class Image {
   }
 }
 
+class RelatedObject {
+  __str__: string;
+  id: string;
+
+  constructor(config: any) {
+    this.__str__ = checkAndReturnTranslation(config, 'EN', getLocalStorageItem('web.lang'));
+    this.id = config.id;
+  }
+}
+
 class Contact {
   id?: string;
   avatar: Image;
@@ -126,6 +141,11 @@ export class TimeSheet {
   breakEndedAt: string;
   timezone: string;
 
+  position: RelatedObject;
+  company: RelatedObject;
+  shift: RelatedObject;
+  jobSite: RelatedObject;
+
   constructor(data: any) {
     this.id = data.id;
     this.candidate = new Contact(data.job_offer.candidate_contact.contact);
@@ -134,6 +154,10 @@ export class TimeSheet {
     this.breakEndedAt = data.break_ended_at;
     this.breakStartedAt = data.break_started_at;
     this.timezone = data.timezone || data.time_zone;
+    this.position = new RelatedObject(data.position);
+    this.company = new RelatedObject(data.company);
+    this.shift = new RelatedObject(data.shift);
+    this.jobSite = new RelatedObject(data.jobsite);
   }
 
   get totalTime(): string {

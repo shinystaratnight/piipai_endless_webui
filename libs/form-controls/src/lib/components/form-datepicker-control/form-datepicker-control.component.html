@@ -1,13 +1,9 @@
 <label *ngIf="isDate || isDateTime" class="wrapper">
-  <span class="label">{{label | translate}}</span>
-  <span class="input-wrapper">
-    <input
-      [(ngModel)]="dateValue"
-      class="input"
-      type="date"
-    />
+  <span class="control__label">{{ label | translate }}</span>
+  <span class="control__input-wrapper">
+    <input [(ngModel)]="dateValue" class="control__input" type="date" />
     <webui-icon
-      class="input-icon"
+      class="control__input-icon"
       [icon]="Icon.Calendar"
       [size]="IconSize.Medium"
     ></webui-icon>
@@ -15,12 +11,12 @@
 </label>
 
 <label *ngIf="isTime || isDateTime" class="wrapper">
-  <span *ngIf="isTime" class="label">{{label | translate}}</span>
-  <span *ngIf="isDateTime" class="label empty">&nbsp;</span>
-  <span class="input-wrapper">
-    <input [(ngModel)]="timeValue" class="input" type="time" />
+  <span *ngIf="isTime" class="control__label">{{ label | translate }}</span>
+  <span *ngIf="isDateTime" class="control__label empty">&nbsp;</span>
+  <span class="control__input-wrapper">
+    <input [(ngModel)]="timeValue" class="control__input" type="time" />
     <webui-icon
-      class="input-icon"
+      class="control__input-icon"
       [icon]="Icon.Clock"
       [size]="IconSize.Medium"
     ></webui-icon>
@@ -28,11 +24,11 @@
 </label>
 
 <label *ngIf="isTimer" class="wrapper wrapper--half">
-  <span class="label">{{label | translate}}</span>
-  <span class="input-wrapper">
-    <input [(ngModel)]="timerValue" class="input" type="text" />
+  <span class="control__label">{{ label | translate }}</span>
+  <span class="control__input-wrapper">
+    <input [(ngModel)]="timerValue" class="control__input" type="text" />
     <webui-icon
-      class="input-icon"
+      class="control__input-icon"
       [icon]="Icon.Timer"
       [size]="IconSize.Medium"
     ></webui-icon>

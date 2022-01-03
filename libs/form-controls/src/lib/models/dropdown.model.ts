@@ -1,14 +1,40 @@
+import { checkAndReturnTranslation, getLocalStorageItem } from '@webui/utilities';
+import { Language } from '@webui/data';
+
 interface IRelatedObject {
   id?: string;
   __str__?: string;
+  [key: string]: any;
 }
 
 export class DropdownOption {
+  public value: string;
+  public extraFields: { [key: string]: any };
+
   static fromRelatedObject(object: IRelatedObject): DropdownOption {
-    return new DropdownOption(object.__str__, object.id);
+    const { id, ...rest } = object;
+
+    return new DropdownOption(id, rest);
   }
 
-  constructor(public label: string = '', public value: string = '') {}
+  constructor(value = '', extraFields: { [key: string]: any }) {
+    this.value = value;
+    this.extraFields = extraFields;
+  }
+
+  public get label(): string {
+    const lang = (getLocalStorageItem('web.lang') as Language) || undefined;
+
+    return checkAndReturnTranslation(this.extraFields, 'EN', lang);
+  }
+
+  public getField(name: string): any {
+    if (!this.extraFields) {
+      return undefined;
+    }
+
+    return this.extraFields[name];
+  }
 }
 
 interface IDropdownPayload {

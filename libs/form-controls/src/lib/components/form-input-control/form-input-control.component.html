@@ -1,11 +1,8 @@
 <label class="control" cdk-overlay-origin>
   <span *ngIf="label" class="control__label">{{ label | translate }}</span>
   <span class="control__input-wrapper">
-    <input
-      #input
-      [attr.placeholder]="placeholder"
-      class="control__input"
-      [attr.type]="type"
-    />
+    <span *ngIf="prefix" class="control__input-prefix">{{ prefix }}</span>
+
+    <input #input [attr.placeholder]="placeholder" class="control__input" [attr.type]="type" />
   </span>
 </label>

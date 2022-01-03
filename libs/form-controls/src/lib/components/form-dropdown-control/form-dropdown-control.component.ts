@@ -47,6 +47,7 @@ export class FormDropdownControlComponent implements OnInit, ControlValueAccesso
   @Input() label?: string;
   @Input() placeholder?: string;
   @Input() url?: string;
+  @Input() params?: { [key: string]: any } = {};
 
   @ViewChild(CdkOverlayOrigin) overlayOrigin?: CdkOverlayOrigin;
   @ViewChild('content') content?: TemplateRef<any>;
@@ -98,8 +99,6 @@ export class FormDropdownControlComponent implements OnInit, ControlValueAccesso
     if (this.value) {
       this.control?.patchValue(this.value.label, { emitEvent: false });
     }
-
-    console.log('here');
 
     this.cd.detectChanges();
   }
@@ -157,7 +156,7 @@ export class FormDropdownControlComponent implements OnInit, ControlValueAccesso
       this.options$.next(DropdownPayload.downloadMoreState(existOptions as DropdownOption[]));
     }
 
-    this.dropdownService.fetchOptions(this.url, { search }).subscribe(
+    this.dropdownService.fetchOptions(this.url, { search, ...this.params }).subscribe(
       (value: DropdownOption[] | undefined) => {
         let options: DropdownOption[] = [];
         if (value) {
@@ -167,7 +166,6 @@ export class FormDropdownControlComponent implements OnInit, ControlValueAccesso
         if (existOptions) {
           options = [...existOptions, ...options];
         }
-        console.log(this);
 
         this.options$?.next(DropdownPayload.successState(options));
       },
@@ -188,7 +186,10 @@ export class FormDropdownControlComponent implements OnInit, ControlValueAccesso
       hasBackdrop: true
     });
 
-    console.log(this.overlayOrigin.elementRef.nativeElement, getComputedStyle(this.overlayOrigin.elementRef.nativeElement).width);
+    console.log(
+      this.overlayOrigin.elementRef.nativeElement,
+      getComputedStyle(this.overlayOrigin.elementRef.nativeElement).width
+    );
 
     config.positionStrategy = this.overlay
       .position()

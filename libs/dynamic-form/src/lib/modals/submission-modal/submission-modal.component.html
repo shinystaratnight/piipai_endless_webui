@@ -8,11 +8,13 @@
           alt="timeSheet.candidate.fullName"
         />
 
-        <h5 class="title">{{ timeSheet.candidate.fullName }}</h5>
+        <div>
+          <h5 class="title">{{ timeSheet.candidate.fullName }}</h5>
 
-        <p *ngIf="timeSheet.candidate.email">
-          {{ timeSheet.candidate.email }}
-        </p>
+          <p *ngIf="timeSheet.candidate.email">
+            {{ timeSheet.candidate.email }}
+          </p>
+        </div>
       </div>
 
       <div class="details__info">
@@ -73,17 +75,24 @@
       <section class="activities">
         <h4 class="section-title">{{ 'Activity' | translate }}</h4>
 
-        <webui-form-dropdown-control
-          formControlName="activity"
-          [url]="activityEndpoint"
-          [label]="'Activity'"
-        ></webui-form-dropdown-control>
+        <div class="form-row">
+          <webui-form-dropdown-control
+            formControlName="activity"
+            [url]="activityEndpoint"
+            [label]="'Activity'"
+            [params]="activityParams"
+          ></webui-form-dropdown-control>
+        </div>
 
-        <webui-form-input-control
-          [label]="'Amount'"
-          type="number"
-          formControlName="amount"
-        ></webui-form-input-control>
+        <div class="form-row">
+          <webui-form-input-control
+            *ngIf="formGroup.get('amount')"
+            [label]="'Amount'"
+            [prefix]="getAmountPrefix()"
+            type="number"
+            formControlName="amount"
+          ></webui-form-input-control>
+        </div>
       </section>
 
       <footer class="footer">

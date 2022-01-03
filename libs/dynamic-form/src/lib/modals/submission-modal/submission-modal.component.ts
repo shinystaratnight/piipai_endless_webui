@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Endpoints, TimeSheet } from '@webui/data';
-import { DatepickerType } from '@webui/form-controls';
+import { DatepickerType, DropdownOption } from '@webui/form-controls';
 import { Icon } from '@webui/icon';
 
 @Component({
@@ -27,32 +27,33 @@ export class SubmissionModalComponent implements OnInit {
         {
           label: 'Company',
           icon: Icon.Company,
-          text: this.timeSheet.candidate.fullName
+          text: this.timeSheet.company.__str__
         },
         {
           label: 'Shift date',
           icon: Icon.Calendar,
-          text: this.timeSheet.candidate.fullName
+          text: this.timeSheet.shift.__str__
         }
       ],
       [
         {
           label: 'Jobsite',
           icon: Icon.JobSite,
-          text: this.timeSheet.candidate.fullName
+          text: this.timeSheet.jobSite.__str__
         },
         {
           label: 'Position',
           icon: Icon.Position,
-          text: this.timeSheet.candidate.fullName
+          text: this.timeSheet.position.__str__
         }
       ]
     ];
   }
   public formGroup?: FormGroup;
 
+  public activityParams: { [key: string]: any };
+
   public ngOnInit() {
-    console.log(this);
     this.timeSheet = new TimeSheet(this.data);
 
     this.formGroup = new FormGroup({
@@ -60,10 +61,37 @@ export class SubmissionModalComponent implements OnInit {
       shiftEndedAt: new FormControl(),
       breakStartedAt: new FormControl(),
       breakEndedAt: new FormControl(),
-      activity: new FormControl(),
-      amount: new FormControl(0)
+      activity: new FormControl()
     });
 
     this.formGroup.valueChanges.subscribe((val) => console.log(val));
+    this.activityParams = this.getActivityParams();
+
+    this.formGroup.get('activity').valueChanges.subscribe((option: DropdownOption) => {
+      if (option && !this.formGroup.get('amount')) {
+        this.formGroup.addControl('amount', new FormControl(0));
+      } else if (!option) {
+        this.formGroup.removeControl('amount');
+      }
+    });
+  }
+
+  public getActivityParams(): { [key: string]: any } {
+    return {
+      fields: ['__str__', 'id', 'translations', 'uom', 'skill_rate_ranges'],
+      skill: this.timeSheet.position.id,
+      company: this.timeSheet.company.id,
+      priced: true
+    };
+  }
+
+  public getAmountPrefix(): string {
+    const activity: DropdownOption = this.formGroup.get('activity').value;
+
+    if (activity.getField('uom')) {
+      return activity.getField('uom').short_name;
+    }
+
+    return '';
   }
 }

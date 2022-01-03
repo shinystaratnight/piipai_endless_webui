@@ -18,6 +18,7 @@ export class FormInputControlComponent implements OnInit, ControlValueAccessor {
   @Input() label?: string;
   @Input() placeholder?: string;
   @Input() type = 'text';
+  @Input() prefix?: string;
 
   public value?: any = '';
   public onChange?: (value: any) => void;
