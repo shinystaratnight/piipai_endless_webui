@@ -1,16 +1,94 @@
-<app-base-modal (dissmisEvent)="dismiss()">
+<webui-dialog [title]="'Worksheet submission'">
+  <div class="content" dialog-content>
+    <section class="details">
+      <div class="details__person">
+        <img
+          class="avatar"
+          [src]="timeSheet.candidate.avatar.origin"
+          alt="timeSheet.candidate.fullName"
+        />
 
-    <header class="header">
-      <app-user-avatar
-        [source]="config.label.avatar"
-        [fullName]="config.label.fullName"
-      ></app-user-avatar>
+        <h5 class="title">{{ timeSheet.candidate.fullName }}</h5>
 
-      <h3 class="title">{{ config.label.fullName }}</h3>
-    </header>
+        <p *ngIf="timeSheet.candidate.email">
+          {{ timeSheet.candidate.email }}
+        </p>
+      </div>
 
-    <div class="modal-body">
-        <app-submission-form [config]="config" (event)="onFormEvent($event)"></app-submission-form>
-    </div>
+      <div class="details__info">
+        <div *ngFor="let column of info" class="details__info-section">
+          <div *ngFor="let record of column" class="details__info-row">
+            <webui-icon [icon]="record.icon"></webui-icon>
 
-</app-base-modal>
+            <div class="field">
+              <b class="label">
+                {{ record.label | translate }}
+              </b>
+
+              <span class="content-text">{{ record.text }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <form *ngIf="formGroup" [formGroup]="formGroup" class="form">
+      <section class="times">
+        <header class="times__header">
+          <h4 class="section-title">{{ 'Time' | translate }}</h4>
+
+          <span class="total-time">{{ timeSheet.totalTime }}</span>
+        </header>
+
+        <div class="form-row">
+          <webui-form-datepicker-control
+            formControlName="shiftStartedAt"
+            [type]="DatepickerType.DateTime"
+            [initialValue]="timeSheet.startedAt"
+            [timezone]="timeSheet.timezone"
+            [label]="'Start time'"
+          ></webui-form-datepicker-control>
+
+          <webui-form-datepicker-control
+            formControlName="shiftEndedAt"
+            [initialValue]="timeSheet.endedAt"
+            [timezone]="timeSheet.timezone"
+            [type]="DatepickerType.DateTime"
+            [label]="'End time'"
+          ></webui-form-datepicker-control>
+        </div>
+
+        <div class="form-row">
+          <webui-form-datepicker-control
+            [timerFrom]="timeSheet.breakStartedAt"
+            [timerTo]="timeSheet.breakEndedAt"
+            [type]="DatepickerType.Timer"
+            [label]="'Break time'"
+          ></webui-form-datepicker-control>
+
+          <span>&nbsp;</span>
+        </div>
+      </section>
+
+      <section class="activities">
+        <h4 class="section-title">{{ 'Activity' | translate }}</h4>
+
+        <webui-form-dropdown-control
+          formControlName="activity"
+          [url]="activityEndpoint"
+          [label]="'Activity'"
+        ></webui-form-dropdown-control>
+
+        <webui-form-input-control
+          [label]="'Amount'"
+          type="number"
+          formControlName="amount"
+        ></webui-form-input-control>
+      </section>
+
+      <footer class="footer">
+        <button class="btn submit-btn" type="submit">{{ 'Submit' | translate }}</button>
+      </footer>
+    </form>
+  </div>
+</webui-dialog>

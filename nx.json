@@ -29,7 +29,16 @@
     "data": {
       "tags": []
     },
+    "dialog": {
+      "tags": []
+    },
     "dynamic-form": {
+      "tags": []
+    },
+    "form-controls": {
+      "tags": []
+    },
+    "icon": {
       "tags": []
     },
     "manager-metadata": {

@@ -1,0 +1,38 @@
+$close-button-color: #7A7A7A;
+$text-color: #2F363D;
+$header-background-color: #EEF6FF;
+$header-border-color: #D3DEEA;
+
+:host {
+  font-family: 'Roboto', sans-serif;
+  color: $text-color;
+}
+
+.modal-header {
+  padding: 14px;
+  padding-left: 32px;
+  background-color: $header-background-color;
+  border-bottom-color: $header-border-color;
+}
+
+.title {
+  font-size: 24px;
+  line-height: 28px;
+  font-weight: 500;
+  margin-bottom: 0;
+}
+
+.close-button {
+  font-size: 24px;
+  margin-left: auto;
+  color: $close-button-color;
+  padding: 0;
+}
+
+.modal-body:empty {
+  display: none;
+}
+
+.modal-footer:empty {
+  display: none;
+}

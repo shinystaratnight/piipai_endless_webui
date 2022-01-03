@@ -88,3 +88,97 @@ export class TimesheetModel extends Model {
     return `${Math.floor(totalTime.asHours())}hr ${totalTime.minutes()}min`;
   }
 }
+
+class Image {
+  origin?: string;
+  thumb?: string;
+
+  constructor(data: any) {
+    this.origin = data.origin;
+    this.thumb = data.thumb;
+  }
+}
+
+class Contact {
+  id?: string;
+  avatar: Image;
+  email: string;
+  __str__: string;
+
+  constructor(data: any) {
+    this.id = data.id;
+    this.avatar = new Image(data.picture);
+    this.email = data.email;
+    this.__str__ = data.__str__;
+  }
+
+  public get fullName(): string {
+    return this.__str__;
+  }
+}
+
+export class TimeSheet {
+  id?: string;
+  candidate: Contact;
+  startedAt: string;
+  endedAt: string;
+  breakStartedAt: string;
+  breakEndedAt: string;
+  timezone: string;
+
+  constructor(data: any) {
+    this.id = data.id;
+    this.candidate = new Contact(data.job_offer.candidate_contact.contact);
+    this.startedAt = data.shift_started_at;
+    this.endedAt = data.shift_ended_at;
+    this.breakEndedAt = data.break_ended_at;
+    this.breakStartedAt = data.break_started_at;
+    this.timezone = data.timezone || data.time_zone;
+  }
+
+  get totalTime(): string {
+    const timeInstance = getTimeInstanceByTimezone(this.timezone);
+    const defaultTime = '0h 0min';
+
+    if (!this.endedAt) {
+      return defaultTime;
+    }
+
+    let times = {
+      shift_ended_at: timeInstance(this.endedAt),
+      shift_started_at: timeInstance(this.startedAt),
+      break_started_at: null,
+      break_ended_at: null
+    };
+
+    let breakTime = 0;
+
+    if (times.shift_ended_at.isBefore(times.shift_started_at)) {
+      return defaultTime;
+    }
+
+    if (this.breakEndedAt && this.breakStartedAt) {
+      times = {
+        ...times,
+        break_ended_at: timeInstance(this.breakEndedAt),
+        break_started_at: timeInstance(this.breakStartedAt)
+      };
+
+      if (
+        times.break_started_at.isAfter(times.shift_ended_at) ||
+        times.break_ended_at.isAfter(times.shift_ended_at) ||
+        times.break_started_at.isBefore(times.shift_started_at) ||
+        times.break_ended_at.isBefore(times.shift_started_at)
+      ) {
+        return defaultTime;
+      }
+
+      breakTime = times.break_ended_at.diff(times.break_started_at);
+    }
+
+    const workTime = times.shift_ended_at.diff(times.shift_started_at);
+    const totalTime = timeInstance.duration(workTime - breakTime);
+
+    return `${Math.floor(totalTime.asHours())}hr ${totalTime.minutes()}min`;
+  }
+}
