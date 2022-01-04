@@ -33,8 +33,12 @@ export const steps: FormStep[] = [
       'contact.gender',
       'contact.birthday',
       'contact.email',
+<<<<<<< HEAD
       'contact.phone_mobile',
       
+=======
+      'contact.phone_mobile'
+>>>>>>> 1f449937bb4762477434fbe77fe178e0afe65bfe
     ]
   },
   {

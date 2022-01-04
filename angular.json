@@ -308,8 +308,8 @@
             "polyfills": "apps/r3sourcer/src/polyfills.ts",
             "tsConfig": "apps/r3sourcer/tsconfig.app.json",
             "assets": [
-              "apps/r3sourcer/src/favicon.ico",
-              "apps/r3sourcer/src/assets"
+              "apps/r3sourcer/src/assets",
+              "apps/r3sourcer/src/manifest"
             ],
             "styles": [
               "./node_modules/ngx-bootstrap/datepicker/bs-datepicker.css",
