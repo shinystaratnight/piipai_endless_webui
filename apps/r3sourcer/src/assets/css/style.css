@@ -8,6 +8,18 @@ body{  }
   font-weight: 400;
   font-size: 16px;
 }
+.user-registration .form-name {
+  padding-top:22px !important;
+  padding-bottom: 0px !important;
+  font-family: Roboto;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 28px;
+  letter-spacing: 0em;
+  text-align: center;
+  color: #2F363D;
+}
 .user-registration a{color:#28a3fc !important;}
 .user-registration .form-element .form-element-label{color: #7A7A7A;}
 .user-registration .form-element .form-element-label{padding-bottom: 5px;}
@@ -57,10 +69,10 @@ sup{
 }
 .user-registration .input_type_birthday .input-group-addon {
   position: relative;
-  margin-top: -37px;
+  margin-top: -35px;
   margin-left: 278px;
   background-color: #EEF6FF;
-  padding: 7px 8px 8px 16px;
+  padding: 7px 8px 6px 16px;
   text-align: center;
   vertical-align: middle;
   border: 1px solid #D3DEEA;
@@ -152,7 +164,7 @@ sup{
  .user-registration :is(.input_type_title, .input_type_gender, .input_type_transportation_to_work) .radio-circle { 
   width: 0px; 
   margin-right: 0px; 
-  border: 1px solid #D3DEEA;
+  border: 0px solid #D3DEEA;
  }
  .user-registration :is(.input_type_title, .input_type_gender, .input_type_transportation_to_work) .radio-circle .inner { 
   background-color: transparent;
