@@ -959,6 +959,15 @@
   "question_type.2": "Yes/No",
   "question_type.3": "Checkboxes",
   "registration.registration": "Registration",
+<<<<<<< HEAD
+ "registration.general_info": "General Info",
+ "registration.additional_info": "Additional Info",
+"registration.financial_info": "Financial Info",
+"registration.industry_info": "Industry & Skills",
+"registration.already_account": "Already have an account",
+"registration.login_here": "Login here!",
+"next_step": "Next"
+=======
   "registration.general_info": "General Info",
   "registration.additional_info": "Additional Info",
   "registration.financial_info": "Financial Info",
@@ -966,4 +975,5 @@
   "registration.already_account": "Already have an account",
   "registration.login_here": "Login here!",
   "next_step": "Next"
+>>>>>>> 1f449937bb4762477434fbe77fe178e0afe65bfe
 }
