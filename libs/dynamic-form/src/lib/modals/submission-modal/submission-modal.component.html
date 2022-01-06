@@ -62,6 +62,7 @@
 
         <div class="form-row">
           <webui-form-datepicker-control
+            [initialValue]="timeSheet.startedAt"
             [timerFrom]="timeSheet.breakStartedAt"
             [timerTo]="timeSheet.breakEndedAt"
             [type]="DatepickerType.Timer"
@@ -79,7 +80,7 @@
           <webui-form-dropdown-control
             formControlName="activity"
             [url]="activityEndpoint"
-            [label]="'Activity'"
+            [label]="'Your activity'"
             [params]="activityParams"
           ></webui-form-dropdown-control>
         </div>

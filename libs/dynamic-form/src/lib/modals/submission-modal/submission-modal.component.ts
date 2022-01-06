@@ -64,7 +64,7 @@ export class SubmissionModalComponent implements OnInit {
       activity: new FormControl()
     });
 
-    this.formGroup.valueChanges.subscribe((val) => console.log(val));
+    this.formGroup.valueChanges.subscribe(this.updateTimesheet);
     this.activityParams = this.getActivityParams();
 
     this.formGroup.get('activity').valueChanges.subscribe((option: DropdownOption) => {
@@ -93,5 +93,9 @@ export class SubmissionModalComponent implements OnInit {
     }
 
     return '';
+  }
+
+  private updateTimesheet(value) {
+    console.log(value);
   }
 }

@@ -54,6 +54,10 @@
   color: $content-color;
   padding: 8px 48px 8px 12px;
 
+  &:last-child {
+    padding-right: 12px;
+  }
+
   @include media-breakpoint-up('lg') {
     font-size: 16px;
     line-height: 19px;
@@ -90,4 +94,13 @@
       padding-right: 2rem;
     }
   }
+}
+
+.dropdown-wrapper {
+  background-color: #fff;
+  border: 1px solid $border-color;
+  box-shadow: 2px 8px 20px rgba(2, 52, 105, 0.1);
+  border-radius: 3px;
+  width: 100%;
+  display: block;
 }
