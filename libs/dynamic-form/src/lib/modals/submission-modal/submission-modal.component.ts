@@ -59,12 +59,11 @@ export class SubmissionModalComponent implements OnInit {
     this.formGroup = new FormGroup({
       shiftStartedAt: new FormControl(),
       shiftEndedAt: new FormControl(),
-      breakStartedAt: new FormControl(),
-      breakEndedAt: new FormControl(),
+      break: new FormControl(),
       activity: new FormControl()
     });
 
-    this.formGroup.valueChanges.subscribe(this.updateTimesheet);
+    this.formGroup.valueChanges.subscribe((value) => this.updateTimeSheet(value));
     this.activityParams = this.getActivityParams();
 
     this.formGroup.get('activity').valueChanges.subscribe((option: DropdownOption) => {
@@ -95,7 +94,9 @@ export class SubmissionModalComponent implements OnInit {
     return '';
   }
 
-  private updateTimesheet(value) {
+  public submitForm(): void {}
+
+  private updateTimeSheet(value) {
     console.log(value);
   }
 }

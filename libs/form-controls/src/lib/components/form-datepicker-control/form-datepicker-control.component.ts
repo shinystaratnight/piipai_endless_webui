@@ -4,6 +4,7 @@ import {
   Component,
   forwardRef,
   Input,
+  OnDestroy,
   OnInit,
   TemplateRef,
   ViewChild,
@@ -14,10 +15,11 @@ import { DatepickerType } from '../../enums/datepicker.enum';
 import { DateService } from '@webui/core';
 import { DateFormat } from '@webui/data';
 import { ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { merge } from 'rxjs';
+import { merge, Subject } from 'rxjs';
 import { Platform } from '@angular/cdk/platform';
 import { CdkOverlayOrigin, Overlay } from '@angular/cdk/overlay';
 import { Dropdown } from '../../helpers';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'webui-form-datepicker-control',
@@ -32,7 +34,9 @@ import { Dropdown } from '../../helpers';
     }
   ]
 })
-export class FormDatepickerControlComponent implements OnInit, ControlValueAccessor, AfterViewInit {
+export class FormDatepickerControlComponent
+  implements OnInit, ControlValueAccessor, AfterViewInit, OnDestroy
+{
   @Input() label?: string;
   @Input() type?: DatepickerType;
   @Input() initialValue?: string;
@@ -51,13 +55,14 @@ export class FormDatepickerControlComponent implements OnInit, ControlValueAcces
   public dateControl = new FormControl('');
   public timeControl = new FormControl('');
   public durationControl = new FormControl('00h 00min');
-  public hoursControl = new FormControl(0);
-  public minutesControl = new FormControl(0);
+  public hoursControl = new FormControl('00');
+  public minutesControl = new FormControl('00');
 
   private onChange!: (value: string | undefined) => void;
   private onTouched!: () => void;
 
   private timerDropdown!: Dropdown;
+  private destroy$: Subject<void> = new Subject<void>();
 
   public get isTimer(): boolean {
     return this.type === DatepickerType.Timer;
@@ -102,6 +107,7 @@ export class FormDatepickerControlComponent implements OnInit, ControlValueAcces
     this.parseInitialValue();
     this.parseTimerInitialValue();
     this.subscribeOnChanges();
+    this.subscribeOnDurationChange();
   }
 
   public ngAfterViewInit(): void {
@@ -110,28 +116,30 @@ export class FormDatepickerControlComponent implements OnInit, ControlValueAcces
     }
   }
 
+  public ngOnDestroy(): void {
+    this.destroy$.next();
+  }
+
   public showDurationDropdown(): void {
     this.timerDropdown.openDropdown(this.overlay, this.viewContainerRef, {});
   }
 
-  public hideDurationDropdown(): void {
-    this.timerDropdown.closeDropdown();
-  }
-
   public plus(control: FormControl): void {
-    control.patchValue(control.value + 1);
+    control.patchValue(parseInt(control.value, 10) + 1);
 
     this.updateDuration();
   }
 
   public minus(control: FormControl): void {
-    control.patchValue(control.value - 1);
+    control.patchValue(parseInt(control.value, 10) - 1);
 
     this.updateDuration();
   }
 
   private updateDuration(): void {
-    const duration = `${this.hoursControl.value}h ${this.minutesControl.value}min`;
+    const hours = this.hoursControl.value;
+    const minutes = this.minutesControl.value;
+    const duration = `${hours || '00'}h ${minutes || '00'}min`;
 
     this.durationControl.patchValue(duration);
   }
@@ -154,11 +162,10 @@ export class FormDatepickerControlComponent implements OnInit, ControlValueAcces
 
     const from = this.dateService.parse(this.timerFrom, this.timezone);
     const to = this.dateService.parse(this.timerTo, this.timezone);
-    const diff = to.diff(from);
     const hours = to.diff(from, 'hours');
-    const minutes = to.diff(to, 'minutes');
+    const minutes = to.diff(from, 'minutes');
 
-    this.timeControl.patchValue(`${hours}h ${minutes}min`, { emitEvent: false });
+    this.durationControl.patchValue(`${hours}h ${minutes}min`, { emitEvent: false });
   }
 
   private subscribeOnChanges(): void {
@@ -166,13 +173,14 @@ export class FormDatepickerControlComponent implements OnInit, ControlValueAcces
       this.dateControl.valueChanges,
       this.timeControl.valueChanges,
       this.durationControl.valueChanges
-    ).subscribe(() => this.onChanges());
+    )
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => this.onChanges());
   }
 
   private onChanges(): void {
     const date = this.dateControl.value;
     const time = this.timeControl.value;
-    const duration = this.durationControl.value;
 
     if (this.isDate) {
       this.onChange(date);
@@ -182,9 +190,46 @@ export class FormDatepickerControlComponent implements OnInit, ControlValueAcces
       const datetime =
         date && time ? this.dateService.parse(`${date}T${time}`, this.timezone) : undefined;
 
-      this.onChange(datetime ? datetime.format() : undefined);
+      this.onChange(datetime ? datetime.utc().format() : undefined);
     } else if (this.isTimer) {
-      console.log(duration, date, time);
+      const hours = this.hoursControl.value;
+      const minutes = this.minutesControl.value;
+
+      if (!hours && !minutes) {
+        this.onChange('');
+        return;
+      }
+
+      this.onChange(`${hours}:${minutes}`);
+    }
+  }
+
+  private subscribeOnDurationChange() {
+    this.validateDuration(this.hoursControl, (value: number) => this.inRange(value, 0, 24));
+    this.validateDuration(this.minutesControl, (value: number) => this.inRange(value, 0, 59));
+  }
+
+  private validateDuration(control: FormControl, validator: (value: number) => number) {
+    control.valueChanges.pipe(takeUntil(this.destroy$)).subscribe((duration) => {
+      if (!duration) {
+        this.updateDuration();
+        return;
+      }
+
+      const parsedValue = parseInt(duration, 10);
+      const nextValue = isNaN(parsedValue) ? duration.replace(/\D/g, '') : validator(parsedValue);
+      control.patchValue(nextValue, { emitEvent: false });
+      this.updateDuration();
+    });
+  }
+
+  private inRange(value: number, from: number, to: number) {
+    if (value > to) {
+      return to;
+    } else if (value < from) {
+      return from;
+    } else {
+      return value;
     }
   }
 }

@@ -49,7 +49,7 @@
       <button class="btn" type="button" (click)="plus(hoursControl)">
         <webui-icon [icon]="Icon.ArrowUp" [size]="IconSize.Medium"></webui-icon>
       </button>
-      <input class="control__input" type="number" readonly [formControl]="hoursControl" />
+      <input class="control__input" placeholder="HH" type="string" [formControl]="hoursControl" />
       <button class="btn" type="button" (click)="minus(hoursControl)">
         <webui-icon [icon]="Icon.ArrowUp" [size]="IconSize.Medium"></webui-icon>
       </button>
@@ -61,7 +61,7 @@
       <button class="btn" type="button" (click)="plus(minutesControl)">
         <webui-icon [icon]="Icon.ArrowUp" [size]="IconSize.Medium"></webui-icon>
       </button>
-      <input class="control__input" type="number" readonly [formControl]="minutesControl" />
+      <input class="control__input" placeholder="MM" type="string" [formControl]="minutesControl" />
       <button class="btn" type="button" (click)="minus(minutesControl)">
         <webui-icon [icon]="Icon.ArrowUp" [size]="IconSize.Medium"></webui-icon>
       </button>
