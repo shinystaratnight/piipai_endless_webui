@@ -8,7 +8,9 @@ export enum Icon {
   Close,
   Timer,
   ArrowDown,
-  ArrowUp
+  ArrowUp,
+  Plus,
+  Delete
 }
 
 export enum IconSize {

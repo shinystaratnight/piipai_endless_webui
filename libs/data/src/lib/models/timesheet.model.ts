@@ -1,8 +1,8 @@
 import {
   checkAndReturnTranslation,
   getLocalStorageItem,
-  getTimeInstance,
-  getTimeInstanceByTimezone
+  getTimeInstanceByTimezone,
+  parseDate
 } from '@webui/utilities';
 import { Endpoints, Models } from '../enums';
 import { Model } from './model';
@@ -133,13 +133,14 @@ class Contact {
 }
 
 export class TimeSheet {
-  id?: string;
+  readonly id?: string;
   candidate: Contact;
   startedAt: string;
   endedAt: string;
   breakStartedAt: string;
   breakEndedAt: string;
-  timezone: string;
+  readonly timezone: string;
+  status: number;
 
   position: RelatedObject;
   company: RelatedObject;
@@ -158,6 +159,7 @@ export class TimeSheet {
     this.company = new RelatedObject(data.company);
     this.shift = new RelatedObject(data.shift);
     this.jobSite = new RelatedObject(data.jobsite);
+    this.status = data.status;
   }
 
   get totalTime(): string {
@@ -204,5 +206,68 @@ export class TimeSheet {
     const totalTime = timeInstance.duration(workTime - breakTime);
 
     return `${Math.floor(totalTime.asHours())}hr ${totalTime.minutes()}min`;
+  }
+
+  public updateBreak(duration: [hours: number, minutes: number] | null): void {
+    if (!duration) {
+      this.breakStartedAt = null;
+      this.breakEndedAt = null;
+      return;
+    }
+
+    const [hours, minutes] = duration;
+
+    if (this.breakStartedAt) {
+      this.breakEndedAt = parseDate(this.breakStartedAt, this.timezone)
+        .add(hours, 'hours')
+        .add(minutes, 'minutes')
+        .utc()
+        .format();
+    } else {
+      this.breakStartedAt = this.startedAt;
+      this.breakEndedAt = parseDate(this.breakStartedAt, this.timezone)
+        .add(hours, 'hours')
+        .add(minutes, 'minutes')
+        .utc()
+        .format();
+    }
+  }
+}
+
+class ApiModel {
+  public id?: string;
+  public apiEndpoint?: string;
+  public get editApiEndpoint(): string {
+    return `${this.apiEndpoint}${this.id}/`;
+  }
+
+  constructor(endpoint: Endpoints, id?: string) {
+    this.apiEndpoint = endpoint;
+    this.id = id;
+  }
+}
+
+export class TimesheetRate extends ApiModel {
+  timesheet: RelatedObject;
+  worktype: RelatedObject;
+  value: number;
+  rate: number;
+
+  constructor(config: any) {
+    super(Endpoints.TimesheetRates, config.id);
+
+    this.timesheet = new RelatedObject(config.timesheet);
+    this.worktype = new RelatedObject(config.worktype);
+    this.value = parseFloat(config.value);
+    this.rate = parseFloat(config.rate);
+  }
+
+  public get requestBody() {
+    return {
+      timesheet: this.timesheet.id,
+      worktype: this.worktype.id,
+      rate: this.rate,
+      value: this.value
+    };
   }
 }

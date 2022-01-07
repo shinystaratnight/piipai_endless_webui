@@ -3,6 +3,12 @@
   <span class="control__input-wrapper">
     <span *ngIf="prefix" class="control__input-prefix">{{ prefix }}</span>
 
-    <input #input [attr.placeholder]="placeholder" class="control__input" [attr.type]="type" />
+    <input
+      [ngModel]="value"
+      (ngModelChange)="onChange($event)"
+      [attr.placeholder]="placeholder"
+      class="control__input"
+      [attr.type]="type"
+    />
   </span>
 </label>

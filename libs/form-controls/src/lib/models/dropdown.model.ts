@@ -8,7 +8,7 @@ interface IRelatedObject {
 }
 
 export class DropdownOption {
-  public value: string;
+  public id: string;
   public extraFields: { [key: string]: any };
 
   static fromRelatedObject(object: IRelatedObject): DropdownOption {
@@ -18,7 +18,7 @@ export class DropdownOption {
   }
 
   constructor(value = '', extraFields: { [key: string]: any }) {
-    this.value = value;
+    this.id = value;
     this.extraFields = extraFields;
   }
 

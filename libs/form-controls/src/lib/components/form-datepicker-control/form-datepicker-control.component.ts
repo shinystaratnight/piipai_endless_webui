@@ -58,7 +58,7 @@ export class FormDatepickerControlComponent
   public hoursControl = new FormControl('00');
   public minutesControl = new FormControl('00');
 
-  private onChange!: (value: string | undefined) => void;
+  private onChange!: (value: string | undefined | null) => void;
   private onTouched!: () => void;
 
   private timerDropdown!: Dropdown;
@@ -166,6 +166,8 @@ export class FormDatepickerControlComponent
     const minutes = to.diff(from, 'minutes');
 
     this.durationControl.patchValue(`${hours}h ${minutes}min`, { emitEvent: false });
+    this.hoursControl.patchValue(hours, { emitEvent: false });
+    this.minutesControl.patchValue(minutes, { emitEvent: false });
   }
 
   private subscribeOnChanges(): void {
@@ -192,11 +194,11 @@ export class FormDatepickerControlComponent
 
       this.onChange(datetime ? datetime.utc().format() : undefined);
     } else if (this.isTimer) {
-      const hours = this.hoursControl.value;
-      const minutes = this.minutesControl.value;
+      const hours = parseInt(this.hoursControl.value, 10);
+      const minutes = parseInt(this.minutesControl.value, 10);
 
       if (!hours && !minutes) {
-        this.onChange('');
+        this.onChange(null);
         return;
       }
 

@@ -75,26 +75,39 @@
       </section>
 
       <section class="activities">
-        <h4 class="section-title">{{ 'Activity' | translate }}</h4>
+        <h4 class="section-title">
+          {{ 'Activity' | translate }}
+          <button type="button" class="plus-button" (click)="addActivityControl()">
+            <webui-icon [icon]="Icon.Plus" [size]="IconSize.Large"></webui-icon>
+          </button>
+        </h4>
 
-        <div class="form-row">
-          <webui-form-dropdown-control
-            formControlName="activity"
-            [url]="activityEndpoint"
-            [label]="'Your activity'"
-            [params]="activityParams"
-          ></webui-form-dropdown-control>
-        </div>
+        <ng-container *ngIf="hasActivities">
+          <div [formGroup]="activity" *ngFor="let activity of activitiesForm; let index = index">
+            <div class="form-row">
+              <webui-form-dropdown-control
+                formControlName="worktype"
+                [url]="activityEndpoint"
+                [label]="'Your activity'"
+                [params]="activityParams"
+              ></webui-form-dropdown-control>
 
-        <div class="form-row">
-          <webui-form-input-control
-            *ngIf="formGroup.get('amount')"
-            [label]="'Amount'"
-            [prefix]="getAmountPrefix()"
-            type="number"
-            formControlName="amount"
-          ></webui-form-input-control>
-        </div>
+              <button type="button" class="delete-button" (click)="removeActivity(activity, index)">
+                <webui-icon [icon]="Icon.Delete"></webui-icon>
+              </button>
+            </div>
+
+            <div class="form-row">
+              <webui-form-input-control
+                *ngIf="activity.get('value')"
+                [label]="'Amount'"
+                [prefix]="getAmountPrefix(activity)"
+                type="number"
+                formControlName="value"
+              ></webui-form-input-control>
+            </div>
+          </div>
+        </ng-container>
       </section>
 
       <footer class="footer">
