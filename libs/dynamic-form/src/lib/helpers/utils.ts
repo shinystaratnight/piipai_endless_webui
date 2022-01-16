@@ -34,11 +34,7 @@ export function getValueOfData(data, key: string, obj: Field): void {
   }
 }
 
-export function getElementFromMetadata(
-  metadata: Field[],
-  key: string,
-  param = 'key'
-): Field {
+export function getElementFromMetadata(metadata: Field[], key: string, param = 'key'): Field {
   let element = null;
   metadata.forEach((el: Field) => {
     if (el[param] === key) {
@@ -97,10 +93,7 @@ export function getOrientation(): number {
   return orientation || 0;
 }
 
-export function generateCssStyles(
-  styles: string[] = [],
-  prefix: string
-): string[] {
+export function generateCssStyles(styles: string[] = [], prefix: string): string[] {
   return [
     styles
       .map((modificator) => {
@@ -140,7 +133,7 @@ export function convertPhoneNumber(data: any): void {
 
   Object.keys(data).forEach((key) => {
     if (isPhoneField(key)) {
-      data[key] = data[key].internationalNumber;
+      data[key] = data[key]?.internationalNumber;
     }
 
     if (typeof data[key] === 'object' && !Array.isArray(data[key])) {
