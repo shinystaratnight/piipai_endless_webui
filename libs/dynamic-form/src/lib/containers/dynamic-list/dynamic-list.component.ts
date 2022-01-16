@@ -72,6 +72,7 @@ import {
 } from '../../modals';
 import { FilterEvent } from '../../interfaces';
 import { formatCurrency, getCurrencySymbol } from '@angular/common';
+import { DialogService } from '@webui/dialog';
 
 const translationMap = CountryCodeLanguage;
 
@@ -218,7 +219,8 @@ export class DynamicListComponent
     private listService: ListService,
     private route: ActivatedRoute,
     @Optional() private sortService: SortService,
-    private siteSettings: SiteSettingsService
+    private siteSettings: SiteSettingsService,
+    private dialog: DialogService
   ) {}
 
   public isMobile = isMobile;
@@ -1713,75 +1715,81 @@ export class DynamicListComponent
   }
 
   public submitTimesheet(e) {
-    const data = this.getRowData(e);
-
-    if (data) {
-      const contact = data.job_offer.candidate_contact.contact;
-      this.modalInfo = {
-        endpoint: e.el.endpoint,
-        edit: true,
-        label: {
-          avatar: contact.picture,
-          fullName: contact.__str__,
-        },
-        extendData: { ...data },
-        data: {
-          id: createAddAction({
-            value: data.id
-          }),
-          shift_ended_at_utc: createAddAction({
-            value: data.shift_ended_at_utc
-          }),
-          shift_started_at: createAddAction({
-            value: data.shift_started_at
-          }),
-          break_started_at: createAddAction({
-            value: data.break_started_at
-          }),
-          break_ended_at: createAddAction({
-            value: data.break_ended_at
-          }),
-          shift_ended_at: createAddAction({
-            value: data.shift_ended_at
-          }),
-          supervisor: createAddAction({
-            value: data.supervisor
-          }),
-          position: createAddAction({
-            value: data.position
-          }),
-          skill: createAddAction({
-            value: data.position
-          }),
-          company: createAddAction({
-            value: data.company
-          }),
-          jobsite: createAddAction({
-            value: data.jobsite
-          }),
-          shift_date: createAddAction({
-            value: data.shift.date.__str__
-          }),
-          time_zone: data.time_zone
-        }
-      };
-
-      let windowClass = 'timesheet-submit-form';
-
-      if (isMobile()) {
-        windowClass += ' mobile-device';
+    const dialogRef = this.dialog.open(SubmissionModalComponent);
+    dialogRef.componentInstance.data = this.getRowData(e);
+    dialogRef.result.then((result: any) => {
+      if (result === Status.Success) {
+        this.refreshList();
       }
+    });
 
-      // this.open(EvaluateModalComponent, { size: 'lg', windowClass });
+    // if (data) {
+    //   const contact = data.job_offer.candidate_contact.contact;
+    //   this.modalInfo = {
+    //     endpoint: e.el.endpoint,
+    //     edit: true,
+    //     label: {
+    //       avatar: contact.picture,
+    //       fullName: contact.__str__,
+    //     },
+    //     extendData: { ...data },
+    //     data: {
+    //       id: createAddAction({
+    //         value: data.id
+    //       }),
+    //       shift_ended_at_utc: createAddAction({
+    //         value: data.shift_ended_at_utc
+    //       }),
+    //       shift_started_at: createAddAction({
+    //         value: data.shift_started_at
+    //       }),
+    //       break_started_at: createAddAction({
+    //         value: data.break_started_at
+    //       }),
+    //       break_ended_at: createAddAction({
+    //         value: data.break_ended_at
+    //       }),
+    //       shift_ended_at: createAddAction({
+    //         value: data.shift_ended_at
+    //       }),
+    //       supervisor: createAddAction({
+    //         value: data.supervisor
+    //       }),
+    //       position: createAddAction({
+    //         value: data.position
+    //       }),
+    //       skill: createAddAction({
+    //         value: data.position
+    //       }),
+    //       company: createAddAction({
+    //         value: data.company
+    //       }),
+    //       jobsite: createAddAction({
+    //         value: data.jobsite
+    //       }),
+    //       shift_date: createAddAction({
+    //         value: data.shift.date.__str__
+    //       }),
+    //       time_zone: data.time_zone
+    //     }
+    //   };
 
-      this.modalRef = this.modalService.open(SubmissionModalComponent, {
-        backdrop: 'static',
-        size: 'md',
-        windowClass
-      });
-      this.modalRef.componentInstance.config = this.modalInfo;
-      this.handleFormClose(this.modalRef.result);
-    }
+    //   let windowClass = 'timesheet-submit-form';
+
+    //   if (isMobile()) {
+    //     windowClass += ' mobile-device';
+    //   }
+
+    //   // this.open(EvaluateModalComponent, { size: 'lg', windowClass });
+
+    //   this.modalRef = this.modalService.open(SubmissionModalComponent, {
+    //     backdrop: 'static',
+    //     size: 'md',
+    //     windowClass
+    //   });
+    //   this.modalRef.componentInstance.config = this.modalInfo;
+    //   this.handleFormClose(this.modalRef.result);
+    // }
   }
 
   public evaluate(e, data?, refresh = true) {

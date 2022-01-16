@@ -30,6 +30,9 @@ import { directives } from './directives';
 
 import { SharedModule } from '@webui/shared';
 import { TranslateModule } from '@ngx-translate/core';
+import { IconModule } from '@webui/icon';
+import { DialogModule } from '@webui/dialog';
+import { FormControlsModule } from "@webui/form-controls";
 
 @NgModule({
   imports: [
@@ -58,7 +61,10 @@ import { TranslateModule } from '@ngx-translate/core';
 
     UiModule,
     WebcamModule,
-    NgxDropzoneModule
+    NgxDropzoneModule,
+    IconModule,
+    DialogModule,
+    FormControlsModule
   ],
   exports: [
     fromComponents.GenericFormComponent,

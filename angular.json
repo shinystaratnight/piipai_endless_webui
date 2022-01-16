@@ -16,10 +16,7 @@
               "libs/billing-metadata/tsconfig.lib.json",
               "libs/billing-metadata/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**",
-              "!libs/billing-metadata/**/*"
-            ]
+            "exclude": ["**/node_modules/**", "!libs/billing-metadata/**/*"]
           }
         },
         "test": {
@@ -40,14 +37,8 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": [
-              "libs/calendar/tsconfig.lib.json",
-              "libs/calendar/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**",
-              "!libs/calendar/**/*"
-            ]
+            "tsConfig": ["libs/calendar/tsconfig.lib.json", "libs/calendar/tsconfig.spec.json"],
+            "exclude": ["**/node_modules/**", "!libs/calendar/**/*"]
           }
         },
         "test": {
@@ -73,10 +64,7 @@
               "libs/candidate-metadata/tsconfig.lib.json",
               "libs/candidate-metadata/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**",
-              "!libs/candidate-metadata/**/*"
-            ]
+            "exclude": ["**/node_modules/**", "!libs/candidate-metadata/**/*"]
           }
         },
         "test": {
@@ -101,10 +89,7 @@
               "libs/client-metadata/tsconfig.lib.json",
               "libs/client-metadata/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**",
-              "!libs/client-metadata/**/*"
-            ]
+            "exclude": ["**/node_modules/**", "!libs/client-metadata/**/*"]
           }
         },
         "test": {
@@ -125,14 +110,8 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": [
-              "libs/core/tsconfig.lib.json",
-              "libs/core/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**",
-              "!libs/core/**/*"
-            ]
+            "tsConfig": ["libs/core/tsconfig.lib.json", "libs/core/tsconfig.spec.json"],
+            "exclude": ["**/node_modules/**", "!libs/core/**/*"]
           }
         },
         "test": {
@@ -154,14 +133,8 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": [
-              "libs/dashboard/tsconfig.lib.json",
-              "libs/dashboard/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**",
-              "!libs/dashboard/**/*"
-            ]
+            "tsConfig": ["libs/dashboard/tsconfig.lib.json", "libs/dashboard/tsconfig.spec.json"],
+            "exclude": ["**/node_modules/**", "!libs/dashboard/**/*"]
           }
         },
         "test": {
@@ -183,14 +156,8 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": [
-              "libs/data/tsconfig.lib.json",
-              "libs/data/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**",
-              "!libs/data/**/*"
-            ]
+            "tsConfig": ["libs/data/tsconfig.lib.json", "libs/data/tsconfig.spec.json"],
+            "exclude": ["**/node_modules/**", "!libs/data/**/*"]
           }
         },
         "test": {
@@ -198,6 +165,28 @@
           "options": {
             "jestConfig": "libs/data/jest.config.js",
             "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "dialog": {
+      "projectType": "library",
+      "root": "libs/dialog",
+      "sourceRoot": "libs/dialog/src",
+      "prefix": "webui",
+      "architect": {
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/dialog"],
+          "options": {
+            "jestConfig": "libs/dialog/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/dialog/src/**/*.ts", "libs/dialog/src/**/*.html"]
           }
         }
       }
@@ -215,10 +204,7 @@
               "libs/dynamic-form/tsconfig.lib.json",
               "libs/dynamic-form/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**",
-              "!libs/dynamic-form/**/*"
-            ]
+            "exclude": ["**/node_modules/**", "!libs/dynamic-form/**/*"]
           }
         },
         "test": {
@@ -230,6 +216,53 @@
         }
       },
       "schematics": {}
+    },
+    "form-controls": {
+      "projectType": "library",
+      "root": "libs/form-controls",
+      "sourceRoot": "libs/form-controls/src",
+      "prefix": "webui",
+      "architect": {
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/form-controls"],
+          "options": {
+            "jestConfig": "libs/form-controls/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/form-controls/src/**/*.ts",
+              "libs/form-controls/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
+    "icon": {
+      "projectType": "library",
+      "root": "libs/icon",
+      "sourceRoot": "libs/icon/src",
+      "prefix": "webui",
+      "architect": {
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/icon"],
+          "options": {
+            "jestConfig": "libs/icon/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/icon/src/**/*.ts", "libs/icon/src/**/*.html"]
+          }
+        }
+      }
     },
     "manager-metadata": {
       "root": "libs/manager-metadata",
@@ -244,10 +277,7 @@
               "libs/manager-metadata/tsconfig.lib.json",
               "libs/manager-metadata/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**",
-              "!libs/manager-metadata/**/*"
-            ]
+            "exclude": ["**/node_modules/**", "!libs/manager-metadata/**/*"]
           }
         },
         "test": {
@@ -268,14 +298,8 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": [
-              "libs/metadata/tsconfig.lib.json",
-              "libs/metadata/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**",
-              "!libs/metadata/**/*"
-            ]
+            "tsConfig": ["libs/metadata/tsconfig.lib.json", "libs/metadata/tsconfig.spec.json"],
+            "exclude": ["**/node_modules/**", "!libs/metadata/**/*"]
           }
         },
         "test": {
@@ -307,10 +331,7 @@
             "main": "apps/r3sourcer/src/main.ts",
             "polyfills": "apps/r3sourcer/src/polyfills.ts",
             "tsConfig": "apps/r3sourcer/tsconfig.app.json",
-            "assets": [
-              "apps/r3sourcer/src/assets",
-              "apps/r3sourcer/src/manifest"
-            ],
+            "assets": ["apps/r3sourcer/src/assets", "apps/r3sourcer/src/manifest"],
             "styles": [
               "./node_modules/ngx-bootstrap/datepicker/bs-datepicker.css",
               "node_modules/ngx-toastr/toastr.css",
@@ -326,9 +347,7 @@
               "node_modules/jtsage-datebox-bootstrap4/jtsage-datebox.js"
             ],
             "stylePreprocessorOptions": {
-              "includePaths": [
-                "./styles"
-              ]
+              "includePaths": ["./styles"]
             },
             "allowedCommonJsDependencies": [
               "angular2-signaturepad",
@@ -417,14 +436,8 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": [
-              "apps/r3sourcer/tsconfig.app.json",
-              "apps/r3sourcer/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**",
-              "!apps/r3sourcer/**/*"
-            ]
+            "tsConfig": ["apps/r3sourcer/tsconfig.app.json", "apps/r3sourcer/tsconfig.spec.json"],
+            "exclude": ["**/node_modules/**", "!apps/r3sourcer/**/*"]
           }
         },
         "test": {
@@ -462,10 +475,7 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": "apps/r3sourcer-e2e/tsconfig.e2e.json",
-            "exclude": [
-              "**/node_modules/**",
-              "!apps/r3sourcer-e2e/**/*"
-            ]
+            "exclude": ["**/node_modules/**", "!apps/r3sourcer-e2e/**/*"]
           }
         }
       }
@@ -479,14 +489,8 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": [
-              "libs/shared/tsconfig.lib.json",
-              "libs/shared/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**",
-              "!libs/shared/**/*"
-            ]
+            "tsConfig": ["libs/shared/tsconfig.lib.json", "libs/shared/tsconfig.spec.json"],
+            "exclude": ["**/node_modules/**", "!libs/shared/**/*"]
           }
         },
         "test": {
@@ -512,10 +516,7 @@
               "libs/shared-metadata/tsconfig.lib.json",
               "libs/shared-metadata/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**",
-              "!libs/shared-metadata/**/*"
-            ]
+            "exclude": ["**/node_modules/**", "!libs/shared-metadata/**/*"]
           }
         },
         "test": {
@@ -536,14 +537,8 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": [
-              "libs/ui/tsconfig.lib.json",
-              "libs/ui/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**",
-              "!libs/ui/**/*"
-            ]
+            "tsConfig": ["libs/ui/tsconfig.lib.json", "libs/ui/tsconfig.spec.json"],
+            "exclude": ["**/node_modules/**", "!libs/ui/**/*"]
           }
         },
         "test": {
@@ -571,14 +566,8 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": [
-              "libs/utilities/tsconfig.lib.json",
-              "libs/utilities/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**",
-              "!libs/utilities/**/*"
-            ]
+            "tsConfig": ["libs/utilities/tsconfig.lib.json", "libs/utilities/tsconfig.spec.json"],
+            "exclude": ["**/node_modules/**", "!libs/utilities/**/*"]
           }
         },
         "test": {
@@ -600,12 +589,15 @@
   },
   "schematics": {
     "@nrwl/angular:application": {
+      "linter": "eslint",
       "unitTestRunner": "jest",
       "e2eTestRunner": "cypress"
     },
     "@nrwl/angular:library": {
+      "linter": "eslint",
       "unitTestRunner": "jest"
-    }
+    },
+    "@nrwl/angular:component": {}
   },
   "defaultProject": "r3sourcer"
 }
