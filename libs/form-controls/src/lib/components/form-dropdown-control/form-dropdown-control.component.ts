@@ -29,6 +29,8 @@ import {
 import { DropdownOption, DropdownPayload } from '../../models/dropdown.model';
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 
+type OptionFilter = (option: DropdownOption) => boolean;
+
 @Component({
   selector: 'webui-form-dropdown-control',
   templateUrl: './form-dropdown-control.component.html',
@@ -48,6 +50,7 @@ export class FormDropdownControlComponent implements OnInit, ControlValueAccesso
   @Input() placeholder?: string;
   @Input() url?: string;
   @Input() params?: { [key: string]: any } = {};
+  @Input() optionFilter?: OptionFilter;
 
   @ViewChild(CdkOverlayOrigin) overlayOrigin?: CdkOverlayOrigin;
   @ViewChild('content') content?: TemplateRef<any>;
@@ -160,7 +163,11 @@ export class FormDropdownControlComponent implements OnInit, ControlValueAccesso
       (value: DropdownOption[] | undefined) => {
         let options: DropdownOption[] = [];
         if (value) {
-          options = [...value];
+          if (this.optionFilter) {
+            options = value.filter(this.optionFilter);
+          } else {
+            options = [...value];
+          }
         }
 
         if (existOptions) {
@@ -185,11 +192,6 @@ export class FormDropdownControlComponent implements OnInit, ControlValueAccesso
       backdropClass: 'form-dropdown-control-backdrop',
       hasBackdrop: true
     });
-
-    console.log(
-      this.overlayOrigin.elementRef.nativeElement,
-      getComputedStyle(this.overlayOrigin.elementRef.nativeElement).width
-    );
 
     config.positionStrategy = this.overlay
       .position()
@@ -219,8 +221,6 @@ export class FormDropdownControlComponent implements OnInit, ControlValueAccesso
         this.subscribeOnScroll();
       });
     this.overlayRef.attach(dropdownContent);
-    console.log(this.overlayRef);
-
     this.overlayRef.backdropClick().subscribe(() => this.closeDropdown());
   }
 

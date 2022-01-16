@@ -165,9 +165,14 @@ export class FormDatepickerControlComponent
     const hours = to.diff(from, 'hours');
     const minutes = to.diff(from, 'minutes');
 
-    this.durationControl.patchValue(`${hours}h ${minutes}min`, { emitEvent: false });
-    this.hoursControl.patchValue(hours, { emitEvent: false });
-    this.minutesControl.patchValue(minutes, { emitEvent: false });
+    this.durationControl.patchValue(`${hours}h ${minutes}min`);
+    this.hoursControl.patchValue(hours);
+    this.minutesControl.patchValue(minutes);
+
+    // Duration update
+    setTimeout(() => {
+      this.onChanges();
+    });
   }
 
   private subscribeOnChanges(): void {

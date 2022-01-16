@@ -303,6 +303,13 @@
   }
 }
 
+.activities {
+  &-empty {
+    display: flex;
+    justify-content: center;
+  }
+}
+
 .footer {
   display: flex;
   align-items: center;
@@ -326,4 +333,12 @@
   @include media-breakpoint-down('md') {
     width: 100%;
   }
+
+  &:disabled {
+    background-color: rgba(40, 163, 252, 0.55) !important;
+  }
+}
+
+button {
+  cursor: pointer;
 }

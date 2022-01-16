@@ -109,8 +109,10 @@ class RelatedObject {
   id: string;
 
   constructor(config: any) {
-    this.__str__ = checkAndReturnTranslation(config, 'EN', getLocalStorageItem('web.lang'));
-    this.id = config.id;
+    this.__str__ = config
+      ? checkAndReturnTranslation(config, 'EN', getLocalStorageItem('web.lang'))
+      : '';
+    this.id = config?.id;
   }
 }
 
@@ -132,8 +134,20 @@ class Contact {
   }
 }
 
-export class TimeSheet {
-  readonly id?: string;
+class ApiModel {
+  public id?: string;
+  public apiEndpoint?: string;
+  public get editApiEndpoint(): string {
+    return `${this.apiEndpoint}${this.id}/`;
+  }
+
+  constructor(endpoint: Endpoints, id?: string) {
+    this.apiEndpoint = endpoint;
+    this.id = id;
+  }
+}
+
+export class TimeSheet extends ApiModel {
   candidate: Contact;
   startedAt: string;
   endedAt: string;
@@ -148,7 +162,8 @@ export class TimeSheet {
   jobSite: RelatedObject;
 
   constructor(data: any) {
-    this.id = data.id;
+    super(Endpoints.TimesheetCandidate, data.id);
+
     this.candidate = new Contact(data.job_offer.candidate_contact.contact);
     this.startedAt = data.shift_started_at;
     this.endedAt = data.shift_ended_at;
@@ -208,6 +223,14 @@ export class TimeSheet {
     return `${Math.floor(totalTime.asHours())}hr ${totalTime.minutes()}min`;
   }
 
+  get isValid(): boolean {
+    if (!this.endedAt) {
+      return true;
+    }
+
+    return this.totalTime !== '0h 0min';
+  }
+
   public updateBreak(duration: [hours: number, minutes: number] | null): void {
     if (!duration) {
       this.breakStartedAt = null;
@@ -232,18 +255,15 @@ export class TimeSheet {
         .format();
     }
   }
-}
 
-class ApiModel {
-  public id?: string;
-  public apiEndpoint?: string;
-  public get editApiEndpoint(): string {
-    return `${this.apiEndpoint}${this.id}/`;
-  }
-
-  constructor(endpoint: Endpoints, id?: string) {
-    this.apiEndpoint = endpoint;
-    this.id = id;
+  public getRequestBody(hasActivity: boolean) {
+    return {
+      shift_started_at: this.startedAt,
+      shift_ended_at: this.endedAt,
+      break_started_at: this.breakStartedAt,
+      break_ended_at: this.breakEndedAt,
+      hours: !hasActivity || !!this.endedAt
+    };
   }
 }
 

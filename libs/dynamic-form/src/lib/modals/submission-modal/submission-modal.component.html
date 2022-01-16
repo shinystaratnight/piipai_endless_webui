@@ -77,7 +77,12 @@
       <section class="activities">
         <h4 class="section-title">
           {{ 'Activity' | translate }}
-          <button type="button" class="plus-button" (click)="addActivityControl()">
+          <button
+            type="button"
+            class="plus-button"
+            [disabled]="!hasActivities"
+            (click)="addActivityControl()"
+          >
             <webui-icon [icon]="Icon.Plus" [size]="IconSize.Large"></webui-icon>
           </button>
         </h4>
@@ -90,6 +95,7 @@
                 [url]="activityEndpoint"
                 [label]="'Your activity'"
                 [params]="activityParams"
+                [optionFilter]="activityOptionFilter"
               ></webui-form-dropdown-control>
 
               <button type="button" class="delete-button" (click)="removeActivity(activity, index)">
@@ -108,10 +114,22 @@
             </div>
           </div>
         </ng-container>
+
+        <div *ngIf="!hasActivities" class="activities-empty">
+          <app-loader class="loader"></app-loader>
+        </div>
       </section>
 
       <footer class="footer">
-        <button class="btn submit-btn" type="submit">{{ 'Submit' | translate }}</button>
+        <button
+          class="btn submit-btn"
+          [disabled]="formInvalid || (processing$ | async)"
+          type="submit"
+        >
+          {{ 'Submit' | translate }}
+
+          <app-spinner *ngIf="processing$ | async"></app-spinner>
+        </button>
       </footer>
     </form>
   </div>

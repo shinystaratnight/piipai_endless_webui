@@ -5,13 +5,19 @@ import {
   OnDestroy,
   OnInit
 } from '@angular/core';
-import { FormArray, FormControl, FormGroup } from '@angular/forms';
+import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Endpoints, TimeSheet, TimesheetRate } from '@webui/data';
 import { DatepickerType, DropdownOption } from '@webui/form-controls';
 import { Icon, IconSize } from '@webui/icon';
 import { GenericFormService } from '../../services';
-import { forkJoin, Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { BehaviorSubject, forkJoin, Subject } from 'rxjs';
+import { finalize, takeUntil, tap } from 'rxjs/operators';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { Modal, Status } from '../modal/modal.component';
+
+const isHourlyWork = (name: string): boolean => {
+  return name.toLocaleLowerCase().replace(' ', '_') === 'hourly_work';
+};
 
 @Component({
   selector: 'app-submission-modal',
@@ -19,13 +25,14 @@ import { takeUntil } from 'rxjs/operators';
   styleUrls: ['./submission-modal.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SubmissionModalComponent implements OnInit, OnDestroy {
+export class SubmissionModalComponent extends Modal implements OnInit, OnDestroy {
   public data: any;
   public activityEndpoint = Endpoints.SkillWorkTypes;
   public timeSheet: TimeSheet;
   public Icon = Icon;
   public IconSize = IconSize;
   public DatepickerType = DatepickerType;
+  public processing$: BehaviorSubject<boolean> = new BehaviorSubject(false);
   public get info() {
     return [
       [
@@ -71,10 +78,28 @@ export class SubmissionModalComponent implements OnInit, OnDestroy {
     return !!this.formGroup.get('activities');
   }
 
+  public get invalidActivities(): boolean {
+    return !this.hasActivities || this.activitiesForm.some((form) => form.invalid);
+  }
+
+  public get formInvalid(): boolean {
+    return (
+      !this.timeSheet.isValid ||
+      this.invalidActivities ||
+      (!this.timeSheet.endedAt && !this.activitiesForm.length)
+    );
+  }
+
   private destroy$: Subject<void> = new Subject<void>();
   private removedActivities: TimesheetRate[] = [];
 
-  constructor(private apiService: GenericFormService, private cd: ChangeDetectorRef) {}
+  constructor(
+    private apiService: GenericFormService,
+    private cd: ChangeDetectorRef,
+    modal: NgbActiveModal
+  ) {
+    super(modal);
+  }
 
   public ngOnInit() {
     this.timeSheet = new TimeSheet(this.data);
@@ -140,7 +165,20 @@ export class SubmissionModalComponent implements OnInit, OnDestroy {
       )
     );
 
-    forkJoin(creationRequests).subscribe((response) => console.log(response));
+    const submitRequest = this.apiService.editForm(
+      this.timeSheet.editApiEndpoint + 'submit/',
+      this.timeSheet.getRequestBody(creationRequests.length > 0)
+    );
+
+    creationRequests.push(submitRequest);
+
+    this.processing$.next(true);
+
+    forkJoin(creationRequests)
+      .pipe(finalize(() => this.processing$.next(false)))
+      .subscribe(() => {
+        this.close(Status.Success);
+      });
   }
 
   public addActivityControl(): void {
@@ -161,6 +199,10 @@ export class SubmissionModalComponent implements OnInit, OnDestroy {
     this.removedActivities.push(timesheetRate);
   }
 
+  public activityOptionFilter(option: DropdownOption) {
+    return !isHourlyWork(option.label);
+  }
+
   private updateTimeSheet(value) {
     this.timeSheet.startedAt = value.shiftStartedAt || null;
     this.timeSheet.endedAt = value.shiftEndedAt || null;
@@ -168,15 +210,12 @@ export class SubmissionModalComponent implements OnInit, OnDestroy {
   }
 
   private getActivities(): void {
-    // if (this.timeSheet.status !== 5) {
-    //   this.formGroup.addControl('activities', new FormArray([this.getActivityForm(undefined, this.timeSheet.id)]));
-    //   return;
-    // }
-
     this.apiService
       .get(Endpoints.TimesheetRates, { timesheet: this.timeSheet.id, limit: -1 })
       .subscribe((response) => {
-        const activities = response.results.map((activity) => new TimesheetRate(activity));
+        const activities = response.results
+          .map((activity) => new TimesheetRate(activity))
+          .filter((rate) => !isHourlyWork(rate.worktype.__str__));
         this.formGroup.addControl(
           'activities',
           new FormArray(activities.map((activity) => this.getActivityForm(activity)))
@@ -188,10 +227,10 @@ export class SubmissionModalComponent implements OnInit, OnDestroy {
   private getActivityForm(activity: TimesheetRate | undefined, timesheet?: string): FormGroup {
     const form = new FormGroup({
       id: new FormControl(activity?.id),
-      value: new FormControl(activity?.value),
+      value: new FormControl(activity?.value, Validators.required),
       rate: new FormControl(activity?.rate),
       timesheet: new FormControl(activity?.timesheet || { id: timesheet }),
-      worktype: new FormControl(activity?.worktype)
+      worktype: new FormControl(activity?.worktype, Validators.required)
     });
 
     form

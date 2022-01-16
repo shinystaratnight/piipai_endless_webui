@@ -1718,7 +1718,9 @@ export class DynamicListComponent
     const dialogRef = this.dialog.open(SubmissionModalComponent);
     dialogRef.componentInstance.data = this.getRowData(e);
     dialogRef.result.then((result: any) => {
-      console.log(result);
+      if (result === Status.Success) {
+        this.refreshList();
+      }
     });
 
     // if (data) {
