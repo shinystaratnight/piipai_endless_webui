@@ -72,8 +72,7 @@ export function getContactAvatar(name): string {
 }
 
 export function isTouchDevice(): boolean {
-  const deviceNamesReg =
-    /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i;
+  const deviceNamesReg = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i;
 
   return deviceNamesReg.test(navigator.userAgent.toLowerCase());
 }
@@ -196,9 +195,9 @@ export function format(str, data) {
     }
 
     if (data) {
-      const shift_started_at = getTimeInstanceByTimezone(
-        data.timezone || data.time_zone
-      )(data.shift_started_at);
+      const shift_started_at = getTimeInstanceByTimezone(data.timezone || data.time_zone)(
+        data.shift_started_at
+      );
 
       switch (key) {
         case 'shift_ended_at': {
@@ -208,8 +207,7 @@ export function format(str, data) {
         }
         case 'break_started_at': {
           data['break_started_at'] =
-            data['break_started_at'] ||
-            shift_started_at.clone().add(4, 'hour').format();
+            data['break_started_at'] || shift_started_at.clone().add(4, 'hour').format();
         }
         case 'break_ended_at': {
           data['break_ended_at'] =
@@ -249,10 +247,7 @@ export function checkAndReturnTranslation(
 ): string {
   const { translations, translation, name, __str__ } = element;
   const translationList =
-    translations ||
-    translation ||
-    (name && typeof name !== 'string' && name.translations) ||
-    [];
+    translations || translation || (name && typeof name !== 'string' && name.translations) || [];
 
   if (!translationList.length) {
     return getDefaultValue(element);
@@ -289,11 +284,7 @@ function getDefaultValue(element: {
   return __str__;
 }
 
-export function setPropValue(
-  key: string,
-  target: { [key: string]: any },
-  value: any
-): void {
+export function setPropValue(key: string, target: { [key: string]: any }, value: any): void {
   const path = key.split('.');
   const prop = path.shift();
 
@@ -319,4 +310,14 @@ export function getFulfilledStatus(
   if (status === 0 && workers.undefined) {
     return 2;
   }
+}
+
+export function getLocalStorageItem(key: string): any | undefined {
+  const value = localStorage.getItem(key);
+
+  if (value !== undefined) {
+    return JSON.parse(value);
+  }
+
+  return undefined;
 }

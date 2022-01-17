@@ -20,6 +20,7 @@
 @import '../node_modules/bootstrap/scss/close';
 
 @import '../node_modules/hamburgers/_sass/hamburgers/hamburgers.scss';
+@import '~@angular/cdk/overlay-prebuilt.css';
 
 @import './base';
 @import './components/index';
@@ -30,3 +31,7 @@
 $fa-font-path: '../../../node_modules/font-awesome/fonts';
 $fa-font-size-base: 12px;
 @import '../node_modules/font-awesome/scss/font-awesome';
+
+.dropdown-backdrop {
+  background-color: transparent;
+}

@@ -1,6 +1,3 @@
-*{ margin: 0; padding: 0; }
-body{  }
-
 .container-fluid{background-color: #fff;}
 .user-registration{width:729px !important;
   font-family: Roboto;
@@ -43,13 +40,13 @@ body{  }
     border: solid 1px #D3DEEA;
 }
 .userDetails{}
-.userDetails span{ 
+.userDetails span{
     display: inline-block;
     width: 50px;
     height: 50px;
     border-radius: 50%;
     text-align: center;
-    padding-top: 10px; 
+    padding-top: 10px;
     background: #EEF6FF;
     color: #2196F3;
 }
@@ -84,15 +81,15 @@ sup{
 .user-registration .input_type_birthday .form-element-content.datepicker .input-group  {
   width: 320px !important;
   max-width: 450px !important;
-} 
+}
 .user-registration .form-group{
     width:48%;
-    
+
     display: flex;
 }
   .user-registration .input_type_last_name, .user-registration .input_type_phone_mobile{
     float:right;
-    
+
     /* border:1px solid red; */
   }
   .user-registration .input_type_email{
@@ -132,17 +129,17 @@ sup{
     position: fixed;
     width: 0;
   }
-  
+
   .user-registration :is(.input_type_title,.input_type_transportation_to_work) .form-element-label{ margin-top:20px;}
-  
-  .input_type_title .form-element-checkbox{    margin-right: 10px !important;}
- 
+
+  .user-registration .input_type_title .form-element-checkbox{    margin-right: 10px !important;}
+
   .user-registration input[type="radio"] {
     opacity: 0;
     position: fixed;
     width: 0;
   }
-  
+
   .user-registration :is(.input_type_title, .input_type_gender, .input_type_transportation_to_work) .form-check-label {
     display: inline-block;
     background-color: #fff;
@@ -153,25 +150,25 @@ sup{
     font-size: 16px;
     border: 1px solid #D3DEEA;
     border-radius: 3px;
- }  
- .user-registration :is(.input_type_title, .input_type_gender, .input_type_transportation_to_work) label:hover { 
+ }
+ .user-registration :is(.input_type_title, .input_type_gender, .input_type_transportation_to_work) label:hover {
   background-color: #64ABF6;
  }
- 
- .user-registration :is(.input_type_title, .input_type_gender, .input_type_transportation_to_work) label.checked { 
+
+ .user-registration :is(.input_type_title, .input_type_gender, .input_type_transportation_to_work) label.checked {
     background-color: #64ABF6;
     border-color: #64ABF6;
     color:#fff;
  }
- .user-registration :is(.input_type_title, .input_type_gender, .input_type_transportation_to_work) .radio-circle { 
-  width: 0px; 
-  margin-right: 0px; 
+ .user-registration :is(.input_type_title, .input_type_gender, .input_type_transportation_to_work) .radio-circle {
+  width: 0px;
+  margin-right: 0px;
   border: 0px solid #D3DEEA;
  }
- .user-registration :is(.input_type_title, .input_type_gender, .input_type_transportation_to_work) .radio-circle .inner { 
+ .user-registration :is(.input_type_title, .input_type_gender, .input_type_transportation_to_work) .radio-circle .inner {
   background-color: transparent;
  }
- .input_type_autocomplete .form-element .autocomplete-value.form-control {
+.user-registration .input_type_autocomplete .form-element .autocomplete-value.form-control {
     padding: 0;
     padding: 20px 10px 16px 0px;
     background-color: #EEF6FF !important;
@@ -179,7 +176,7 @@ sup{
     width: 325px;
     margin-bottom: 10px;
 }
-.input_type_autocomplete{
+.user-registration .input_type_autocomplete{
   display: inline-block;
   margin-bottom: 20px;
 }
@@ -192,20 +189,20 @@ margin-top: 20px;
   width: 202px !important;
     height: 36px;
 }
-.input_type_autocomplete .autocomplete{
+.user-registration .input_type_autocomplete .autocomplete{
   width: 319px;
 }
-.input_type_autocomplete .autocomplete input{
+.user-registration .input_type_autocomplete .autocomplete input{
   width: 290px;
 }
-.input_type_autocomplete .autocomplete-value > div{
+.user-registration .input_type_autocomplete .autocomplete-value > div{
   padding-left:10px;
 }
 .user-registration .input_type_residency{
   float: right;
   margin-top: -79px
 }
-.input_type_residency .form-element select.form-control:not([size]):not([form-element-label]) {
+.user-registration .input_type_residency .form-element select.form-control:not([size]):not([form-element-label]) {
   height: 36px;
   min-height: 22px;
   padding-right: 30px;
@@ -216,7 +213,7 @@ margin-top: 20px;
 .user-registration .input_type_transportation_to_work .form-check-label{
 padding: 6px 11px
 }
-.input_type_transportation_to_work{
+.user-registration .input_type_transportation_to_work{
   margin-bottom: 50px !important;
 }
 .user-registration .input_type_country .form-element .autocomplete-value.form-control {
@@ -253,8 +250,8 @@ padding: 6px 11px
   margin-top: -79px;
 }
 .border-line{
-  border:1px solid #D3DEEA;    
-  margin-top: 20px;    
+  border:1px solid #D3DEEA;
+  margin-top: 20px;
   width: 100%;
   width: 730px;
   margin-left: -17px;
@@ -276,7 +273,7 @@ padding: 6px 11px
   left: 0px;
 }
 .login_here_4 .register-link{
-  
+
 }
 /* Responsive */
 @media only screen and (max-width: 600px)  {
@@ -290,7 +287,7 @@ padding: 6px 11px
     }
     .user-registration .dropzone-wrapper{
       margin-right: 6px !important;
-    } 
+    }
     .dynamic-form {
       margin: 0px !important;
     }
@@ -371,7 +368,7 @@ padding: 6px 11px
     width: 140px;
   }
   .user-registration .btn.btn-default {
-    width: 151px !important;  
+    width: 151px !important;
   }
   .user-registration .form-group.input_type_weight{
     width: 50%;
@@ -388,7 +385,7 @@ padding: 6px 11px
 .user-registration .form-group.input_type_height input{
   width: 150px !important;
   float: right;
-  
+
 }
 .user-registration .mobile-datepicker::before {
   display: none !important;
@@ -421,27 +418,27 @@ padding: 6px 11px
 }
 }
 /* Target Portrait and Landscape */
-@media only screen  and (min-device-width: 768px) 
+@media only screen  and (min-device-width: 768px)
   and (-webkit-min-device-pixel-ratio: 1) {
-    
-    
+
+
 }
 /* ----------- iPhone X ----------- */
 /* Portrait and Landscape */
-@media only screen 
-  and (min-device-width: 375px) 
-  and (max-device-width: 812px) 
-  and (-webkit-min-device-pixel-ratio: 3) { 
+@media only screen
+  and (min-device-width: 375px)
+  and (max-device-width: 812px)
+  and (-webkit-min-device-pixel-ratio: 3) {
     .user-registration .form-element input {
       width: 322px;
   }
 }
 /* ----------- iPhone 6+, 7+ and 8+ ----------- */
 /* Portrait and Landscape */
-@media only screen 
-  and (min-device-width: 414px) 
-  and (max-device-width: 736px) 
-  and (-webkit-min-device-pixel-ratio: 3) { 
+@media only screen
+  and (min-device-width: 414px)
+  and (max-device-width: 736px)
+  and (-webkit-min-device-pixel-ratio: 3) {
     .user-registration .form-element input {
       width: 354px;
     }
@@ -449,10 +446,10 @@ padding: 6px 11px
 /* ----------- iPhone 6, 6S, 7 and 8 ----------- */
 
 /* Portrait and Landscape */
-@media only screen 
-  and (min-device-width: 375px) 
-  and (max-device-width: 667px) 
-  and (-webkit-min-device-pixel-ratio: 2) { 
+@media only screen
+  and (min-device-width: 375px)
+  and (max-device-width: 667px)
+  and (-webkit-min-device-pixel-ratio: 2) {
     .user-registration .form-element input {
       width: 354px;
     }
@@ -461,8 +458,8 @@ padding: 6px 11px
 /* ----------- iPhone 5, 5S, 5C and 5SE ----------- */
 
 /* Portrait and Landscape */
-@media only screen 
-  and (min-device-width: 320px) 
+@media only screen
+  and (min-device-width: 320px)
   and (-webkit-min-device-pixel-ratio: 2) {
     .user-registration .form-element input {
       width: 272px !important;
