@@ -37,7 +37,10 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": ["libs/calendar/tsconfig.lib.json", "libs/calendar/tsconfig.spec.json"],
+            "tsConfig": [
+              "libs/calendar/tsconfig.lib.json",
+              "libs/calendar/tsconfig.spec.json"
+            ],
             "exclude": ["**/node_modules/**", "!libs/calendar/**/*"]
           }
         },
@@ -110,7 +113,10 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": ["libs/core/tsconfig.lib.json", "libs/core/tsconfig.spec.json"],
+            "tsConfig": [
+              "libs/core/tsconfig.lib.json",
+              "libs/core/tsconfig.spec.json"
+            ],
             "exclude": ["**/node_modules/**", "!libs/core/**/*"]
           }
         },
@@ -133,7 +139,10 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": ["libs/dashboard/tsconfig.lib.json", "libs/dashboard/tsconfig.spec.json"],
+            "tsConfig": [
+              "libs/dashboard/tsconfig.lib.json",
+              "libs/dashboard/tsconfig.spec.json"
+            ],
             "exclude": ["**/node_modules/**", "!libs/dashboard/**/*"]
           }
         },
@@ -156,7 +165,10 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": ["libs/data/tsconfig.lib.json", "libs/data/tsconfig.spec.json"],
+            "tsConfig": [
+              "libs/data/tsconfig.lib.json",
+              "libs/data/tsconfig.spec.json"
+            ],
             "exclude": ["**/node_modules/**", "!libs/data/**/*"]
           }
         },
@@ -186,7 +198,10 @@
         "lint": {
           "builder": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["libs/dialog/src/**/*.ts", "libs/dialog/src/**/*.html"]
+            "lintFilePatterns": [
+              "libs/dialog/src/**/*.ts",
+              "libs/dialog/src/**/*.html"
+            ]
           }
         }
       }
@@ -259,7 +274,10 @@
         "lint": {
           "builder": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["libs/icon/src/**/*.ts", "libs/icon/src/**/*.html"]
+            "lintFilePatterns": [
+              "libs/icon/src/**/*.ts",
+              "libs/icon/src/**/*.html"
+            ]
           }
         }
       }
@@ -298,7 +316,10 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": ["libs/metadata/tsconfig.lib.json", "libs/metadata/tsconfig.spec.json"],
+            "tsConfig": [
+              "libs/metadata/tsconfig.lib.json",
+              "libs/metadata/tsconfig.spec.json"
+            ],
             "exclude": ["**/node_modules/**", "!libs/metadata/**/*"]
           }
         },
@@ -331,7 +352,10 @@
             "main": "apps/r3sourcer/src/main.ts",
             "polyfills": "apps/r3sourcer/src/polyfills.ts",
             "tsConfig": "apps/r3sourcer/tsconfig.app.json",
-            "assets": ["apps/r3sourcer/src/assets", "apps/r3sourcer/src/manifest"],
+            "assets": [
+              "apps/r3sourcer/src/assets",
+              "apps/r3sourcer/src/manifest"
+            ],
             "styles": [
               "./node_modules/ngx-bootstrap/datepicker/bs-datepicker.css",
               "node_modules/ngx-toastr/toastr.css",
@@ -436,7 +460,10 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": ["apps/r3sourcer/tsconfig.app.json", "apps/r3sourcer/tsconfig.spec.json"],
+            "tsConfig": [
+              "apps/r3sourcer/tsconfig.app.json",
+              "apps/r3sourcer/tsconfig.spec.json"
+            ],
             "exclude": ["**/node_modules/**", "!apps/r3sourcer/**/*"]
           }
         },
@@ -489,7 +516,10 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": ["libs/shared/tsconfig.lib.json", "libs/shared/tsconfig.spec.json"],
+            "tsConfig": [
+              "libs/shared/tsconfig.lib.json",
+              "libs/shared/tsconfig.spec.json"
+            ],
             "exclude": ["**/node_modules/**", "!libs/shared/**/*"]
           }
         },
@@ -528,6 +558,31 @@
         }
       }
     },
+    "stepper": {
+      "projectType": "library",
+      "root": "libs/stepper",
+      "sourceRoot": "libs/stepper/src",
+      "prefix": "webui",
+      "architect": {
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/stepper"],
+          "options": {
+            "jestConfig": "libs/stepper/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/stepper/src/**/*.ts",
+              "libs/stepper/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
     "ui": {
       "projectType": "library",
       "root": "libs/ui",
@@ -537,7 +592,10 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": ["libs/ui/tsconfig.lib.json", "libs/ui/tsconfig.spec.json"],
+            "tsConfig": [
+              "libs/ui/tsconfig.lib.json",
+              "libs/ui/tsconfig.spec.json"
+            ],
             "exclude": ["**/node_modules/**", "!libs/ui/**/*"]
           }
         },
@@ -566,7 +624,10 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": ["libs/utilities/tsconfig.lib.json", "libs/utilities/tsconfig.spec.json"],
+            "tsConfig": [
+              "libs/utilities/tsconfig.lib.json",
+              "libs/utilities/tsconfig.spec.json"
+            ],
             "exclude": ["**/node_modules/**", "!libs/utilities/**/*"]
           }
         },

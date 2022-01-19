@@ -33,6 +33,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { IconModule } from '@webui/icon';
 import { DialogModule } from '@webui/dialog';
 import { FormControlsModule } from "@webui/form-controls";
+import { StepperModule } from '@webui/stepper';
 
 @NgModule({
   imports: [
@@ -64,7 +65,8 @@ import { FormControlsModule } from "@webui/form-controls";
     NgxDropzoneModule,
     IconModule,
     DialogModule,
-    FormControlsModule
+    FormControlsModule,
+    StepperModule
   ],
   exports: [
     fromComponents.GenericFormComponent,
