@@ -592,6 +592,7 @@
     }
   },
   "cli": {
+    "analytics": "e81ab3fc-eacf-49ad-b0bb-93d06b4d23be",
     "warnings": {
       "typescriptMismatch": false,
       "versionMismatch": false

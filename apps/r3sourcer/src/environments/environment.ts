@@ -8,7 +8,7 @@ export const environment = {
   production: false,
   api: 'http://localhost:4200/api',
   clientId: 'MMtPUqBFwBDo3kVEQl6mzVm6e8h5OHclTsDcraUj',
-  origin: 'https://laviin.r3sourcertest.com'
+  origin: 'https://piiprent.piipai.com'
 };
 
 /*

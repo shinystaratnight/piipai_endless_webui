@@ -33,7 +33,7 @@ export const steps: FormStep[] = [
       'contact.gender',
       'contact.birthday',
       'contact.email',
-      'contact.phone_mobile',
+      'contact.phone_mobile'
       
     ]
   },
@@ -42,6 +42,10 @@ export const steps: FormStep[] = [
     metadata: [],
     content: [
       'contact.address.street_address',
+      "contact.address.city",
+      "contact.address.state",
+      "contact.address.postal_code",
+      "contact.address.country",
       'nationality',
       'residency',
       'tax_file_number',
