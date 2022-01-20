@@ -1,67 +1,88 @@
-.container-fluid{background-color: #fff;}
-.user-registration{width:729px !important;
+* {
+  margin: 0;
+  padding: 0;
+}
+body {
+}
+
+.container-fluid {
+  background-color: #fff;
+}
+.user-registration {
+  width: 729px !important;
   font-family: Roboto;
   font-style: normal;
   font-weight: 400;
   font-size: 16px;
-  margin-top:43.5px;
 }
 .user-registration .form-name {
-	padding-top:22px !important;
-	padding-bottom: 0px !important;
-	font-family: Roboto;
-	font-size: 24px;
-	font-style: normal;
-	font-weight: 500;
-	line-height: 28px;
-	letter-spacing: 0em;
-	text-align: center;
-	color: #2F363D;
+  padding-top: 22px !important;
+  padding-bottom: 0px !important;
+  font-family: Roboto;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 28px;
+  letter-spacing: 0em;
+  text-align: center;
+  color: #2f363d;
 }
-
-.user-registration a{color:#28a3fc !important;}
-.user-registration .form-element .form-element-label{color: #7A7A7A;}
-.user-registration .form-element .form-element-label{padding-bottom: 5px;}
+.user-registration a {
+  color: #28a3fc !important;
+}
+.user-registration .form-element .form-element-label {
+  color: #7a7a7a;
+}
+.user-registration .form-element .form-element-label {
+  padding-bottom: 5px;
+}
 .user-registration .dynamic-form:not(.view-form-mode) .form-element .form-element-label.required::before {
   content: "";
-  color: #51A1F5;
+  color: #51a1f5;
   display: inline-block;
   margin-right: 0.25rem;
-  background: #51A1F5;
-    border-radius: 50%;
-    width: 5px;
-    height: 5px;
+  background: #51a1f5;
+  border-radius: 50%;
+  width: 5px;
+  height: 5px;
 }
 
-#piiprent{ }
-#piiprent section .row .col-6, #piiprent section .row .col-12{ padding-top: 8px; padding-bottom: 8px; }
-#piiprent input, #piiprent select{
-    background: #EEF6FF;
-    border: solid 1px #D3DEEA;
+#piiprent {
 }
-.userDetails{}
-.userDetails span{
-    display: inline-block;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    text-align: center;
-    padding-top: 10px;
-    background: #EEF6FF;
-    color: #2196F3;
+#piiprent section .row .col-6,
+#piiprent section .row .col-12 {
+  padding-top: 8px;
+  padding-bottom: 8px;
 }
-sup{
-    color: #2196F3;
-    font-weight: bold;
+#piiprent input,
+#piiprent select {
+  background: #eef6ff;
+  border: solid 1px #d3deea;
+}
+.userDetails {
+}
+.userDetails span {
+  display: inline-block;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  text-align: center;
+  padding-top: 10px;
+  background: #eef6ff;
+  color: #2196f3;
+}
+sup {
+  color: #2196f3;
+  font-weight: bold;
 }
 .user-registration .form-element input {
-    height: 36px;
-    min-height: 22px;
-    width: 320px;
-    padding-left: 10px;
+  height: 36px;
+  min-height: 22px;
+  width: 320px;
+  padding-left: 10px;
 }
-.user-registration .input_type_birthday{
-  border:0px solid green !important;
+.user-registration .input_type_birthday {
+  border: 0px solid green !important;
 }
 .user-registration .form-element .form-element-label {
   text-transform: uppercase;
@@ -69,140 +90,152 @@ sup{
 .user-registration .input_type_birthday .input-group-addon {
   position: relative;
   margin-top: -35px;
-  margin-left: 278px;
-  background-color: #EEF6FF;
+  /* margin-left: 278px; */
+  background-color: #eef6ff;
   padding: 7px 8px 6px 16px;
   text-align: center;
   vertical-align: middle;
-  border: 1px solid #D3DEEA;
+  border: 1px solid #d3deea;
   border-left: 0px !important;
   z-index: 99999;
+  right: -88%;
 }
-.user-registration .input_type_birthday .form-element-content.datepicker .input-group  {
+.user-registration .input_type_birthday .form-element-content.datepicker .input-group {
   width: 320px !important;
   max-width: 450px !important;
 }
-.user-registration .form-group{
-    width:48%;
+.user-registration .form-group {
+  width: 48%;
 
-    display: flex;
+  display: flex;
 }
-  .user-registration .input_type_last_name, .user-registration .input_type_phone_mobile{
-    float:right;
+.user-registration .input_type_last_name,
+.user-registration .input_type_phone_mobile {
+  float: right;
 
-    /* border:1px solid red; */
-  }
-  .user-registration .input_type_email{
-    display: inline-block;
-    margin-bottom:30px;
-  }
-  .user-registration .btn-primary.btn-lg.rounded-pill{width:210px;}
-  .user-registration .input_type_gender{
-    float:right;
-    margin-top: -70px;
-  }
-  .user-registration .input_type_postal_code{
-    /* float:right;
-    margin-top: -79px;   */
-    position: relative;
-    left: 574px;
-    top: -78px;
-  }
-  .user-registration .input_type_postal_code input{
-    width: 84px;
-    height: 36px;
-  }
-  .user-registration .input_type_country{
- display: inline-block;
- position: absolute;
- margin-top: -60px;
+  /* border:1px solid red; */
 }
-  .user-registration .input_type_first_name{
-    float:left;
-    /* border:1px solid red; */
-  }
-  .user-registration .form-element-content{
-    display: block;
-  }
-  .user-registration input[type="radio"] {
-    opacity: 0;
-    position: fixed;
-    width: 0;
-  }
+.user-registration .input_type_email {
+  display: inline-block;
+  margin-bottom: 30px;
+}
+.user-registration .btn-primary.btn-lg.rounded-pill {
+  width: 210px;
+}
+.user-registration .input_type_gender {
+  float: right;
+  margin-top: -70px;
+}
+.user-registration .input_type_postal_code {
+  /* float:right;
+  margin-top: -79px;   */
+  position: relative;
+  left: 574px;
+  top: -78px;
+}
+.user-registration .input_type_postal_code input {
+  width: 84px !important;
+  height: 36px;
+}
+.user-registration .input_type_country {
+  display: inline-block;
+  position: absolute;
+  margin-top: -60px;
+}
+.user-registration .input_type_first_name {
+  float: left;
+  /* border:1px solid red; */
+}
+.user-registration .form-element-content {
+  display: block;
+}
+.user-registration input[type="radio"] {
+  opacity: 0;
+  position: fixed;
+  width: 0;
+}
 
-  .user-registration :is(.input_type_title,.input_type_transportation_to_work) .form-element-label{ margin-top:20px;}
+.user-registration :is(.input_type_title, .input_type_transportation_to_work) .form-element-label {
+  margin-top: 20px;
+}
 
-  .user-registration .input_type_title .form-element-checkbox{    margin-right: 10px !important;}
+.input_type_title .form-element-checkbox {
+  margin-right: 10px !important;
+}
 
-  .user-registration input[type="radio"] {
-    opacity: 0;
-    position: fixed;
-    width: 0;
-  }
+.user-registration input[type="radio"] {
+  opacity: 0;
+  position: fixed;
+  width: 0;
+}
 
-  .user-registration :is(.input_type_title, .input_type_gender, .input_type_transportation_to_work) .form-check-label {
-    display: inline-block;
-    background-color: #fff;
-    padding: 6px 20px;
-    font-family: Roboto;
-    font-style: normal;
-    font-weight: 400;
-    font-size: 16px;
-    border: 1px solid #D3DEEA;
-    border-radius: 3px;
- }
- .user-registration :is(.input_type_title, .input_type_gender, .input_type_transportation_to_work) label:hover {
-  background-color: #64ABF6;
- }
+.user-registration :is(.input_type_title, .input_type_gender, .input_type_transportation_to_work) .form-check-label {
+  display: inline-block;
+  background-color: #fff;
+  padding: 6px 20px;
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  border: 1px solid #d3deea;
+  border-radius: 3px;
+}
+.user-registration :is(.input_type_title, .input_type_gender, .input_type_transportation_to_work) label:hover {
+  background-color: #64abf6;
+}
 
- .user-registration :is(.input_type_title, .input_type_gender, .input_type_transportation_to_work) label.checked {
-    background-color: #64ABF6;
-    border-color: #64ABF6;
-    color:#fff;
- }
- .user-registration :is(.input_type_title, .input_type_gender, .input_type_transportation_to_work) .radio-circle {
+.user-registration :is(.input_type_title, .input_type_gender, .input_type_transportation_to_work) label.checked {
+  background-color: #64abf6;
+  border-color: #64abf6;
+  color: #fff;
+}
+.user-registration :is(.input_type_title, .input_type_gender, .input_type_transportation_to_work) .radio-circle {
   width: 0px;
   margin-right: 0px;
-  border: 0px solid #D3DEEA;
- }
- .user-registration :is(.input_type_title, .input_type_gender, .input_type_transportation_to_work) .radio-circle .inner {
-  background-color: transparent;
- }
-.user-registration .input_type_autocomplete .form-element .autocomplete-value.form-control {
-    padding: 0;
-    padding: 20px 10px 16px 0px;
-    background-color: #EEF6FF !important;
-    border: solid 1px #D3DEEA;
-    width: 325px;
-    margin-bottom: 10px;
+  border: 0px solid #d3deea;
 }
-.user-registration .input_type_autocomplete{
+.user-registration :is(.input_type_title, .input_type_gender, .input_type_transportation_to_work) .radio-circle .inner {
+  background-color: transparent;
+}
+.input_type_autocomplete .form-element .autocomplete-value.form-control {
+  padding: 0;
+  padding: 20px 10px 16px 0px;
+  background-color: #eef6ff !important;
+  border: solid 1px #d3deea;
+  width: 325px;
+  margin-bottom: 10px;
+  border-radius: 3px;
+}
+.input_type_autocomplete {
   display: inline-block;
   margin-bottom: 20px;
 }
-.input_type_city{float: left;margin-top: 20px;}
-.input_type_state{
-margin-top: 20px;
-    margin-left: 44px;
+.input_type_city {
+  float: left;
+  margin-top: 20px;
 }
-.input_type_state .autocomplete-value{
+.input_type_state {
+  margin-top: 20px;
+  margin-left: 44px;
+}
+.input_type_state .autocomplete-value {
   width: 202px !important;
-    height: 36px;
+  height: 36px;
 }
-.user-registration .input_type_autocomplete .autocomplete{
+.input_type_autocomplete .autocomplete {
   width: 319px;
 }
-.user-registration .input_type_autocomplete .autocomplete input{
+.input_type_autocomplete .autocomplete input {
   width: 290px;
 }
-.user-registration .input_type_autocomplete .autocomplete-value > div{
-  padding-left:10px;
+.input_type_autocomplete .autocomplete-value > div {
+  padding-left: 10px;
 }
-.user-registration .input_type_residency{
+.user-registration .input_type_residency {
   float: right;
-  margin-top: -79px
+  margin-top: -79px;
 }
-.user-registration .input_type_residency .form-element select.form-control:not([size]):not([form-element-label]) {
+.input_type_residency .form-element select.form-control:not([size]):not([form-element-label]) {
   height: 36px;
   min-height: 22px;
   padding-right: 30px;
@@ -210,10 +243,10 @@ margin-top: 20px;
   width: 314px;
   padding-left: 10px;
 }
-.user-registration .input_type_transportation_to_work .form-check-label{
-padding: 6px 11px
+.user-registration .input_type_transportation_to_work .form-check-label {
+  padding: 6px 11px;
 }
-.user-registration .input_type_transportation_to_work{
+.input_type_transportation_to_work {
   margin-bottom: 50px !important;
 }
 .user-registration .input_type_country .form-element .autocomplete-value.form-control {
@@ -221,46 +254,54 @@ padding: 6px 11px
 }
 .btn-back {
   background: #fff;
-  border: 1px solid #28A3FC;
+  border: 1px solid #28a3fc;
   width: 210px;
   margin-right: 20px;
 }
-.user-registration  .input_type_bank_name, .user-registration  .input_type_personal_id {
+.user-registration .input_type_bank_name,
+.user-registration .input_type_personal_id {
   float: right;
   margin-top: 10px;
 }
-.user-registration  .input_type_AccountholdersName, .user-registration .input_type_IBAN{
+.user-registration .input_type_AccountholdersName,
+.user-registration .input_type_IBAN {
   display: inline-block;
   margin-top: 10px;
 }
 .user-registration .btn.btn-default {
   width: 210px !important;
-  border: 1px solid #28A3FC !important;
-  color: #28A3FC !important;
+  border: 1px solid #28a3fc !important;
+  color: #28a3fc !important;
 }
-.user-registration .input_type_skill input, .user-registration .input_type_skill select{
-  padding-left:10px !important;
+.user-registration .input_type_skill input,
+.user-registration .input_type_skill select {
+  padding-left: 10px !important;
 }
-.user-registration .input_type_id{
+.user-registration .input_type_id {
   display: inline-block;
   margin-top: 20px;
 }
-.user-registration .input_type_skill{
+.user-registration .input_type_skill {
   float: right;
   margin-top: -79px;
 }
-.border-line{
-  border:1px solid #D3DEEA;
+.border-line {
+  border: 1px solid #d3deea;
   margin-top: 20px;
-  width: 100%;
-  width: 730px;
-  margin-left: -17px;
+  /* width: 108%; */
+  /* width: 730px; */
+  /* margin-left: -4%; */
+  left: 0;
+  right: 0;
 }
 .border-line_2 {
   margin-top: -84px;
   position: absolute;
 }
-.border-line_3, .border-line_4{display:none;}
+.border-line_3,
+.border-line_4 {
+  display: none;
+}
 .register-button {
   display: flex;
   margin-left: 125px;
@@ -272,196 +313,210 @@ padding: 6px 11px
 .login_here_4 {
   left: 0px;
 }
-.login_here_4 .register-link{
-
+.login_here_4 .register-link {
 }
 /* Responsive */
-@media only screen and (max-width: 600px)  {
-    #piiprent{ max-width: 95%; }
-    .user-registration {
+@media only screen and (max-width: 600px) {
+  #piiprent {
+      max-width: 95%;
+  }
+  .user-registration {
       background-color: fff;
-    }
-    .user-registration .form-group {
+  }
+  .user-registration .form-group {
       width: 100%;
       margin-top: 0px;
-    }
-    .user-registration .dropzone-wrapper{
+  }
+  .user-registration .dropzone-wrapper {
       margin-right: 6px !important;
-    }
-    .dynamic-form {
+  }
+  .dynamic-form {
       margin: 0px !important;
-    }
-    .user-registration  .justify-content-center {
+  }
+  .user-registration .justify-content-center {
       padding-left: 15px;
-    }
-    .user-registration .input_type_title{
-      width:321px;
-    }
-    .user-registration .input_type_gender{
+  }
+  .user-registration .input_type_title {
+      width: 321px;
+  }
+  .user-registration .input_type_gender {
       margin-top: 0px;
-    }
-    .user-registration .border-line{
+  }
+  .user-registration .border-line {
       margin-top: 82px;
-      width: 345px;
-    }
-    .user-registration .step-list{margin-bottom: -1rem;}
-    .user-registration .buttons-wrapper .btn.action {
-      padding: 0.375rem 0.90rem;
-    }
-    .dropzone[_ngcontent-egr-c262] {
+      /* width: 345px; */
+  }
+  .user-registration .step-list {
+      margin-bottom: -1rem;
+  }
+  .user-registration .buttons-wrapper .btn.action {
+      padding: 0.375rem 0.9rem;
+  }
+  .dropzone[_ngcontent-egr-c262] {
       width: 75px;
       height: 75px;
-    }
-    .user-registration .form-element .form-element-label{
+  }
+  .user-registration .form-element .form-element-label {
       text-transform: uppercase !important;
-      color: #7A7A7A !important;
+      color: #7a7a7a !important;
       font-size: 10px !important;
-     }
-     .mobile-device .user-registration .form-element-label {
+  }
+  .mobile-device .user-registration .form-element-label {
       font-size: 10px;
       font-weight: 400;
       text-transform: capitalize !important;
-      color: #7A7A7A !important;
-    }
-    .user-registration .form-element-content .mobile-datepicker::before {
+      color: #7a7a7a !important;
+  }
+  .user-registration .form-element-content .mobile-datepicker::before {
       right: 5px;
-    }
-    .mobile-device .user-registration .form-group {
+  }
+  .mobile-device .user-registration .form-group {
       margin-bottom: 10px;
-    }
-    .user-registration .input_type_last_name{
+  }
+  .user-registration .input_type_last_name {
       margin-top: 10px;
-    }
-    .user-registration .logo{
+  }
+  .user-registration .logo {
       margin: 0px 0px 0px 0px !important;
-    }
-    .user-registration .input_type_gender{
+  }
+  .user-registration .input_type_gender {
       float: none;
-    }
-    .user-registration .input_type_last_name, .user-registration .input_type_phone_mobile {
-       float: left;
+  }
+  .user-registration .input_type_last_name,
+  .user-registration .input_type_phone_mobile {
+      float: left;
       /* border: 1px solid red; */
-     }
-  .input_type_city{
-    float:none;
-    margin-top:0px;
+  }
+  .input_type_city {
+      float: none;
+      margin-top: 0px;
   }
   .input_type_state {
-    margin-top: 0px;
-    margin-left: 0px;
+      margin-top: 0px;
+      margin-left: 0px;
   }
   .user-registration .input_type_postal_code {
-    position: relative;
-    left: 233px;
-    top: -88px;
+      position: relative;
+      left: 233px;
+      top: -88px;
   }
   .input_type_transportation_to_work {
-    margin-bottom: 0px !important;
+      margin-bottom: 0px !important;
   }
-  .input_type_transportation_to_work .form-element-checkbox.mr-4{
-    margin-right: 1rem !important;
+  .input_type_transportation_to_work .form-element-checkbox.mr-4 {
+      margin-right: 1rem !important;
   }
   .user-registration .input_type_autocomplete .form-element .autocomplete-value.form-control {
-    width: 318px;
+      width: 318px;
   }
   .user-registration .btn-primary.btn-lg.rounded-pill {
-    width: 140px;
+      width: 100%;
   }
   .user-registration .btn.btn-default {
-    width: 151px !important;
+      width: 135px !important;
   }
-  .user-registration .form-group.input_type_weight{
-    width: 50%;
-    margin-top: 44px;
-  }
-  .user-registration .form-group.input_type_weight input{
-    width: 150px;
-  }
-.user-registration .form-group.input_type_height{
-  width: 50%;
-  margin-top: -68px;
-  left: 194px;
-}
-.user-registration .form-group.input_type_height input{
-  width: 150px !important;
-  float: right;
 
-}
-.user-registration .mobile-datepicker::before {
-  display: none !important;
-}
-.user-registration .datepicker .fa-calendar{
-  background-color: green;
-}
-.border-line_2 {
-  margin-top: -95px !important;
-  position: absolute;
-}
-.user-registration .form-group {
-  margin-bottom: 1.5rem;
-}
-.user-registration .input_type_skill {
-  margin-top: -79px;
-  float:none !important;
-}
-.register-button {
-  display: flex;
-  margin-left: 0px !important;
-  margin-top: -37px !important;
-}
-.login_here_4 {
-  left: 0px !important;
-}
-.button-container{
-  margin-left: -15px;
-  margin-right: -15px;
-}
+  .user-registration .btn-primary.btn-lg.rounded-pill {
+      width: 135px;
+  }
+
+  .user-registration .form-group.input_type_weight {
+      width: 50%;
+      margin-top: 44px;
+  }
+  .user-registration .form-group.input_type_weight input {
+      width: 150px;
+  }
+  .user-registration .form-group.input_type_height {
+      width: 50%;
+      margin-top: -68px;
+      left: 194px;
+  }
+  .user-registration .form-group.input_type_height input {
+      width: 150px !important;
+      float: right;
+  }
+  .user-registration .mobile-datepicker::before {
+      display: none !important;
+  }
+  .user-registration .datepicker .fa-calendar {
+      background-color: green;
+  }
+  .border-line_2 {
+      margin-top: -95px !important;
+      position: absolute;
+  }
+  .user-registration .form-group {
+      margin-bottom: 1.5rem;
+  }
+  .user-registration .input_type_skill {
+      margin-top: -79px;
+      float: none !important;
+  }
+  .register-button {
+      display: flex;
+      margin-left: 0px !important;
+      margin-top: -37px !important;
+  }
+  .login_here_4 {
+      left: 0px !important;
+  }
+  .button-container {
+      margin-left: -15px;
+      margin-right: -15px;
+  }
 }
 /* Target Portrait and Landscape */
-@media only screen  and (min-device-width: 768px)
-  and (-webkit-min-device-pixel-ratio: 1) {
-
-
+@media only screen and (min-device-width: 768px) and (-webkit-min-device-pixel-ratio: 1) {
 }
 /* ----------- iPhone X ----------- */
 /* Portrait and Landscape */
-@media only screen
-  and (min-device-width: 375px)
-  and (max-device-width: 812px)
-  and (-webkit-min-device-pixel-ratio: 3) {
-    .user-registration .form-element input {
+@media only screen and (min-device-width: 375px) and (max-device-width: 812px) and (-webkit-min-device-pixel-ratio: 3) {
+  .user-registration .form-element input {
       width: 322px;
   }
 }
 /* ----------- iPhone 6+, 7+ and 8+ ----------- */
 /* Portrait and Landscape */
-@media only screen
-  and (min-device-width: 414px)
-  and (max-device-width: 736px)
-  and (-webkit-min-device-pixel-ratio: 3) {
-    .user-registration .form-element input {
+@media only screen and (min-device-width: 414px) and (max-device-width: 736px) and (-webkit-min-device-pixel-ratio: 3) {
+  .user-registration .form-element input {
       width: 354px;
-    }
+  }
 }
 /* ----------- iPhone 6, 6S, 7 and 8 ----------- */
 
 /* Portrait and Landscape */
-@media only screen
-  and (min-device-width: 375px)
-  and (max-device-width: 667px)
-  and (-webkit-min-device-pixel-ratio: 2) {
-    .user-registration .form-element input {
-      width: 354px;
-    }
+@media only screen and (min-device-width: 375px) and (max-device-width: 667px) and (-webkit-min-device-pixel-ratio: 2) {
+  .user-registration .input_type_birthday .form-element-content {
+      width: 100% !important;
+  }
+  .user-registration .form-element {
+      width: 100% !important;
+  }
+  .user-registration .form-element input {
+      width: 100% !important;
+  }
+  .user-registration .input_type_postal_code input {
+      width: 84px !important;
+      height: 36px;
+  }
 }
 
 /* ----------- iPhone 5, 5S, 5C and 5SE ----------- */
 
 /* Portrait and Landscape */
-@media only screen
-  and (min-device-width: 320px)
-  and (-webkit-min-device-pixel-ratio: 2) {
-    .user-registration .form-element input {
-      width: 272px !important;
-    }
+@media only screen and (min-device-width: 320px) and (-webkit-min-device-pixel-ratio: 2) {
+  .user-registration .form-element {
+      width: 100% !important;
+  }
+  .user-registration .form-element input {
+      width: 100% !important;
+  }
+  .user-registration .input_type_birthday .form-element-content {
+      width: 100% !important;
+  }
+  .user-registration .input_type_postal_code input {
+      width: 84px !important;
+      height: 36px;
+  }
 }
