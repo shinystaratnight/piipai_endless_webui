@@ -617,14 +617,16 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
 
     return success.asObservable();
   }
-  updateStepProgressBar(step){ 
-   
+ updateStepProgressBar(step){ 
+
     if(step == 1){
       this.barWidth = 30;
     }else if(step == 2){
       this.barWidth = 65;
     }else if(step == 3){
+
       this.barWidth = 96;
+
     }
   }
 }

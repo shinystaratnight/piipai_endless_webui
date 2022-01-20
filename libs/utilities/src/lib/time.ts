@@ -1,5 +1,6 @@
 import { DateFormat } from '@webui/data';
 import * as moment from 'moment-timezone';
+import { Moment } from 'moment-timezone';
 
 // export const timeZone = 'Australia/Sydney';
 
@@ -20,6 +21,10 @@ export function getTimeInstanceByTimezone(timezone: string) {
   }
 
   return moment.tz.setDefault(timezone);
+}
+
+export function parseDate(date: string, timezone?: string, format?: string): Moment {
+  return moment.tz(date, format, timezone);
 }
 
 export function getLocalTime() {

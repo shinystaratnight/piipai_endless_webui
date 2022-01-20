@@ -23,7 +23,6 @@ export class FormRadioComponent extends BasicElementComponent
 
   getTranslationKey = getTranslationKey;
   isChecked: any;
-
   constructor(private fb: FormBuilder) {
     super();
   }
