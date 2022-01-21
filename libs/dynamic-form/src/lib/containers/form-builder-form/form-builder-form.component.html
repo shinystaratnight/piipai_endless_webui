@@ -6,15 +6,10 @@
     
     <ng-container *ngIf="step$ | async as step">
       <div class="row">
-
         <div class="col-12 text-center form-name" *ngIf="step.position === 1" >{{ 'registration.general_info' | translate }}</div>
-
         <div class="col-12 text-center form-name" *ngIf="step.position === 2" >{{ 'registration.additional_info' | translate }}</div>
-
         <div class="col-12 text-center form-name" *ngIf="step.position === 3" >{{ 'registration.financial_info' | translate }}</div>
-
         <div class="col-12 text-center form-name" *ngIf="step.position === 4" >{{ 'registration.industry_info' | translate }}</div>
-
       </div>
       <div class="row" *ngIf="steps.length > 1">
         <div class="step-container col-12 text-center" >
@@ -59,7 +54,7 @@
           [hiddenFields]="hiddenFields"
         >
         </app-dynamic-form>
-        <div class="border-line " [ngClass]="['border-line_'+step.position]">
+        <div class="row border-line " [ngClass]="['border-line_'+step.position]">
           
         </div>
         <div class="button-container">
