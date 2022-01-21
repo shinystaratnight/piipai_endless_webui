@@ -1,72 +1,48 @@
-<ng-container *ngIf="testData">
-  <div class="test__header">
-    <p class="test__description" *ngIf="testData.description">
-      {{ testData.description }}
-    </p>
+<section *ngIf="testData; else preloader">
+  <header class="header">
+    <h4 class="title">{{ testData.name }}</h4>
 
-    <h4 class="test__name">{{ testData.name }}</h4>
-  </div>
-
-  <div class="test__body">
     <webui-stepper
+      class="stepper"
       [currentStep]="currentQuestion"
       [stepCount]="testData.questions.length"
     ></webui-stepper>
+  </header>
 
-    <ng-container *ngIf="!reload">
-      <p class="test__question">
-        {{ testData.questions[currentQuestion].name }}
-      </p>
-      <p
-        class="test__question-details"
-        *ngIf="testData.questions[currentQuestion].details"
-      >
-        {{ testData.questions[currentQuestion].details }}
-      </p>
+  <div *ngIf="!reload; else preloader" class="content">
+    <p class="description">{{ testData.questions[currentQuestion].name }}</p>
 
-      <div>
-        <div
-          *ngIf="testData.questions[currentQuestion].pictures.length"
-          class="images"
-        >
-          <img
-            class="image"
-            *ngFor="let image of testData.questions[currentQuestion].pictures"
-            [src]="image"
-            alt=""
-          />
-        </div>
+    <p *ngIf="testData.questions[currentQuestion].details">
+      {{ testData.questions[currentQuestion].details }}
+    </p>
 
-        <ng-container
-          appFormElement
-          [config]="testData.questions[currentQuestion].answerMetadata"
-          [group]="testData.questions[currentQuestion].group"
-        >
-        </ng-container>
+    <div class="images" *ngIf="testData.questions[currentQuestion].pictures.length">
+      <img class="image" *ngFor="let image of testData.questions[currentQuestion].pictures" [src]="image" alt="" />
+    </div>
 
-        <ng-container
-          *ngIf="
-            testData.questions[currentQuestion].type === QuestionType.Text &&
-            !skipScore
-          "
-          appFormElement
-          [config]="testData.questions[currentQuestion].scoreMetadata"
-          [group]="testData.questions[currentQuestion].group"
-        >
-        </ng-container>
-      </div>
+    <ng-container
+      appFormElement
+      [config]="testData.questions[currentQuestion].answerMetadata"
+      [group]="testData.questions[currentQuestion].group"
+    >
     </ng-container>
 
-    <div *ngIf="reload" class="spinner">
-      <div class="double-bounce1"></div>
-      <div class="double-bounce2"></div>
-    </div>
+    <ng-container
+      *ngIf="
+        testData.questions[currentQuestion].type === QuestionType.Text &&
+        !skipScore
+      "
+      appFormElement
+      [config]="testData.questions[currentQuestion].scoreMetadata"
+      [group]="testData.questions[currentQuestion].group"
+    >
+    </ng-container>
   </div>
 
-  <div class="test__footer d-flex justify-content-between">
+  <footer class="footer">
     <button
       type="button"
-      class="test__button btn btn-default"
+      class="button-secondary"
       (click)="back()"
       [disabled]="currentQuestion === 0"
     >
@@ -75,7 +51,7 @@
     <button
       *ngIf="currentQuestion + 1 !== testData.questions.length"
       type="button"
-      class="test__button btn btn-primary"
+      class="button-primary"
       (click)="next()"
     >
       Next
@@ -83,15 +59,17 @@
     <button
       *ngIf="currentQuestion + 1 === testData.questions.length"
       type="submit"
-      class="test__button btn btn-success"
+      class="button-primary"
       (click)="sendForm()"
     >
       Submit
     </button>
-  </div>
-</ng-container>
+  </footer>
+</section>
 
-<div *ngIf="!testData" class="spinner">
-  <div class="double-bounce1"></div>
-  <div class="double-bounce2"></div>
-</div>
+<ng-template #preloader>
+  <div class="spinner">
+    <div class="double-bounce1"></div>
+    <div class="double-bounce2"></div>
+  </div>
+</ng-template>

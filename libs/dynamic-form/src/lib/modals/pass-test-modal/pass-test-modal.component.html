@@ -1,7 +1,11 @@
-<!-- <app-close-button
-  class="close mt-3 mr-3"
-  (click)="dismiss()"
-></app-close-button> -->
+<header class="header">
+  <img class="logo" [src]="logo" alt="Logo" />
+
+  <app-close-button
+    class="close close-button"
+    (click)="dismiss()"
+  ></app-close-button>
+</header>
 
 <app-test-generator
   [workflowObject]="config.workflowObject"
