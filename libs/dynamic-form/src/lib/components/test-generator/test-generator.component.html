@@ -1,11 +1,11 @@
-<section *ngIf="testData; else preloader">
+<section *ngIf="testConfig$ | async as test; else preloader">
   <header class="header">
-    <h4 class="title">{{ testData.name }}</h4>
+    <h4 class="title">{{ test.name }}</h4>
   </header>
 
   <div class="content">
     <webui-stepper #cdkStepper>
-      <cdk-step *ngFor="let question of testData.questions">
+      <cdk-step *ngFor="let question of test.questions">
         <p class="description">{{ question.name }}</p>
 
         <p *ngIf="question.details">
@@ -29,50 +29,64 @@
           <webui-form-radio-switch
             *ngSwitchCase="QuestionType.Options"
             formControlName="answer"
-            [options]="question.answerMetadata.options"
+            [options]="question.options"
           ></webui-form-radio-switch>
+
+          <webui-form-radio-switch
+            *ngSwitchCase="QuestionType.YesNo"
+            formControlName="answer"
+            [options]="question.options"
+          ></webui-form-radio-switch>
+
+          <div class="checkboxes" *ngSwitchCase="QuestionType.Checkboxes">
+            <webui-form-checkbox
+              *ngFor="let option of question.options"
+              [formControlName]="option.value"
+              [label]="option.label"
+            ></webui-form-checkbox>
+          </div>
+
+          <div class="text" *ngSwitchCase="QuestionType.Text">
+            <webui-form-textarea
+              formControlName="answer_text"
+              label="answer"
+            ></webui-form-textarea>
+
+            <webui-form-input-control
+              *ngIf="!skipScore"
+              formControlName="score"
+              label="score"
+            ></webui-form-input-control>
+          </div>
         </form>
-
-        <!-- <ng-container
-          appFormElement
-          [config]="question.answerMetadata"
-          [group]="question.group"
-        >
-        </ng-container>
-
-        <ng-container
-          *ngIf="question.type === QuestionType.Text && !skipScore"
-          appFormElement
-          [config]="question.scoreMetadata"
-          [group]="question.group"
-        >
-        </ng-container> -->
 
         <footer class="footer">
           <button
             type="button"
             class="button-secondary"
-            (click)="stepper.previous()"
+            [disabled]="question.first"
+            cdkStepperPrevious
           >
-            Back
+            {{ 'back' | translate }}
           </button>
           <button
+            *ngIf="!question.last"
             type="button"
             class="button-primary"
             [disabled]="question.group.invalid"
-            (click)="stepper.next()"
+            cdkStepperNext
           >
-            Next
+            {{ 'next' | translate }}
           </button>
 
-          <!-- <button
-            *ngIf="currentQuestion + 1 === testData.questions.length"
+          <button
+            *ngIf="question.last"
             type="submit"
             class="button-primary"
-            (click)="sendForm()"
+            (click)="sendForm(test.questions)"
           >
-            Submit
-          </button> -->
+            {{ 'submit' | translate }}
+          </button>
         </footer>
       </cdk-step>
     </webui-stepper>
@@ -80,8 +94,5 @@
 </section>
 
 <ng-template #preloader>
-  <div class="spinner">
-    <div class="double-bounce1"></div>
-    <div class="double-bounce2"></div>
-  </div>
+  <app-loader class="loader"></app-loader>
 </ng-template>

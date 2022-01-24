@@ -2,11 +2,13 @@
 
 :host {
   display: block;
+  text-align: center;
 }
 
 .wrapper {
   position: relative;
-  display: flex;
+  display: inline-flex;
+  width: 100%;
   align-items: center;
   justify-content: space-between;
   color: $secondary-color;
@@ -40,7 +42,7 @@
 
     &.active {
       color: #fff;
-      background-color: #2196F3;
+      background-color: #2196f3;
     }
   }
 }

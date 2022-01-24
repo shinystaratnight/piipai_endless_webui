@@ -1,9 +1,9 @@
-<div class="wrapper">
-  <span
-    class="step"
-    [class.active]="step.active"
-    *ngFor="let step of steps$ | async"
-  >
+<div
+  *ngIf="steps$ | async as steps"
+  class="wrapper"
+  [ngStyle]="{ 'maxWidth.px': steps.length * 48 }"
+>
+  <span class="step" [class.active]="step.active" *ngFor="let step of steps">
     {{ step.label }}
   </span>
 
