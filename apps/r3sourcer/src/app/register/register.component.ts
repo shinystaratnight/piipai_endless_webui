@@ -32,7 +32,6 @@ export class RegisterComponent implements OnInit {
   }
 
   public setFormConfig(config: any): void {
-      console.log('setFormConfig', config);
     this.config = config;
   }
 }
