@@ -3,17 +3,20 @@ import {
   OnInit,
   ChangeDetectionStrategy,
   Input,
-  forwardRef
+  forwardRef,
+  OnDestroy
 } from '@angular/core';
 import {
   ControlValueAccessor,
   FormControl,
   NG_VALUE_ACCESSOR
 } from '@angular/forms';
+import { Observable, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 interface IOption {
   label: string;
-  value: any;
+  value: unknown;
 }
 
 @Component({
@@ -29,36 +32,42 @@ interface IOption {
     }
   ]
 })
-export class FormRadioSwitchComponent implements OnInit, ControlValueAccessor {
+export class FormRadioSwitchComponent
+  implements OnInit, ControlValueAccessor, OnDestroy
+{
+  private destroy: Subject<void> = new Subject();
+
   @Input() options!: IOption[];
 
-  public onChange?: (value: any) => void;
+  public onChange?: (value: unknown) => void;
   public onTouched?: () => void;
-
   public control: FormControl = new FormControl();
+  public destroy$: Observable<void> = this.destroy.asObservable();
 
   public ngOnInit() {
-    console.log(this);
-
-    this.control.valueChanges.subscribe((value) => {
-      console.log(value, this.onChange);
-      if (this.onChange) {
-        console.log(value);
-        this.onChange(value);
-      }
-    });
+    this.control.valueChanges
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((value) => {
+        if (this.onChange) {
+          this.onChange(value);
+        }
+      });
   }
 
-  writeValue(value: any): void {
+  public ngOnDestroy(): void {
+    this.destroy.next();
+    this.destroy.complete();
+  }
+
+  public writeValue(value: unknown): void {
     this.control.patchValue(value);
   }
 
-  registerOnChange(fn: any): void {
-    console.log('register');
+  public registerOnChange(fn: (value: unknown) => void): void {
     this.onChange = fn;
   }
 
-  registerOnTouched(fn: any): void {
+  public registerOnTouched(fn: () => void): void {
     this.onTouched = fn;
   }
 }

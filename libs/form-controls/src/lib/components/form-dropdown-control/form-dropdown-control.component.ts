@@ -8,14 +8,24 @@ import {
   ViewContainerRef,
   ElementRef,
   ChangeDetectorRef,
-  forwardRef
+  forwardRef,
+  OnDestroy
 } from '@angular/core';
 import { Icon, IconSize } from '@webui/icon';
-import { CdkOverlayOrigin, Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
+import {
+  CdkOverlayOrigin,
+  Overlay,
+  OverlayConfig,
+  OverlayRef
+} from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
 import { DropdownService } from '../../services/dropdown.service';
-import { BehaviorSubject, Subject } from 'rxjs';
-import { ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import {
+  ControlValueAccessor,
+  FormControl,
+  NG_VALUE_ACCESSOR
+} from '@angular/forms';
 import {
   debounceTime,
   delay,
@@ -45,34 +55,33 @@ type OptionFilter = (option: DropdownOption) => boolean;
     }
   ]
 })
-export class FormDropdownControlComponent implements OnInit, ControlValueAccessor {
+export class FormDropdownControlComponent
+  implements OnInit, ControlValueAccessor, OnDestroy
+{
+  private value: unknown;
+  private destroy: Subject<void> = new Subject<void>();
+  private overlayRef?: OverlayRef | null;
+  private onChange?: (val: DropdownOption) => void;
+  private onTouched?: () => void;
+
   @Input() label?: string;
   @Input() placeholder?: string;
   @Input() url?: string;
-  @Input() params?: { [key: string]: any } = {};
+  @Input() params?: { [key: string]: unknown } = {};
   @Input() optionFilter?: OptionFilter;
 
   @ViewChild(CdkOverlayOrigin) overlayOrigin?: CdkOverlayOrigin;
-  @ViewChild('content') content?: TemplateRef<any>;
+  @ViewChild('content') content?: TemplateRef<unknown>;
   @ViewChild('input') input?: ElementRef<HTMLInputElement>;
   @ViewChild('scroller') scroller?: CdkVirtualScrollViewport;
 
   public control?: FormControl;
   public Icon = Icon;
   public IconSize = IconSize;
-  public options$: BehaviorSubject<DropdownPayload> = new BehaviorSubject<DropdownPayload>(
+  public options$: BehaviorSubject<DropdownPayload> = new BehaviorSubject(
     DropdownPayload.initialState()
   );
-
-  public get isOpen(): boolean {
-    return !!this.overlayRef?.hasAttached();
-  }
-
-  private value: any;
-  private destroy$: Subject<void> = new Subject<void>();
-  private overlayRef?: OverlayRef | null;
-  private onChange?: (val: DropdownOption) => void;
-  private onTouched?: () => void;
+  public destroy$: Observable<void> = this.destroy.asObservable();
 
   constructor(
     private overlay: Overlay,
@@ -81,8 +90,17 @@ export class FormDropdownControlComponent implements OnInit, ControlValueAccesso
     private cd: ChangeDetectorRef
   ) {}
 
-  ngOnInit(): void {
+  public get isOpen(): boolean {
+    return !!this.overlayRef?.hasAttached();
+  }
+
+  public ngOnInit(): void {
     this.initControl();
+  }
+
+  public ngOnDestroy(): void {
+    this.destroy.next();
+    this.destroy.complete();
   }
 
   public openDropdown(): void {
@@ -100,7 +118,9 @@ export class FormDropdownControlComponent implements OnInit, ControlValueAccesso
     this.options$.next(DropdownPayload.initialState());
 
     if (this.value) {
-      this.control?.patchValue(this.value.label, { emitEvent: false });
+      this.control?.patchValue((this.value as DropdownOption).label, {
+        emitEvent: false
+      });
     }
 
     this.cd.detectChanges();
@@ -150,34 +170,41 @@ export class FormDropdownControlComponent implements OnInit, ControlValueAccesso
       });
   }
 
-  private fetchOptions(search: string = '', existOptions?: DropdownOption[]): void {
+  private fetchOptions(
+    search: string = '',
+    existOptions?: DropdownOption[]
+  ): void {
     if (!this.url || !this.dropdownService.hasMoreItems) {
       return;
     }
 
     if (existOptions) {
-      this.options$.next(DropdownPayload.downloadMoreState(existOptions as DropdownOption[]));
+      this.options$.next(
+        DropdownPayload.downloadMoreState(existOptions as DropdownOption[])
+      );
     }
 
-    this.dropdownService.fetchOptions(this.url, { search, ...this.params }).subscribe(
-      (value: DropdownOption[] | undefined) => {
-        let options: DropdownOption[] = [];
-        if (value) {
-          if (this.optionFilter) {
-            options = value.filter(this.optionFilter);
-          } else {
-            options = [...value];
+    this.dropdownService
+      .fetchOptions(this.url, { search, ...this.params })
+      .subscribe(
+        (value: DropdownOption[] | undefined) => {
+          let options: DropdownOption[] = [];
+          if (value) {
+            if (this.optionFilter) {
+              options = value.filter(this.optionFilter);
+            } else {
+              options = [...value];
+            }
           }
-        }
 
-        if (existOptions) {
-          options = [...existOptions, ...options];
-        }
+          if (existOptions) {
+            options = [...existOptions, ...options];
+          }
 
-        this.options$?.next(DropdownPayload.successState(options));
-      },
-      (error) => this.options$.next(DropdownPayload.errorState(error.error))
-    );
+          this.options$?.next(DropdownPayload.successState(options));
+        },
+        (error) => this.options$.next(DropdownPayload.errorState(error.error))
+      );
   }
 
   private createOverlay() {
@@ -187,7 +214,8 @@ export class FormDropdownControlComponent implements OnInit, ControlValueAccesso
 
     const config = new OverlayConfig({
       disposeOnNavigation: true,
-      width: getComputedStyle(this.overlayOrigin.elementRef.nativeElement).width,
+      width: getComputedStyle(this.overlayOrigin.elementRef.nativeElement)
+        .width,
       maxHeight: '10rem',
       backdropClass: 'form-dropdown-control-backdrop',
       hasBackdrop: true
@@ -210,9 +238,13 @@ export class FormDropdownControlComponent implements OnInit, ControlValueAccesso
     this.control?.patchValue('', { emitEvent: false });
 
     this.overlayRef = this.overlay.create(config);
-    const dropdownContent = new TemplatePortal(this.content, this.viewContainerRef, {
-      payload: this.options$
-    });
+    const dropdownContent = new TemplatePortal(
+      this.content,
+      this.viewContainerRef,
+      {
+        payload: this.options$
+      }
+    );
     this.overlayRef
       .attachments()
       .pipe(delay(200))
@@ -224,15 +256,15 @@ export class FormDropdownControlComponent implements OnInit, ControlValueAccesso
     this.overlayRef.backdropClick().subscribe(() => this.closeDropdown());
   }
 
-  registerOnChange(fn: any): void {
+  public registerOnChange(fn: (val: DropdownOption) => void): void {
     this.onChange = fn;
   }
 
-  registerOnTouched(fn: any): void {
+  public registerOnTouched(fn: () => void): void {
     this.onTouched = fn;
   }
 
-  writeValue(obj: any): void {
+  public writeValue(obj: any): void {
     if (obj) {
       this.value = obj;
       this.control?.patchValue(obj.__str__, { emitEvent: false });

@@ -1,5 +1,5 @@
 <label class="control" cdk-overlay-origin>
-  <span class="control__label">{{label | translate}}</span>
+  <span class="control__label">{{ label | translate }}</span>
   <span class="control__input-wrapper">
     <input
       #input
@@ -24,12 +24,16 @@
       <ul class="list" *ngIf="payload | async as data">
         <ng-container *ngIf="data.results">
           <ng-container *ngIf="data.results.length">
-            <li class="element" *ngFor="let option of data.results" (click)="setValue(option)">
+            <li
+              class="element"
+              *ngFor="let option of data.results"
+              (click)="setValue(option)"
+            >
               {{ option.label }}
             </li>
           </ng-container>
           <li class="element empty" *ngIf="data.results.length === 0">
-            Empty Data
+            {{ 'no_record' | translate }}
           </li>
         </ng-container>
 

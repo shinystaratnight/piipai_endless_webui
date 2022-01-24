@@ -3,9 +3,16 @@ import {
   OnInit,
   ChangeDetectionStrategy,
   forwardRef,
-  Input
+  Input,
+  OnDestroy
 } from '@angular/core';
-import { FormControl, NG_VALUE_ACCESSOR } from '@angular/forms';
+import {
+  ControlValueAccessor,
+  FormControl,
+  NG_VALUE_ACCESSOR
+} from '@angular/forms';
+import { Observable, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'webui-form-checkbox',
@@ -20,20 +27,31 @@ import { FormControl, NG_VALUE_ACCESSOR } from '@angular/forms';
     }
   ]
 })
-export class FormCheckboxComponent implements OnInit {
+export class FormCheckboxComponent
+  implements OnInit, ControlValueAccessor, OnDestroy
+{
+  private destroy: Subject<void> = new Subject();
+
   @Input() label?: string;
 
   public onChange?: (value: boolean) => void;
   public onTouched?: () => void;
-
   public control: FormControl = new FormControl();
+  public destroy$: Observable<void> = this.destroy.asObservable();
 
   public ngOnInit() {
-    this.control.valueChanges.subscribe((value) => {
-      if (this.onChange) {
-        this.onChange(value);
-      }
-    });
+    this.control.valueChanges
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((value) => {
+        if (this.onChange) {
+          this.onChange(value);
+        }
+      });
+  }
+
+  public ngOnDestroy(): void {
+    this.destroy.next();
+    this.destroy.complete();
   }
 
   public writeValue(value: boolean): void {

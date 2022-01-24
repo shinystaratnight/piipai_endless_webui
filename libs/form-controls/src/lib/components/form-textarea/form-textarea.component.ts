@@ -3,9 +3,12 @@ import {
   OnInit,
   ChangeDetectionStrategy,
   Input,
-  forwardRef
+  forwardRef,
+  OnDestroy
 } from '@angular/core';
-import { FormControl, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { Observable, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'webui-form-textarea',
@@ -20,33 +23,41 @@ import { FormControl, NG_VALUE_ACCESSOR } from '@angular/forms';
     }
   ]
 })
-export class FormTextareaComponent implements OnInit {
+export class FormTextareaComponent implements OnInit, OnDestroy, ControlValueAccessor {
+  private destroy: Subject<void> = new Subject();
+
   @Input() label?: string;
   @Input() placeholder?: string;
 
   public onChange?: (value: string) => void;
   public onTouched?: () => void;
-
   public control: FormControl = new FormControl();
+  public destroy$: Observable<void> = this.destroy.asObservable();
 
   public ngOnInit() {
-    this.control.valueChanges.subscribe((value) => {
-      if (this.onChange) {
-        this.onChange(value);
-      }
-    });
+    this.control.valueChanges
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((value) => {
+        if (this.onChange) {
+          this.onChange(value);
+        }
+      });
   }
 
-  writeValue(value: string): void {
+  public ngOnDestroy(): void {
+    this.destroy.next();
+    this.destroy.complete();
+  }
+
+  public writeValue(value: string): void {
     this.control.patchValue(value);
   }
 
-  registerOnChange(fn: (value: string) => void): void {
-    console.log('register');
+  public registerOnChange(fn: (value: string) => void): void {
     this.onChange = fn;
   }
 
-  registerOnTouched(fn: () => void): void {
+  public registerOnTouched(fn: () => void): void {
     this.onTouched = fn;
   }
 }

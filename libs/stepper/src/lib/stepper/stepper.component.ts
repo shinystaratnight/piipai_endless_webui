@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { CdkStepper } from '@angular/cdk/stepper';
 
 @Component({
@@ -8,12 +8,7 @@ import { CdkStepper } from '@angular/cdk/stepper';
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [{ provide: CdkStepper, useExisting: StepperComponent }]
 })
-export class StepperComponent extends CdkStepper implements OnInit {
-
-  ngOnInit() {
-    console.log(this);
-  }
-
+export class StepperComponent extends CdkStepper {
   selectStepByIndex(index: number): void {
     this.selectedIndex = index;
   }
