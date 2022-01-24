@@ -13,6 +13,8 @@ interface IStep {
   active: boolean;
 }
 
+type StepsPayload = Array<IStep>;
+
 @Component({
   selector: 'webui-stepper-indicator',
   templateUrl: './stepper-indicator.component.html',
@@ -20,12 +22,14 @@ interface IStep {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class StepperIndicatorComponent implements OnInit, OnChanges {
-  private steps: BehaviorSubject<IStep[]> = new BehaviorSubject([] as IStep[]);
+  private steps: BehaviorSubject<StepsPayload> = new BehaviorSubject(
+    [] as StepsPayload
+  );
 
   @Input() public currentStep?: number;
   @Input() public stepCount?: number;
 
-  public steps$: Observable<IStep[]> = this.steps.asObservable();
+  public steps$: Observable<StepsPayload> = this.steps.asObservable();
 
   public ngOnInit(): void {
     this.generateSteps();
@@ -52,8 +56,12 @@ export class StepperIndicatorComponent implements OnInit, OnChanges {
   }
 
   private generateSteps(): void {
+    if (!this.stepCount) {
+      return;
+    }
+
     const previousValue = this.steps.value;
-    let nextValue: IStep[] = previousValue;
+    let nextValue: StepsPayload = previousValue;
 
     if (!previousValue.length) {
       nextValue = new Array(this.stepCount).fill('').map((el, index) => ({
