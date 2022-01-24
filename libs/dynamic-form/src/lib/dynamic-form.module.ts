@@ -34,6 +34,7 @@ import { IconModule } from '@webui/icon';
 import { DialogModule } from '@webui/dialog';
 import { FormControlsModule } from "@webui/form-controls";
 import { StepperModule } from '@webui/stepper';
+import { CdkStepperModule } from '@angular/cdk/stepper';
 
 @NgModule({
   imports: [
@@ -66,7 +67,8 @@ import { StepperModule } from '@webui/stepper';
     IconModule,
     DialogModule,
     FormControlsModule,
-    StepperModule
+    StepperModule,
+    CdkStepperModule
   ],
   exports: [
     fromComponents.GenericFormComponent,

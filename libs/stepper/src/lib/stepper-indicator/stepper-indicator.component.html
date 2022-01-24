@@ -1,0 +1,11 @@
+<div class="wrapper">
+  <span
+    class="step"
+    [class.active]="step.active"
+    *ngFor="let step of steps$ | async"
+  >
+    {{ step.label }}
+  </span>
+
+  <div class="line" [ngStyle]="linearGradient"></div>
+</div>

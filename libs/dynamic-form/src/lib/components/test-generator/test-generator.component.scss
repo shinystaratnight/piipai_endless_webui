@@ -30,10 +30,11 @@
 }
 
 .content {
-  padding-top: 28px;
-  padding-left: 12px;
-  padding-right: 12px;
+  padding: 0 0.75rem;
+  // padding-left: 12px;
+  // padding-right: 12px;
   text-align: center;
+  // padding-bottom: 2rem;
 
   .question {
     font-size: 14px;
@@ -50,15 +51,19 @@
   .images {
     display: flex;
     justify-content: center;
-    margin: 0 -8px;
 
     .image {
       height: 120px;
       width: auto;
       object-fit: contain;
-      margin: 0 8px;
     }
   }
+}
+
+.form {
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+  margin-top: 1.5rem;
 }
 
 .footer {
@@ -67,7 +72,9 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 0 7px;
+  margin-top: 2rem;
+  margin-left: -0.75rem;
+  margin-right: -0.75rem;
 
   button {
     width: 100%;

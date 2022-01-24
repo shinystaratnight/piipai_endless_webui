@@ -4,7 +4,8 @@ import {
   DropdownContentComponent,
   FormDatepickerControlComponent,
   FormDropdownControlComponent,
-  FormInputControlComponent
+  FormInputControlComponent,
+  FormRadioSwitchComponent
 } from './components';
 import { TranslateModule } from '@ngx-translate/core';
 import { IconModule } from '@webui/icon';
@@ -25,14 +26,21 @@ import { PlatformModule } from '@angular/cdk/platform';
     IconModule,
     ScrollingModule,
     UiModule,
-    PlatformModule
+    PlatformModule,
+    TranslateModule
   ],
   declarations: [
     FormInputControlComponent,
     FormDropdownControlComponent,
     FormDatepickerControlComponent,
-    DropdownContentComponent
+    DropdownContentComponent,
+    FormRadioSwitchComponent
   ],
-  exports: [FormInputControlComponent, FormDatepickerControlComponent, FormDropdownControlComponent]
+  exports: [
+    FormInputControlComponent,
+    FormDatepickerControlComponent,
+    FormDropdownControlComponent,
+    FormRadioSwitchComponent
+  ]
 })
 export class FormControlsModule {}

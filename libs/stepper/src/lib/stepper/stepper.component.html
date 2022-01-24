@@ -1,11 +1,7 @@
-<div class="wrapper">
-  <span
-    class="step"
-    [class.active]="step.active"
-    *ngFor="let step of steps$ | async"
-  >
-    {{ step.label }}
-  </span>
+<webui-stepper-indicator
+  class="indicator"
+  [currentStep]="selectedIndex"
+  [stepCount]="steps.length"
+></webui-stepper-indicator>
 
-  <div class="line" [ngStyle]="linearGradient"></div>
-</div>
+<div [ngTemplateOutlet]="selected ? selected.content : null"></div>
