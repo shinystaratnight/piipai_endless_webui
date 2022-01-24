@@ -71,7 +71,7 @@
               class="btn btn-secondary align-self-center my-2"
               *ngIf="testData && checkCount(getType(question.config), answers[question.id].length)"
               type="button"
-              (click)="addAnswer(true, answers[question.id], null, question)"
+              (click)="addAnswer(true, answers[question.id], null, question.config)"
             >
               <fa-icon icon="plus"></fa-icon> Answer
             </button>

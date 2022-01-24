@@ -14,8 +14,12 @@ import { Icon, IconSize } from '@webui/icon';
 import { DatepickerType } from '../../enums/datepicker.enum';
 import { DateService } from '@webui/core';
 import { DateFormat } from '@webui/data';
-import { ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { merge, Subject } from 'rxjs';
+import {
+  ControlValueAccessor,
+  FormControl,
+  NG_VALUE_ACCESSOR
+} from '@angular/forms';
+import { merge, Observable, Subject } from 'rxjs';
 import { Platform } from '@angular/cdk/platform';
 import { CdkOverlayOrigin, Overlay } from '@angular/cdk/overlay';
 import { Dropdown } from '../../helpers';
@@ -37,6 +41,11 @@ import { takeUntil } from 'rxjs/operators';
 export class FormDatepickerControlComponent
   implements OnInit, ControlValueAccessor, AfterViewInit, OnDestroy
 {
+  private onChange?: (value: string | undefined | null) => void;
+  private onTouched?: () => void;
+  private timerDropdown!: Dropdown;
+  private destroy: Subject<void> = new Subject<void>();
+
   @Input() label?: string;
   @Input() type?: DatepickerType;
   @Input() initialValue?: string;
@@ -46,7 +55,7 @@ export class FormDatepickerControlComponent
   @Input() timerTo?: string;
 
   @ViewChild(CdkOverlayOrigin) overlayOrigin?: CdkOverlayOrigin;
-  @ViewChild('content') content?: TemplateRef<any>;
+  @ViewChild('content') content?: TemplateRef<unknown>;
 
   public Icon = Icon;
   public IconSize = IconSize;
@@ -57,12 +66,7 @@ export class FormDatepickerControlComponent
   public durationControl = new FormControl('00h 00min');
   public hoursControl = new FormControl('00');
   public minutesControl = new FormControl('00');
-
-  private onChange!: (value: string | undefined | null) => void;
-  private onTouched!: () => void;
-
-  private timerDropdown!: Dropdown;
-  private destroy$: Subject<void> = new Subject<void>();
+  public destroy$: Observable<void> = this.destroy.asObservable();
 
   public get isTimer(): boolean {
     return this.type === DatepickerType.Timer;
@@ -91,15 +95,17 @@ export class FormDatepickerControlComponent
     private viewContainerRef: ViewContainerRef
   ) {}
 
-  public writeValue(value: any): void {
+  public writeValue(value: string): void {
     this.value = value;
   }
 
-  public registerOnChange(fn: any): void {
+  public registerOnChange(
+    fn: (value: string | undefined | null) => void
+  ): void {
     this.onChange = fn;
   }
 
-  public registerOnTouched(fn: any): void {
+  public registerOnTouched(fn: () => void): void {
     this.onTouched = fn;
   }
 
@@ -117,7 +123,8 @@ export class FormDatepickerControlComponent
   }
 
   public ngOnDestroy(): void {
-    this.destroy$.next();
+    this.destroy.next();
+    this.destroy.complete();
   }
 
   public showDurationDropdown(): void {
@@ -151,8 +158,12 @@ export class FormDatepickerControlComponent
 
     const date = this.dateService.parse(this.initialValue, this.timezone);
 
-    this.dateControl.patchValue(date.format('YYYY-MM-DD'), { emitEvent: false });
-    this.timeControl.patchValue(date.format(DateFormat.Time), { emitEvent: false });
+    this.dateControl.patchValue(date.format('YYYY-MM-DD'), {
+      emitEvent: false
+    });
+    this.timeControl.patchValue(date.format(DateFormat.Time), {
+      emitEvent: false
+    });
   }
 
   private parseTimerInitialValue(): void {
@@ -195,7 +206,9 @@ export class FormDatepickerControlComponent
       this.onChange(time);
     } else if (this.isDateTime) {
       const datetime =
-        date && time ? this.dateService.parse(`${date}T${time}`, this.timezone) : undefined;
+        date && time
+          ? this.dateService.parse(`${date}T${time}`, this.timezone)
+          : undefined;
 
       this.onChange(datetime ? datetime.utc().format() : undefined);
     } else if (this.isTimer) {
@@ -212,22 +225,33 @@ export class FormDatepickerControlComponent
   }
 
   private subscribeOnDurationChange() {
-    this.validateDuration(this.hoursControl, (value: number) => this.inRange(value, 0, 24));
-    this.validateDuration(this.minutesControl, (value: number) => this.inRange(value, 0, 59));
+    this.validateDuration(this.hoursControl, (value: number) =>
+      this.inRange(value, 0, 24)
+    );
+    this.validateDuration(this.minutesControl, (value: number) =>
+      this.inRange(value, 0, 59)
+    );
   }
 
-  private validateDuration(control: FormControl, validator: (value: number) => number) {
-    control.valueChanges.pipe(takeUntil(this.destroy$)).subscribe((duration) => {
-      if (!duration) {
-        this.updateDuration();
-        return;
-      }
+  private validateDuration(
+    control: FormControl,
+    validator: (value: number) => number
+  ) {
+    control.valueChanges
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((duration) => {
+        if (!duration) {
+          this.updateDuration();
+          return;
+        }
 
-      const parsedValue = parseInt(duration, 10);
-      const nextValue = isNaN(parsedValue) ? duration.replace(/\D/g, '') : validator(parsedValue);
-      control.patchValue(nextValue, { emitEvent: false });
-      this.updateDuration();
-    });
+        const parsedValue = parseInt(duration, 10);
+        const nextValue = isNaN(parsedValue)
+          ? duration.replace(/\D/g, '')
+          : validator(parsedValue);
+        control.patchValue(nextValue, { emitEvent: false });
+        this.updateDuration();
+      });
   }
 
   private inRange(value: number, from: number, to: number) {

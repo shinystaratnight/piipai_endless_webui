@@ -32,6 +32,7 @@
       "@webui/metadata": ["libs/metadata/src/index.ts"],
       "@webui/shared": ["libs/shared/src/index.ts"],
       "@webui/shared-metadata": ["libs/shared-metadata/src/index.ts"],
+      "@webui/stepper": ["libs/stepper/src/index.ts"],
       "@webui/ui": ["libs/ui/src/index.ts"],
       "@webui/utilities": ["libs/utilities/src/index.ts"]
     }

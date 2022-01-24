@@ -7,7 +7,8 @@ import {
   ViewChild,
   TemplateRef,
   ViewChildren,
-  QueryList
+  QueryList,
+  ChangeDetectionStrategy
 } from '@angular/core';
 
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
@@ -50,7 +51,8 @@ interface IAcceptanceTest {
 @Component({
   selector: 'app-test-builder',
   templateUrl: './test-builder.component.html',
-  styleUrls: ['./test-builder.component.scss']
+  styleUrls: ['./test-builder.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TestBuilderComponent implements OnInit, OnChanges {
   @Input() public testData: IAcceptanceTest;
