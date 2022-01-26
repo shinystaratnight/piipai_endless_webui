@@ -1,5 +1,6 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { SiteSettingsService } from '@webui/core';
 
 export interface PassTestModalConfig {
   send?: boolean;
@@ -19,7 +20,14 @@ export interface PassTestModalConfig {
 export class PassTestModalComponent {
   config: PassTestModalConfig;
 
-  constructor(private modal: NgbActiveModal) {}
+  constructor(
+    private modal: NgbActiveModal,
+    private settings: SiteSettingsService
+  ) {}
+
+  public get logo(): string {
+    return this.settings.settings.logo || '/assets/img/logo.svg';
+  }
 
   close(data: any) {
     this.modal.close(data);

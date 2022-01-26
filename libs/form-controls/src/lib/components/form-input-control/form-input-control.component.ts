@@ -1,4 +1,9 @@
-import { Component, OnInit, ChangeDetectionStrategy, Input, forwardRef } from '@angular/core';
+import {
+  Component,
+  ChangeDetectionStrategy,
+  Input,
+  forwardRef
+} from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
@@ -14,29 +19,25 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
     }
   ]
 })
-export class FormInputControlComponent implements OnInit, ControlValueAccessor {
+export class FormInputControlComponent implements ControlValueAccessor {
   @Input() label?: string;
   @Input() placeholder?: string;
   @Input() type = 'text';
   @Input() prefix?: string;
 
-  public value?: any = '';
-  public onChange?: (value: any) => void;
+  public value?: string = '';
+  public onChange?: (value: string) => void;
   public onTouched?: () => void;
 
-  constructor() {}
-
-  writeValue(value: any): void {
+  public writeValue(value: string): void {
     this.value = value;
   }
 
-  registerOnChange(fn: any): void {
+  public registerOnChange(fn: (value: string) => void): void {
     this.onChange = fn;
   }
 
-  registerOnTouched(fn: any): void {
+  public registerOnTouched(fn: () => void): void {
     this.onTouched = fn;
   }
-
-  ngOnInit(): void {}
 }

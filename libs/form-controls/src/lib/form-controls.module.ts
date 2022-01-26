@@ -2,9 +2,12 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   DropdownContentComponent,
+  FormCheckboxComponent,
   FormDatepickerControlComponent,
   FormDropdownControlComponent,
-  FormInputControlComponent
+  FormInputControlComponent,
+  FormRadioSwitchComponent,
+  FormTextareaComponent
 } from './components';
 import { TranslateModule } from '@ngx-translate/core';
 import { IconModule } from '@webui/icon';
@@ -25,14 +28,25 @@ import { PlatformModule } from '@angular/cdk/platform';
     IconModule,
     ScrollingModule,
     UiModule,
-    PlatformModule
+    PlatformModule,
+    TranslateModule
   ],
   declarations: [
     FormInputControlComponent,
     FormDropdownControlComponent,
     FormDatepickerControlComponent,
-    DropdownContentComponent
+    DropdownContentComponent,
+    FormRadioSwitchComponent,
+    FormCheckboxComponent,
+    FormTextareaComponent
   ],
-  exports: [FormInputControlComponent, FormDatepickerControlComponent, FormDropdownControlComponent]
+  exports: [
+    FormInputControlComponent,
+    FormDatepickerControlComponent,
+    FormDropdownControlComponent,
+    FormRadioSwitchComponent,
+    FormCheckboxComponent,
+    FormTextareaComponent
+  ]
 })
 export class FormControlsModule {}
