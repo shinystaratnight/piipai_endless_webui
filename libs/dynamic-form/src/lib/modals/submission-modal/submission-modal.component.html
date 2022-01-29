@@ -1,4 +1,4 @@
-<webui-dialog [title]="'Worksheet submission'">
+<webui-dialog [title]="'Worksheet submission' | translate">
   <div class="content" dialog-content>
     <section class="details">
       <div class="details__person">
@@ -37,7 +37,7 @@
     <form *ngIf="formGroup" [formGroup]="formGroup" class="form" (ngSubmit)="submitForm()">
       <section class="times">
         <header class="times__header">
-          <h4 class="section-title">{{ 'Time' | translate }}</h4>
+          <h4 class="section-title">{{ 'time' | translate }}</h4>
 
           <span class="total-time">{{ timeSheet.totalTime }}</span>
         </header>
@@ -48,7 +48,7 @@
             [type]="DatepickerType.DateTime"
             [initialValue]="timeSheet.startedAt"
             [timezone]="timeSheet.timezone"
-            [label]="'Start time'"
+            [label]="'start_time' | translate"
           ></webui-form-datepicker-control>
 
           <webui-form-datepicker-control
@@ -56,7 +56,7 @@
             [initialValue]="timeSheet.endedAt"
             [timezone]="timeSheet.timezone"
             [type]="DatepickerType.DateTime"
-            [label]="'End time'"
+            [label]="'end_time' | translate"
           ></webui-form-datepicker-control>
         </div>
 
@@ -67,7 +67,7 @@
             [timerFrom]="timeSheet.breakStartedAt"
             [timerTo]="timeSheet.breakEndedAt"
             [type]="DatepickerType.Timer"
-            [label]="'Break time'"
+            [label]="'break_time' | translate"
           ></webui-form-datepicker-control>
 
           <span>&nbsp;</span>
@@ -76,7 +76,7 @@
 
       <section class="activities">
         <h4 class="section-title">
-          {{ 'Activity' | translate }}
+          {{ 'activity' | translate }}
           <button
             type="button"
             class="plus-button"
@@ -93,7 +93,7 @@
               <webui-form-dropdown-control
                 formControlName="worktype"
                 [url]="activityEndpoint"
-                [label]="'Your activity'"
+                [label]="'your_activity' | translate"
                 [params]="activityParams"
                 [optionFilter]="activityOptionFilter"
               ></webui-form-dropdown-control>
@@ -106,7 +106,7 @@
             <div class="form-row">
               <webui-form-input-control
                 *ngIf="activity.get('value')"
-                [label]="'Amount'"
+                [label]="'amount' | translate"
                 [prefix]="getAmountPrefix(activity)"
                 type="number"
                 formControlName="value"
@@ -126,7 +126,7 @@
           [disabled]="formInvalid || (processing$ | async)"
           type="submit"
         >
-          {{ 'Submit' | translate }}
+          {{ 'submit' | translate }}
 
           <app-spinner *ngIf="processing$ | async"></app-spinner>
         </button>
