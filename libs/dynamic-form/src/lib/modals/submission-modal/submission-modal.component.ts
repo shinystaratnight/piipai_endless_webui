@@ -37,29 +37,29 @@ export class SubmissionModalComponent extends Modal implements OnInit, OnDestroy
     return [
       [
         {
-          label: 'Supervisor',
+          label: 'supervisor.label',
           icon: Icon.Person,
           text: this.timeSheet.candidate.fullName
         },
         {
-          label: 'Company',
+          label: 'company',
           icon: Icon.Company,
           text: this.timeSheet.company.__str__
         },
         {
-          label: 'Shift date',
+          label: 'shift.date.__str__.label',
           icon: Icon.Calendar,
           text: this.timeSheet.shift.__str__
         }
       ],
       [
         {
-          label: 'Jobsite',
+          label: 'jobsite.label',
           icon: Icon.JobSite,
           text: this.timeSheet.jobSite.__str__
         },
         {
-          label: 'Position',
+          label: 'position.label',
           icon: Icon.Position,
           text: this.timeSheet.position.__str__
         }
