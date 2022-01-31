@@ -68,7 +68,7 @@ import {
   ApproveTimesheetModalComponent,
   SubmissionModalComponent,
   SignatureModalComponent,
-  Reason
+  EvaluateCandidateModalComponent
 } from '../../modals';
 import { FilterEvent } from '../../interfaces';
 import { formatCurrency, getCurrencySymbol } from '@angular/common';
@@ -1451,7 +1451,7 @@ export class DynamicListComponent
           this.setAction(e);
           break;
         case 'evaluateCandidate':
-          this.evaluate(e);
+          this.evaluateCandidate(e);
           break;
         case 'sendSMS':
           this.openFrame(e.el.fields);
@@ -1790,6 +1790,18 @@ export class DynamicListComponent
     //   this.modalRef.componentInstance.config = this.modalInfo;
     //   this.handleFormClose(this.modalRef.result);
     // }
+  }
+
+  public evaluateCandidate(e) {
+    const dialogRef = this.dialog.open(EvaluateCandidateModalComponent);
+    dialogRef.componentInstance.data = this.getRowData(e);
+    dialogRef.componentInstance.endpoint = e.el.endpoint;
+    dialogRef.result.then((result: any) => {
+      console.log(result);
+      if (result.status === Status.Success) {
+        this.refreshList();
+      }
+    });
   }
 
   public evaluate(e, data?, refresh = true) {

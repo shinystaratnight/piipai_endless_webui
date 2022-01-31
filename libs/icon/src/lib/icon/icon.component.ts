@@ -28,7 +28,8 @@ export class IconComponent implements OnInit {
   public ngOnInit() {
     this.classes = {
       'size-lg': IconSize.Large === this.size,
-      'size-md': IconSize.Medium === this.size
+      'size-md': IconSize.Medium === this.size,
+      'size-xl': IconSize.ExtraLarge === this.size
     };
   }
 }

@@ -10,10 +10,13 @@ export enum Icon {
   ArrowDown,
   ArrowUp,
   Plus,
-  Delete
+  Delete,
+  Star,
+  StarFilled
 }
 
 export enum IconSize {
   Large,
-  Medium
+  Medium,
+  ExtraLarge
 }

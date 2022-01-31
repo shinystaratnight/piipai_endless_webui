@@ -160,6 +160,10 @@ export class TimeSheet extends ApiModel {
   company: RelatedObject;
   shift: RelatedObject;
   jobSite: RelatedObject;
+  evaluation: {
+    evaluation_score: number;
+    evaluated_at: string;
+  }
 
   constructor(data: any) {
     super(Endpoints.TimesheetCandidate, data.id);
@@ -175,6 +179,7 @@ export class TimeSheet extends ApiModel {
     this.shift = new RelatedObject(data.shift);
     this.jobSite = new RelatedObject(data.jobsite);
     this.status = data.status;
+    this.evaluation = data.evaluation;
   }
 
   get totalTime(): string {
