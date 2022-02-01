@@ -68,7 +68,8 @@ import {
   ApproveTimesheetModalComponent,
   SubmissionModalComponent,
   SignatureModalComponent,
-  EvaluateCandidateModalComponent
+  EvaluateCandidateModalComponent,
+  ApproveWorksheetModalComponent
 } from '../../modals';
 import { FilterEvent } from '../../interfaces';
 import { formatCurrency, getCurrencySymbol } from '@angular/common';
@@ -1718,7 +1719,7 @@ export class DynamicListComponent
     const dialogRef = this.dialog.open(SubmissionModalComponent);
     dialogRef.componentInstance.data = this.getRowData(e);
     dialogRef.result.then((result: any) => {
-      if (result === Status.Success) {
+      if (result.status === Status.Success) {
         this.refreshList();
       }
     });
@@ -1912,196 +1913,206 @@ export class DynamicListComponent
       });
   }
 
+  // TODO: implement change timesheet
   public changeTimesheet(e) {
-    const data = this.getRowData(e);
-    const signature =
-      data.company.supervisor_approved_scheme.includes('SIGNATURE');
+    // const data = this.getRowData(e);
+    // const signature =
+    //   data.company.supervisor_approved_scheme.includes('SIGNATURE');
 
-    if (data) {
-      const contact = data.job_offer.candidate_contact.contact;
-      const score = this.getPropValue(data, 'evaluation.evaluation_score');
+    // if (data) {
+    //   const contact = data.job_offer.candidate_contact.contact;
+    //   const score = this.getPropValue(data, 'evaluation.evaluation_score');
 
-      this.modalInfo = {
-        changeEndpoint: e.el.endpoint,
-        evaluateEndpoint: `${Endpoints.Timesheet}${data.id}/evaluate/`,
-        edit: true,
-        evaluated: data.evaluated,
-        total: this.getTotalTime(data),
-        metadataQuery:
-          isMobile() && getOrientation() !== 90 ? 'type=mobile' : '',
-        signatureStep: false,
-        form: {},
-        supervisor_signature: data.supervisor_signature.origin,
-        label: {
-          avatar: contact.picture,
-          fullName: contact.__str__,
-        },
-        extendData: data,
-        timesheetData: {
-          shift_started_at: createAddAction({
-            value: data.shift_started_at
-          }),
-          break_started_at: createAddAction({
-            value: data.break_started_at
-          }),
-          break_ended_at: createAddAction({
-            value: data.break_ended_at
-          }),
-          shift_ended_at: createAddAction({
-            value: data.shift_ended_at
-          }),
-          noBreak: createAddAction({
-            value: !data.break_started_at && !data.break_ended_at
-          }),
-          company: createAddAction({
-            value: this.format('{company.id}', data)
-          }),
-          time_zone: data.time_zone
-        },
-        changeMetadata: new Subject(),
-        data: {
-          evaluation_score: score
-        },
-        evaluateEvent: this.evaluateEvent.bind(this),
-        sendSignature: this.sendSignature.bind(this)
-      };
+    //   this.modalInfo = {
+    //     changeEndpoint: e.el.endpoint,
+    //     evaluateEndpoint: `${Endpoints.Timesheet}${data.id}/evaluate/`,
+    //     edit: true,
+    //     evaluated: data.evaluated,
+    //     total: this.getTotalTime(data),
+    //     metadataQuery:
+    //       isMobile() && getOrientation() !== 90 ? 'type=mobile' : '',
+    //     signatureStep: false,
+    //     form: {},
+    //     supervisor_signature: data.supervisor_signature.origin,
+    //     label: {
+    //       avatar: contact.picture,
+    //       fullName: contact.__str__,
+    //     },
+    //     extendData: data,
+    //     timesheetData: {
+    //       shift_started_at: createAddAction({
+    //         value: data.shift_started_at
+    //       }),
+    //       break_started_at: createAddAction({
+    //         value: data.break_started_at
+    //       }),
+    //       break_ended_at: createAddAction({
+    //         value: data.break_ended_at
+    //       }),
+    //       shift_ended_at: createAddAction({
+    //         value: data.shift_ended_at
+    //       }),
+    //       noBreak: createAddAction({
+    //         value: !data.break_started_at && !data.break_ended_at
+    //       }),
+    //       company: createAddAction({
+    //         value: this.format('{company.id}', data)
+    //       }),
+    //       time_zone: data.time_zone
+    //     },
+    //     changeMetadata: new Subject(),
+    //     data: {
+    //       evaluation_score: score
+    //     },
+    //     evaluateEvent: this.evaluateEvent.bind(this),
+    //     sendSignature: this.sendSignature.bind(this)
+    //   };
 
-      let windowClass = 'approve-modal';
+    //   let windowClass = 'approve-modal';
 
-      if (signature) {
-        this.modalInfo.signature = {
-          endpoint: `${Endpoints.Timesheet}${data.id}/approve_by_signature/`,
-          value: ''
-        };
+    //   if (signature) {
+    //     this.modalInfo.signature = {
+    //       endpoint: `${Endpoints.Timesheet}${data.id}/approve_by_signature/`,
+    //       value: ''
+    //     };
 
-        windowClass = 'approve-modal change';
-      }
+    //     windowClass = 'approve-modal change';
+    //   }
 
-      window.addEventListener('orientationchange', () => {
-        if (this.modalInfo.changeMetadata) {
-          const orientation = getOrientation();
+    //   window.addEventListener('orientationchange', () => {
+    //     if (this.modalInfo.changeMetadata) {
+    //       const orientation = getOrientation();
 
-          this.modalInfo.metadataQuery =
-            isMobile() && orientation === 90 ? '' : 'type=mobile';
+    //       this.modalInfo.metadataQuery =
+    //         isMobile() && orientation === 90 ? '' : 'type=mobile';
 
-          setTimeout(() => {
-            this.modalInfo.changeMetadata.next(true);
-          }, 100);
-        }
-      });
+    //       setTimeout(() => {
+    //         this.modalInfo.changeMetadata.next(true);
+    //       }, 100);
+    //     }
+    //   });
 
-      this.modalRef = this.modalService.open(ChangeTimesheetModalComponent, {
-        backdrop: 'static',
-        size: 'lg',
-        windowClass
-      });
-      this.modalRef.componentInstance.config = this.modalInfo;
-      this.modalRef.componentInstance.timesheet = data;
-      this.handleFormClose(this.modalRef.result);
-    }
+    //   this.modalRef = this.modalService.open(ChangeTimesheetModalComponent, {
+    //     backdrop: 'static',
+    //     size: 'lg',
+    //     windowClass
+    //   });
+    //   this.modalRef.componentInstance.config = this.modalInfo;
+    //   this.modalRef.componentInstance.timesheet = data;
+    //   this.handleFormClose(this.modalRef.result);
+    // }
   }
 
+  // TODO: implement approve timesheet
   public approveTimesheet(e) {
-    const data = this.getRowData(e);
-    const {
-      shift_started_at,
-      shift_ended_at,
-      break_started_at,
-      break_ended_at
-    } = data;
-    const signature =
-      data.company.supervisor_approved_scheme.includes('SIGNATURE');
-
-    const approveTimesheet = () => {
-      this.genericFormService
-        .editForm(`${Endpoints.Timesheet}${data.id}/approve/`, {
-          shift_started_at,
-          shift_ended_at,
-          break_started_at,
-          break_ended_at,
-          send_candidate_message: false,
-          send_supervisor_message: false,
-          no_break: false
-        })
-        .pipe(
-          catchError((err) => {
-            const message = err.errors.non_field_errors[0];
-            this.toastr.sendMessage(message, MessageType.Error);
-
-            return of(false);
-          })
-        )
-        .subscribe((response) => {
-          if (typeof response === 'boolean') {
-            return;
-          }
-
-          this.refreshList();
-        });
-    };
-
-    if (data) {
-      e.el.endpoint = this.format(this.evaluateEndpoint, data);
-
-      if (signature) {
-        const contact = data.job_offer.candidate_contact.contact;
-        const score = this.getPropValue(data, 'evaluation.evaluation_score');
-        this.modalInfo = {
-          endpoint: `${Endpoints.Timesheet}${data.id}/approve_by_signature/`,
-          evaluateEndpoint: `${Endpoints.Timesheet}${data.id}/evaluate/`,
-          evaluated: data.evaluated,
-          timesheet: {
-            date: this.format('{shift_started_at__date}', data),
-            started_at: this.format('{shift_started_at__time}', data),
-            break: this.format(
-              '{break_started_at__time} - {break_ended_at__time}',
-              data
-            ),
-            ended_at: this.format('{shift_ended_at__time}', data),
-            shift_start_end: this.format(
-              '{shift_started_at__time} - {shift_ended_at__time}',
-              data
-            ),
-            break_start_and: this.format(
-              '{break_started_at__time} - {break_ended_at__time}',
-              data
-            ),
-            unformated_date: data.shift_started_at,
-            total: this.getTotalTime(data)
-          },
-          form: {},
-          signature: {
-            endpoint: `${Endpoints.Timesheet}${data.id}/approve_by_signature/`,
-            value: ''
-          },
-          label: {
-            avatar: contact.picture,
-            fullName: contact.__str__,
-          },
-          data: {
-            evaluation_score: score
-          },
-          signatureStep: true,
-          approve: true,
-          evaluateEvent: this.evaluateEvent.bind(this),
-          sendSignature: this.sendSignature.bind(this)
-        };
-
-        this.modalRef = this.modalService.open(ApproveTimesheetModalComponent, {
-          windowClass: 'approve-modal approve'
-        });
-        this.modalRef.componentInstance.config = this.modalInfo;
-        this.modalRef.componentInstance.timesheet = data;
-        this.handleFormClose(this.modalRef.result);
-      } else if (!data.evaluated) {
-        this.approveEndpoint = `${Endpoints.Timesheet}${data.id}/approve/`;
-        this.evaluate(e, data, false).then(() => {
-          approveTimesheet();
-        });
-      } else {
-        approveTimesheet();
+    const dialogRef = this.dialog.open(ApproveWorksheetModalComponent);
+    dialogRef.componentInstance.data = this.getRowData(e);
+    dialogRef.result.then((result: any) => {
+      if (result.status === Status.Success) {
+        this.refreshList();
       }
-    }
+    });
+
+    // const data = this.getRowData(e);
+    // const {
+    //   shift_started_at,
+    //   shift_ended_at,
+    //   break_started_at,
+    //   break_ended_at
+    // } = data;
+    // const signature =
+    //   data.company.supervisor_approved_scheme.includes('SIGNATURE');
+
+    // const approveTimesheet = () => {
+    //   this.genericFormService
+    //     .editForm(`${Endpoints.Timesheet}${data.id}/approve/`, {
+    //       shift_started_at,
+    //       shift_ended_at,
+    //       break_started_at,
+    //       break_ended_at,
+    //       send_candidate_message: false,
+    //       send_supervisor_message: false,
+    //       no_break: false
+    //     })
+    //     .pipe(
+    //       catchError((err) => {
+    //         const message = err.errors.non_field_errors[0];
+    //         this.toastr.sendMessage(message, MessageType.Error);
+
+    //         return of(false);
+    //       })
+    //     )
+    //     .subscribe((response) => {
+    //       if (typeof response === 'boolean') {
+    //         return;
+    //       }
+
+    //       this.refreshList();
+    //     });
+    // };
+
+    // if (data) {
+    //   e.el.endpoint = this.format(this.evaluateEndpoint, data);
+
+    //   if (signature) {
+    //     const contact = data.job_offer.candidate_contact.contact;
+    //     const score = this.getPropValue(data, 'evaluation.evaluation_score');
+    //     this.modalInfo = {
+    //       endpoint: `${Endpoints.Timesheet}${data.id}/approve_by_signature/`,
+    //       evaluateEndpoint: `${Endpoints.Timesheet}${data.id}/evaluate/`,
+    //       evaluated: data.evaluated,
+    //       timesheet: {
+    //         date: this.format('{shift_started_at__date}', data),
+    //         started_at: this.format('{shift_started_at__time}', data),
+    //         break: this.format(
+    //           '{break_started_at__time} - {break_ended_at__time}',
+    //           data
+    //         ),
+    //         ended_at: this.format('{shift_ended_at__time}', data),
+    //         shift_start_end: this.format(
+    //           '{shift_started_at__time} - {shift_ended_at__time}',
+    //           data
+    //         ),
+    //         break_start_and: this.format(
+    //           '{break_started_at__time} - {break_ended_at__time}',
+    //           data
+    //         ),
+    //         unformated_date: data.shift_started_at,
+    //         total: this.getTotalTime(data)
+    //       },
+    //       form: {},
+    //       signature: {
+    //         endpoint: `${Endpoints.Timesheet}${data.id}/approve_by_signature/`,
+    //         value: ''
+    //       },
+    //       label: {
+    //         avatar: contact.picture,
+    //         fullName: contact.__str__,
+    //       },
+    //       data: {
+    //         evaluation_score: score
+    //       },
+    //       signatureStep: true,
+    //       approve: true,
+    //       evaluateEvent: this.evaluateEvent.bind(this),
+    //       sendSignature: this.sendSignature.bind(this)
+    //     };
+
+    //     this.modalRef = this.modalService.open(ApproveTimesheetModalComponent, {
+    //       windowClass: 'approve-modal approve'
+    //     });
+    //     this.modalRef.componentInstance.config = this.modalInfo;
+    //     this.modalRef.componentInstance.timesheet = data;
+    //     this.handleFormClose(this.modalRef.result);
+    //   } else if (!data.evaluated) {
+    //     this.approveEndpoint = `${Endpoints.Timesheet}${data.id}/approve/`;
+    //     this.evaluate(e, data, false).then(() => {
+    //       approveTimesheet();
+    //     });
+    //   } else {
+    //     approveTimesheet();
+    //   }
+    // }
   }
 
   public getRowData(event): any {

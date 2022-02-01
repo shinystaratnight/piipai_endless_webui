@@ -36,8 +36,6 @@ export class EvaluateCandidateModalComponent extends Modal implements OnInit {
   ngOnInit(): void {
     this.timeSheet = new TimeSheet(this.data);
 
-    console.log(this);
-
     this.formGroup = new FormGroup({
       rating: new FormControl(
         this.timeSheet.evaluation

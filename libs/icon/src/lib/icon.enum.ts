@@ -12,7 +12,8 @@ export enum Icon {
   Plus,
   Delete,
   Star,
-  StarFilled
+  StarFilled,
+  AddPicture
 }
 
 export enum IconSize {

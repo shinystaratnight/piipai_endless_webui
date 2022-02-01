@@ -37,6 +37,7 @@ import { StepperModule } from '@webui/stepper';
 import { CdkStepperModule } from '@angular/cdk/stepper';
 import { TimesheetDetailsPreviewComponent } from './modals/timesheet-details-preview/timesheet-details-preview.component';
 import { RatingModule } from 'libs/rating/src';
+import { ApproveWorksheetModalComponent } from './modals/approve-worksheet-modal/approve-worksheet-modal.component';
 
 @NgModule({
   imports: [
@@ -94,6 +95,7 @@ import { RatingModule } from 'libs/rating/src';
     ...modals,
     ...modalComponents,
     TimesheetDetailsPreviewComponent,
+    ApproveWorksheetModalComponent,
   ],
   providers: [...services],
   entryComponents: [

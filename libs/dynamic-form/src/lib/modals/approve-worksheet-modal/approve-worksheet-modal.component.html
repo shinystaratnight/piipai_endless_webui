@@ -1,0 +1,31 @@
+<webui-dialog [title]="'evaluate.label' | translate">
+  <div class="content" dialog-content>
+    <app-timesheet-details-preview
+      [timeSheet]="workSheet"
+    ></app-timesheet-details-preview>
+
+    <form
+      class="form"
+      *ngIf="formGroup"
+      [formGroup]="formGroup"
+      (ngSubmit)="submit()"
+    >
+
+    <webui-form-image-upload-control
+      formControlName="pictures"
+    ></webui-form-image-upload-control>
+
+      <footer class="footer">
+        <button
+          class="btn submit-btn"
+          [disabled]="formInvalid || (processing$ | async)"
+          type="submit"
+        >
+          {{ 'approve' | translate }}
+
+          <app-spinner *ngIf="processing$ | async"></app-spinner>
+        </button>
+      </footer>
+    </form>
+  </div>
+</webui-dialog>
