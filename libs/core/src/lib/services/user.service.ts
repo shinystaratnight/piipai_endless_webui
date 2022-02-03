@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable, Optional } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { LocalStorageService } from 'ngx-webstorage';
@@ -11,6 +11,9 @@ import { ErrorsService } from './errors.service';
 import { ToastService, MessageType } from './toast.service';
 import { EventService, EventType } from './event.service';
 import { isManager } from '@webui/utilities';
+import { ENV } from '@webui/core';
+
+const defaultCountryCode = 'GB';
 
 @Injectable({
   providedIn: 'root'
@@ -36,6 +39,7 @@ export class UserService {
     private authService: AuthService,
     private errorsService: ErrorsService,
     private eventService: EventService,
+    @Optional() @Inject(ENV) private env: any
   ) {}
 
   public getUserData(): Observable<any> {
@@ -44,31 +48,23 @@ export class UserService {
         map((user: User) => {
           this.user = user;
 
-          if (!user.data.country_code) {
-            user.data.country_code = 'GB';
-          }
-
           user.data.roles = user.data.roles.map((role: Role) => {
-
             return {
               ...role,
               company_id: role.company_contact_rel.company.id,
               client_contact_id: role.company_contact_rel.company_contact.id
             }
           });
+
+          const currentDomainRoles = user.data.roles.filter((role) => {
+            return role.domain === location.host || (this.env.origin ? this.env.origin.replace('https://', '') === role.domain : false);
+          });
+
+          this.checkRoleExist(user.data.contact.contact_type, currentDomainRoles);
+          
+          user.data.country_code = user.data.country_code || defaultCountryCode;
+
           const roles = user.data.roles;
-          if (!user.data.contact.contact_type || !roles.length) {
-            this.authService.logout();
-
-            setTimeout(() => {
-              this.toastService.sendMessage(
-                'User is invalid',
-                MessageType.Error
-              );
-            }, 1000);
-            throw Error('User is invalid');
-          }
-
           const redirectRole: Role = this.authService.role;
           const storageRole: Role = this.storage.retrieve('role');
           const lang: Language = this.storage.retrieve('lang');
@@ -76,15 +72,16 @@ export class UserService {
           let role: Role;
 
           if (storageRole) {
-            role = roles.find(el => el.id === storageRole.id);
+            role = currentDomainRoles.find(el => el.id === storageRole.id);
           } else {
-            role = roles.find(el =>
+            role = currentDomainRoles.find(el =>
               el.__str__.includes(this.user.data.contact.contact_type)
             );
           }
 
           if (redirectRole) {
-            const existRole = roles.find(el => el.id === redirectRole.id);
+            const existRole = currentDomainRoles.find(el => el.id === redirectRole.id);
+
             if (existRole) {
               role = existRole;
             } else {
@@ -93,7 +90,7 @@ export class UserService {
             }
           }
 
-          this.user.currentRole = role || roles[0];
+          this.user.currentRole = role || currentDomainRoles[0];
           this.storage.store('role', this.user.currentRole);
 
           if (!lang && user.data.contact.default_language) {
@@ -109,18 +106,6 @@ export class UserService {
     }
   }
 
-  public setTimezone(): Observable<any> {
-    const timeZone = this.getTimeZone();
-
-    return this.http
-      .post(this.timezoneEndpoint, { user_timezone: timeZone })
-      .pipe(catchError(errors => this.errorsService.handleError(errors)));
-  }
-
-  public getTimeZone() {
-    return Intl.DateTimeFormat().resolvedOptions().timeZone;
-  }
-
   public currentRole(role: Role) {
     this.user.currentRole = role;
     this.storage.store('role', role);
@@ -129,5 +114,20 @@ export class UserService {
 
   public resolve() {
     return this.getUserData();
+  }
+
+  private checkRoleExist(contactType: string, roles: Role[]): void {
+    if (!contactType || !roles.length) {
+      this.authService.logout();
+
+      setTimeout(() => {
+        this.toastService.sendMessage(
+          'User is invalid',
+          MessageType.Error
+        );
+      }, 1000);
+
+      throw Error('User is invalid');
+    }
   }
 }
