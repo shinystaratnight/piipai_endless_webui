@@ -4,7 +4,7 @@ import {
   getTimeInstanceByTimezone,
   parseDate
 } from '@webui/utilities';
-import { Endpoints, Models } from '../enums';
+import { DateFormat, Endpoints, Models } from '../enums';
 import { Model } from './model';
 
 export type Timesheet = {
@@ -234,6 +234,21 @@ export class TimeSheet extends ApiModel {
     }
 
     return this.totalTime !== '0h 0min';
+  }
+
+  get format(): { [key: string]: string } {
+    const timeInstance = getTimeInstanceByTimezone(this.timezone);
+    const startedAt = parseDate(this.startedAt, this.timezone).format(DateFormat.DateTime);
+    const endedAt = this.endedAt ? parseDate(this.endedAt, this.timezone).format(DateFormat.DateTime) : undefined;
+    const breakTime = this.breakStartedAt && this.breakEndedAt 
+      ? timeInstance.duration(parseDate(this.breakEndedAt, this.timezone).diff(parseDate(this.breakStartedAt, this.timezone)))
+      : undefined;
+
+    return {
+      startedAt,
+      endedAt,
+      breakTime: breakTime ? `${Math.floor(breakTime.asHours())}hr ${breakTime.minutes()}min` : '00h 00m'
+    }
   }
 
   public updateBreak(duration: [hours: number, minutes: number] | null): void {

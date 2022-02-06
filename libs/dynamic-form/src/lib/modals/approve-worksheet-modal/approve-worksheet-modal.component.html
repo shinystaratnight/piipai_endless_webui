@@ -11,9 +11,29 @@
       (ngSubmit)="submit()"
     >
 
-    <webui-form-image-upload-control
-      formControlName="pictures"
-    ></webui-form-image-upload-control>
+      <ng-container *ngTemplateOutlet="addButton; context: { label: 'time', onClick: addTime }"></ng-container>
+
+      <ng-container *ngTemplateOutlet="infoTable; context: { config: timeTable }"></ng-container>
+
+      <ng-container *ngTemplateOutlet="addButton; context: { label: 'activity', onClick: addActivity }"></ng-container>
+
+      <ng-container *ngTemplateOutlet="infoTable; context: { config: activityTable }"></ng-container>
+
+      <div class="group">
+        <h4 class="group-title">{{ 'notes.label' | translate }}</h4>
+
+        <webui-form-textarea
+          formControlName="note"
+        ></webui-form-textarea>
+      </div>
+      
+      <div class="group">
+        <h4 class="group-title">{{ 'files.label' | translate }}</h4>
+
+        <webui-form-image-upload-control
+          formControlName="pictures"
+        ></webui-form-image-upload-control>
+      </div>
 
       <footer class="footer">
         <button
@@ -29,3 +49,47 @@
     </form>
   </div>
 </webui-dialog>
+
+
+<ng-template #addButton let-label="label" let-onClick="onClick">
+  <button type="button" class="btn group-title add-button" (click)="onClick()">
+    <span class="add-button-icon">
+      <webui-icon [icon]="Icon.Plus"></webui-icon>
+    </span>
+
+    <span>
+      {{ label | translate }}
+    </span>
+  </button>
+</ng-template>
+
+<ng-template #infoTable let-config="config">
+  <div class="table-wrapper">
+    <table class="table">
+      <thead>
+        <tr>
+          <th [class.last]="last" *ngFor="let label of config.head; let last = last">{{ label | translate }}</th>
+          <th class="actions"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let row of config.rows">
+          <td [class.last]="last" *ngFor="let cell of row.cells; let last = last">
+            <!-- <span class="content"> -->
+              {{ cell.content }}
+            <!-- </span> -->
+          </td>
+          <td class="actions">
+            <button type="button" class="btn text-success">
+              <webui-icon [icon]="Icon.Edit" [size]="IconSize.Medium"></webui-icon>
+            </button>
+  
+            <button type="button" class="btn text-danger">
+              <webui-icon [icon]="Icon.Delete" [size]="IconSize.Medium"></webui-icon>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</ng-template>

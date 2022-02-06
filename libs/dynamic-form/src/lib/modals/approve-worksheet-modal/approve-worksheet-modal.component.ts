@@ -1,7 +1,21 @@
 import { Component, OnInit, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { TimeSheet } from '@webui/data';
+import { Icon, IconSize } from '@webui/icon';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
+
+interface ICell {
+  content: string;
+}
+
+interface IRow {
+  cells: ICell[];
+}
+
+interface ITable {
+  rows: IRow[];
+  head: string[];
+}
 
 @Component({
   selector: 'app-approve-worksheet-modal',
@@ -15,6 +29,8 @@ export class ApproveWorksheetModalComponent implements OnInit, OnDestroy {
   public workSheet: TimeSheet;
   public processing$: BehaviorSubject<boolean> = new BehaviorSubject(false);
   public formGroup?: FormGroup;
+  public Icon = Icon;
+  public IconSize = IconSize;
 
   public get formInvalid(): boolean {
     return this.formGroup.invalid;
@@ -24,6 +40,45 @@ export class ApproveWorksheetModalComponent implements OnInit, OnDestroy {
     return this.destroy.asObservable();
   }
 
+  public get timeTable(): ITable {
+    if (this.workSheet) {
+      return {
+        head: ['start_time', 'end_time', 'break_time'],
+        rows: [
+          {
+            cells: [
+              { content: this.workSheet.format.startedAt },
+              { content: this.workSheet.format.endedAt },
+              { content: this.workSheet.format.breakTime },
+            ]
+          }
+        ]
+      }
+    }
+  }
+
+  public get activityTable(): ITable {
+    if (this.workSheet) {
+      return {
+        head: ['activity', 'amount'],
+        rows: [
+          {
+            cells: [
+              { content: '121'},
+              { content: '122'},
+            ]
+          },
+          {
+            cells: [
+              { content: '121'},
+              { content: '122'},
+            ]
+          }
+        ]
+      }
+    }
+  }
+
   constructor() { }
 
    public ngOnInit(): void {
@@ -31,6 +86,7 @@ export class ApproveWorksheetModalComponent implements OnInit, OnDestroy {
 
     this.formGroup = new FormGroup({
       pictures: new FormControl(''),
+      note: new FormControl('')
     });
   }
 
@@ -40,6 +96,14 @@ export class ApproveWorksheetModalComponent implements OnInit, OnDestroy {
   }
 
   public submit() {
+
+  }
+
+  public addTime(): void {
+
+  }
+
+  public addActivity(): void {
 
   }
 

@@ -9,8 +9,21 @@
   display: flex;
   flex-direction: column;
   padding: 20px 12px 0;
-  align-items: center;
-  justify-content: center;
+}
+
+.group {
+  margin-top: 20px;
+  padding-left: 18px;
+  padding-right: 18px;
+
+  &-title {
+    font-weight: 500;
+    font-family: Roboto, sans-serif;
+    font-size: 16px;
+    line-height: 19px;
+    color: $brand-dark-color;
+    margin-bottom: 15px;
+  }
 }
 
 .footer {
@@ -49,4 +62,92 @@
 
 button {
   cursor: pointer;
+}
+
+.add-button {
+  width: auto;
+  align-self: flex-start;
+  margin-left: 6px;
+  margin-bottom: 0;
+
+  &-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+    background-color: $brand-color;
+    border-radius: 50%;
+    color: #fff;
+    margin-right: 20px;
+  }
+}
+
+.table {
+  margin-top: 15px;
+
+  &-wrapper {
+    @include media-breakpoint-up('md') {
+      margin-left: 18px;
+      margin-right: 18px; 
+    }
+  }
+
+  th {
+    font-size: 10px;
+    line-height: 12px;
+    font-family: Roboto, sans-serif;
+    text-transform: uppercase;
+    color: $secondary-color;
+    font-weight: 400;
+    border-top: 0;
+
+    @include media-breakpoint-up('md') {
+      font-size: 12px;
+      line-height: 14px;
+    }
+  }
+
+  td {
+    font-size: 14px;
+    font-family: Roboto, sans-serif;
+    color: $content-color;
+    vertical-align: middle;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    border-top: 0;
+    border-bottom: 1px solid $border-color;
+
+    &.last {
+      width: 25%;
+
+      @include media-breakpoint-up('md') {
+        width: 180px;
+      }  
+    }
+
+    @include media-breakpoint-up('md') {
+      font-size: 16px;
+      line-height: 19px;
+    }
+
+    .content {
+      display: inline-block;
+      max-width: 100%;
+      overflow: hidden;
+    }
+  }
+
+  .actions {
+    width: 84px;
+
+    button {
+      padding: 0;
+
+      &:not(:last-child) {
+        margin-right: 15px;
+      }
+    }
+  }
 }
