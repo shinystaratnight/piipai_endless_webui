@@ -174,7 +174,7 @@ export class FormDatepickerControlComponent
     const from = this.dateService.parse(this.timerFrom, this.timezone);
     const to = this.dateService.parse(this.timerTo, this.timezone);
     const hours = to.diff(from, 'hours');
-    const minutes = to.diff(from, 'minutes');
+    const minutes = to.clone().add(-hours, 'hours').diff(from, 'minutes');
 
     this.durationControl.patchValue(`${hours}h ${minutes}min`);
     this.hoursControl.patchValue(hours);

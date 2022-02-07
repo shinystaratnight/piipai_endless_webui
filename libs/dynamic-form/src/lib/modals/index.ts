@@ -11,6 +11,7 @@ import { SignatureModalComponent } from './signature-modal/signature-modal.compo
 import { EvaluateCandidateModalComponent } from './evaluate-candidate-modal/evaluate-candidate-modal.component';
 import { TimesheetDetailsPreviewComponent } from './timesheet-details-preview/timesheet-details-preview.component';
 import { ApproveWorksheetModalComponent } from './approve-worksheet-modal/approve-worksheet-modal.component';
+import { EntityListComponent } from './approve-worksheet-modal/entity-list/entity-list.component';
 
 export * from './base-modal/base-modal.component';
 export * from './pass-test-modal/pass-test-modal.component';
@@ -38,7 +39,10 @@ export const modals = [
   SignatureModalComponent,
   EvaluateCandidateModalComponent,
   TimesheetDetailsPreviewComponent,
-  ApproveWorksheetModalComponent
+  ApproveWorksheetModalComponent,
+  TimesheetDetailsPreviewComponent,
+  ApproveWorksheetModalComponent,
+  EntityListComponent
 ];
 
 export const components = [EvaluateFieldComponent];

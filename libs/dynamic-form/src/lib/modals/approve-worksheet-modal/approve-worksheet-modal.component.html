@@ -1,7 +1,7 @@
 <webui-dialog [title]="'evaluate.label' | translate">
   <div class="content" dialog-content>
     <app-timesheet-details-preview
-      [timeSheet]="workSheet"
+      [timeSheet]="timeSheet"
     ></app-timesheet-details-preview>
 
     <form
@@ -10,30 +10,125 @@
       [formGroup]="formGroup"
       (ngSubmit)="submit()"
     >
+      <section class="section">
+        <header class="header">
+          <button
+            type="button"
+            class="btn header-button"
+            [hidden]="timeViewType$ | async"
+            (click)="addTime()"
+          >
+            <webui-icon [icon]="Icon.Plus"></webui-icon>
+          </button>
 
-      <ng-container *ngTemplateOutlet="addButton; context: { label: 'time', onClick: addTime }"></ng-container>
+          <h4 class="section-title">{{ 'time' | translate }}</h4>
 
-      <ng-container *ngTemplateOutlet="infoTable; context: { config: timeTable }"></ng-container>
+          <span *ngIf="timeViewType$ | async" class="total-time">{{
+            timeSheet.totalTime
+          }}</span>
+        </header>
 
-      <ng-container *ngTemplateOutlet="addButton; context: { label: 'activity', onClick: addActivity }"></ng-container>
+        <ng-container *ngIf="timeViewType$ | async as type">
+          <div [formGroup]="formGroup.get('times')" *ngIf="type === 'form'">
+            <div class="form-row">
+              <webui-form-datepicker-control
+                formControlName="shiftStartedAt"
+                [type]="DatepickerType.DateTime"
+                [initialValue]="timeSheet.startedAt"
+                [timezone]="timeSheet.timezone"
+                [label]="'start_time' | translate"
+              ></webui-form-datepicker-control>
 
-      <ng-container *ngTemplateOutlet="infoTable; context: { config: activityTable }"></ng-container>
+              <webui-form-datepicker-control
+                formControlName="shiftEndedAt"
+                [initialValue]="timeSheet.endedAt"
+                [timezone]="timeSheet.timezone"
+                [type]="DatepickerType.DateTime"
+                [label]="'end_time' | translate"
+              ></webui-form-datepicker-control>
+            </div>
 
-      <div class="group">
-        <h4 class="group-title">{{ 'notes.label' | translate }}</h4>
+            <div class="form-row">
+              <webui-form-datepicker-control
+                formControlName="break"
+                [initialValue]="timeSheet.startedAt"
+                [timerFrom]="timeSheet.breakStartedAt"
+                [timerTo]="timeSheet.breakEndedAt"
+                [type]="DatepickerType.Timer"
+                [label]="'break_time' | translate"
+              ></webui-form-datepicker-control>
 
-        <webui-form-textarea
-          formControlName="note"
-        ></webui-form-textarea>
-      </div>
-      
-      <div class="group">
-        <h4 class="group-title">{{ 'files.label' | translate }}</h4>
+              <span>&nbsp;</span>
+            </div>
+
+            <footer class="footer footer--form">
+              <button
+                class="type"
+                class="btn cancel"
+                (click)="cancelTimeEditing()"
+              >
+                {{ 'cancel' | translate }}
+              </button>
+
+              <button
+                class="btn submit-btn submit-btn--success"
+                type="button"
+                [disabled]="timeInvalid"
+                (click)="saveTime()"
+              >
+                {{ 'save' | translate }}
+              </button>
+            </footer>
+          </div>
+
+          <app-entity-list
+            *ngIf="type == 'list'"
+            [config]="timeTable"
+            (edit)="editTime()"
+            (delete)="deleteTime()"
+          ></app-entity-list>
+        </ng-container>
+      </section>
+
+      <section class="section">
+        <header class="header">
+          <button
+            type="button"
+            class="btn header-button"
+            [hidden]="activityViewType$ | async"
+            (click)="addActivity()"
+          >
+            <webui-icon [icon]="Icon.Plus"></webui-icon>
+          </button>
+
+          <h4 class="section-title">{{ 'activity' | translate }}</h4>
+        </header>
+
+        <ng-container *ngIf="activityViewType$ | async as type">
+          <app-entity-list
+            *ngIf="type == 'list'"
+            [config]="activityTable"
+          ></app-entity-list>
+        </ng-container>
+      </section>
+
+      <section class="section">
+        <header class="header">
+          <h4 class="section-title">{{ 'notes.label' | translate }}</h4>
+        </header>
+
+        <webui-form-textarea formControlName="note"></webui-form-textarea>
+      </section>
+
+      <section class="section">
+        <header>
+          <h4 class="section-title">{{ 'files.label' | translate }}</h4>
+        </header>
 
         <webui-form-image-upload-control
           formControlName="pictures"
         ></webui-form-image-upload-control>
-      </div>
+      </section>
 
       <footer class="footer">
         <button
@@ -49,47 +144,3 @@
     </form>
   </div>
 </webui-dialog>
-
-
-<ng-template #addButton let-label="label" let-onClick="onClick">
-  <button type="button" class="btn group-title add-button" (click)="onClick()">
-    <span class="add-button-icon">
-      <webui-icon [icon]="Icon.Plus"></webui-icon>
-    </span>
-
-    <span>
-      {{ label | translate }}
-    </span>
-  </button>
-</ng-template>
-
-<ng-template #infoTable let-config="config">
-  <div class="table-wrapper">
-    <table class="table">
-      <thead>
-        <tr>
-          <th [class.last]="last" *ngFor="let label of config.head; let last = last">{{ label | translate }}</th>
-          <th class="actions"></th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let row of config.rows">
-          <td [class.last]="last" *ngFor="let cell of row.cells; let last = last">
-            <!-- <span class="content"> -->
-              {{ cell.content }}
-            <!-- </span> -->
-          </td>
-          <td class="actions">
-            <button type="button" class="btn text-success">
-              <webui-icon [icon]="Icon.Edit" [size]="IconSize.Medium"></webui-icon>
-            </button>
-  
-            <button type="button" class="btn text-danger">
-              <webui-icon [icon]="Icon.Delete" [size]="IconSize.Medium"></webui-icon>
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-</ng-template>
