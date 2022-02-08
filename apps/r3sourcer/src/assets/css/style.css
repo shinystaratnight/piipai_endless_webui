@@ -197,7 +197,7 @@ sup {
 .user-registration :is(.input_type_title, .input_type_gender, .input_type_transportation_to_work) .radio-circle .inner {
     background-color: transparent;
 }
-.input_type_autocomplete .form-element .autocomplete-value.form-control {
+.user-registration .input_type_autocomplete .form-element .autocomplete-value.form-control {
     padding: 0;
     padding: 20px 10px 16px 0px;
     background-color: #eef6ff !important;
@@ -206,36 +206,36 @@ sup {
     margin-bottom: 10px;
     border-radius: 3px;
 }
-.input_type_autocomplete {
+.user-registration .input_type_autocomplete {
     display: inline-block;
     margin-bottom: 20px;
 }
-.input_type_city {
+.user-registration .input_type_city {
     float: left;
     margin-top: 20px;
 }
-.input_type_state {
+.user-registration .input_type_state {
     margin-top: 20px;
     margin-left: 44px;
 }
-.input_type_state .autocomplete-value {
+.user-registration .input_type_state .autocomplete-value {
     width: 202px !important;
     height: 36px;
 }
-.input_type_autocomplete .autocomplete {
+.user-registration .input_type_autocomplete .autocomplete {
     width: 319px;
 }
-.input_type_autocomplete .autocomplete input {
+.user-registration .input_type_autocomplete .autocomplete input {
     width: 290px;
 }
-.input_type_autocomplete .autocomplete-value > div {
+.user-registration .input_type_autocomplete .autocomplete-value > div {
     padding-left: 10px;
 }
 .user-registration .input_type_residency {
     float: right;
     margin-top: -79px;
 }
-.input_type_residency .form-element select.form-control:not([size]):not([form-element-label]) {
+.user-registration .input_type_residency .form-element select.form-control:not([size]):not([form-element-label]) {
     height: 36px;
     min-height: 22px;
     padding-right: 30px;
@@ -246,7 +246,7 @@ sup {
 .user-registration .input_type_transportation_to_work .form-check-label {
     padding: 6px 11px;
 }
-.input_type_transportation_to_work {
+.user-registration .input_type_transportation_to_work {
     margin-bottom: 50px !important;
 }
 .user-registration .input_type_country .form-element .autocomplete-value.form-control {
