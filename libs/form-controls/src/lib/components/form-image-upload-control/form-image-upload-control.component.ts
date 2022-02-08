@@ -23,7 +23,7 @@ export class FormImageUploadControlComponent implements OnInit, OnDestroy, Contr
   private pictures: BehaviorSubject<File[]> = new BehaviorSubject([] as File[]);
 
   public pictures$ = this.pictures.asObservable();
-  public onChange?: (value: string) => void;
+  public onChange?: (value: unknown[]) => void;
   public onTouched?: () => void;
   public Icon = Icon;
   public IconSize = IconSize;
@@ -55,7 +55,7 @@ export class FormImageUploadControlComponent implements OnInit, OnDestroy, Contr
     this.control.patchValue(value);
   }
 
-  public registerOnChange(fn: (value: string) => void): void {
+  public registerOnChange(fn: (value: unknown[]) => void): void {
     this.onChange = fn;
   }
 
@@ -70,6 +70,9 @@ export class FormImageUploadControlComponent implements OnInit, OnDestroy, Contr
     pictures.push(...event.addedFiles);
 
     this.pictures.next([...pictures]);
+    if (this.onChange) {
+      this.onChange(this.pictures.value);
+    }
   }
 
   public onRemove(event: File) {

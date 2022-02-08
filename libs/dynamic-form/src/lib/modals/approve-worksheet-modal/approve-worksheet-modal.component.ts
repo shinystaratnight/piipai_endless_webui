@@ -1,16 +1,14 @@
-import {
-  Component,
-  OnInit,
-  ChangeDetectionStrategy,
-  OnDestroy
-} from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Endpoints, TimeSheet, TimesheetRate } from '@webui/data';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { UserService } from '@webui/core';
+import { Endpoints, ENoteContentType, INote, Note, TimeSheet, TimesheetRate } from '@webui/data';
 import { DatepickerType, DropdownOption } from '@webui/form-controls';
 import { Icon, IconSize } from '@webui/icon';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { BehaviorSubject, forkJoin, Observable, of, Subject } from 'rxjs';
+import { finalize, switchMap, takeUntil } from 'rxjs/operators';
 import { GenericFormService } from '../../services';
+import { Modal, Status } from '../modal/modal.component';
 import { ITable } from './entity-list/entity-list.component';
 
 type ViewType = 'list' | 'form' | undefined;
@@ -25,17 +23,12 @@ const isHourlyWork = (name: string): boolean => {
   styleUrls: ['./approve-worksheet-modal.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ApproveWorksheetModalComponent implements OnInit, OnDestroy {
+export class ApproveWorksheetModalComponent extends Modal implements OnInit, OnDestroy {
   private destroy: Subject<void> = new Subject<void>();
   private hasTimeForm: BehaviorSubject<boolean> = new BehaviorSubject(false);
-  private timeViewType: BehaviorSubject<ViewType> = new BehaviorSubject(
-    undefined
-  );
-  private activityViewType: BehaviorSubject<ViewType> = new BehaviorSubject(
-    undefined
-  );
-  private activities: BehaviorSubject<TimesheetRate[] | null> =
-    new BehaviorSubject(null);
+  private timeViewType: BehaviorSubject<ViewType> = new BehaviorSubject(undefined);
+  private activityViewType: BehaviorSubject<ViewType> = new BehaviorSubject(undefined);
+  private activities: BehaviorSubject<TimesheetRate[] | null> = new BehaviorSubject(null);
   private removedActivities: TimesheetRate[] = [];
   private editingActivity: TimesheetRate | null;
 
@@ -101,20 +94,26 @@ export class ApproveWorksheetModalComponent implements OnInit, OnDestroy {
         rows: activities.map((activity) => {
           return {
             entity: activity,
-            cells: [
-              { content: activity.worktype.__str__ },
-              { content: activity.value + '' }
-            ]
+            cells: [{ content: activity.worktype.__str__ }, { content: activity.value + '' }]
           };
         })
       };
     }
   }
 
-  constructor(private apiService: GenericFormService) {}
+  constructor(
+    private apiService: GenericFormService,
+    private userService: UserService,
+    modal: NgbActiveModal
+  ) {
+    super(modal);
+  }
 
   public ngOnInit(): void {
-    this.timeSheet = new TimeSheet(this.data);
+    this.timeSheet = new TimeSheet({
+      endpoint: Endpoints.Timesheet,
+      ...this.data
+    });
 
     if (this.timeSheet.endedAt) {
       this.timeViewType.next('list');
@@ -134,8 +133,6 @@ export class ApproveWorksheetModalComponent implements OnInit, OnDestroy {
     this.destroy.complete();
   }
 
-  public submit() {}
-
   public addTime(): void {
     this.formGroup.addControl('times', this.initTimeForm(this.timeSheet));
     this.timeViewType.next('form');
@@ -154,10 +151,7 @@ export class ApproveWorksheetModalComponent implements OnInit, OnDestroy {
   }
 
   public addActivity(): void {
-    this.formGroup.addControl(
-      'activity',
-      this.getActivityForm(undefined, this.timeSheet.id)
-    );
+    this.formGroup.addControl('activity', this.getActivityForm(undefined, this.timeSheet.id));
 
     this.activityViewType.next('form');
   }
@@ -192,16 +186,12 @@ export class ApproveWorksheetModalComponent implements OnInit, OnDestroy {
   }
 
   public cancelActivityEditing() {
-    this.activityViewType.next(
-      this.activities.value.length ? 'list' : undefined
-    );
+    this.activityViewType.next(this.activities.value.length ? 'list' : undefined);
     this.formGroup.removeControl('activity');
   }
 
   public getAmountPrefix(): string {
-    const worktype: DropdownOption = this.formGroup
-      .get('activity')
-      .get('worktype').value;
+    const worktype: DropdownOption = this.formGroup.get('activity').get('worktype').value;
 
     if (worktype instanceof DropdownOption) {
       if (worktype.getField('uom')) {
@@ -218,22 +208,15 @@ export class ApproveWorksheetModalComponent implements OnInit, OnDestroy {
 
   public editAvtivity(row: { entity: TimesheetRate }): void {
     const activity = this.activities.value.find((el) => el === row.entity);
-    this.formGroup.addControl(
-      'activity',
-      this.getActivityForm(activity, this.timeSheet.id)
-    );
+    this.formGroup.addControl('activity', this.getActivityForm(activity, this.timeSheet.id));
     this.editingActivity = activity;
 
     this.activityViewType.next('form');
   }
 
   public deleteActivity(row: { entity: TimesheetRate }) {
-    const activity = this.activities.value.find(
-      (activity) => activity === row.entity
-    );
-    const newActivities = this.activities.value.filter(
-      (activity) => activity !== row.entity
-    );
+    const activity = this.activities.value.find((activity) => activity === row.entity);
+    const newActivities = this.activities.value.filter((activity) => activity !== row.entity);
     this.activities.next(newActivities);
 
     if (!newActivities.length) {
@@ -245,6 +228,74 @@ export class ApproveWorksheetModalComponent implements OnInit, OnDestroy {
     }
 
     this.removedActivities.push(activity);
+  }
+
+  public submitForm(): void {
+    const formValue = this.formGroup.value;
+
+    const creationRequests = this.activities.value.map((activity) => {
+      const timesheetRate = new TimesheetRate(activity);
+
+      return timesheetRate.id
+        ? this.apiService.updateForm(timesheetRate.editApiEndpoint, timesheetRate.requestBody)
+        : this.apiService.submitForm(timesheetRate.apiEndpoint, timesheetRate.requestBody);
+    });
+
+    creationRequests.push(
+      ...this.removedActivities.map((activity) =>
+        this.apiService.delete(activity.apiEndpoint, activity.id)
+      )
+    );
+
+    if (formValue.note || formValue.pictures) {
+      const note = new Note({
+        object_id: this.timeSheet.id,
+        note: formValue.note,
+        contact: this.userService.user.data.contact,
+        content_type: { id: ENoteContentType.TimeSheet.toString(), __str__: '' }
+      });
+
+      console.log(note.getPartialValue<Note>(['contact', 'content_type', 'note', 'object_id']));
+
+      console.log(formValue.pictures);
+
+      const request = this.apiService.submitForm(Endpoints.Note, note).pipe(
+        switchMap((response: INote) => {
+          console.log(formValue.pictures);
+
+          if (formValue.pictures && formValue.pictures.length) {
+            const requests = formValue.pictures.map((picture) => {
+              const body = new FormData();
+              body.append('note', response.id);
+              body.append('file', picture);
+
+              return this.apiService.uploadFile(Endpoints.NoteFile, body);
+            });
+
+            return forkJoin(requests);
+          }
+
+          return of(response);
+        })
+      );
+
+      creationRequests.push(request);
+    }
+
+    const submitRequest = this.apiService.editForm(
+      this.timeSheet.editApiEndpoint + 'not_agree/',
+      this.timeSheet.getRequestBody(creationRequests.length > 0)
+    );
+
+    creationRequests.push(submitRequest);
+
+    this.processing$.next(true);
+
+    forkJoin(creationRequests)
+      .pipe(finalize(() => this.processing$.next(false)))
+      .subscribe(() => {
+        this.close(Status.Success);
+      });
   }
 
   private initTimeForm(timeSheet: TimeSheet): FormGroup {
@@ -293,10 +344,7 @@ export class ApproveWorksheetModalComponent implements OnInit, OnDestroy {
       });
   }
 
-  private getActivityForm(
-    activity: TimesheetRate | undefined,
-    timesheet?: string
-  ): FormGroup {
+  private getActivityForm(activity: TimesheetRate | undefined, timesheet?: string): FormGroup {
     const form = new FormGroup({
       id: new FormControl(activity?.id),
       value: new FormControl(activity?.value, Validators.required),

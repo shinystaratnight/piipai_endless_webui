@@ -166,7 +166,7 @@ export class TimeSheet extends ApiModel {
   }
 
   constructor(data: any) {
-    super(Endpoints.TimesheetCandidate, data.id);
+    super(data.endpoint || Endpoints.TimesheetCandidate, data.id);
 
     this.candidate = new Contact(data.job_offer.candidate_contact.contact);
     this.startedAt = data.shift_started_at;
