@@ -1,4 +1,10 @@
-import { Component, ChangeDetectionStrategy, Input, Output, EventEmitter } from '@angular/core';
+import {
+  Component,
+  ChangeDetectionStrategy,
+  Input,
+  Output,
+  EventEmitter
+} from '@angular/core';
 import { IconSize, Icon } from '@webui/icon';
 
 interface ICell {
@@ -7,7 +13,7 @@ interface ICell {
 
 interface IRow {
   cells: ICell[];
-  id?: string;
+  entity?: any;
 }
 
 export interface ITable {
@@ -26,7 +32,7 @@ export class EntityListComponent {
 
   public readonly Icon = Icon;
   public readonly IconSize = IconSize;
-  
+
   @Output() public edit: EventEmitter<IRow> = new EventEmitter();
   @Output() public delete: EventEmitter<IRow> = new EventEmitter();
 

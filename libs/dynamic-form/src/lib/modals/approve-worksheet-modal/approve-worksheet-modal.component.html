@@ -104,11 +104,59 @@
           <h4 class="section-title">{{ 'activity' | translate }}</h4>
         </header>
 
-        <ng-container *ngIf="activityViewType$ | async as type">
-          <app-entity-list
-            *ngIf="type == 'list'"
-            [config]="activityTable"
-          ></app-entity-list>
+        <ng-container *ngIf="activities$ | async">
+          <ng-container *ngIf="activityViewType$ | async as type">
+            <div
+              *ngIf="type === 'form'"
+              [formGroup]="formGroup.get('activity')"
+            >
+              <div class="form-row">
+                <webui-form-dropdown-control
+                  formControlName="worktype"
+                  [url]="activityEndpoint"
+                  [label]="'your_activity' | translate"
+                  [params]="activityParams"
+                  [optionFilter]="activityOptionFilter"
+                ></webui-form-dropdown-control>
+              </div>
+
+              <div class="form-row">
+                <webui-form-input-control
+                  *ngIf="formGroup.get('activity')?.get('value')"
+                  [label]="'amount' | translate"
+                  [prefix]="getAmountPrefix()"
+                  type="number"
+                  formControlName="value"
+                ></webui-form-input-control>
+              </div>
+
+              <footer class="footer footer--form">
+                <button
+                  class="type"
+                  class="btn cancel"
+                  (click)="cancelActivityEditing()"
+                >
+                  {{ 'cancel' | translate }}
+                </button>
+
+                <button
+                  class="btn submit-btn submit-btn--success"
+                  type="button"
+                  [disabled]="activityInvalid"
+                  (click)="saveActivity()"
+                >
+                  {{ 'save' | translate }}
+                </button>
+              </footer>
+            </div>
+
+            <app-entity-list
+              *ngIf="type === 'list'"
+              [config]="activityTable"
+              (edit)="editAvtivity($event)"
+              (delete)="deleteActivity($event)"
+            ></app-entity-list>
+          </ng-container>
         </ng-container>
       </section>
 
@@ -121,7 +169,7 @@
       </section>
 
       <section class="section">
-        <header>
+        <header class="header">
           <h4 class="section-title">{{ 'files.label' | translate }}</h4>
         </header>
 

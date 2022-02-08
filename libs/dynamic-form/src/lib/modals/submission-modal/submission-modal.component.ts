@@ -16,7 +16,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Modal, Status } from '../modal/modal.component';
 
 const isHourlyWork = (name: string): boolean => {
-  return name.toLocaleLowerCase().replace(' ', '_') === 'hourly_work';
+  return name.toLocaleLowerCase().replace(/ /g, '_').includes('hourly_work');
 };
 
 @Component({
