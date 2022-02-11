@@ -7,7 +7,8 @@ import {
   FormDropdownControlComponent,
   FormInputControlComponent,
   FormRadioSwitchComponent,
-  FormTextareaComponent
+  FormTextareaComponent,
+  FormImageUploadControlComponent
 } from './components';
 import { TranslateModule } from '@ngx-translate/core';
 import { IconModule } from '@webui/icon';
@@ -16,6 +17,7 @@ import { OverlayModule } from '@angular/cdk/overlay';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { UiModule } from '@webui/ui';
 import { PlatformModule } from '@angular/cdk/platform';
+import { NgxDropzoneModule } from 'ngx-dropzone';
 
 @NgModule({
   imports: [
@@ -29,7 +31,8 @@ import { PlatformModule } from '@angular/cdk/platform';
     ScrollingModule,
     UiModule,
     PlatformModule,
-    TranslateModule
+    TranslateModule,
+    NgxDropzoneModule
   ],
   declarations: [
     FormInputControlComponent,
@@ -38,7 +41,8 @@ import { PlatformModule } from '@angular/cdk/platform';
     DropdownContentComponent,
     FormRadioSwitchComponent,
     FormCheckboxComponent,
-    FormTextareaComponent
+    FormTextareaComponent,
+    FormImageUploadControlComponent
   ],
   exports: [
     FormInputControlComponent,
@@ -46,7 +50,8 @@ import { PlatformModule } from '@angular/cdk/platform';
     FormDropdownControlComponent,
     FormRadioSwitchComponent,
     FormCheckboxComponent,
-    FormTextareaComponent
+    FormTextareaComponent,
+    FormImageUploadControlComponent
   ]
 })
 export class FormControlsModule {}

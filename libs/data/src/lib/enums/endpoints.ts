@@ -160,6 +160,7 @@ export enum Endpoints {
   Activity = '/activity/activities/',
   Permission = '/company-settings/globalpermissions/',
   Note = '/core/notes/',
+  NoteFile = '/core/notefiles/',
   Order = '/core/orders/',
   Tag = '/core/tags/',
   ManagerCompanySettings = '/company_settings/',

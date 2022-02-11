@@ -507,6 +507,31 @@
         }
       }
     },
+    "rating": {
+      "projectType": "library",
+      "root": "libs/rating",
+      "sourceRoot": "libs/rating/src",
+      "prefix": "webui",
+      "architect": {
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/rating"],
+          "options": {
+            "jestConfig": "libs/rating/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/rating/src/**/*.ts",
+              "libs/rating/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
     "shared": {
       "projectType": "library",
       "root": "libs/shared",
