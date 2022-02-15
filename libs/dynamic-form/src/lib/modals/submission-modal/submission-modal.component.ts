@@ -16,7 +16,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Modal, Status } from '../modal/modal.component';
 
 const isHourlyWork = (name: string): boolean => {
-  return name.toLocaleLowerCase().replace(' ', '_') === 'hourly_work';
+  return name.toLocaleLowerCase().replace(/ /g, '_').includes('hourly_work');
 };
 
 @Component({
@@ -33,39 +33,6 @@ export class SubmissionModalComponent extends Modal implements OnInit, OnDestroy
   public IconSize = IconSize;
   public DatepickerType = DatepickerType;
   public processing$: BehaviorSubject<boolean> = new BehaviorSubject(false);
-  public get info() {
-    return [
-      [
-        {
-          label: 'supervisor.label',
-          icon: Icon.Person,
-          text: this.timeSheet.candidate.fullName
-        },
-        {
-          label: 'company',
-          icon: Icon.Company,
-          text: this.timeSheet.company.__str__
-        },
-        {
-          label: 'shift.date.__str__.label',
-          icon: Icon.Calendar,
-          text: this.timeSheet.shift.__str__
-        }
-      ],
-      [
-        {
-          label: 'jobsite.label',
-          icon: Icon.JobSite,
-          text: this.timeSheet.jobSite.__str__
-        },
-        {
-          label: 'position.label',
-          icon: Icon.Position,
-          text: this.timeSheet.position.__str__
-        }
-      ]
-    ];
-  }
   public formGroup?: FormGroup;
 
   public activityParams: { [key: string]: any };
@@ -127,6 +94,7 @@ export class SubmissionModalComponent extends Modal implements OnInit, OnDestroy
 
   public ngOnDestroy() {
     this.destroy$.next();
+    this.destroy$.complete();
   }
 
   public getActivityParams(): { [key: string]: any } {
