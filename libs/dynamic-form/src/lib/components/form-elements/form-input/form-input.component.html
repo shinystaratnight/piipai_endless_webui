@@ -185,13 +185,13 @@
     </div>
   </div>
   <div
-    class="text-danger mt-1"
+    class="text-danger mt-3"
     *ngIf="group.get(this.key) && group.get(this.key).getError('pattern')"
   >
     {{ config.templateOptions.patternError }}
   </div>
   <div *ngIf="errors">
-    <div class="text-danger mt-1" *ngIf="errors[config.key]">
+    <div class="text-danger mt-3" *ngIf="errors[config.key]">
       {{ errors[config.key] }}
     </div>
   </div>

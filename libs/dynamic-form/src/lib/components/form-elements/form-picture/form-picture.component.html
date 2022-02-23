@@ -90,9 +90,9 @@
     </ng-container>
   </div>
   <div *ngIf="errors">
-    <div class="text-danger mt-1" *ngIf="errors[key]">{{ errors[key] }}</div>
+    <div class="text-danger mt-3" *ngIf="errors[key]">{{ errors[key] }}</div>
   </div>
-  <div class="text-danger mt-1 text-left" *ngIf="sizeError">
+  <div class="text-danger mt-3 text-left" *ngIf="sizeError">
     {{'file_size' | translate: {"Default": 'File size is too large!'} }} <br>
     {{'max_size' | translate: {"Default": 'Maximum allowed file size is 10 Mb.'} }}
   </div>
