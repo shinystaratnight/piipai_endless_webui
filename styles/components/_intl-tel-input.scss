@@ -23,3 +23,39 @@
     border-color: map-get($theme-colors, $item);
   }
 }
+
+.iti--allow-dropdown {
+	// input {
+	// 	padding-right: 6px;
+	// 	padding-left: 52px;
+	// 	margin-left: 0;
+	// }
+	// input[type=text] {
+	// 	padding-right: 6px;
+	// 	padding-left: 52px;
+	// 	margin-left: 0;
+	// }
+	input[type=tel] {
+		padding-right: 6px;
+		padding-left: 52px !important;
+		margin-left: 0;
+	}
+}
+.iti--separate-dial-code {
+	// input {
+	// 	padding-right: 6px;
+	// 	padding-left: 52px;
+	// 	margin-left: 0;
+	// }
+	// input[type=text] {
+	// 	padding-right: 6px;
+	// 	padding-left: 52px;
+	// 	margin-left: 0;
+	// }
+	input[type=tel] {
+		padding-right: 6px;
+		padding-left: 52px !important;
+		margin-left: 0;
+	}
+}
+
