@@ -112,6 +112,7 @@ sup {
 .user-registration .input_type_last_name,
 .user-registration .input_type_phone_mobile {
     float: right;
+    display: inline-block !important;
 
     /* border:1px solid red; */
 }
