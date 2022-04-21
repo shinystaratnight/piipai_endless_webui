@@ -32,7 +32,7 @@ export class BasicElementComponent {
     nativeElement.required = config.type !== 'datepicker' && required;
 
     if (type === 'number') {
-      nativeElement.step = 1;
+      nativeElement.step = step ? step + '' : 1;
     }
     if (max && type !== 'number') {
       nativeElement.maxLength = max;
@@ -54,9 +54,6 @@ export class BasicElementComponent {
     }
     if (rows) {
       nativeElement.rows = rows;
-    }
-    if (step) {
-      nativeElement.step = step;
     }
   }
 
