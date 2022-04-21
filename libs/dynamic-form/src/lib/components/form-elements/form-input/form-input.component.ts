@@ -7,7 +7,6 @@ import {
   EventEmitter,
   ElementRef,
   HostListener,
-  ViewEncapsulation,
   OnDestroy,
   ChangeDetectorRef
 } from '@angular/core';
@@ -41,10 +40,7 @@ import { FormEvent } from '../../../interfaces';
   templateUrl: './form-input.component.html',
   styleUrls: ['./form-input.component.scss']
 })
-export class FormInputComponent
-  extends BasicElementComponent
-  implements OnInit, AfterViewInit, OnDestroy
-{
+export class FormInputComponent extends BasicElementComponent implements OnInit, AfterViewInit, OnDestroy {
   public config: Field;
   public group: FormGroup;
   public errors: any;
@@ -140,25 +136,20 @@ export class FormInputComponent
           !(this.config.hide || this.config.send === false));
 
       if (this.config.templateOptions.type === 'number') {
-        this.addControl(
-          this.config,
-          this.fb,
-          this.requiredField,
-          this.config.templateOptions.min,
-          this.config.templateOptions.max,
-          this.config.templateOptions.pattern
-        );
+        const { min, max, pattern } = this.config.templateOptions;
 
-        this.subscriptions.push(
-          this.group.get(this.key).valueChanges.subscribe((value) => {
-            if (value) {
-              this.group.get(this.key).patchValue(parseFloat(value), {
-                onlySelf: true,
-                emitEvent: false
-              });
-            }
-          })
-        );
+        this.addControl(this.config, this.fb, this.requiredField, min, max, pattern);
+
+        // this.subscriptions.push(
+        //   this.group.get(this.key).valueChanges.subscribe((value) => {
+        //     if (value) {
+        //       this.group.get(this.key).patchValue(parseFloat(value), {
+        //         onlySelf: true,
+        //         emitEvent: false
+        //       });
+        //     }
+        //   })
+        // );
       } else {
         this.addControl(this.config, this.fb, this.requiredField);
       }

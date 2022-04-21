@@ -11,24 +11,16 @@
       class="form-element-label"
       *ngIf="label && config.templateOptions.label"
       [class.inline]="config.templateOptions.inline"
-      [ngClass]="[
-        config.templateOptions.inline ? config.templateOptions.color : ''
-      ]"
+      [ngClass]="[config.templateOptions.inline ? config.templateOptions.color : '']"
       [class.bold]="config.templateOptions.bold"
       [class.required]="config.templateOptions.required"
       [attr.for]="key"
     >
-      {{
-        getTranslationKey('label')
-          | translate: { Default: config.templateOptions.label }
-      }}:
+      {{ getTranslationKey('label') | translate: { Default: config.templateOptions.label } }}:
     </label>
     <app-info
       *ngIf="config.templateOptions.description"
-      [description]="
-        getTranslationKey('description')
-          | translate: { Default: config.templateOptions.description || '' }
-      "
+      [description]="getTranslationKey('description') | translate: { Default: config.templateOptions.description || '' }"
     ></app-info>
     <i
       class="data-list-trigger info-icon"
@@ -36,8 +28,9 @@
       triggers="mouseover:mouseout"
       [placement]="'bottom'"
       [ngbTooltip]="dataListTemplate"
-      >View</i
     >
+      View
+    </i>
     <div
       class="form-element-content edit"
       [class.showAll]="viewMode || config.type === 'static'"
@@ -54,9 +47,7 @@
       </ng-container>
 
       <ng-container
-        *ngIf="
-          (this.config.type !== 'static' ||
-            (this.config.type === 'static' && !this.config.read_only)) &&
+        *ngIf="(this.config.type !== 'static' || (this.config.type === 'static' && !this.config.read_only)) &&
           !viewMode &&
           !config.read_only &&
           !isAddressField &&
@@ -67,9 +58,7 @@
         <ng-container *ngTemplateOutlet="inputField"></ng-container>
       </ng-container>
 
-      <ng-container
-        *ngIf="config.type !== 'static' && !viewMode && isAddressField"
-      >
+      <ng-container *ngIf="config.type !== 'static' && !viewMode && isAddressField">
         <ng-container *ngTemplateOutlet="addressField"></ng-container>
       </ng-container>
 
@@ -141,9 +130,7 @@
 
       <span
         class="readonly"
-        *ngIf="
-          config.type === 'static' && config.templateOptions.type !== 'score'
-        "
+        *ngIf="config.type === 'static' && config.templateOptions.type !== 'score'"
         [ngClass]="config.templateOptions.color"
         [ngStyle]="{
           fontWeight: config.templateOptions.bold ? 'bold' : 'normal'
@@ -284,17 +271,16 @@
         class="star"
       >
         <span class="half" [style.width.%]="fill">
-          {{ group.get(key).value ? '&#9733;' : '&#9734;' }} </span
-        >{{ group.get(key).value ? '&#9733;' : '&#9734;' }}</span
-      >
+          {{ group.get(key).value ? '&#9733;' : '&#9734;' }}
+        </span>
+        {{ group.get(key).value ? '&#9733;' : '&#9734;' }}
+      </span>
     </ng-template>
   </ngb-rating>
 
   <span
     class="score"
-    *ngIf="
-      !viewMode && !config.read_only && config.templateOptions.type === 'score'
-    "
+    *ngIf="!viewMode && !config.read_only && config.templateOptions.type === 'score'"
     [style.borderColor]="colors[hovered || group.get(key).value]"
     [style.color]="colors[hovered || group.get(key).value]"
   >
