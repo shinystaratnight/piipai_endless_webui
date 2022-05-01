@@ -142,8 +142,8 @@ export class CheckPermissionService {
         page.disabled = allowMethods.indexOf('get') === -1;
       }
 
-      if (page.childrens && page.childrens.length) {
-        this.parseNavigation(permissions, page.childrens);
+      if (page.children && page.children.length) {
+        this.parseNavigation(permissions, page.children);
       }
     });
   }

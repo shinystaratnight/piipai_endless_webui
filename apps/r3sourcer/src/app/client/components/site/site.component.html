@@ -59,96 +59,15 @@
             (str)="changeFormLabel($event)"
           >
             <div class="d-flex">
-              <!-- <button
-                type="button"
-                class="btn button-delete custom-button"
-                *ngIf="showDeleteButton()"
-                (click)="deleteElement(pageData)"
-              >
-                <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                Delete
-              </button> -->
-
-              <!-- <button type="button" class="btn close button-close mt-2"
-                    *ngIf="formMode === FormMode.Edit"
-                    (click)="changeMode(FormMode.View)">
-                      Close without save
-                  </button>
-
-                  <button type="button" class="btn btn-primary btn-shadow ml-auto button-edit"
-                    *ngIf="formMode === FormMode.View && checkPermission('update')"
-                    (click)="changeMode(FormMode.Edit)">
-                      <fa-icon [icon]="['fas', 'pencil-alt']"></fa-icon>
-                      Edit mode
-                  </button> -->
-
-                  <button type="submit" class="btn btn-primary button-save save mt-2"
-                    *ngIf="!formStorage && formMode !== FormMode.View && (checkPermission('post') || checkPermission('update')) && (pageData.endpoint !== '/core/users/')"
-                    [disabled]="saveProcess">
-                      {{ 'save' | translate: {"Default": "Save"} }}
-                      <app-spinner *ngIf="saveProcess"></app-spinner>
-                  </button>
-
-                  <!-- <button type="button" class="btn btn-success mr-2 ml-auto"
-                    *ngIf="formStorage && !approvedStorage && formMode === FormMode.Edit && checkPermission('post')"
-                    (click)="approveFormStorage(pageData)">
-                      Approve
-                  </button> -->
+              <button type="submit" class="btn btn-primary button-save save mt-2"
+                *ngIf="!formStorage && formMode !== FormMode.View && (checkPermission('post') || checkPermission('update')) && (pageData.endpoint !== '/core/users/')"
+                [disabled]="saveProcess">
+                  {{ 'save' | translate: {"Default": "Save"} }}
+                  <app-spinner *ngIf="saveProcess"></app-spinner>
+              </button>
             </div>
           </app-generic-form>
         </div>
-        <!-- <div class="form-content"
-          *ngIf="pageData.endpoint === '/core/forms/'">
-            <app-form-builder
-              [path]="pageData.pathData.path"
-              [endpoint]="pageData.endpoint"
-              [id]="pageData.pathData.id"
-              (str)="changeFormLabel($event)">
-            </app-form-builder>
-        </div> -->
-
-        <!-- <div class="form-content" *ngIf="!reload && (pageData.endpoint === '/acceptance-tests/acceptancetests/' && pageData.pathData.id)">
-          <app-test-builder [testData]="acceptenceTestData">
-              <app-generic-form
-                [endpoint]="pageData.endpoint"
-                [id]="pageData.pathData.id"
-                [path]="pageData.pathData.path"
-                [mode]="formMode"
-                (modeEvent)="modeEvent($event)"
-                (errorForm)="formError($event)"
-                (event)="formEvent($event)"
-                (str)="setTestData($event)">
-                  <div class="d-flex">
-                    <button type="button" class="btn button-delete custom-button"
-                      *ngIf="pageData.pathData.id && checkPermission('delete')"
-                      (click)="deleteElement(pageData)">
-                        <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                        Delete
-                    </button>
-
-                    <button type="button" class="btn close button-close"
-                      *ngIf="formMode === FormMode.Edit"
-                      (click)="changeMode(FormMode.View)">
-                        Close without save
-                    </button>
-
-                    <button type="button" class="btn btn-primary btn-shadow ml-auto button-edit"
-                      *ngIf="formMode === FormMode.View && checkPermission('update')"
-                      (click)="changeMode(FormMode.Edit)">
-                        <fa-icon [icon]="['fas', 'pencil-alt']"></fa-icon>
-                        Edit mode
-                    </button>
-
-                    <button type="submit" class="btn btn-primary button-save"
-                      *ngIf="!formStorage && formMode !== FormMode.View && (checkPermission('post') || checkPermission('update'))"
-                      [disabled]="saveProcess">
-                        Save
-                        <app-spinner *ngIf="saveProcess"></app-spinner>
-                    </button>
-                  </div>
-              </app-generic-form>
-          </app-test-builder>
-        </div> -->
       </div>
 
       <ng-container *ngSwitchCase="'list'">
@@ -180,34 +99,22 @@
             [listNameCache]="listNameCache"
             [allowPermissions]="permissionMethods"
             [endpoint]="pageData.endpoint"
-            (checkedObjects)="checkedObjects($event)">
-
-              <!-- <app-back-link
-                label="Back to job info"
-                (backEvent)="back()">
-              </app-back-link> -->
-
-          </app-generic-list>
+            (checkedObjects)="checkedObjects($event)"
+          ></app-generic-list>
           <div class="buttons mb-5">
-            <button type="button" class="btn btn-secondary" (click)="back()">{{'cancel' | translate: {"Default": "Cancel"} }}</button>
-            <button type="button" class="btn btn-primary pr-3" (click)="sendData()">{{'fill_in.label' | translate: {"Default": "Fill in"} }}</button>
+            <button type="button" class="btn btn-secondary" (click)="back()">
+              {{'cancel' | translate: {"Default": "Cancel"} }}
+            </button>
+            <button type="button" class="btn btn-primary pr-3" (click)="sendData()">
+              {{'fill_in.label' | translate: {"Default": "Fill in"} }}
+            </button>
           </div>
         </div>
       </ng-container>
-
-      <!-- <app-map *ngSwitchCase="'map'"></app-map> -->
     </div>
   </ng-container>
 
   <div class="dashboard" *ngIf="dashboard">
-    <!-- <app-dashboard
-      *ngIf="isManager"
-      class="dashboard-item align-self-start"
-      [pages]="pagesList"
-      [userModules]="userModules"
-      [modulesList]="modulesList"
-      (changeWidgetList)="updateNavigation($event)"></app-dashboard> -->
-
     <app-calendar
       class="dashboard-item"
       [class.alone]="!isManager"
@@ -218,8 +125,6 @@
     [clientId]="getClientId()"
     *ngIf="identifyDevice()"
   ></app-mobile-timesheets>
-
-  <!-- <app-toast></app-toast> -->
 
   <ng-template #modal let-modal>
     <div class="modal-content-wrapper">
@@ -284,7 +189,5 @@
       </div>
     </div>
   </ng-template>
-
-  <!-- <app-master-guide *ngIf="user.data.is_primary"></app-master-guide> -->
 </ng-container>
 <app-site-loader *ngIf="loader"></app-site-loader>

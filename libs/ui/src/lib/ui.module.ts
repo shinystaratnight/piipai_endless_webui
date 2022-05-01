@@ -4,6 +4,7 @@ import { RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { ReactiveFormsModule } from '@angular/forms';
+import { DialogModule } from '@webui/dialog';
 
 import {
   CloseButtonComponent,
@@ -13,9 +14,10 @@ import {
   LoaderComponent,
   SpinnerComponent,
   LanguageSelectorComponent,
-  UserAvatarComponent
+  UserAvatarComponent,
+  ConfirmDeleteModalComponent,
+  IconComponent,
 } from './components';
-import { IconComponent } from './components/icon/icon.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +29,8 @@ import { IconComponent } from './components/icon/icon.component';
     SpinnerComponent,
     LanguageSelectorComponent,
     IconComponent,
-    UserAvatarComponent
+    UserAvatarComponent,
+    ConfirmDeleteModalComponent,
   ],
   imports: [
     CommonModule,
@@ -35,6 +38,7 @@ import { IconComponent } from './components/icon/icon.component';
     TranslateModule,
     FontAwesomeModule,
     ReactiveFormsModule,
+    DialogModule,
   ],
   exports: [
     CloseButtonComponent,

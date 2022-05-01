@@ -3,6 +3,6 @@ export interface Page {
   url: string;
   endpoint: string;
   __str__: string;
-  childrens: Page[];
+  children: Page[];
   disabled?: boolean;
 }
