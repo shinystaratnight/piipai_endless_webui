@@ -26,7 +26,7 @@ describe('UserService', () => {
               url: '/contact/',
               endpoint: '/contacts',
               __str__: 'Contact',
-              childrens: []
+              children: []
             }
           ];
           const response = {
@@ -53,7 +53,7 @@ describe('UserService', () => {
           url: '/contact/',
           endpoint: '/contacts',
           __str__: 'Contact',
-          childrens: []
+          children: []
         }
       ];
       const url = ['contact'];
@@ -163,20 +163,20 @@ describe('UserService', () => {
           url: '/contact/',
           endpoint: '/contacts',
           __str__: 'Contact',
-          childrens: [
+          children: [
             {
               name: 'Candidate Contact',
               url: '/contact/candidate/',
               endpoint: '/candidatecontact',
               __str__: 'Candidate Contact',
-              childrens: []
+              children: []
             }
           ]
         }
       ];
-      const path = list[0].childrens[0].url;
+      const path = list[0].children[0].url;
       const result = siteService.getElementFromList(list, path);
-      expect(result).toEqual(list[0].childrens[0]);
+      expect(result).toEqual(list[0].children[0]);
     })));
   });
 

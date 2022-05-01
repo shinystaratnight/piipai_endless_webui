@@ -20,7 +20,7 @@ export interface Page {
   translateKey: string;
   disabled?: boolean;
   active?: boolean;
-  childrens: Page[];
+  children: Page[];
 }
 
 type NavigationResponse = {
@@ -77,6 +77,11 @@ export class NavigationService {
         return this.http
           .get<NavigationResponse>(Endpoints.ExtranetNavigation, { params })
           .pipe(
+            map((response) => {
+              response.results = this.renameField(response.results, 'childrens', 'children');
+
+              return response;
+            }),
             mergeMap(({ results: list }) => {
               if (isManager()) {
                 const companyId = this.userService.companyId;
@@ -145,8 +150,8 @@ export class NavigationService {
   public generateLinks(links, target) {
     links.forEach((el) => {
       target.push(el);
-      if (el.childrens) {
-        this.generateLinks(el.childrens, target);
+      if (el.children) {
+        this.generateLinks(el.children, target);
       }
     });
   }
@@ -157,8 +162,8 @@ export class NavigationService {
         page.url = page.url.replace(prefix, '/');
       });
 
-      if (page.childrens && page.childrens.length) {
-        this.removePrefix(page.childrens);
+      if (page.children && page.children.length) {
+        this.removePrefix(page.children);
       }
     });
   }
@@ -167,8 +172,8 @@ export class NavigationService {
     pages.forEach((page) => {
       page.translateKey = page.url === '/' ? page.name.toLowerCase() : page.url;
 
-      if (page.childrens) {
-        this.generateTranslateKeys(page.childrens);
+      if (page.children) {
+        this.generateTranslateKeys(page.children);
       }
     });
   }
@@ -179,8 +184,8 @@ export class NavigationService {
         list.splice(index, 1);
       }
 
-      if (page.childrens) {
-        this.hideCandidateConsentUrl(page.childrens);
+      if (page.children) {
+        this.hideCandidateConsentUrl(page.children);
       }
     });
   }
@@ -195,9 +200,24 @@ export class NavigationService {
         pages.splice(index, 1);
       }
 
-      if (el.childrens) {
-        this.removeMYOBLink(el.childrens, countryCode);
+      if (el.children) {
+        this.removeMYOBLink(el.children, countryCode);
       }
+    });
+  }
+
+  private renameField<T>(target: Array<T>, from: string, to: string): Array<T & { [key: string]: any }> {
+    return target.map((el) => {
+      const result = {
+        ...el,
+        [to]: el[from]
+      };
+
+      if (Array.isArray(result[to])) {
+        Object.assign(result, { [to]: this.renameField<T>(result[to], from, to) });
+      }
+
+      return result;
     });
   }
 }

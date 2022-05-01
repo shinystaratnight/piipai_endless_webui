@@ -7,9 +7,9 @@ export class DialogService {
 
   public open(content: any, options: any = {}) {
     return this.modalService.open(content, {
-      ...options,
       backdrop: 'static',
-      size: 'lg'
+      size: 'lg',
+      ...options,
     });
   }
 }

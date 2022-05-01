@@ -110,9 +110,9 @@ export class SiteService {
         if (!element) {
           element = el;
         }
-      } else if (el.childrens.length) {
+      } else if (el.children.length) {
         if (!element) {
-          element = this.getElementFromList(el.childrens, path);
+          element = this.getElementFromList(el.children, path);
         }
       }
     });

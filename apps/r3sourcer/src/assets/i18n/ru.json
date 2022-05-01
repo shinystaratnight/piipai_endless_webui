@@ -446,5 +446,7 @@
   "from": "От",
   "to": "До",
   "times_only": "Только время",
-  "piecework_or_combined": "Сдельная работа"
+  "piecework_or_combined": "Сдельная работа",
+  "confirm_delete_instance": "Are you sure you would like to DELETE {{name}}?",
+  "do_not_delete": "Do not delete!"
 }

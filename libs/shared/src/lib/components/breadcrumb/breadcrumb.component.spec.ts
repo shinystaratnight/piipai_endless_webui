@@ -60,14 +60,14 @@ describe('BreadcrumbComponent', () => {
               url: '/contact/',
               endpoint: '/contacts',
               __str__: 'Contact',
-              childrens: []
+              children: []
             },
             {
               name: 'Login',
               url: '/login/',
               endpoint: '/login',
               __str__: 'Login',
-              childrens: []
+              children: []
             }
           ];
           spyOn(comp, 'generateData');
@@ -99,7 +99,7 @@ describe('BreadcrumbComponent', () => {
           url: '/contact/',
           endpoint: '/contact',
           __str__: 'Contact',
-          childrens: []
+          children: []
         }
       ];
       comp.list = [];
@@ -155,19 +155,19 @@ describe('BreadcrumbComponent', () => {
           url: '/core/',
           endpoint: '/core/',
           __str__: 'Core',
-          childrens: [
+          children: [
             {
               name: 'Contact',
               url: '/core/contact/',
               endpoint: '/contacts/',
               __str__: 'Contact',
-              childrens: []
+              children: []
             }
           ]
         }
       ];
       result = comp.getElement(path, comp.navigationList);
-      expect(result).toEqual(comp.navigationList[0].childrens[0]);
+      expect(result).toEqual(comp.navigationList[0].children[0]);
     });
   });
 

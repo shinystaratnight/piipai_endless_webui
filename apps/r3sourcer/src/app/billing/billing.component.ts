@@ -141,8 +141,8 @@ export class BillingComponent implements OnInit, OnDestroy {
       if (path === page.url && page.url !== '/') {
         active = true;
         page.active = true;
-      } else if (page.childrens) {
-        page.active = this.setActivePage(page.childrens, path);
+      } else if (page.children) {
+        page.active = this.setActivePage(page.children, path);
         active = active || page.active;
       }
     });

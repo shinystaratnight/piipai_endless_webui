@@ -92,9 +92,9 @@ export class BreadcrumbComponent implements OnChanges {
         if (!result) {
           result = el;
         }
-      } else if (el.childrens && el.childrens.length) {
+      } else if (el.children && el.children.length) {
         if (!result) {
-          result = this.getElement(path, el.childrens);
+          result = this.getElement(path, el.children);
         }
       }
     });
