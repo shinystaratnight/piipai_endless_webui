@@ -112,8 +112,8 @@ export class CompanyPurposeService {
         result = false;
       }
 
-      if (el.childrens && result) {
-        el.childrens = this.filterByName(keys, el.childrens);
+      if (el.children && result) {
+        el.children = this.filterByName(keys, el.children);
       }
 
       return result;

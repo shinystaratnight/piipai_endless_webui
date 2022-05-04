@@ -1,8 +1,6 @@
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-
 import { Subject, Subscription } from 'rxjs';
 
 import {
@@ -114,15 +112,12 @@ export class SiteComponent implements OnInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     private siteService: SiteService,
-    private genericFormService: GenericFormService,
     private navigationService: NavigationService,
     private userService: UserService,
     private authService: AuthService,
     private permission: CheckPermissionService,
     private ts: ToastService,
-    private siteSettingsService: SiteSettingsService,
     private modalService: NgbModal,
-    private purposeService: CompanyPurposeService,
     private eventService: EventService
   ) {}
 
@@ -198,24 +193,9 @@ export class SiteComponent implements OnInit, OnDestroy {
     this.siteService
       .getDataOfPage(url, this.pagesList)
       .subscribe((pageData: PageData) => {
-        // if (pageData.endpoint === '/core/workflownodes/') {
-        //   this.additionalData = {
-        //     company: {
-        //       action: 'add',
-        //       data: {
-        //         value: {
-        //           id: this.siteSettingsService.settings.company_settings.company
-        //         }
-        //       }
-        //     }
-        //   };
-        //   this.pageData = pageData;
-        //   this.permissionMethods = this.permission.getAllowMethods(undefined, pageData.endpoint);
-        // } else
         if (this.isProfilePage(pageData)) {
           pageData.pathData.id = this.user.data.contact.candidate_contact;
           pageData.endpoint = '/candidate/candidatecontacts/';
-          // pageData.endpoint = pageData.pathData.path;
           this.formMode = FormMode.View;
           this.pageData = pageData;
           this.permissionMethods = this.permission.getAllowMethods(
@@ -241,60 +221,16 @@ export class SiteComponent implements OnInit, OnDestroy {
             ) {
               this.formMode = FormMode.View;
             }
-            // if (isClient()) {
             this.permissionMethods = ['delete', 'get', 'post', 'update'];
-            // } else {
-            //   this.permissionMethods = this.permission.getAllowMethods(undefined, pageData.endpoint);
-            // }
-            // if (pageData.endpoint === '/core/formstorages/') {
-            //   this.formStorage = true;
-            // } else {
-            //   this.formStorage = false;
-            // }
           }, 0);
         }
         this.setActivePage(this.pagesList, pageData.pathData.path);
-
-        // this.getNameOfList(pageData);
       });
   }
 
-  // public getNameOfList(pageData: PageData) {
-  //   if (pageData.pathData.type === 'form') {
-  //     if (this.listNameCache[pageData.endpoint]) {
-  //       this.listName = this.listNameCache[pageData.endpoint];
-  //       return;
-  //     }
-
-  //     this.genericFormService.getMetadata(pageData.endpoint)
-  //       .subscribe((list) => {
-  //         if (list && list.list && list.list.label) {
-  //           this.listName = list.list.label;
-  //           this.listNameCache[pageData.endpoint] = list.list.label;
-  //         }
-  //       });
-  //   }
-  // }
-
   public updateNavigationList(role: Role) {
-    // this.pageData = null;
     this.updateJiraTask(role);
-    // this.dashboard = false;
-
-    // this.userService.currentRole(role);
-    // this.currentRole = role;
-    // if (isManager()) {
-    //   location.href = '/';
-    // } else if (isClient()) {
-    //   location.href = '/cl/';
-    // }
-
     const client = isClient();
-
-    // this.pageData = null;
-    // // this.updateJiraTask(role);
-    // this.dashboard = false;
-
     this.userService.currentRole(role);
     this.loader = true;
 
@@ -315,22 +251,6 @@ export class SiteComponent implements OnInit, OnDestroy {
     if (isCandidate()) {
       this.router.navigate(['/cd']);
     }
-
-    // this.navigationService.getPages(role)
-    //   .subscribe((pages: any) => {
-    //     if (!role.__str__.includes('candidate') && !role.__str__.includes('client')) {
-    //       this.permission.parseNavigation(this.permission.permissions, pages);
-    //     }
-    //     this.pagesList = pages;
-
-    //     if (this.router.url !== '/') {
-    //       this.router.navigate(['']);
-    //     } else {
-    //       setTimeout(() => {
-    //         this.dashboard = true;
-    //       }, 100);
-    //     }
-    //   });
   }
 
   public updateJiraTask(role: Role) {
@@ -354,38 +274,16 @@ export class SiteComponent implements OnInit, OnDestroy {
   }
 
   public getPageNavigation(url: any[]) {
-    // if (!this.modulesList && !url.length) {
-    //   this.getModelsList(url);
-    // }
     if (!this.pagesList) {
       this.getPages(url);
     }
-    // if (!this.userModules && !url.length) {
-    //   this.getUserModules(url);
-    // }
     if (this.pagesList) {
       this.getPageData(url);
     }
   }
 
-  // public getModelsList(url) {
-  //   this.navigationService.getModules().subscribe(
-  //     (res: any) => {
-  //       const data = this.purposeService.filterModules(res);
-  //       this.modulesList = data;
-  //     }
-  //   );
-  // }
-
-  // public getUserModules(url) {
-  //   this.navigationService.getUserModules().subscribe(
-  //     (res: any) => this.userModules = res
-  //   );
-  // }
-
   public getPages(url) {
     const role = this.user.currentRole;
-    // const companyId = isManager() ? this.user.data.contact.company_id : '';
 
     this.navigationService.getPages(role).subscribe((res: any) => {
       this.pagesList = res;
@@ -435,62 +333,19 @@ export class SiteComponent implements OnInit, OnDestroy {
     this.formMode = mode;
   }
 
-  // public deleteElement(element) {
-  //   this.genericFormService.delete(element.endpoint, element.pathData.id).subscribe(
-  //     (res: any) => this.router.navigate([element.pathData.path]),
-  //     (err: any) => {
-  //       if (err.status === 'error') {
-  //         this.ts.sendMessage(err.errors.error, MessageType.Error);
-  //       }
-  //       this.errors = err.errors;
-  //     }
-  //   );
-  // }
-
-  // public updateNavigation(e) {
-  //   if (e.changed) {
-  //     this.userModules = null;
-  //     this.modulesList = null;
-  //     this.getPageNavigation([]);
-  //   }
-  // }
-
-  // public approveFormStorage(element) {
-  //   const endpoint = `${this.formStorageEndpoint}${element.pathData.id}/approve/`;
-  //   const body = {
-  //     status: 'True'
-  //   };
-  //   this.genericFormService.submitForm(endpoint, body).subscribe(
-  //     (res: any) => this.router.navigate([element.pathData.path]),
-  //     (err: any) => this.error = err
-  //   );
-  // }
-
   public setActivePage(pages, path) {
     let active = false;
     pages.forEach((page) => {
       if (path === page.url && page.url !== '/') {
         active = true;
         page.active = true;
-      } else if (page.childrens) {
-        page.active = this.setActivePage(page.childrens, path);
+      } else if (page.children) {
+        page.active = this.setActivePage(page.children, path);
         active = active || page.active;
       }
     });
     return active;
   }
-
-  // public getClientId(): string | undefined {
-  //   if (this.currentRole.__str__.includes('client')) {
-  //     return this.currentRole.id;
-  //   }
-
-  //   return undefined;
-  // }
-
-  // public setTestData(data) {
-  //   this.acceptenceTestData = data.data;
-  // }
 
   public openChangePassword() {
     this.modalRef = this.modalService.open(this.modal, { backdrop: 'static' });
@@ -529,35 +384,6 @@ export class SiteComponent implements OnInit, OnDestroy {
     };
   }
 
-  // public back() {
-  //   this.router.navigate([this.pageData.pathData.path + '/' + this.getId(this.pageData.endpoint) + '/change']); //tslint:disable-line
-
-  //   return false;
-  // }
-
-  // public sendData() {
-  //   if (this.data) {
-  //     this.genericFormService.submitForm(this.pageData.endpoint, this.data).subscribe(
-  //       (res: any) => this.router.navigate([this.pageData.pathData.path + '/' + this.getId(this.pageData.endpoint) + '/change']), //tslint:disable-line
-  //       (err: any) => this.error = err
-  //     );
-  //   }
-  // }
-
-  // public getId(path: string): string {
-  //   const keys = path.split('/');
-
-  //   return keys[keys.length - 3];
-  // }
-
-  // public identifyDevice() {
-  //   if (this.pageData) {
-  //     if (this.user.currentRole.__str__.includes('client') && this.pageData.pathData.path === '/' ) {
-  //       return isMobile();
-  //     }
-  //   }
-  // }
-
   public permissionErrorHandler() {
     const path =
       (this.pageData &&
@@ -566,12 +392,6 @@ export class SiteComponent implements OnInit, OnDestroy {
       '/';
     this.router.navigate([path]);
   }
-
-  // public showDeleteButton() {
-  //   return this.pageData.pathData.id
-  //     && this.checkPermission('delete')
-  //     && !this.isProfilePage(this.pageData);
-  // }
 
   public isProfilePage(page: PageData) {
     return page.pathData.path === '/profile/';

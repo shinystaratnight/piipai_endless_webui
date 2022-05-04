@@ -17,7 +17,11 @@ export class DialogComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  public close() {
-    this.active.close(ModalDismissReasons.ESC);
+  public dismiss() {
+    this.active.dismiss(ModalDismissReasons.ESC);
+  }
+
+  public close(result?: any) {
+    return this.active.close(result);
   }
 }
