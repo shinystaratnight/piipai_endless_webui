@@ -1,18 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { JwtHelperService } from '@auth0/angular-jwt';
-import {
-  AuthService,
-  UserService,
-} from '@webui/core';
+import { AuthService, UserService } from '@webui/core';
 
 @Component({
-  selector: 'app-loginas',
-  templateUrl: 'loginas.component.html'
+  selector: 'app-login-as',
+  template: '',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LoginasComponent implements OnInit {
-
+export class LoginAsComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private http: HttpClient,
@@ -27,19 +23,16 @@ export class LoginasComponent implements OnInit {
   }
 
   private loginAs(id: string) {
-    const endpoint = `/auth/${id}/loginas/`
+    const endpoint = `/auth/${id}/loginas/`;
 
-    this.http.post(endpoint, {})
-      .subscribe((res: any) => {
-        const helper = new JwtHelperService();
-        const token = helper.decodeToken(res.access_token_jwt);
+    this.http.post(endpoint, {}).subscribe(
+      (res: any) => {
         this.authService.storeToken(res);
         this.userService.getUserData().subscribe(() => {
           location.href = '/';
         });
       },
-      () => location.href = '/'
+      () => (location.href = '/')
     );
   }
-
 }
