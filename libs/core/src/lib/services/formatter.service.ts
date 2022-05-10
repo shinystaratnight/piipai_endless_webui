@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { DateFormat } from '@webui/data';
 import { getTimeInstance, isCandidate, isMobile } from '@webui/utilities';
 import { UserService } from './user.service';
+import { DATE_FORMAT, DATE_TIME_FORMAT, TIME_FORMAT } from '@webui/time';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class FormatterService {
   constructor(private userService: UserService) {}
@@ -61,10 +61,10 @@ export class FormatterService {
 
               return timeInstance(data[field]).format(
                 format === 'time'
-                  ? DateFormat.Time
+                  ? TIME_FORMAT
                   : format === 'datetime'
-                  ? DateFormat.DateTime
-                  : DateFormat.Date
+                  ? DATE_TIME_FORMAT
+                  : DATE_FORMAT
               );
             } else {
               return isMobile() && isCandidate() ? '-' : '';

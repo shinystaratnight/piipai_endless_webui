@@ -1,4 +1,3 @@
-import { DateFormat } from '@webui/data';
 import * as moment from 'moment-timezone';
 import { Moment } from 'moment-timezone';
 
@@ -7,8 +6,8 @@ import { Moment } from 'moment-timezone';
 // setTimeZone(timeZone);
 moment.updateLocale('en', {
   week: {
-    dow: 1 // Monday is the first day of the week.
-  } as any
+    dow: 1, // Monday is the first day of the week.
+  } as any,
 });
 
 export function getTimeInstance(): any {
@@ -23,7 +22,11 @@ export function getTimeInstanceByTimezone(timezone: string) {
   return moment.tz.setDefault(timezone);
 }
 
-export function parseDate(date: string, timezone?: string, format?: string): Moment {
+export function parseDate(
+  date: string,
+  timezone?: string,
+  format?: string
+): Moment {
   return moment.tz(date, format, timezone);
 }
 
@@ -70,7 +73,3 @@ export function getMonthStart() {
 export function getMonthEnd() {
   return getToday().endOf('month').format();
 }
-
-export const dateFormat = DateFormat.Date;
-export const datetimeFormat = DateFormat.DateTime;
-export const timeFormat = DateFormat.Time;

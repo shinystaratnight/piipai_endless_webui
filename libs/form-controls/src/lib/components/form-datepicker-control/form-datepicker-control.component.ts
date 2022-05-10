@@ -8,22 +8,22 @@ import {
   OnInit,
   TemplateRef,
   ViewChild,
-  ViewContainerRef
+  ViewContainerRef,
 } from '@angular/core';
 import { Icon, IconSize } from '@webui/icon';
 import { DatepickerType } from '../../enums/datepicker.enum';
 import { DateService } from '@webui/core';
-import { DateFormat } from '@webui/data';
 import {
   ControlValueAccessor,
   FormControl,
-  NG_VALUE_ACCESSOR
+  NG_VALUE_ACCESSOR,
 } from '@angular/forms';
 import { merge, Observable, Subject } from 'rxjs';
 import { Platform } from '@angular/cdk/platform';
 import { CdkOverlayOrigin, Overlay } from '@angular/cdk/overlay';
 import { Dropdown } from '../../helpers';
 import { takeUntil } from 'rxjs/operators';
+import { API_DATE_FORMAT, TIME_FORMAT } from '@webui/time';
 
 @Component({
   selector: 'webui-form-datepicker-control',
@@ -34,9 +34,9 @@ import { takeUntil } from 'rxjs/operators';
     {
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => FormDatepickerControlComponent),
-      multi: true
-    }
-  ]
+      multi: true,
+    },
+  ],
 })
 export class FormDatepickerControlComponent
   implements OnInit, ControlValueAccessor, AfterViewInit, OnDestroy
@@ -158,11 +158,11 @@ export class FormDatepickerControlComponent
 
     const date = this.dateService.parse(this.initialValue, this.timezone);
 
-    this.dateControl.patchValue(date.format('YYYY-MM-DD'), {
-      emitEvent: false
+    this.dateControl.patchValue(date.format(API_DATE_FORMAT), {
+      emitEvent: false,
     });
-    this.timeControl.patchValue(date.format(DateFormat.Time), {
-      emitEvent: false
+    this.timeControl.patchValue(date.format(TIME_FORMAT), {
+      emitEvent: false,
     });
   }
 

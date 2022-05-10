@@ -2,10 +2,11 @@ import {
   checkAndReturnTranslation,
   getLocalStorageItem,
   getTimeInstanceByTimezone,
-  parseDate
+  parseDate,
 } from '@webui/utilities';
-import { DateFormat, Endpoints, Models } from '../enums';
+import { Endpoints, Models } from '../enums';
 import { Model } from './model';
+import { DATE_TIME_FORMAT } from '@webui/time';
 
 export type Timesheet = {
   id: string;
@@ -32,7 +33,7 @@ export class TimesheetModel extends Model {
   readonly endpoints = {
     not_agree: `${Endpoints.Timesheet}{id}/not_agree/`,
     evaluate: `${Endpoints.Timesheet}{id}/evaluate/`,
-    approve_by_signature: `${Endpoints}{id}/approve_by_signature/`
+    approve_by_signature: `${Endpoints}{id}/approve_by_signature/`,
   };
 
   get totalTime() {
@@ -46,7 +47,7 @@ export class TimesheetModel extends Model {
       shift_started_at,
       shift_ended_at,
       break_started_at,
-      break_ended_at
+      break_ended_at,
     } = this.data;
     const timeInstance = getTimeInstanceByTimezone(timezone || time_zone);
     const defaultTime = '0h 0min';
@@ -59,7 +60,7 @@ export class TimesheetModel extends Model {
       shift_ended_at: timeInstance(shift_ended_at),
       shift_started_at: timeInstance(shift_started_at),
       break_started_at: null,
-      break_ended_at: null
+      break_ended_at: null,
     };
 
     let breakTime = 0;
@@ -72,7 +73,7 @@ export class TimesheetModel extends Model {
       times = {
         ...times,
         break_ended_at: timeInstance(break_ended_at),
-        break_started_at: timeInstance(break_started_at)
+        break_started_at: timeInstance(break_started_at),
       };
 
       if (
@@ -163,7 +164,7 @@ export class TimeSheet extends ApiModel {
   evaluation: {
     evaluation_score: number;
     evaluated_at: string;
-  }
+  };
 
   constructor(data: any) {
     super(data.endpoint || Endpoints.TimesheetCandidate, data.id);
@@ -194,7 +195,7 @@ export class TimeSheet extends ApiModel {
       shift_ended_at: timeInstance(this.endedAt),
       shift_started_at: timeInstance(this.startedAt),
       break_started_at: null,
-      break_ended_at: null
+      break_ended_at: null,
     };
 
     let breakTime = 0;
@@ -207,7 +208,7 @@ export class TimeSheet extends ApiModel {
       times = {
         ...times,
         break_ended_at: timeInstance(this.breakEndedAt),
-        break_started_at: timeInstance(this.breakStartedAt)
+        break_started_at: timeInstance(this.breakStartedAt),
       };
 
       if (
@@ -238,17 +239,28 @@ export class TimeSheet extends ApiModel {
 
   get format(): { [key: string]: string } {
     const timeInstance = getTimeInstanceByTimezone(this.timezone);
-    const startedAt = parseDate(this.startedAt, this.timezone).format(DateFormat.DateTime);
-    const endedAt = this.endedAt ? parseDate(this.endedAt, this.timezone).format(DateFormat.DateTime) : undefined;
-    const breakTime = this.breakStartedAt && this.breakEndedAt 
-      ? timeInstance.duration(parseDate(this.breakEndedAt, this.timezone).diff(parseDate(this.breakStartedAt, this.timezone)))
+    const startedAt = parseDate(this.startedAt, this.timezone).format(
+      DATE_TIME_FORMAT
+    );
+    const endedAt = this.endedAt
+      ? parseDate(this.endedAt, this.timezone).format(DATE_TIME_FORMAT)
       : undefined;
+    const breakTime =
+      this.breakStartedAt && this.breakEndedAt
+        ? timeInstance.duration(
+            parseDate(this.breakEndedAt, this.timezone).diff(
+              parseDate(this.breakStartedAt, this.timezone)
+            )
+          )
+        : undefined;
 
     return {
       startedAt,
       endedAt,
-      breakTime: breakTime ? `${Math.floor(breakTime.asHours())}hr ${breakTime.minutes()}min` : '00h 00m'
-    }
+      breakTime: breakTime
+        ? `${Math.floor(breakTime.asHours())}hr ${breakTime.minutes()}min`
+        : '00h 00m',
+    };
   }
 
   public updateBreak(duration: [hours: number, minutes: number] | null): void {
@@ -282,7 +294,7 @@ export class TimeSheet extends ApiModel {
       shift_ended_at: this.endedAt,
       break_started_at: this.breakStartedAt,
       break_ended_at: this.breakEndedAt,
-      hours: !hasActivity || !!this.endedAt
+      hours: !hasActivity || !!this.endedAt,
     };
   }
 }
@@ -307,7 +319,7 @@ export class TimesheetRate extends ApiModel {
       timesheet: this.timesheet.id,
       worktype: this.worktype.id,
       rate: this.rate,
-      value: this.value
+      value: this.value,
     };
   }
 }
