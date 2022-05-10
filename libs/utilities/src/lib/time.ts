@@ -33,19 +33,3 @@ function getToday() {
 export function getTimeZoneOffset() {
   return getToday().format('Z').slice(1);
 }
-
-export function getWeekStart() {
-  return getToday().startOf('isoWeek').format();
-}
-
-export function getWeekEnd() {
-  return getToday().endOf('isoWeek').format();
-}
-
-export function getMonthStart() {
-  return getToday().startOf('month').format();
-}
-
-export function getMonthEnd() {
-  return getToday().endOf('month').format();
-}

@@ -1,10 +1,4 @@
 import { FilterModel } from './filter.model';
-import {
-  getWeekStart,
-  getWeekEnd,
-  getMonthStart,
-  getMonthEnd,
-} from '@webui/utilities';
 import { getTomorrow, getYesterday, Time } from '@webui/time';
 
 export interface DateFilterOptions {
@@ -107,6 +101,10 @@ export class DateFilter implements FilterModel {
     const tomorrow = getTomorrow().format();
     const yesterday = getYesterday().format();
     const today = Time.now().format();
+    const weekStart = Time.now().startOf('isoWeek').format();
+    const monthStart = Time.now().startOf('month').format();
+    const weekEnd = Time.now().endOf('isoWeek').format();
+    const monthEnd = Time.now().endOf('month').format();
 
     switch (type) {
       case DateTypes.Yesterday:
@@ -119,10 +117,10 @@ export class DateFilter implements FilterModel {
         return `${key}_0=${tomorrow}&${key}_1=${tomorrow}`;
 
       case DateTypes.Week:
-        return `${key}_0=${getWeekStart()}&${key}_1=${getWeekEnd()}`;
+        return `${key}_0=${weekStart}&${key}_1=${weekEnd}`;
 
       case DateTypes.Month:
-        return `${key}_0=${getMonthStart()}&${key}_1=${getMonthEnd()}`;
+        return `${key}_0=${monthStart}&${key}_1=${monthEnd}`;
     }
   };
 }
