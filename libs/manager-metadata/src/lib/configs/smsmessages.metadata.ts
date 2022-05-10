@@ -1,8 +1,4 @@
 import { createFilter, Type } from '@webui/metadata';
-import { getYesterday, getToday } from '@webui/utilities';
-
-const yesterdayFormatDate = getYesterday();
-const todayFormatDate = getToday().format();
 
 const list = {
   list: {
@@ -20,12 +16,12 @@ const list = {
             color: 'link',
             customLink: true,
             action: 'messageDetail',
-          }
+          },
         ],
         name: 'sid',
         sort_field: 'sid',
         label: 'SID',
-        sort: true
+        sort: true,
       },
       {
         delim: null,
@@ -34,36 +30,36 @@ const list = {
         content: [
           {
             field: 'template.__str__',
-            type: 'text'
-          }
+            type: 'text',
+          },
         ],
         name: 'template',
         title: null,
-        sort_field: 'template'
+        sort_field: 'template',
       },
       {
         content: [
           {
             field: 'from_number',
-            type: 'input'
-          }
+            type: 'input',
+          },
         ],
         name: 'from_number',
         sort_field: 'from_number',
         label: 'From number',
-        sort: true
+        sort: true,
       },
       {
         content: [
           {
             field: 'to_number',
-            type: 'input'
-          }
+            type: 'input',
+          },
         ],
         name: 'to_number',
         sort_field: 'to_number',
         label: 'To number',
-        sort: true
+        sort: true,
       },
       {
         content: [
@@ -76,52 +72,52 @@ const list = {
               FAILED: 'Failed',
               DELIVERED: 'Delivered',
               UNDELIVERED: 'Undelivered',
-              RECEIVED: 'Received'
+              RECEIVED: 'Received',
             },
             field: 'status',
-            type: 'select'
-          }
+            type: 'select',
+          },
         ],
         name: 'status',
         sort_field: 'status',
         label: 'Status',
-        sort: true
+        sort: true,
       },
       {
         content: [
           {
             field: 'sent_at',
-            type: 'datepicker'
-          }
+            type: 'datepicker',
+          },
         ],
         name: 'sent_at',
         sort_field: 'sent_at',
         label: 'Sent at',
-        sort: true
+        sort: true,
       },
       {
         content: [
           {
             field: 'delivered_received_datetime',
-            type: 'datepicker'
-          }
+            type: 'datepicker',
+          },
         ],
         name: 'delivered_received_datetime',
-        label: 'Delivered received datetime'
+        label: 'Delivered received datetime',
       },
       {
         content: [
           {
             field: 'related',
             type: 'static',
-            label: 'Links'
-          }
+            label: 'Links',
+          },
         ],
         name: 'links',
         title: null,
         label: 'Links',
-        delim: null
-      }
+        delim: null,
+      },
     ],
     pagination_label: 'SMS message',
     search_enabled: true,
@@ -133,16 +129,16 @@ const list = {
         options: [
           {
             value: 'SENT',
-            label: 'SMS sent'
+            label: 'SMS sent',
           },
           {
             value: 'RECEIVED',
-            label: 'SMS received'
-          }
+            label: 'SMS received',
+          },
         ],
         query: 'type',
         default: null,
-        type: 'select'
+        type: 'select',
       },
       {
         key: 'status',
@@ -150,40 +146,40 @@ const list = {
         options: [
           {
             value: 'ACCEPTED',
-            label: 'Accepted'
+            label: 'Accepted',
           },
           {
             value: 'SENT',
-            label: 'Sent'
+            label: 'Sent',
           },
           {
             value: 'QUEUED',
-            label: 'Queued'
+            label: 'Queued',
           },
           {
             value: 'SENDING',
-            label: 'Sending'
+            label: 'Sending',
           },
           {
             value: 'FAILED',
-            label: 'Failed'
+            label: 'Failed',
           },
           {
             value: 'DELIVERED',
-            label: 'Delivered'
+            label: 'Delivered',
           },
           {
             value: 'UNDELIVERED',
-            label: 'Undelivered'
+            label: 'Undelivered',
           },
           {
             value: 'RECEIVED',
-            label: 'Received'
-          }
+            label: 'Received',
+          },
         ],
         query: 'status',
         default: null,
-        type: 'select'
+        type: 'select',
       },
       {
         key: 'template',
@@ -192,9 +188,9 @@ const list = {
         data: {
           value: 'name',
           endpoint: '/sms-interface/smstemplates/',
-          key: 'id'
+          key: 'id',
         },
-        query: 'template'
+        query: 'template',
       },
       createFilter(Type.Date, {
         key: 'created_at',
@@ -210,15 +206,15 @@ const list = {
           {
             key: 'yes',
             value: 'True',
-            label: 'Yes'
+            label: 'Yes',
           },
           {
             key: 'no',
             value: 'False',
-            label: 'No'
-          }
-        ]
-      })
+            label: 'No',
+          },
+        ],
+      }),
       // {
       //   key: 'check_reply',
       //   label: 'Check reply status after timeout',
@@ -241,9 +237,9 @@ const list = {
     buttons: [
       {
         action: 'sendSMS',
-        label: 'Create new SMS'
-      }
-    ]
+        label: 'Create new SMS',
+      },
+    ],
   },
   fields: [
     {
@@ -253,9 +249,9 @@ const list = {
         label: '',
         type: 'link',
         link: null,
-        text: ''
+        text: '',
       },
-      read_only: true
+      read_only: true,
     },
     {
       key: 'status',
@@ -266,40 +262,40 @@ const list = {
         options: [
           {
             value: 'ACCEPTED',
-            label: 'Accepted'
+            label: 'Accepted',
           },
           {
             value: 'SENT',
-            label: 'Sent'
+            label: 'Sent',
           },
           {
             value: 'QUEUED',
-            label: 'Queued'
+            label: 'Queued',
           },
           {
             value: 'SENDING',
-            label: 'Sending'
+            label: 'Sending',
           },
           {
             value: 'FAILED',
-            label: 'Failed'
+            label: 'Failed',
           },
           {
             value: 'DELIVERED',
-            label: 'Delivered'
+            label: 'Delivered',
           },
           {
             value: 'UNDELIVERED',
-            label: 'Undelivered'
+            label: 'Undelivered',
           },
           {
             value: 'RECEIVED',
-            label: 'Received'
-          }
+            label: 'Received',
+          },
         ],
-        type: 'select'
+        type: 'select',
       },
-      read_only: true
+      read_only: true,
     },
     {
       key: 'delivered_received_datetime',
@@ -307,9 +303,9 @@ const list = {
       templateOptions: {
         required: false,
         label: 'Delivered received datetime',
-        type: 'datetime'
+        type: 'datetime',
       },
-      read_only: true
+      read_only: true,
     },
     {
       key: 'sid',
@@ -319,7 +315,7 @@ const list = {
         label: 'SID',
         description: 'Twillio Message ID',
       },
-      read_only: true
+      read_only: true,
     },
     {
       key: 'related',
@@ -327,9 +323,9 @@ const list = {
       templateOptions: {
         required: false,
         label: 'Links',
-        type: 'static'
+        type: 'static',
       },
-      read_only: true
+      read_only: true,
     },
     {
       key: 'to_number',
@@ -338,9 +334,9 @@ const list = {
         required: true,
         label: 'To number',
         type: 'text',
-        max: 25
+        max: 25,
       },
-      read_only: true
+      read_only: true,
     },
     {
       key: 'from_number',
@@ -350,9 +346,9 @@ const list = {
         required: false,
         label: 'From number',
         type: 'text',
-        max: 25
+        max: 25,
       },
-      read_only: true
+      read_only: true,
     },
     {
       key: 'sent_at',
@@ -360,11 +356,11 @@ const list = {
       templateOptions: {
         required: false,
         label: 'Sent at',
-        type: 'datetime'
+        type: 'datetime',
       },
-      read_only: true
-    }
-  ]
+      read_only: true,
+    },
+  ],
 };
 
 const form = [
@@ -376,9 +372,9 @@ const form = [
       required: false,
       label: 'From number',
       max: 25,
-      type: 'text'
+      type: 'text',
     },
-    read_only: false
+    read_only: false,
   },
   {
     key: 'to_number',
@@ -387,9 +383,9 @@ const form = [
       required: true,
       label: 'To number',
       max: 25,
-      type: 'text'
+      type: 'text',
     },
-    read_only: false
+    read_only: false,
   },
   {
     key: 'text',
@@ -397,9 +393,9 @@ const form = [
     templateOptions: {
       required: false,
       label: 'Text message',
-      type: 'textarea'
+      type: 'textarea',
     },
-    read_only: false
+    read_only: false,
   },
   {
     key: 'type',
@@ -412,15 +408,15 @@ const form = [
       options: [
         {
           value: 'SENT',
-          label: 'SMS sent'
+          label: 'SMS sent',
         },
         {
           value: 'RECEIVED',
-          label: 'SMS received'
-        }
-      ]
+          label: 'SMS received',
+        },
+      ],
     },
-    read_only: false
+    read_only: false,
   },
   {
     key: 'status',
@@ -432,39 +428,39 @@ const form = [
       options: [
         {
           value: 'ACCEPTED',
-          label: 'Accepted'
+          label: 'Accepted',
         },
         {
           value: 'SENT',
-          label: 'Sent'
+          label: 'Sent',
         },
         {
           value: 'QUEUED',
-          label: 'Queued'
+          label: 'Queued',
         },
         {
           value: 'SENDING',
-          label: 'Sending'
+          label: 'Sending',
         },
         {
           value: 'FAILED',
-          label: 'Failed'
+          label: 'Failed',
         },
         {
           value: 'DELIVERED',
-          label: 'Delivered'
+          label: 'Delivered',
         },
         {
           value: 'UNDELIVERED',
-          label: 'Undelivered'
+          label: 'Undelivered',
         },
         {
           value: 'RECEIVED',
-          label: 'Received'
-        }
-      ]
+          label: 'Received',
+        },
+      ],
     },
-    read_only: false
+    read_only: false,
   },
   {
     list: false,
@@ -476,12 +472,12 @@ const form = [
       delete: false,
       values: ['__str__'],
       type: 'related',
-      edit: true
+      edit: true,
     },
     collapsed: false,
     type: 'related',
     key: 'template',
-    many: false
+    many: false,
   },
   {
     key: 'sent_at',
@@ -489,9 +485,9 @@ const form = [
     templateOptions: {
       required: false,
       label: 'Sent at',
-      type: 'datetime'
+      type: 'datetime',
     },
-    read_only: false
+    read_only: false,
   },
   {
     key: 'created_at',
@@ -499,9 +495,9 @@ const form = [
     templateOptions: {
       required: false,
       label: 'Created at',
-      type: 'datetime'
+      type: 'datetime',
     },
-    read_only: true
+    read_only: true,
   },
   {
     key: 'reply_timeout',
@@ -513,9 +509,9 @@ const form = [
       type: 'number',
       min: -2147483648,
       description: 'Minutes',
-      max: 2147483647
+      max: 2147483647,
     },
-    read_only: false
+    read_only: false,
   },
   {
     key: 'delivery_timeout',
@@ -527,9 +523,9 @@ const form = [
       type: 'number',
       min: -2147483648,
       description: 'Minutes',
-      max: 2147483647
+      max: 2147483647,
     },
-    read_only: false
+    read_only: false,
   },
   {
     key: 'error_message',
@@ -538,9 +534,9 @@ const form = [
     templateOptions: {
       required: false,
       label: 'Error message',
-      type: 'textarea'
+      type: 'textarea',
     },
-    read_only: false
+    read_only: false,
   },
   {
     list: false,
@@ -552,13 +548,13 @@ const form = [
       delete: false,
       values: ['__str__'],
       type: 'related',
-      edit: true
+      edit: true,
     },
     collapsed: false,
     type: 'related',
     key: 'related',
-    many: true
-  }
+    many: true,
+  },
 ];
 
 const sent = [
@@ -567,14 +563,14 @@ const sent = [
     key: 'resend_id',
     hide: true,
     templateOptions: {
-      type: 'text'
-    }
+      type: 'text',
+    },
   },
   {
     type: 'checkbox',
     key: 'has_resend_action',
     hide: true,
-    templateOptions: {}
+    templateOptions: {},
   },
   {
     type: 'row',
@@ -590,17 +586,17 @@ const sent = [
             read_only: true,
             type: 'static',
             templateOptions: {
-              bottom: true
+              bottom: true,
             },
           },
           {
             key: 'from_number',
             type: 'input',
             templateOptions: {
-              type: 'text'
+              type: 'text',
             },
           },
-        ]
+        ],
       },
       {
         type: 'group',
@@ -612,19 +608,19 @@ const sent = [
             read_only: true,
             type: 'static',
             templateOptions: {
-              bottom: true
+              bottom: true,
             },
           },
           {
             key: 'to_number',
             type: 'input',
             templateOptions: {
-              type: 'text'
+              type: 'text',
             },
           },
-        ]
-      }
-    ]
+        ],
+      },
+    ],
   },
   {
     key: 'text',
@@ -632,7 +628,7 @@ const sent = [
     templateOptions: {
       label: 'Text of the message',
       type: 'textarea',
-      background: true
+      background: true,
     },
   },
   {
@@ -657,24 +653,24 @@ const sent = [
           label: 'Status',
           errorDescription: {
             value: 'FAILED',
-            error: 'The contact is not available in this moment'
+            error: 'The contact is not available in this moment',
           },
           options: [
             {
               value: 'ACCEPTED',
-              label: 'Accepted'
+              label: 'Accepted',
             },
             {
               value: 'SENT',
-              label: 'Sent'
+              label: 'Sent',
             },
             {
               value: 'QUEUED',
-              label: 'Queued'
+              label: 'Queued',
             },
             {
               value: 'SENDING',
-              label: 'Sending'
+              label: 'Sending',
             },
             {
               value: 'FAILED',
@@ -682,17 +678,17 @@ const sent = [
             },
             {
               value: 'DELIVERED',
-              label: 'Delivered'
+              label: 'Delivered',
             },
             {
               value: 'UNDELIVERED',
-              label: 'Undelivered'
+              label: 'Undelivered',
             },
             {
               value: 'RECEIVED',
-              label: 'Received'
-            }
-          ]
+              label: 'Received',
+            },
+          ],
         },
       },
       {
@@ -707,18 +703,18 @@ const sent = [
               action: 'resend',
               text: 'Resend',
               type: 'button',
-            }
-          }
-        ]
-      }
-    ]
+            },
+          },
+        ],
+      },
+    ],
   },
   {
     key: 'sent_at',
     type: 'datepicker',
     templateOptions: {
       label: 'Sent at',
-      type: 'datetime'
+      type: 'datetime',
     },
   },
   {
@@ -743,7 +739,7 @@ const sent = [
           description: 'Minutes',
         },
       },
-    ]
+    ],
   },
   {
     endpoint: null,
@@ -756,8 +752,8 @@ const sent = [
     column: true,
     type: 'related',
     key: 'related',
-    many: true
-  }
+    many: true,
+  },
 ];
 
 const reply = [
@@ -775,17 +771,17 @@ const reply = [
             read_only: true,
             type: 'static',
             templateOptions: {
-              bottom: true
+              bottom: true,
             },
           },
           {
             key: 'from_number',
             type: 'input',
             templateOptions: {
-              type: 'text'
+              type: 'text',
             },
           },
-        ]
+        ],
       },
       {
         type: 'group',
@@ -797,19 +793,19 @@ const reply = [
             read_only: true,
             type: 'static',
             templateOptions: {
-              bottom: true
+              bottom: true,
             },
           },
           {
             key: 'to_number',
             type: 'input',
             templateOptions: {
-              type: 'text'
+              type: 'text',
             },
           },
-        ]
-      }
-    ]
+        ],
+      },
+    ],
   },
   {
     key: 'text',
@@ -817,7 +813,7 @@ const reply = [
     templateOptions: {
       label: 'Text of the message',
       type: 'textarea',
-      background: true
+      background: true,
     },
   },
   {
@@ -827,24 +823,24 @@ const reply = [
       label: 'Status',
       errorDescription: {
         value: 'FAILED',
-        error: 'The contact is not available in this moment'
+        error: 'The contact is not available in this moment',
       },
       options: [
         {
           value: 'ACCEPTED',
-          label: 'Accepted'
+          label: 'Accepted',
         },
         {
           value: 'SENT',
-          label: 'Sent'
+          label: 'Sent',
         },
         {
           value: 'QUEUED',
-          label: 'Queued'
+          label: 'Queued',
         },
         {
           value: 'SENDING',
-          label: 'Sending'
+          label: 'Sending',
         },
         {
           value: 'FAILED',
@@ -852,17 +848,17 @@ const reply = [
         },
         {
           value: 'DELIVERED',
-          label: 'Delivered'
+          label: 'Delivered',
         },
         {
           value: 'UNDELIVERED',
-          label: 'Undelivered'
+          label: 'Undelivered',
         },
         {
           value: 'RECEIVED',
-          label: 'Received'
-        }
-      ]
+          label: 'Received',
+        },
+      ],
     },
   },
   {
@@ -870,7 +866,7 @@ const reply = [
     type: 'datepicker',
     templateOptions: {
       label: 'Sent at',
-      type: 'datetime'
+      type: 'datetime',
     },
   },
   {
@@ -884,8 +880,8 @@ const reply = [
     column: true,
     type: 'related',
     key: 'related',
-    many: true
-  }
+    many: true,
+  },
 ];
 
 const formadd = [
@@ -897,9 +893,9 @@ const formadd = [
       required: false,
       label: 'From number',
       max: 25,
-      type: 'text'
+      type: 'text',
     },
-    read_only: false
+    read_only: false,
   },
   {
     key: 'to_number',
@@ -908,9 +904,9 @@ const formadd = [
       required: true,
       label: 'To number',
       max: 25,
-      type: 'text'
+      type: 'text',
     },
-    read_only: false
+    read_only: false,
   },
   {
     key: 'text',
@@ -918,9 +914,9 @@ const formadd = [
     templateOptions: {
       required: false,
       label: 'Text message',
-      type: 'textarea'
+      type: 'textarea',
     },
-    read_only: false
+    read_only: false,
   },
   {
     key: 'type',
@@ -933,15 +929,15 @@ const formadd = [
       options: [
         {
           value: 'SENT',
-          label: 'SMS sent'
+          label: 'SMS sent',
         },
         {
           value: 'RECEIVED',
-          label: 'SMS received'
-        }
-      ]
+          label: 'SMS received',
+        },
+      ],
     },
-    read_only: false
+    read_only: false,
   },
   {
     key: 'status',
@@ -953,39 +949,39 @@ const formadd = [
       options: [
         {
           value: 'ACCEPTED',
-          label: 'Accepted'
+          label: 'Accepted',
         },
         {
           value: 'SENT',
-          label: 'Sent'
+          label: 'Sent',
         },
         {
           value: 'QUEUED',
-          label: 'Queued'
+          label: 'Queued',
         },
         {
           value: 'SENDING',
-          label: 'Sending'
+          label: 'Sending',
         },
         {
           value: 'FAILED',
-          label: 'Failed'
+          label: 'Failed',
         },
         {
           value: 'DELIVERED',
-          label: 'Delivered'
+          label: 'Delivered',
         },
         {
           value: 'UNDELIVERED',
-          label: 'Undelivered'
+          label: 'Undelivered',
         },
         {
           value: 'RECEIVED',
-          label: 'Received'
-        }
-      ]
+          label: 'Received',
+        },
+      ],
     },
-    read_only: false
+    read_only: false,
   },
   {
     list: false,
@@ -997,12 +993,12 @@ const formadd = [
       delete: false,
       values: ['__str__'],
       type: 'related',
-      edit: true
+      edit: true,
     },
     collapsed: false,
     type: 'related',
     key: 'template',
-    many: false
+    many: false,
   },
   {
     key: 'sent_at',
@@ -1010,9 +1006,9 @@ const formadd = [
     templateOptions: {
       required: false,
       label: 'Sent at',
-      type: 'datetime'
+      type: 'datetime',
     },
-    read_only: false
+    read_only: false,
   },
   {
     key: 'created_at',
@@ -1020,9 +1016,9 @@ const formadd = [
     templateOptions: {
       required: false,
       label: 'Created at',
-      type: 'datetime'
+      type: 'datetime',
     },
-    read_only: true
+    read_only: true,
   },
   {
     key: 'reply_timeout',
@@ -1034,9 +1030,9 @@ const formadd = [
       type: 'number',
       min: -2147483648,
       description: 'Minutes',
-      max: 2147483647
+      max: 2147483647,
     },
-    read_only: false
+    read_only: false,
   },
   {
     key: 'delivery_timeout',
@@ -1048,9 +1044,9 @@ const formadd = [
       type: 'number',
       min: -2147483648,
       description: 'Minutes',
-      max: 2147483647
+      max: 2147483647,
     },
-    read_only: false
+    read_only: false,
   },
   {
     key: 'error_message',
@@ -1059,9 +1055,9 @@ const formadd = [
     templateOptions: {
       required: false,
       label: 'Error message',
-      type: 'textarea'
+      type: 'textarea',
     },
-    read_only: false
+    read_only: false,
   },
   {
     list: false,
@@ -1073,13 +1069,13 @@ const formadd = [
       delete: false,
       values: ['__str__'],
       type: 'related',
-      edit: true
+      edit: true,
     },
     collapsed: false,
     type: 'related',
     key: 'related',
-    many: true
-  }
+    many: true,
+  },
 ];
 
 export const smsmessages = {
@@ -1087,5 +1083,5 @@ export const smsmessages = {
   form,
   formadd,
   sent,
-  reply
+  reply,
 };

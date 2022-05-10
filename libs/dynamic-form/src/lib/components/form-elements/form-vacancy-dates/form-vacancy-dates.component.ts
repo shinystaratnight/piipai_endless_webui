@@ -7,21 +7,21 @@ import {
   Input,
   OnDestroy,
   ViewEncapsulation,
-  ChangeDetectionStrategy
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { NgbCalendar, NgbDate } from '@ng-bootstrap/ng-bootstrap';
 import { BehaviorSubject, Subscription } from 'rxjs';
 
 import { BasicElementComponent } from './../basic-element/basic-element.component';
-import { getTimeInstance, getToday } from '@webui/utilities';
+import { Time } from '@webui/time';
 
 @Component({
   selector: 'app-form-vacancy-dates',
   templateUrl: 'form-vacancy-dates.component.html',
   styleUrls: ['./form-vacancy-dates.component.scss'],
   encapsulation: ViewEncapsulation.None,
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FormVacancyDatesComponent
   extends BasicElementComponent
@@ -45,8 +45,8 @@ export class FormVacancyDatesComponent
   public markDisabled: Function;
   public vacancyDates: string[];
   public dates: any = {};
-  public todayElement: any;
-  public timeInstance = getTimeInstance();
+  // public todayElement: any;
+  // public timeInstance = getTimeInstance();
   public updating: boolean;
 
   @ViewChild('calendar')
@@ -59,7 +59,7 @@ export class FormVacancyDatesComponent
   }
 
   public ngOnInit() {
-    this.calcMinDate(this.timeInstance);
+    this.calcMinDate();
     this.addControl(this.config, this.fb);
     if (this.config && this.config.value) {
       this.group.get(this.key).patchValue(this.config.value);
@@ -87,7 +87,7 @@ export class FormVacancyDatesComponent
   public markDisabledDates(dates: any[] = []) {
     this.markDisabled = (calendarDate) => {
       const exist = dates.find((shift) => {
-        const shiftDate = this.timeInstance(shift);
+        const shiftDate = Time.parse(shift);
 
         return (
           shiftDate.year() === calendarDate.year &&
@@ -100,8 +100,8 @@ export class FormVacancyDatesComponent
         return exist;
       }
 
-      const existDate = this.timeInstance(exist);
-      const today = getToday();
+      const existDate = Time.parse(exist);
+      const today = Time.now();
 
       if (
         today.year() === existDate.year() &&
@@ -115,19 +115,23 @@ export class FormVacancyDatesComponent
     };
   }
 
-  public calcMinDate(time) {
+  public calcMinDate() {
+    const today = Time.now();
+
     this.minDate = {
-      year: time().year(),
-      month: time().month() + 1,
-      day: time().date()
+      year: today.year(),
+      month: today.month() + 1,
+      day: today.date(),
     };
   }
 
-  public selectVacancyDate(e: NgbDate, time = this.timeInstance) {
+  public selectVacancyDate(e: NgbDate) {
     if (e && !this.updating) {
       this.updating = true;
       const { year, month, day } = e;
-      const date = time([year, month - 1, day]).format(this.dateFormat);
+      const date = Time.parse(`${year}-${month - 1}-${day}`).format(
+        this.dateFormat
+      );
 
       let dates = this.vacancyDates || [];
 
@@ -150,7 +154,7 @@ export class FormVacancyDatesComponent
       this.group.get(this.key).patchValue(this.vacancyDates);
       this.event.emit({
         el: this.config,
-        type: 'change'
+        type: 'change',
       });
     }
   }

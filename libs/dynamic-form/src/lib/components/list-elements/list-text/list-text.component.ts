@@ -1,14 +1,14 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import { DateFormat } from '@webui/data';
 
 import { isMobile, getTimeInstance, getTranslationKey } from '@webui/utilities';
 import { getValueOfData, generateCssStyles } from '../../../helpers';
+import { DATE_FORMAT, DATE_TIME_FORMAT } from '@webui/time';
 
 @Component({
   selector: 'app-list-text',
   templateUrl: './list-text.component.html',
   styleUrls: ['./list-text.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ListTextComponent implements OnInit {
   private stylePrefix = 'list-text';
@@ -30,7 +30,7 @@ export class ListTextComponent implements OnInit {
     2: '#fc9183',
     3: '#FFA236',
     4: '#ffbf00',
-    5: '#FFD042'
+    5: '#FFD042',
   };
 
   public isMobile = isMobile;
@@ -102,24 +102,24 @@ export class ListTextComponent implements OnInit {
       if (type === 'date') {
         if (this.arrayValue) {
           const result = this.value.map((el) => {
-            return el ? moment(el, 'YYYY-MM-DD').format(DateFormat.Date) : ' ';
+            return el ? moment(el, 'YYYY-MM-DD').format(DATE_FORMAT) : ' ';
           });
           this.value = result;
         } else {
           this.value = this.value
-            ? moment(this.value, 'YYYY-MM-DD').format(DateFormat.Date)
+            ? moment(this.value, 'YYYY-MM-DD').format(DATE_FORMAT)
             : ' ';
         }
       }
       if (type === 'datetime') {
         if (this.arrayValue) {
           const result = this.value.map((el) => {
-            return el ? moment(el).format(DateFormat.DateTime) : ' ';
+            return el ? moment(el).format(DATE_TIME_FORMAT) : ' ';
           });
           this.value = result;
         } else {
           this.value = this.value
-            ? moment(this.value).format(DateFormat.DateTime)
+            ? moment(this.value).format(DATE_TIME_FORMAT)
             : ' '; //tslint:disable-line
         }
       }
@@ -153,7 +153,7 @@ export class ListTextComponent implements OnInit {
         'success',
         'warning',
         'description',
-        'comment'
+        'comment',
       ];
       const color = this.config.color;
       this.iconClass = classes.indexOf(color) > -1 ? `text-${color}` : '';
@@ -170,7 +170,7 @@ export class ListTextComponent implements OnInit {
         if (candidate) {
           result.push({
             name: candidate.name,
-            status
+            status,
           });
         }
       });
