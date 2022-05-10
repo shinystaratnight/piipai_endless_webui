@@ -1,18 +1,4 @@
-import {
-  getYesterday,
-  getToday,
-  getWeekEnd,
-  getWeekStart,
-  getMonthStart,
-  getMonthEnd
-} from '@webui/utilities';
-
-const yesterdayFormatDate = getYesterday();
-const todayFormatDate = getToday().format();
-const weekStart = getWeekStart();
-const weekEnd = getWeekEnd();
-const monthStart = getMonthStart();
-const monthEnd = getMonthEnd();
+import { createFilter, Type } from '@webui/metadata';
 
 const formset = {
   list: {
@@ -23,25 +9,25 @@ const formset = {
         content: [
           {
             field: 'sent_at',
-            type: 'datepicker'
-          }
+            type: 'datepicker',
+          },
         ],
         name: 'sent_at',
         sort_field: 'sent_at',
         label: 'Sent at',
-        sort: true
+        sort: true,
       },
       {
         content: [
           {
             field: 'sid',
-            type: 'textarea'
-          }
+            type: 'textarea',
+          },
         ],
         name: 'sid',
         sort_field: 'sid',
         label: 'SID',
-        sort: true
+        sort: true,
       },
       {
         content: [
@@ -50,50 +36,50 @@ const formset = {
             type: 'select',
             values: {
               SENT: 'SMS sent',
-              RECEIVED: 'SMS received'
-            }
-          }
+              RECEIVED: 'SMS received',
+            },
+          },
         ],
         name: 'type',
         sort_field: 'type',
         label: 'Direction',
-        sort: true
+        sort: true,
       },
       {
         content: [
           {
             field: 'from_number',
-            type: 'input'
-          }
+            type: 'input',
+          },
         ],
         name: 'from_number',
         sort_field: 'from_number',
         label: 'From number',
-        sort: true
+        sort: true,
       },
       {
         content: [
           {
             field: 'to_number',
-            type: 'input'
-          }
+            type: 'input',
+          },
         ],
         name: 'to_number',
         sort_field: 'to_number',
         label: 'To number',
-        sort: true
+        sort: true,
       },
       {
         content: [
           {
             field: 'segments',
-            type: 'input'
-          }
+            type: 'input',
+          },
         ],
         name: 'segments',
         sort_field: 'segments',
         label: 'Number of segments',
-        sort: true
+        sort: true,
       },
       {
         content: [
@@ -106,107 +92,82 @@ const formset = {
               FAILED: 'Failed',
               DELIVERED: 'Delivered',
               UNDELIVERED: 'Undelivered',
-              RECEIVED: 'Received'
+              RECEIVED: 'Received',
             },
             field: 'status',
-            type: 'select'
-          }
+            type: 'select',
+          },
         ],
         name: 'status',
         sort_field: 'status',
         label: 'Status',
-        sort: true
+        sort: true,
       },
       {
         content: [
           {
             field: 'cost',
             display: '$ {field}',
-            type: 'input'
-          }
+            type: 'input',
+          },
         ],
         name: 'cost',
-        label: 'Cost'
-      }
+        label: 'Cost',
+      },
     ],
     pagination_label: 'SMS message',
     search_enabled: true,
     editDisable: true,
     buttons: [],
     filters: [
-      {
-        list: [
-          {
-            label: 'Today',
-            query: `created_at_0=${todayFormatDate}&created_at_1=${todayFormatDate}`
-          },
-          {
-            label: 'Yesterday',
-            query: `created_at_0=${yesterdayFormatDate}&created_at_1=${yesterdayFormatDate}`
-          },
-          {
-            label: 'This week',
-            query: `created_at_0=${weekStart}&created_at_1=${weekEnd}`
-          },
-          {
-            label: 'This month',
-            query: `created_at_0=${monthStart}&created_at_1=${monthEnd}`
-          }
-        ],
+      createFilter(Type.Date, {
         key: 'created_at',
         label: 'Created at',
-        type: 'date',
-        input: [
-          {
-            label: 'From',
-            query: 'created_at_0'
-          },
-          {
-            label: 'To',
-            query: 'created_at_1'
-          }
-        ]
-      },
+        yesterday: true,
+        today: true,
+        week: true,
+        month: true,
+      }),
       {
         key: 'status',
         label: 'Status',
         options: [
           {
             value: 'ACCEPTED',
-            label: 'Accepted'
+            label: 'Accepted',
           },
           {
             value: 'SENT',
-            label: 'Sent'
+            label: 'Sent',
           },
           {
             value: 'QUEUED',
-            label: 'Queued'
+            label: 'Queued',
           },
           {
             value: 'SENDING',
-            label: 'Sending'
+            label: 'Sending',
           },
           {
             value: 'FAILED',
-            label: 'Failed'
+            label: 'Failed',
           },
           {
             value: 'DELIVERED',
-            label: 'Delivered'
+            label: 'Delivered',
           },
           {
             value: 'UNDELIVERED',
-            label: 'Undelivered'
+            label: 'Undelivered',
           },
           {
             value: 'RECEIVED',
-            label: 'Received'
-          }
+            label: 'Received',
+          },
         ],
         query: 'status',
         default: null,
-        type: 'select'
+        type: 'select',
       },
       {
         key: 'type',
@@ -215,31 +176,31 @@ const formset = {
           {
             value: 'SENT',
             key: 'sent',
-            label: 'SMS sent'
+            label: 'SMS sent',
           },
           {
             value: 'RECEIVED',
             key: 'received',
-            label: 'SMS received'
-          }
+            label: 'SMS received',
+          },
         ],
         query: 'type',
         multiple: false,
         default: null,
-        type: 'checkbox'
-      }
-    ]
+        type: 'checkbox',
+      },
+    ],
   },
   fields: [
     {
       key: 'sent_at',
       templateOptions: {
-        type: 'datetime'
-      }
-    }
-  ]
+        type: 'datetime',
+      },
+    },
+  ],
 };
 
 export const smslogs = {
-  formset
+  formset,
 };

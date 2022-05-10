@@ -1,12 +1,11 @@
 import {
   checkAndReturnTranslation,
   getLocalStorageItem,
-  getTimeInstanceByTimezone,
   parseDate,
 } from '@webui/utilities';
 import { Endpoints, Models } from '../enums';
 import { Model } from './model';
-import { DATE_TIME_FORMAT } from '@webui/time';
+import { DATE_TIME_FORMAT, Time } from '@webui/time';
 
 export type Timesheet = {
   id: string;
@@ -49,7 +48,7 @@ export class TimesheetModel extends Model {
       break_started_at,
       break_ended_at,
     } = this.data;
-    const timeInstance = getTimeInstanceByTimezone(timezone || time_zone);
+    const timeZone = timezone || time_zone;
     const defaultTime = '0h 0min';
 
     if (!shift_ended_at) {
@@ -57,8 +56,8 @@ export class TimesheetModel extends Model {
     }
 
     let times = {
-      shift_ended_at: timeInstance(shift_ended_at),
-      shift_started_at: timeInstance(shift_started_at),
+      shift_ended_at: Time.parse(shift_ended_at, { timezone: timeZone }),
+      shift_started_at: Time.parse(shift_started_at, { timezone: timeZone }),
       break_started_at: null,
       break_ended_at: null,
     };
@@ -72,8 +71,8 @@ export class TimesheetModel extends Model {
     if (break_ended_at && break_started_at) {
       times = {
         ...times,
-        break_ended_at: timeInstance(break_ended_at),
-        break_started_at: timeInstance(break_started_at),
+        break_ended_at: Time.parse(break_ended_at, { timezone: timeZone }),
+        break_started_at: Time.parse(break_started_at, { timezone: timeZone }),
       };
 
       if (
@@ -89,7 +88,7 @@ export class TimesheetModel extends Model {
     }
 
     const workTime = times.shift_ended_at.diff(times.shift_started_at);
-    const totalTime = timeInstance.duration(workTime - breakTime);
+    const totalTime = Time.duration(workTime - breakTime);
 
     return `${Math.floor(totalTime.asHours())}hr ${totalTime.minutes()}min`;
   }
@@ -184,7 +183,6 @@ export class TimeSheet extends ApiModel {
   }
 
   get totalTime(): string {
-    const timeInstance = getTimeInstanceByTimezone(this.timezone);
     const defaultTime = '0h 0min';
 
     if (!this.endedAt) {
@@ -192,8 +190,8 @@ export class TimeSheet extends ApiModel {
     }
 
     let times = {
-      shift_ended_at: timeInstance(this.endedAt),
-      shift_started_at: timeInstance(this.startedAt),
+      shift_ended_at: Time.parse(this.endedAt, { timezone: this.timezone }),
+      shift_started_at: Time.parse(this.startedAt, { timezone: this.timezone }),
       break_started_at: null,
       break_ended_at: null,
     };
@@ -207,8 +205,12 @@ export class TimeSheet extends ApiModel {
     if (this.breakEndedAt && this.breakStartedAt) {
       times = {
         ...times,
-        break_ended_at: timeInstance(this.breakEndedAt),
-        break_started_at: timeInstance(this.breakStartedAt),
+        break_ended_at: Time.parse(this.breakEndedAt, {
+          timezone: this.timezone,
+        }),
+        break_started_at: Time.parse(this.breakStartedAt, {
+          timezone: this.timezone,
+        }),
       };
 
       if (
@@ -224,7 +226,7 @@ export class TimeSheet extends ApiModel {
     }
 
     const workTime = times.shift_ended_at.diff(times.shift_started_at);
-    const totalTime = timeInstance.duration(workTime - breakTime);
+    const totalTime = Time.duration(workTime - breakTime);
 
     return `${Math.floor(totalTime.asHours())}hr ${totalTime.minutes()}min`;
   }
@@ -238,7 +240,6 @@ export class TimeSheet extends ApiModel {
   }
 
   get format(): { [key: string]: string } {
-    const timeInstance = getTimeInstanceByTimezone(this.timezone);
     const startedAt = parseDate(this.startedAt, this.timezone).format(
       DATE_TIME_FORMAT
     );
@@ -247,7 +248,7 @@ export class TimeSheet extends ApiModel {
       : undefined;
     const breakTime =
       this.breakStartedAt && this.breakEndedAt
-        ? timeInstance.duration(
+        ? Time.duration(
             parseDate(this.breakEndedAt, this.timezone).diff(
               parseDate(this.breakStartedAt, this.timezone)
             )

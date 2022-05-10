@@ -1,27 +1,11 @@
 import { FilterModel } from './filter.model';
 import {
-  getYesterday,
-  getToday,
-  getTommorrow,
   getWeekStart,
   getWeekEnd,
   getMonthStart,
-  getMonthEnd
+  getMonthEnd,
 } from '@webui/utilities';
-
-// import * as moment from 'moment-timezone';
-
-// const todayDate = moment().tz('Australia/Sydney');
-
-// export const todayFormatDate = todayDate.format();
-// export const yesterdayFormatDate = todayDate
-//   .clone()
-//   .add(-1, 'day')
-//   .format();
-// export const tomorrowFormatDate = todayDate
-//   .clone()
-//   .add(1, 'day')
-//   .format();
+import { getTomorrow, getYesterday, Time } from '@webui/time';
 
 export interface DateFilterOptions {
   key: string;
@@ -38,7 +22,7 @@ export enum DateTypes {
   Today,
   Tomorrow,
   Week,
-  Month
+  Month,
 }
 
 export const Date = 'date';
@@ -59,7 +43,7 @@ export class DateFilter implements FilterModel {
       today = false,
       tomorrow = false,
       week = false,
-      month = false
+      month = false,
     } = options;
 
     this.key = key;
@@ -68,13 +52,13 @@ export class DateFilter implements FilterModel {
       {
         label: 'From',
         key: 'from',
-        query: `${key}_0`
+        query: `${key}_0`,
       },
       {
         label: 'To',
         key: 'to',
-        query: `${key}_1`
-      }
+        query: `${key}_1`,
+      },
     ];
 
     this.list = [];
@@ -82,7 +66,7 @@ export class DateFilter implements FilterModel {
       this.list.push({
         label: 'Yesterday',
         key: 'yesterday',
-        query: DateTypes.Yesterday
+        query: DateTypes.Yesterday,
       });
     }
 
@@ -90,7 +74,7 @@ export class DateFilter implements FilterModel {
       this.list.push({
         label: 'Today',
         key: 'today',
-        query: DateTypes.Today
+        query: DateTypes.Today,
       });
     }
 
@@ -98,7 +82,7 @@ export class DateFilter implements FilterModel {
       this.list.push({
         label: 'Tomorrow',
         key: 'tomorrow',
-        query: DateTypes.Tomorrow
+        query: DateTypes.Tomorrow,
       });
     }
 
@@ -106,7 +90,7 @@ export class DateFilter implements FilterModel {
       this.list.push({
         label: 'This week',
         key: 'this_week',
-        query: DateTypes.Week
+        query: DateTypes.Week,
       });
     }
 
@@ -114,21 +98,25 @@ export class DateFilter implements FilterModel {
       this.list.push({
         label: 'This month',
         key: 'this_month',
-        query: DateTypes.Month
+        query: DateTypes.Month,
       });
     }
   }
 
   static getQuery = (key: string, type: DateTypes) => {
+    const tomorrow = getTomorrow().format();
+    const yesterday = getYesterday().format();
+    const today = Time.now().format();
+
     switch (type) {
       case DateTypes.Yesterday:
-        return `${key}_0=${getYesterday()}&${key}_1=${getYesterday()}`;
+        return `${key}_0=${yesterday}&${key}_1=${yesterday}`;
 
       case DateTypes.Today:
-        return `${key}_0=${getToday().format()}&${key}_1=${getToday().format()}`;
+        return `${key}_0=${today}&${key}_1=${today}`;
 
       case DateTypes.Tomorrow:
-        return `${key}_0=${getTommorrow()}&${key}_1=${getTommorrow()}`;
+        return `${key}_0=${tomorrow}&${key}_1=${tomorrow}`;
 
       case DateTypes.Week:
         return `${key}_0=${getWeekStart()}&${key}_1=${getWeekEnd()}`;

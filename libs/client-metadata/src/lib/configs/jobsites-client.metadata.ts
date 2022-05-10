@@ -1,5 +1,5 @@
-import { getToday } from '@webui/utilities';
 import { Endpoints } from '@webui/data';
+import { Time } from '@webui/time';
 
 const list = {
   list: {
@@ -10,102 +10,102 @@ const list = {
         content: [
           {
             field: '__str__',
-            type: 'static'
-          }
+            type: 'static',
+          },
         ],
         name: 'site_name',
         title: null,
         label: 'Site Name',
-        delim: null
+        delim: null,
       },
       {
         content: [
           {
             field: 'address.state.name',
             type: 'text',
-            label: 'State'
-          }
+            label: 'State',
+          },
         ],
         name: 'state',
         title: null,
         label: 'State',
-        delim: null
+        delim: null,
       },
       {
         content: [
           {
             field: 'address.city.name',
             type: 'text',
-            label: 'City'
-          }
+            label: 'City',
+          },
         ],
         name: 'city',
         title: null,
         label: 'City',
-        delim: null
+        delim: null,
       },
       {
         content: [
           {
             endpoint: '/core/companies/',
             field: 'regular_company',
-            type: 'related'
-          }
+            type: 'related',
+          },
         ],
         name: 'regular_company',
         sort_field: 'regular_company',
         label: 'Client',
-        sort: true
+        sort: true,
       },
       {
         content: [
           {
             endpoint: '/core/companycontacts/',
             field: 'portfolio_manager',
-            type: 'related'
-          }
+            type: 'related',
+          },
         ],
         name: 'portfolio_manager',
         sort_field: 'portfolio_manager',
         label: 'Portfolio manager',
-        sort: true
+        sort: true,
       },
       {
         content: [
           {
             endpoint: '/pricing/industries/',
             field: 'industry',
-            type: 'text'
-          }
+            type: 'text',
+          },
         ],
         name: 'industry',
         sort_field: 'industry',
         label: 'Industry',
-        sort: true
+        sort: true,
       },
       {
         content: [
           {
             field: 'start_date',
-            type: 'datepicker'
-          }
+            type: 'datepicker',
+          },
         ],
         name: 'start_date',
         sort_field: 'start_date',
         label: 'Start Date',
-        sort: true
+        sort: true,
       },
       {
         content: [
           {
             field: 'end_date',
-            type: 'datepicker'
-          }
+            type: 'datepicker',
+          },
         ],
         name: 'end_date',
         sort_field: 'end_date',
         label: 'End Date',
-        sort: true
+        sort: true,
       },
       {
         content: [
@@ -113,18 +113,18 @@ const list = {
             values: {
               false: 'times-circle',
               true: 'check-circle',
-              null: 'minus-circle'
+              null: 'minus-circle',
             },
             type: 'icon',
-            field: 'is_available'
-          }
+            field: 'is_available',
+          },
         ],
         name: 'is_available',
-        label: 'Status'
-      }
+        label: 'Status',
+      },
     ],
     pagination_label: 'Jobsite',
-    editDisable: false
+    editDisable: false,
   },
   fields: [
     {
@@ -133,9 +133,9 @@ const list = {
       templateOptions: {
         required: false,
         label: 'Start Date',
-        type: 'date'
+        type: 'date',
       },
-      read_only: true
+      read_only: true,
     },
     {
       key: 'end_date',
@@ -143,9 +143,9 @@ const list = {
       templateOptions: {
         required: false,
         label: 'End Date',
-        type: 'date'
+        type: 'date',
       },
-      read_only: true
+      read_only: true,
     },
     {
       key: 'active_states',
@@ -153,9 +153,9 @@ const list = {
       templateOptions: {
         required: false,
         label: 'Active states',
-        type: 'static'
+        type: 'static',
       },
-      read_only: true
+      read_only: true,
     },
     {
       key: '__str__',
@@ -163,11 +163,11 @@ const list = {
       templateOptions: {
         required: false,
         label: 'Jobsite',
-        type: 'static'
+        type: 'static',
       },
-      read_only: true
-    }
-  ]
+      read_only: true,
+    },
+  ],
 };
 
 const formset = {
@@ -184,16 +184,16 @@ const formset = {
         edit: true,
         values: ['__str__'],
         label: 'Primary contact',
-        type: 'related'
+        type: 'related',
       },
       read_only: false,
-      type: 'related'
+      type: 'related',
     },
     {
       key: '__str__',
       read_only: true,
       templateOptions: { required: false, label: 'Jobsite', type: 'static' },
-      type: 'static'
+      type: 'static',
     },
     {
       key: 'id',
@@ -201,35 +201,35 @@ const formset = {
         action: 'editForm',
         label: '',
         type: 'button',
-        text: ''
+        text: '',
       },
-      type: 'button'
+      type: 'button',
     },
     {
       key: 'start_date',
       read_only: false,
       templateOptions: { required: false, label: 'Start Date', type: 'date' },
-      type: 'datepicker'
+      type: 'datepicker',
     },
     {
       key: 'end_date',
       read_only: false,
       templateOptions: { required: false, label: 'End Date', type: 'date' },
-      type: 'datepicker'
+      type: 'datepicker',
     },
     {
       key: 'notes',
       read_only: false,
       templateOptions: { required: false, label: 'Notes', type: 'text' },
-      type: 'input'
-    }
+      type: 'input',
+    },
   ],
   list: {
     columns: [
       {
         name: '__str__',
         content: [{ type: 'static', field: '__str__' }],
-        label: 'Jobsite'
+        label: 'Jobsite',
       },
       {
         name: 'primary_contact',
@@ -239,31 +239,31 @@ const formset = {
           {
             endpoint: '/core/companycontacts/',
             type: 'related',
-            field: 'primary_contact'
-          }
+            field: 'primary_contact',
+          },
         ],
-        label: 'Primary contact'
+        label: 'Primary contact',
       },
       {
         name: 'start_date',
         sort: true,
         sort_field: 'start_date',
         content: [{ type: 'datepicker', field: 'start_date' }],
-        label: 'Start Date'
+        label: 'Start Date',
       },
       {
         name: 'end_date',
         sort: true,
         sort_field: 'end_date',
         content: [{ type: 'datepicker', field: 'end_date' }],
-        label: 'End Date'
+        label: 'End Date',
       },
       {
         name: 'notes',
         sort: true,
         sort_field: 'notes',
         content: [{ type: 'input', field: 'notes' }],
-        label: 'Notes'
+        label: 'Notes',
       },
       {
         name: 'actions',
@@ -275,7 +275,7 @@ const formset = {
             title: 'Edit',
             text_color: '#f0ad4e',
             type: 'button',
-            field: 'id'
+            field: 'id',
           },
           {
             action: 'delete',
@@ -283,21 +283,21 @@ const formset = {
             title: 'Delete',
             text_color: '#f32700',
             type: 'button',
-            field: 'id'
-          }
+            field: 'id',
+          },
         ],
         label: 'Actions',
         title: null,
-        delim: null
-      }
+        delim: null,
+      },
     ],
     buttons: [],
     list: 'jobsite',
     editDisable: false,
     label: 'Jobsite',
     pagination_label: 'Jobsite',
-    search_enabled: true
-  }
+    search_enabled: true,
+  },
 };
 
 const form = [
@@ -309,10 +309,10 @@ const form = [
       address: 'address.__str__',
       title: 'short_name',
       updated_at: 'updated_at',
-      map: 'address'
+      map: 'address',
     },
     type: 'info',
-    key: 'id'
+    key: 'id',
   },
   {
     type: 'tabs',
@@ -341,17 +341,17 @@ const form = [
                       label: 'Name',
                       values: ['contact'],
                       type: 'related',
-                      display: '{contact.__str__}'
+                      display: '{contact.__str__}',
                     },
                     read_only: true,
                     visibleMode: true,
                     prefilled: {
-                      company: '{regular_company.id}'
+                      company: '{regular_company.id}',
                     },
                     type: 'related',
                     query: {
-                      company: '{regular_company.id}'
-                    }
+                      company: '{regular_company.id}',
+                    },
                   },
                   {
                     key: 'primary_contact.job_title',
@@ -361,9 +361,9 @@ const form = [
                       required: false,
                       label: 'Job Title',
                       max: 31,
-                      type: 'text'
+                      type: 'text',
                     },
-                    read_only: true
+                    read_only: true,
                   },
                   {
                     key: 'primary_contact.contact.email',
@@ -373,9 +373,9 @@ const form = [
                       required: false,
                       label: 'E-mail',
                       max: 255,
-                      type: 'text'
+                      type: 'text',
                     },
-                    read_only: true
+                    read_only: true,
                   },
                   {
                     key: 'primary_contact.contact.phone_mobile',
@@ -384,12 +384,12 @@ const form = [
                     templateOptions: {
                       required: false,
                       label: 'Phone number',
-                      type: 'text'
+                      type: 'text',
                     },
-                    read_only: true
-                  }
+                    read_only: true,
+                  },
                 ],
-                width: 0.25
+                width: 0.25,
               },
               {
                 label: 'Additional Info',
@@ -403,10 +403,10 @@ const form = [
                     templateOptions: {
                       label: 'Industry',
                       values: ['__str__', 'translations'],
-                      type: 'related'
+                      type: 'related',
                     },
                     type: 'related',
-                    key: 'industry'
+                    key: 'industry',
                   },
                   {
                     key: 'start_date',
@@ -414,9 +414,9 @@ const form = [
                     templateOptions: {
                       required: false,
                       label: 'Start Date',
-                      type: 'date'
+                      type: 'date',
                     },
-                    read_only: false
+                    read_only: false,
                   },
                   {
                     key: 'end_date',
@@ -424,12 +424,12 @@ const form = [
                     templateOptions: {
                       required: false,
                       label: 'End Date',
-                      type: 'date'
+                      type: 'date',
                     },
-                    read_only: false
-                  }
+                    read_only: false,
+                  },
                 ],
-                width: 0.25
+                width: 0.25,
               },
               {
                 label: 'Portfolio Manager',
@@ -444,12 +444,12 @@ const form = [
                     templateOptions: {
                       label: 'Name',
                       values: ['__str__'],
-                      type: 'related'
+                      type: 'related',
                     },
                     type: 'related',
                     query: {
-                      company: '{master_company.id}'
-                    }
+                      company: '{master_company.id}',
+                    },
                   },
                   {
                     key: 'portfolio_manager.job_title',
@@ -459,9 +459,9 @@ const form = [
                       required: false,
                       label: 'Job Title',
                       max: 31,
-                      type: 'text'
+                      type: 'text',
                     },
-                    read_only: true
+                    read_only: true,
                   },
                   {
                     key: 'portfolio_manager.contact.phone_mobile',
@@ -470,16 +470,16 @@ const form = [
                     templateOptions: {
                       required: false,
                       label: 'Phone number',
-                      type: 'text'
+                      type: 'text',
                     },
-                    read_only: true
-                  }
+                    read_only: true,
+                  },
                 ],
-                width: 0.25
-              }
-            ]
-          }
-        ]
+                width: 0.25,
+              },
+            ],
+          },
+        ],
       },
       {
         endpoint: Endpoints.Job,
@@ -488,20 +488,20 @@ const form = [
           label: 'Jobs',
           type: 'list',
           text: 'Jobs',
-          add_label: 'Add +'
+          add_label: 'Add +',
         },
         prefilled: {
           customer_representative: '{primary_contact.id}',
           jobsite: '{id}',
-          customer_company: '{regular_company.id}'
+          customer_company: '{regular_company.id}',
         },
         type: 'list',
         metadata_query: {
-          type: 'jobsite_client'
+          type: 'jobsite_client',
         },
         query: {
-          jobsite: '{id}'
-        }
+          jobsite: '{id}',
+        },
       },
       {
         endpoint: '/core/notes/',
@@ -510,19 +510,19 @@ const form = [
           label: 'Notes',
           type: 'list',
           add_label: '+ Add',
-          text: 'Notes'
+          text: 'Notes',
         },
         add_form: true,
         prefilled: {
           object_id: '{id}',
-          content_type: '{model_content_type}'
+          content_type: '{model_content_type}',
         },
         type: 'list',
         query: {
-          object_id: '{id}'
-        }
-      }
-    ]
+          object_id: '{id}',
+        },
+      },
+    ],
   },
   {
     key: 'primary_contact.contact',
@@ -531,10 +531,10 @@ const form = [
     templateOptions: {
       required: true,
       label: 'Contact',
-      type: 'text'
+      type: 'text',
     },
     send: false,
-    type: 'input'
+    type: 'input',
   },
   {
     key: 'portfolio_manager.contact',
@@ -543,10 +543,10 @@ const form = [
     templateOptions: {
       required: true,
       label: 'Contact',
-      type: 'text'
+      type: 'text',
     },
     send: false,
-    type: 'input'
+    type: 'input',
   },
   {
     key: 'is_available',
@@ -554,11 +554,11 @@ const form = [
     templateOptions: {
       required: false,
       label: 'Available',
-      type: 'checkbox'
+      type: 'checkbox',
     },
     hide: true,
     default: false,
-    type: 'checkbox'
+    type: 'checkbox',
   },
   {
     key: 'short_name',
@@ -567,8 +567,8 @@ const form = [
     templateOptions: {
       label: 'Site short name',
       max: 63,
-      type: 'text'
-    }
+      type: 'text',
+    },
   },
   {
     endpoint: '/core/companies/',
@@ -576,10 +576,10 @@ const form = [
     templateOptions: {
       label: 'Provider company',
       values: ['__str__'],
-      type: 'related'
+      type: 'related',
     },
     type: 'related',
-    key: 'master_company'
+    key: 'master_company',
   },
   {
     key: 'regular_company',
@@ -590,9 +590,9 @@ const form = [
     templateOptions: {
       label: 'Client',
       values: ['__str__'],
-      type: 'related'
+      type: 'related',
     },
-    type: 'related'
+    type: 'related',
   },
   {
     endpoint: '/core/addresses/',
@@ -602,11 +602,11 @@ const form = [
       label: 'Address',
       add: true,
       values: ['__str__'],
-      type: 'address'
+      type: 'address',
     },
     type: 'address',
-    key: 'address'
-  }
+    key: 'address',
+  },
 ];
 
 const formadd = [
@@ -629,17 +629,17 @@ const formadd = [
                 'short_name',
                 '__str__',
                 'master_company',
-                'primary_contact'
+                'primary_contact',
               ],
               type: 'related',
-              required: true
+              required: true,
             },
             type: 'related',
             query: {
               has_industry: '2',
-              status: '70'
+              status: '70',
             },
-            many: false
+            many: false,
           },
           {
             endpoint: '/core/companycontacts/',
@@ -648,14 +648,14 @@ const formadd = [
               required: true,
               label: 'Primary contact',
               values: ['__str__'],
-              type: 'related'
+              type: 'related',
             },
             default: '{regular_company.primary_contact.id}',
             showIf: ['regular_company.id'],
             type: 'related',
             query: {
-              company: '{regular_company.id}'
-            }
+              company: '{regular_company.id}',
+            },
           },
           {
             list: false,
@@ -669,13 +669,13 @@ const formadd = [
               delete: false,
               values: ['__str__'],
               type: 'address',
-              edit: true
+              edit: true,
             },
             collapsed: false,
             showIf: ['regular_company.id'],
             type: 'address',
             key: 'address',
-            many: false
+            many: false,
           },
           {
             list: false,
@@ -685,22 +685,22 @@ const formadd = [
               label: 'Industry',
               values: ['__str__', 'translations'],
               type: 'related',
-              required: true
+              required: true,
             },
             collapsed: false,
             default: '{regular_company.industry.id}',
             showIf: ['primary_contact.id', 'address'],
             type: 'related',
             key: 'industry',
-            many: false
+            many: false,
           },
           {
             checkObject: {
               endpoint: '/hr/jobsites/',
               error: 'Job site with this name already exists, please alter it!',
               query: {
-                short_name: '{regular_company.short_name} - {address.vicinity}'
-              }
+                short_name: '{regular_company.short_name} - {address.vicinity}',
+              },
             },
             key: 'short_name',
             read_only: false,
@@ -708,13 +708,13 @@ const formadd = [
               required: false,
               label: 'Site name',
               max: 63,
-              type: 'text'
+              type: 'text',
             },
             showIf: ['primary_contact.id', 'address'],
             default: '{regular_company.short_name} - {address.vicinity}',
-            type: 'input'
-          }
-        ]
+            type: 'input',
+          },
+        ],
       },
       {
         type: 'column',
@@ -730,16 +730,16 @@ const formadd = [
               delete: false,
               values: ['__str__'],
               type: 'related',
-              edit: true
+              edit: true,
             },
             visibleMode: true,
             default: '{regular_company.primary_contact.id}',
             showIf: ['primary_contact.id', 'address'],
             type: 'related',
             query: {
-              master_company: 'current'
+              master_company: 'current',
             },
-            many: false
+            many: false,
           },
           {
             list: false,
@@ -753,7 +753,7 @@ const formadd = [
               values: ['__str__'],
               type: 'related',
               edit: true,
-              required: true
+              required: true,
             },
             collapsed: false,
             default: '{regular_company.master_company.id}',
@@ -761,9 +761,9 @@ const formadd = [
             type: 'related',
             query: {
               current: '2',
-              type: 'master'
+              type: 'master',
             },
-            many: false
+            many: false,
           },
           {
             key: 'start_date',
@@ -771,11 +771,11 @@ const formadd = [
             templateOptions: {
               required: false,
               label: 'Start Date',
-              type: 'date'
+              type: 'date',
             },
             showIf: ['primary_contact.id', 'address'],
-            default: getToday(),
-            type: 'datepicker'
+            default: Time.now().format(),
+            type: 'datepicker',
           },
           {
             key: 'end_date',
@@ -784,19 +784,19 @@ const formadd = [
             templateOptions: {
               required: false,
               label: 'End Date',
-              type: 'date'
+              type: 'date',
             },
-            read_only: false
-          }
-        ]
-      }
-    ]
-  }
+            read_only: false,
+          },
+        ],
+      },
+    ],
+  },
 ];
 
 export const jobsitesclient = {
   list,
   formset,
   form,
-  formadd
+  formadd,
 };

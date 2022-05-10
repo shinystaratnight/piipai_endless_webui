@@ -14,14 +14,6 @@ export function getTimeInstance(): any {
   return moment;
 }
 
-export function getTimeInstanceByTimezone(timezone: string) {
-  if (!timezone) {
-    return getTimeInstance();
-  }
-
-  return moment.tz.setDefault(timezone);
-}
-
 export function parseDate(
   date: string,
   timezone?: string,
@@ -30,28 +22,12 @@ export function parseDate(
   return moment.tz(date, format, timezone);
 }
 
-export function getLocalTime() {
-  return moment().clone();
-}
-
 export function getTimeByTimezone(timezone: string) {
   return moment.tz(timezone);
 }
 
-export function setTimeZone(timezone: string) {
-  moment.tz.setDefault(timezone);
-}
-
-export function getToday() {
+function getToday() {
   return moment();
-}
-
-export function getYesterday() {
-  return getLocalTime().add(-1, 'day').format();
-}
-
-export function getTommorrow() {
-  return getLocalTime().add(1, 'day').format();
 }
 
 export function getTimeZoneOffset() {
