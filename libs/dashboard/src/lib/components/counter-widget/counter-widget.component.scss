@@ -1,3 +1,4 @@
+@use 'sass:math';
 @import '../../../../../../styles/variables';
 
 :host {
@@ -41,8 +42,8 @@
   flex-wrap: wrap;
   width: calc(100% + #{$gap});
   margin-top: 1rem;
-  margin-left: -$gap / 2;
-  margin-right: -$gap / 2;
+  margin-left: math.div(-$gap, 2) ;
+  margin-right: math.div(-$gap, 2) ;
 
   &__item {
     margin: 0 0.5rem;
