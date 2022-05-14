@@ -1,15 +1,14 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
-import { Moment } from 'moment';
-import { getTimeInstance, isMobile } from '@webui/utilities';
+import { isMobile } from '@webui/utilities';
+import { Time } from '@webui/time';
 
 @Component({
   selector: 'app-tracking-modal',
   templateUrl: './tracking-modal.component.html',
   styleUrls: ['./tracking-modal.component.scss'],
-  // changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TrackingModalComponent implements OnInit {
   timesheet: any;
@@ -32,12 +31,12 @@ export class TrackingModalComponent implements OnInit {
 
   ngOnInit() {
     const timezone = this.timesheet.time_zone || this.timesheet.timezone;
-    this.timeInstance = timezone ? getTimeInstance().tz.setDefault(timezone) : getTimeInstance();
-
-    const break_end = this.timeInstance(this.timesheet.break_ended_at);
-    const break_start = this.timeInstance(this.timesheet.break_started_at);
-    const end = this.timeInstance(this.timesheet.shift_ended_at);
-    const start = this.timeInstance(this.timesheet.shift_started_at);
+    const break_end = Time.parse(this.timesheet.break_ended_at, { timezone });
+    const break_start = Time.parse(this.timesheet.break_started_at, {
+      timezone,
+    });
+    const end = Time.parse(this.timesheet.shift_ended_at, { timezone });
+    const start = Time.parse(this.timesheet.shift_started_at, { timezone });
 
     this.timePoints = { start, end, break_start, break_end };
     this.jobsite = this.timesheet.jobsite.__str__;
@@ -67,7 +66,11 @@ export class TrackingModalComponent implements OnInit {
   }
 
   public trackingMarkerCoordinates(time) {
-    const item = this.path.find((el) => time.format('hh:mm A') === this.timeInstance(el.log_at).format('hh:mm A'));
+    const item = this.path.find(
+      (el) =>
+        time.format('hh:mm A') ===
+        this.timeInstance(el.log_at).format('hh:mm A')
+    );
 
     if (item) {
       this.markerLatitude = item.lat;

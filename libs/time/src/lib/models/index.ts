@@ -1,5 +1,9 @@
 import * as moment from 'moment-timezone';
-import { Moment, MomentFormatSpecification } from 'moment-timezone';
+import {
+  Moment,
+  MomentFormatSpecification,
+  MomentInput,
+} from 'moment-timezone';
 
 moment.updateLocale('en', {
   week: {
@@ -9,18 +13,23 @@ moment.updateLocale('en', {
 
 export class Time {
   static duration = moment.duration;
+  static utc = moment.utc;
 
-  static now(): Moment {
-    return moment().clone();
+  static now(timezone?: string): Moment {
+    if (typeof timezone === 'string') {
+      return moment.tz(timezone);
+    }
+
+    return moment();
   }
 
   static parse(
-    value: string,
+    value: MomentInput,
     config: { format?: MomentFormatSpecification; timezone?: string } = {}
   ): Moment {
     const { format, timezone } = config;
 
-    if (format && timezone) {
+    if (format && timezone && typeof value === 'string') {
       return moment.tz(value, format, timezone);
     } else if (format) {
       return moment(value, format);

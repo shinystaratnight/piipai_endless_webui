@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Moment } from 'moment-timezone';
 
 import {
   DateRange,
@@ -7,7 +6,7 @@ import {
   weekStart,
   weekEnd,
 } from '@webui/utilities';
-import { Time } from '@webui/time';
+import { Moment, Time } from '@webui/time';
 
 export interface DatepickerData {
   header: string[];

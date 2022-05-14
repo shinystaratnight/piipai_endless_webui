@@ -1,17 +1,15 @@
 import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core';
 
-import { Moment } from 'moment-timezone';
-
 import { DateRangeService } from '../../services';
 import { DateRange } from '@webui/utilities';
+import { Moment } from '@webui/time';
 
 @Component({
   selector: 'app-date-range',
   templateUrl: './date-range.component.html',
-  styleUrls: ['./date-range.component.scss']
+  styleUrls: ['./date-range.component.scss'],
 })
 export class DateRangeComponent implements OnInit {
-
   @Input() type: DateRange;
   @Input() date: Moment;
   @Input() large: boolean;
@@ -20,9 +18,7 @@ export class DateRangeComponent implements OnInit {
 
   rangeTitle: string;
 
-  constructor(
-    private dateRangeService: DateRangeService
-  ) {}
+  constructor(private dateRangeService: DateRangeService) {}
 
   ngOnInit() {
     this.updateRangeTitle();

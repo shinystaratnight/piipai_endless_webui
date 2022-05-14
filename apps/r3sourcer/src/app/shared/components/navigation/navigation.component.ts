@@ -8,7 +8,7 @@ import {
   EventEmitter,
   Output,
   ViewEncapsulation,
-  OnDestroy
+  OnDestroy,
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
@@ -29,14 +29,13 @@ import {
   isClient,
   isCandidate,
   isManager,
-  getTimeInstance
 } from '@webui/utilities';
 
 @Component({
   selector: 'app-navigation',
   templateUrl: './navigation.component.html',
   styleUrls: ['./navigation.component.scss'],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
 })
 export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('header') public header: any;
@@ -91,14 +90,19 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
       return this.user.data.contact.name;
     }
 
-    return this.user.currentRole.__str__.split(':').map(el => el.trim()).slice(0, 2).join(' - ');
+    return this.user.currentRole.__str__
+      .split(':')
+      .map((el) => el.trim())
+      .slice(0, 2)
+      .join(' - ');
   }
 
   get trialMessage() {
-    const date = this.dateService.instance;
-    const expires = date(this.user.data.end_trial_date, 'YYYY-MM-DD hh:mm:ss');
+    const expires = this.dateService.parse(this.user.data.end_trial_date, {
+      format: 'YYYY-MM-DD hh:mm:ss',
+    });
 
-    if (expires.isAfter(date())) {
+    if (expires.isAfter(this.dateService.now())) {
       return `Trail version expires ${expires.format()}`;
     } else {
       return null;
@@ -106,7 +110,9 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   get roleList() {
-    return this.user.data.roles.filter((el) => el.id !== this.user.currentRole.id)
+    return this.user.data.roles.filter(
+      (el) => el.id !== this.user.currentRole.id
+    );
   }
 
   public resizeSubscription: Subscription;
@@ -172,10 +178,6 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
     } else {
       this.greeting = `Welcome, Anonymous User`;
     }
-  }
-
-  public formatDate(date) {
-    return getTimeInstance()(date, 'YYYY-MM-DD hh:mm:ss').format('YYYY/MM/DD');
   }
 
   public checkCandidateRole(role) {

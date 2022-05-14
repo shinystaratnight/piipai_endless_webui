@@ -121,9 +121,9 @@ export function getStorageLang(): Language {
   return JSON.parse(localStorage.getItem('web.lang'));
 }
 
-export function getTotalTime(time, data) {
-  const shift_ended_at = time(data.shift_ended_at);
-  const shift_started_at = time(data.shift_started_at);
+export function getTotalTime(data, timezone?: string) {
+  const shift_ended_at = Time.parse(data.shift_ended_at, { timezone });
+  const shift_started_at = Time.parse(data.shift_started_at, { timezone });
 
   let breakTime = 0;
 
@@ -136,8 +136,8 @@ export function getTotalTime(time, data) {
   }
 
   if (data.break_ended_at && data.break_started_at) {
-    const break_ended_at = time(data.break_ended_at);
-    const break_started_at = time(data.break_started_at);
+    const break_ended_at = Time.parse(data.break_ended_at, { timezone });
+    const break_started_at = Time.parse(data.break_started_at, { timezone });
 
     if (
       break_started_at.isAfter(shift_ended_at) ||
@@ -152,7 +152,7 @@ export function getTotalTime(time, data) {
   }
 
   const workTime = shift_ended_at.diff(shift_started_at);
-  const totalTime = time.duration(workTime - breakTime);
+  const totalTime = Time.duration(workTime - breakTime);
 
   return `${Math.floor(totalTime.asHours())}hr ${totalTime.minutes()}min`;
 }

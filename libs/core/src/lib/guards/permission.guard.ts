@@ -9,7 +9,7 @@ import {
   NavigationService,
   CheckPermissionService,
   DateService,
-  SubscriptionService
+  SubscriptionService,
 } from '../services';
 import { User, Role } from '@webui/data';
 
@@ -38,57 +38,58 @@ export class PermissionGuard implements CanActivate {
     const subject = new Subject<boolean>();
 
     setTimeout(() => {
-      this.userService.getUserData()
-      .pipe(
-        catchError(() => of(false))
-      )
-      .subscribe((user: User) => {
-        const requests = [this.navigationService.getPages(user.currentRole)];
+      this.userService
+        .getUserData()
+        .pipe(catchError(() => of(false)))
+        .subscribe((user: User) => {
+          const requests = [this.navigationService.getPages(user.currentRole)];
 
-        if (this.isManager(user.currentRole)) {
-          const endTrial = this.dateService.instance(user.data.end_trial_date);
-          const trialExpired = endTrial.isBefore(this.dateService.instance());
+          if (this.isManager(user.currentRole)) {
+            const endTrial = this.dateService.parse(user.data.end_trial_date);
+            const trialExpired = endTrial.isBefore(this.dateService.now());
 
-          if (trialExpired) {
-            this.subscriptionService.update();
+            if (trialExpired) {
+              this.subscriptionService.update();
+            } else {
+              this.subscriptionService.useTrialPermissions();
+            }
+
+            requests.push(
+              this.checkPermissionService.getPermissions(user.data.user)
+            );
           } else {
-            this.subscriptionService.useTrialPermissions();
+            this.subscriptionService.useClientPermissions();
           }
 
-          requests.push(this.checkPermissionService.getPermissions(user.data.user));
-        } else {
-          this.subscriptionService.useClientPermissions();
-        }
+          forkJoin(requests).subscribe(([navigation]) => {
+            if (!this.isManager(user.currentRole)) {
+              subject.next(true);
+              return;
+            }
 
-        forkJoin(requests).subscribe(([ navigation ]) => {
-          if (!this.isManager(user.currentRole)) {
-            subject.next(true);
-            return;
-          }
+            let routeSegments = (<any>route)._urlSegment.segments;
 
-          let routeSegments = (<any>route)._urlSegment.segments;
+            if (routeSegments[0].path === 'mn') {
+              routeSegments = routeSegments.slice(1);
+            }
 
-          if (routeSegments[0].path === 'mn') {
-            routeSegments = routeSegments.slice(1);
-          }
+            if (routeSegments[0] && routeSegments[0].path === 'settings') {
+              subject.next(true);
+              return;
+            }
 
-          if (routeSegments[0] && routeSegments[0].path === 'settings') {
-            subject.next(true);
-            return;
-          }
+            this.checkPermissionService
+              .checkPermission(user.data.user, routeSegments, navigation)
+              .subscribe((hasAccess) => {
+                if (hasAccess) {
+                  subject.next(hasAccess);
+                  return;
+                }
 
-          this.checkPermissionService
-            .checkPermission(user.data.user, routeSegments, navigation)
-            .subscribe((hasAccess) => {
-              if (hasAccess) {
-                subject.next(hasAccess);
-                return;
-              }
-
-              this.router.navigate(['/']);
-            });
-        })
-      });
+                this.router.navigate(['/']);
+              });
+          });
+        });
     });
 
     return subject.asObservable();

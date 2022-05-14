@@ -34,7 +34,6 @@ import {
   isMobile,
   isCandidate,
   getContactAvatar,
-  getTimeInstance,
   getPropValue,
   isManager,
   isClient,
@@ -50,12 +49,9 @@ import {
   SortService,
 } from '../../services';
 import {
-  createAddAction,
   smallModalEndpoints,
-  getOrientation,
   fillingForm,
   listUpdateActions,
-  Sort,
 } from '../../helpers';
 
 import { environment } from '../../../../../../apps/r3sourcer/src/environments/environment';
@@ -64,7 +60,6 @@ import {
   TrackingModalComponent,
   EvaluateModalComponent,
   Status,
-  ChangeTimesheetModalComponent,
   ApproveTimesheetModalComponent,
   SubmissionModalComponent,
   SignatureModalComponent,
@@ -74,7 +69,7 @@ import {
 import { FilterEvent } from '../../interfaces';
 import { formatCurrency, getCurrencySymbol } from '@angular/common';
 import { DialogService } from '@webui/dialog';
-import { DATE_FORMAT, DATE_TIME_FORMAT, TIME_FORMAT } from '@webui/time';
+import { DATE_FORMAT, DATE_TIME_FORMAT, Time, TIME_FORMAT } from '@webui/time';
 
 const translationMap = CountryCodeLanguage;
 
@@ -1221,12 +1216,7 @@ export class DynamicListComponent
   }
 
   public getTotalTime(data) {
-    const timezone = data['timezone'] || data['time_zone'];
-    const timeInstance = timezone
-      ? getTimeInstance().tz.setDefault(timezone)
-      : getTimeInstance();
-
-    return getTotalTime(timeInstance, data);
+    return getTotalTime(data, data['timezone'] || data['time_zone']);
   }
 
   public checkValue(obj) {
@@ -2292,18 +2282,17 @@ export class DynamicListComponent
     if (!props.length) {
       if (data) {
         if (prop.indexOf('__') > -1) {
-          const timeInstance = timezone
-            ? getTimeInstance().tz.setDefault(timezone)
-            : getTimeInstance();
           const [field, format] = prop.split('__');
           const datetime = ['date', 'time', 'datetime', 'diff'];
           if (datetime.indexOf(format) > -1) {
             if (data[field]) {
               if (format === 'diff') {
-                return timeInstance(data[field]).from(timeInstance());
+                return Time.parse(data[field], { timezone }).from(
+                  Time.now(timezone)
+                );
               }
 
-              return timeInstance(data[field]).format(
+              return Time.parse(data[field], { timezone }).format(
                 format === 'time'
                   ? TIME_FORMAT
                   : format === 'datetime'

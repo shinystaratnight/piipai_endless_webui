@@ -8,39 +8,38 @@ import {
   ElementRef,
   HostListener,
   OnDestroy,
-  ChangeDetectorRef
+  ChangeDetectorRef,
 } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 import {
   SearchCountryField,
   TooltipLabel,
-  CountryISO
+  CountryISO,
 } from 'ngx-intl-tel-input';
 
 import { Subscription } from 'rxjs';
-import { distinctUntilChanged, debounceTime } from 'rxjs/operators';
+import { distinctUntilChanged } from 'rxjs/operators';
 
 import { Field } from '@webui/data';
-import {
-  FormatString,
-  getTotalTime,
-  getTimeInstance,
-  getPropValue
-} from '@webui/utilities';
+import { FormatString, getTotalTime, getPropValue } from '@webui/utilities';
 
 import { BasicElementComponent } from '../basic-element/basic-element.component';
 import { SiteSettingsService } from '@webui/core';
 import { formatCurrency, getCurrencySymbol } from '@angular/common';
 import { isAddressField, isPhoneField } from '../../../helpers';
 import { FormEvent } from '../../../interfaces';
+import { Time } from '@webui/time';
 
 @Component({
   selector: 'app-form-input',
   templateUrl: './form-input.component.html',
-  styleUrls: ['./form-input.component.scss']
+  styleUrls: ['./form-input.component.scss'],
 })
-export class FormInputComponent extends BasicElementComponent implements OnInit, AfterViewInit, OnDestroy {
+export class FormInputComponent
+  extends BasicElementComponent
+  implements OnInit, AfterViewInit, OnDestroy
+{
   public config: Field;
   public group: FormGroup;
   public errors: any;
@@ -64,19 +63,16 @@ export class FormInputComponent extends BasicElementComponent implements OnInit,
   public modalScrollDistance = 2;
   public modalScrollThrottle = 50;
   public address = '';
-  public timeInstance = getTimeInstance();
   dataListMap: any[];
 
   public intl;
-  separateDialCode = true;
   SearchCountryField = SearchCountryField;
   TooltipLabel = TooltipLabel;
-  CountryISO = CountryISO;
   preferredCountries: CountryISO[] = [
     CountryISO.Australia,
     CountryISO.Estonia,
     CountryISO.Finland,
-    CountryISO.Ukraine
+    CountryISO.Ukraine,
   ];
   selectedCountryISO: CountryISO;
 
@@ -86,7 +82,7 @@ export class FormInputComponent extends BasicElementComponent implements OnInit,
     2: '#fc9183',
     3: '#FFA236',
     4: '#ffbf00',
-    5: '#FFD042'
+    5: '#FFD042',
   };
 
   public requiredField: boolean;
@@ -138,7 +134,14 @@ export class FormInputComponent extends BasicElementComponent implements OnInit,
       if (this.config.templateOptions.type === 'number') {
         const { min, max, pattern } = this.config.templateOptions;
 
-        this.addControl(this.config, this.fb, this.requiredField, min, max, pattern);
+        this.addControl(
+          this.config,
+          this.fb,
+          this.requiredField,
+          min,
+          max,
+          pattern
+        );
 
         // this.subscriptions.push(
         //   this.group.get(this.key).valueChanges.subscribe((value) => {
@@ -214,7 +217,7 @@ export class FormInputComponent extends BasicElementComponent implements OnInit,
         value: el.value,
         label: el.type.name,
         default: el.default,
-        id: el.id
+        id: el.id,
       };
     });
   }
@@ -248,7 +251,7 @@ export class FormInputComponent extends BasicElementComponent implements OnInit,
 
       this.displayValue = formatString.format('{totalTime}', {
         ...newData,
-        totalTime: getTotalTime(this.timeInstance, newData)
+        totalTime: getTotalTime(newData),
       });
     }
   }
@@ -278,29 +281,29 @@ export class FormInputComponent extends BasicElementComponent implements OnInit,
       'shift_started_at',
       'shift_ended_at',
       'break_started_at',
-      'break_ended_at'
+      'break_ended_at',
     ];
 
     if (keys.indexOf(data.key) > -1) {
       if (this.config.type === 'static' && this.config.key === 'total_worked') {
-        const shiftStart = this.timeInstance(data.data.shift_started_at);
-        const shiftEnded = this.timeInstance(data.data.shift_ended_at);
-        const breakStart = this.timeInstance(data.data.break_started_at);
-        const breakEnded = this.timeInstance(data.data.break_ended_at);
+        const shiftStart = Time.parse(data.data.shift_started_at);
+        const shiftEnded = Time.parse(data.data.shift_ended_at);
+        const breakStart = Time.parse(data.data.break_started_at);
+        const breakEnded = Time.parse(data.data.break_ended_at);
 
         if (
           shiftStart.isBefore(shiftEnded) &&
           breakStart.isBefore(breakEnded)
         ) {
-          const shiftTime = this.timeInstance.utc(shiftEnded.diff(shiftStart));
-          const breakTime = this.timeInstance.utc(breakEnded.diff(breakStart));
+          const shiftTime = Time.utc(shiftEnded.diff(shiftStart));
+          const breakTime = Time.utc(breakEnded.diff(breakStart));
 
           const shiftDiff = shiftTime.format('HH:mm');
           if (breakStart && breakEnded && !data.data.no_break) {
             const breakDiff = breakTime.format('HH:mm');
-            const totalTime = this.timeInstance
-              .utc(shiftTime.diff(breakTime))
-              .format('HH:mm');
+            const totalTime = Time.utc(shiftTime.diff(breakTime)).format(
+              'HH:mm'
+            );
 
             this.displayValue = `${shiftDiff} - ${breakDiff} = ${totalTime} hours`;
           } else {
@@ -492,7 +495,7 @@ export class FormInputComponent extends BasicElementComponent implements OnInit,
         );
         const text = format.format(this.config.templateOptions.text, {
           [this.config.key]: value,
-          currency
+          currency,
         });
         this.displayValue = text || (value || value === 0 ? value : '-');
 
@@ -517,13 +520,13 @@ export class FormInputComponent extends BasicElementComponent implements OnInit,
       }
     } else {
       if (this.config.value instanceof Object) {
-        const displayFormat = this.config.templateOptions.display
+        const displayFormat = this.config.templateOptions.display;
         this.displayValue = displayFormat
           ? format.format(displayFormat, this.config.value)
           : this.config.value.__str__ || '-';
       } else {
         const text = format.format(this.config.templateOptions.text, {
-          [this.config.key]: this.config.value
+          [this.config.key]: this.config.value,
         });
 
         this.displayValue = text || this.config.value || '-';
@@ -549,7 +552,7 @@ export class FormInputComponent extends BasicElementComponent implements OnInit,
     this.event.emit({
       type: e.type,
       el: this.config,
-      value: this.group.get(this.key).value
+      value: this.group.get(this.key).value,
     });
   }
 
@@ -623,13 +626,13 @@ export class FormInputComponent extends BasicElementComponent implements OnInit,
     this.event.emit({
       type: 'change',
       el: this.config,
-      value: data
+      value: data,
     });
 
     this.event.emit({
       type: 'address',
       el: this.config,
-      value: data
+      value: data,
     });
 
     setTimeout(() => {

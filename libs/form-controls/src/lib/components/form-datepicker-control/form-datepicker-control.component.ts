@@ -156,7 +156,9 @@ export class FormDatepickerControlComponent
       return;
     }
 
-    const date = this.dateService.parse(this.initialValue, this.timezone);
+    const date = this.dateService.parse(this.initialValue, {
+      timezone: this.timezone,
+    });
 
     this.dateControl.patchValue(date.format(API_DATE_FORMAT), {
       emitEvent: false,
@@ -171,8 +173,12 @@ export class FormDatepickerControlComponent
       return;
     }
 
-    const from = this.dateService.parse(this.timerFrom, this.timezone);
-    const to = this.dateService.parse(this.timerTo, this.timezone);
+    const from = this.dateService.parse(this.timerFrom, {
+      timezone: this.timezone,
+    });
+    const to = this.dateService.parse(this.timerTo, {
+      timezone: this.timezone,
+    });
     const hours = to.diff(from, 'hours');
     const minutes = to.clone().add(-hours, 'hours').diff(from, 'minutes');
 
@@ -200,6 +206,10 @@ export class FormDatepickerControlComponent
     const date = this.dateControl.value;
     const time = this.timeControl.value;
 
+    if (!this.onChange) {
+      return;
+    }
+
     if (this.isDate) {
       this.onChange(date);
     } else if (this.isTime) {
@@ -207,7 +217,9 @@ export class FormDatepickerControlComponent
     } else if (this.isDateTime) {
       const datetime =
         date && time
-          ? this.dateService.parse(`${date}T${time}`, this.timezone)
+          ? this.dateService.parse(`${date}T${time}`, {
+              timezone: this.timezone,
+            })
           : undefined;
 
       this.onChange(datetime ? datetime.utc().format() : undefined);
