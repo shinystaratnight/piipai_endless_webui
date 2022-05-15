@@ -21,7 +21,6 @@ import {
   NavigationService,
   TranslateHelperService,
   UserService,
-  DateService,
 } from '@webui/core';
 import { User, Page, Role, Language } from '@webui/data';
 import {
@@ -30,6 +29,7 @@ import {
   isCandidate,
   isManager,
 } from '@webui/utilities';
+import { Time } from '@webui/time';
 
 @Component({
   selector: 'app-navigation',
@@ -49,7 +49,6 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() public user: User;
   @Input() public logo = '/assets/img/new-software.svg';
 
-  // @Output() public update: EventEmitter<Role> = new EventEmitter();
   @Output()
   public changePasswordEmitter: EventEmitter<any> = new EventEmitter();
 
@@ -80,9 +79,7 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
   private modalRef: NgbModalRef;
 
   get pages(): Page[] {
-    const menu = this.navigationService.navigationList[this.currentRole];
-
-    return menu;
+    return this.navigationService.navigationList[this.currentRole];
   }
 
   get fullName(): string {
@@ -98,11 +95,11 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   get trialMessage() {
-    const expires = this.dateService.parse(this.user.data.end_trial_date, {
+    const expires = Time.parse(this.user.data.end_trial_date, {
       format: 'YYYY-MM-DD hh:mm:ss',
     });
 
-    if (expires.isAfter(this.dateService.now())) {
+    if (expires.isAfter(Time.now())) {
       return `Trail version expires ${expires.format()}`;
     } else {
       return null;
@@ -123,7 +120,6 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
     private navigationService: NavigationService,
     private userService: UserService,
     private translate: TranslateHelperService,
-    private dateService: DateService,
     private modalService: NgbModal
   ) {}
 

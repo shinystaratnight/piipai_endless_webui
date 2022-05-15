@@ -10,7 +10,6 @@ export * from './errors.service';
 export * from './toast.service';
 export * from './env.service';
 export * from './event.service';
-export * from './date.service';
 export * from './translate-helper-service';
 export * from './date-range.service';
 export * from './subscription.service';

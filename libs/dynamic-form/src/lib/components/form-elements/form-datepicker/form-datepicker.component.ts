@@ -19,13 +19,13 @@ import { getTimePickerConfig } from './form-datepicker.config';
 import { BasicElementComponent } from '../basic-element/basic-element.component';
 
 import { FormatString, isMobile, getTranslationKey } from '@webui/utilities';
-import { DateService } from '@webui/core';
 import { BsLocaleService } from 'ngx-bootstrap/datepicker';
 import {
   API_DATE_FORMAT,
   DATE_FORMAT,
   DATE_TIME_FORMAT,
   FULL_TIME_FORMAT,
+  Time,
   TIME_FORMAT,
 } from '@webui/time';
 import { Moment } from '@webui/time';
@@ -95,7 +95,6 @@ export class FormDatepickerComponent
   constructor(
     private fb: FormBuilder,
     private cd: ChangeDetectorRef,
-    private dateService: DateService,
     private localeService: BsLocaleService
   ) {
     super();
@@ -216,7 +215,7 @@ export class FormDatepickerComponent
       this.formats.date = dateFormat;
 
       if (value) {
-        const dateInstance = this.dateService.parse(value, {
+        const dateInstance = Time.parse(value, {
           timezone: time_zone,
           format: parseFormat,
         });
@@ -312,18 +311,18 @@ export class FormDatepickerComponent
   private parseValue(type: DateType, value: string): Moment {
     switch (type) {
       case DateType.Date: {
-        return this.dateService.parse(value, {
+        return Time.parse(value, {
           timezone: this.timezone,
           format: API_DATE_FORMAT,
         });
       }
 
       case DateType.Datetime: {
-        return this.dateService.parse(value, { timezone: this.timezone });
+        return Time.parse(value, { timezone: this.timezone });
       }
 
       case DateType.Time: {
-        return this.dateService.parse(value, {
+        return Time.parse(value, {
           timezone: this.timezone,
           format: FULL_TIME_FORMAT,
         });
@@ -460,7 +459,7 @@ export class FormDatepickerComponent
     switch (type) {
       case DateType.Date: {
         result = date.value
-          ? this.dateService.parse(date.value, {
+          ? Time.parse(date.value, {
               timezone: this.timezone,
               format: date.format,
             })
@@ -472,12 +471,12 @@ export class FormDatepickerComponent
         if (!date.value) {
           result = null;
         } else if (!time.value) {
-          result = this.dateService.parse(date.value, {
+          result = Time.parse(date.value, {
             timezone: this.timezone,
             format: date.format,
           });
         } else {
-          result = this.dateService.parse(`${date.value} ${time.value}`, {
+          result = Time.parse(`${date.value} ${time.value}`, {
             timezone: this.timezone,
             format: `${date.format} ${time.format}`,
           });
@@ -487,7 +486,7 @@ export class FormDatepickerComponent
 
       case DateType.Time: {
         result = time.value
-          ? this.dateService.parse(time.value, {
+          ? Time.parse(time.value, {
               timezone: this.timezone,
               format: time.format,
             })

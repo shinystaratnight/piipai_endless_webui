@@ -8,10 +8,10 @@ import {
   UserService,
   NavigationService,
   CheckPermissionService,
-  DateService,
   SubscriptionService,
 } from '../services';
 import { User, Role } from '@webui/data';
+import { Time } from '@webui/time';
 
 @Injectable()
 export class PermissionGuard implements CanActivate {
@@ -20,7 +20,6 @@ export class PermissionGuard implements CanActivate {
     private userService: UserService,
     private checkPermissionService: CheckPermissionService,
     private navigationService: NavigationService,
-    private dateService: DateService,
     private subscriptionService: SubscriptionService
   ) {}
 
@@ -45,8 +44,8 @@ export class PermissionGuard implements CanActivate {
           const requests = [this.navigationService.getPages(user.currentRole)];
 
           if (this.isManager(user.currentRole)) {
-            const endTrial = this.dateService.parse(user.data.end_trial_date);
-            const trialExpired = endTrial.isBefore(this.dateService.now());
+            const endTrial = Time.parse(user.data.end_trial_date);
+            const trialExpired = endTrial.isBefore(Time.now());
 
             if (trialExpired) {
               this.subscriptionService.update();

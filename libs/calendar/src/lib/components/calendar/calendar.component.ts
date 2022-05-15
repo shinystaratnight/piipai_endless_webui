@@ -43,9 +43,8 @@ import {
   EventService,
   EventType,
   SiteSettingsService,
-  DateService,
 } from '@webui/core';
-import { CountryCodeLanguage, Endpoints } from '@webui/data';
+import { Endpoints } from '@webui/data';
 import { Form } from '@webui/dynamic-form';
 import { finalize } from 'rxjs/operators';
 import { Moment, Time } from '@webui/time';
@@ -183,8 +182,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
     private selectDateService: SelectDateService,
     private cd: ChangeDetectorRef,
     private eventService: EventService,
-    private siteSettings: SiteSettingsService,
-    private dateService: DateService
+    private siteSettings: SiteSettingsService
   ) {}
 
   get isMonthRange() {
