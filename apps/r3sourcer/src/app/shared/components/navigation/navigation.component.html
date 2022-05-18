@@ -51,7 +51,7 @@
         <span *ngIf="trialMessage" class="description">{{ trialMessage }}</span>
 
         <span class="description role" *ngIf="user.data.roles.length > 1">
-          {{ user.currentRole.name }} <a href="#" (click)="chooseRole($event)">Change</a>
+          {{ user.currentRole.name | translate : { "Default": user.currentRole.name } }} <a href="#" (click)="chooseRole($event)">Change</a>
         </span>
       </div>
       <img
@@ -182,20 +182,20 @@
 
     <fa-icon
       class="icon-link"
-      [class.extend]="p.childrens && p.childrens.length"
+      [class.extend]="p.children && p.children.length"
       [icon]="['fas', p.opened ? 'minus' : 'plus']"
     >
     </fa-icon>
 
-    <ng-container *ngIf="p.childrens && f">
+    <ng-container *ngIf="p.children && f">
       <ng-container
-        *ngTemplateOutlet="list; context: { pages: p.childrens, height: h }"
+        *ngTemplateOutlet="list; context: { pages: p.children, height: h }"
       ></ng-container>
     </ng-container>
 
-    <ng-container *ngIf="p.childrens && !f">
+    <ng-container *ngIf="p.children && !f">
       <ng-container
-        *ngTemplateOutlet="list; context: { pages: p.childrens }"
+        *ngTemplateOutlet="list; context: { pages: p.children }"
       ></ng-container>
     </ng-container>
   </li>
@@ -205,7 +205,7 @@
   <ol class="roles">
     <li *ngFor="let item of roleList">
       <a
-        href="https://{{item.domain}}/loginas/{{user.data.user}}"
+        href="https://{{item.domain}}"
         target="_blank"
         (click)="changeRole(item, $event)"
       >

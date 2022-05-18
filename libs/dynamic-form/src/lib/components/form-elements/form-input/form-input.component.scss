@@ -156,3 +156,9 @@ button.password {
     color: $primary;
   }
 }
+
+.error-message {
+  margin-top: 0.025rem;
+  display: none;
+  color: $danger;
+}

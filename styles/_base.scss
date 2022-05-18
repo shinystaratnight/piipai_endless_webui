@@ -4,7 +4,7 @@
 $site-background: #f5f5f5;
 
 body {
-  // font-family: 'Source Sans Pro', sans-serif;
+  font-family: 'Source Sans Pro', sans-serif;
   font-size: 16px;
   line-height: 20px;
   color: $gray;
@@ -378,10 +378,6 @@ iframe.send-sms {
   }
 }
 
-// .sebm-google-map-container-inner {
-//   height: 100% !important;
-// }
-
 .permissions .nav {
   margin-left: 3rem;
 }
@@ -404,12 +400,6 @@ iframe.send-sms {
 }
 
 .timesheet-submit-form {
-  // .items {
-  //   @include media-breakpoint-down('md') {
-  //     display: block !important;
-  //   }
-  // }
-
   @include media-breakpoint-down('md') {
     .button-save {
       width: 100%;
@@ -456,7 +446,6 @@ iframe.send-sms {
                                   supported by Chrome and Opera */
 }
 
-// Styles for none encapsulation elements
 app-checkbox {
   display: flex;
 }

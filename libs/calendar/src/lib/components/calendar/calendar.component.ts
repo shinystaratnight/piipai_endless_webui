@@ -7,7 +7,7 @@ import {
   TemplateRef,
   OnDestroy,
   ChangeDetectionStrategy,
-  ChangeDetectorRef
+  ChangeDetectorRef,
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -15,15 +15,13 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { combineLatest, forkJoin, Subscription } from 'rxjs';
 import { uniq } from 'ramda';
 
-import { Moment } from 'moment-timezone';
-
 import {
   CalendarService,
   CalendarData,
   Status,
   CalendarDataService,
   Calendar,
-  SelectDateService
+  SelectDateService,
 } from '../../services';
 import {
   DateRange,
@@ -33,10 +31,9 @@ import {
   isClient,
   getRoleId,
   FormatString,
-  getTimeInstance,
   checkAndReturnTranslation,
   getStorageLang,
-  getFulfilledStatus
+  getFulfilledStatus,
 } from '@webui/utilities';
 import { filters } from './calendar-filters.meta';
 
@@ -46,17 +43,17 @@ import {
   EventService,
   EventType,
   SiteSettingsService,
-  DateService
 } from '@webui/core';
-import { CountryCodeLanguage, Endpoints } from '@webui/data';
+import { Endpoints } from '@webui/data';
 import { Form } from '@webui/dynamic-form';
 import { finalize } from 'rxjs/operators';
+import { Moment, Time } from '@webui/time';
 
 @Component({
   selector: 'app-calendar',
   templateUrl: './calendar.component.html',
   styleUrls: ['./calendar.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CalendarComponent implements OnInit, OnDestroy {
   public range = DateRange;
@@ -73,20 +70,20 @@ export class CalendarComponent implements OnInit, OnDestroy {
     [Status.Pending]: { color: 'bg-warning', key: 'undefined' },
     [Status.Open]: { color: 'bg-primary', key: '' },
     [Status.Filled]: { color: 'bg-warning', key: '' },
-    [Status.Approved]: { color: 'bg-success', key: '' }
+    [Status.Approved]: { color: 'bg-success', key: '' },
   };
 
   public statusFilter = {
     shifts: [
       { type: Status.Unfilled, color: 'danger', label: 'Unfulfilled' },
       { type: Status.Fullfilled, color: 'success', label: 'Fulfilled' },
-      { type: Status.Pending, color: 'warning', label: 'Pending' }
+      { type: Status.Pending, color: 'warning', label: 'Pending' },
     ],
     timesheets: [
       { type: Status.Open, color: 'info', label: 'Open' },
       { type: Status.Filled, color: 'warning', label: 'Filled' },
-      { type: Status.Approved, color: 'success', label: 'Approved' }
-    ]
+      { type: Status.Approved, color: 'success', label: 'Approved' },
+    ],
   };
 
   public statusFilterData: any;
@@ -122,7 +119,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
     displayValue(data) {
       return Object.keys(data).filter((key) => data[key]).length;
     },
-    data: {}
+    data: {},
   };
   public currentDate: Moment;
   public customRange: { start: Moment; end: Moment };
@@ -136,38 +133,38 @@ export class CalendarComponent implements OnInit, OnDestroy {
       type: Status.Fullfilled,
       count: 0,
       cssClass: 'text-success',
-      text: 'Filled shifts'
+      text: 'Filled shifts',
     },
     {
       type: Status.Unfilled,
       count: 0,
       cssClass: 'text-danger',
-      text: 'Unfilled shifts'
+      text: 'Unfilled shifts',
     },
     {
       type: Status.Pending,
       count: 0,
       cssClass: 'text-warning',
-      text: 'Pending shifts'
+      text: 'Pending shifts',
     },
     {
       type: Status.Open,
       count: 0,
       cssClass: 'text-info',
-      text: 'Open'
+      text: 'Open',
     },
     {
       type: Status.Filled,
       count: 0,
       cssClass: 'text-warning',
-      text: 'Filled'
+      text: 'Filled',
     },
     {
       type: Status.Approved,
       count: 0,
       cssClass: 'text-success',
-      text: 'Approved'
-    }
+      text: 'Approved',
+    },
   ];
   isManager = isManager;
   isClient = isClient;
@@ -185,8 +182,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
     private selectDateService: SelectDateService,
     private cd: ChangeDetectorRef,
     private eventService: EventService,
-    private siteSettings: SiteSettingsService,
-    private dateService: DateService
+    private siteSettings: SiteSettingsService
   ) {}
 
   get isMonthRange() {
@@ -253,8 +249,9 @@ export class CalendarComponent implements OnInit, OnDestroy {
     });
 
     const activeStatuses = this.statusFilterData.map((el) => el.type);
-    this.timesheetCounter = this.timesheetCounter
-      .filter((el) => activeStatuses.indexOf(el.type) > -1);
+    this.timesheetCounter = this.timesheetCounter.filter(
+      (el) => activeStatuses.indexOf(el.type) > -1
+    );
 
     const rangeSubscription = this.currentRange.valueChanges.subscribe(
       (value: DateRange) => {
@@ -377,28 +374,28 @@ export class CalendarComponent implements OnInit, OnDestroy {
             value: formatString.format(
               '{shift.date.job.default_shift_starting_time}',
               data
-            )
-          }
+            ),
+          },
         },
         skill: {
           action: 'add',
           data: {
-            value: formatString.format('{shift.date.job.position.id}', data)
-          }
+            value: formatString.format('{shift.date.job.position.id}', data),
+          },
         },
         job: {
           action: 'add',
           data: {
-            value: formatString.format('{shift.date.job.id}', data)
-          }
-        }
-      }
+            value: formatString.format('{shift.date.job.id}', data),
+          },
+        },
+      },
     };
 
     this.modalRef = this.modalService.open(this.modal, {
       size: 'lg',
       windowClass: 'extend-modal',
-      backdrop: 'static'
+      backdrop: 'static',
     });
   }
 
@@ -441,7 +438,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
       this.getStatus(shift.is_fulfilled) !== this.getStatus(1);
     const dateSuccess = this.calendar
       .getToday()
-      .isBefore(getTimeInstance()(shift.date).add(1, DateRange.Day));
+      .isBefore(Time.parse(shift.date).add(1, DateRange.Day));
 
     return statusSeccess && dateSuccess;
   }
@@ -455,7 +452,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
     const body = {
       confirmed_available: available,
       target_date: date,
-      candidate_contact: this.userService.user.data.contact.candidate_contact
+      candidate_contact: this.userService.user.data.contact.candidate_contact,
     };
 
     if (availableId) {
@@ -493,18 +490,18 @@ export class CalendarComponent implements OnInit, OnDestroy {
           action: 'add',
           data: {
             value: dates,
-            hide: true
-          }
-        }
-      }
+            hide: true,
+          },
+        },
+      },
     };
 
     if (this.isDayRange) {
       this.modalInfo.data['default_shift_starting_time'] = {
         action: 'add',
         data: {
-          value: this.selectedTime
-        }
+          value: this.selectedTime,
+        },
       };
     }
 
@@ -572,9 +569,9 @@ export class CalendarComponent implements OnInit, OnDestroy {
             ...tooltip.shift,
             date: {
               ...tooltip.shift.date,
-              ...shiftData
-            }
-          }
+              ...shiftData,
+            },
+          },
         };
 
         Object.assign(tooltip, newData);
@@ -629,9 +626,9 @@ export class CalendarComponent implements OnInit, OnDestroy {
                 ...data.shift,
                 date: {
                   ...data.shift.date,
-                  ...shift
-                }
-              }
+                  ...shift,
+                },
+              },
             };
           });
         });
@@ -718,11 +715,15 @@ export class CalendarComponent implements OnInit, OnDestroy {
       this.getCandidateTimesheets(
         this.generateCandidateTimesheetQuery(range.start, range.end)
       ),
-      this.getJobOffers(this.generateJobOffersQuery(range.start, range.end))
+      this.getJobOffers(this.generateJobOffersQuery(range.start, range.end)),
+      this.data.getHolidaysForPeriod(
+        range.start.format(filterDateFormat),
+        range.end.format(filterDateFormat)
+      ),
     ];
 
     combineLatest(requests).subscribe((data) => {
-      const [availability, timesheets, jobOffers] = data;
+      const [availability, timesheets, jobOffers, holidays] = data;
 
       this.prepareTimesheetsData(
         (jobOffers as any).results,
@@ -732,6 +733,9 @@ export class CalendarComponent implements OnInit, OnDestroy {
       this.availability = (availability as any).results;
 
       this.shifts.push(...this.availability);
+      this.shifts.push(
+        ...(holidays as Array<{ name: string; holiday_date: string }>)
+      );
 
       this.updateCalendar(this.currentDate, rangeType);
       this.cd.detectChanges();
@@ -739,12 +743,20 @@ export class CalendarComponent implements OnInit, OnDestroy {
   }
 
   private getData(rangeType: DateRange, range: { start: Moment; end: Moment }) {
-    const request = this.getShifts(
-      this.generateQuery(range.start, range.end, this.client, this.candidate)
-    );
+    const requests = [
+      this.getShifts(
+        this.generateQuery(range.start, range.end, this.client, this.candidate)
+      ),
+      this.data.getHolidaysForPeriod(
+        range.start.format(filterDateFormat),
+        range.end.format(filterDateFormat)
+      ),
+    ];
 
-    request.subscribe((data) => {
-      this.prepareShiftsData(data);
+    forkJoin(requests).subscribe((data) => {
+      const [shifts, holidays] = data;
+
+      this.prepareShiftsData(shifts, holidays);
       this.updateCalendar(this.currentDate, rangeType);
       this.cd.detectChanges();
     });
@@ -760,9 +772,9 @@ export class CalendarComponent implements OnInit, OnDestroy {
         'is_fulfilled',
         'workers_details',
         'time',
-        'workers'
+        'workers',
       ],
-      limit: -1
+      limit: -1,
     };
 
     if (this.calendarType === Calendar.Client) {
@@ -785,7 +797,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
       ['target_date_0']: from.format(filterDateFormat),
       ['target_date_1']: to.format(filterDateFormat),
       fields: ['id', 'target_date', 'confirmed_available'],
-      limit: -1
+      limit: -1,
     };
 
     return filterList;
@@ -796,7 +808,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
       ['shift_started_at_0']: from.format(filterDateFormat),
       ['shift_started_at_1']: to.format(filterDateFormat),
       fields: ['id', 'status', 'shift'],
-      limit: -1
+      limit: -1,
     };
 
     return filterList;
@@ -806,13 +818,13 @@ export class CalendarComponent implements OnInit, OnDestroy {
     const filterList = {
       ['shift__date__shift_date_0']: from.format(filterDateFormat),
       ['shift__date__shift_date_1']: to.format(filterDateFormat),
-      limit: -1
+      limit: -1,
     };
 
     return filterList;
   }
 
-  private prepareShiftsData(data) {
+  private prepareShiftsData(data, holidays?) {
     this.shifts = [];
     data = Array.isArray(data) ? data : data.results;
 
@@ -833,6 +845,10 @@ export class CalendarComponent implements OnInit, OnDestroy {
         });
       });
     }
+
+    if (holidays) {
+      this.shifts.push(...holidays);
+    }
   }
 
   private parseData(shift, fullData?: boolean) {
@@ -845,7 +861,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
         jobsite_link: `/hr/jobsites/${shift.job.jobsite.id}/change`,
         jobsite: shift.job.jobsite.short_name,
         position: this.getPositionTranslation(shift.job.position.name),
-        candidates: shift.workers_details
+        candidates: shift.workers_details,
       };
     } else {
       return {
@@ -857,7 +873,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
           shift.workers_details
         ),
         candidates: shift.workers_details,
-        timesheet: this.calendar.calculateShiftSize(shift.time)
+        timesheet: this.calendar.calculateShiftSize(shift.time),
       };
     }
   }
@@ -892,7 +908,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
               jobOffer.shift.date.job.position.name
             ),
             timesheets,
-            timesheetStatus: this.getTimesheetsStatus(timesheets[0])
+            timesheetStatus: this.getTimesheetsStatus(timesheets[0]),
           };
         })
         .filter(

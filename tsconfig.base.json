@@ -24,11 +24,18 @@
       "@webui/core": ["libs/core/src/index.ts"],
       "@webui/dashboard": ["libs/dashboard/src/index.ts"],
       "@webui/data": ["libs/data/src/index.ts"],
+      "@webui/dialog": ["libs/dialog/src/index.ts"],
       "@webui/dynamic-form": ["libs/dynamic-form/src/index.ts"],
+      "@webui/form-controls": ["libs/form-controls/src/index.ts"],
+      "@webui/icon": ["libs/icon/src/index.ts"],
       "@webui/manager-metadata": ["libs/manager-metadata/src/index.ts"],
       "@webui/metadata": ["libs/metadata/src/index.ts"],
+      "@webui/models": ["libs/models/src/index.ts"],
+      "@webui/rating": ["libs/rating/src/index.ts"],
       "@webui/shared": ["libs/shared/src/index.ts"],
       "@webui/shared-metadata": ["libs/shared-metadata/src/index.ts"],
+      "@webui/stepper": ["libs/stepper/src/index.ts"],
+      "@webui/time": ["libs/time/src/index.ts"],
       "@webui/ui": ["libs/ui/src/index.ts"],
       "@webui/utilities": ["libs/utilities/src/index.ts"]
     }

@@ -21,6 +21,8 @@ import { CheckPermissionService, ToastService, MessageType } from '@webui/core';
 import { isMobile, isCandidate, isClient, isManager } from '@webui/utilities';
 import { Endpoints } from '@webui/data';
 import { finalize } from 'rxjs/operators';
+import { DialogService, DialogRef } from '@webui/dialog';
+import { ConfirmDeleteModalComponent } from '@webui/ui';
 
 @Component({
   selector: 'app-site',
@@ -88,6 +90,9 @@ export class SiteComponent implements OnInit, OnDestroy {
 
   private subscriptions: Subscription[] = [];
 
+  public rowId: any = "";
+  public dialogRef: DialogRef;
+
   get isMobileDevice() {
     return isMobile() && isCandidate();
   }
@@ -120,7 +125,8 @@ export class SiteComponent implements OnInit, OnDestroy {
     private siteSettingsService: SiteSettingsService,
     private modalService: NgbModal,
     private purposeService: CompanyPurposeService,
-    private eventService: EventService
+    private eventService: EventService,
+    private dialogService: DialogService,
   ) {}
 
   public ngOnInit() {
@@ -366,6 +372,8 @@ export class SiteComponent implements OnInit, OnDestroy {
   }
 
   public formEvent(e) {
+	let rowId = this.pageData.pathData.id;
+	localStorage.setItem('rowId', rowId);
     if (e.type === 'saveStart') {
       this.saveProcess = true;
       return;
@@ -407,18 +415,25 @@ export class SiteComponent implements OnInit, OnDestroy {
   }
 
   public deleteElement(element) {
-    this.genericFormService
-      .delete(element.endpoint, element.pathData.id)
-      .subscribe(
-        () => {
-          const path = `/${this.authService.getRedirectUrl()}${
-            element.pathData.path
-          }`;
+    this.dialogRef = this.dialogService.open(ConfirmDeleteModalComponent, { size: 'sm' });
+    this.dialogRef.componentInstance.instanceName = this.listName.toLowerCase();
 
-          this.router.navigate([path]);
-        },
-        (err: any) => (this.errors = err.errors)
-      );
+    this.dialogRef.result
+      .then(() => {
+        this.genericFormService
+          .delete(element.endpoint, element.pathData.id)
+          .subscribe(
+            () => {
+              const path = `/${this.authService.getRedirectUrl()}${
+                element.pathData.path
+              }`;
+
+              this.router.navigate([path]);
+            },
+            (err: any) => (this.errors = err.errors)
+          );
+      })
+      .catch(() => {});
   }
 
   public updateNavigation(e) {
@@ -449,8 +464,8 @@ export class SiteComponent implements OnInit, OnDestroy {
       if (path === page.url && page.url !== '/') {
         active = true;
         page.active = true;
-      } else if (page.childrens) {
-        page.active = this.setActivePage(page.childrens, path);
+      } else if (page.children) {
+        page.active = this.setActivePage(page.children, path);
         active = active || page.active;
       }
     });

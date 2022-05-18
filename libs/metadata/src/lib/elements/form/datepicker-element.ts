@@ -20,11 +20,13 @@ export class DatepickerElement extends BasicFormElement {
   templateOptions: DatepickerElementTemplateOptions;
 
   inline?: boolean;
+  rightPosition: boolean;
 
   constructor(key: string, label: string, type: DatepickerType) {
     super(key, label, Datepicker);
 
     this.templateOptions.type = type;
+    this.rightPosition = true;
   }
 
   setInline() {
@@ -35,6 +37,12 @@ export class DatepickerElement extends BasicFormElement {
 
   setShowTime() {
     this.templateOptions.showTime = true;
+
+    return this;
+  }
+
+  setDropdonLeft() {
+    this.rightPosition = false;
 
     return this;
   }

@@ -15,6 +15,12 @@ import { Subscription } from 'rxjs';
 import { BasicElementComponent } from './../basic-element/basic-element.component';
 import { getTranslationKey } from '@webui/utilities';
 
+type SelectOption = {
+  value: string;
+  color?: string;
+  key?: string;
+};
+
 @Component({
   selector: 'app-form-select',
   templateUrl: 'form-select.component.html'
@@ -40,6 +46,8 @@ export class FormSelectComponent
 
   public viewMode: boolean;
 
+  private translateKey: string;
+
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
 
@@ -54,15 +62,13 @@ export class FormSelectComponent
 
   public ngOnInit() {
     this.addControl(this.config, this.fb, this.config.templateOptions.required);
-    this.options = !this.config.templateOptions.doNotSort
-      ? this.config.templateOptions.options.sort((p, n) =>
-          p.label > n.label ? 1 : -1
-        )
-      : this.config.templateOptions.options.slice();
-    this.setInitValue();
+    this.translateKey = this.config.translateKey || this.key;
+    this.options = this.config.templateOptions.options.slice();
+
     this.checkModeProperty();
     this.checkHiddenProperty();
     this.createEvent();
+    this.setInitValue();
   }
 
   public ngOnDestroy() {
@@ -107,11 +113,11 @@ export class FormSelectComponent
     }
   }
 
-  public getValue(
-    options: any[],
-    value: string
-  ): { value: string; color?: string; key?: string } {
-    let element = options.find((el) => el.value == value); // tslint:disable-line
+  public getOption(options: any[], value: unknown): SelectOption | null {
+    let element = options.find(
+      (el) => el.value.toString() === value.toString()
+    );
+
     if (element) {
       return {
         key: element.value,
@@ -124,26 +130,26 @@ export class FormSelectComponent
   }
 
   public setInitValue() {
-    let value = this.config.value || this.group.get(this.key).value;
-    if (value || this.config.default) {
-      const option = this.getValue(this.options, value);
-      if (option.value === '-' || !option) {
-        value = this.config.default;
-      }
-    }
+    const parsedValue = this.parseValue([
+      this.config.value,
+      this.group.get(this.key).value,
+      this.config.default
+    ]);
 
-    if (value != undefined) {
-      this.group.get(this.key).patchValue(value);
+    if (parsedValue.exist) {
+      const option = this.getOption(this.options, parsedValue.value);
+
+      if (option) {
+        this.displayValueKey = this.getOptionTranslationKey(option.key);
+        this.textColor = option.color ? `text-${option.color}` : '';
+        this.group.get(this.key).patchValue(parsedValue.value);
+      } else {
+        this.displayValue = '-';
+      }
+
+      this.group.get(this.key).patchValue(parsedValue.value);
     } else {
       this.group.get(this.key).patchValue(null);
-    }
-    if ((this.viewMode || this.config.read_only) && !this.config.hide) {
-      const option = this.getValue(this.options, value);
-      if (option.value !== '-') {
-        this.displayValueKey = this.getOptionTranslationKey(option.key);
-      }
-      this.displayValue = option.value;
-      this.textColor = option.color ? `text-${option.color}` : '';
     }
   }
 
@@ -162,6 +168,23 @@ export class FormSelectComponent
   }
 
   getOptionTranslationKey(optionKey: string): string {
-    return `${this.key}.${optionKey}`;
+    return `${this.translateKey}.${optionKey}`;
+  }
+
+  private parseValue(valueList: any[]): {
+    exist: boolean;
+    value: unknown | null;
+  } {
+    const isExist = (value: unknown) => value !== null && value !== undefined;
+    const value = valueList.find((val) => isExist(val));
+
+    if (value === undefined) {
+      return { exist: false, value: null };
+    }
+
+    return {
+      exist: true,
+      value
+    };
   }
 }

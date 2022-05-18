@@ -90,9 +90,9 @@
     </ng-container>
   </div>
   <div *ngIf="errors">
-    <div class="text-danger mt-1" *ngIf="errors[key]">{{ errors[key] }}</div>
+    <div class="text-danger mt-3" *ngIf="errors[key]">{{ errors[key] }}</div>
   </div>
-  <div class="text-danger mt-1 text-left" *ngIf="sizeError">
+  <div class="text-danger mt-3 text-left" *ngIf="sizeError">
     {{'file_size' | translate: {"Default": 'File size is too large!'} }} <br>
     {{'max_size' | translate: {"Default": 'Maximum allowed file size is 10 Mb.'} }}
   </div>
@@ -149,15 +149,16 @@
 <ng-template #pictureView>
   <div class="d-flex flex-wrap">
     <div class="text-center dropzone-wrapper">
-      <label class="dropzone-name" [class.required]="config.templateOptions.required">
+      <label class="dropzone-name" [hidden]="true" [class.required]="config.templateOptions.required">
         {{'add_photo' | translate: {"Default": 'Add photo'} }}
       </label>
       <div class="dropzone" #dropzone>
+        <i class="fa fa-user" aria-hidden="true"></i>
         <img *ngIf="value" [src]="value" alt="" width="100" height="100" />
       </div>
     </div>
     <div class="d-flex flex-column justify-content-center">
-      <span class="description">{{'drag_and_drop' | translate}}</span>
+      <span class="description" [hidden]="true" >{{'drag_and_drop' | translate}}</span>
       <div class="d-flex align-items-center buttons-wrapper">
         <button class="btn action mr-2" (click)="upload()">{{'add_photo' | translate: {"Default": 'Add photo'} }}</button>
         <button class="btn action" (click)="open()">{{'use_camera' | translate: {"Default": 'Use camera'} }}</button>

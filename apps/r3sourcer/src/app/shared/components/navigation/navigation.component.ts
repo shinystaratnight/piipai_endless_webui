@@ -8,7 +8,7 @@ import {
   EventEmitter,
   Output,
   ViewEncapsulation,
-  OnDestroy
+  OnDestroy,
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
@@ -21,7 +21,6 @@ import {
   NavigationService,
   TranslateHelperService,
   UserService,
-  DateService,
 } from '@webui/core';
 import { User, Page, Role, Language } from '@webui/data';
 import {
@@ -29,14 +28,14 @@ import {
   isClient,
   isCandidate,
   isManager,
-  getTimeInstance
 } from '@webui/utilities';
+import { Time } from '@webui/time';
 
 @Component({
   selector: 'app-navigation',
   templateUrl: './navigation.component.html',
   styleUrls: ['./navigation.component.scss'],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
 })
 export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('header') public header: any;
@@ -50,7 +49,6 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() public user: User;
   @Input() public logo = '/assets/img/new-software.svg';
 
-  // @Output() public update: EventEmitter<Role> = new EventEmitter();
   @Output()
   public changePasswordEmitter: EventEmitter<any> = new EventEmitter();
 
@@ -81,9 +79,7 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
   private modalRef: NgbModalRef;
 
   get pages(): Page[] {
-    const menu = this.navigationService.navigationList[this.currentRole];
-
-    return menu;
+    return this.navigationService.navigationList[this.currentRole];
   }
 
   get fullName(): string {
@@ -91,14 +87,19 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
       return this.user.data.contact.name;
     }
 
-    return this.user.currentRole.__str__.split(':').map(el => el.trim()).slice(0, 2).join(' - ');
+    return this.user.currentRole.__str__
+      .split(':')
+      .map((el) => el.trim())
+      .slice(0, 2)
+      .join(' - ');
   }
 
   get trialMessage() {
-    const date = this.dateService.instance;
-    const expires = date(this.user.data.end_trial_date, 'YYYY-MM-DD hh:mm:ss');
+    const expires = Time.parse(this.user.data.end_trial_date, {
+      format: 'YYYY-MM-DD hh:mm:ss',
+    });
 
-    if (expires.isAfter(date())) {
+    if (expires.isAfter(Time.now())) {
       return `Trail version expires ${expires.format()}`;
     } else {
       return null;
@@ -106,7 +107,9 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   get roleList() {
-    return this.user.data.roles.filter((el) => el.id !== this.user.currentRole.id)
+    return this.user.data.roles.filter(
+      (el) => el.id !== this.user.currentRole.id
+    );
   }
 
   public resizeSubscription: Subscription;
@@ -117,7 +120,6 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
     private navigationService: NavigationService,
     private userService: UserService,
     private translate: TranslateHelperService,
-    private dateService: DateService,
     private modalService: NgbModal
   ) {}
 
@@ -174,10 +176,6 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  public formatDate(date) {
-    return getTimeInstance()(date, 'YYYY-MM-DD hh:mm:ss').format('YYYY/MM/DD');
-  }
-
   public checkCandidateRole(role) {
     this.candidate = role.__str__.includes('candidate');
   }
@@ -214,6 +212,7 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
 
     // this.update.emit(role);
     this.userService.currentRole(role);
+    this.modalRef.close();
   }
 
   public clickAction(e, p) {

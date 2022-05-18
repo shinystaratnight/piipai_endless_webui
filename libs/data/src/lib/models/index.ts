@@ -4,3 +4,4 @@ export * from './skill-work-type.model';
 export * from './timesheet.model';
 export * from './note.model';
 export * from './billing';
+export * from './note';

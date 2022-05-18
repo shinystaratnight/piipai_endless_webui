@@ -1,16 +1,106 @@
-<app-base-modal (dissmisEvent)="dismiss()">
+<webui-dialog [title]="'worksheet_submission' | translate">
+  <div class="content" dialog-content>
+    <app-timesheet-details-preview
+      [timeSheet]="timeSheet"
+    ></app-timesheet-details-preview>
 
-    <header class="header">
-      <app-user-avatar
-        [source]="config.label.avatar"
-        [fullName]="config.label.fullName"
-      ></app-user-avatar>
+    <form *ngIf="formGroup" [formGroup]="formGroup" class="form" (ngSubmit)="submitForm()">
+      <section class="times">
+        <header class="times__header">
+          <h4 class="section-title">{{ 'time' | translate }}</h4>
 
-      <h3 class="title">{{ config.label.fullName }}</h3>
-    </header>
+          <span class="total-time">{{ timeSheet.totalTime }}</span>
+        </header>
 
-    <div class="modal-body">
-        <app-submission-form [config]="config" (event)="onFormEvent($event)"></app-submission-form>
-    </div>
+        <div class="form-row">
+          <webui-form-datepicker-control
+            formControlName="shiftStartedAt"
+            [type]="DatepickerType.DateTime"
+            [initialValue]="timeSheet.startedAt"
+            [timezone]="timeSheet.timezone"
+            [label]="'start_time' | translate"
+          ></webui-form-datepicker-control>
 
-</app-base-modal>
+          <webui-form-datepicker-control
+            formControlName="shiftEndedAt"
+            [initialValue]="timeSheet.endedAt"
+            [timezone]="timeSheet.timezone"
+            [type]="DatepickerType.DateTime"
+            [label]="'end_time' | translate"
+          ></webui-form-datepicker-control>
+        </div>
+
+        <div class="form-row">
+          <webui-form-datepicker-control
+            formControlName="break"
+            [initialValue]="timeSheet.startedAt"
+            [timerFrom]="timeSheet.breakStartedAt"
+            [timerTo]="timeSheet.breakEndedAt"
+            [type]="DatepickerType.Timer"
+            [label]="'break_time' | translate"
+          ></webui-form-datepicker-control>
+
+          <span>&nbsp;</span>
+        </div>
+      </section>
+
+      <section class="activities">
+        <h4 class="section-title">
+          {{ 'activity' | translate }}
+          <button
+            type="button"
+            class="plus-button"
+            [disabled]="!hasActivities"
+            (click)="addActivityControl()"
+          >
+            <webui-icon [icon]="Icon.Plus" [size]="IconSize.Large"></webui-icon>
+          </button>
+        </h4>
+
+        <ng-container *ngIf="hasActivities">
+          <div [formGroup]="activity" *ngFor="let activity of activitiesForm; let index = index">
+            <div class="form-row">
+              <webui-form-dropdown-control
+                formControlName="worktype"
+                [url]="activityEndpoint"
+                [label]="'your_activity' | translate"
+                [params]="activityParams"
+                [optionFilter]="activityOptionFilter"
+              ></webui-form-dropdown-control>
+
+              <button type="button" class="delete-button" (click)="removeActivity(activity, index)">
+                <webui-icon [icon]="Icon.Delete"></webui-icon>
+              </button>
+            </div>
+
+            <div class="form-row">
+              <webui-form-input-control
+                *ngIf="activity.get('value')"
+                [label]="'amount' | translate"
+                [prefix]="getAmountPrefix(activity)"
+                type="number"
+                formControlName="value"
+              ></webui-form-input-control>
+            </div>
+          </div>
+        </ng-container>
+
+        <div *ngIf="!hasActivities" class="activities-empty">
+          <app-loader class="loader"></app-loader>
+        </div>
+      </section>
+
+      <footer class="footer">
+        <button
+          class="btn submit-btn"
+          [disabled]="formInvalid || (processing$ | async)"
+          type="submit"
+        >
+          {{ 'submit' | translate }}
+
+          <app-spinner *ngIf="processing$ | async"></app-spinner>
+        </button>
+      </footer>
+    </form>
+  </div>
+</webui-dialog>

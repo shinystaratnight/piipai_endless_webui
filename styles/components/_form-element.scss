@@ -35,6 +35,10 @@
 
       &.ng-touched.ng-invalid {
         border-color: $danger;
+
+        & + .error-message {
+          display: block;
+        }
       }
     }
 
@@ -263,11 +267,7 @@
 
     button {
       padding: 0 5px;
-
-      // border: none;
       outline: none;
-
-      // background: transparent;
     }
 
     .mobile-datepicker {
@@ -281,8 +281,6 @@
 
       border: 1px solid $gray;
       border-radius: 4px !important;
-
-      // box-shadow: 0 0 8px 0 rgba($gray, 0.1);
       background-color: #ffffff;
 
       &::before {
@@ -384,8 +382,14 @@
   }
 }
 
-.registration-form ngx-intl-tel-input.ng-touched.ng-invalid input {
-  border-color: $danger;
+.registration-form ngx-intl-tel-input {
+  &.ng-touched.ng-invalid input {
+    border-color: $danger;
+  }
+
+  &.ng-touched.ng-invalid + .error-message {
+    display: block;
+  }
 }
 
 @each $item in $themes {

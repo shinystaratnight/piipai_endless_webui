@@ -100,11 +100,7 @@
         </app-list-buttons>
       </h2>
       <div
-        [enable]="!inForm"
-        *ngIf="
-          (showFilters && !(identifyDevice() || isMobileDevice)) ||
-          config.list.search_enabled
-        "
+        *ngIf="(showFilters && !(identifyDevice() || isMobileDevice)) || config.list.search_enabled"
         class="datatable-header"
         [class.open-filters]="!filtersHidden && showFilters"
         [class.in-form]="inForm"
@@ -207,15 +203,15 @@
                 style="width: 2rem"
               >
                 <div class="text-center" *ngIf="config.list.actions || actions">
-                  <label for="all-checkbox">{{ 'all' | translate }}</label>
+                  <label class="all-label" for="all-checkbox">{{ 'all' | translate }}</label>
                   <input
                     id="all-checkbox"
                     type="checkbox"
                     hidden
                     appSubscriptionRequired
                     *ngIf="config.list.actions || actions"
-                    [(ngModel)]="selectedAll"
-                    (ngModelChange)="selectAll()"
+                    [ngModel]="selectedAll"
+                    (ngModelChange)="selectAll($event)"
                   />
                 </div>
               </th>
@@ -259,6 +255,7 @@
                   }
                 "
                 (click)="openDetails(row, $event)"
+                [id]="row.id"
               >
                 <td *ngIf="hasSelectColumn || hasEditLink" class="first-cell">
                   <label *ngIf="config.list.actions || actions">

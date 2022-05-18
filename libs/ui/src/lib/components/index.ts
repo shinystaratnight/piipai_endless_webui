@@ -6,3 +6,5 @@ export * from './loader/loader.component';
 export * from './spinner/spinner.component';
 export * from './language-selector/language-selector.component';
 export * from './user-avatar/user-avatar.component';
+export * from './confirm-delete-modal/confirm-delete-modal.component';
+export * from './icon/icon.component';

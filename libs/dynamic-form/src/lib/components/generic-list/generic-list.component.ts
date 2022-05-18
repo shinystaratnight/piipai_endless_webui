@@ -76,6 +76,10 @@ export class GenericListComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
 
   private results: any[];
+  
+  public afterEditLimit: any = 10;
+  public afterEditOffset: any = 0;
+  public isEditRecord: any = false;
 
   constructor(
     private gfs: GenericFormService,
@@ -95,6 +99,8 @@ export class GenericListComponent implements OnInit, OnDestroy {
     this.initTableData(mainTable);
 
     if (this.update) {
+		// set temp flag in localstorage
+      localStorage.setItem('flagAfterEditRecord', 'true');
       this.subscriptions.push(
         this.update.subscribe((update) => {
           const table = this.getFirstTable();
@@ -114,6 +120,7 @@ export class GenericListComponent implements OnInit, OnDestroy {
           if (
             table.offset + table.limit < (table.data && table.data.count) &&
             table.data.count > table.limit
+            && !table.uploadAll
           ) {
             if (data && !this.isLoading) {
               setTimeout(() => {
@@ -181,9 +188,14 @@ export class GenericListComponent implements OnInit, OnDestroy {
   public uploadMore() {
     const table = this.getFirstTable();
     const limit = table.limit;
-    const offset = table.offset + limit;
+    const offset = this.afterEditOffset != 0 ? parseInt(this.afterEditOffset) + limit :  table.offset + limit;
     table.query.pagination = `limit=${limit}&offset=${offset}`;
-
+	
+	// Here we handlig pagination in after edit record
+    const afterEditLimit = offset + limit;
+    this.afterEditOffset = parseInt(this.afterEditOffset) + limit;
+    localStorage.setItem('afterEditLimit', afterEditLimit);
+	
     this.getData(
       table.endpoint,
       this.generateQuery(table.query),
@@ -269,7 +281,7 @@ export class GenericListComponent implements OnInit, OnDestroy {
     }
   }
 
-  public getData(endpoint, query = '?', table, target = null, add = false) {
+  public getData(endpoint, query = '?', table, target = null, add = false, all?: boolean) {
     if (this.clientId) {
       query += `&role=${this.clientId}`;
     }
@@ -309,7 +321,26 @@ export class GenericListComponent implements OnInit, OnDestroy {
       }
       this.isLoading = false;
       this.updateTable(data, table, target, add);
-    });
+      if (all) {
+        table.uploadAll = true;
+      }
+    },
+    // The 2nd callback handles errors.
+    (err) => console.error(err),
+    // The 3rd callback handles the "complete" event.
+    () => {
+      setTimeout(() => {
+        const rowId = localStorage.getItem('rowId');
+        if(rowId != ""){
+          const selectedRow = (document.getElementById(rowId)) as HTMLTableElement;
+          if(selectedRow) {
+            selectedRow.scrollIntoView({behavior: "smooth", block: "center", inline: "center"});localStorage.removeItem('rowId');
+
+          }
+        }
+      }, 500);
+      }
+      );
   }
 
   updateTable(data, table, target, add) {
@@ -378,6 +409,7 @@ export class GenericListComponent implements OnInit, OnDestroy {
       e.type === 'update'
     ) {
       table.refresh = true;
+      table.uploadAll = false;
       if (e.type === 'update') {
         table.offset = 0;
         table.query.pagination = '';
@@ -419,6 +451,9 @@ export class GenericListComponent implements OnInit, OnDestroy {
       table.minimized = true;
       table.maximize = false;
       this.minimizedTable.push(table);
+    } else if (e.type === 'uploadAll') {
+      table.refresh = true;
+      this.uploadAll();
     }
   }
 
@@ -521,8 +556,8 @@ export class GenericListComponent implements OnInit, OnDestroy {
     let body;
     const ids = [];
     const keys = Object.keys(data);
-    const {
-      action: { multiple, bodyFields, method }
+    let {
+      action: { multiple, bodyFields, method, bodySignature, signature_endpoint }
     } = e;
     keys.forEach((el) => {
       if (data[el]) {
@@ -532,18 +567,18 @@ export class GenericListComponent implements OnInit, OnDestroy {
 
     if (multiple) {
       const requests = ids.map((id: string) => {
-        const url = FormatString.format(endpoint, { id });
+        let url = FormatString.format(endpoint, { id });
+        const rowData = this.results.find((el) => el.id === id);
         let body = {};
 
-        if (bodyFields) {
+        const isSignatureApproving = rowData.company && rowData.company.supervisor_approved_scheme === 'SIGNATURE';
+
+        if (bodyFields && !isSignatureApproving) {
           bodyFields.forEach((prop) => {
             if (typeof prop === 'string') {
               body = {
                 ...body,
-                [prop]: getPropValue(
-                  this.results.find((el) => el.id === id),
-                  prop
-                )
+                [prop]: getPropValue(rowData, prop)
               };
             }
 
@@ -554,6 +589,12 @@ export class GenericListComponent implements OnInit, OnDestroy {
               };
             }
           });
+        } else if (isSignatureApproving) {
+          method = ApiMethod.POST;
+          url = FormatString.format(signature_endpoint, { id });
+          body = {
+            ...bodySignature
+          };
         }
 
         switch (method) {
@@ -658,6 +699,17 @@ export class GenericListComponent implements OnInit, OnDestroy {
       sort: '',
       pagination: ''
     };
+    
+    // Here we handlig pagination in after edit record
+    const flagAfterEditRecord = localStorage.getItem('flagAfterEditRecord');
+    if(flagAfterEditRecord == 'true' && parseInt(localStorage.getItem('afterEditLimit')) > this.limit){ 
+      queryList['pagination'] = "limit="+ localStorage.getItem('afterEditLimit') + "&offset=" + this.afterEditOffset;
+      this.afterEditOffset = localStorage.getItem('afterEditLimit');
+      
+    }
+    localStorage.removeItem('flagAfterEditRecord');
+    localStorage.removeItem('afterEditLimit');
+    
     const table = this.getFirstTable();
     const keys = Object.keys(queryParams);
 
@@ -720,5 +772,19 @@ export class GenericListComponent implements OnInit, OnDestroy {
 
   public loadMoreHandler() {
     this.upload.next(true);
+  }
+
+  private uploadAll() {
+    const table = this.getFirstTable();
+    table.query.pagination = `limit=-1&offset=0`;
+
+    this.getData(
+      table.endpoint,
+      this.generateQuery(table.query),
+      table,
+      null,
+      false,
+      true
+    );
   }
 }

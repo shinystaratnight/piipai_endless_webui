@@ -306,6 +306,11 @@ app-datepicker {
       );
     }
 
+    &.holiday {
+      background: rgba(#ccc, .4);
+      opacity: 0.4;
+    }
+
     &.unavailable {
       background: linear-gradient(
         45deg,
@@ -314,6 +319,11 @@ app-datepicker {
         $danger 85%,
         $danger 100%
       );
+    }
+
+    &.date-selected {
+      background-color: rgba($success, 0.2);
+      opacity: 1;
     }
   }
 

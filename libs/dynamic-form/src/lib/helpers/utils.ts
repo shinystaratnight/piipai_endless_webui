@@ -34,11 +34,7 @@ export function getValueOfData(data, key: string, obj: Field): void {
   }
 }
 
-export function getElementFromMetadata(
-  metadata: Field[],
-  key: string,
-  param = 'key'
-): Field {
+export function getElementFromMetadata(metadata: Field[], key: string, param = 'key'): Field {
   let element = null;
   metadata.forEach((el: Field) => {
     if (el[param] === key) {
@@ -97,10 +93,7 @@ export function getOrientation(): number {
   return orientation || 0;
 }
 
-export function generateCssStyles(
-  styles: string[] = [],
-  prefix: string
-): string[] {
+export function generateCssStyles(styles: string[] = [], prefix: string): string[] {
   return [
     styles
       .map((modificator) => {
@@ -123,16 +116,24 @@ export const isAddressField = (field: Field) => {
   return key === 'address' || key === 'street_address';
 };
 
+export const isPhoneField = (key: string): boolean => {
+  const phoneFieldKeys = ['phone_mobile', 'emergency_contact_phone'];
+
+  if (key.includes('.')) {
+    return key.split('.').some((part) => phoneFieldKeys.includes(part));
+  }
+
+  return phoneFieldKeys.includes(key);
+};
+
 export function convertPhoneNumber(data: any): void {
   if (!data) {
     return;
   }
 
-  const phoneFieldKey = 'phone_mobile';
-
   Object.keys(data).forEach((key) => {
-    if (key === phoneFieldKey) {
-      data[key] = data[key].internationalNumber;
+    if (isPhoneField(key)) {
+      data[key] = data[key]?.internationalNumber;
     }
 
     if (typeof data[key] === 'object' && !Array.isArray(data[key])) {

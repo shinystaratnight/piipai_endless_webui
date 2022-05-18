@@ -4,38 +4,27 @@ import {
   Output,
   EventEmitter,
   OnDestroy,
-  ChangeDetectorRef
+  ChangeDetectorRef,
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 
 import { FilterService } from '../../../services';
 import { FormatString } from '@webui/utilities';
+import { DATE_TIME_FORMAT, Time } from '@webui/time';
 
 enum FilterType {
-  Multiple = 'multiple'
+  Multiple = 'multiple',
 }
 
 @Component({
   selector: 'app-filter-multiple',
-  templateUrl: './filter-multiple.component.html'
+  templateUrl: './filter-multiple.component.html',
 })
 export class FilterMultipleComponent implements OnInit, OnDestroy {
   public config: any;
   public query: string;
   public data: any[];
-  public isCollapsed = true;
-  public icons = {
-    r3sourcer: {
-      true: 'chevron-right',
-      false: 'chevron-down'
-    },
-    default: {
-      true: 'eye',
-      false: 'eye-slash'
-    }
-  };
-  public theme: string;
   public type: string;
   public filterSubscription: Subscription;
   public querySubscription: Subscription;
@@ -61,13 +50,6 @@ export class FilterMultipleComponent implements OnInit, OnDestroy {
     this.filterSubscription = this.fs.reset.subscribe(() =>
       this.updateFilter()
     );
-    this.isCollapsed =
-      this.query || document.body.classList.contains('r3sourcer')
-        ? false
-        : true;
-    this.theme = document.body.classList.contains('r3sourcer')
-      ? 'r3sourcer'
-      : 'default';
     if (!this.data) {
       this.createData(this.type);
     }
@@ -135,7 +117,7 @@ export class FilterMultipleComponent implements OnInit, OnDestroy {
         param: this.config.param,
         checked: type === 'data' ? true : false,
         data: type === 'data' ? data : data.value,
-        key: data.key
+        key: data.key,
       };
     });
   }
@@ -185,7 +167,7 @@ export class FilterMultipleComponent implements OnInit, OnDestroy {
 
   public changeQuery() {
     this.event.emit({
-      list: this.config.listName
+      list: this.config.listName,
     });
   }
 
@@ -259,7 +241,23 @@ export class FilterMultipleComponent implements OnInit, OnDestroy {
           if (!uniqueField[field]) {
             uniqueField[field] = [];
           }
-          if (uniqueField[field].indexOf(el.data[field]) > -1) {
+
+          const condition = () => {
+            if (field === 'name' && el.data.date) {
+              const currentValue = Time.parse(el.data[field], {
+                format: DATE_TIME_FORMAT,
+              });
+
+              return uniqueField[field].some((name) => {
+                const elValue = Time.parse(name, { format: DATE_TIME_FORMAT });
+                return Math.abs(elValue.diff(currentValue, 'hours')) < 4;
+              });
+            } else {
+              return uniqueField[field].indexOf(el.data[field]) > -1;
+            }
+          };
+
+          if (condition()) {
             if (i !== index) {
               el.checked = false;
             }

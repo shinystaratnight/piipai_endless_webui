@@ -1,28 +1,29 @@
 import { Role } from '@webui/data';
-import { getTimeInstanceByTimezone } from './time';
+import { Time } from '@webui/time';
+// import { getTimeInstanceByTimezone } from './time';
 
 enum Language {
   English = 'en',
   Russian = 'ru',
   Estonian = 'et',
-  Finnish = 'fi'
+  Finnish = 'fi',
 }
 
 enum LanguageFullName {
   English = 'English',
   Russian = 'Russian',
   Estonian = 'Estonian',
-  Finnish = 'Finnish'
+  Finnish = 'Finnish',
 }
 
 enum CountryCodeLanguage {
   EE = Language.Estonian,
-  FI = Language.Finnish
+  FI = Language.Finnish,
 }
 
 const translationCountryName = {
   EE: LanguageFullName.Estonian,
-  FI: LanguageFullName.Finnish
+  FI: LanguageFullName.Finnish,
 };
 
 export type Translation = {
@@ -37,7 +38,7 @@ export enum DateRange {
   Year = 'year',
   Month = 'month',
   Week = 'week',
-  Day = 'day'
+  Day = 'day',
 }
 
 export const filterDateFormat = 'YYYY-MM-DD';
@@ -49,7 +50,7 @@ export const rangeFormats = {
   [DateRange.Year]: 'YYYY',
   [DateRange.Month]: 'MMMM YYYY',
   [DateRange.Week]: 'MMM D',
-  [DateRange.Day]: 'D MMMM YYYY'
+  [DateRange.Day]: 'D MMMM YYYY',
 };
 
 export function getContactAvatar(name): string {
@@ -120,9 +121,9 @@ export function getStorageLang(): Language {
   return JSON.parse(localStorage.getItem('web.lang'));
 }
 
-export function getTotalTime(time, data) {
-  const shift_ended_at = time(data.shift_ended_at);
-  const shift_started_at = time(data.shift_started_at);
+export function getTotalTime(data, timezone?: string) {
+  const shift_ended_at = Time.parse(data.shift_ended_at, { timezone });
+  const shift_started_at = Time.parse(data.shift_started_at, { timezone });
 
   let breakTime = 0;
 
@@ -135,8 +136,8 @@ export function getTotalTime(time, data) {
   }
 
   if (data.break_ended_at && data.break_started_at) {
-    const break_ended_at = time(data.break_ended_at);
-    const break_started_at = time(data.break_started_at);
+    const break_ended_at = Time.parse(data.break_ended_at, { timezone });
+    const break_started_at = Time.parse(data.break_started_at, { timezone });
 
     if (
       break_started_at.isAfter(shift_ended_at) ||
@@ -151,7 +152,7 @@ export function getTotalTime(time, data) {
   }
 
   const workTime = shift_ended_at.diff(shift_started_at);
-  const totalTime = time.duration(workTime - breakTime);
+  const totalTime = Time.duration(workTime - breakTime);
 
   return `${Math.floor(totalTime.asHours())}hr ${totalTime.minutes()}min`;
 }
@@ -196,9 +197,9 @@ export function format(str, data) {
     }
 
     if (data) {
-      const shift_started_at = getTimeInstanceByTimezone(
-        data.timezone || data.time_zone
-      )(data.shift_started_at);
+      const shift_started_at = Time.parse(data.shift_started_at, {
+        timezone: data.timezone || data.time_zone,
+      });
 
       switch (key) {
         case 'shift_ended_at': {
@@ -319,4 +320,14 @@ export function getFulfilledStatus(
   if (status === 0 && workers.undefined) {
     return 2;
   }
+}
+
+export function getLocalStorageItem(key: string): any | undefined {
+  const value = localStorage.getItem(key);
+
+  if (value !== undefined) {
+    return JSON.parse(value);
+  }
+
+  return undefined;
 }

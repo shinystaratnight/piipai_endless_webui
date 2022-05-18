@@ -1,3 +1,4 @@
+@use 'sass:math';
 @import '../mixins';
 
 $width: 510px;
@@ -135,7 +136,7 @@ $width: 510px;
     }
 
     @include media-breakpoint-down('sm') {
-      padding: $content-padding / 2 16px;
+      padding: math.div($content-padding, 2) 16px;
     }
   }
 
@@ -469,25 +470,7 @@ $width: 510px;
 
     @include media-breakpoint-down('sm') {
       display: none;
-      // width: 136px;
-
-      // margin-top: 7px;
-      // margin-bottom: 34px;
     }
-
-    // @media (max-width: 767.98px) and (orientation: landscape) {
-    //   &.btn {
-    //     width: 130px !important;
-    //   }
-
-    //   &:not(.signature-step) {
-    //     display: none;
-    //   }
-
-    //   &.only-mobile {
-    //     display: none;
-    //   }
-    // }
   }
 
   .modal-footer {
@@ -724,8 +707,6 @@ $width: 510px;
 }
 
 .modal-content {
-  // max-height: 95vh;
-
   overflow: auto;
 
   box-shadow: 0 0 10px 4px rgba(0, 0, 0, 0.2);
@@ -745,10 +726,6 @@ $width: 510px;
     overflow: hidden;
     white-space: nowrap;
   }
-
-  // @include media-breakpoint-down('md') {
-  //   max-height: 95vh;
-  // }
 }
 
 .modal-content .has-tabs .button-save {

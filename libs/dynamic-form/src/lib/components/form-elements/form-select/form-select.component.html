@@ -2,6 +2,7 @@
   class="form-group"
   [formGroup]="group"
   *ngIf="!viewMode && !config.hide && !config.read_only"
+  [ngClass]="['input_type_'+key]"
 >
   <div class="form-element">
     <label
@@ -10,17 +11,11 @@
       *ngIf="label && config.templateOptions.label"
       [attr.for]="key"
     >
-      {{
-        getTranslationKey(config.key, 'label')
-          | translate: { Default: config.templateOptions.label }
-      }}
+      {{ getTranslationKey(translateKey, 'label') | translate: { Default: config.templateOptions.label } }}
     </label>
     <app-info
       *ngIf="config.templateOptions.description"
-      [description]="
-        getTranslationKey(this.key, 'description')
-          | translate: { Default: config.templateOptions.description || '' }
-      "
+      [description]="getTranslationKey(translateKey, 'description') | translate: { Default: config.templateOptions.description || '' }"
     ></app-info>
     <div class="form-element-content edit">
       <select
@@ -38,16 +33,13 @@
           *ngFor="let option of config.templateOptions.options"
           [value]="option.value"
         >
-          {{
-            getOptionTranslationKey(option.value)
-              | translate: { Default: option.label }
-          }}
+          {{ getOptionTranslationKey(option.value) | translate: { Default: option.label } }}
         </option>
       </select>
     </div>
   </div>
   <div *ngIf="errors">
-    <div class="text-danger mt-1" *ngIf="errors[key]">{{ errors[key] }}</div>
+    <div class="text-danger mt-3" *ngIf="errors[key]">{{ errors[key] }}</div>
   </div>
   <div *ngIf="message">
     <div *ngIf="message[key]" class="text-success mt-1">{{ message[key] }}</div>
@@ -63,10 +55,7 @@
     class="form-element-label"
     *ngIf="label && config.templateOptions.label"
   >
-    {{
-      getTranslationKey(config.key, 'label')
-        | translate: { Default: config.templateOptions.label }
-    }}:
+    {{ getTranslationKey(translateKey, 'label') | translate: { Default: config.templateOptions.label } }}:
   </label>
   <div
     class="form-element-content"

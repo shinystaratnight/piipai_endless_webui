@@ -5,11 +5,14 @@ import {
   OnChanges,
   SimpleChanges,
   ViewChild,
-  TemplateRef
+  TemplateRef,
+  ViewChildren,
+  QueryList,
+  ChangeDetectionStrategy
 } from '@angular/core';
 
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { BehaviorSubject, forkJoin, Observable, of } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 
 import {
@@ -24,18 +27,39 @@ import { Field, Endpoints } from '@webui/data';
 import {
   testMetadata,
   questionMetadata,
-  answerMetadata
+  answerMetadata,
+  MetadataType
 } from './test-builder.config';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { DynamicFormComponent } from 'libs/dynamic-form/src/lib/containers';
+
+interface IAcceptanceTest {
+  acceptance_test_questions: any[];
+  acceptance_tests_industries: { [key: number]: any };
+  acceptance_tests_skills: { [key: number]: any };
+  acceptance_tests_tags: { [key: number]: any };
+  acceptance_tests_workflow_nodes: { [key: number]: any };
+  description: string;
+  id: string;
+  is_active: string;
+  test_name: string;
+  valid_from: string;
+  valid_until: string;
+  __str__: string;
+}
 
 @Component({
   selector: 'app-test-builder',
   templateUrl: './test-builder.component.html',
-  styleUrls: ['./test-builder.component.scss']
+  styleUrls: ['./test-builder.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TestBuilderComponent implements OnInit, OnChanges {
-  @Input() public testData: any;
+  @Input() public testData: IAcceptanceTest;
 
   @ViewChild('preview') public previewModal: TemplateRef<any>;
+  @ViewChildren('question')
+  public questionList: QueryList<DynamicFormComponent>;
 
   public testMetadata: Field[];
 
@@ -52,9 +76,9 @@ export class TestBuilderComponent implements OnInit, OnChanges {
   pictureLoading: Map<string, boolean> = new Map();
 
   public configMap = {
-    [Endpoints.AcceptenceTest]: testMetadata,
-    [Endpoints.AcceptenceTestQuestion]: questionMetadata,
-    [Endpoints.AcceptenceTestAnswers]: answerMetadata
+    [Endpoints.AcceptanceTest]: testMetadata,
+    [Endpoints.AcceptanceTestQuestion]: questionMetadata,
+    [Endpoints.AcceptanceTestAnswers]: answerMetadata
   };
 
   constructor(
@@ -67,12 +91,15 @@ export class TestBuilderComponent implements OnInit, OnChanges {
   }
 
   public ngOnChanges(changes: SimpleChanges) {
-    if (
-      changes.hasOwnProperty('testData') &&
-      !changes['testData'].isFirstChange()
-    ) {
-      this.setPictures(this.testData);
-      this.checkQuestions(this.testData);
+    const { testData } = changes;
+
+    if (testData && !testData.isFirstChange()) {
+      const currentValue: IAcceptanceTest = testData.currentValue;
+
+      if (currentValue) {
+        this.setPictures(currentValue);
+        this.checkQuestions(currentValue);
+      }
     }
   }
 
@@ -88,7 +115,7 @@ export class TestBuilderComponent implements OnInit, OnChanges {
 
   public updateTestForm(data) {
     this.testId = data.id;
-    this.createMetadata(Endpoints.AcceptenceTest, 'form', data).subscribe(
+    this.createMetadata(Endpoints.AcceptanceTest, 'form', data).subscribe(
       (config: Field[]) => {
         this.testMetadata = config;
       }
@@ -97,13 +124,11 @@ export class TestBuilderComponent implements OnInit, OnChanges {
 
   public createMetadata(
     endpoint: string,
-    metadataType: string,
+    metadataType: MetadataType,
     data?
   ): Observable<Field[]> {
-    return of(this.configMap[endpoint][metadataType]).pipe(
+    return of(this.configMap[endpoint](metadataType)).pipe(
       map((config: Field[]) => {
-        config = JSON.parse(JSON.stringify(config));
-
         const mode = new BehaviorSubject('edit');
         const button = getElementFromMetadata(config, 'button', 'type');
         const hidden = new BehaviorSubject(false);
@@ -123,12 +148,13 @@ export class TestBuilderComponent implements OnInit, OnChanges {
     );
   }
 
-  public addQuestion(create: boolean, data?) {
-    const metadataType = create ? 'formadd' : 'form';
+  public addQuestion(create: boolean, question?) {
+    const metadataType: MetadataType = create ? 'formadd' : 'form';
+
     this.createMetadata(
-      Endpoints.AcceptenceTestQuestion,
+      Endpoints.AcceptanceTestQuestion,
       metadataType,
-      data
+      question
     ).subscribe((config: Field[]) => {
       if (create) {
         const order = getElementFromMetadata(config, 'order');
@@ -146,17 +172,27 @@ export class TestBuilderComponent implements OnInit, OnChanges {
         }
       }
 
-      this.questions.push(config);
+      const hiddenFields = this.updateMetadataByProps(config);
+
+      this.questions.push({
+        id: this.getId(config),
+        hiddenFields,
+        config
+      });
     });
   }
 
-  public addAnswer(create: boolean, target, data?) {
-    const metadataType = create ? 'formadd' : 'form';
+  public addAnswer(create: boolean, target, answerData?, questionData?) {
+    const metadataType: MetadataType = create ? 'formadd' : 'form';
+
+    const exclude_from_score = questionData
+      ? getElementFromMetadata(questionData, 'exclude_from_score')
+      : null;
 
     this.createMetadata(
-      Endpoints.AcceptenceTestAnswers,
+      Endpoints.AcceptanceTestAnswers,
       metadataType,
-      data
+      answerData
     ).subscribe((config: Field[]) => {
       if (create) {
         const order = getElementFromMetadata(config, 'order');
@@ -164,6 +200,17 @@ export class TestBuilderComponent implements OnInit, OnChanges {
 
         if (order) {
           order.value = value;
+        }
+      }
+
+      const score = getElementFromMetadata(config, 'score');
+
+      if (exclude_from_score && score) {
+        score.hide = exclude_from_score.value;
+
+        if (score.hide) {
+          score.value = 5;
+          score.templateOptions.required = false;
         }
       }
 
@@ -183,26 +230,35 @@ export class TestBuilderComponent implements OnInit, OnChanges {
     return value + 1;
   }
 
-  public checkQuestions(data: any) {
-    if (data && data.acceptance_test_questions) {
-      const questions = data.acceptance_test_questions.sort((prev, next) =>
-        prev.order > next.order ? 1 : -1
-      );
+  public checkQuestions(acceptanceTest: IAcceptanceTest) {
+    const questions = acceptanceTest.acceptance_test_questions.sort(
+      (prev, next) => (prev.order > next.order ? 1 : -1)
+    );
 
-      questions.forEach((question) => {
-        this.addQuestion(false, question);
-        this.answers[question.id] = [];
-        this.checkAnswers(question);
-      });
-    }
+    questions.forEach((question) => {
+      this.addQuestion(false, question);
+      this.answers[question.id] = [];
+      this.checkAnswers(question);
+    });
   }
 
   public checkAnswers(data: any) {
     if (data && data.acceptance_test_answers) {
       const answers = data.acceptance_test_answers;
-
-      answers.forEach((answer) => {
-        this.addAnswer(false, this.answers[data.id], answer);
+      const questionMetadataObservable = this.createMetadata(
+        Endpoints.AcceptanceTestQuestion,
+        'form',
+        data
+      );
+      questionMetadataObservable.subscribe((questionMetadata) => {
+        answers.forEach((answer) => {
+          this.addAnswer(
+            false,
+            this.answers[data.id],
+            answer,
+            questionMetadata
+          );
+        });
       });
     }
   }
@@ -216,28 +272,38 @@ export class TestBuilderComponent implements OnInit, OnChanges {
       action = 'submitForm';
     }
 
+    if (data.type === '1') {
+      data.exclude_from_score = true;
+    }
+
     this.genericFormService[action](
-      Endpoints.AcceptenceTestQuestion + (update ? data.id + '/' : ''),
+      Endpoints.AcceptanceTestQuestion + (update ? data.id + '/' : ''),
       data
     ).subscribe((res) => {
       this.createMetadata(
-        Endpoints.AcceptenceTestQuestion,
+        Endpoints.AcceptanceTestQuestion,
         'form',
         res
       ).subscribe((config: Field[]) => {
+        const hiddenFields = this.updateMetadataByProps(config);
+
         this.answers[res.id] = this.answers[res.id] || [];
-        this.questions.splice(index, 1, config);
+        this.questions.splice(index, 1, {
+          id: this.getId(config),
+          hiddenFields,
+          config
+        });
         this.pictures.set(res.id, []);
       });
     });
   }
 
   public deleteQuestion(id: string, target: any[], index: number) {
-    this.deleteObject(Endpoints.AcceptenceTestQuestion, target, index, id);
+    this.deleteObject(Endpoints.AcceptanceTestQuestion, target, index, id);
   }
 
   public deleteAnswer(id: string, target: any[], index: number) {
-    this.deleteObject(Endpoints.AcceptenceTestAnswers, target, index, id);
+    this.deleteObject(Endpoints.AcceptanceTestAnswers, target, index, id);
   }
 
   public deleteObject(
@@ -266,11 +332,11 @@ export class TestBuilderComponent implements OnInit, OnChanges {
     }
 
     this.genericFormService[action](
-      Endpoints.AcceptenceTestAnswers + (update ? data.id + '/' : ''),
+      Endpoints.AcceptanceTestAnswers + (update ? data.id + '/' : ''),
       data
     ).subscribe((res) => {
       this.createMetadata(
-        Endpoints.AcceptenceTestAnswers,
+        Endpoints.AcceptanceTestAnswers,
         'form',
         res
       ).subscribe((config: Field[]) => {
@@ -307,7 +373,7 @@ export class TestBuilderComponent implements OnInit, OnChanges {
   }
 
   public checkCount(type: number, length: number) {
-    if (type === 0) {
+    if (type === 0 || type === 3) {
       return true;
     }
 
@@ -366,7 +432,7 @@ export class TestBuilderComponent implements OnInit, OnChanges {
       });
   }
 
-  setPictures(data: any): void {
+  setPictures(data: IAcceptanceTest): void {
     data.acceptance_test_questions.forEach((question) => {
       this.pictures.set(
         question.id,
@@ -375,5 +441,75 @@ export class TestBuilderComponent implements OnInit, OnChanges {
         })
       );
     });
+  }
+
+  public drop(event: CdkDragDrop<string[]>) {
+    moveItemInArray(this.questions, event.previousIndex, event.currentIndex);
+
+    setTimeout(() => {
+      const orderRequests = this.questionList
+        .map((el, i) => {
+          const id = el.form.value.id;
+
+          return {
+            id,
+            order: i + 1
+          };
+        })
+        .map((el) => {
+          return this.genericFormService.updateForm(
+            Endpoints.AcceptanceTestQuestion + el.id + '/',
+            el
+          );
+        });
+
+      forkJoin(orderRequests).subscribe();
+    });
+  }
+
+  private updateMetadataByProps(metadata: Field[]) {
+    let hiddenFields = {
+      elements: [],
+      keys: [],
+      observers: []
+    };
+
+    metadata.forEach((el) => {
+      if (el.showIf && el.showIf.length) {
+        if (hiddenFields.keys.indexOf(el.key) === -1) {
+          hiddenFields.keys.push(el.key);
+          hiddenFields.elements.push(el);
+          hiddenFields.observers = this.observeFields(
+            el.showIf,
+            hiddenFields.observers
+          );
+          el.hidden = new BehaviorSubject(true);
+        }
+      }
+
+      if (el.children) {
+        hiddenFields = this.updateMetadataByProps(el.children);
+      }
+    });
+
+    return hiddenFields;
+  }
+
+  private observeFields(fields: any[], observers) {
+    fields.forEach((field: any) => {
+      if (field instanceof Object) {
+        const keys = Object.keys(field);
+        keys.forEach((key) => {
+          if (observers.indexOf(key) === -1) {
+            observers.push(key);
+          }
+        });
+      } else {
+        if (observers.indexOf(field) === -1) {
+          observers.push(field);
+        }
+      }
+    });
+    return observers;
   }
 }

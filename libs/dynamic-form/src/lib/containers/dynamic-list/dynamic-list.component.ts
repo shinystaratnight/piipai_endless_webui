@@ -9,7 +9,7 @@ import {
   OnDestroy,
   AfterContentChecked,
   SimpleChanges,
-  Optional
+  Optional,
 } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -27,18 +27,17 @@ import {
   AuthService,
   UserService,
   CompanyPurposeService,
-  SiteSettingsService
+  SiteSettingsService,
 } from '@webui/core';
 import {
   FormatString,
   isMobile,
   isCandidate,
   getContactAvatar,
-  getTimeInstance,
   getPropValue,
   isManager,
   isClient,
-  getTotalTime
+  getTotalTime,
 } from '@webui/utilities';
 import { Endpoints, CountryCodeLanguage, Models } from '@webui/data';
 
@@ -47,15 +46,12 @@ import {
   GenericFormService,
   ListStorageService,
   ListService,
-  SortService
+  SortService,
 } from '../../services';
 import {
-  createAddAction,
   smallModalEndpoints,
-  getOrientation,
   fillingForm,
   listUpdateActions,
-  Sort
 } from '../../helpers';
 
 import { environment } from '../../../../../../apps/r3sourcer/src/environments/environment';
@@ -64,19 +60,23 @@ import {
   TrackingModalComponent,
   EvaluateModalComponent,
   Status,
-  ChangeTimesheetModalComponent,
   ApproveTimesheetModalComponent,
-  SubmissionModalComponent
+  SubmissionModalComponent,
+  SignatureModalComponent,
+  EvaluateCandidateModalComponent,
+  ApproveWorksheetModalComponent,
 } from '../../modals';
 import { FilterEvent } from '../../interfaces';
 import { formatCurrency, getCurrencySymbol } from '@angular/common';
+import { DialogService } from '@webui/dialog';
+import { DATE_FORMAT, DATE_TIME_FORMAT, Time, TIME_FORMAT } from '@webui/time';
 
 const translationMap = CountryCodeLanguage;
 
 @Component({
   selector: 'app-dynamic-list',
   templateUrl: './dynamic-list.component.html',
-  styleUrls: ['./dynamic-list.component.scss']
+  styleUrls: ['./dynamic-list.component.scss'],
 })
 export class DynamicListComponent
   implements OnInit, OnChanges, OnDestroy, AfterContentChecked
@@ -111,6 +111,7 @@ export class DynamicListComponent
   @Input() disableActions: boolean;
   @Input() inlineFilters: boolean;
   @Input() actionProcess: boolean;
+  @Input() uploadAll: boolean;
 
   @Output() event: EventEmitter<any> = new EventEmitter();
   @Output() list: EventEmitter<any> = new EventEmitter();
@@ -137,7 +138,7 @@ export class DynamicListComponent
   public count: number;
   public innerTableCall = {
     row: '',
-    cell: ''
+    cell: '',
   };
   public modalRef: NgbModalRef;
   public tabs: any;
@@ -152,7 +153,7 @@ export class DynamicListComponent
   public searchFilter = {
     type: 'search',
     query: 'search',
-    key: 'search'
+    key: 'search',
   };
   public position: { top; left };
   public noneEdit: boolean;
@@ -177,12 +178,12 @@ export class DynamicListComponent
     Endpoints.CandidateContact,
     Endpoints.CandidatePool,
     Endpoints.Company,
-    Endpoints.CompanyContact
+    Endpoints.CompanyContact,
   ];
   public mobileDesign = [
     Endpoints.TimesheetHistory,
     Endpoints.TimesheetCandidate,
-    Endpoints.TimesheetUnapproved
+    Endpoints.TimesheetUnapproved,
   ];
   public collapsed = true;
   public updateButtons = new Map();
@@ -215,7 +216,8 @@ export class DynamicListComponent
     private listService: ListService,
     private route: ActivatedRoute,
     @Optional() private sortService: SortService,
-    private siteSettings: SiteSettingsService
+    private siteSettings: SiteSettingsService,
+    private dialog: DialogService
   ) {}
 
   public isMobile = isMobile;
@@ -246,7 +248,7 @@ export class DynamicListComponent
 
         if (rowData.updateList) {
           this.body = [
-            ...this.generateBody(this.config, this.fullData, this.innerTables)
+            ...this.generateBody(this.config, this.fullData, this.innerTables),
           ];
         }
       })
@@ -295,7 +297,7 @@ export class DynamicListComponent
           this.modalInfo = {
             url: this.sanitizer.bypassSecurityTrustResourceUrl(
               this.currentActionData.pdf_url
-            )
+            ),
           };
           this.open(this.pdfDocumentModal, { size: 'lg' });
         }, 100);
@@ -340,8 +342,8 @@ export class DynamicListComponent
         ...this.fullData,
         [this.responseField]: [
           ...this.fullData[this.responseField],
-          ...addData[this.responseField]
-        ]
+          ...addData[this.responseField],
+        ],
       };
       this.body.push(...this.generateBody(config, addData, innerTables));
     }
@@ -350,6 +352,14 @@ export class DynamicListComponent
     this.listService.data = this.fullData && this.fullData[this.responseField];
     this.listService.config = this.config.list;
     this.listService.updateActions = listUpdateActions[this.endpoint];
+
+    if (changes.uploadAll?.currentValue) {
+      const keys = Object.keys(this.select);
+      keys.forEach((el) => {
+        this.select[el] = true;
+      });
+      this.emitSelect();
+    }
   }
 
   public getFormat(property: string, data, config): string {
@@ -369,7 +379,7 @@ export class DynamicListComponent
     if (this.config.list.filters) {
       this.filterService.filters = {
         endpoint: this.parentEndpoint || this.endpoint,
-        list: this.config.list
+        list: this.config.list,
       };
       this.filtersOfList = this.filterService.getFiltersByEndpoint(
         this.endpoint
@@ -416,7 +426,7 @@ export class DynamicListComponent
     if (config && data[this.responseField]) {
       this.select = {
         ...this.select,
-        ...this.resetSelectedElements(data[this.responseField])
+        ...this.resetSelectedElements(data[this.responseField]),
       };
       if (config.list) {
         if (this.tabs) {
@@ -549,7 +559,7 @@ export class DynamicListComponent
     if (this.first) {
       this.filterService.filters = {
         endpoint: this.endpoint,
-        list: null
+        list: null,
       };
       this.filterService.resetQueries(this.config.list.list);
       this.filtersOfList = undefined;
@@ -762,7 +772,7 @@ export class DynamicListComponent
         __str__,
         rowData: el,
         collapsed: true,
-        content: []
+        content: [],
       };
 
       if (highlight) {
@@ -783,7 +793,7 @@ export class DynamicListComponent
           content: [],
           contextMenu: col.context_menu,
           tab: this.getTabOfColumn(col.name),
-          timezone: col.timezone
+          timezone: col.timezone,
         };
         col.content.forEach((element) => {
           const obj = this.generateContentElement(element, col, cell, el);
@@ -859,7 +869,7 @@ export class DynamicListComponent
       boldClass:
         (el.endpoint === Endpoints.Tag || this.endpoint === Endpoints.Tag) &&
         (el.owner === 'system' || (el.tag && el.tag.system === 'owner')),
-      translated: element.translated
+      translated: element.translated,
     };
     if (cell.timezone) {
       obj.timezone = this.getPropValue(el, cell.timezone);
@@ -878,7 +888,7 @@ export class DynamicListComponent
 
         obj.display = this.format(obj.form.templateOptions.display, {
           ...el,
-          currency
+          currency,
         });
       }
     }
@@ -980,7 +990,7 @@ export class DynamicListComponent
         obj.value.forEach((val) => {
           obj.link.push(
             this.format(element.endpoint, {
-              [obj.name]: val
+              [obj.name]: val,
             })
           );
         });
@@ -999,7 +1009,7 @@ export class DynamicListComponent
             element.text.replace(/{field}/gi, `{${element.field}}`),
             {
               ...el,
-              totalTime: this.getTotalTime(el)
+              totalTime: this.getTotalTime(el),
             }
           );
         } else {
@@ -1038,7 +1048,7 @@ export class DynamicListComponent
     if (element.type === 'select' && element.content) {
       obj.content = element.content.map((elem) => {
         const newObj = Object.assign({}, elem, {
-          disableAction: this.disableActions
+          disableAction: this.disableActions,
         });
 
         newObj['endpoint'] = this.format(elem.endpoint, el);
@@ -1089,7 +1099,7 @@ export class DynamicListComponent
           query,
           field: obj,
           id: el.id,
-          request_field: element.request_field
+          request_field: element.request_field,
         });
       } else {
         this.asyncData[element.endpoint] = [
@@ -1099,8 +1109,8 @@ export class DynamicListComponent
             query,
             field: obj,
             id: el.id,
-            request_field: element.request_field
-          }
+            request_field: element.request_field,
+          },
         ];
       }
     }
@@ -1126,7 +1136,7 @@ export class DynamicListComponent
       mb: false,
       p: true,
       action: element.action,
-      text: this.format(element.text, el)
+      text: this.format(element.text, el),
     };
 
     if (element.hidden) {
@@ -1148,7 +1158,7 @@ export class DynamicListComponent
     this.event.emit({
       type: 'sort',
       list: this.config.list.list,
-      query: this.sortService.getSortQuery(this.sortService.getCurrentState())
+      query: this.sortService.getSortQuery(this.sortService.getCurrentState()),
     });
   }
 
@@ -1206,12 +1216,7 @@ export class DynamicListComponent
   }
 
   public getTotalTime(data) {
-    const timezone = data['timezone'] || data['time_zone'];
-    const timeInstance = timezone
-      ? getTimeInstance().tz.setDefault(timezone)
-      : getTimeInstance();
-
-    return getTotalTime(timeInstance, data);
+    return getTotalTime(data, data['timezone'] || data['time_zone']);
   }
 
   public checkValue(obj) {
@@ -1228,10 +1233,17 @@ export class DynamicListComponent
     }
   }
 
-  public selectAll() {
+  public selectAll(selected) {
+    if (!this.uploadAll) {
+      this.event.emit(this.createEvent('uploadAll'));
+      this.selectedAll = false;
+      return;
+    }
+
+    this.selectedAll = selected;
     const keys = Object.keys(this.select);
     keys.forEach((el) => {
-      this.select[el] = this.selectedAll;
+      this.select[el] = selected;
     });
     this.emitSelect();
   }
@@ -1254,21 +1266,43 @@ export class DynamicListComponent
   }
 
   public actionHandler(e) {
-    this.actionEndpoint = e.action.endpoint;
+    const { action } = e;
+    this.actionEndpoint = action.endpoint;
+
     if (
-      e.action.required &&
-      !Object.keys(this.select).some((el) => el && this.select[el])
+      action.required &&
+      Object.keys(this.select).every((el) => el && !this.select[el])
     ) {
       this.actionProcess = false;
-      this.toastr.sendMessage(e.action.selectionError, MessageType.Error);
+      this.toastr.sendMessage(action.selectionError, MessageType.Error);
       return;
     }
-    this.event.emit({
-      type: 'action',
-      list: this.config.list.list,
-      action: e.action,
-      data: this.select
-    });
+
+    if (action.signature_endpoint) {
+      this.open(SignatureModalComponent);
+
+      this.modalRef.result
+        .then(({ status, result: signature }) => {
+          if (status === Status.Success) {
+            action.bodySignature.supervisor_signature = signature;
+
+            this.event.emit({
+              type: 'action',
+              list: this.config.list.list,
+              action: e.action,
+              data: this.select,
+            });
+          }
+        })
+        .catch(() => {});
+    } else {
+      this.event.emit({
+        type: 'action',
+        list: this.config.list.list,
+        action: e.action,
+        data: this.select,
+      });
+    }
   }
 
   public filterHandler(e: FilterEvent) {
@@ -1279,7 +1313,7 @@ export class DynamicListComponent
       this.event.emit({
         type: 'filter',
         list: e.list,
-        query: ''
+        query: '',
       });
 
       this.filterService.resetFilters(e.list);
@@ -1287,7 +1321,7 @@ export class DynamicListComponent
       this.event.emit({
         type: 'filter',
         list: e.list,
-        query: this.filterService.getQuery(e.list)
+        query: this.filterService.getQuery(e.list),
       });
     }
   }
@@ -1295,7 +1329,7 @@ export class DynamicListComponent
   public open(modal, options = {}) {
     this.modalRef = this.modalService.open(modal, {
       ...options,
-      backdrop: 'static'
+      backdrop: 'static',
     });
   }
 
@@ -1339,7 +1373,7 @@ export class DynamicListComponent
     this.event.emit({
       type: 'pagination',
       list: this.config.list.list,
-      query
+      query,
     });
   }
 
@@ -1412,7 +1446,7 @@ export class DynamicListComponent
           this.setAction(e);
           break;
         case 'evaluateCandidate':
-          this.evaluate(e);
+          this.evaluateCandidate(e);
           break;
         case 'sendSMS':
           this.openFrame(e.el.fields);
@@ -1473,7 +1507,7 @@ export class DynamicListComponent
       reply_timeout,
       delivery_timeout,
       type,
-      company_id
+      company_id,
     } = this.getRowData(e);
 
     const data = {
@@ -1483,14 +1517,14 @@ export class DynamicListComponent
       reply_timeout: this.getDataAction(reply_timeout),
       delivery_timeout: this.getDataAction(delivery_timeout),
       type: this.getDataAction(type),
-      company: this.getDataAction(company_id)
+      company: this.getDataAction(company_id),
     };
 
     this.modalInfo = {
       type: 'form',
       mode: 'edit',
       endpoint: e.el.endpoint,
-      data
+      data,
     };
 
     this.open(this.modal);
@@ -1505,7 +1539,7 @@ export class DynamicListComponent
       reply_timeout,
       delivery_timeout,
       type,
-      company_id
+      company_id,
     } = this.getRowData(e);
 
     const data = {
@@ -1516,14 +1550,14 @@ export class DynamicListComponent
       reply_timeout: this.getDataAction(reply_timeout),
       delivery_timeout: this.getDataAction(delivery_timeout),
       type: this.getDataAction(type),
-      company: this.getDataAction(company_id)
+      company: this.getDataAction(company_id),
     };
 
     this.modalInfo = {
       type: 'form',
       mode: 'edit',
       endpoint: e.el.endpoint,
-      data
+      data,
     };
 
     this.open(this.modal);
@@ -1535,7 +1569,7 @@ export class DynamicListComponent
       .subscribe(() => {
         this.event.emit({
           type: 'update',
-          list: this.config.list.list
+          list: this.config.list.list,
         });
       });
   }
@@ -1553,7 +1587,7 @@ export class DynamicListComponent
 
     this.modalInfo = {
       amount: currency + rowData.profile_price,
-      e
+      e,
     };
 
     this.open(this.confirmProfileModal);
@@ -1565,7 +1599,7 @@ export class DynamicListComponent
     this.saveProcess = true;
 
     const body = {
-      company: this.userService.user.data.contact.company_id
+      company: this.userService.user.data.contact.company_id,
     };
 
     this.genericFormService
@@ -1581,7 +1615,7 @@ export class DynamicListComponent
           );
           this.event.emit({
             type: 'update',
-            list: this.config.list.list
+            list: this.config.list.list,
           });
         },
         () => {
@@ -1627,7 +1661,7 @@ export class DynamicListComponent
     this.modalInfo = {
       type: 'form',
       endpoint: e.el.endpoint,
-      label: e.el.value
+      label: e.el.value,
     };
 
     this.open(this.modal, { size: 'lg' });
@@ -1636,7 +1670,7 @@ export class DynamicListComponent
   public setAction(e) {
     this.modalInfo = {
       type: 'action',
-      endpoint: e.el.endpoint
+      endpoint: e.el.endpoint,
     };
 
     if (e.el.confirm && e.el.options) {
@@ -1657,7 +1691,7 @@ export class DynamicListComponent
     this.genericFormService.submitForm(endpoint, {}).subscribe((res: any) => {
       this.event.emit({
         type: 'update',
-        list: this.config.list.list
+        list: this.config.list.list,
       });
     });
   }
@@ -1676,75 +1710,93 @@ export class DynamicListComponent
   }
 
   public submitTimesheet(e) {
-    const data = this.getRowData(e);
-
-    if (data) {
-      const contact = data.job_offer.candidate_contact.contact;
-      this.modalInfo = {
-        endpoint: e.el.endpoint,
-        edit: true,
-        label: {
-          avatar: contact.picture,
-          fullName: contact.__str__,
-        },
-        extendData: { ...data },
-        data: {
-          id: createAddAction({
-            value: data.id
-          }),
-          shift_ended_at_utc: createAddAction({
-            value: data.shift_ended_at_utc
-          }),
-          shift_started_at: createAddAction({
-            value: data.shift_started_at
-          }),
-          break_started_at: createAddAction({
-            value: data.break_started_at
-          }),
-          break_ended_at: createAddAction({
-            value: data.break_ended_at
-          }),
-          shift_ended_at: createAddAction({
-            value: data.shift_ended_at
-          }),
-          supervisor: createAddAction({
-            value: data.supervisor
-          }),
-          position: createAddAction({
-            value: data.position
-          }),
-          skill: createAddAction({
-            value: data.position
-          }),
-          company: createAddAction({
-            value: data.company
-          }),
-          jobsite: createAddAction({
-            value: data.jobsite
-          }),
-          shift_date: createAddAction({
-            value: data.shift.date.__str__
-          }),
-          time_zone: data.time_zone
-        }
-      };
-
-      let windowClass = 'timesheet-submit-form';
-
-      if (isMobile()) {
-        windowClass += ' mobile-device';
+    const dialogRef = this.dialog.open(SubmissionModalComponent);
+    dialogRef.componentInstance.data = this.getRowData(e);
+    dialogRef.result.then((result: any) => {
+      if (result.status === Status.Success) {
+        this.refreshList();
       }
+    });
 
-      // this.open(EvaluateModalComponent, { size: 'lg', windowClass });
+    // if (data) {
+    //   const contact = data.job_offer.candidate_contact.contact;
+    //   this.modalInfo = {
+    //     endpoint: e.el.endpoint,
+    //     edit: true,
+    //     label: {
+    //       avatar: contact.picture,
+    //       fullName: contact.__str__,
+    //     },
+    //     extendData: { ...data },
+    //     data: {
+    //       id: createAddAction({
+    //         value: data.id
+    //       }),
+    //       shift_ended_at_utc: createAddAction({
+    //         value: data.shift_ended_at_utc
+    //       }),
+    //       shift_started_at: createAddAction({
+    //         value: data.shift_started_at
+    //       }),
+    //       break_started_at: createAddAction({
+    //         value: data.break_started_at
+    //       }),
+    //       break_ended_at: createAddAction({
+    //         value: data.break_ended_at
+    //       }),
+    //       shift_ended_at: createAddAction({
+    //         value: data.shift_ended_at
+    //       }),
+    //       supervisor: createAddAction({
+    //         value: data.supervisor
+    //       }),
+    //       position: createAddAction({
+    //         value: data.position
+    //       }),
+    //       skill: createAddAction({
+    //         value: data.position
+    //       }),
+    //       company: createAddAction({
+    //         value: data.company
+    //       }),
+    //       jobsite: createAddAction({
+    //         value: data.jobsite
+    //       }),
+    //       shift_date: createAddAction({
+    //         value: data.shift.date.__str__
+    //       }),
+    //       time_zone: data.time_zone
+    //     }
+    //   };
 
-      this.modalRef = this.modalService.open(SubmissionModalComponent, {
-        backdrop: 'static',
-        size: 'md',
-        windowClass
-      });
-      this.modalRef.componentInstance.config = this.modalInfo;
-      this.handleFormClose(this.modalRef.result);
-    }
+    //   let windowClass = 'timesheet-submit-form';
+
+    //   if (isMobile()) {
+    //     windowClass += ' mobile-device';
+    //   }
+
+    //   // this.open(EvaluateModalComponent, { size: 'lg', windowClass });
+
+    //   this.modalRef = this.modalService.open(SubmissionModalComponent, {
+    //     backdrop: 'static',
+    //     size: 'md',
+    //     windowClass
+    //   });
+    //   this.modalRef.componentInstance.config = this.modalInfo;
+    //   this.handleFormClose(this.modalRef.result);
+    // }
+  }
+
+  public evaluateCandidate(e) {
+    const dialogRef = this.dialog.open(EvaluateCandidateModalComponent);
+    dialogRef.componentInstance.data = this.getRowData(e);
+    dialogRef.componentInstance.endpoint = e.el.endpoint;
+    dialogRef.result.then((result: any) => {
+      console.log(result);
+      if (result.status === Status.Success) {
+        this.refreshList();
+      }
+    });
   }
 
   public evaluate(e, data?, refresh = true) {
@@ -1763,16 +1815,16 @@ export class DynamicListComponent
         label: {
           picture: contact.picture && contact.picture.origin,
           contactAvatar: getContactAvatar(contact.__str__),
-          name: contact.__str__
+          name: contact.__str__,
         },
         data: {
-          evaluation_score: 5
-        }
+          evaluation_score: 5,
+        },
       };
 
       this.modalRef = this.modalService.open(EvaluateModalComponent, {
         backdrop: 'static',
-        windowClass: 'small-modal'
+        windowClass: 'small-modal',
       });
       this.modalRef.componentInstance.config = this.modalInfo;
       return this.handleFormClose(this.modalRef.result, refresh);
@@ -1808,7 +1860,7 @@ export class DynamicListComponent
 
           this.evaluateEvent({
             type: 'sendForm',
-            status: 'success'
+            status: 'success',
           });
         });
     }
@@ -1817,7 +1869,7 @@ export class DynamicListComponent
   public refreshList() {
     this.event.emit({
       type: 'update',
-      list: this.config.list.list
+      list: this.config.list.list,
     });
   }
 
@@ -1850,107 +1902,117 @@ export class DynamicListComponent
 
         this.evaluateEvent({
           type: 'sendForm',
-          status: 'success'
+          status: 'success',
         });
       });
   }
 
+  // TODO: implement change timesheet
   public changeTimesheet(e) {
-    const data = this.getRowData(e);
-    const signature =
-      data.company.supervisor_approved_scheme.includes('SIGNATURE');
-
-    if (data) {
-      const contact = data.job_offer.candidate_contact.contact;
-      const score = this.getPropValue(data, 'evaluation.evaluation_score');
-
-      this.modalInfo = {
-        changeEndpoint: e.el.endpoint,
-        evaluateEndpoint: `${Endpoints.Timesheet}${data.id}/evaluate/`,
-        edit: true,
-        evaluated: data.evaluated,
-        total: this.getTotalTime(data),
-        metadataQuery:
-          isMobile() && getOrientation() !== 90 ? 'type=mobile' : '',
-        signatureStep: false,
-        form: {},
-        supervisor_signature: data.supervisor_signature.origin,
-        label: {
-          avatar: contact.picture,
-          fullName: contact.__str__,
-        },
-        extendData: data,
-        timesheetData: {
-          shift_started_at: createAddAction({
-            value: data.shift_started_at
-          }),
-          break_started_at: createAddAction({
-            value: data.break_started_at
-          }),
-          break_ended_at: createAddAction({
-            value: data.break_ended_at
-          }),
-          shift_ended_at: createAddAction({
-            value: data.shift_ended_at
-          }),
-          noBreak: createAddAction({
-            value: !data.break_started_at && !data.break_ended_at
-          }),
-          company: createAddAction({
-            value: this.format('{company.id}', data)
-          }),
-          time_zone: data.time_zone
-        },
-        changeMetadata: new Subject(),
-        data: {
-          evaluation_score: score
-        },
-        evaluateEvent: this.evaluateEvent.bind(this),
-        sendSignature: this.sendSignature.bind(this)
-      };
-
-      let windowClass = 'approve-modal';
-
-      if (signature) {
-        this.modalInfo.signature = {
-          endpoint: `${Endpoints.Timesheet}${data.id}/approve_by_signature/`,
-          value: ''
-        };
-
-        windowClass = 'approve-modal change';
+    const dialogRef = this.dialog.open(ApproveWorksheetModalComponent);
+    dialogRef.componentInstance.data = this.getRowData(e);
+    dialogRef.result.then((result: any) => {
+      if (result.status === Status.Success) {
+        this.refreshList();
       }
+    });
 
-      window.addEventListener('orientationchange', () => {
-        if (this.modalInfo.changeMetadata) {
-          const orientation = getOrientation();
+    // const data = this.getRowData(e);
+    // const signature =
+    //   data.company.supervisor_approved_scheme.includes('SIGNATURE');
 
-          this.modalInfo.metadataQuery =
-            isMobile() && orientation === 90 ? '' : 'type=mobile';
+    // if (data) {
+    //   const contact = data.job_offer.candidate_contact.contact;
+    //   const score = this.getPropValue(data, 'evaluation.evaluation_score');
 
-          setTimeout(() => {
-            this.modalInfo.changeMetadata.next(true);
-          }, 100);
-        }
-      });
+    //   this.modalInfo = {
+    //     changeEndpoint: e.el.endpoint,
+    //     evaluateEndpoint: `${Endpoints.Timesheet}${data.id}/evaluate/`,
+    //     edit: true,
+    //     evaluated: data.evaluated,
+    //     total: this.getTotalTime(data),
+    //     metadataQuery:
+    //       isMobile() && getOrientation() !== 90 ? 'type=mobile' : '',
+    //     signatureStep: false,
+    //     form: {},
+    //     supervisor_signature: data.supervisor_signature.origin,
+    //     label: {
+    //       avatar: contact.picture,
+    //       fullName: contact.__str__,
+    //     },
+    //     extendData: data,
+    //     timesheetData: {
+    //       shift_started_at: createAddAction({
+    //         value: data.shift_started_at
+    //       }),
+    //       break_started_at: createAddAction({
+    //         value: data.break_started_at
+    //       }),
+    //       break_ended_at: createAddAction({
+    //         value: data.break_ended_at
+    //       }),
+    //       shift_ended_at: createAddAction({
+    //         value: data.shift_ended_at
+    //       }),
+    //       noBreak: createAddAction({
+    //         value: !data.break_started_at && !data.break_ended_at
+    //       }),
+    //       company: createAddAction({
+    //         value: this.format('{company.id}', data)
+    //       }),
+    //       time_zone: data.time_zone
+    //     },
+    //     changeMetadata: new Subject(),
+    //     data: {
+    //       evaluation_score: score
+    //     },
+    //     evaluateEvent: this.evaluateEvent.bind(this),
+    //     sendSignature: this.sendSignature.bind(this)
+    //   };
 
-      this.modalRef = this.modalService.open(ChangeTimesheetModalComponent, {
-        backdrop: 'static',
-        size: 'lg',
-        windowClass
-      });
-      this.modalRef.componentInstance.config = this.modalInfo;
-      this.modalRef.componentInstance.timesheet = data;
-      this.handleFormClose(this.modalRef.result);
-    }
+    //   let windowClass = 'approve-modal';
+
+    //   if (signature) {
+    //     this.modalInfo.signature = {
+    //       endpoint: `${Endpoints.Timesheet}${data.id}/approve_by_signature/`,
+    //       value: ''
+    //     };
+
+    //     windowClass = 'approve-modal change';
+    //   }
+
+    //   window.addEventListener('orientationchange', () => {
+    //     if (this.modalInfo.changeMetadata) {
+    //       const orientation = getOrientation();
+
+    //       this.modalInfo.metadataQuery =
+    //         isMobile() && orientation === 90 ? '' : 'type=mobile';
+
+    //       setTimeout(() => {
+    //         this.modalInfo.changeMetadata.next(true);
+    //       }, 100);
+    //     }
+    //   });
+
+    //   this.modalRef = this.modalService.open(ChangeTimesheetModalComponent, {
+    //     backdrop: 'static',
+    //     size: 'lg',
+    //     windowClass
+    //   });
+    //   this.modalRef.componentInstance.config = this.modalInfo;
+    //   this.modalRef.componentInstance.timesheet = data;
+    //   this.handleFormClose(this.modalRef.result);
+    // }
   }
 
+  // TODO: implement approve timesheet
   public approveTimesheet(e) {
     const data = this.getRowData(e);
     const {
       shift_started_at,
       shift_ended_at,
       break_started_at,
-      break_ended_at
+      break_ended_at,
     } = data;
     const signature =
       data.company.supervisor_approved_scheme.includes('SIGNATURE');
@@ -1964,7 +2026,7 @@ export class DynamicListComponent
           break_ended_at,
           send_candidate_message: false,
           send_supervisor_message: false,
-          no_break: false
+          no_break: false,
         })
         .pipe(
           catchError((err) => {
@@ -2010,28 +2072,28 @@ export class DynamicListComponent
               data
             ),
             unformated_date: data.shift_started_at,
-            total: this.getTotalTime(data)
+            total: this.getTotalTime(data),
           },
           form: {},
           signature: {
             endpoint: `${Endpoints.Timesheet}${data.id}/approve_by_signature/`,
-            value: ''
+            value: '',
           },
           label: {
             avatar: contact.picture,
             fullName: contact.__str__,
           },
           data: {
-            evaluation_score: score
+            evaluation_score: score,
           },
           signatureStep: true,
           approve: true,
           evaluateEvent: this.evaluateEvent.bind(this),
-          sendSignature: this.sendSignature.bind(this)
+          sendSignature: this.sendSignature.bind(this),
         };
 
         this.modalRef = this.modalService.open(ApproveTimesheetModalComponent, {
-          windowClass: 'approve-modal approve'
+          windowClass: 'approve-modal approve',
         });
         this.modalRef.componentInstance.config = this.modalInfo;
         this.modalRef.componentInstance.timesheet = data;
@@ -2091,7 +2153,7 @@ export class DynamicListComponent
       label: e.label,
       id: e.id,
       mode: this.allowPermissions.includes('update') ? 'edit' : 'view',
-      dontUseMetadataQuery: true
+      dontUseMetadataQuery: true,
     };
 
     this.open(this.modal, { size: 'lg' });
@@ -2101,7 +2163,7 @@ export class DynamicListComponent
     this.modalInfo = {
       type: 'form',
       endpoint: this.endpoint,
-      label: `Add ${this.config.list.label}`
+      label: `Add ${this.config.list.label}`,
     };
 
     this.open(this.modal, { size: 'lg' });
@@ -2112,7 +2174,7 @@ export class DynamicListComponent
       type: 'form',
       endpoint: this.endpoint,
       label: label ? label : 'Edit',
-      id
+      id,
     };
 
     this.open(this.modal, { size: 'lg' });
@@ -2155,11 +2217,11 @@ export class DynamicListComponent
       row.highlight = false;
       if (typeof values[property] === 'boolean') {
         row.highlight = {
-          highlight: true
+          highlight: true,
         };
       } else if (property) {
         row.highlight = {
-          color: values[property]
+          color: values[property],
         };
       }
     } else {
@@ -2169,7 +2231,7 @@ export class DynamicListComponent
 
   public openList(value) {
     this.list.emit({
-      endpoint: value
+      endpoint: value,
     });
   }
 
@@ -2181,7 +2243,7 @@ export class DynamicListComponent
       innerTable: true,
       list: this.config.list.list,
       key: el.key,
-      row: el.rowId
+      row: el.rowId,
     });
   }
 
@@ -2220,23 +2282,22 @@ export class DynamicListComponent
     if (!props.length) {
       if (data) {
         if (prop.indexOf('__') > -1) {
-          const timeInstance = timezone
-            ? getTimeInstance().tz.setDefault(timezone)
-            : getTimeInstance();
           const [field, format] = prop.split('__');
           const datetime = ['date', 'time', 'datetime', 'diff'];
           if (datetime.indexOf(format) > -1) {
             if (data[field]) {
               if (format === 'diff') {
-                return timeInstance(data[field]).from(timeInstance());
+                return Time.parse(data[field], { timezone }).from(
+                  Time.now(timezone)
+                );
               }
 
-              return timeInstance(data[field]).format(
+              return Time.parse(data[field], { timezone }).format(
                 format === 'time'
-                  ? 'hh:mm A'
+                  ? TIME_FORMAT
                   : format === 'datetime'
-                  ? 'DD/MM/YYYY hh:mm A'
-                  : 'DD/MM/YYYY'
+                  ? DATE_TIME_FORMAT
+                  : DATE_FORMAT
               );
             } else {
               return isMobile() && isCandidate() ? '-' : '';
@@ -2279,7 +2340,7 @@ export class DynamicListComponent
 
       this.event.emit({
         type: 'update',
-        list: this.config.list.list
+        list: this.config.list.list,
       });
     }
   }
@@ -2299,7 +2360,7 @@ export class DynamicListComponent
           .subscribe((res: any) => {
             this.event.emit({
               type: 'update',
-              list: this.config.list.list
+              list: this.config.list.list,
             });
             this.approveEndpoint = null;
           });
@@ -2345,7 +2406,7 @@ export class DynamicListComponent
         description: this.getPropValue(el, 'contact.address.__str__'),
         iconUrl: '/assets/img/location-blue.svg',
         id: this.getPropValue(el, 'id'),
-        selected: this.select[this.getPropValue(el, 'id')]
+        selected: this.select[this.getPropValue(el, 'id')],
       });
     });
     if (this.supportData) {
@@ -2355,7 +2416,7 @@ export class DynamicListComponent
         name: this.data[this.supportData].__str__,
         description: this.data[this.supportData].address,
         label: this.sanitizer.bypassSecurityTrustStyle('{ color: "green"}'),
-        iconUrl: '/assets/img/location-red.svg'
+        iconUrl: '/assets/img/location-red.svg',
       });
       data.latitude = this.data[this.supportData].latitude;
       data.longitude = this.data[this.supportData].longitude;
@@ -2366,7 +2427,7 @@ export class DynamicListComponent
   public printPDF(e) {
     this.genericFormService.getAll(e.el.endpoint).subscribe((res: any) => {
       this.modalInfo = {
-        url: this.sanitizer.bypassSecurityTrustResourceUrl(res.pdf)
+        url: this.sanitizer.bypassSecurityTrustResourceUrl(res.pdf),
       };
       this.open(this.pdfDocumentModal, { size: 'lg' });
     });
@@ -2379,7 +2440,7 @@ export class DynamicListComponent
         (res: any) => {
           this.event.emit({
             type: 'update',
-            list: this.config.list.list
+            list: this.config.list.list,
           });
         },
         (err: any) => {
@@ -2437,21 +2498,21 @@ export class DynamicListComponent
             skill: {
               action: 'add',
               data: {
-                value: this.format('{position.id}', rowData)
-              }
+                value: this.format('{position.id}', rowData),
+              },
             },
             default_shift_starting_time: {
               action: 'add',
               data: {
-                value: this.format('{default_shift_starting_time}', rowData)
-              }
+                value: this.format('{default_shift_starting_time}', rowData),
+              },
             },
             job: {
               action: 'add',
               data: {
-                value: e.el.rowId
-              }
-            }
+                value: e.el.rowId,
+              },
+            },
           };
         } else if (lastElement === 'candidate_fill') {
           endpoint = [...arr, 'candidate_fill'].join('/') + '/';
@@ -2461,15 +2522,15 @@ export class DynamicListComponent
             [Models.Timesheet]: {
               action: 'add',
               data: {
-                value: this.format('{id}', rowData)
-              }
+                value: this.format('{id}', rowData),
+              },
             },
             company: {
               action: 'add',
               data: {
-                value: this.format('{company.id}', rowData)
-              }
-            }
+                value: this.format('{company.id}', rowData),
+              },
+            },
           };
         } else if (lastElement === 'supervisor_approve') {
           endpoint = [...arr, 'supervisor_approve'].join('/') + '/';
@@ -2479,15 +2540,15 @@ export class DynamicListComponent
             [Models.Timesheet]: {
               action: 'add',
               data: {
-                value: this.format('{id}', rowData)
-              }
+                value: this.format('{id}', rowData),
+              },
             },
             company: {
               action: 'add',
               data: {
-                value: this.format('{company.id}', rowData)
-              }
-            }
+                value: this.format('{company.id}', rowData),
+              },
+            },
           };
         } else {
           id = lastElement;
@@ -2503,7 +2564,7 @@ export class DynamicListComponent
       edit: true,
       data,
       label,
-      dontUseMetadataQuery: e.value === 'editModal' || e.value === 'editForm'
+      dontUseMetadataQuery: e.value === 'editModal' || e.value === 'editForm',
     };
 
     let size = 'lg';
@@ -2565,16 +2626,16 @@ export class DynamicListComponent
         ['has_resend_action']: {
           action: 'add',
           data: {
-            value: this.getRowData(e)['has_resend_action']
-          }
+            value: this.getRowData(e)['has_resend_action'],
+          },
         },
         ['resend_id']: {
           action: 'add',
           data: {
-            value: e.el.rowId
-          }
-        }
-      }
+            value: e.el.rowId,
+          },
+        },
+      },
     };
 
     this.open(this.messageDetail, { windowClass: 'message-detail' });
@@ -2583,7 +2644,7 @@ export class DynamicListComponent
   public addForm(e) {
     this.modalInfo = {
       type: 'form',
-      endpoint: e.el.endpoint
+      endpoint: e.el.endpoint,
     };
 
     this.open(this.modal, { size: 'lg' });
@@ -2625,7 +2686,7 @@ export class DynamicListComponent
 
         this.event.emit({
           type: 'update',
-          list: this.config.list.list
+          list: this.config.list.list,
         });
       },
       (err: any) => {
@@ -2643,7 +2704,7 @@ export class DynamicListComponent
             label: invoice.customer_company.name,
             type: 'form',
             edit: true,
-            mode: 'edit'
+            mode: 'edit',
           };
           this.open(this.modal, { size: 'lg' });
 
@@ -2678,7 +2739,7 @@ export class DynamicListComponent
 
         if (typeof targetValue === 'string' && targetValue.includes('{')) {
           targetValue = this.format(targetValue, {
-            session: this.userService.user
+            session: this.userService.user,
           });
         }
 
@@ -2774,7 +2835,7 @@ export class DynamicListComponent
           this.listStorage.updateTrackingInfo(e.id, true);
 
           this.modalRef = this.modalService.open(TrackingModalComponent, {
-            backdrop: 'static'
+            backdrop: 'static',
           });
           this.modalRef.componentInstance.timesheet = timesheet;
           this.modalRef.componentInstance.data = res.results;
@@ -2827,6 +2888,8 @@ export class DynamicListComponent
 
     if (this.checkPermission('get')) {
       const { editEndpoint, editDisable } = this.config.list;
+      // set temp flag in localstorage
+      localStorage.setItem('flagAfterEditRecord', 'true');
 
       if (this.first && !editEndpoint && !this.inForm && !editDisable) {
         this.router.navigate([row.id, 'change'], { relativeTo: this.route });
@@ -2841,7 +2904,7 @@ export class DynamicListComponent
           endpoint: editEndpoint,
           id,
           label,
-          mode: 'edit'
+          mode: 'edit',
         };
 
         this.open(this.modal, { size: 'lg' });
@@ -2853,8 +2916,15 @@ export class DynamicListComponent
     return {
       action: type,
       data: {
-        value
-      }
+        value,
+      },
+    };
+  }
+
+  private createEvent(type: string) {
+    return {
+      list: this.config.list.list,
+      type,
     };
   }
 }

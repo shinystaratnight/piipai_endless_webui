@@ -1,19 +1,25 @@
-<div *ngIf="settings" class="site-page">
-  <div class="form-page">
-    <div class="header">
-      <img class="logo" [src]="logo" />
+<section id="piiprent" class="user-registration container-fluid col-xl-6 col-lg-8 col-md-10 col-sm-12 col-12" *ngIf="settings">
+  <header>
+      <div class="row p-2 border-bottom">
+          <div class="col-12 text-right">
+            <a href="/"><i class="fa fa-times" aria-hidden="true"></i></a>
+          </div>
+          <div class="col-12 text-center">
+              <img class="logo" [src]="logo">
+          </div>
+      </div>
+  </header>
+  <section>
+    
 
-      <p class="company">{{ settings.company_name }}</p>
-      <h1 class="form-name">{{ title }}</h1>
-    </div>
-
-    <div class="form-content registration-form">
+    <section>
+      <!-- <div class="form-name">{{ title }}</div> -->
       <app-form-builder-form
         [id]="settings.register_form_id"
         [companyId]="settings.company"
         (formConfig)="setFormConfig($event)"
       >
       </app-form-builder-form>
-    </div>
-  </div>
-</div>
+    </section>
+  </section>  
+</section>

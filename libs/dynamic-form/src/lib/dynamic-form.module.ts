@@ -30,6 +30,12 @@ import { directives } from './directives';
 
 import { SharedModule } from '@webui/shared';
 import { TranslateModule } from '@ngx-translate/core';
+import { IconModule } from '@webui/icon';
+import { DialogModule } from '@webui/dialog';
+import { FormControlsModule } from "@webui/form-controls";
+import { StepperModule } from '@webui/stepper';
+import { CdkStepperModule } from '@angular/cdk/stepper';
+import { RatingModule } from '@webui/rating';
 
 @NgModule({
   imports: [
@@ -58,7 +64,13 @@ import { TranslateModule } from '@ngx-translate/core';
 
     UiModule,
     WebcamModule,
-    NgxDropzoneModule
+    NgxDropzoneModule,
+    IconModule,
+    DialogModule,
+    FormControlsModule,
+    StepperModule,
+    CdkStepperModule,
+    RatingModule
   ],
   exports: [
     fromComponents.GenericFormComponent,
@@ -79,7 +91,7 @@ import { TranslateModule } from '@ngx-translate/core';
     ...directives,
     ...fromContainers.components,
     ...modals,
-    ...modalComponents
+    ...modalComponents,
   ],
   providers: [...services],
   entryComponents: [

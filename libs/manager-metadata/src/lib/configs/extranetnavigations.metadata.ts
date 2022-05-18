@@ -67,7 +67,7 @@ const form = [
     read_only: false
   },
   {
-    key: 'childrens',
+    key: 'children',
     type: 'static',
     templateOptions: {
       required: false,
@@ -113,7 +113,7 @@ const formadd = [
     read_only: false
   },
   {
-    key: 'childrens',
+    key: 'children',
     type: 'static',
     templateOptions: {
       required: false,

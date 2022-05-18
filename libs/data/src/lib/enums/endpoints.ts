@@ -97,15 +97,15 @@ export enum Endpoints {
   FormFieldGroup = '/core/formfieldgroups/',
   FormStorage = '/core/formstorages/',
 
-  // Acceptence Test
-  AcceptenceTest = '/acceptance-tests/acceptancetests/',
-  AcceptenceTestIndustry = '/acceptance-tests/acceptancetestindustries/',
-  AcceptenceTestTag = '/acceptance-tests/acceptancetesttags/',
-  AcceptenceTestWorkflowNode = '/acceptance-tests/acceptancetestworkflownodes/',
-  AcceptenceTestQuestion = '/acceptance-tests/acceptancetestquestions/',
-  AcceptenceTestAnswers = '/acceptance-tests/acceptancetestanswers/',
-  AcceptenceTestSkill = '/acceptance-tests/acceptancetestskills/',
-  AcceptenceTestPassAnswers = '/acceptance-tests/workflowobjectanswers/',
+  // Acceptance Test
+  AcceptanceTest = '/acceptance-tests/acceptancetests/',
+  AcceptanceTestIndustry = '/acceptance-tests/acceptancetestindustries/',
+  AcceptanceTestTag = '/acceptance-tests/acceptancetesttags/',
+  AcceptanceTestWorkflowNode = '/acceptance-tests/acceptancetestworkflownodes/',
+  AcceptanceTestQuestion = '/acceptance-tests/acceptancetestquestions/',
+  AcceptanceTestAnswers = '/acceptance-tests/acceptancetestanswers/',
+  AcceptanceTestSkill = '/acceptance-tests/acceptancetestskills/',
+  AcceptanceTestPassAnswers = '/acceptance-tests/workflowobjectanswers/',
 
   // Rate coefficient
   RateCoefficient = '/pricing/ratecoefficients/',
@@ -160,6 +160,7 @@ export enum Endpoints {
   Activity = '/activity/activities/',
   Permission = '/company-settings/globalpermissions/',
   Note = '/core/notes/',
+  NoteFile = '/core/notefiles/',
   Order = '/core/orders/',
   Tag = '/core/tags/',
   ManagerCompanySettings = '/company_settings/',
@@ -170,7 +171,8 @@ export enum Endpoints {
   MYOB = '/company-settings/myobsettings/',
   ApplicationFormTranslations = '/core/formtranlations/',
   UnitOfMeasurements = '/core/unitofmeasurements/',
-  CandidateCounter = '/candidate/statistics/'
+  CandidateCounter = '/candidate/statistics/',
+  Payments = '/billing/payments/'
 }
 
 export const getBankAccountLayoutEndpoint = (countryCode: string) => {

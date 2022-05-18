@@ -131,14 +131,25 @@
   </div>
   <div class="grid-row" *ngFor="let week of calendarData?.body">
     <ng-container *ngFor="let day of week; let i = index">
-      <span class="grid-item month-day" [class.date-selected]="isSelected(day.date)"
-        *ngIf="!day.tooltip && calendarType !== 2" appSelectDate [disable]="!(isManager() || canClientCreateJob())"
+      <span
+        class="grid-item month-day"
+        [class.date-selected]="isSelected(day.date)"
+        *ngIf="!day.tooltip && calendarType !== 2"
+        appSelectDate
+        [class.holiday]="day.holiday"
+        [attr.title]="day.holiday"
+        [disable]="!(isManager() || canClientCreateJob())"
         [date]="day.date">
         <span class="date" [class.current-date]="day.today">{{day.label}}</span>
       </span>
 
-      <span class="grid-item month-day" [class.available]="day.available === true"
-        [class.unavailable]="day.available === false" triggers="click:click" [ngbTooltip]="availabilityTooltip"
+      <span class="grid-item month-day"
+        [class.holiday]="day.holiday"
+        [class.available]="day.available === true"
+        [class.unavailable]="day.available === false"
+        triggers="click:click"
+        [attr.title]="day.holiday"
+        [ngbTooltip]="availabilityTooltip"
         [placement]="getPlacement(i, week.length)" *ngIf="!day.tooltip && calendarType === 2">
         <span class="date" [class.current-date]="day.today">{{day.label}}</span>
 
@@ -160,10 +171,21 @@
         </ng-template>
       </span>
 
-      <span class="grid-item month-day" [class.date-selected]="isSelected(day.date)" appSelectDate [date]="day.date"
-        [disable]="!(isManager() || canClientCreateJob())" *ngIf="day.tooltip" [class.active]="day.isOpen"
-        triggers="click:click" [ngbTooltip]="monthTooltip" [placement]="getPlacement(i, week.length)"
-        (shown)="getShiftData(day)" (hidden)="day.isOpen = false">
+      <span
+        class="grid-item month-day"
+        [class.holiday]="day.holiday"
+        [class.date-selected]="isSelected(day.date)"
+        appSelectDate
+        [date]="day.date"
+        [disable]="!(isManager() || canClientCreateJob())"
+        *ngIf="day.tooltip"
+        [class.active]="day.isOpen"
+        triggers="click:click"
+        [attr.title]="day.holiday"
+        [ngbTooltip]="monthTooltip"
+        [placement]="getPlacement(i, week.length)"
+        (shown)="getShiftData(day)"
+        (hidden)="day.isOpen = false">
 
         <span class="date" [class.current-date]="day.today">{{day.label}}</span>
 

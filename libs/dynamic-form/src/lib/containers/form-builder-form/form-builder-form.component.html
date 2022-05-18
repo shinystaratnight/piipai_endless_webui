@@ -1,20 +1,50 @@
-<div *ngIf="config" class="form-builder-form">
-  <section class="form">
-    <div class="p-3 d-flex align-items-center justify-content-end">
+<div *ngIf="config">
+  <section class="form ">
+    <div class="p-3  form-hidden align-items-center justify-content-end">
       <app-language-selector></app-language-selector>
     </div>
-
+    
     <ng-container *ngIf="step$ | async as step">
-      <header class="form__header" *ngIf="steps.length > 1">
-        <span class="form__steps">
+      <div class="row">
+        <div class="col-12 text-center form-name" *ngIf="step.position === 1" >{{ 'registration.general_info' | translate }}</div>
+        <div class="col-12 text-center form-name" *ngIf="step.position === 2" >{{ 'registration.additional_info' | translate }}</div>
+        <div class="col-12 text-center form-name" *ngIf="step.position === 3" >{{ 'registration.financial_info' | translate }}</div>
+        <div class="col-12 text-center form-name" *ngIf="step.position === 4" >{{ 'registration.industry_info' | translate }}</div>
+      </div>
+      <div class="row" *ngIf="steps.length > 1">
+        <div class="step-container col-12 text-center" >
+          <span class="progresbar-steps" [style.background]="'linear-gradient(90deg, #2196F3 '+ barWidth+'%, rgba(35, 154, 246, 0.706568) 30.25%, rgba(37, 157, 248, 0.3) 51.84%, rgba(40, 163, 252, 0.03) 100%)'" >
+          <ul class="step-list">
+            <li [ngClass]="{'active': step.position >= 1}" >
+              <span class="marker-number">{{step.position > 1 ? '&#10004;' : '1'}}</span> 
+              <span class="marker-text">{{ 'registration.general_info' | translate }}</span>
+            </li>
+            <li [ngClass]="{'active': step.position >= 2}" >
+              <span class="marker-number">{{step.position > 2 ? '&#10004;' : '2'}}</span> 
+              <span class="marker-text">{{ 'registration.additional_info' | translate }}</span>
+            </li>
+            <li [ngClass]="{'active': step.position >= 3}" >
+              <span class="marker-number">{{step.position > 3 ? '&#10004;' : '3'}}</span> 
+              <span class="marker-text">{{ 'registration.financial_info' | translate }}</span>
+            </li>
+            <li [ngClass]="{'active': step.position >= 4}" >
+              <span class="marker-number">{{step.position > 4 ? '&#10004;' : '4'}}</span> 
+              <span class="marker-text">{{ 'Industry and skills' | translate }}</span>
+            </li>
+          </ul>
+        </span>
+        </div>
+
+        <span class="form__steps form-hidden">
           {{ 'registration.step' | translate }} {{ step.position }}
           {{ 'registration.of' | translate }} {{ steps.length }}
         </span>
 
-        <h3 class="form__name">{{ step.title | translate }}</h3>
-      </header>
+        <h3 class="form__name  form-hidden" >{{ step.title | translate }}</h3>
+      </div>
 
-      <div class="content">
+      <section>
+        
         <app-dynamic-form
           [formBuilder]="true"
           [config]="step.metadata"
@@ -24,55 +54,26 @@
           [hiddenFields]="hiddenFields"
         >
         </app-dynamic-form>
-      </div>
-
-      <footer
-        class="form__footer"
-        [class.justify-content-center]="steps.length === 1"
-      >
-        <button
-          type="button"
-          class="form__button btn btn-outline"
-          (click)="back()"
-        >
-          {{ 'back' | translate }}
-        </button>
-
-        <div
-          class="button-wrapper d-flex flex-column align-items-center"
-          *ngIf="step.position !== steps.length"
-        >
-          <button
-            type="button"
-            class="form__button btn btn-primary w-100"
-            [disabled]="invalid$ | async"
-            (click)="next()"
-          >
-            {{ 'next' | translate }}
-          </button>
-          <span class="error-message" *ngIf="invalid$ | async">
-            {{ 'registration.fill_error' | translate }}
-          </span>
+        <div class="row border-line " [ngClass]="['border-line_'+step.position]">
+          
         </div>
-
-        <div
-          class="button-wrapper d-flex flex-column align-items-center"
-          *ngIf="step.position === steps.length"
-        >
-          <button
-            type="submit"
-            class="form__button btn btn-primary w-100"
-            [disabled]="form.invalid || (saving$ | async)"
-            (click)="submitForm()"
-          >
-            {{ 'registration.register' | translate }}
-            <app-spinner *ngIf="saving$ | async"></app-spinner>
-          </button>
-          <span class="error-message" *ngIf="form.invalid">
-            {{ 'registration.fill_error' | translate }}
-          </span>
+        <div class="button-container">
+          <div class="col-12 text-center pt-4 pb-4" style="color: #7A7A7A;" *ngIf="step.position !== steps.length">
+            <button *ngIf="step.position !== 1" type="button" class="form__button btn btn-default btn-outline rounded-pill btn-back" (click)="back()" >{{ 'back' | translate }}</button>
+            <button class="btn btn-primary btn-lg rounded-pill" [disabled]="invalid$ | async" (click)="next()" >{{ 'next_step' | translate }}</button>
+          </div>
+          <div class="col-12 text-center pt-4 pb-4 register-button" *ngIf="step.position === steps.length">
+            <button *ngIf="step.position !== 1" type="button" class="form__button btn btn-default btn-outline rounded-pill btn-back" (click)="back()" >{{ 'back' | translate }}</button>
+            
+            <button type="submit" class="btn btn-primary btn-lg rounded-pill" [disabled]="form.invalid || (saving$ | async)" (click)="submitForm()"  >
+              {{ 'registration.register' | translate }}
+              <app-spinner *ngIf="saving$ | async"></app-spinner>
+            </button>
+            
+          </div>
+          <div class="col-12 text-center pb-4" style="color: #7A7A7A;" [ngClass]="['login_here_'+step.position]"><span class="register-link" >{{ 'registration.already_account' | translate }}, <a href="javascript:void(0);" (click)="back()" >{{ 'registration.login_here' | translate }}</a></span></div>
         </div>
-      </footer>
+      </section>
     </ng-container>
   </section>
 </div>

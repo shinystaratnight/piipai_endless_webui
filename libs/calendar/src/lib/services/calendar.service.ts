@@ -1,17 +1,9 @@
 import { Injectable } from '@angular/core';
 
-import { Moment } from 'moment-timezone';
-
-import {
-  DateRange,
-  rangeFormats,
-  weekEnd,
-  weekStart,
-  getToday,
-  getTimeInstance
-} from '@webui/utilities';
+import { DateRange, rangeFormats, weekEnd, weekStart } from '@webui/utilities';
 import { DatepickerService } from './datepicker.service';
 import { TranslateHelperService } from '@webui/core';
+import { Moment, Time } from '@webui/time';
 
 export enum Status {
   Unfilled,
@@ -19,7 +11,7 @@ export enum Status {
   Pending,
   Open,
   Filled,
-  Approved
+  Approved,
 }
 
 export interface CalendarData {
@@ -55,7 +47,7 @@ export class CalendarService {
     '21:00',
     '22:00',
     '23:00',
-    '23:59 PM'
+    '23:59 PM',
   ];
 
   private calendarHeight = 370;
@@ -89,6 +81,7 @@ export class CalendarService {
       return body.map((row) => {
         return row.map((day) => {
           const newData = data.filter((el) => el.date === day.date);
+          const holidayData = data.find((el) => el.holiday_date === day.date);
           const availabilityData = data.find(
             (el) => el.target_date === day.date
           );
@@ -96,12 +89,13 @@ export class CalendarService {
             ...day,
             data: newData,
             jobOffers: newData.filter((el) => el.showButtons),
+            holiday: holidayData ? holidayData.name : undefined,
             available: availabilityData
               ? availabilityData.confirmed_available
               : undefined,
             availableId: availabilityData ? availabilityData.id : undefined,
             tooltip: this.generateTooltipForMonth(newData),
-            isOpen: false
+            isOpen: false,
           };
         });
       });
@@ -123,7 +117,7 @@ export class CalendarService {
             data: newData,
             tooltip: this.generateTooltipForMonth(newData),
             isOpen: false,
-            lines: this.calculateLines()
+            lines: this.calculateLines(),
           };
         });
       },
@@ -137,7 +131,7 @@ export class CalendarService {
         ...body,
         data: data.filter((el) => el.date === body.date),
         isOpen: false,
-        lines: this.calculateLines()
+        lines: this.calculateLines(),
       };
     });
   }
@@ -147,21 +141,21 @@ export class CalendarService {
   }
 
   getToday() {
-    return getToday();
+    return Time.now();
   }
 
   calculateShiftSize(start: string) {
     const timesheetTime = 8.5;
-    const startMoment = getTimeInstance()(start, 'hh:mm:ss');
+    const startMoment = Time.parse(start, { format: 'hh:mm:ss' });
 
     const time = {
       hours: startMoment.hour(),
-      minute: startMoment.minute()
+      minute: startMoment.minute(),
     };
 
     return {
       top: Math.round((this.calendarHeight / 24) * time.hours) + 'px',
-      height: Math.round((this.calendarHeight / 24) * timesheetTime) + 'px'
+      height: Math.round((this.calendarHeight / 24) * timesheetTime) + 'px',
     };
   }
 
@@ -181,7 +175,7 @@ export class CalendarService {
       return {
         time,
         top: (this.calendarHeight / (this.calendarTimes.length - 1)) * i - 6,
-        ...result
+        ...result,
       };
     });
   }
@@ -190,7 +184,7 @@ export class CalendarService {
     return this.calendarTimes.map((time, i) => {
       return {
         top: (this.calendarHeight / (this.calendarTimes.length - 1)) * i,
-        class: i % 4 !== 0 ? 'dotted' : ''
+        class: i % 4 !== 0 ? 'dotted' : '',
       };
     });
   }
@@ -210,8 +204,8 @@ export class CalendarService {
           [Status.Pending]: 0,
           [Status.Open]: 0,
           [Status.Filled]: 0,
-          [Status.Approved]: 0
-        }
+          [Status.Approved]: 0,
+        },
       };
 
       data.forEach((shift) => {

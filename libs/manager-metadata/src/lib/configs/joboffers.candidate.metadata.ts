@@ -1,3 +1,5 @@
+import { List } from "@webui/metadata";
+
 const formset = {
   fields: [
     {
@@ -53,7 +55,12 @@ const formset = {
           }
         ],
         label: 'Status'
-      }
+      },
+      new List.column.element('job', 'Job')
+        .setWidth(300)
+        .setContent([
+          new List.input.element('shift.date.job.name')
+        ])
     ],
     list: 'joboffer',
     editDisable: false,

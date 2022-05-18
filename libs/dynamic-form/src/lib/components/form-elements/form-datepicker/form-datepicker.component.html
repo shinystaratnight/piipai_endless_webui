@@ -8,6 +8,7 @@
   [hidden]="config.hide || viewMode || config.read_only"
   (mouseover)="currentField = true"
   (mouseleave)="currentField = false"
+  [ngClass]="['input_type_'+key]"
 >
   <div class="form-element">
     <label
@@ -134,7 +135,7 @@
     </div>
   </div>
   <div *ngIf="errors && errors[config.key]">
-    <div class="text-danger mt-1">{{ errors[config.key] }}</div>
+    <div class="text-danger mt-3">{{ errors[config.key] }}</div>
   </div>
 
   <div *ngIf="message && message[config.key]">

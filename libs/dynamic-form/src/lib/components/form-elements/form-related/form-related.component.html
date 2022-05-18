@@ -1,4 +1,4 @@
-<div appDropDown element=".autocomplete" [update]="update" *ngIf="(!viewMode || config.list) && !config.hide">
+<div appDropDown element=".autocomplete" [update]="update" *ngIf="(!viewMode || config.list) && !config.hide"  class="input_type_autocomplete" [ngClass]="['input_type_'+this.key]">
   <div *ngIf="!config.list" class="form-group" [formGroup]="group">
     <div class="form-element" *ngIf="!config.many">
       <label class="form-element-label" [attr.for]="key" [class.required]="config.templateOptions.required"
@@ -395,7 +395,7 @@
     </a>
   </div>
   <div *ngIf="hasError()">
-    <div class="text-danger mt-1 mb-2">{{ errors[config.key] }}</div>
+    <div class="text-danger mt-3 mb-2">{{ errors[config.key] }}</div>
   </div>
   <div *ngIf="message">
     <div *ngIf="message[config.key]" class="text-success mt-1">

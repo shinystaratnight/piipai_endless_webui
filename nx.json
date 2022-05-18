@@ -29,13 +29,25 @@
     "data": {
       "tags": []
     },
+    "dialog": {
+      "tags": []
+    },
     "dynamic-form": {
+      "tags": []
+    },
+    "form-controls": {
+      "tags": []
+    },
+    "icon": {
       "tags": []
     },
     "manager-metadata": {
       "tags": []
     },
     "metadata": {
+      "tags": []
+    },
+    "models": {
       "tags": []
     },
     "r3sourcer": {
@@ -45,10 +57,19 @@
       "tags": [],
       "implicitDependencies": ["r3sourcer"]
     },
+    "rating": {
+      "tags": []
+    },
     "shared": {
       "tags": []
     },
     "shared-metadata": {
+      "tags": []
+    },
+    "stepper": {
+      "tags": []
+    },
+    "time": {
       "tags": []
     },
     "ui": {

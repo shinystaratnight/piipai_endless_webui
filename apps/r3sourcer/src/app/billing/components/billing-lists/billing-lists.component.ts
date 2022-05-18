@@ -1,6 +1,6 @@
-import { Component, Input } from '@angular/core';
+import { Component } from '@angular/core';
 
-import { metadata, smsMetadata } from './billing-lists.metadata';
+import { paymentMetadata, smsMetadata } from './billing-lists.metadata';
 import { ListService, SortService } from '@webui/dynamic-form';
 
 @Component({
@@ -10,10 +10,6 @@ import { ListService, SortService } from '@webui/dynamic-form';
   providers: [ListService, SortService]
 })
 export class BillingListsComponent {
-
-  @Input() public payments: any;
-
-  public config = metadata;
+  public paymentConfig = paymentMetadata;
   public smsConfig = smsMetadata;
-
 }

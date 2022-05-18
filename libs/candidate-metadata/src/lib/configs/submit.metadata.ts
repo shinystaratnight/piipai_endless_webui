@@ -3,7 +3,6 @@ import {
   Models,
   NoteModel,
   SkillModel,
-  WageType
 } from '@webui/data';
 import { Form, CheckboxType, DatepickerType } from '@webui/metadata';
 

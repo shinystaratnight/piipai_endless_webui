@@ -159,7 +159,7 @@
 //       fakeAsync(inject([SiteService], (siteService: SiteService) => {
 //         comp.pagesList = [
 //           {
-//             childrens: [],
+//             children: [],
 //             endpoint: '/core/contacts/',
 //             name: 'Contact',
 //             url: '/contacts/',
@@ -215,7 +215,7 @@
 //         modulesList = [];
 //         let pagesList = [
 //           {
-//             childrens: [],
+//             children: [],
 //             endpoint: '/core/contacts/',
 //             name: 'Contact',
 //             url: '/contacts/',
@@ -242,7 +242,7 @@
 //         userModules = [];
 //         let pagesList = [
 //           {
-//             childrens: [],
+//             children: [],
 //             endpoint: '/core/contacts/',
 //             name: 'Contact',
 //             url: '/contacts/',
@@ -269,7 +269,7 @@
 //         pages = [];
 //         let pagesList = [
 //           {
-//             childrens: [],
+//             children: [],
 //             endpoint: '/core/contacts/',
 //             name: 'Contact',
 //             url: '/contacts/',
@@ -404,7 +404,7 @@
 //       ];
 //       comp.pages = [
 //         {
-//           childrens: [],
+//           children: [],
 //           endpoint: '/candidate/candidatecontacts/',
 //           name: 'Candidate Contact',
 //           url: '/candidatecontacts/',
@@ -423,22 +423,22 @@
 //       let pagesList = [
 //         {
 //           endpoint: 'four',
-//           childrens: [
+//           children: [
 //             {
 //               endpoint: 'first',
-//               childrens: []
+//               children: []
 //             }
 //           ]
 //         },
 //         {
 //           endpoint: 'five',
-//           childrens: [
+//           children: [
 //             {
 //               endpoint: 'six',
-//               childrens: [
+//               children: [
 //                 {
 //                   endpoint: 'seven',
-//                   childrens: []
+//                   children: []
 //                 }
 //               ]
 //             }
@@ -446,10 +446,10 @@
 //         },
 //         {
 //           endpoint: 'second',
-//           childrens: [
+//           children: [
 //             {
 //               endpoint: 'third',
-//               childrens: []
+//               children: []
 //             }
 //           ]
 //         }
@@ -458,17 +458,17 @@
 //       expect(result).toEqual([
 //         {
 //           endpoint: 'four',
-//           childrens: []
+//           children: []
 //         },
 //         {
 //           endpoint: 'five',
-//           childrens: [
+//           children: [
 //             {
 //               endpoint: 'six',
-//               childrens: [
+//               children: [
 //                 {
 //                   endpoint: 'seven',
-//                   childrens: []
+//                   children: []
 //                 }
 //               ]
 //             }

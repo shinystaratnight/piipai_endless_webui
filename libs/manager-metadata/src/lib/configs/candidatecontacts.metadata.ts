@@ -1411,13 +1411,6 @@ const formadd = [
     collapsed: false,
     list: false,
     smallModal: true,
-    checkObject: {
-      endpoint: Endpoints.CandidateContact,
-      error: 'This Candidate contact already exists!',
-      query: {
-        contact: '{contact.id}'
-      }
-    },
     visibleMode: true,
     update: {
       before: true,

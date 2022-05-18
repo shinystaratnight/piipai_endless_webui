@@ -18,7 +18,7 @@ interface AuthResponse {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
   private _role: Role;
@@ -47,15 +47,17 @@ export class AuthService {
   public storeToken(response, rememberMe?: boolean, username?: string) {
     const data: AuthResponse = response.data || response || {};
 
-    const { access_token = '', access_token_jwt = '', refresh_token = '' } = {
-      ...data
-    };
+    const {
+      access_token = '',
+      access_token_jwt = '',
+      refresh_token = '',
+    } = data;
     this.storage.store('user', {
       access_token,
       refresh_token,
       access_token_jwt,
       rememberMe,
-      username
+      username,
     });
   }
 
@@ -79,7 +81,7 @@ export class AuthService {
       refresh_token,
       username,
       client_id: this.env.clientId,
-      grant_type: 'refresh_token'
+      grant_type: 'refresh_token',
     };
 
     return this.http.post(Endpoints.TokenRefresh, body).pipe(
@@ -87,7 +89,7 @@ export class AuthService {
         this.storage.store('user', {
           ...user,
           access_token: response.access_token_jwt,
-          refresh_token: response.refresh_token
+          refresh_token: response.refresh_token,
         });
       }),
       catchError((error: any) => this.error.handleError(error))

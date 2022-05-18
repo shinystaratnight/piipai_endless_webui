@@ -58,7 +58,7 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
   private invalid: BehaviorSubject<boolean> = new BehaviorSubject(false);
   private saving: BehaviorSubject<boolean> = new BehaviorSubject(false);
   private _step: BehaviorSubject<Step> = new BehaviorSubject({} as Step);
-
+  barWidth: any = 0;
   constructor(
     private service: FormBuilderService,
     private router: Router,
@@ -119,6 +119,7 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
   public next(): void {
     const currentStep = this._step.getValue();
     this.changeStep(currentStep.key + 1);
+    this.updateStepProgressBar(currentStep.position);
   }
 
   // public eventHandler(event: any) {
@@ -547,8 +548,8 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
     const currentTest: BehaviorSubject<number> = new BehaviorSubject<number>(0);
     const success: Subject<boolean> = new Subject();
     const chosenIndustry = formData.industry.id;
-    const chosenSkills = formData.skill;
-    const chosenTags = formData.tag;
+    const chosenSkills = formData.skill || [];
+    const chosenTags = formData.tag || [];
 
     let testsForPassing = this.config.tests.filter((test) => {
       const industries = test.acceptance_tests_industries.map(
@@ -598,7 +599,8 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
         this.modalRef.componentInstance.config = {
           test,
           description: test.description,
-          send: false
+          send: false,
+          skipScoreForTest: true
         } as PassTestModalConfig;
 
         this.modalRef.result
@@ -614,5 +616,17 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
     }
 
     return success.asObservable();
+  }
+ updateStepProgressBar(step){ 
+
+    if(step == 1){
+      this.barWidth = 30;
+    }else if(step == 2){
+      this.barWidth = 65;
+    }else if(step == 3){
+
+      this.barWidth = 96;
+
+    }
   }
 }

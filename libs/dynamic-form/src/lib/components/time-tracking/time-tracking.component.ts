@@ -1,12 +1,11 @@
 import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core';
 
-import { Moment } from 'moment-timezone';
-import { getTimeInstance } from '@webui/utilities';
+import { Time, Moment } from '@webui/time';
 
 @Component({
   selector: 'app-time-tracking',
   templateUrl: './time-tracking.component.html',
-  styleUrls: ['./time-tracking.component.scss']
+  styleUrls: ['./time-tracking.component.scss'],
 })
 export class TimeTrackingComponent implements OnInit {
   @Input()
@@ -43,7 +42,7 @@ export class TimeTrackingComponent implements OnInit {
     this.breakStyles = {
       left: left + '%',
       width: breakWidth + '%',
-      position: 'absolute'
+      position: 'absolute',
     };
   }
 
@@ -56,7 +55,7 @@ export class TimeTrackingComponent implements OnInit {
 
     const newTime = Math.round(minutes * event) * 60 * 1000;
 
-    this.time = getTimeInstance()(start + newTime);
+    this.time = Time.parse(start + newTime);
     this.changeTimeTracking.emit(this.time);
   }
 }

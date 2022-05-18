@@ -86,11 +86,7 @@ $header-bg: #fdfdfd;
     }
 
     &-img {
-      height: 40px;
-
-      @include media-breakpoint-down('lg') {
-        height: 32px;
-      }
+      height: 60px;
     }
   }
 
@@ -323,7 +319,6 @@ $header-bg: #fdfdfd;
     bottom: -28px;
     padding: 4px 36px;
     border-radius: 0 0 0.25rem 0.25rem;
-    // border: 1px solid rgba($gray, 0.5);
     box-shadow: 0 3px 2px rgba(black, 0.04);
     z-index: 1;
 

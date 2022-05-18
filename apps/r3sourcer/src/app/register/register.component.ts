@@ -21,7 +21,8 @@ export class RegisterComponent implements OnInit {
   }
 
   get logo(): string {
-    return this.settings.logo || '/assets/img/logo.svg';
+    //return this.settings.logo || '/assets/img/logo.svg';
+    return '/assets/img/piiprent_logo.png';
   }
 
   constructor(private route: ActivatedRoute) {}

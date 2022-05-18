@@ -2,25 +2,21 @@ import { Component, OnDestroy } from '@angular/core';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 import { GenericFormService } from '../../../services';
-import { getTimeInstance } from '@webui/utilities';
 
 import { TrackingModalComponent } from '../../../modals';
 
 @Component({
   selector: 'app-form-tracking',
   templateUrl: './form-tracking.component.html',
-  styleUrls: ['./form-tracking.component.scss']
+  styleUrls: ['./form-tracking.component.scss'],
 })
 export class FormTrackingComponent implements OnDestroy {
-
   public config;
   public modalRef: NgbModalRef;
 
-  public timeInstance = getTimeInstance();
-
   constructor(
     private genericFormService: GenericFormService,
-    private modalService: NgbModal,
+    private modalService: NgbModal
   ) {}
 
   public ngOnDestroy() {
@@ -33,10 +29,13 @@ export class FormTrackingComponent implements OnDestroy {
     const timesheet = this.config.formData.value.data;
     const endpoint = `/candidate/location/${timesheet.job_offer.candidate_contact.id}/history/`;
 
-    this.genericFormService.getByQuery(endpoint, `?timesheet=${timesheet.id}&limit=-1`)
+    this.genericFormService
+      .getByQuery(endpoint, `?timesheet=${timesheet.id}&limit=-1`)
       .subscribe((res) => {
         if (res.results.length) {
-          this.modalRef = this.modalService.open(TrackingModalComponent, {backdrop: 'static'});
+          this.modalRef = this.modalService.open(TrackingModalComponent, {
+            backdrop: 'static',
+          });
           this.modalRef.componentInstance.timesheet = timesheet;
           this.modalRef.componentInstance.data = res.results;
         }
