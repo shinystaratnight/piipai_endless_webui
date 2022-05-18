@@ -42,6 +42,7 @@ import { SharedModule as LibSharedModule } from '@webui/shared';
 import { UiModule } from '@webui/ui';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { DialogModule } from '@webui/dialog';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
   // bootstrap: [ ManagerComponent ],
@@ -78,6 +79,7 @@ import { DialogModule } from '@webui/dialog';
     UiModule,
     DragDropModule,
     DialogModule,
+    TranslateModule,
   ],
   providers: [
     // ...guards,
