@@ -107,6 +107,18 @@ export class FormDatepickerControlComponent
     this.onTouched = fn;
   }
 
+  public setDisabledState(isDisabled: boolean): void {
+    if (isDisabled) {
+      this.dateControl.disable();
+      this.timeControl.disable();
+      this.durationControl.disable();
+    } else {
+      this.dateControl.enable();
+      this.timeControl.enable();
+      this.durationControl.enable();
+    }
+  }
+
   ngOnInit(): void {
     this.parseInitialValue();
     this.parseTimerInitialValue();

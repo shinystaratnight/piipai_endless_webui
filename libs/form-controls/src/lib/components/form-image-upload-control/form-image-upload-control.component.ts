@@ -64,7 +64,6 @@ export class FormImageUploadControlComponent implements OnInit, OnDestroy, Contr
   }
 
   public onSelect(event: NgxDropzoneChangeEvent) {
-    console.log(event);
     const pictures = this.pictures.value;
 
     pictures.push(...event.addedFiles);

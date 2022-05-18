@@ -3,7 +3,7 @@ import {
   ChangeDetectorRef,
   Component,
   OnDestroy,
-  OnInit
+  OnInit,
 } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Endpoints, TimeSheet, TimesheetRate } from '@webui/data';
@@ -23,9 +23,12 @@ const isHourlyWork = (name: string): boolean => {
   selector: 'app-submission-modal',
   templateUrl: './submission-modal.component.html',
   styleUrls: ['./submission-modal.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SubmissionModalComponent extends Modal implements OnInit, OnDestroy {
+export class SubmissionModalComponent
+  extends Modal
+  implements OnInit, OnDestroy
+{
   public data: any;
   public activityEndpoint = Endpoints.SkillWorkTypes;
   public timeSheet: TimeSheet;
@@ -38,7 +41,8 @@ export class SubmissionModalComponent extends Modal implements OnInit, OnDestroy
   public activityParams: { [key: string]: any };
 
   public get activitiesForm(): FormGroup[] {
-    return (this.formGroup.get('activities') as FormArray).controls as FormGroup[];
+    return (this.formGroup.get('activities') as FormArray)
+      .controls as FormGroup[];
   }
 
   public get hasActivities(): boolean {
@@ -46,7 +50,9 @@ export class SubmissionModalComponent extends Modal implements OnInit, OnDestroy
   }
 
   public get invalidActivities(): boolean {
-    return !this.hasActivities || this.activitiesForm.some((form) => form.invalid);
+    return (
+      !this.hasActivities || this.activitiesForm.some((form) => form.invalid)
+    );
   }
 
   public get formInvalid(): boolean {
@@ -55,6 +61,10 @@ export class SubmissionModalComponent extends Modal implements OnInit, OnDestroy
       this.invalidActivities ||
       (!this.timeSheet.endedAt && !this.activitiesForm.length)
     );
+  }
+
+  public get title(): string {
+    return this.timeSheet.status === 7 ? 'worksheet' : 'worksheet_submission';
   }
 
   private destroy$: Subject<void> = new Subject<void>();
@@ -75,21 +85,29 @@ export class SubmissionModalComponent extends Modal implements OnInit, OnDestroy
       shiftStartedAt: new FormControl(this.timeSheet.startedAt),
       shiftEndedAt: new FormControl(this.timeSheet.endedAt),
       break: new FormControl(),
-      activity: new FormControl()
+      activity: new FormControl(),
     });
 
-    this.formGroup.valueChanges.subscribe((value) => this.updateTimeSheet(value));
+    this.formGroup.valueChanges.subscribe((value) =>
+      this.updateTimeSheet(value)
+    );
     this.activityParams = this.getActivityParams();
 
-    this.formGroup.get('activity').valueChanges.subscribe((option: DropdownOption) => {
-      if (option && !this.formGroup.get('amount')) {
-        this.formGroup.addControl('amount', new FormControl(0));
-      } else if (!option) {
-        this.formGroup.removeControl('amount');
-      }
-    });
+    this.formGroup
+      .get('activity')
+      .valueChanges.subscribe((option: DropdownOption) => {
+        if (option && !this.formGroup.get('amount')) {
+          this.formGroup.addControl('amount', new FormControl(0));
+        } else if (!option) {
+          this.formGroup.removeControl('amount');
+        }
+      });
 
     this.getActivities();
+
+    if (this.timeSheet.status === 7) {
+      this.formGroup.disable();
+    }
   }
 
   public ngOnDestroy() {
@@ -102,7 +120,7 @@ export class SubmissionModalComponent extends Modal implements OnInit, OnDestroy
       fields: ['__str__', 'id', 'translations', 'uom', 'skill_rate_ranges'],
       skill: this.timeSheet.position.id,
       company: this.timeSheet.company.id,
-      priced: true
+      priced: true,
     };
   }
 
@@ -123,8 +141,14 @@ export class SubmissionModalComponent extends Modal implements OnInit, OnDestroy
       const timesheetRate = new TimesheetRate(activity);
 
       return timesheetRate.id
-        ? this.apiService.updateForm(timesheetRate.editApiEndpoint, timesheetRate.requestBody)
-        : this.apiService.submitForm(timesheetRate.apiEndpoint, timesheetRate.requestBody);
+        ? this.apiService.updateForm(
+            timesheetRate.editApiEndpoint,
+            timesheetRate.requestBody
+          )
+        : this.apiService.submitForm(
+            timesheetRate.apiEndpoint,
+            timesheetRate.requestBody
+          );
     });
 
     creationRequests.push(
@@ -172,33 +196,49 @@ export class SubmissionModalComponent extends Modal implements OnInit, OnDestroy
   }
 
   private updateTimeSheet(value) {
-    this.timeSheet.startedAt = value.shiftStartedAt || null;
-    this.timeSheet.endedAt = value.shiftEndedAt || null;
-    this.timeSheet.updateBreak(value.break ? value.break.split(':') : null);
+    if ('shiftStartedAt' in value) {
+      this.timeSheet.startedAt = value.shiftStartedAt || null;
+    }
+
+    if ('shiftEndedAt' in value) {
+      this.timeSheet.endedAt = value.shiftEndedAt || null;
+    }
+
+    if ('break' in value) {
+      this.timeSheet.updateBreak(value.break ? value.break.split(':') : null);
+    }
   }
 
   private getActivities(): void {
     this.apiService
-      .get(Endpoints.TimesheetRates, { timesheet: this.timeSheet.id, limit: -1 })
+      .get(Endpoints.TimesheetRates, {
+        timesheet: this.timeSheet.id,
+        limit: -1,
+      })
       .subscribe((response) => {
         const activities = response.results
           .map((activity) => new TimesheetRate(activity))
           .filter((rate) => !isHourlyWork(rate.worktype.__str__));
         this.formGroup.addControl(
           'activities',
-          new FormArray(activities.map((activity) => this.getActivityForm(activity)))
+          new FormArray(
+            activities.map((activity) => this.getActivityForm(activity))
+          )
         );
         this.cd.detectChanges();
       });
   }
 
-  private getActivityForm(activity: TimesheetRate | undefined, timesheet?: string): FormGroup {
+  private getActivityForm(
+    activity: TimesheetRate | undefined,
+    timesheet?: string
+  ): FormGroup {
     const form = new FormGroup({
       id: new FormControl(activity?.id),
       value: new FormControl(activity?.value, Validators.required),
       rate: new FormControl(activity?.rate),
       timesheet: new FormControl(activity?.timesheet || { id: timesheet }),
-      worktype: new FormControl(activity?.worktype, Validators.required)
+      worktype: new FormControl(activity?.worktype, Validators.required),
     });
 
     form
@@ -209,6 +249,10 @@ export class SubmissionModalComponent extends Modal implements OnInit, OnDestroy
 
         form.get('rate').patchValue(rate, { emitEvent: false });
       });
+
+    if (this.timeSheet.status === 7) {
+      form.disable();
+    }
 
     return form;
   }

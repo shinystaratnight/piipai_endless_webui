@@ -971,42 +971,52 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, 0.3);
       padding: 10px;
     }
 
-    .button-wrapper {
-      flex: 1;
+    button.app-button__view {
+      width: 100%;
 
-      text-align: center;
-
-      border-right: 1px solid rgba($gray, 0.1);
-
-      .btn {
-        margin-bottom: 0;
-      }
-
-      br {
-        display: none;
-      }
-
-      app-form-button {
-        display: block;
-      }
-
-      button {
-        width: 100%;
-
-        &:hover,
-        &:active {
-          background-color: rgba($gray, 0.3);
-        }
-      }
-
-      &:last-child {
-        border-right: none;
+      &:hover,
+      &:active {
+        background-color: rgba($gray, 0.3);
       }
     }
 
+    //.button-wrapper {
+    //  flex: 1;
+    //
+    //  text-align: center;
+    //
+    //  border-right: 1px solid rgba($gray, 0.1);
+    //
+    //  .btn {
+    //    margin-bottom: 0;
+    //  }
+    //
+    //  br {
+    //    display: none;
+    //  }
+    //
+    //  app-form-button {
+    //    display: block;
+    //  }
+    //
+    //  button.app-button__view {
+    //    width: 100%;
+    //
+    //    &:hover,
+    //    &:active {
+    //      background-color: rgba($gray, 0.3);
+    //    }
+    //  }
+    //
+    //  &:last-child {
+    //    border-right: none;
+    //  }
+    //}
+
     .signature {
       position: absolute;
-      top: -3px;
+      top: 0;
+      margin-top: 19px;
       right: 10px;
     }
   }
@@ -1016,12 +1026,12 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, 0.3);
   display: inline-flex;
 }
 
-.no-signature {
-  padding-left: 147px;
-
-  app-list-checkbox {
-    position: absolute;
-    top: 6px;
-    left: 13px;
-  }
-}
+//.no-signature {
+//  padding-left: 147px;
+//
+//  app-list-checkbox {
+//    position: absolute;
+//    top: 6px;
+//    left: 13px;
+//  }
+//}
