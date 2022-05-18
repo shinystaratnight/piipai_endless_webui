@@ -6,20 +6,17 @@ import {
   AfterViewInit,
   ViewChildren,
   OnDestroy,
-  ChangeDetectorRef
+  ChangeDetectorRef,
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { Subscription } from 'rxjs';
 
 import { FilterService } from '../../../services';
-import {
-  isMobile,
-  getTimeInstance,
-  isTouchDevice,
-} from '@webui/utilities';
+import { isTouchDevice } from '@webui/utilities';
 
 import { date as DateFilter } from '@webui/metadata';
+import { Time } from '@webui/time';
 
 interface Params {
   [query: string]: string;
@@ -28,7 +25,7 @@ interface Params {
 @Component({
   selector: 'app-filter-date',
   templateUrl: './filter-date.component.html',
-  styleUrls: ['./filter-date.component.scss']
+  styleUrls: ['./filter-date.component.scss'],
 })
 export class FilterDateComponent implements OnInit, AfterViewInit, OnDestroy {
   public config: any;
@@ -38,7 +35,6 @@ export class FilterDateComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public displayFormat = 'DD/MM/YYYY';
   public queryFormat = 'YYYY-MM-DD';
-  public timeInstance = getTimeInstance();
   public init = false;
 
   public filterSubscription: Subscription;
@@ -112,7 +108,7 @@ export class FilterDateComponent implements OnInit, AfterViewInit, OnDestroy {
             if (newDate.trim() !== prevDate.trim()) {
               this.onChange(newDate, el.nativeElement.name);
             }
-          }
+          },
         });
         el.nativeElement.readOnly = false;
       });
@@ -126,7 +122,7 @@ export class FilterDateComponent implements OnInit, AfterViewInit, OnDestroy {
   public changeDateOnMobile(data) {
     this.query = this.getQuery(this.data);
     this.fs.generateQuery(this.query, this.config.key, this.config.listName, {
-      data: this.data
+      data: this.data,
     });
 
     this.changeQuery();
@@ -142,24 +138,14 @@ export class FilterDateComponent implements OnInit, AfterViewInit, OnDestroy {
     this.resetData(this.data);
 
     const params = this.getParams(query);
-    const queryParams = this.convert(
-      undefined,
-      this.queryFormat,
-      params,
-      this.timeInstance
-    );
+    const queryParams = this.convert(undefined, this.queryFormat, params);
 
-    this.data = this.convert(
-      undefined,
-      this.displayFormat,
-      params,
-      this.timeInstance
-    );
+    this.data = this.convert(undefined, this.displayFormat, params);
     this.query = this.getQuery(queryParams);
 
     this.fs.generateQuery(this.query, this.config.key, this.config.listName, {
       data: this.data,
-      query
+      query,
     });
 
     this.changeQuery();
@@ -174,14 +160,13 @@ export class FilterDateComponent implements OnInit, AfterViewInit, OnDestroy {
     const queryParams = this.convert(
       this.displayFormat,
       this.queryFormat,
-      this.data,
-      this.timeInstance
+      this.data
     );
 
     this.query = this.getQuery(queryParams);
 
     this.fs.generateQuery(this.query, this.config.key, this.config.listName, {
-      data: this.data
+      data: this.data,
     });
 
     this.changeQuery();
@@ -189,7 +174,7 @@ export class FilterDateComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public changeQuery() {
     this.event.emit({
-      list: this.config.listName
+      list: this.config.listName,
     });
   }
 
@@ -220,12 +205,7 @@ export class FilterDateComponent implements OnInit, AfterViewInit, OnDestroy {
       if (data.byQuery) {
         this.query = data.query;
         const params = this.getParams(this.query);
-        this.data = this.convert(
-          this.queryFormat,
-          this.displayFormat,
-          params,
-          this.timeInstance
-        );
+        this.data = this.convert(this.queryFormat, this.displayFormat, params);
       } else {
         this.data = data.data;
         this.query = data.query;
@@ -244,22 +224,22 @@ export class FilterDateComponent implements OnInit, AfterViewInit, OnDestroy {
     this.changeQuery();
   }
 
-  public convert(from: string, to: string, params: Params, moment) {
+  public convert(from: string, to: string, params: Params) {
     //tslint:disable-line
     const newParams = { ...params };
 
     Object.keys(newParams).forEach((el) => {
       newParams[el] = newParams[el]
-        ? this.parseDateValue(newParams[el], moment, from).format(to)
+        ? this.parseDateValue(newParams[el], from).format(to)
         : '';
     });
 
     return newParams;
   }
 
-  public parseDateValue(date: string, moment, format: string) {
+  public parseDateValue(date: string, format: string) {
     //tslint:disable-line
-    return format ? moment(date, format) : moment(date);
+    return format ? Time.parse(date, { format }) : Time.parse(date);
   }
 
   public getParams(query: string): Params {

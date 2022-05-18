@@ -1,11 +1,9 @@
 import { Injectable } from '@angular/core';
 
-import { Moment } from 'moment-timezone';
-
 import { DateRange, rangeFormats, weekEnd, weekStart } from '@webui/utilities';
 import { DatepickerService } from './datepicker.service';
 import { TranslateHelperService } from '@webui/core';
-import { Time } from '@webui/time';
+import { Moment, Time } from '@webui/time';
 
 export enum Status {
   Unfilled,

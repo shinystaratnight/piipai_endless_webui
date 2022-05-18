@@ -9,7 +9,6 @@ import {
   ChangeDetectorRef,
 } from '@angular/core';
 
-import { getTimeByTimezone } from '@webui/utilities';
 import { Time } from '@webui/time';
 
 @Component({
@@ -41,10 +40,7 @@ export class TimeComponent implements OnInit, OnDestroy {
       }
 
       const localTime = Time.now().format(this.timeFormat);
-      const momentTime = this.timezone
-        ? getTimeByTimezone(this.timezone)
-        : Time.now();
-      this.time = momentTime.format(this.timeFormat);
+      this.time = Time.now(this.timezone).format(this.timeFormat);
 
       this.differTimezone = localTime !== this.time;
       this.cd.detectChanges();

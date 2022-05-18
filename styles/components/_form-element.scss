@@ -267,11 +267,7 @@
 
     button {
       padding: 0 5px;
-
-      // border: none;
       outline: none;
-
-      // background: transparent;
     }
 
     .mobile-datepicker {
@@ -285,8 +281,6 @@
 
       border: 1px solid $gray;
       border-radius: 4px !important;
-
-      // box-shadow: 0 0 8px 0 rgba($gray, 0.1);
       background-color: #ffffff;
 
       &::before {

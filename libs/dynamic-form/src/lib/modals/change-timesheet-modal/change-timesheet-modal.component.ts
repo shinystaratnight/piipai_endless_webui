@@ -1,10 +1,8 @@
 import { Component } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { FormatterService } from '@webui/core';
 import { Endpoints, Timesheet, TimesheetModel } from '@webui/data';
 import { isMobile } from '@webui/utilities';
 import { Subject } from 'rxjs';
-import { getOrientation } from '../../helpers';
 import { Modal, Status } from '../modal/modal.component';
 
 type ClientTimesheetModalConfig = {
@@ -22,7 +20,7 @@ type ClientTimesheetModalConfig = {
   form: any;
   supervisor_signature: string;
   label: {
-    avatar: { origin: string, fullName: string };
+    avatar: { origin: string; fullName: string };
     fullName: string;
   };
   extendData: any;
@@ -41,7 +39,7 @@ type ClientTimesheetModalConfig = {
 @Component({
   selector: 'app-change-timesheet-modal',
   templateUrl: './change-timesheet-modal.component.html',
-  styleUrls: ['./change-timesheet-modal.component.scss']
+  styleUrls: ['./change-timesheet-modal.component.scss'],
 })
 export class ChangeTimesheetModalComponent extends Modal {
   config: ClientTimesheetModalConfig;
@@ -53,7 +51,7 @@ export class ChangeTimesheetModalComponent extends Modal {
   isSignatureStep: boolean;
   isMobile = isMobile;
 
-  constructor(modal: NgbActiveModal, private formatter: FormatterService) {
+  constructor(modal: NgbActiveModal) {
     super(modal);
   }
 

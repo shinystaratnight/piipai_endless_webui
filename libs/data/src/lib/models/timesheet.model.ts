@@ -1,7 +1,6 @@
 import {
   checkAndReturnTranslation,
   getLocalStorageItem,
-  parseDate,
 } from '@webui/utilities';
 import { Endpoints, Models } from '../enums';
 import { Model } from './model';
@@ -240,17 +239,19 @@ export class TimeSheet extends ApiModel {
   }
 
   get format(): { [key: string]: string } {
-    const startedAt = parseDate(this.startedAt, this.timezone).format(
-      DATE_TIME_FORMAT
-    );
+    const startedAt = Time.parse(this.startedAt, {
+      timezone: this.timezone,
+    }).format(DATE_TIME_FORMAT);
     const endedAt = this.endedAt
-      ? parseDate(this.endedAt, this.timezone).format(DATE_TIME_FORMAT)
+      ? Time.parse(this.endedAt, { timezone: this.timezone }).format(
+          DATE_TIME_FORMAT
+        )
       : undefined;
     const breakTime =
       this.breakStartedAt && this.breakEndedAt
         ? Time.duration(
-            parseDate(this.breakEndedAt, this.timezone).diff(
-              parseDate(this.breakStartedAt, this.timezone)
+            Time.parse(this.breakEndedAt, { timezone: this.timezone }).diff(
+              Time.parse(this.breakStartedAt, { timezone: this.timezone })
             )
           )
         : undefined;
@@ -274,14 +275,18 @@ export class TimeSheet extends ApiModel {
     const [hours, minutes] = duration;
 
     if (this.breakStartedAt) {
-      this.breakEndedAt = parseDate(this.breakStartedAt, this.timezone)
+      this.breakEndedAt = Time.parse(this.breakStartedAt, {
+        timezone: this.timezone,
+      })
         .add(hours, 'hours')
         .add(minutes, 'minutes')
         .utc()
         .format();
     } else {
       this.breakStartedAt = this.startedAt;
-      this.breakEndedAt = parseDate(this.breakStartedAt, this.timezone)
+      this.breakEndedAt = Time.parse(this.breakStartedAt, {
+        timezone: this.timezone,
+      })
         .add(hours, 'hours')
         .add(minutes, 'minutes')
         .utc()

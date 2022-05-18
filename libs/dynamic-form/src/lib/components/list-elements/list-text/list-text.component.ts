@@ -1,8 +1,8 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 
-import { isMobile, getTimeInstance, getTranslationKey } from '@webui/utilities';
+import { isMobile, getTranslationKey } from '@webui/utilities';
 import { getValueOfData, generateCssStyles } from '../../../helpers';
-import { DATE_FORMAT, DATE_TIME_FORMAT } from '@webui/time';
+import { DATE_FORMAT, DATE_TIME_FORMAT, Time } from '@webui/time';
 
 @Component({
   selector: 'app-list-text',
@@ -61,11 +61,11 @@ export class ListTextComponent implements OnInit {
     //   this.workers = this.generateWorkers(this.config.workers_details);
     // }
 
-    const timeInstance = this.config.timezone
-      ? getTimeInstance().tz.setDefault(this.config.timezone)
-      : getTimeInstance();
+    // const timeInstance = this.config.timezone
+    //   ? getTimeInstance().tz.setDefault(this.config.timezone)
+    //   : getTimeInstance();
 
-    this.checkDate(timeInstance);
+    this.checkDate();
     this.customizeStatic(this.config.value);
     this.cssClasses = generateCssStyles(this.config.styles, this.stylePrefix);
     this.translationKey = getTranslationKey(
@@ -82,45 +82,55 @@ export class ListTextComponent implements OnInit {
     return Math.floor(parseFloat(score));
   }
 
-  public checkDate(moment) {
-    //tslint:disable-line
-    const type =
-      this.config.templateOptions && this.config.templateOptions.type;
+  public checkDate() {
+    const timezone = this.config.timezone;
+    const type = this.config.templateOptions?.type;
     if (type === 'time' || type === 'date' || type === 'datetime') {
       if (type === 'time') {
         if (this.arrayValue) {
-          const result = this.value.map((el) => {
-            return el ? moment(el, 'hh:mm:ss').format('hh:mm A') : ' ';
+          this.value = this.value.map((el) => {
+            return el
+              ? Time.parse(el, { format: 'hh:mm:ss', timezone }).format(
+                  'hh:mm A'
+                )
+              : ' ';
           });
-          this.value = result;
         } else {
           this.value = this.value
-            ? moment(this.value, 'hh:mm:ss').format('hh:mm A')
+            ? Time.parse(this.value, { format: 'hh:mm:ss', timezone }).format(
+                'hh:mm A'
+              )
             : ' ';
         }
       }
       if (type === 'date') {
         if (this.arrayValue) {
-          const result = this.value.map((el) => {
-            return el ? moment(el, 'YYYY-MM-DD').format(DATE_FORMAT) : ' ';
+          this.value = this.value.map((el) => {
+            return el
+              ? Time.parse(el, { format: 'YYYY-MM-DD', timezone }).format(
+                  DATE_FORMAT
+                )
+              : ' ';
           });
-          this.value = result;
         } else {
           this.value = this.value
-            ? moment(this.value, 'YYYY-MM-DD').format(DATE_FORMAT)
+            ? Time.parse(this.value, { format: 'YYYY-MM-DD', timezone }).format(
+                DATE_FORMAT
+              )
             : ' ';
         }
       }
       if (type === 'datetime') {
         if (this.arrayValue) {
-          const result = this.value.map((el) => {
-            return el ? moment(el).format(DATE_TIME_FORMAT) : ' ';
+          this.value = this.value.map((el) => {
+            return el
+              ? Time.parse(el, { timezone }).format(DATE_TIME_FORMAT)
+              : ' ';
           });
-          this.value = result;
         } else {
           this.value = this.value
-            ? moment(this.value).format(DATE_TIME_FORMAT)
-            : ' '; //tslint:disable-line
+            ? Time.parse(this.value, { timezone }).format(DATE_TIME_FORMAT)
+            : ' ';
         }
       }
     }
