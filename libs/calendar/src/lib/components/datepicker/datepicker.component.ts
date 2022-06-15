@@ -1,20 +1,18 @@
 import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core';
 
-import { Moment } from 'moment-timezone';
-
 import { DateRangeService, DatepickerService } from '../../services';
 import { DateRange, filterDateFormat } from '@webui/utilities';
+import { Moment } from '@webui/time';
 
 @Component({
   selector: 'app-datepicker',
   templateUrl: './datepicker.component.html',
-  styleUrls: ['./datepicker.component.scss']
+  styleUrls: ['./datepicker.component.scss'],
 })
 export class DatepickerComponent implements OnInit {
-
   @Input() type: DateRange;
   @Input() date: Moment;
-  @Input() range: { start: Moment, end: Moment };
+  @Input() range: { start: Moment; end: Moment };
 
   @Output() update = new EventEmitter();
 
@@ -49,7 +47,7 @@ export class DatepickerComponent implements OnInit {
     this.setActiveDates(this.date, this.range);
   }
 
-  public setActiveDates(from: Moment, range: { start: Moment, end: Moment }) {
+  public setActiveDates(from: Moment, range: { start: Moment; end: Moment }) {
     range = range || this.datepickerService.getRangeDates(from, DateRange.Week);
     this.activeDates = [];
     const day = range.start.clone();
@@ -95,7 +93,7 @@ export class DatepickerComponent implements OnInit {
   }
 
   public isLastActiveDay(day: any) {
-    return this.activeDates.indexOf(day.date) === (this.activeDates.length - 1);
+    return this.activeDates.indexOf(day.date) === this.activeDates.length - 1;
   }
 
   public showCustomWeekCalendar(event) {
@@ -108,7 +106,7 @@ export class DatepickerComponent implements OnInit {
   public setCustomWeek(date: Moment) {
     this.update.emit({
       start: date.clone(),
-      end: date.clone().add(1, DateRange.Week)
+      end: date.clone().add(1, DateRange.Week),
     });
   }
 
@@ -118,7 +116,7 @@ export class DatepickerComponent implements OnInit {
         return row.map((month) => {
           return {
             ...month,
-            active: month.month === this.date.month()
+            active: month.month === this.date.month(),
           };
         });
       });
@@ -137,5 +135,4 @@ export class DatepickerComponent implements OnInit {
       });
     });
   }
-
 }

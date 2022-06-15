@@ -1,7 +1,12 @@
 import { Injectable } from '@angular/core';
-import { Moment } from 'moment-timezone';
 
-import { DateRange, filterDateFormat, weekStart, weekEnd, getToday } from '@webui/utilities';
+import {
+  DateRange,
+  filterDateFormat,
+  weekStart,
+  weekEnd,
+} from '@webui/utilities';
+import { Moment, Time } from '@webui/time';
 
 export interface DatepickerData {
   header: string[];
@@ -10,7 +15,6 @@ export interface DatepickerData {
 
 @Injectable()
 export class DatepickerService {
-
   private headerFormat = {
     month: 'ddd',
     week: 'ddd / D MMM',
@@ -33,7 +37,7 @@ export class DatepickerService {
       row.push({
         label: currentMonth.format('MMMM'),
         date: currentMonth.clone(),
-        month: currentMonth.month()
+        month: currentMonth.month(),
       });
 
       currentMonth.add(1, DateRange.Month);
@@ -68,7 +72,7 @@ export class DatepickerService {
         month: currentDay.month(),
         dateMoment: currentDay.clone(),
         label: currentDay.format('D'),
-        today: date === getToday().format(filterDateFormat)
+        today: date === Time.now().format(filterDateFormat),
       });
 
       currentDay.add(1, 'day');
@@ -84,13 +88,16 @@ export class DatepickerService {
     };
   }
 
-  public generateWeek(from: Moment, updateBody?: Function, range?: { start: Moment, end: Moment }): DatepickerData {
+  public generateWeek(
+    from: Moment,
+    updateBody?: Function,
+    range?: { start: Moment; end: Moment }
+  ): DatepickerData {
     range = range || this.getRangeDates(from, DateRange.Week);
     let body = [];
 
     const currentDay = range.start.clone();
     while (currentDay.isBefore(range.end)) {
-
       const date = currentDay.format(filterDateFormat);
 
       body.push({
@@ -124,27 +131,34 @@ export class DatepickerService {
     };
   }
 
-  public getRangeDates(date: Moment, type: DateRange): { start: Moment, end: Moment } {
+  public getRangeDates(
+    date: Moment,
+    type: DateRange
+  ): { start: Moment; end: Moment } {
     const start = date.clone().startOf(type);
     const end = date.clone().endOf(type);
 
     if (type === DateRange.Month) {
       return {
         start: start.weekday(weekStart),
-        end: end.weekday(weekEnd)
-      }
+        end: end.weekday(weekEnd),
+      };
     }
 
     return {
       start,
-      end
+      end,
     };
   }
 
-  private getHeader(type: DateRange, from: Moment, range?: { start: Moment, end: Moment }): string[] {
+  private getHeader(
+    type: DateRange,
+    from: Moment,
+    range?: { start: Moment; end: Moment }
+  ): string[] {
     const result = [];
 
-    let start = range && range.start.clone() || from;
+    let start = (range && range.start.clone()) || from;
 
     if (type !== DateRange.Day) {
       if (!range) {
@@ -154,7 +168,9 @@ export class DatepickerService {
       }
 
       for (let day = 0; day < 7; day++) {
-        result.push(start.clone().add(day, DateRange.Day).format(this.headerFormat[type]));
+        result.push(
+          start.clone().add(day, DateRange.Day).format(this.headerFormat[type])
+        );
       }
     } else {
       result.push(start.format(this.headerFormat[type]));

@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { FormatterService } from '@webui/core';
 import { Timesheet, TimesheetModel } from '@webui/data';
 import { isMobile } from '@webui/utilities';
 import { Modal, Status } from '../modal/modal.component';
@@ -28,7 +27,7 @@ export type ApproveTimesheetModalConfig = {
     value: string;
   };
   label: {
-    avatar: { origin: string, thumb: string };
+    avatar: { origin: string; thumb: string };
     fullName: string;
   };
   data: {
@@ -41,7 +40,7 @@ export type ApproveTimesheetModalConfig = {
 @Component({
   selector: 'app-approve-timesheet-modal',
   templateUrl: './approve-timesheet-modal.component.html',
-  styleUrls: ['./approve-timesheet-modal.component.scss']
+  styleUrls: ['./approve-timesheet-modal.component.scss'],
 })
 export class ApproveTimesheetModalComponent extends Modal implements OnInit {
   config: ApproveTimesheetModalConfig;
@@ -52,7 +51,7 @@ export class ApproveTimesheetModalComponent extends Modal implements OnInit {
 
   isMobile = isMobile;
 
-  constructor(modal: NgbActiveModal, private formatter: FormatterService) {
+  constructor(modal: NgbActiveModal) {
     super(modal);
   }
 

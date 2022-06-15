@@ -1,28 +1,29 @@
 import { Role } from '@webui/data';
-import { getTimeInstanceByTimezone } from './time';
+import { Time } from '@webui/time';
+// import { getTimeInstanceByTimezone } from './time';
 
 enum Language {
   English = 'en',
   Russian = 'ru',
   Estonian = 'et',
-  Finnish = 'fi'
+  Finnish = 'fi',
 }
 
 enum LanguageFullName {
   English = 'English',
   Russian = 'Russian',
   Estonian = 'Estonian',
-  Finnish = 'Finnish'
+  Finnish = 'Finnish',
 }
 
 enum CountryCodeLanguage {
   EE = Language.Estonian,
-  FI = Language.Finnish
+  FI = Language.Finnish,
 }
 
 const translationCountryName = {
   EE: LanguageFullName.Estonian,
-  FI: LanguageFullName.Finnish
+  FI: LanguageFullName.Finnish,
 };
 
 export type Translation = {
@@ -37,7 +38,7 @@ export enum DateRange {
   Year = 'year',
   Month = 'month',
   Week = 'week',
-  Day = 'day'
+  Day = 'day',
 }
 
 export const filterDateFormat = 'YYYY-MM-DD';
@@ -49,7 +50,7 @@ export const rangeFormats = {
   [DateRange.Year]: 'YYYY',
   [DateRange.Month]: 'MMMM YYYY',
   [DateRange.Week]: 'MMM D',
-  [DateRange.Day]: 'D MMMM YYYY'
+  [DateRange.Day]: 'D MMMM YYYY',
 };
 
 export function getContactAvatar(name): string {
@@ -72,7 +73,8 @@ export function getContactAvatar(name): string {
 }
 
 export function isTouchDevice(): boolean {
-  const deviceNamesReg = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i;
+  const deviceNamesReg =
+    /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i;
 
   return deviceNamesReg.test(navigator.userAgent.toLowerCase());
 }
@@ -119,9 +121,9 @@ export function getStorageLang(): Language {
   return JSON.parse(localStorage.getItem('web.lang'));
 }
 
-export function getTotalTime(time, data) {
-  const shift_ended_at = time(data.shift_ended_at);
-  const shift_started_at = time(data.shift_started_at);
+export function getTotalTime(data, timezone?: string) {
+  const shift_ended_at = Time.parse(data.shift_ended_at, { timezone });
+  const shift_started_at = Time.parse(data.shift_started_at, { timezone });
 
   let breakTime = 0;
 
@@ -134,8 +136,8 @@ export function getTotalTime(time, data) {
   }
 
   if (data.break_ended_at && data.break_started_at) {
-    const break_ended_at = time(data.break_ended_at);
-    const break_started_at = time(data.break_started_at);
+    const break_ended_at = Time.parse(data.break_ended_at, { timezone });
+    const break_started_at = Time.parse(data.break_started_at, { timezone });
 
     if (
       break_started_at.isAfter(shift_ended_at) ||
@@ -150,7 +152,7 @@ export function getTotalTime(time, data) {
   }
 
   const workTime = shift_ended_at.diff(shift_started_at);
-  const totalTime = time.duration(workTime - breakTime);
+  const totalTime = Time.duration(workTime - breakTime);
 
   return `${Math.floor(totalTime.asHours())}hr ${totalTime.minutes()}min`;
 }
@@ -195,9 +197,9 @@ export function format(str, data) {
     }
 
     if (data) {
-      const shift_started_at = getTimeInstanceByTimezone(data.timezone || data.time_zone)(
-        data.shift_started_at
-      );
+      const shift_started_at = Time.parse(data.shift_started_at, {
+        timezone: data.timezone || data.time_zone,
+      });
 
       switch (key) {
         case 'shift_ended_at': {
@@ -207,7 +209,8 @@ export function format(str, data) {
         }
         case 'break_started_at': {
           data['break_started_at'] =
-            data['break_started_at'] || shift_started_at.clone().add(4, 'hour').format();
+            data['break_started_at'] ||
+            shift_started_at.clone().add(4, 'hour').format();
         }
         case 'break_ended_at': {
           data['break_ended_at'] =
@@ -247,7 +250,10 @@ export function checkAndReturnTranslation(
 ): string {
   const { translations, translation, name, __str__ } = element;
   const translationList =
-    translations || translation || (name && typeof name !== 'string' && name.translations) || [];
+    translations ||
+    translation ||
+    (name && typeof name !== 'string' && name.translations) ||
+    [];
 
   if (!translationList.length) {
     return getDefaultValue(element);
@@ -284,7 +290,11 @@ function getDefaultValue(element: {
   return __str__;
 }
 
-export function setPropValue(key: string, target: { [key: string]: any }, value: any): void {
+export function setPropValue(
+  key: string,
+  target: { [key: string]: any },
+  value: any
+): void {
   const path = key.split('.');
   const prop = path.shift();
 

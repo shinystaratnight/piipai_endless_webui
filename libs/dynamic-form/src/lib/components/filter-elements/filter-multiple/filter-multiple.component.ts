@@ -4,22 +4,22 @@ import {
   Output,
   EventEmitter,
   OnDestroy,
-  ChangeDetectorRef
+  ChangeDetectorRef,
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 
 import { FilterService } from '../../../services';
-import { FormatString, getTimeInstance } from '@webui/utilities';
-import { DateFormat } from '@webui/data';
+import { FormatString } from '@webui/utilities';
+import { DATE_TIME_FORMAT, Time } from '@webui/time';
 
 enum FilterType {
-  Multiple = 'multiple'
+  Multiple = 'multiple',
 }
 
 @Component({
   selector: 'app-filter-multiple',
-  templateUrl: './filter-multiple.component.html'
+  templateUrl: './filter-multiple.component.html',
 })
 export class FilterMultipleComponent implements OnInit, OnDestroy {
   public config: any;
@@ -117,7 +117,7 @@ export class FilterMultipleComponent implements OnInit, OnDestroy {
         param: this.config.param,
         checked: type === 'data' ? true : false,
         data: type === 'data' ? data : data.value,
-        key: data.key
+        key: data.key,
       };
     });
   }
@@ -167,7 +167,7 @@ export class FilterMultipleComponent implements OnInit, OnDestroy {
 
   public changeQuery() {
     this.event.emit({
-      list: this.config.listName
+      list: this.config.listName,
     });
   }
 
@@ -244,15 +244,14 @@ export class FilterMultipleComponent implements OnInit, OnDestroy {
 
           const condition = () => {
             if (field === 'name' && el.data.date) {
-              const timeInstance = getTimeInstance();
-              const currentValue = timeInstance(el.data[field], DateFormat.DateTime);
-
-              const result = uniqueField[field].some((name) => {
-                const elValue = timeInstance(name, DateFormat.DateTime);
-                return Math.abs(elValue.diff(currentValue, 'hours')) < 4;
+              const currentValue = Time.parse(el.data[field], {
+                format: DATE_TIME_FORMAT,
               });
 
-              return result;
+              return uniqueField[field].some((name) => {
+                const elValue = Time.parse(name, { format: DATE_TIME_FORMAT });
+                return Math.abs(elValue.diff(currentValue, 'hours')) < 4;
+              });
             } else {
               return uniqueField[field].indexOf(el.data[field]) > -1;
             }

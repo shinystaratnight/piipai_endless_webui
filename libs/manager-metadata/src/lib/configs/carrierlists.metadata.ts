@@ -1,8 +1,4 @@
-import { getYesterday, getToday, getTommorrow } from '@webui/utilities';
-
-const yesterdayFormatDate = getYesterday();
-const todayFormatDate = getToday().format();
-const tomorrowFormatDate = getTommorrow();
+import { createFilter, Type } from '@webui/metadata';
 
 const list = {
   list: {
@@ -14,41 +10,41 @@ const list = {
           {
             endpoint: '/candidate/candidatecontacts/',
             field: 'candidate_contact',
-            type: 'related'
-          }
+            type: 'related',
+          },
         ],
         name: 'candidate_contact',
         sort_field: 'candidate_contact',
         label: 'Candidate contact',
-        sort: true
+        sort: true,
       },
       {
         content: [{ field: 'target_date', type: 'datepicker' }],
         name: 'target_date',
         sort_field: 'target_date',
         label: 'Target Date',
-        sort: true
+        sort: true,
       },
       {
         content: [{ field: 'confirmed_available', type: 'checkbox' }],
         name: 'confirmed_available',
         sort_field: 'confirmed_available',
         label: 'Confirmed Available',
-        sort: true
+        sort: true,
       },
       {
         content: [
           {
             endpoint: '/hr/joboffers/',
             field: 'job_offer',
-            type: 'related'
-          }
+            type: 'related',
+          },
         ],
         name: 'job_offer',
         sort_field: 'job_offer',
         label: 'Job offer',
-        sort: true
-      }
+        sort: true,
+      },
     ],
     pagination_label: 'Carrier List',
     search_enabled: false,
@@ -61,40 +57,18 @@ const list = {
         data: {
           value: '__str__',
           endpoint: '/candidate/candidatecontacts/',
-          key: 'id'
+          key: 'id',
         },
-        query: 'candidate_contact'
+        query: 'candidate_contact',
       },
-      {
-        list: [
-          {
-            label: 'Yesterday',
-            query: `target_date_0=${yesterdayFormatDate}&target_date_1=${yesterdayFormatDate}`
-          },
-          {
-            label: 'Today',
-            query: `target_date_0=${todayFormatDate}&target_date_1=${todayFormatDate}`
-          },
-          {
-            label: 'Tomorrow',
-            query: `target_date_0=${tomorrowFormatDate}&target_date_1=${tomorrowFormatDate}`
-          }
-        ],
+      createFilter(Type.Date, {
         key: 'target_date',
         label: 'Target date',
-        type: 'date',
-        input: [
-          {
-            label: 'From',
-            query: 'target_date_0'
-          },
-          {
-            label: 'To',
-            query: 'target_date_1'
-          }
-        ]
-      }
-    ]
+        yesterday: true,
+        today: true,
+        tomorrow: true,
+      }),
+    ],
   },
   fields: [
     {
@@ -107,12 +81,12 @@ const list = {
         delete: false,
         values: ['__str__'],
         type: 'related',
-        edit: true
+        edit: true,
       },
       collapsed: false,
       type: 'related',
       key: 'candidate_contact',
-      many: false
+      many: false,
     },
     {
       list: false,
@@ -124,18 +98,18 @@ const list = {
         delete: false,
         values: ['__str__'],
         type: 'related',
-        edit: true
+        edit: true,
       },
       collapsed: false,
       type: 'related',
       key: 'job_offer',
-      many: false
+      many: false,
     },
     {
       key: 'target_date',
       type: 'datepicker',
       templateOptions: { required: false, label: 'Target Date', type: 'date' },
-      read_only: true
+      read_only: true,
     },
     {
       key: 'confirmed_available',
@@ -144,11 +118,11 @@ const list = {
       templateOptions: {
         required: false,
         label: 'Confirmed Available',
-        type: 'checkbox'
+        type: 'checkbox',
       },
-      read_only: true
-    }
-  ]
+      read_only: true,
+    },
+  ],
 };
 
 const formset = {
@@ -160,9 +134,9 @@ const formset = {
       templateOptions: {
         required: false,
         label: 'Confirmed Available',
-        type: 'checkbox'
+        type: 'checkbox',
       },
-      type: 'checkbox'
+      type: 'checkbox',
     },
     {
       many: false,
@@ -176,17 +150,17 @@ const formset = {
         edit: true,
         values: ['__str__'],
         label: 'Job offer',
-        type: 'related'
+        type: 'related',
       },
       read_only: true,
-      type: 'related'
+      type: 'related',
     },
     {
       key: 'target_date',
       read_only: false,
       templateOptions: { required: false, label: 'Target Date', type: 'date' },
-      type: 'datepicker'
-    }
+      type: 'datepicker',
+    },
   ],
   list: {
     columns: [
@@ -195,14 +169,14 @@ const formset = {
         sort: true,
         sort_field: 'target_date',
         content: [{ type: 'datepicker', field: 'target_date' }],
-        label: 'Target Date'
+        label: 'Target Date',
       },
       {
         name: 'confirmed_available',
         sort: true,
         sort_field: 'confirmed_available',
         content: [{ type: 'checkbox', field: 'confirmed_available' }],
-        label: 'Confirmed Available'
+        label: 'Confirmed Available',
       },
       {
         name: 'job_offer',
@@ -212,10 +186,10 @@ const formset = {
           {
             endpoint: '/hr/joboffers/',
             type: 'related',
-            field: 'job_offer'
-          }
+            field: 'job_offer',
+          },
         ],
-        label: 'Job offer'
+        label: 'Job offer',
       },
       {
         name: 'actions',
@@ -227,7 +201,7 @@ const formset = {
             title: 'Edit',
             text_color: '#f0ad4e',
             type: 'button',
-            field: 'id'
+            field: 'id',
           },
           {
             action: 'delete',
@@ -235,20 +209,20 @@ const formset = {
             title: 'Delete',
             text_color: '#f32700',
             type: 'button',
-            field: 'id'
-          }
+            field: 'id',
+          },
         ],
         label: 'Actions',
         title: null,
-        delim: null
-      }
+        delim: null,
+      },
     ],
     list: 'carrierlist',
     editDisable: false,
     label: 'Carrier List',
     pagination_label: 'Carrier List',
-    search_enabled: false
-  }
+    search_enabled: false,
+  },
 };
 
 const form = [
@@ -261,7 +235,7 @@ const form = [
       delete: false,
       values: ['__str__'],
       type: 'related',
-      edit: true
+      edit: true,
     },
     type: 'related',
     key: 'candidate_contact',
@@ -272,9 +246,9 @@ const form = [
     templateOptions: {
       required: false,
       label: 'Target Date',
-      type: 'date'
+      type: 'date',
     },
-    read_only: true
+    read_only: true,
   },
   {
     key: 'confirmed_available',
@@ -283,9 +257,9 @@ const form = [
     templateOptions: {
       required: false,
       label: 'Confirmed Available',
-      type: 'checkbox'
+      type: 'checkbox',
     },
-    read_only: false
+    read_only: false,
   },
   {
     endpoint: '/skills/skills/',
@@ -296,7 +270,7 @@ const form = [
       delete: false,
       values: ['__str__', 'tranlsations', 'name'],
       type: 'related',
-      edit: true
+      edit: true,
     },
     type: 'related',
     key: 'skill',
@@ -305,13 +279,13 @@ const form = [
     key: 'updated_at',
     type: 'datepicker',
     templateOptions: { required: false, label: 'Updated at', type: 'datetime' },
-    read_only: true
+    read_only: true,
   },
   {
     key: 'created_at',
     type: 'datepicker',
     templateOptions: { required: false, label: 'Created at', type: 'datetime' },
-    read_only: true
+    read_only: true,
   },
 ];
 
@@ -326,10 +300,10 @@ const formadd = [
       delete: false,
       values: ['__str__'],
       type: 'related',
-      edit: true
+      edit: true,
     },
     query: {
-      active_states: 70
+      active_states: 70,
     },
     type: 'related',
     key: 'candidate_contact',
@@ -338,7 +312,7 @@ const formadd = [
     key: 'target_date',
     type: 'datepicker',
     templateOptions: { required: false, label: 'Target Date', type: 'date' },
-    read_only: false
+    read_only: false,
   },
   {
     key: 'confirmed_available',
@@ -347,9 +321,9 @@ const formadd = [
     templateOptions: {
       required: false,
       label: 'Confirmed Available',
-      type: 'checkbox'
+      type: 'checkbox',
     },
-    read_only: false
+    read_only: false,
   },
   {
     endpoint: '/skills/skills/',
@@ -360,14 +334,14 @@ const formadd = [
       delete: false,
       values: ['__str__', 'tranlsations', 'name'],
       type: 'related',
-      edit: true
+      edit: true,
     },
     query: {
       company: 'currentCompany',
     },
     type: 'related',
     key: 'skill',
-  }
+  },
 ];
 
 const candidatepool = {
@@ -376,8 +350,8 @@ const candidatepool = {
       key: 'target_date',
       read_only: false,
       templateOptions: { required: false, label: 'Target Date', type: 'date' },
-      type: 'datepicker'
-    }
+      type: 'datepicker',
+    },
   ],
   list: {
     columns: [
@@ -386,22 +360,22 @@ const candidatepool = {
         sort: true,
         sort_field: 'target_date',
         content: [{ type: 'datepicker', field: 'target_date' }],
-        label: 'Target Date'
+        label: 'Target Date',
       },
       {
         name: 'confirmed_available',
         sort: true,
         sort_field: 'confirmed_available',
         content: [{ type: 'checkbox', field: 'confirmed_available' }],
-        label: 'Confirmed Available'
+        label: 'Confirmed Available',
       },
     ],
     list: 'carrierlist',
     editDisable: false,
     label: 'Carrier List',
     pagination_label: 'Carrier List',
-    search_enabled: false
-  }
+    search_enabled: false,
+  },
 };
 
 export const carrierlists = {
@@ -409,5 +383,5 @@ export const carrierlists = {
   formset,
   form,
   formadd,
-  candidatepool
+  candidatepool,
 };

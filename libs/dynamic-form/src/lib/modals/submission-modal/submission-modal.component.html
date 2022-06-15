@@ -1,4 +1,4 @@
-<webui-dialog [title]="'worksheet_submission' | translate">
+<webui-dialog [title]="title | translate">
   <div class="content" dialog-content>
     <app-timesheet-details-preview
       [timeSheet]="timeSheet"
@@ -50,6 +50,7 @@
           <button
             type="button"
             class="plus-button"
+            *ngIf="timeSheet.status !== 7"
             [disabled]="!hasActivities"
             (click)="addActivityControl()"
           >
@@ -68,7 +69,7 @@
                 [optionFilter]="activityOptionFilter"
               ></webui-form-dropdown-control>
 
-              <button type="button" class="delete-button" (click)="removeActivity(activity, index)">
+              <button *ngIf="timeSheet.status !== 7" type="button" class="delete-button" (click)="removeActivity(activity, index)">
                 <webui-icon [icon]="Icon.Delete"></webui-icon>
               </button>
             </div>
@@ -90,7 +91,7 @@
         </div>
       </section>
 
-      <footer class="footer">
+      <footer class="footer" *ngIf="timeSheet.status !== 7">
         <button
           class="btn submit-btn"
           [disabled]="formInvalid || (processing$ | async)"

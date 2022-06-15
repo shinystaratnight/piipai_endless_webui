@@ -255,14 +255,8 @@ export class ApproveWorksheetModalComponent extends Modal implements OnInit, OnD
         content_type: { id: ENoteContentType.TimeSheet.toString(), __str__: '' }
       });
 
-      console.log(note.getPartialValue<Note>(['contact', 'content_type', 'note', 'object_id']));
-
-      console.log(formValue.pictures);
-
       const request = this.apiService.submitForm(Endpoints.Note, note).pipe(
         switchMap((response: INote) => {
-          console.log(formValue.pictures);
-
           if (formValue.pictures && formValue.pictures.length) {
             const requests = formValue.pictures.map((picture) => {
               const body = new FormData();
@@ -333,8 +327,6 @@ export class ApproveWorksheetModalComponent extends Modal implements OnInit, OnD
         const activities = response.results
           .map((activity) => new TimesheetRate(activity))
           .filter((rate) => !isHourlyWork(rate.worktype.__str__));
-
-        console.log(activities);
 
         if (activities.length) {
           this.activityViewType.next('list');

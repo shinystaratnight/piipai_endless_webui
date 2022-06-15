@@ -1,19 +1,19 @@
 import {
   MissingTranslationHandler,
-  MissingTranslationHandlerParams
+  MissingTranslationHandlerParams,
 } from '@ngx-translate/core';
 
 export class MissingTranslationHelper implements MissingTranslationHandler {
   private defaultKey = 'Default';
 
   handle(params: MissingTranslationHandlerParams) {
-    // const { key, interpolateParams } = params;
+    const { key, interpolateParams } = params;
 
     // console.log(`"${key}": "${interpolateParams[this.defaultKey]}"`);
 
-    if (params.interpolateParams) {
-      return params.interpolateParams[this.defaultKey];
+    if (interpolateParams && this.defaultKey in interpolateParams) {
+      return interpolateParams[this.defaultKey];
     }
-    return params.key;
+    return key;
   }
 }

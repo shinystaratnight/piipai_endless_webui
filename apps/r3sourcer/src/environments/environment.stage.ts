@@ -3,5 +3,6 @@ export const environment = {
   STRIPE_PUBLIC_API_KEY: 'pk_test_2MvNXfKY5LWSSkOz241aYEs4',
   production: true,
   api: 'https://api.r3sourcertest.com',
-  clientId: 'MMtPUqBFwBDo3kVEQl6mzVm6e8h5OHclTsDcraUj'
+  clientId: 'MMtPUqBFwBDo3kVEQl6mzVm6e8h5OHclTsDcraUj',
+  host: 'piipai.com'
 };
