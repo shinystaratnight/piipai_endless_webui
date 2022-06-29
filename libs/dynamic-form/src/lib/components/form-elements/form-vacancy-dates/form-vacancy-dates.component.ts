@@ -129,7 +129,7 @@ export class FormVacancyDatesComponent
     if (e && !this.updating) {
       this.updating = true;
       const { year, month, day } = e;
-      const date = Time.parse(`${year}-${month - 1}-${day}`).format(
+      const date = Time.parse(`${year}-${month}-${day}`).format(
         this.dateFormat
       );
 
