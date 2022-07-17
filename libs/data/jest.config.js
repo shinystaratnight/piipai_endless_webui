@@ -1,10 +1,21 @@
 module.exports = {
-  name: 'data',
-  preset: '../../jest.config.js',
-  transform: {
-    '^.+\\.[tj]sx?$': 'ts-jest',
+  displayName: 'data',
+  preset: '../../jest.preset.js',
+  setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
+  globals: {
+    'ts-jest': {
+      tsconfig: '<rootDir>/tsconfig.spec.json',
+      stringifyContentPathRegex: '\\.(html|svg)$',
+    },
   },
-  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'html'],
   coverageDirectory: '../../coverage/libs/data',
-  globals: { 'ts-jest': { tsConfig: '<rootDir>/tsconfig.spec.json' } },
+  transform: {
+    '^.+\\.(ts|mjs|js|html)$': 'jest-preset-angular',
+  },
+  transformIgnorePatterns: ['node_modules/(?!.*\\.mjs$)'],
+  snapshotSerializers: [
+    'jest-preset-angular/build/serializers/no-ng-attributes',
+    'jest-preset-angular/build/serializers/ng-snapshot',
+    'jest-preset-angular/build/serializers/html-comment',
+  ],
 };

@@ -1,0 +1,26 @@
+{
+  "projectType": "library",
+  "root": "libs/calendar",
+  "sourceRoot": "libs/calendar/src",
+  "prefix": "webui",
+  "targets": {
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/calendar"],
+      "options": {
+        "jestConfig": "libs/calendar/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/calendar/src/**/*.ts",
+          "libs/calendar/src/**/*.html"
+        ]
+      }
+    }
+  },
+  "tags": []
+}

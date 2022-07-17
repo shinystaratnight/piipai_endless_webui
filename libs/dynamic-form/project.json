@@ -1,0 +1,26 @@
+{
+  "projectType": "library",
+  "root": "libs/dynamic-form",
+  "sourceRoot": "libs/dynamic-form/src",
+  "prefix": "webui",
+  "targets": {
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/dynamic-form"],
+      "options": {
+        "jestConfig": "libs/dynamic-form/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/dynamic-form/src/**/*.ts",
+          "libs/dynamic-form/src/**/*.html"
+        ]
+      }
+    }
+  },
+  "tags": []
+}

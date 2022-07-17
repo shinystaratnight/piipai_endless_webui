@@ -1,0 +1,94 @@
+{
+  "projectType": "application",
+  "root": "apps/r3sourcer",
+  "sourceRoot": "apps/r3sourcer/src",
+  "prefix": "webui",
+  "targets": {
+    "build": {
+      "executor": "@angular-devkit/build-angular:browser",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/r3sourcer",
+        "index": "apps/r3sourcer/src/index.html",
+        "main": "apps/r3sourcer/src/main.ts",
+        "polyfills": "apps/r3sourcer/src/polyfills.ts",
+        "tsConfig": "apps/r3sourcer/tsconfig.app.json",
+        "inlineStyleLanguage": "scss",
+        "assets": [
+          "apps/r3sourcer/src/favicon.ico",
+          "apps/r3sourcer/src/assets"
+        ],
+        "styles": ["apps/r3sourcer/src/styles.scss"],
+        "scripts": []
+      },
+      "configurations": {
+        "production": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "500kb",
+              "maximumError": "1mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "2kb",
+              "maximumError": "4kb"
+            }
+          ],
+          "fileReplacements": [
+            {
+              "replace": "apps/r3sourcer/src/environments/environment.ts",
+              "with": "apps/r3sourcer/src/environments/environment.prod.ts"
+            }
+          ],
+          "outputHashing": "all"
+        },
+        "development": {
+          "buildOptimizer": false,
+          "optimization": false,
+          "vendorChunk": true,
+          "extractLicenses": false,
+          "sourceMap": true,
+          "namedChunks": true
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "serve": {
+      "executor": "@angular-devkit/build-angular:dev-server",
+      "configurations": {
+        "production": {
+          "browserTarget": "r3sourcer:build:production"
+        },
+        "development": {
+          "browserTarget": "r3sourcer:build:development"
+        }
+      },
+      "defaultConfiguration": "development"
+    },
+    "extract-i18n": {
+      "executor": "@angular-devkit/build-angular:extract-i18n",
+      "options": {
+        "browserTarget": "r3sourcer:build"
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "apps/r3sourcer/src/**/*.ts",
+          "apps/r3sourcer/src/**/*.html"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/apps/r3sourcer"],
+      "options": {
+        "jestConfig": "apps/r3sourcer/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}

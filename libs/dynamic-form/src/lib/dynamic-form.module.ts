@@ -5,7 +5,7 @@ import { RouterModule } from '@angular/router';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { AgmCoreModule } from '@agm/core';
+// import { AgmCoreModule } from '@agm/core';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { ButtonsModule } from 'ngx-bootstrap/buttons';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
@@ -13,7 +13,7 @@ import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { GooglePlaceModule } from 'ngx-google-places-autocomplete';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { QuillModule } from 'ngx-quill';
-import { Angular2SignaturepadModule } from 'angular2-signaturepad';
+import { SignaturePadModule } from 'angular2-signaturepad';
 import { WebcamModule } from 'ngx-webcam';
 import { NgxDropzoneModule } from 'ngx-dropzone';
 
@@ -45,13 +45,13 @@ import { RatingModule } from '@webui/rating';
     FontAwesomeModule,
     FormsModule,
     RouterModule,
-    AgmCoreModule,
+    // AgmCoreModule,
     InfiniteScrollModule,
     SharedModule,
     ButtonsModule.forRoot(),
     GooglePlaceModule,
     QuillModule,
-    Angular2SignaturepadModule,
+    SignaturePadModule,
     DragDropModule,
 
     BsDropdownModule.forRoot(),

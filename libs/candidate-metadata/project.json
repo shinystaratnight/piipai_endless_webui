@@ -1,0 +1,26 @@
+{
+  "projectType": "library",
+  "root": "libs/candidate-metadata",
+  "sourceRoot": "libs/candidate-metadata/src",
+  "prefix": "webui",
+  "targets": {
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/candidate-metadata"],
+      "options": {
+        "jestConfig": "libs/candidate-metadata/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/candidate-metadata/src/**/*.ts",
+          "libs/candidate-metadata/src/**/*.html"
+        ]
+      }
+    }
+  },
+  "tags": []
+}
