@@ -3,7 +3,7 @@ import { Directive, HostListener, ElementRef } from '@angular/core';
 import { isMobile } from '@webui/utilities';
 
 @Directive({
-  selector: '[appInputFocus]'
+  selector: '[webuiInputFocus]'
 })
 export class InputFocusDirective {
 

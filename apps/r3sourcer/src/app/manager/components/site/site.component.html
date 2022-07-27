@@ -73,7 +73,7 @@
             <div class="d-flex">
               <button
                 type="button"
-                appSubscriptionRequired
+                webuiSubscriptionRequired
                 class="btn button-delete custom-button"
                 *ngIf="showDeleteButton()"
                 (click)="deleteElement(pageData)"
@@ -84,7 +84,7 @@
 
               <button
                 type="button"
-                appSubscriptionRequired
+                webuiSubscriptionRequired
                 class="btn button-close mt-2"
                 *ngIf="formMode === FormMode.Edit"
                 (click)="changeMode(FormMode.View)"
@@ -94,7 +94,7 @@
 
               <button
                 type="button"
-                appSubscriptionRequired
+                webuiSubscriptionRequired
                 class="btn btn-primary btn-shadow ml-auto button-edit"
                 *ngIf="formMode === FormMode.View && checkPermission('update')"
                 (click)="changeMode(FormMode.Edit)"
@@ -105,7 +105,7 @@
 
               <button
                 type="submit"
-                appSubscriptionRequired
+                webuiSubscriptionRequired
                 class="btn btn-primary button-save save mt-2"
                 *ngIf="
                   !formStorage &&
@@ -121,7 +121,7 @@
 
               <button
                 type="button"
-                appSubscriptionRequired
+                webuiSubscriptionRequired
                 class="btn btn-success mr-2 ml-auto"
                 *ngIf="
                   formStorage &&
@@ -168,7 +168,7 @@
               <div class="d-flex">
                 <button
                   type="button"
-                  appSubscriptionRequired
+                  webuiSubscriptionRequired
                   class="btn button-delete custom-button"
                   *ngIf="pageData.pathData.id && checkPermission('delete')"
                   (click)="deleteElement(pageData)"
@@ -188,7 +188,7 @@
 
                 <button
                   type="button"
-                  appSubscriptionRequired
+                  webuiSubscriptionRequired
                   class="btn btn-primary btn-shadow ml-auto button-edit"
                   *ngIf="
                     formMode === FormMode.View && checkPermission('update')
@@ -201,7 +201,7 @@
 
                 <button
                   type="submit"
-                  appSubscriptionRequired
+                  webuiSubscriptionRequired
                   class="btn btn-primary button-save"
                   *ngIf="
                     !formStorage &&
@@ -265,7 +265,7 @@
             </button>
             <button
               type="button"
-              appSubscriptionRequired
+              webuiSubscriptionRequired
               class="btn btn-primary pr-3"
               [disabled]="!data || fillInDataSending"
               (click)="sendData()"
@@ -313,7 +313,7 @@
             >Forgot Password?</a
           >
           <div class="d-flex align-items-center">
-            <button appSubscriptionRequired type="submit" class="btn btn-primary ml-auto">Save</button>
+            <button webuiSubscriptionRequired type="submit" class="btn btn-primary ml-auto">Save</button>
           </div>
         </app-generic-form>
       </div>
@@ -339,7 +339,7 @@
           (event)="resetEvent($event)"
         >
           <div class="d-flex align-items-center">
-            <button appSubscriptionRequired type="submit" class="btn btn-primary ml-auto">Reset</button>
+            <button webuiSubscriptionRequired type="submit" class="btn btn-primary ml-auto">Reset</button>
           </div>
         </app-generic-form>
       </div>
@@ -349,4 +349,4 @@
   <app-master-guide *ngIf="user.data.is_primary"></app-master-guide>
 </ng-container>
 
-<app-site-loader *ngIf="loader"></app-site-loader>
+<webui-site-loader *ngIf="loader"></webui-site-loader>

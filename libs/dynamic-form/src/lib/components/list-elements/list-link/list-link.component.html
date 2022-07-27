@@ -7,7 +7,7 @@
       </a>
       <button type="button" class="btn btn-outline-primary"
         *ngIf="phone"
-        appSubscriptionRequired
+        webuiSubscriptionRequired
         [attr.title]="smsDisabledTitle"
         [class.disabled]="smsDisabled"
         (click)="sendSms($event)"
@@ -15,7 +15,7 @@
           SMS
       </button>
       <button type="button" class="btn btn-outline-primary"
-        appSubscriptionRequired
+        webuiSubscriptionRequired
         *ngIf="phone"
         (click)="linkView.nativeElement.click()">
           Call

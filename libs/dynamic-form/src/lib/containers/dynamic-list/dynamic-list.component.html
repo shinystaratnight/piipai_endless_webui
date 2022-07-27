@@ -208,7 +208,7 @@
                     id="all-checkbox"
                     type="checkbox"
                     hidden
-                    appSubscriptionRequired
+                    webuiSubscriptionRequired
                     *ngIf="config.list.actions || actions"
                     [ngModel]="selectedAll"
                     (ngModelChange)="selectAll($event)"
@@ -264,7 +264,7 @@
                       class="form-check-input"
                       [checked]="select[row.id]"
                       hidden
-                      appSubscriptionRequired
+                      webuiSubscriptionRequired
                     />
                     <webui-checkbox
                       [checked]="select[row.id]"

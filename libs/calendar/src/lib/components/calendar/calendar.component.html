@@ -106,7 +106,7 @@
             {{'reset_dates' | translate: {"Default": "Reset selected dates"} }}
           </span>
 
-          <button appSubscriptionRequired type="button" class="btn job-btn ml-3" (click)="addJob()">
+          <button webuiSubscriptionRequired type="button" class="btn job-btn ml-3" (click)="addJob()">
             {{'create_job' | translate: {"Default": "Create Job"} }}
           </button>
         </ng-container>
@@ -433,9 +433,9 @@
     </div>
   </div>
   <div *ngIf="hasActions" class="shift-action-wrapper">
-    <button appSubscriptionRequired class="shift-action" type="button" (click)="extendJob(shift)">Extend</button>
-    <button appSubscriptionRequired class="shift-action" *ngIf="fillinAccess(shift)" type="button" (click)="fillInJob(shift)">Fill in</button>
-    <button appSubscriptionRequired class="shift-action" [class.bg-success]="activeShift === shift.shift.id"
+    <button webuiSubscriptionRequired class="shift-action" type="button" (click)="extendJob(shift)">Extend</button>
+    <button webuiSubscriptionRequired class="shift-action" *ngIf="fillinAccess(shift)" type="button" (click)="fillInJob(shift)">Fill in</button>
+    <button webuiSubscriptionRequired class="shift-action" [class.bg-success]="activeShift === shift.shift.id"
       *ngIf="fillinAccess(shift) && isManager()" type="button" (click)="selectJob($event, shift)">Fill</button>
   </div>
 </ng-template>
@@ -453,7 +453,7 @@
       <app-generic-form [endpoint]="modalInfo.endpoint" [data]="modalInfo.data" [mode]="modalInfo.mode"
         [edit]="modalInfo.edit" (event)="formEvent($event, modal.close)" (errorForm)="formError()">
         <div class="text-center">
-          <button appSubscriptionRequired type="submit" class="btn big-btn btn-shadow btn-primary text-white button-save mt-3 mb-4"
+          <button webuiSubscriptionRequired type="submit" class="btn big-btn btn-shadow btn-primary text-white button-save mt-3 mb-4"
             [disabled]="saveProcess || extendFormInvalid">
             Save
             <webui-spinner *ngIf="saveProcess"></webui-spinner>

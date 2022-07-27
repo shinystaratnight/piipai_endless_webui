@@ -28,7 +28,7 @@
             <button
               type="button"
               class="btn edit-mode"
-              appSubscriptionRequired
+              webuiSubscriptionRequired
               *ngIf="canUpdate && mode === 'view' && !hideEditButton()"
               (click)="changeMode('edit')"
             >
@@ -39,7 +39,7 @@
             <button
               type="button"
               class="btn close-btn"
-              appSubscriptionRequired
+              webuiSubscriptionRequired
               *ngIf="mode === 'edit'"
               (click)="changeMode('view')"
             >
@@ -52,7 +52,7 @@
             <button
               type="submit"
               class="btn btn-primary btn-shadow save"
-              appSubscriptionRequired
+              webuiSubscriptionRequired
               [class.ml-auto]="mode !== 'edit'"
               *ngIf="mode === 'edit' || !config.editForm"
               [disabled]="form && form.disableSaveButton"

@@ -9,7 +9,7 @@ export class WorkflowStatePipe implements PipeTransform {
 
   constructor(
     private translatePipe: TranslatePipe,
-    @Optional() @Inject(ENV) private env: any,
+    @Optional() @Inject(ENV) private env: Record<string, string | boolean>,
     @Optional() private localEnv: LocalEnvService,
   ) {}
 
@@ -18,7 +18,7 @@ export class WorkflowStatePipe implements PipeTransform {
     const workflowType = this.localEnv.value['workflowType'];
 
     if (!workflowType) {
-      return this.env.production
+      return this.env['production']
         ? fallback
         : 'Workflow type is not provided';
     }

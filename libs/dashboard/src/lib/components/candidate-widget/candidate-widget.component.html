@@ -176,7 +176,7 @@
 </ng-template>
 
 <ng-template #score let-value="value" let-right="right">
-  <span class="score d-inline-flex align-items-center" [appAverageScore]="value">
+  <span class="score d-inline-flex align-items-center" [webuiAverageScore]="value">
     {{ value | averageScore }}
     <ng-container *ngIf="value">
       <fa-icon class="ml-1" icon="star"></fa-icon>

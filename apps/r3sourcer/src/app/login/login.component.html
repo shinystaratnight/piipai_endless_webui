@@ -44,14 +44,14 @@
 
   <div *ngIf="subdomain" class="register-link">
     <a [routerLink]="['/registration']">
-      <app-icon-plus appIcon size="sm" color="primary"></app-icon-plus>
+      <webui-icon-plus webuiIcon size="sm" color="primary"></webui-icon-plus>
       {{'login.register' | translate}}
     </a>
   </div>
 </ng-container>
 
 <ng-container *ngIf="token">
-  <app-site-loader></app-site-loader>
+  <webui-site-loader></webui-site-loader>
 </ng-container>
 
 <!-- <app-toast></app-toast> -->

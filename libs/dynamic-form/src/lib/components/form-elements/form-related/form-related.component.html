@@ -26,13 +26,13 @@
           <button *ngIf="displayValue" class="clear-button mr-1" type="button" (click)="clearField()">
             <fa-icon class="text-secondary" [icon]="['fas', 'times']"></fa-icon>
           </button>
-          <button appSubscriptionRequired type="button" class="btn btn-primary text-white" [class.alone]="!canEdit && !canDelete" *ngIf="canCreate" (click)="open('post')">
+          <button webuiSubscriptionRequired type="button" class="btn btn-primary text-white" [class.alone]="!canEdit && !canDelete" *ngIf="canCreate" (click)="open('post')">
             {{'add_new' | translate}}
           </button>
-          <button appSubscriptionRequired type="button" class="btn btn-warning text-white mr-1" *ngIf="canEdit" (click)="open('update')">
+          <button webuiSubscriptionRequired type="button" class="btn btn-warning text-white mr-1" *ngIf="canEdit" (click)="open('update')">
             {{'edit' | translate}}
           </button>
-          <button appSubscriptionRequired type="button" class="btn btn-danger text-white" *ngIf="" (click)="open('delete')">
+          <button webuiSubscriptionRequired type="button" class="btn btn-danger text-white" *ngIf="" (click)="open('delete')">
             {{'delete' | translate}}
           </button>
         </div>
@@ -86,7 +86,7 @@
             placeholder="{{ 'select' | translate: {'Default': 'Select'} }}" (focus)="generateList()" />
 
           <div class="form-element-content-actions" *ngIf="config.options && config.templateOptions.add">
-            <button appSubscriptionRequired type="button" class="btn btn-primary text-white alone"
+            <button webuiSubscriptionRequired type="button" class="btn btn-primary text-white alone"
               *ngIf="config.templateOptions.add && checkPermission('post')" (click)="open('post')">
               <!-- <i class="text-white mr-1" fa name="plus"></i>  -->
               {{'add_new' | translate}}
@@ -207,7 +207,7 @@
       </div>
 
       <button
-        appSubscriptionRequired
+        webuiSubscriptionRequired
         *ngIf="config.delay && checkPermission('post')"
         type="button"
         class="btn btn-primary btn-shadow align-self-center"
@@ -216,7 +216,7 @@
       </button>
 
       <button
-        appSubscriptionRequired
+        webuiSubscriptionRequired
         *ngIf="config.templateOptions.add_label && config.templateOptions.add"
         type="button"
         class="btn btn-primary btn-shadow align-self-center" (click)="addObject()">
@@ -270,7 +270,7 @@
 
                 <ng-template #actionsTemplate>
                   <button
-                    appSubscriptionRequired
+                    webuiSubscriptionRequired
                     class="custom-button d-flex align-items-center"
                     *ngIf="config.templateOptions.delete && checkPermission('delete')"
                     (click)="deleteObject(object, $event)">
@@ -283,7 +283,7 @@
                     {{'delete' | translate}}
                   </button>
                   <button
-                    appSubscriptionRequired
+                    webuiSubscriptionRequired
                     class="custom-button d-flex align-items-center"
                     *ngIf="config.templateOptions.edit && checkPermission('update')"
                     (click)="editObject(object, $event)">
@@ -296,7 +296,7 @@
                     {{'edit' | translate}}
                   </button>
                   <button
-                    appSubscriptionRequired
+                    webuiSubscriptionRequired
                     class="custom-button d-flex align-items-center"
                     *ngIf="skillEndpoint && !object.allData.default_rate"
                     (click)="setAsDefault(object)">
@@ -309,7 +309,7 @@
                 </ng-template>
               </span>
               <button
-                appSubscriptionRequired
+                webuiSubscriptionRequired
                 *ngIf="!object.id"
                 class="custom-button d-flex align-items-center"
                 (click)="removeItem(index, $event)">

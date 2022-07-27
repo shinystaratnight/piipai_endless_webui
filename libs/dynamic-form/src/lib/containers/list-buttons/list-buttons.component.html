@@ -1,4 +1,4 @@
-<div class="d-flex align-items-center" *appHasPermission="{action: 'post', endpoint: endpoint}" [class.list-buttons]="first">
+<div class="d-flex align-items-center" *webuiHasPermission="{action: 'post', endpoint: endpoint}" [class.list-buttons]="first">
   <div
     class="d-flex align-items-center flex-wrap ml-sm-auto"
     *ngIf="buttons && buttons.length"
@@ -37,7 +37,7 @@
     <a
       class="btn btn-primary btn-shadow datatable-button first text-white"
       routerLink="add"
-      appSubscriptionRequired
+      webuiSubscriptionRequired
       *ngIf="first && !inForm && checkPermission('post')"
     >
       <span class="button-icon mr-1"></span>{{ 'add_new' | translate: {'Default': 'Add new'} }}&nbsp;

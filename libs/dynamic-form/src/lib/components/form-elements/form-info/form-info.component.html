@@ -226,10 +226,10 @@
       <p class="body">{{ 'add_shifts_and_workers.description' | translate: {"Default": "Create dates, shifts and time for tasks, add workers."} }}</p>
 
       <div class="actions">
-        <button appSubscriptionRequired class="btn btn-primary" type="button" (click)="extendJob()">
+        <button webuiSubscriptionRequired class="btn btn-primary" type="button" (click)="extendJob()">
           {{ 'add_shifts_and_workers' | translate: {"Default": "Add shifts and workers"} }}
         </button>
-        <button appSubscriptionRequired class="btn btn-primary" type="button" (click)="fillInJob()">
+        <button webuiSubscriptionRequired class="btn btn-primary" type="button" (click)="fillInJob()">
           {{ 'fill_in.label' | translate: {"Default": "Fill In"} }}
         </button>
       </div>

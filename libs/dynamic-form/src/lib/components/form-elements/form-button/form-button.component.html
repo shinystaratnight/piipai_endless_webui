@@ -16,7 +16,7 @@
   </div>
 
   <button
-    appSubscriptionRequired
+    webuiSubscriptionRequired
     [type]="
       config.templateOptions.type ? config.templateOptions.type : 'button'
     "
@@ -94,7 +94,7 @@
   </button>
   <span class="postfix mr-1" *ngIf="config.postfix">{{ config.postfix }}</span>
   <button
-    appSubscriptionRequired
+    webuiSubscriptionRequired
     class="custom-button"
     type="button"
     *ngIf="
