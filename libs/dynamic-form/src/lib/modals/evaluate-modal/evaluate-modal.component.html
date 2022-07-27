@@ -36,7 +36,7 @@
       <div class="d-flex">
         <button class="btn btn-shadow btn-primary button-save ml-lg-auto">
           {{ 'save' | translate: { Default: 'Save' } }}
-          <app-spinner *ngIf="saveProcess"></app-spinner>
+          <webui-spinner *ngIf="saveProcess"></webui-spinner>
         </button>
       </div>
     </app-generic-form>
@@ -79,7 +79,7 @@
         (click)="sendEvaluateData(config.endpoint, config.data)"
       >
         {{ 'save' | translate: { Default: 'Save' } }}
-        <app-spinner *ngIf="saveProcess"></app-spinner>
+        <webui-spinner *ngIf="saveProcess"></webui-spinner>
       </button>
     </div>
   </ng-container>

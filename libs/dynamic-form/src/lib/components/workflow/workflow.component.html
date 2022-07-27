@@ -33,7 +33,7 @@
       <div class="modal-header">
         <h5 class="modal-title">{{modalInfo.label}}</h5>
 
-        <app-close-button class="close ml-auto" (click)="modal.dismiss()"></app-close-button>
+        <webui-close-button class="close ml-auto" (click)="modal.dismiss()"></webui-close-button>
       </div>
     </div>
     <div class="modal-body">
@@ -82,7 +82,7 @@
       <div class="modal-header">
         <h5 class="modal-title">{{editModalInfo.label}}</h5>
 
-        <app-close-button class="close ml-auto" (click)="modal.dismiss()"></app-close-button>
+        <webui-close-button class="close ml-auto" (click)="modal.dismiss()"></webui-close-button>
       </div>
     </div>
     <div class="modal-body">
@@ -94,7 +94,7 @@
         (errorForm)="formError($event)">
           <button appSubscriptionRequired type="submit" class="btn btn-secondary bg-primary text-white button-save" [disabled]="saveProcess">
             Save
-            <app-spinner *ngIf="saveProcess"></app-spinner>
+            <webui-spinner *ngIf="saveProcess"></webui-spinner>
           </button>
       </app-generic-form>
     </div>
@@ -107,7 +107,7 @@
       <div class="modal-header">
         <h5 class="modal-title">{{parentId ? 'Add Substate' : 'Add State'}}</h5>
 
-        <app-close-button class="close ml-auto" (click)="modal.dismiss()"></app-close-button>
+        <webui-close-button class="close ml-auto" (click)="modal.dismiss()"></webui-close-button>
       </div>
     </div>
     <div class="modal-body">
@@ -117,7 +117,7 @@
           <button appSubscriptionRequired type="submit" class="btn btn-secondary bg-primary text-white button-save"
             [disabled]="saveProcess">
             Add
-            <app-spinner *ngIf="saveProcess"></app-spinner>
+            <webui-spinner *ngIf="saveProcess"></webui-spinner>
           </button>
       </app-dynamic-form>
     </div>
@@ -130,7 +130,7 @@
       <div class="modal-header">
         <h5 class="modal-title">Add Acceptance Test</h5>
 
-        <app-close-button class="close ml-auto" (click)="modal.dismiss()"></app-close-button>
+        <webui-close-button class="close ml-auto" (click)="modal.dismiss()"></webui-close-button>
       </div>
     </div>
     <div class="modal-body">
@@ -140,7 +140,7 @@
           <button appSubscriptionRequired type="submit" class="btn btn-secondary bg-primary text-white button-save"
             [disabled]="saveProcess">
             Add
-            <app-spinner *ngIf="saveProcess"></app-spinner>
+            <webui-spinner *ngIf="saveProcess"></webui-spinner>
           </button>
       </app-dynamic-form>
     </div>

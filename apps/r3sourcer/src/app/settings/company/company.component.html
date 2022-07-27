@@ -39,7 +39,7 @@
   <div class="d-flex">
     <button appSubscriptionRequired type="submit" class="btn btn-primary ml-auto" [disabled]="saveProcess || form.disableSaveButton">
       Save
-      <app-spinner *ngIf="saveProcess"></app-spinner>
+      <webui-spinner *ngIf="saveProcess"></webui-spinner>
     </button>
   </div>
 </app-dynamic-form>

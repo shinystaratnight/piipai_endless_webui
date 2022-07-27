@@ -42,7 +42,7 @@
             [(ngModel)]="searchValue" [ngModelOptions]="{ standalone: true }" />
 
           <div class="text-center" *ngIf="loading">
-            <app-loader></app-loader>
+            <webui-loader></webui-loader>
           </div>
 
           <div class="autocomplete-list" infinite-scroll [infiniteScrollDistance]="modalScrollDistance"
@@ -58,7 +58,7 @@
             </ul>
 
             <div class="autocomplete-preloader" *ngIf="skipScroll">
-              <app-spinner></app-spinner>
+              <webui-spinner></webui-spinner>
             </div>
           </div>
         </div>
@@ -111,7 +111,7 @@
               </li>
             </ul>
             <div class="autocomplete-preloader" *ngIf="skipScroll">
-              <app-spinner></app-spinner>
+              <webui-spinner></webui-spinner>
             </div>
           </div>
         </div>
@@ -159,8 +159,8 @@
             </span>
             <span>{{ item.distance }} km</span>
 
-            <app-close-button class="ml-2" *ngIf="!config.doNotChoice" [sm]="true" (click)="deleteItem(i, item)">
-            </app-close-button>
+            <webui-close-button class="ml-2" *ngIf="!config.doNotChoice" [sm]="true" (click)="deleteItem(i, item)">
+            </webui-close-button>
           </div>
         </ng-container>
       </div>
@@ -180,7 +180,7 @@
                 <label class="d-flex align-items-center w-100">
                   <input type="checkbox" class="form-check-input" [(ngModel)]="option.checked" name="checked"
                     [ngModelOptions]="{ standalone: true }" (ngModelChange)="setValue(option, true)" hidden />
-                  <app-checkbox [sm]="true" [checked]="option.checked"></app-checkbox>
+                  <webui-checkbox [sm]="true" [checked]="option.checked"></webui-checkbox>
                   {{ option.__str__ }}
                 </label>
               </li>
@@ -410,7 +410,7 @@
       <div class="modal-header">
         <h5 class="modal-title">{{ modalData.title }}</h5>
 
-        <app-close-button class="ml-auto" (click)="c()"></app-close-button>
+        <webui-close-button class="ml-auto" (click)="c()"></webui-close-button>
       </div>
     </div>
 
@@ -431,7 +431,7 @@
         >
           <button *ngIf="checkPermission(modalData.type)" type="submit" class="btn btn-primary button-save" [disabled]="saveProcess">
             {{'save' | translate}}
-            <app-spinner *ngIf="saveProcess"></app-spinner>
+            <webui-spinner *ngIf="saveProcess"></webui-spinner>
           </button>
         </app-generic-form>
       </div>
@@ -468,7 +468,7 @@
   <div class="message-detail-header">
     <h5 class="message-label">{{ modalData.label }}</h5>
 
-    <app-close-button class="close ml-2" (click)="modal.dismiss()"></app-close-button>
+    <webui-close-button class="close ml-2" (click)="modal.dismiss()"></webui-close-button>
   </div>
 
   <app-generic-form [endpoint]="modalData.endpoint" [metadataQuery]="modalData.metadataQuery" [id]="modalData.id"

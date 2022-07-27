@@ -134,10 +134,10 @@
                   (ngModelChange)="setValue(option, chashValues)"
                   hidden
                 />
-                <app-checkbox
+                <webui-checkbox
                   [sm]="true"
                   [checked]="option.checked"
-                ></app-checkbox>
+                ></webui-checkbox>
                 {{ option[config.data.value] }}
               </label>
             </li>
@@ -146,7 +146,7 @@
             class="d-flex align-items-center justify-content-center"
             *ngIf="skipScroll"
           >
-            <app-loader></app-loader>
+            <webui-loader></webui-loader>
           </div>
         </div>
       </div>

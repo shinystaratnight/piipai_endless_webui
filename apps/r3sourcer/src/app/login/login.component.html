@@ -28,15 +28,15 @@
           <div class="links form-group">
             <label class="form-element-checkbox" [class.active]="rememberMe">
               <input type="checkbox" class="form-check-input" [(ngModel)]="rememberMe" hidden />
-              <app-checkbox [checked]="rememberMe"></app-checkbox>
+              <webui-checkbox [checked]="rememberMe"></webui-checkbox>
               <span>{{'login.remember_me' | translate}}</span>
             </label>
             <a class="forgot" href="" (click)="openResetForm()">{{'login.forgot_password' | translate}}</a>
           </div>
           <button class="btn btn-primary login-button" type="submit">
-            {{'login.login' | translate}} <app-spinner *ngIf="loginProcess"></app-spinner>
+            {{'login.login' | translate}} <webui-spinner *ngIf="loginProcess"></webui-spinner>
           </button>
-          <app-language-selector></app-language-selector>
+          <webui-language-selector></webui-language-selector>
         </app-generic-form>
       </div>
     </div>
@@ -62,7 +62,7 @@
       <div class="modal-header">
         <h5 class="modal-title">{{'password.reset' | translate}}</h5>
 
-        <app-close-button class="ml-auto" (click)="modal.dismiss()"></app-close-button>
+        <webui-close-button class="ml-auto" (click)="modal.dismiss()"></webui-close-button>
       </div>
     </div>
     <div class="py-3">

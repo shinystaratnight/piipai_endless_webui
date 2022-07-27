@@ -42,7 +42,7 @@
             [disabled]="saveProcess"
           >
             Add Note
-            <app-spinner *ngIf="saveProcess"></app-spinner>
+            <webui-spinner *ngIf="saveProcess"></webui-spinner>
           </button>
         </div>
       </app-generic-form>
@@ -89,10 +89,10 @@
           }}
         </h5>
 
-        <app-close-button
+        <webui-close-button
           class="ml-auto"
           (click)="modal.dismiss()"
-        ></app-close-button>
+        ></webui-close-button>
       </div>
     </div>
 
@@ -111,7 +111,7 @@
           [disabled]="saveProcess"
         >
           {{ 'save' | translate: { Default: 'Save' } }}
-          <app-spinner *ngIf="saveProcess"></app-spinner>
+          <webui-spinner *ngIf="saveProcess"></webui-spinner>
         </button>
       </app-generic-form>
     </div>

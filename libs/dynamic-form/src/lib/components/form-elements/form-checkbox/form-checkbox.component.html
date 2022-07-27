@@ -31,7 +31,7 @@
           [disabled]="config.readonly"
         />
 
-        <app-checkbox [sm]="true" [checked]="group.get(key).value" *ngIf="isCheckboxType"></app-checkbox>
+        <webui-checkbox [sm]="true" [checked]="group.get(key).value" *ngIf="isCheckboxType"></webui-checkbox>
 
         <span class="button-group" *ngIf="isButtonType">
           <button type="button" class="btn" [class.btn-primary]="currentValue === true" (click)="patchValue(true)">
@@ -42,7 +42,7 @@
             {{'piecework_or_combined' | translate}}
           </button>
         </span>
-        
+
         <ng-container *ngIf="!isButtonType">
           {{ getTranslationKey(config.key, 'text') | translate : { Default: config.templateOptions.text || config.templateOptions.label } }}
         </ng-container>
@@ -56,7 +56,7 @@
           Resend
         </button>
       </label>
-      
+
       <ng-container *ngTemplateOutlet="descriptionTemplate"></ng-container>
     </div>
   </div>
@@ -101,7 +101,7 @@
         >
 
           {{ getTranslationKey(config.key, 'text') | translate : { Default: config.templateOptions.text || config.templateOptions.label } }}
-        
+
           <button
             *ngIf="hasButton"
             type="button"
@@ -110,9 +110,9 @@
           >
             Resend
           </button>
-        
+
         </label>
-        
+
         <ng-container *ngTemplateOutlet="descriptionTemplate"></ng-container>
       </div>
     </div>

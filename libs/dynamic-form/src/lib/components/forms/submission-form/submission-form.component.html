@@ -15,7 +15,7 @@
     </div>
     <button class="btn btn-primary" type="submit">
       Save
-      <app-spinner *ngIf="saveProcess"></app-spinner>
+      <webui-spinner *ngIf="saveProcess"></webui-spinner>
     </button>
   </div>
 </app-dynamic-form>
@@ -35,7 +35,7 @@
     </div>
     <button class="btn btn-primary" type="submit">
       Save
-      <app-spinner *ngIf="saveProcess"></app-spinner>
+      <webui-spinner *ngIf="saveProcess"></webui-spinner>
     </button>
   </div>
 </app-dynamic-form>
@@ -75,6 +75,6 @@
 <div class="footer" *ngIf="formFilled">
   <button class="btn btn-primary" type="button" (click)="saveTimesheet()">
     Save
-    <app-spinner *ngIf="saveProcess"></app-spinner>
+    <webui-spinner *ngIf="saveProcess"></webui-spinner>
   </button>
 </div>

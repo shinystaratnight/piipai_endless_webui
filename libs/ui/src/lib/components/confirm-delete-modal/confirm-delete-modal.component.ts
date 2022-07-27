@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, ViewChild } from '@angular/core';
+import { Component, ChangeDetectionStrategy, ViewChild } from '@angular/core';
 import { DialogComponent } from '@webui/dialog';
 
 @Component({
@@ -8,9 +8,9 @@ import { DialogComponent } from '@webui/dialog';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ConfirmDeleteModalComponent {
-  instanceName: string;
+  instanceName?: string;
 
-  @ViewChild(DialogComponent) dialogComponent: DialogComponent;
+  @ViewChild(DialogComponent) dialogComponent!: DialogComponent;
 
   get param() {
     return {

@@ -65,7 +65,7 @@
     (click)="open(getState(currentState.value))"
   >
     <fa-icon class="f-size-10 mr-0" icon="check" *ngIf="!saveProcess"></fa-icon>
-    <app-spinner *ngIf="saveProcess" [sm]="true"></app-spinner>
+    <webui-spinner *ngIf="saveProcess" [sm]="true"></webui-spinner>
   </button>
 
   <button
@@ -82,10 +82,10 @@
     <div class="modal-header">
       <h5 class="modal-title">{{ modalData.title }}</h5>
 
-      <app-close-button
+      <webui-close-button
         class="ml-auto"
         (click)="modal.dismiss()"
-      ></app-close-button>
+      ></webui-close-button>
     </div>
 
     <div class="modal-body timeline" *ngIf="modalData">
@@ -166,7 +166,7 @@
         >
           <button type="submit" class="btn btn-primary">
             Save
-            <app-spinner *ngIf="saveProcess"></app-spinner>
+            <webui-spinner *ngIf="saveProcess"></webui-spinner>
           </button>
         </app-generic-form>
       </div>
@@ -230,7 +230,7 @@
 
     <span class="state-progress">{{ calculateProgress(state) }}</span>
 
-    <app-spinner *ngIf="state.saveProcess" [sm]="true"></app-spinner>
+    <webui-spinner *ngIf="state.saveProcess" [sm]="true"></webui-spinner>
   </div>
   <ng-template #requir>
     <div class="info-block">

@@ -16,7 +16,7 @@
         (ngModelChange)="toggleRange($event)"
         [(ngModel)]="toggle"
       />
-      <app-checkbox [sm]="true" [checked]="toggle"></app-checkbox>
+      <webui-checkbox [sm]="true" [checked]="toggle"></webui-checkbox>
       {{ 'search_by_distance' | translate: { Default: 'Search by distance' } }}
     </label>
     <div class="px-2 my-3" [hidden]="!toggle">

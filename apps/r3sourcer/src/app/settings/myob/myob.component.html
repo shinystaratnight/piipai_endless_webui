@@ -8,7 +8,7 @@
       (click)="connectHandler()"
     >
       {{ connectProcess ? 'Connecting' : connectButton.text }}
-      <app-spinner *ngIf="connectProcess"></app-spinner>
+      <webui-spinner *ngIf="connectProcess"></webui-spinner>
     </button>
     <p class="description">
       <span class="border rounded-circle border-info mr-1">i</span>
@@ -306,7 +306,7 @@
         (click)="sendForm(accountForm.value)"
       >
         Save
-        <app-spinner *ngIf="saveProcess"></app-spinner>
+        <webui-spinner *ngIf="saveProcess"></webui-spinner>
       </button>
     </div>
   </form>

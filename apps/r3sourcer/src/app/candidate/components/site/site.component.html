@@ -22,11 +22,11 @@
           !isProfilePage(pageData)
         "
       >
-        <app-back-link
+        <webui-back-link
           [label]="this.backToListLabel"
           [path]="pageData.pathData.path"
         >
-        </app-back-link>
+        </webui-back-link>
       </ng-container>
 
       <div
@@ -81,7 +81,7 @@
               [disabled]="saveProcess"
             >
               {{ 'save' | translate }}
-              <app-spinner *ngIf="saveProcess"></app-spinner>
+              <webui-spinner *ngIf="saveProcess"></webui-spinner>
             </button>
           </div>
         </app-generic-form>
@@ -124,10 +124,10 @@
             {{'change_password' | translate: {"Default": "Change Password"} }}
           </h5>
 
-          <app-close-button
+          <webui-close-button
             class="ml-auto"
             (click)="modal.dismiss()"
-          ></app-close-button>
+          ></webui-close-button>
         </div>
       </div>
       <div class="py-3">
@@ -158,10 +158,10 @@
             {{ 'password_reset' | translate: {"Default": "Password Reset"} }}
           </h5>
 
-          <app-close-button
+          <webui-close-button
             class="ml-auto"
             (click)="modal.dismiss()"
-          ></app-close-button>
+          ></webui-close-button>
         </div>
       </div>
       <div class="py-3">

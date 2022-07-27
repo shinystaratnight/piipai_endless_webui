@@ -24,11 +24,11 @@
             !isProfilePage(pageData)
           "
         >
-          <app-back-link
+          <webui-back-link
             [label]="this.backToListLabel"
             [path]="pageData.pathData.path"
           >
-          </app-back-link>
+          </webui-back-link>
         </ng-container>
 
         <div
@@ -116,7 +116,7 @@
                 [disabled]="saveProcess"
               >
                 Save
-                <app-spinner *ngIf="saveProcess"></app-spinner>
+                <webui-spinner *ngIf="saveProcess"></webui-spinner>
               </button>
 
               <button
@@ -211,7 +211,7 @@
                   [disabled]="saveProcess"
                 >
                   Save
-                  <app-spinner *ngIf="saveProcess"></app-spinner>
+                  <webui-spinner *ngIf="saveProcess"></webui-spinner>
                 </button>
               </div>
             </app-generic-form>
@@ -256,8 +256,8 @@
             (checkedObjects)="checkedObjects($event)"
             (listUpdated)="data = null"
           >
-            <app-back-link label="Back to job info" (backEvent)="back()">
-            </app-back-link>
+            <webui-back-link label="Back to job info" (backEvent)="back()">
+            </webui-back-link>
           </app-generic-list>
           <div class="buttons mb-5">
             <button type="button" class="btn btn-secondary" (click)="back()">
@@ -271,7 +271,7 @@
               (click)="sendData()"
             >
               Fill in
-              <app-spinner *ngIf="fillInDataSending"></app-spinner>
+              <webui-spinner *ngIf="fillInDataSending"></webui-spinner>
             </button>
           </div>
         </div>
@@ -296,10 +296,10 @@
         <div class="modal-header">
           <h5 class="modal-title">Change Password</h5>
 
-          <app-close-button
+          <webui-close-button
             class="ml-auto"
             (click)="modal.dismiss()"
-          ></app-close-button>
+          ></webui-close-button>
         </div>
       </div>
       <div class="py-3">
@@ -326,10 +326,10 @@
         <div class="modal-header">
           <h5 class="modal-title">Password Reset</h5>
 
-          <app-close-button
+          <webui-close-button
             class="ml-auto"
             (click)="modal.dismiss()"
-          ></app-close-button>
+          ></webui-close-button>
         </div>
       </div>
       <div class="py-3">

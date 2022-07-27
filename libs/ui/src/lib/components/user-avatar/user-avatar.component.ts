@@ -1,15 +1,15 @@
 import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
 
 @Component({
-  selector: 'app-user-avatar',
+  selector: 'webui-user-avatar',
   templateUrl: './user-avatar.component.html',
   styleUrls: ['./user-avatar.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UserAvatarComponent {
 
-  @Input() source: { origin: string, thumb: string };
-  @Input() fullName: string;
+  @Input() source!: { origin: string, thumb: string };
+  @Input() fullName = '';
 
   public get alt(): string {
     if (!this.fullName) {

@@ -201,12 +201,12 @@
       </ng-container>
     </p>
 
-    <app-time
+    <webui-time
       *ngIf="timezone"
       [timezone]="timezone"
       description="Time at jobsite:"
       differMessage="Timezone at jobsite differs from Your timezone!">
-    </app-time>
+    </webui-time>
 
     <p *ngIf="config && config.metadata['birthday']">
       <span class="description">{{ 'birthday' | translate: {"Default": "Birthday"} }} :</span>&nbsp;
@@ -248,7 +248,7 @@
         <div class="modal-header">
           <h5 class="modal-title">{{modalInfo.label}}</h5>
 
-          <app-close-button class="ml-auto" (click)="modal.dismiss()"></app-close-button>
+          <webui-close-button class="ml-auto" (click)="modal.dismiss()"></webui-close-button>
         </div>
       </div>
       <div class="modal-body">
@@ -264,7 +264,7 @@
             <button type="submit" class="btn btn-shadow btn-primary text-white button-save mt-3 mb-4"
               [disabled]="saveProcess">
                 {{ 'save' | translate: {"Default": "Save"} }}
-                <app-spinner *ngIf="saveProcess"></app-spinner>
+                <webui-spinner *ngIf="saveProcess"></webui-spinner>
             </button>
           </div>
         </app-generic-form>

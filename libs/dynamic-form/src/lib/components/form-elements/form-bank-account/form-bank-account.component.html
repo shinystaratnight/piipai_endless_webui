@@ -79,10 +79,10 @@
       <div class="modal-header">
         <h5 class="modal-title">{{ modalData.title }}</h5>
 
-        <app-close-button
+        <webui-close-button
           class="ml-auto"
           (click)="modal.dismiss()"
-        ></app-close-button>
+        ></webui-close-button>
       </div>
     </div>
 
@@ -99,7 +99,7 @@
           [disabled]="saveProcess"
         >
           Save
-          <app-spinner *ngIf="saveProcess"></app-spinner>
+          <webui-spinner *ngIf="saveProcess"></webui-spinner>
         </button>
       </app-dynamic-form>
     </div>

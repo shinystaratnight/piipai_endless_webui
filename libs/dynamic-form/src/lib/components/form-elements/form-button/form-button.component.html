@@ -141,10 +141,10 @@
       <img [src]="config.image" alt="" style="border-radius: 0.5rem" />
       <div class="backdrop" (click)="action($event)">
         {{'show_map' | translate}}
-        <app-spinner
+        <webui-spinner
           style="margin-left: -.5rem;"
           *ngIf="saveProcess"
-        ></app-spinner>
+        ></webui-spinner>
       </div>
       <div
         *ngIf="config.locationDataEmpty"

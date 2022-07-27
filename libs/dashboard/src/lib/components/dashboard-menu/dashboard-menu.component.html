@@ -14,8 +14,8 @@
           [formControlName]="item.widgetId"
         />
 
-        <app-checkbox [checked]="form.get(item.widgetId).value" [sm]="true">
-        </app-checkbox>
+        <webui-checkbox [checked]="form.get(item.widgetId).value" [sm]="true">
+        </webui-checkbox>
 
         {{ item.translateKey | translate: { Default: item.name } }}
       </label>

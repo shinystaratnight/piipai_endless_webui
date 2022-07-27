@@ -18,7 +18,7 @@
     [disabled]="isDisableSmsButton(action.endpoint)"
   >
     {{ label }}
-    <app-spinner *ngIf="actionProcess"></app-spinner>
+    <webui-spinner *ngIf="actionProcess"></webui-spinner>
   </button>
 </div>
 
@@ -26,10 +26,10 @@
   <div class="modal-header">
     <p>{{ action.message }}</p>
 
-    <app-close-button
+    <webui-close-button
       class="ml-auto"
       (click)="modal.dismiss(false)"
-    ></app-close-button>
+    ></webui-close-button>
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-secondary" (click)="modal.close(true)">

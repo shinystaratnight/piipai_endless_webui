@@ -70,7 +70,7 @@
 
     <div class="calendar noselect">
       <div class="d-flex justify-content-center align-items-center flex-fill" *ngIf="!calendarData">
-        <app-loader></app-loader>
+        <webui-loader></webui-loader>
       </div>
       <ng-container *ngIf="isMonthRange && calendarData">
         <ng-container *ngTemplateOutlet="monthCalendar"></ng-container>
@@ -120,7 +120,7 @@
   <label class="d-flex align-items-center">
     <input type="checkbox" class="form-check-input" [(ngModel)]="status.data[type]" (ngModelChange)="updateLayers()"
       hidden>
-    <app-checkbox [sm]="true" [checked]="status.data[type]" [className]="className"></app-checkbox>
+    <webui-checkbox [sm]="true" [checked]="status.data[type]" [className]="className"></webui-checkbox>
     {{display | lowercase | translate}}
   </label>
 </ng-template>
@@ -208,7 +208,7 @@
         </div>
 
         <ng-template #monthTooltip>
-          <app-loader *ngIf="day.loading"></app-loader>
+          <webui-loader *ngIf="day.loading"></webui-loader>
 
           <div *ngIf="!day.loading" class="shift-tooltip">
             <ng-container
@@ -281,7 +281,7 @@
           <div [ngClass]="['border', getColor(shift.is_fulfilled)]"></div>
 
           <div class="content" *ngIf="shift.loading">
-            <app-loader></app-loader>
+            <webui-loader></webui-loader>
           </div>
 
           <div *ngIf="!shift.loading" class="content">
@@ -331,7 +331,7 @@
           <div [ngClass]="['border', getColor(shift.is_fulfilled)]"></div>
 
           <div class="content" *ngIf="shift.loading">
-            <app-loader></app-loader>
+            <webui-loader></webui-loader>
           </div>
 
           <div class="content" *ngIf="!shift.loading">
@@ -446,7 +446,7 @@
       <div class="modal-header">
         <h5 class="modal-title">{{modalInfo.label}}</h5>
 
-        <app-close-button class="ml-auto" (click)="modal.dismiss()"></app-close-button>
+        <webui-close-button class="ml-auto" (click)="modal.dismiss()"></webui-close-button>
       </div>
     </div>
     <div class="modal-body">
@@ -456,7 +456,7 @@
           <button appSubscriptionRequired type="submit" class="btn big-btn btn-shadow btn-primary text-white button-save mt-3 mb-4"
             [disabled]="saveProcess || extendFormInvalid">
             Save
-            <app-spinner *ngIf="saveProcess"></app-spinner>
+            <webui-spinner *ngIf="saveProcess"></webui-spinner>
           </button>
         </div>
       </app-generic-form>

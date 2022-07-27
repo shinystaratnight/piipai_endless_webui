@@ -111,7 +111,7 @@
           (click)="toggleFilterBlock()"
           *ngIf="showFilters && !(identifyDevice() || isMobileDevice)"
         >
-          <app-icon icon="filter"></app-icon>
+          <webui-icon icon="filter"></webui-icon>
           {{ 'filters' | translate: { Default: 'Filters' } }}
         </button>
         <app-list-search-bar
@@ -266,10 +266,10 @@
                       hidden
                       appSubscriptionRequired
                     />
-                    <app-checkbox
+                    <webui-checkbox
                       [checked]="select[row.id]"
                       (click)="toggleCheckbox($event, row)"
-                    ></app-checkbox>
+                    ></webui-checkbox>
                   </label>
 
                   <a
@@ -523,10 +523,10 @@
       <div class="modal-header">
         <h5 class="modal-title">{{ modalInfo.label }}</h5>
         &nbsp;
-        <app-close-button
+        <webui-close-button
           class="close-button ml-auto align-self-center"
           (click)="modal.dismiss()"
-        ></app-close-button>
+        ></webui-close-button>
       </div>
     </div>
     <div class="modal-body" [ngSwitch]="modalInfo.type">
@@ -552,7 +552,7 @@
           [disabled]="saveProcess || modalInfo.form.disableSaveButton"
         >
           {{ 'save' | translate: { Default: 'Save' } }}
-          <app-spinner *ngIf="saveProcess"></app-spinner>
+          <webui-spinner *ngIf="saveProcess"></webui-spinner>
         </button>
       </app-generic-form>
       <agm-map
@@ -574,10 +574,10 @@
 <ng-template #messageDetail let-modal>
   <div class="message-detail-header">
     <h5 class="message-label">{{ modalInfo.label }}</h5>
-    <app-close-button
+    <webui-close-button
       class="close-button ml-auto"
       (click)="modal.dismiss()"
-    ></app-close-button>
+    ></webui-close-button>
   </div>
 
   <app-generic-form
@@ -596,10 +596,10 @@
 <ng-template #confirmModal let-modal>
   <div class="modal-header">
     <p>{{ modalInfo.message }}</p>
-    <app-close-button
+    <webui-close-button
       class="close-button ml-auto"
       (click)="modal.close()"
-    ></app-close-button>
+    ></webui-close-button>
   </div>
   <div class="modal-footer">
     <button
@@ -623,10 +623,10 @@
   <div class="modal-content-wrapper">
     <div class="modal-header-wrapper">
       <div class="modal-header">
-        <app-close-button
+        <webui-close-button
           class="close-button ml-auto"
           (click)="modal.dismiss()"
-        ></app-close-button>
+        ></webui-close-button>
       </div>
     </div>
     <div class="modal-body">
@@ -645,7 +645,7 @@
         (click)="confirmCandidateBuy()"
       >
         Confirm
-        <app-spinner *ngIf="saveProcess"></app-spinner>
+        <webui-spinner *ngIf="saveProcess"></webui-spinner>
       </button>
     </div>
   </div>
@@ -656,10 +656,10 @@
     <div class="modal-header-wrapper">
       <div class="modal-header">
         <h5 class="modal-title">Send message</h5>
-        <app-close-button
+        <webui-close-button
           class="close-button ml-auto"
           (click)="modal.dismiss()"
-        ></app-close-button>
+        ></webui-close-button>
       </div>
     </div>
     <div class="modal-body p-0">
@@ -675,10 +675,10 @@
 </ng-template>
 
 <ng-template #pdfDocumentModal let-modal>
-  <app-close-button
+  <webui-close-button
     class="close-button ml-auto mt-3 mr-3"
     (click)="modal.close()"
-  ></app-close-button>
+  ></webui-close-button>
   <div class="modal-body">
     <object
       type="application/pdf"
@@ -689,10 +689,10 @@
 </ng-template>
 
 <ng-template #fillInMap let-modal>
-  <app-close-button
+  <webui-close-button
     class="close-button"
     (click)="modal.close()"
-  ></app-close-button>
+  ></webui-close-button>
   <agm-map
     [latitude]="modalInfo.latitude"
     [longitude]="modalInfo.longitude"
@@ -724,10 +724,10 @@
 </ng-template>
 
 <ng-template #mapModal let-modal>
-  <app-close-button
+  <webui-close-button
     class="close-button"
     (click)="modal.close()"
-  ></app-close-button>
+  ></webui-close-button>
   <agm-map
     [latitude]="modalInfo.latitude"
     [longitude]="modalInfo.longitude"

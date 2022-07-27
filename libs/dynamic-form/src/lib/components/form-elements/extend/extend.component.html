@@ -47,7 +47,7 @@
     <div class="shifts-header">
       <div class="title">{{'shifts' | translate: {"Default": "Shifts"} }} </div>
 
-      <button type="button" class="btn btn-shadow btn-primary mr-3" (click)="autocompleteCandidates()">{{'autocomplete' | translate: {"Default": "Autocomplete"} }} <app-spinner *ngIf="autocompleteProcess"></app-spinner></button>
+      <button type="button" class="btn btn-shadow btn-primary mr-3" (click)="autocompleteCandidates()">{{'autocomplete' | translate: {"Default": "Autocomplete"} }} <webui-spinner *ngIf="autocompleteProcess"></webui-spinner></button>
       <app-info placement="left" [description]="requirements"></app-info>
     </div>
 
@@ -128,10 +128,10 @@
       </ng-container>
     </div>
 
-    <!-- <app-close-button
+    <!-- <webui-close-button
       [sm]="true"
       (click)="removeTime(target, index, parentIndex)">
-    </app-close-button> -->
+    </webui-close-button> -->
   </div>
 
 </ng-template>
