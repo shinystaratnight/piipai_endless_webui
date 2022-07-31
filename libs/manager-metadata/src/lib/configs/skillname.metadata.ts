@@ -1,4 +1,4 @@
-import { createFilter, Filter, Type, List } from '@webui/metadata';
+import { Filter, List } from '@webui/metadata';
 import { Endpoints } from '@webui/data';
 
 const list = () => {

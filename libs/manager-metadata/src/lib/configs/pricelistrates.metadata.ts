@@ -1,5 +1,6 @@
-import { Endpoints, SkillWorkTypeModel, Models } from '@webui/data';
+import { SkillWorkTypeModel } from '@webui/data';
 import { Form, List } from '@webui/metadata';
+import { Endpoints } from '@webui/models';
 
 const worktypeField = () =>
   new SkillWorkTypeModel()

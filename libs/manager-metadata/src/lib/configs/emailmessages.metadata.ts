@@ -1,6 +1,5 @@
 import { Filter, List } from '@webui/metadata';
-import { ColumnElement } from 'libs/metadata/src/lib/elements/list/column-element';
-import { Endpoints } from '@webui/data';
+import { Endpoints } from "@webui/models";
 
 const list = () => {
   return {
@@ -35,8 +34,8 @@ const list = () => {
         }),
       ])
       .setColumns([
-        {
-          content: [
+        new List.column.element('id', 'ID')
+          .setContent([
             {
               field: 'id',
               type: 'button',
@@ -47,10 +46,7 @@ const list = () => {
               customLink: true,
               action: 'messageDetail',
             }
-          ],
-          name: 'id',
-          label: 'ID',
-        } as ColumnElement,
+          ]),
         new List.column.element('subject', 'Subject')
           .setContent([
             new List.text.element('subject')

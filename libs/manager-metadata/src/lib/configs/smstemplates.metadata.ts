@@ -1,15 +1,15 @@
 import { Endpoints } from '@webui/data';
-import { Filter } from '@webui/metadata';
+// import { Filter } from '@webui/metadata';
 
-const filters = {
-  language: new Filter.related.element({
-    key: 'language',
-    label: 'Language',
-    endpoint: `${Endpoints.CompanyLanguages}{company}/languages/?language={filter_value}`,
-    parameter: '{language.alpha_2}',
-    display: '{language.name}',
-  })
-}
+// const filters = {
+//   language: new Filter.related.element({
+//     key: 'language',
+//     label: 'Language',
+//     endpoint: `${Endpoints.CompanyLanguages}{company}/languages/?language={filter_value}`,
+//     parameter: '{language.alpha_2}',
+//     display: '{language.name}',
+//   })
+// }
 
 const list = {
   list: {
