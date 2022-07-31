@@ -1,7 +1,7 @@
 import { checkAndReturnTranslation, getLocalStorageItem } from '@webui/utilities';
-import { Language } from '@webui/data';
+import { Language } from '@webui/models';
 
-interface IRelatedObject {
+export interface IRelatedObject {
   id?: string;
   __str__?: string;
   [key: string]: any;
