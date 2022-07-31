@@ -14,6 +14,7 @@
     "icon": "libs/icon",
     "manager-metadata": "libs/manager-metadata",
     "metadata": "libs/metadata",
+    "models": "libs/models",
     "r3sourcer": "apps/r3sourcer",
     "r3sourcer-e2e": "apps/r3sourcer-e2e",
     "rating": "libs/rating",

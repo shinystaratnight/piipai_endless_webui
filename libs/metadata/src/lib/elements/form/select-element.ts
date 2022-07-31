@@ -9,7 +9,7 @@ export interface SelectElementTemplateOptions extends BasicElementTemplateOption
 
 export class SelectElement extends BasicFormElement {
 
-  templateOptions: SelectElementTemplateOptions;
+  override templateOptions!: SelectElementTemplateOptions;
 
   constructor(key: string, label: string) {
     super(key, label, Select);

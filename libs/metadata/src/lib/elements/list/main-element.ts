@@ -7,8 +7,8 @@ export interface Tab {
 }
 
 export class MainElement {
-  columns: ColumnElement[];
-  filters: any[];
+  columns!: ColumnElement[];
+  filters?: any[];
   actions: any;
 
   search_enabled = true;

@@ -3,14 +3,14 @@ import { BasicListElement } from './basic-list-element';
 export const Select = 'select';
 
 export class SelectElement extends BasicListElement {
-  values?: any;
+  override values?: any;
   color?: any;
 
   constructor(field: string) {
     super(field, Select);
   }
 
-  setValues(values: any) {
+  override setValues(values: any) {
     this.values = { ...values };
 
     return this;

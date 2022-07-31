@@ -3,7 +3,7 @@ export const Group = 'group';
 export class GroupElement {
   type = Group;
 
-  children: any[];
+  children!: any[];
 
   label?: string;
   width?: number;

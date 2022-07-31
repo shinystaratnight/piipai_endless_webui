@@ -7,7 +7,8 @@
     "postinstall": "node ./decorate-angular-cli.js && ngcc --properties es2015 browser module main",
     "start": "nx serve r3sourcer",
     "build": "nx build",
-    "test": "nx test"
+    "test": "nx test",
+    "lint": "nx lint"
   },
   "private": true,
   "dependencies": {
@@ -27,6 +28,8 @@
     "@ngx-translate/core": "^14.0.0",
     "@nrwl/angular": "13.10.6",
     "moment-timezone": "^0.5.34",
+    "ngx-bootstrap": "^8.0.0",
+    "ramda": "^0.28.0",
     "rxjs": "~7.4.0",
     "tslib": "^2.0.0",
     "zone.js": "~0.11.4"
@@ -47,6 +50,7 @@
     "@nrwl/workspace": "13.10.6",
     "@types/jest": "27.0.2",
     "@types/node": "16.11.7",
+    "@types/ramda": "^0.28.15",
     "@typescript-eslint/eslint-plugin": "~5.18.0",
     "@typescript-eslint/parser": "~5.18.0",
     "cypress": "^9.1.0",

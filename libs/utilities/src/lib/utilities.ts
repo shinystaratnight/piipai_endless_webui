@@ -1,38 +1,5 @@
-import { Role } from '@webui/data';
-import { Time } from '@webui/time';
-// import { getTimeInstanceByTimezone } from './time';
-
-enum Language {
-  English = 'en',
-  Russian = 'ru',
-  Estonian = 'et',
-  Finnish = 'fi',
-}
-
-enum LanguageFullName {
-  English = 'English',
-  Russian = 'Russian',
-  Estonian = 'Estonian',
-  Finnish = 'Finnish',
-}
-
-enum CountryCodeLanguage {
-  EE = Language.Estonian,
-  FI = Language.Finnish,
-}
-
-// const translationCountryName = {
-//   EE: LanguageFullName.Estonian,
-//   FI: LanguageFullName.Finnish,
-// };
-
-export type Translation = {
-  language: {
-    id: Language;
-    name: LanguageFullName;
-  };
-  value: string;
-};
+import { MomentInput, Time } from '@webui/time';
+import { CountryCodeLanguage, Language, Role, Translation } from '@webui/models';
 
 export enum DateRange {
   Year = 'year',
@@ -53,34 +20,6 @@ export const rangeFormats = {
   [DateRange.Day]: 'D MMMM YYYY',
 };
 
-export function getContactAvatar(name: string): string {
-  const nameElements = name.split(' ');
-
-  if (nameElements && nameElements.length) {
-    if (nameElements.length === 2) {
-      return nameElements
-        .map((el) => el[0])
-        .join('')
-        .toUpperCase();
-    } else if (nameElements.length > 2) {
-      nameElements.shift();
-      return nameElements
-        .map((el) => el[0])
-        .join('')
-        .toUpperCase();
-    }
-  }
-
-  return '';
-}
-
-export function isTouchDevice(): boolean {
-  const deviceNamesReg =
-    /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i;
-
-  return deviceNamesReg.test(navigator.userAgent.toLowerCase());
-}
-
 export function getCurrentRole(): Role | undefined {
   const role = getLocalStorageItem('web.role');
 
@@ -89,14 +28,6 @@ export function getCurrentRole(): Role | undefined {
   }
 
   return JSON.parse(role as string);
-}
-
-export function isMobile(): boolean {
-  if (isTouchDevice()) {
-    return window.innerWidth < 768;
-  }
-
-  return false;
 }
 
 export function isCandidate(): boolean {
@@ -139,6 +70,42 @@ export function getRoleId(): string | undefined {
   return;
 }
 
+export function getContactAvatar(name: string): string {
+  const nameElements = name.split(' ');
+
+  if (nameElements && nameElements.length) {
+    if (nameElements.length === 2) {
+      return nameElements
+        .map((el) => el[0])
+        .join('')
+        .toUpperCase();
+    } else if (nameElements.length > 2) {
+      nameElements.shift();
+      return nameElements
+        .map((el) => el[0])
+        .join('')
+        .toUpperCase();
+    }
+  }
+
+  return '';
+}
+
+export function isTouchDevice(): boolean {
+  const deviceNamesReg =
+    /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i;
+
+  return deviceNamesReg.test(navigator.userAgent.toLowerCase());
+}
+
+export function isMobile(): boolean {
+  if (isTouchDevice()) {
+    return window.innerWidth < 768;
+  }
+
+  return false;
+}
+
 export function getStorageLang(): Language {
   const lang = getLocalStorageItem('web.lang');
 
@@ -149,7 +116,7 @@ export function getStorageLang(): Language {
   return JSON.parse(lang as string) as Language;
 }
 
-export function getTotalTime(data: Record<string, unknown>, timezone?: string) {
+export function getTotalTime(data: Record<string, MomentInput>, timezone?: string) {
   const shift_ended_at = Time.parse(data['shift_ended_at'], { timezone });
   const shift_started_at = Time.parse(data['shift_started_at'], { timezone });
 
@@ -233,7 +200,7 @@ export function format(str: string, data: Record<string, unknown>) {
     }
 
     if (data) {
-      const shift_started_at = Time.parse(data['shift_started_at'], {
+      const shift_started_at = Time.parse(data['shift_started_at'] as MomentInput, {
         timezone: data['timezone'] as string || data['time_zone'] as string || undefined,
       });
 

@@ -1,14 +1,16 @@
+import { IsHiddenFn } from '../../models';
+
 export const Row = 'row';
 
 export class RowElement {
   type = Row;
 
-  children: any[];
+  children!: any[];
 
   label?: string;
   hideBorder?: boolean;
   showOnMobile?: boolean;
-  isHidden?: Function;
+  isHidden?: IsHiddenFn;
 
   constructor(label?: string) {
     this.label = label;
@@ -32,7 +34,7 @@ export class RowElement {
     return this;
   }
 
-  setIsHidden(rule: Function) {
+  setIsHidden(rule: () => boolean) {
     this.isHidden = rule;
 
     return this;

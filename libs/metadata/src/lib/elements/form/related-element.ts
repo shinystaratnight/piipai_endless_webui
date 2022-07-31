@@ -1,5 +1,5 @@
 import { BasicFormElement, BasicElementTemplateOptions } from './basic-form-element';
-import { Endpoints } from '@webui/data';
+import { Endpoints } from '@webui/models';
 
 export const Related = 'related';
 
@@ -25,7 +25,7 @@ export class RelatedElement extends BasicFormElement {
   options?: any[];
   doNotChoice?: boolean;
   visibleMode?: boolean;
-  send?: boolean;
+  override send?: boolean;
   withoutIdField?: boolean;
   addEndpoint?: string;
 
@@ -38,7 +38,7 @@ export class RelatedElement extends BasicFormElement {
   prefilled?: { [key: string]: string };
   query?: { [key: string]: any; }
 
-  templateOptions: RelatedElementTemplateOptions;
+  override templateOptions!: RelatedElementTemplateOptions;
 
   constructor(key: string, label: string, endpoint: string) {
     super(key, label, Related);
@@ -70,7 +70,7 @@ export class RelatedElement extends BasicFormElement {
     return this;
   }
 
-  setPerfilledFields(config: { [key: string]: string }) {
+  setPrefilledFields(config: { [key: string]: string }) {
     this.prefilled = { ...config };
 
     return this;
@@ -82,11 +82,11 @@ export class RelatedElement extends BasicFormElement {
     return this;
   }
 
-  updateTemplateOptions(key: string, value: any) {
-    this.templateOptions[key] = value;
-
-    return this;
-  }
+  // updateTemplateOptions(key: keyof RelatedElementTemplateOptions, value: any) {
+  //   this.templateOptions[key] = value;
+  //
+  //   return this;
+  // }
 
   setAddEndpoint(endpoint: Endpoints) {
     this.addEndpoint = endpoint;

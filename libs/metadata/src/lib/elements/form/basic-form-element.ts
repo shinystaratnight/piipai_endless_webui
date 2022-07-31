@@ -1,6 +1,5 @@
 import { BehaviorSubject } from 'rxjs';
-
-import { Field } from '@webui/data';
+import { Field } from '../../models';
 
 export interface BasicElementTemplateOptions {
   label?: string;

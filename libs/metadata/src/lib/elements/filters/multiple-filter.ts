@@ -20,7 +20,7 @@ export class MultipleFilter implements FilterModel {
   public param: string;
   public unique: string[];
   public display: string;
-  public data: { [key: string]: string };
+  public data?: { [key: string]: string };
   public preset: boolean;
 
   constructor(options: MultipleFilterOptions) {
@@ -29,7 +29,7 @@ export class MultipleFilter implements FilterModel {
     this.key = key;
     this.label = label;
     this.query = query;
-    this.unique = [...unique];
+    this.unique = unique ? [...unique] : [];
     this.data = data;
 
     this.display = '__str__';
