@@ -10,7 +10,7 @@ Sentry.init({
   dsn: "https://c149325c0a1347d398995cc08ada38e0@o276502.ingest.sentry.io/5797823",
   integrations: [
     new Integrations.BrowserTracing({
-      tracingOrigins: ["https://r3sourcertest.com", "https://r3sourcer.com"],
+      tracingOrigins: ["https://piipaitest.com"],
       routingInstrumentation: Sentry.routingInstrumentation,
     }),
   ],
