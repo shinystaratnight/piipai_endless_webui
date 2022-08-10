@@ -5,18 +5,18 @@ import { DateRange } from '@webui/utilities';
 import { Moment } from '@webui/time';
 
 @Component({
-  selector: 'app-date-range',
+  selector: 'webui-date-range',
   templateUrl: './date-range.component.html',
   styleUrls: ['./date-range.component.scss'],
 })
 export class DateRangeComponent implements OnInit {
-  @Input() type: DateRange;
-  @Input() date: Moment;
-  @Input() large: boolean;
+  @Input() type!: DateRange;
+  @Input() date!: Moment;
+  @Input() large!: boolean;
 
   @Output() dateChange = new EventEmitter();
 
-  rangeTitle: string;
+  rangeTitle!: string;
 
   constructor(private dateRangeService: DateRangeService) {}
 
@@ -24,19 +24,19 @@ export class DateRangeComponent implements OnInit {
     this.updateRangeTitle();
   }
 
-  nextRange(e) {
+  nextRange(e: MouseEvent) {
     this.dateRangeService.nextRange(this.date, this.type);
 
     this.rangeChanged(e);
   }
 
-  previousRange(e) {
+  previousRange(e: MouseEvent) {
     this.dateRangeService.previousRange(this.date, this.type);
 
     this.rangeChanged(e);
   }
 
-  rangeChanged(e) {
+  rangeChanged(e: MouseEvent) {
     e.stopPropagation();
     e.preventDefault();
 

@@ -1,5 +1,5 @@
 <ng-container *ngIf="isYearRange">
-  <app-date-range [type]="type" [date]="date" (dateChange)="changeCalendar($event)"></app-date-range>
+  <webui-date-range [type]="type" [date]="date" (dateChange)="changeCalendar($event)"></webui-date-range>
 
   <div class="body">
     <div class="calendar-row" *ngFor="let row of yearBody">
@@ -15,7 +15,7 @@
 </ng-container>
 
 <ng-container *ngIf="isWeekRange">
-  <app-date-range [type]="dateRange.Month" [date]="date" (dateChange)="changeCalendar($event)"></app-date-range>
+  <webui-date-range [type]="dateRange.Month" [date]="date" (dateChange)="changeCalendar($event)"></webui-date-range>
 
   <div class="body">
     <div class="calendar-row calendar-header">
@@ -58,7 +58,7 @@
 </ng-container>
 
 <ng-container *ngIf="isDayRange">
-  <app-date-range [type]="dateRange.Month" [date]="date" (dateChange)="changeCalendar($event)"></app-date-range>
+  <webui-date-range [type]="dateRange.Month" [date]="date" (dateChange)="changeCalendar($event)"></webui-date-range>
 
   <div class="body">
     <div class="calendar-row calendar-header">

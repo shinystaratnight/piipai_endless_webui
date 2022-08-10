@@ -108,10 +108,10 @@
   </div>
 
   <div class="dashboard" *ngIf="dashboard">
-    <app-calendar
+    <webui-calendar
       class="dashboard-item"
       [class.alone]="!isManager"
-    ></app-calendar>
+    ></webui-calendar>
 
     <app-counter-widget></app-counter-widget>
   </div>

@@ -1,5 +1,5 @@
 import { MomentInput, Time } from '@webui/time';
-import { CountryCodeLanguage, Language, Role, Translation } from '@webui/models';
+import {CountryCodeLanguage, ITranslationPayload, Language, Role, Translation} from '@webui/models';
 
 export enum DateRange {
   Year = 'year',
@@ -236,12 +236,7 @@ export function getTranslationKey(key: string, type: string) {
 }
 
 export function checkAndReturnTranslation(
-  element: {
-    translations?: Translation[];
-    translation?: Translation[];
-    name?: { name: string; translations: Translation[] } | string;
-    __str__?: string;
-  },
+  element: ITranslationPayload,
   countryCode: string,
   lang?: Language
 ): string {

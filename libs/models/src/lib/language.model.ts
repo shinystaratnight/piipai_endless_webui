@@ -29,3 +29,10 @@ export type Translation = {
   };
   value: string;
 };
+
+export interface ITranslationPayload {
+  translations?: Translation[];
+  translation?: Translation[];
+  name?: { name: string; translations: Translation[] } | string;
+  __str__?: string;
+}

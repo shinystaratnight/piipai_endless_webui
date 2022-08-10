@@ -20,7 +20,7 @@ import {
 } from './services';
 
 // import { SharedModule } from '@webui/shared';
-import { DynamicFormModule } from '@webui/dynamic-form';
+// import { DynamicFormModule } from '@webui/dynamic-form';
 import { SharedModule } from '@webui/shared';
 import { UiModule } from '@webui/ui';
 
@@ -34,7 +34,7 @@ import { UiModule } from '@webui/ui';
     NgbTooltipModule,
     ButtonsModule,
     // SharedModule,
-    DynamicFormModule,
+    // DynamicFormModule,
     TranslateModule,
     UiModule,
     SharedModule

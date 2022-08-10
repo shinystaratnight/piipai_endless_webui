@@ -17,8 +17,6 @@ import { uniq } from 'ramda';
 
 import {
   CalendarService,
-  CalendarData,
-  Status,
   CalendarDataService,
   Calendar,
   SelectDateService,
@@ -44,27 +42,33 @@ import {
   EventType,
   SiteSettingsService,
 } from '@webui/core';
-import { Endpoints } from '@webui/data';
-import { Form } from '@webui/dynamic-form';
+import { Endpoints, ITranslationPayload } from '@webui/models';
 import { finalize } from 'rxjs/operators';
 import { Moment, Time } from '@webui/time';
+import { IDateRange, Status } from '../../models';
+
+type StatusFilter = {
+  type: Status,
+  color: string,
+  label: string
+}
 
 @Component({
-  selector: 'app-calendar',
+  selector: 'webui-calendar',
   templateUrl: './calendar.component.html',
   styleUrls: ['./calendar.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CalendarComponent implements OnInit, OnDestroy {
   public range = DateRange;
-  public currentRange: FormControl;
-  public rangeTitle: string;
-  public calendarData: CalendarData;
+  public currentRange!: FormControl;
+  public rangeTitle!: string;
+  public calendarData?: { header: string[], body: any[] | any, date: string };
   public shifts: any;
   public filters = filters;
   public topHeight: any;
-  public calendarTimes: any[];
-  public shiftStatus = {
+  public calendarTimes!: any[];
+  public shiftStatus: Record<Status, { color: string, key: string }> = {
     [Status.Unfilled]: { color: 'bg-danger', key: 'cancelled' },
     [Status.Fullfilled]: { color: 'bg-success', key: 'accepted' },
     [Status.Pending]: { color: 'bg-warning', key: 'undefined' },
@@ -73,7 +77,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
     [Status.Approved]: { color: 'bg-success', key: '' },
   };
 
-  public statusFilter = {
+  public statusFilter: Record<'shifts' | 'timesheets', StatusFilter[]> = {
     shifts: [
       { type: Status.Unfilled, color: 'danger', label: 'Unfulfilled' },
       { type: Status.Fullfilled, color: 'success', label: 'Fulfilled' },
@@ -86,47 +90,49 @@ export class CalendarComponent implements OnInit, OnDestroy {
     ],
   };
 
-  public statusFilterData: any;
+  public statusFilterData!: StatusFilter[];
 
-  public showCalendarDropdown: boolean;
-  public calendarType: Calendar;
+  public showCalendarDropdown!: boolean;
+  public calendarType!: Calendar;
 
-  public client: string;
-  public activeShift: string;
-  private extendForm: Form;
-  private currentRangeType: DateRange;
+  // Filter values
+  public client?: string;
+  public candidate?: string;
+
+  public activeShift?: string;
+  private extendForm!: unknown;
+  private currentRangeType!: DateRange;
 
   get extendFormInvalid() {
     if (!this.extendForm) {
       return false;
     }
 
-    return this.extendForm.disableSaveButton;
+    return (this.extendForm as any).disableSaveButton;
   }
 
   @ViewChild('filter')
-  public filter: ElementRef;
+  public filter!: ElementRef;
 
   @ViewChild(DatepickerComponent)
-  public datepicker: ElementRef;
+  public datepicker!: ElementRef;
 
   @ViewChild('modal')
-  public modal: TemplateRef<any>;
+  public modal!: TemplateRef<any>;
 
-  private candidate: string;
   public status = {
     hideAutocomplete: true,
-    displayValue(data) {
-      return Object.keys(data).filter((key) => data[key]).length;
+    displayValue(data: Record<number, boolean>): number {
+      return Object.keys(data).filter((key: string) => data[parseInt(key)]).length;
     },
-    data: {},
+    data: {} as Record<number, boolean>,
   };
-  public currentDate: Moment;
-  public customRange: { start: Moment; end: Moment };
+  public currentDate!: Moment;
+  public customRange?: IDateRange;
   public modalInfo: any;
-  public saveProcess: boolean;
+  public saveProcess!: boolean;
   public availability = [];
-  public selectedTime: string;
+  public selectedTime!: string;
 
   public timesheetCounter = [
     {
@@ -169,9 +175,9 @@ export class CalendarComponent implements OnInit, OnDestroy {
   isManager = isManager;
   isClient = isClient;
 
-  private modalRef: NgbModalRef;
+  private modalRef!: NgbModalRef;
   private lastData: any;
-  private subscriptions: Subscription[];
+  private subscriptions!: Subscription[];
 
   constructor(
     private calendar: CalendarService,
@@ -316,7 +322,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
     this.changeCalendar(this.currentRange.value);
   }
 
-  changeQuery(event?) {
+  changeQuery(event?: { key: 'candidate' | 'client', value: { data: string } }) {
     if (event) {
       this[event.key] = event.value.data;
     }
@@ -335,20 +341,20 @@ export class CalendarComponent implements OnInit, OnDestroy {
     this.updateCalendar(this.currentDate, this.currentRange.value);
   }
 
-  openAutocomplete(event) {
-    const target = event.target;
+  openAutocomplete(event: MouseEvent) {
+    const target: HTMLElement = event.target as HTMLElement;
     this.status.hideAutocomplete = !this.status.hideAutocomplete;
 
-    if (target.classList.contains('autocomplete-value')) {
+    if (target?.classList.contains('autocomplete-value')) {
       this.topHeight = target.offsetHeight + 1;
     }
   }
 
-  getColor(status: number) {
+  getColor(status: Status): string {
     return this.shiftStatus[status].color;
   }
 
-  getStatus(status: number) {
+  getStatus(status: Status): string {
     return this.shiftStatus[status].key;
   }
 
@@ -359,7 +365,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
     }, 100);
   }
 
-  public extendJob(data) {
+  public extendJob(data: any) {
     const formatString = new FormatString();
 
     this.modalInfo = {
@@ -399,7 +405,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
     });
   }
 
-  public fillInJob(data) {
+  public fillInJob(data: any) {
     const prefix = isManager() ? 'mn' : 'cl';
 
     this.router.navigateByUrl(
@@ -407,7 +413,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
     );
   }
 
-  public formEvent(e, closeModal) {
+  public formEvent(e: { type: string, status: 'success', form: any }, closeModal: () => void) {
     if (e.type === 'saveStart') {
       this.saveProcess = true;
     }
@@ -433,14 +439,14 @@ export class CalendarComponent implements OnInit, OnDestroy {
     this.saveProcess = false;
   }
 
-  public fillinAccess(shift) {
-    const statusSeccess =
+  public fillinAccess(shift: { date: string, is_fulfilled: Status }) {
+    const statusSuccess =
       this.getStatus(shift.is_fulfilled) !== this.getStatus(1);
     const dateSuccess = this.calendar
       .getToday()
       .isBefore(Time.parse(shift.date).add(1, DateRange.Day));
 
-    return statusSeccess && dateSuccess;
+    return statusSuccess && dateSuccess;
   }
 
   public setAvailability(event: Event, day: any, available: boolean) {
@@ -481,7 +487,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
   }
 
   public addJob() {
-    const dates = this.selectDateService.getSlectedDates();
+    const dates = this.selectDateService.getSelectedDates();
 
     this.modalInfo = {
       endpoint: isClient() ? Endpoints.ClientJobs : Endpoints.Job,
@@ -508,15 +514,15 @@ export class CalendarComponent implements OnInit, OnDestroy {
     this.modalService.open(this.modal, { size: 'lg', backdrop: 'static' });
   }
 
-  isSelected(date: string) {
-    return this.selectDateService.isSelected(date);
+  isSelected(date?: string): boolean {
+    return !!date && this.selectDateService.isSelected(date);
   }
 
   isSelectedTime(time: string) {
     return time === this.selectedTime;
   }
 
-  selectTime(time) {
+  selectTime(time: string) {
     this.selectedTime = time;
   }
 
@@ -545,7 +551,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
     return count;
   }
 
-  getShiftDataWeekCalendar(tooltip) {
+  getShiftDataWeekCalendar(tooltip: { loaded: boolean, loading: boolean, shift: any }) {
     if (tooltip.loaded) {
       return;
     }
@@ -579,7 +585,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
       });
   }
 
-  getShiftData(day) {
+  getShiftData(day: { loaded: boolean, data: any[], loading: boolean, tooltip: any, isOpen: boolean }) {
     if (day.loaded) {
       return;
     }
@@ -608,7 +614,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
             return;
           }
 
-          day.tooltip[key] = day.tooltip[key].map((data) => {
+          day.tooltip[key] = day.tooltip[key].map((data: any) => {
             const el = parsedShiftDates.find(
               (el) => el.shift_date_id === data.shift.date.id
             );
@@ -640,7 +646,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
     day.isOpen = true;
   }
 
-  selectJob(event, shift) {
+  selectJob(event: MouseEvent, shift: any) {
     event.preventDefault();
     event.stopPropagation();
     if (this.activeShift === shift.shift.id) {
@@ -762,8 +768,8 @@ export class CalendarComponent implements OnInit, OnDestroy {
     });
   }
 
-  private generateQuery(from: Moment, to: Moment, client?, candidate?) {
-    const filterList = {
+  private generateQuery(from: Moment, to: Moment, client?: string, candidate?: string) {
+    const filterList: Record<string, any> = {
       ['date__shift_date_0']: from.format(filterDateFormat),
       ['date__shift_date_1']: to.format(filterDateFormat),
       fields: [
@@ -824,7 +830,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
     return filterList;
   }
 
-  private prepareShiftsData(data, holidays?) {
+  private prepareShiftsData(data: any, holidays?: any[]) {
     this.shifts = [];
     data = Array.isArray(data) ? data : data.results;
 
@@ -833,10 +839,10 @@ export class CalendarComponent implements OnInit, OnDestroy {
 
     if (data.length) {
       this.shifts = data
-        .map((shift) => this.parseData(shift))
-        .filter((shift) => this.status.data[shift.is_fulfilled]);
+        .map((shift: any) => this.parseData(shift))
+        .filter((shift: any) => this.status.data[shift.is_fulfilled as Status]);
 
-      this.shifts.forEach((shift) => {
+      this.shifts.forEach((shift: any) => {
         this.timesheetCounter.forEach((counter) => {
           counter.count += shift.candidates[this.shiftStatus[counter.type].key];
           if (shift.is_fulfilled === 0) {
@@ -851,7 +857,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
     }
   }
 
-  private parseData(shift, fullData?: boolean) {
+  private parseData(shift: any, fullData?: boolean) {
     if (fullData) {
       return {
         shift,
@@ -878,9 +884,9 @@ export class CalendarComponent implements OnInit, OnDestroy {
     }
   }
 
-  private getPositionTranslation(position): string {
-    const coutryCode = this.siteSettings.settings.country_code;
-    return checkAndReturnTranslation(position, coutryCode, getStorageLang());
+  private getPositionTranslation(position: ITranslationPayload): string {
+    const countryCode = this.siteSettings.settings.country_code;
+    return checkAndReturnTranslation(position, countryCode, getStorageLang());
   }
 
   private prepareTimesheetsData(jobOffers: any[], timesheetList: any[]) {
@@ -913,10 +919,10 @@ export class CalendarComponent implements OnInit, OnDestroy {
         })
         .filter(
           (jobOffer) =>
-            this.status.data[jobOffer.timesheetStatus] || jobOffer.showButtons
+            this.status.data[jobOffer.timesheetStatus as number] || jobOffer.showButtons
         );
 
-      this.shifts.forEach((shift) => {
+      this.shifts.forEach((shift: any) => {
         this.timesheetCounter.forEach((counter) => {
           if (counter.type === shift.timesheetStatus) {
             counter.count += 1;
@@ -964,7 +970,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
         break;
     }
 
-    this.calendarData = calendarData;
+    this.calendarData = calendarData as any;
   }
 
   private updateCalendar(date: Moment, type: DateRange) {
@@ -986,7 +992,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
 
   @HostListener('document:click', ['$event'])
   @HostListener('document:touch', ['$event'])
-  public handleClick(event) {
+  public handleClick(event: MouseEvent) {
     let clickedComponent = event.target;
     let inside = false;
     do {
@@ -996,7 +1002,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
       ) {
         inside = true;
       }
-      clickedComponent = clickedComponent.parentNode;
+      clickedComponent = (clickedComponent as unknown as HTMLElement).parentNode;
     } while (clickedComponent);
     if (!inside) {
       if (!this.status.hideAutocomplete) {

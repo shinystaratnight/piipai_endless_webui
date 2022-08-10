@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
-import { Language } from '@webui/data';
+import { Language } from '@webui/models';
 import { TranslateHelperService } from '@webui/core';
 
 @Component({

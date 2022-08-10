@@ -27,8 +27,8 @@
 
       <fa-icon class="px-2 calendar-icon" [icon]="['fas', 'chevron-down']" (click)="openDropdown()"></fa-icon>
 
-      <app-datepicker *ngIf="showCalendarDropdown" [date]="currentDate" [type]="rangeForDropdown"
-        (update)="setDate($event)" [range]="customRange"></app-datepicker>
+      <webui-datepicker *ngIf="showCalendarDropdown" [date]="currentDate" [type]="rangeForDropdown"
+        (update)="setDate($event)" [range]="customRange"></webui-datepicker>
     </div>
   </div>
 
@@ -135,7 +135,7 @@
         class="grid-item month-day"
         [class.date-selected]="isSelected(day.date)"
         *ngIf="!day.tooltip && calendarType !== 2"
-        appSelectDate
+        webuiSelectDate
         [class.holiday]="day.holiday"
         [attr.title]="day.holiday"
         [disable]="!(isManager() || canClientCreateJob())"
@@ -175,7 +175,7 @@
         class="grid-item month-day"
         [class.holiday]="day.holiday"
         [class.date-selected]="isSelected(day.date)"
-        appSelectDate
+        webuiSelectDate
         [date]="day.date"
         [disable]="!(isManager() || canClientCreateJob())"
         *ngIf="day.tooltip"
@@ -272,12 +272,12 @@
     <div class="times">
       <ng-container *ngTemplateOutlet="times"></ng-container>
     </div>
-    <span class="grid-item week-item" appSelectDate [class.date-selected]="isSelected(day.date)" [date]="day.date"
+    <span class="grid-item week-item" webuiSelectDate [class.date-selected]="isSelected(day.date)" [date]="day.date"
       [disable]="!(isManager() || canClientCreateJob())" *ngFor="let day of calendarData?.body">
       <ng-container *ngFor="let shift of day.data; let index = index">
-        <div class="shift-item" [class.active]="activeShift === shift.shift.id" appCalendarTooltip
+        <div class="shift-item" [class.active]="activeShift === shift.shift.id" webuiCalendarTooltip
           [active]="activeShift === shift.shift.id" [ngStyle]="shift.timesheet" [style.margin-left.px]="index * 8"
-          (show)="getShiftDataWeekCalendar(shift)" (click)="selectJob($event, shift)">
+          (showed)="getShiftDataWeekCalendar(shift)" (click)="selectJob($event, shift)">
           <div [ngClass]="['border', getColor(shift.is_fulfilled)]"></div>
 
           <div class="content" *ngIf="shift.loading">
@@ -305,7 +305,7 @@
 </ng-template>
 
 <ng-template #times>
-  <span class="times-item" [class.time-selected]="isSelectedTime(time.time) && isSelected(calendarData.date)"
+  <span class="times-item" [class.time-selected]="isSelectedTime(time.time) && isSelected(calendarData?.date)"
     [style.top.px]="time.top" [style.bottom.px]="time.bottom" *ngFor="let time of calendarTimes"
     (click)="selectTime(time.time)">{{time.time}}</span>
 </ng-template>
@@ -321,12 +321,12 @@
     <div class="times">
       <ng-container *ngTemplateOutlet="times"></ng-container>
     </div>
-    <span class="grid-item day-item" appSelectDate [class.date-selected]="isSelected(calendarData.date)"
-      [date]="calendarData.date" [disable]="!(isManager() || canClientCreateJob())">
+    <span class="grid-item day-item" webuiSelectDate [class.date-selected]="isSelected(calendarData?.date)"
+      [date]="calendarData?.date" [disable]="!(isManager() || canClientCreateJob())">
       <ng-container *ngFor="let shift of calendarData?.body.data; let index = index">
         <div class="shift-item preview" [class.active]="activeShift === shift.shift.id"
-          [active]="activeShift === shift.shift.id" appCalendarTooltip [ngStyle]="shift.timesheet"
-          [style.margin-left.px]="index * 120 + index * 8" (show)="getShiftDataWeekCalendar(shift)"
+          [active]="activeShift === shift.shift.id" webuiCalendarTooltip [ngStyle]="shift.timesheet"
+          [style.margin-left.px]="index * 120 + index * 8" (showed)="getShiftDataWeekCalendar(shift)"
           (click)="selectJob($event, shift)">
           <div [ngClass]="['border', getColor(shift.is_fulfilled)]"></div>
 

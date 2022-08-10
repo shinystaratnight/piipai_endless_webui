@@ -3,8 +3,8 @@ import { Time } from '@webui/time';
 
 @Injectable()
 export class SelectDateService {
-  startDate: string;
-  endDate: string;
+  startDate!: string | null;
+  endDate!: string | null;
 
   selectedDates = new Map();
 
@@ -51,8 +51,8 @@ export class SelectDateService {
     this.endDate = null;
   }
 
-  getSlectedDates() {
-    const dates = [];
+  getSelectedDates(): string[] | undefined {
+    const dates: string[] = [];
     this.selectedDates.forEach((val, key) => {
       if (val) {
         dates.push(key);
@@ -62,6 +62,8 @@ export class SelectDateService {
     if (dates.length) {
       return dates;
     }
+
+    return undefined
   }
 
   clear() {
