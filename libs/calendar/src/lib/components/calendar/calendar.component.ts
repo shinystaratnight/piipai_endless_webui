@@ -946,6 +946,8 @@ export class CalendarComponent implements OnInit, OnDestroy {
         return 5;
       }
     }
+
+    return;
   }
 
   private generateCalendar(date: Moment, type: DateRange) {

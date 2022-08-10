@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, Router, ActivatedRouteSnapshot } from '@angular/router';
 
-import { forkJoin, of, Subject } from 'rxjs';
+import { forkJoin, Subject, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
 import {
@@ -10,8 +10,8 @@ import {
   CheckPermissionService,
   SubscriptionService,
 } from '../services';
-import { User, Role } from '@webui/data';
 import { Time } from '@webui/time';
+import { Role } from '@webui/models';
 
 @Injectable()
 export class PermissionGuard implements CanActivate {
@@ -39,8 +39,16 @@ export class PermissionGuard implements CanActivate {
     setTimeout(() => {
       this.userService
         .getUserData()
-        .pipe(catchError(() => of(false)))
-        .subscribe((user: User) => {
+        .pipe(catchError((err) => {
+          subject.next(false);
+          return throwError(err);
+        }))
+        .subscribe((user) => {
+          if (Array.isArray(user)) {
+            subject.next(false);
+            return;
+          }
+
           const requests = [this.navigationService.getPages(user.currentRole)];
 
           if (this.isManager(user.currentRole)) {

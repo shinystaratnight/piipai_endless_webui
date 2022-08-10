@@ -2,16 +2,15 @@ import { Inject, Injectable, Optional } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { LocalStorageService } from 'ngx-webstorage';
-import { Observable, of } from 'rxjs';
+import { of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
-import { User, Role, Language } from '@webui/data';
 
 import { AuthService } from './auth.service';
 import { ErrorsService } from './errors.service';
 import { ToastService, MessageType } from './toast.service';
 import { EventService, EventType } from './event.service';
-import { isManager } from '@webui/utilities';
-import { ENV } from '@webui/core';
+import { ENV } from './env.service';
+import { Language, Role, User } from '@webui/models';
 
 const defaultCountryCode = 'GB';
 
@@ -22,14 +21,16 @@ export class UserService {
   public authEndpoint = '/auth/restore_session/';
   public rolesEndpoint = '/core/users/roles/';
   public timezoneEndpoint = '/core/users/timezone/';
-  public user: User;
+  public user!: User;
   public error: any;
-  public roleRedirect: string;
+  public roleRedirect!: string;
 
-  get companyId() {
+  get companyId(): string {
     if (this.user) {
       return this.user.data.contact.company_id;
     }
+
+    return '';
   }
 
   constructor(
@@ -42,10 +43,10 @@ export class UserService {
     @Optional() @Inject(ENV) private env: any
   ) {}
 
-  public getUserData(): Observable<any> {
+  public getUserData() {
     if (!this.user) {
-      return this.http.get(this.authEndpoint).pipe(
-        map((user: User) => {
+      return this.http.get<User>(this.authEndpoint).pipe(
+        map((user) => {
           this.user = user;
 
           user.data.roles = user.data.roles.map((role: Role) => {
@@ -61,15 +62,15 @@ export class UserService {
           });
 
           this.checkRoleExist(user.data.contact.contact_type, currentDomainRoles);
-          
+
           user.data.country_code = user.data.country_code || defaultCountryCode;
 
           const roles = user.data.roles;
-          const redirectRole: Role = this.authService.role;
+          const redirectRole: Role | undefined = this.authService.role;
           const storageRole: Role = this.storage.retrieve('role');
-          const lang: Language = this.storage.retrieve('lang');
+          const lang: Language = this.storage.retrieve('lang') as Language;
 
-          let role: Role;
+          let role: Role | undefined;
 
           if (storageRole) {
             role = currentDomainRoles.find(el => el.id === storageRole.id);

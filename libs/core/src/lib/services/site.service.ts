@@ -9,7 +9,7 @@ import { Page, PageData, PathData } from '@webui/data';
 })
 export class SiteService {
 
-  public list: Page[];
+  public list!: Page[];
 
   public getDataOfPage(url: any, list: Page[]) {
     return of(this.generateData(list, url));
@@ -41,7 +41,7 @@ export class SiteService {
     return `/${url.join('/')}/`;
   }
 
-  public getTypeOfPage(url): PathData {
+  public getTypeOfPage(url: Array<{path: string}>): PathData {
     if (!url.length) {
       return {
         type: 'list',
@@ -49,7 +49,7 @@ export class SiteService {
       };
     }
 
-    let data: PathData;
+    let data: PathData = {} as PathData;
     const urlCopy = url.map((el) => {
       return el.path;
     });
@@ -86,7 +86,7 @@ export class SiteService {
         type: 'map',
         path: this.generatePath(urlCopy)
       };
-    } else {
+    } else if (lastElement) {
       urlCopy.push(lastElement);
       if (urlCopy.indexOf('settings') > -1) {
         data = <any> {
@@ -104,7 +104,7 @@ export class SiteService {
   }
 
   public getElementFromList(list: Page[], path: string): Page {
-    let element;
+    let element: Page = {} as Page;
     list.forEach((el) => {
       if (el.url === path) {
         if (!element) {

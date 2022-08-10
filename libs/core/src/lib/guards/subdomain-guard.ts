@@ -17,6 +17,7 @@ export class SubdomainGuard implements CanActivate {
       return of(true);
     } else {
       this.router.navigate(['']);
+      return of (false);
     }
   }
 }

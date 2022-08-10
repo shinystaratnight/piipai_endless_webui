@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
-import { Language } from '@webui/data';
-
 import { LocalStorageService } from 'ngx-webstorage';
+import { Language } from '@webui/models';
 
 @Injectable({
   providedIn: 'root'

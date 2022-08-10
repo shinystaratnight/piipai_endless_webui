@@ -3,10 +3,10 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { map, catchError, tap } from 'rxjs/operators';
 
-import { Endpoints, CountryCodeLanguage, Language } from '@webui/data';
 import { TranslateHelperService } from './translate-helper-service';
 import { LocalStorageService } from 'ngx-webstorage';
 import { isManager } from '@webui/utilities';
+import { CountryCodeLanguage, Endpoints, Language } from '@webui/models';
 
 interface CompanySettings {
   sms_enabled: boolean;
@@ -15,8 +15,9 @@ interface CompanySettings {
   color_scheme: string;
   advance_state_saving: boolean;
   font: string;
-  country_code: string;
+  country_code: keyof typeof CountryCodeLanguage;
   currency: string;
+  redirect_to: string;
   [key: string]: any;
 }
 
@@ -24,7 +25,7 @@ interface CompanySettings {
   providedIn: 'root'
 })
 export class SiteSettingsService {
-  settings: CompanySettings;
+  settings!: CompanySettings;
 
   get companyId() {
     if (this.settings) {
@@ -54,7 +55,7 @@ export class SiteSettingsService {
     return `SMS sending is disabled for ${this.getCompanyName()}, please contact your administrator.`;
   }
 
-  private getSettings(): Observable<CompanySettings> {
+  private getSettings() {
     if (!this.settings) {
       return this.http.get<CompanySettings>(Endpoints.CompanySettings).pipe(
         tap((settings) => {
@@ -93,12 +94,12 @@ export class SiteSettingsService {
     const fontFamily = `${settings.font || 'Source Sans Pro'}, sans-serif`;
 
     // TODO: refactor it
-    body.parentElement.classList.add(themeClass);
+    body.parentElement?.classList.add(themeClass);
     body.style.fontFamily = fontFamily;
   }
 
   private updateLanguage(settings: CompanySettings): void {
-    const companyLang = CountryCodeLanguage[settings.country_code];
+    const companyLang: string = CountryCodeLanguage[settings.country_code].toString();
     const defaultLanguage = this.storage.retrieve('lang');
     const { currentLang } = this.translate;
 
@@ -111,14 +112,14 @@ export class SiteSettingsService {
 
     if (isManager()) {
       lang = Language.English;
-    } else if (companyLang && currentLang !== companyLang) {
+    } else if (companyLang && currentLang !== companyLang as string) {
       lang = companyLang;
     }
 
     if (!lang && !companyLang) {
       this.translate.setLang(Language.English);
     } else if (lang) {
-      this.translate.setLang(lang);
+      this.translate.setLang(lang as Language);
     }
   }
 }

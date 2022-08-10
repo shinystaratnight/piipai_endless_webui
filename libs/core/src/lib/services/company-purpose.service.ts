@@ -8,15 +8,16 @@ import {
 import { of, Observable } from 'rxjs';
 import { catchError, tap, map } from 'rxjs/operators';
 
-import { Endpoints, Purpose, DashboardWidget } from '@webui/data';
+import { Purpose, DashboardWidget } from '@webui/data';
 import { ErrorsService } from './errors.service';
 import { ToastService, MessageType } from './toast.service';
+import { Endpoints } from '@webui/models';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CompanyPurposeService {
-  public purpose: Purpose;
+  public purpose?: Purpose;
 
   // hideListColumns = {
   //   [Endpoints.SkillName]: {
@@ -76,7 +77,7 @@ export class CompanyPurposeService {
   //   return columns;
   // }
 
-  getPurpose(id: string): Observable<any[] | Purpose> {
+  getPurpose(id: string) {
     const query = { fields: ['purpose'] };
     const params = new HttpParams({ fromObject: query });
 
@@ -84,12 +85,15 @@ export class CompanyPurposeService {
       return of(this.purpose);
     }
 
-    return this.http.get(Endpoints.Company + id + '/', { params }).pipe(
-      tap((res: { id: string; purpose: Purpose }) => {
+    return this.http.get<{ id: string; purpose: Purpose }>(Endpoints.Company + id + '/', { params }).pipe(
+      tap((res) => {
         this.purpose = res.purpose;
       }),
-      map((res: { id: string; purpose: Purpose }) => res.purpose),
-      catchError((err: HttpErrorResponse) => this.errors.handleError(err))
+      map((res) => res.purpose),
+      catchError((err: HttpErrorResponse) => {
+        this.errors.handleError(err);
+        return of(null);
+      })
     );
   }
 
@@ -104,7 +108,7 @@ export class CompanyPurposeService {
       );
   }
 
-  private filterByName(keys: string[], navigation) {
+  private filterByName(keys: string[], navigation: any[]) {
     return navigation.filter(el => {
       let result = true;
 
