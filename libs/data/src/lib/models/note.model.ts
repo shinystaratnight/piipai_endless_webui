@@ -1,14 +1,15 @@
-import { Endpoints, Models } from '../enums';
+import { Endpoints } from '@webui/models';
+import { Models } from '../enums';
 import { OverrideConfig } from '../interfaces';
 import { Model } from './model';
 
 export class NoteModel extends Model {
-  readonly key = Models.Note;
-  readonly label = 'Notes';
-  readonly endpoint = Endpoints.Note;
-  readonly translateKey = 'notes';
+  override readonly key = Models.Note;
+  override readonly label = 'Notes';
+  override readonly endpoint = Endpoints.Note;
+  override readonly translateKey = 'notes';
 
-  formListElement(config: OverrideConfig = {}) {
+  formListElement(config: OverrideConfig) {
     const { query, model_content_type } = config;
 
     return super

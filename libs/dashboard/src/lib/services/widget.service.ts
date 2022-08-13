@@ -2,10 +2,10 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 
 import { map, catchError } from 'rxjs/operators';
-import { of, Observable } from 'rxjs';
+import { of, Observable, throwError } from 'rxjs';
 
 import { ErrorsService } from '@webui/core';
-import { Endpoints, ButtonWidget } from '@webui/data';
+import { ButtonWidget } from '@webui/data';
 
 import {
   Type,
@@ -15,12 +15,13 @@ import {
   GridElement
 } from '../interfaces';
 import { widgetsData } from '../helpers';
+import { Endpoints } from '@webui/models';
 
 @Injectable()
 export class WidgetService {
-  widgets: Widget[];
-  userWidgets: UserWidget[];
-  listsId: string[];
+  widgets!: Widget[];
+  userWidgets?: UserWidget[];
+  listsId!: string[];
   params = new HttpParams({ fromObject: { limit: '-1' } });
 
   constructor(private http: HttpClient, private errorService: ErrorsService) {}
@@ -36,7 +37,7 @@ export class WidgetService {
         map((res: any) => {
           if (res.results) {
             const widgets = res.results
-              .map((el) => {
+              .map((el: any) => {
                 const type: Type = el.module_data.model;
 
                 return {
@@ -45,7 +46,7 @@ export class WidgetService {
                   ...widgetsData[type]
                 };
               })
-              .filter((el) => widgetsData[el.type]);
+              .filter((el: any) => widgetsData[el.type as Type]);
 
             this.widgets = widgets;
             return this.widgets;
@@ -64,14 +65,14 @@ export class WidgetService {
       .get(Endpoints.UserDashboardModule, { params: this.params })
       .pipe(
         map((res: any) => {
-          const widgets = res.results.filter((el) =>
+          const widgets = res.results.filter((el: any) =>
             this.existWidget(this.widgets, el)
           );
 
-          const userWidgets = widgets.map((el) => {
+          const userWidgets = widgets.map((el: any) => {
             const widget = this.widgets.find(
               (item) => item.id === el.dashboard_module.id
-            );
+            ) as Widget;
             const defaultConfig = {
               size: this.getSizes(widget.type),
               coords: this.getPosition(widget.type),
@@ -142,7 +143,11 @@ export class WidgetService {
     ];
   }
 
-  addWidget(widgetId: string, contactId: string, config: any = {}) {
+  addWidget(widgetId: string | null, contactId: string, config: any = {}) {
+    if (!widgetId) {
+      return throwError('error');
+    }
+
     const body = {
       company_contact: contactId,
       dashboard_module: widgetId,
@@ -176,7 +181,7 @@ export class WidgetService {
     };
 
     widgets.forEach((widget) => {
-      const { coords, size } = widget.config;
+      const { coords } = widget.config;
       const widgetElement = {
         type: GridElementType.Widget,
         widget
@@ -188,11 +193,15 @@ export class WidgetService {
     return grid;
   }
 
-  updateCoords(grid: GridElement) {
+  updateCoords(grid: GridElement | null) {
+    if (!grid) {
+      return;
+    }
+
     const { elements, id } = grid;
 
     this.parseGrid(grid);
-    this.updateElementsId(grid.elements, id);
+    this.updateElementsId(elements, id);
   }
 
   getSizes(type: Type) {
@@ -283,14 +292,14 @@ export class WidgetService {
       gridElement.elements = elements;
       elements = this.removeEmptyElements(gridElement);
 
-      if (elements.length > 0) {
+      if (elements && elements.length > 0) {
         elements.forEach((grid) => this.parseGrid(grid));
       }
     }
   }
 
   private removeEmptyElements(element: GridElement) {
-    return element.elements.filter((gridElement) => {
+    return element.elements?.filter((gridElement) => {
       if (gridElement.type === GridElementType.Widget) {
         return true;
       }
@@ -299,9 +308,13 @@ export class WidgetService {
     });
   }
 
-  private updateElementsId(elements: GridElement[], parentId?: string) {
+  private updateElementsId(elements?: GridElement[], parentId?: string) {
+    if (!elements) {
+      return;
+    }
+
     elements.forEach((el, index) => {
-      if (el.type === GridElementType.Widget) {
+      if (el.widget && el.type === GridElementType.Widget) {
         el.widget.config.coords = parentId;
         return;
       }
@@ -312,15 +325,19 @@ export class WidgetService {
     });
   }
 
-  private updateId(index: number | string, parentId: string) {
+  private updateId(index: number | string = '', parentId?: string) {
     return parentId ? parentId + index : index + '';
   }
 
   private checkMainColumnElements(
     type: GridElementType,
-    elements: GridElement[],
+    elements?: GridElement[],
     parentId?: string
-  ): GridElement[] {
+  ): GridElement[] | undefined {
+    if (!elements) {
+      return elements;
+    }
+
     if (type === GridElementType.Column && !parentId) {
       return elements.map((el, i) => {
         const id = i.toString();
@@ -342,9 +359,9 @@ export class WidgetService {
 
   private checkRowElements(
     type: GridElementType,
-    elements: GridElement[]
-  ): GridElement[] {
-    if (type === GridElementType.Row && elements.length > 1) {
+    elements?: GridElement[]
+  ): GridElement[] | undefined {
+    if (type === GridElementType.Row && elements && elements.length > 1) {
       return elements.map((el, i) => {
         const id = i.toString();
         if (el.type === GridElementType.Column) {
@@ -364,8 +381,12 @@ export class WidgetService {
 
   private checkOnSingleColumn(
     type: GridElementType,
-    elements: GridElement[]
-  ): GridElement[] {
+    elements?: GridElement[]
+  ): GridElement[] | undefined {
+    if (!elements) {
+      return elements;
+    }
+
     if (
       type === GridElementType.Row &&
       elements.length === 1 &&
@@ -380,16 +401,16 @@ export class WidgetService {
   private generateGridElements(
     gridElement: GridElement,
     widgetElement: GridElement,
-    coords: string
+    coords?: string
   ) {
     const { elements, type, id } = gridElement;
-    const index = coords.charAt(0);
+    const index: number = +(coords?.charAt(0) as string);
     const newId = this.updateId(index, id);
 
-    coords = coords.slice(1);
+    coords = coords?.slice(1);
     this.listsId.push(newId);
 
-    if (coords.length === 0 && type === GridElementType.Column) {
+    if (elements && coords?.length === 0 && type === GridElementType.Column) {
       elements[index] = {
         id: newId,
         type: GridElementType.Row,
@@ -404,13 +425,13 @@ export class WidgetService {
         ? GridElementType.Column
         : GridElementType.Row;
 
-    if (coords.length === 0) {
+    if (elements && coords?.length === 0) {
       elements[index] = {
         id: newId,
         type: newType,
         elements: [widgetElement]
       };
-    } else if (coords.length) {
+    } else if (elements && coords?.length) {
       const element = elements[index] || {
         id: newId,
         type: newType,

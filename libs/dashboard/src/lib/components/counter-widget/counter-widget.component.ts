@@ -25,13 +25,13 @@ type DateParams = {
 };
 
 @Component({
-  selector: 'app-counter-widget',
+  selector: 'webui-counter-widget',
   templateUrl: './counter-widget.component.html',
   styleUrls: ['./counter-widget.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CounterWidgetComponent implements OnInit, OnDestroy {
-  data$: Observable<any>;
+  data$!: Observable<any>;
   dateParams$: BehaviorSubject<DateParams> = new BehaviorSubject(
     {} as DateParams
   );
@@ -49,14 +49,14 @@ export class CounterWidgetComponent implements OnInit, OnDestroy {
     key: 'counter',
     value: 'Counter'
   };
-  rangeForm: FormGroup;
+  rangeForm!: FormGroup;
   hasForm$: BehaviorSubject<boolean> = new BehaviorSubject(false);
   get loading$() {
     return this.loading.asObservable();
   }
 
   private loading: BehaviorSubject<boolean> = new BehaviorSubject(true);
-  private controlSubscription: Subscription;
+  private controlSubscription!: Subscription;
 
   constructor(
     private widgetService: WidgetService,

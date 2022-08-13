@@ -12,15 +12,15 @@ import { WidgetService } from '../../services/widget.service';
 import { ButtonWidget } from '@webui/data';
 
 @Component({
-  selector: 'app-buttons-widget',
+  selector: 'webui-buttons-widget',
   templateUrl: './buttons-widget.component.html',
   styleUrls: ['./buttons-widget.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ButtonsWidget implements OnInit, OnDestroy {
-  buttons: ButtonWidget[];
+export class ButtonsWidgetComponent implements OnInit, OnDestroy {
+  buttons?: ButtonWidget[];
 
-  private eventSubscription: Subscription;
+  private eventSubscription!: Subscription;
 
   constructor(
     private widgetService: WidgetService,

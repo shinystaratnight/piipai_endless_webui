@@ -2,9 +2,10 @@ import {
   checkAndReturnTranslation,
   getLocalStorageItem,
 } from '@webui/utilities';
-import { Endpoints, Models } from '../enums';
+import { Models } from '../enums';
 import { Model } from './model';
 import { DATE_TIME_FORMAT, Time } from '@webui/time';
+import { Endpoints } from '@webui/models';
 
 export type Timesheet = {
   id: string;
@@ -24,10 +25,10 @@ export type Timesheet = {
 };
 
 export class TimesheetModel extends Model {
-  readonly key = Models.Timesheet;
-  readonly label = 'Timesheet';
-  readonly endpoint = Endpoints.Timesheet;
-  readonly data: Timesheet;
+  override readonly key = Models.Timesheet;
+  override readonly label = 'Timesheet';
+  override readonly endpoint = Endpoints.Timesheet;
+  override data: Timesheet;
   readonly endpoints = {
     not_agree: `${Endpoints.Timesheet}{id}/not_agree/`,
     evaluate: `${Endpoints.Timesheet}{id}/evaluate/`,

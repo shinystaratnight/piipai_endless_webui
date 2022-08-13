@@ -1,14 +1,15 @@
 import { Form } from '@webui/metadata';
-import { Endpoints, Models } from '../enums';
+import { Endpoints } from '@webui/models';
+import { Models } from '../enums';
 import { IModel, OverrideConfig } from '../interfaces';
 
 export abstract class Model implements IModel {
-  readonly key: Models;
-  readonly label: string;
-  readonly endpoint: Endpoints;
-  readonly translateKey: string;
+  readonly key!: Models;
+  readonly label!: string;
+  readonly endpoint!: Endpoints;
+  readonly translateKey?: string;
 
-  constructor(readonly data = {}) {}
+  constructor(readonly data: unknown = {}) {}
 
   formElement(config = {} as OverrideConfig) {
     const { key, label } = config;

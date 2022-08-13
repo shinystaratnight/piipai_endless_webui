@@ -1,8 +1,9 @@
-import { Endpoints, Models } from '../enums';
+import { Endpoints } from '@webui/models';
+import { Models } from '../enums';
 import { Model } from './model';
 
 export class SkillWorkTypeModel extends Model {
-  readonly key = Models.SkillWorkType;
-  readonly label = 'Skill Activity';
-  readonly endpoint = Endpoints.SkillWorkTypes;
+  override readonly key = Models.SkillWorkType;
+  override readonly label = 'Skill Activity';
+  override readonly endpoint = Endpoints.SkillWorkTypes;
 }

@@ -32,7 +32,11 @@ export class CompanyPurposeService {
     private toastr: ToastService
   ) {}
 
-  public filterModules(widgets: DashboardWidget[]) {
+  public filterModules(widgets?: DashboardWidget[]) {
+    if (!widgets) {
+      return;
+    }
+
     switch (this.purpose) {
       case Purpose.Recruitment:
         return this.filterByEndpoint([Endpoints.CandidateContact], widgets);

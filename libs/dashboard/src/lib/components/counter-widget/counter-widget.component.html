@@ -1,17 +1,17 @@
-<app-dashboard-widget [label]="widgetLabel">
+<webui-dashboard-widget [label]="widgetLabel">
   <ng-container header>
     <div
       class="btn-group range-buttons"
       btnRadioGroup
       [formControl]="dateRangeTypeControl"
     >
-      <app-range-button
+      <webui-range-button
         *ngFor="let option of dateRangeList"
         [active]="dateRangeTypeControl.value === option"
         [dateRange]="option"
         [key]="getLabel(option).key"
         [label]="getLabel(option).value"
-      ></app-range-button>
+      ></webui-range-button>
     </div>
 
     <form
@@ -20,23 +20,23 @@
       class="form"
       (ngSubmit)="onRangeFormSubmit()"
     >
-      <app-range-field
+      <webui-range-field
         [group]="rangeForm"
         class="form__item form__field"
         label="From"
         translateKey="from"
         name="from"
         controlName="from"
-      ></app-range-field>
+      ></webui-range-field>
 
-      <app-range-field
+      <webui-range-field
         [group]="rangeForm"
         class="form__item form__field"
         label="To"
         translateKey="to"
         name="to"
         controlName="to"
-      ></app-range-field>
+      ></webui-range-field>
 
       <button
         class="form__item form__button btn btn-primary"
@@ -88,4 +88,4 @@
 
     <webui-loader *ngIf="loading$ | async" class="loader"></webui-loader>
   </div>
-</app-dashboard-widget>
+</webui-dashboard-widget>

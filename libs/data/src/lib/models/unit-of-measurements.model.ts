@@ -1,9 +1,10 @@
-import { Endpoints, Models } from '../enums';
+import { Endpoints } from '@webui/models';
+import { Models } from '../enums';
 import { Model } from './model';
 
 export class UnitOfMeasurementsModel extends Model {
-  readonly endpoint = Endpoints.UnitOfMeasurements;
-  readonly label = 'Unit of measurements';
-  readonly key = Models.UnitOfMeasurements;
+  override readonly endpoint = Endpoints.UnitOfMeasurements;
+  override readonly label = 'Unit of measurements';
+  override readonly key = Models.UnitOfMeasurements;
 }
 

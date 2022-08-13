@@ -13,25 +13,25 @@ import { FormGroup, FormControl } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
 export interface WidgetItem {
-  widgetId: string;
-  id?: string;
-  name: string;
-  active: boolean;
+  widgetId: string | null;
+  id: string | null;
+  name?: string;
+  active?: boolean;
   translateKey: string;
 }
 
 @Component({
-  selector: 'app-dashboard-menu',
+  selector: 'webui-dashboard-menu',
   templateUrl: './dashboard-menu.component.html',
   styleUrls: ['./dashboard-menu.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DashboardMenuComponent implements OnInit, OnChanges, OnDestroy {
-  @Input() widgets: WidgetItem[];
+  @Input() widgets!: WidgetItem[];
   @Output() changed: EventEmitter<WidgetItem> = new EventEmitter();
 
-  form: FormGroup;
-  private subscription: Subscription;
+  form!: FormGroup;
+  private subscription!: Subscription;
 
   ngOnInit() {
     this.updateForm();
@@ -47,26 +47,34 @@ export class DashboardMenuComponent implements OnInit, OnChanges, OnDestroy {
     this.subscription.unsubscribe();
   }
 
+  getFieldValue(name: string | null): boolean {
+    if (!name) {
+      return false;
+    }
+
+    return this.form.get(name)?.value as boolean;
+  }
+
   private updateForm() {
     if (this.subscription) {
       this.subscription.unsubscribe();
     }
 
-    const form = {};
+    const form: Record<string, any> = {};
     this.widgets.forEach((widget) => {
-      form[widget.widgetId] = new FormControl(widget.active);
+      form[widget.widgetId as string] = new FormControl(widget.active);
     });
 
     this.form = new FormGroup(form);
     this.subscription = this.form.valueChanges.subscribe((value) => {
       const changedWidget = this.widgets.find(
-        (widget) => value[widget.widgetId] !== widget.active
+        (widget) => value[widget.widgetId as string] !== widget.active
       );
 
       if (changedWidget) {
         this.changed.emit({
           ...changedWidget,
-          active: value[changedWidget.widgetId]
+          active: value[changedWidget.widgetId as string]
         });
       }
     });
