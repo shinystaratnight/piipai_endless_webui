@@ -4,7 +4,7 @@ import { TranslateHelperService } from '@webui/core';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-root',
+  selector: 'webui-root',
   template: `
     <img
       *ngIf="loader"
@@ -23,7 +23,7 @@ import { Subscription } from 'rxjs';
 })
 export class AppComponent implements OnInit, OnDestroy {
   loader = true;
-  langSubscription: Subscription;
+  langSubscription!: Subscription;
 
   constructor(
     private translate: TranslateService,
