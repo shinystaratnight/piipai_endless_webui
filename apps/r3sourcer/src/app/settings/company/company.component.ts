@@ -10,47 +10,48 @@ import {
   EventService,
   EventType,
 } from '@webui/core';
-import { Field, Purpose } from '@webui/data';
+import { Purpose } from '@webui/data';
 
 import { meta, purposeConfig } from './company.meta';
 import { SettingsService } from '../settings.service';
 import { Time } from '@webui/time';
+import { Field } from '@webui/metadata';
 
 @Component({
-  selector: 'app-company',
+  selector: 'webui-company',
   templateUrl: 'company.component.html',
 })
 export class CompanyComponent implements OnInit, OnDestroy {
   public endpoint = '/company_settings/';
   public hiddenFields = {
-    elements: [],
-    keys: [],
-    observers: [],
+    elements: <any[]>[],
+    keys: <any[]>[],
+    observers: <any[]>[],
   };
 
   public errors: any;
   public response: any;
 
-  public currentTheme: string;
-  public currentFont: string;
+  public currentTheme!: string;
+  public currentFont!: string;
 
-  public savedTheme: string;
-  public savedFont: string;
-  public saveProcess: boolean;
+  public savedTheme!: string;
+  public savedFont!: string;
+  public saveProcess!: boolean;
 
-  public config;
-  public purposeConfig: any[];
-  public formId: number;
+  public config!: any;
+  public purposeConfig!: any[];
+  public formId!: number;
   public form: any;
   public companyData: any;
 
   public companySettingsData: any;
-  public showWorkflow: boolean;
+  public showWorkflow!: boolean;
   public workflowForm: any;
 
-  public company: string;
+  public company!: string;
 
-  public urlSubscription: Subscription;
+  public urlSubscription!: Subscription;
 
   constructor(
     private gfs: GenericFormService,
@@ -85,13 +86,13 @@ export class CompanyComponent implements OnInit, OnDestroy {
   }
 
   public getPurpose(id: string) {
-    this.purpose.getPurpose(id).subscribe((purpose: Purpose) => {
+    this.purpose.getPurpose(id).subscribe((purpose: Purpose | null) => {
       this.companyData = { purpose };
       this.purposeConfig = [{ ...purposeConfig, value: purpose }];
     });
   }
 
-  public changePurpose(event) {
+  public changePurpose(event: any) {
     if (event.type === 'change') {
       this.purpose.changePurpose(this.company, event.value).subscribe(() => {
         this.eventService.emit(EventType.PurposeChanged);
@@ -128,11 +129,11 @@ export class CompanyComponent implements OnInit, OnDestroy {
     });
   }
 
-  public changeWorkflowSaving(value) {
+  public changeWorkflowSaving(value: any) {
     this.workflowForm = value;
   }
 
-  public observeFields(fields: any[], observers) {
+  public observeFields(fields: any[], observers: any[]) {
     fields.forEach((field: any) => {
       if (field instanceof Object) {
         const keys = Object.keys(field);
@@ -157,19 +158,19 @@ export class CompanyComponent implements OnInit, OnDestroy {
 
   public resetSettings() {
     const body = document.body;
-    body.parentElement.classList.remove(this.currentTheme);
+    body.parentElement?.classList.remove(this.currentTheme);
     if (this.savedTheme) {
-      body.parentElement.classList.add(`${this.savedTheme}-theme`);
+      body.parentElement?.classList.add(`${this.savedTheme}-theme`);
     }
     if (this.savedFont) {
       const font = `${this.savedFont}, sans-serif`;
       body.style.fontFamily = font;
     } else {
-      body.style.fontFamily = null;
+      body.style.fontFamily = '';
     }
   }
 
-  public submitForm(data) {
+  public submitForm(data: any) {
     Object.assign(data.company_settings, this.workflowForm);
     const keys = Object.keys(data.invoice_rule);
     keys.forEach((key) => {
@@ -202,7 +203,7 @@ export class CompanyComponent implements OnInit, OnDestroy {
     );
   }
 
-  public fillingForm(metadata, data) {
+  public fillingForm(metadata: any[], data: any) {
     metadata.forEach((el) => {
       if (el.key) {
         this.getValueOfData(data, el.key, el);
@@ -212,9 +213,9 @@ export class CompanyComponent implements OnInit, OnDestroy {
     });
   }
 
-  public getValueOfData(data, key, obj) {
+  public getValueOfData(data: any, key: string, obj: any) {
     const keys = key.split('.');
-    const prop = keys.shift();
+    const prop: string = keys.shift() as string;
     if (keys.length === 0) {
       if (data) {
         if (key.includes('period_zero_reference')) {
@@ -236,12 +237,12 @@ export class CompanyComponent implements OnInit, OnDestroy {
     }
   }
 
-  public eventHandler(e) {
+  public eventHandler(e: any) {
     if (e.type === 'change' && e.el.type === 'radio' && e.value) {
       const body = document.body;
       if (e.el.templateOptions.type === 'color') {
-        body.parentElement.classList.remove(this.currentTheme);
-        body.parentElement.classList.add(`${e.value}-theme`);
+        body.parentElement?.classList.remove(this.currentTheme);
+        body.parentElement?.classList.add(`${e.value}-theme`);
         this.currentTheme = `${e.value}-theme`;
       } else if (e.el.templateOptions.type === 'text') {
         const font = `${e.value}, sans-serif`;

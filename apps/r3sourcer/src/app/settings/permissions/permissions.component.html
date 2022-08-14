@@ -1,6 +1,7 @@
 <div class="permissions">
-  <ngb-tabset type="pills" (tabChange)="beforeChange()">
-    <ngb-tab id="group" title="Groups">
+  <ul ngbNav type="pills" (tabChange)="beforeChange()">
+    <li [ngbNavItem]="'group'">
+      <a ngbNavLink>Groups</a>
       <ng-template ngbTabContent>
         <div class="permission-block-add form-inline">
           <input type="text" class="permission-input form-control mr-2" [(ngModel)]="name">
@@ -13,8 +14,9 @@
           </ng-container>
         </div>
       </ng-template>
-    </ngb-tab>
-    <ngb-tab id="user" title="Users">
+    </li>
+    <li [ngbNavItem]="'user'">
+      <a ngbNavLink>Users</a>
       <ng-template ngbTabContent>
         <div class="permission-wrapper">
           <ng-container *ngTemplateOutlet="list; context: {title: 'Users', list: users, param: 'name', element: 'user', type: 'list'}"></ng-container>
@@ -24,8 +26,8 @@
           </ng-container>
         </div>
       </ng-template>
-    </ngb-tab>
-  </ngb-tabset>
+    </li>
+  </ul>
 </div>
 
 <ng-template #list let-t="title" let-l="list" let-p="param" let-a="actions" let-type="type" let-e="element">

@@ -6,38 +6,38 @@ import { finalize } from 'rxjs/operators';
 
 import { meta, payrollAccounts } from './myob.meta';
 import { GenericFormService } from '@webui/dynamic-form';
-import { Field } from '@webui/data';
 import { SettingsService } from '../settings.service';
 import { Time } from '@webui/time';
+import { Field } from '@webui/metadata';
 
 @Component({
-  selector: 'app-myob',
+  selector: 'webui-myob',
   templateUrl: './myob.component.html',
   styleUrls: ['./myob.component.scss'],
 })
 export class MyobComponent implements OnInit, OnDestroy {
   public endpoint = '/company_settings/';
-  public pageUrl: string;
+  public pageUrl!: string;
   public errors: any;
   public response: any;
-  public config;
-  public saveProcess: boolean;
+  public config: any;
+  public saveProcess!: boolean;
 
   public companyFile: any;
   public payrollAccounts: any;
-  public accounts: any[];
+  public accounts!: any[];
   public MYOBSettings: any;
   public error: any;
-  public viewMode: boolean;
+  public viewMode!: boolean;
 
-  public keysOfPayroll: string[];
-  public authData: any[];
-  public myobApiKey: string;
-  public connectProcess: boolean;
+  public keysOfPayroll!: string[];
+  public authData!: any[];
+  public myobApiKey!: string;
+  public connectProcess!: boolean;
   public connectButton: any;
 
-  public querySubscription: Subscription;
-  public urlSubscription: Subscription;
+  public querySubscription!: Subscription;
+  public urlSubscription!: Subscription;
 
   constructor(
     private gfs: GenericFormService,
@@ -90,7 +90,7 @@ export class MyobComponent implements OnInit, OnDestroy {
     this.querySubscription.unsubscribe();
   }
 
-  public getMyobApiKey(callback) {
+  public getMyobApiKey(callback: () => void) {
     if (this.myobApiKey) {
       if (callback) {
         callback.apply(this);
@@ -111,7 +111,7 @@ export class MyobComponent implements OnInit, OnDestroy {
     );
   }
 
-  public parseMYOBSettings(settings) {
+  public parseMYOBSettings(settings: any) {
     settings = JSON.parse(JSON.stringify(settings));
 
     Object.keys(this.payrollAccounts).forEach((el) => {
@@ -147,7 +147,7 @@ export class MyobComponent implements OnInit, OnDestroy {
     }
   }
 
-  public eventHandler(e) {
+  public eventHandler(e: any) {
     if (e.type === 'chenge' && e.list) {
       this.getCompanyFiles();
       this.authData = e.list;
@@ -200,7 +200,7 @@ export class MyobComponent implements OnInit, OnDestroy {
       .join('.')}`;
   }
 
-  public testCompanyFile(file) {
+  public testCompanyFile(file: any) {
     const url = '/company_settings/company_files/check/';
     const body = {
       id: file.cf_id,
@@ -224,7 +224,7 @@ export class MyobComponent implements OnInit, OnDestroy {
     this.gfs.getAll(url).subscribe(
       (res: any) => {
         this.companyFile.list = res.company_files;
-        this.companyFile.list.forEach((el) => {
+        this.companyFile.list.forEach((el: any) => {
           el.username = '';
           el.password = '';
         });
@@ -247,7 +247,7 @@ export class MyobComponent implements OnInit, OnDestroy {
   }
 
   public refreshAccounts() {
-    const companyFile = this.companyFile.list.find((el) => {
+    const companyFile = this.companyFile.list.find((el: any) => {
       return el.id === this.payrollAccounts['invoice_company_file'].value;
     });
 
@@ -258,7 +258,7 @@ export class MyobComponent implements OnInit, OnDestroy {
       this.gfs.getAll(url).subscribe(
         (res: any) => {
           const accounts = res.filter(
-            (el) => el.type.toLowerCase() === 'income'
+            (el: any) => el.type.toLowerCase() === 'income'
           );
 
           this.parseAccounts(
@@ -289,7 +289,7 @@ export class MyobComponent implements OnInit, OnDestroy {
     );
   }
 
-  public updateMetadata(data, key) {
+  public updateMetadata(data: any[], key: string) {
     const element = this.getElementByKey(data, key);
     data.forEach((el, i) => {
       if (el.key === key) {
@@ -301,7 +301,7 @@ export class MyobComponent implements OnInit, OnDestroy {
   }
 
   public getAuthData() {
-    const obj = this.getElementByKey(this.config, 'auth_data_list');
+    const obj = this.getElementByKey(this.config, 'auth_data_list') as Field;
 
     this.gfs
       .getAll('/company_settings/auth_data/')
@@ -326,14 +326,14 @@ export class MyobComponent implements OnInit, OnDestroy {
     value?: string
   ): void {
     const url = '/company_settings/company_files/';
-    const companyFile = this.companyFile.list.find((el) => el.id === id);
+    const companyFile = this.companyFile.list.find((el: any) => el.id === id);
 
     if (companyFile) {
       this.gfs
         .getAll(`${url}${companyFile.cf_id}/accounts/`)
         .subscribe((res: any) => {
           const accounts = res.myob_accounts.filter(
-            (el) => el.type.toLowerCase() === 'income'
+            (el: any) => el.type.toLowerCase() === 'income'
           );
 
           this.parseAccounts(accounts, key, value);
@@ -364,7 +364,7 @@ export class MyobComponent implements OnInit, OnDestroy {
     this.parseMYOBSettings(this.MYOBSettings);
   }
 
-  public updateButton(type) {
+  public updateButton(type: string) {
     this.connectProcess = false;
     if (type === 'success') {
       this.connectButton.text = 'Success';
@@ -379,17 +379,17 @@ export class MyobComponent implements OnInit, OnDestroy {
     }, 3500);
   }
 
-  public sendForm(form) {
+  public sendForm(form: any) {
     if (this.viewMode) {
       return;
     }
 
     const url = '/company_settings/myob_settings/';
-    const data = {};
+    const data: Record<string, any> = {};
     Object.keys(form).forEach((key) => {
       if (key.indexOf('company_file') > -1) {
         const file = this.companyFile.list.find(
-          (item) => item.id === form[key]
+          (item: any) => item.id === form[key]
         );
         if (file) {
           data[key] = {
@@ -418,9 +418,9 @@ export class MyobComponent implements OnInit, OnDestroy {
     );
   }
 
-  public getValueOfData(data, key: string, obj: Field, param?: string): void {
+  public getValueOfData(data: any, key: string, obj: Field, param?: keyof Field): void {
     const keys = key.split('.');
-    const prop = keys.shift();
+    const prop: string = keys.shift() as string;
     if (keys.length === 0) {
       if (data) {
         if (param) {
@@ -440,8 +440,8 @@ export class MyobComponent implements OnInit, OnDestroy {
     }
   }
 
-  public getElementByKey(metadata, key) {
-    let result;
+  public getElementByKey(metadata: any[], key: string): Field | undefined {
+    let result: Field | undefined;
     metadata.forEach((el) => {
       if (el.key === key) {
         result = el;
@@ -452,7 +452,7 @@ export class MyobComponent implements OnInit, OnDestroy {
     return result;
   }
 
-  public parseError(err) {
+  public parseError(err: any) {
     if (err && err.errors) {
       Object.keys(this.payrollAccounts).forEach((el) => {
         if (err.errors[el]) {

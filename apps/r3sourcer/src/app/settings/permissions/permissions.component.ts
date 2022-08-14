@@ -25,35 +25,35 @@ export interface Group {
 }
 
 @Component({
-  selector: 'app-permissions',
+  selector: 'webui-permissions',
   templateUrl: 'permissions.component.html',
   styleUrls: ['./permissions.component.scss']
 })
 export class PermissionsComponent implements OnInit, OnDestroy {
-  public permissionsList: Permission[];
-  public targetPermissions: Permission[];
-  public cashPermissions: Permission[];
+  public permissionsList!: Permission[];
+  public targetPermissions!: Permission[];
+  public cashPermissions!: Permission[];
 
-  public users: User[];
-  public cashUsers: User[];
+  public users!: User[];
+  public cashUsers!: User[];
 
-  public groups: Group[];
-  public userGroups: Group[];
-  public targetGroups: Group[];
-  public cashGroups: Group[];
-  public cashUserGroups: Group[];
+  public groups!: Group[];
+  public userGroups!: Group[];
+  public targetGroups!: Group[];
+  public cashGroups!: Group[];
+  public cashUserGroups!: Group[];
 
-  public targetId: string;
+  public targetId?: string;
 
-  public search = {
+  public search: Record<string, string> = {
     list: '',
     permission: '',
     group: ''
   };
 
-  public name: string;
+  public name!: string;
 
-  public urlSubscription: Subscription;
+  public urlSubscription!: Subscription;
 
   constructor(
     private service: PermissionsService,
@@ -91,7 +91,7 @@ export class PermissionsComponent implements OnInit, OnDestroy {
   public getPermissions(): void {
     this.service.getAllPermissions().subscribe((res: any) => {
       this.cashPermissions = res.permission_list;
-      this.permissionsList = [].concat(this.cashPermissions);
+      this.permissionsList =  Array.from(this.cashPermissions);
     });
   }
 
@@ -117,23 +117,23 @@ export class PermissionsComponent implements OnInit, OnDestroy {
     if (permission.active) {
       if (type === 'user') {
         this.service
-          .revokePermissionsOfTheUser(this.targetId, [permission.id])
+          .revokePermissionsOfTheUser(this.targetId as string, [permission.id])
           .subscribe((res: any) => (permission.active = false));
       }
       if (type === 'group') {
         this.service
-          .revokePermissionsOfTheGroup(this.targetId, [permission.id])
+          .revokePermissionsOfTheGroup(this.targetId as string, [permission.id])
           .subscribe((res: any) => (permission.active = false));
       }
     } else {
       if (type === 'user') {
         this.service
-          .addPermissionsOnTheUser(this.targetId, [permission.id])
+          .addPermissionsOnTheUser(this.targetId as string, [permission.id])
           .subscribe((res: any) => (permission.active = true));
       }
       if (type === 'group') {
         this.service
-          .addPermissionsOnTheGroup(this.targetId, [permission.id])
+          .addPermissionsOnTheGroup(this.targetId as string, [permission.id])
           .subscribe((res: any) => (permission.active = true));
       }
     }
@@ -142,13 +142,13 @@ export class PermissionsComponent implements OnInit, OnDestroy {
   public toggleGroup(group: Group): void {
     if (!group.active) {
       this.service
-        .addUserOnTheGroup(group.id, this.targetId)
+        .addUserOnTheGroup(group.id, this.targetId as string)
         .subscribe((res: any) => {
           group.active = true;
         });
     } else if (group.active) {
       this.service
-        .removeUserOnTheGroup(group.id, this.targetId)
+        .removeUserOnTheGroup(group.id, this.targetId as string)
         .subscribe((res: any) => {
           group.active = false;
         });
@@ -189,7 +189,7 @@ export class PermissionsComponent implements OnInit, OnDestroy {
     }
   }
 
-  public getGroupsOfUser(id) {
+  public getGroupsOfUser(id: string) {
     combineLatest([
       this.service.getAvailableGroupsOnTheUser(id),
       this.service.getGroupsOnTheUser(id)
@@ -212,7 +212,7 @@ export class PermissionsComponent implements OnInit, OnDestroy {
     });
   }
 
-  public filter(value, type, target, element) {
+  public filter(value: any, type: any, target: any, element: any) {
     type = type === 'list' ? element : type;
     const source =
       type === 'user'
@@ -239,15 +239,15 @@ export class PermissionsComponent implements OnInit, OnDestroy {
 
   public beforeChange(): void {
     this.targetId = undefined;
-    this.search.list = '';
-    this.search.group = '';
-    this.search.permission = '';
+    this.search['list'] = '';
+    this.search['group'] = '';
+    this.search['permission'] = '';
     this.targetPermissions = [];
     this.targetGroups = [];
     this.groups.length = 0;
     this.permissionsList.length = 0;
-    this.groups = [].concat(this.cashGroups);
-    this.permissionsList = [].concat(this.cashPermissions);
+    this.groups = Array.from(this.cashGroups);
+    this.permissionsList = Array.from(this.cashPermissions);
     this.resetData(this.groups);
     this.resetData(this.permissionsList);
   }
@@ -258,11 +258,11 @@ export class PermissionsComponent implements OnInit, OnDestroy {
     });
   }
 
-  public selectAll(type) {
+  public selectAll(type: 'user' | 'group') {
     if (type === 'user') {
       this.service
         .addPermissionsOnTheUser(
-          this.targetId,
+          this.targetId as string,
           this.permissionsList.map((el) => el.id)
         )
         .subscribe((res: any) =>
@@ -272,7 +272,7 @@ export class PermissionsComponent implements OnInit, OnDestroy {
     if (type === 'group') {
       this.service
         .addPermissionsOnTheGroup(
-          this.targetId,
+          this.targetId as string,
           this.permissionsList.map((el) => el.id)
         )
         .subscribe((res: any) =>
@@ -281,11 +281,11 @@ export class PermissionsComponent implements OnInit, OnDestroy {
     }
   }
 
-  public removeAll(type) {
+  public removeAll(type: 'user' | 'group') {
     if (type === 'user') {
       this.service
         .revokePermissionsOfTheUser(
-          this.targetId,
+          this.targetId as string,
           this.permissionsList.map((el) => el.id)
         )
         .subscribe((res: any) =>
@@ -295,7 +295,7 @@ export class PermissionsComponent implements OnInit, OnDestroy {
     if (type === 'group') {
       this.service
         .revokePermissionsOfTheGroup(
-          this.targetId,
+          this.targetId as string,
           this.permissionsList.map((el) => el.id)
         )
         .subscribe((res: any) =>
