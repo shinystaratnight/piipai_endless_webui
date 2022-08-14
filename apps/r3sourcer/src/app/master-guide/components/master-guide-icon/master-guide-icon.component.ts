@@ -1,13 +1,13 @@
 import { Component, ChangeDetectionStrategy, Output, EventEmitter, Input } from '@angular/core';
 
 @Component({
-  selector: 'app-master-guide-icon',
+  selector: 'webui-master-guide-icon',
   templateUrl: './master-guide-icon.component.html',
   styleUrls: ['./master-guide-icon.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MasterGuideIconComponent {
-  @Input() inactive: boolean;
+  @Input() inactive!: boolean;
 
   @Output() toggle: EventEmitter<any> = new EventEmitter();
 

@@ -2,13 +2,14 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { catchError, map } from 'rxjs/operators';
 
-import { Endpoints, Purpose } from '@webui/data';
+import { Purpose } from '@webui/data';
 import {
   ErrorsService,
   CompanyPurposeService,
   SiteSettingsService
 } from '@webui/core';
 import { GuideProps } from '../interfaces';
+import { Endpoints } from '@webui/models';
 
 @Injectable()
 export class MasterGuideService {
