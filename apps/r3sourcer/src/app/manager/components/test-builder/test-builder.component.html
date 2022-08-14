@@ -31,12 +31,12 @@
           </webui-dynamic-form>
 
           <div class="images" *ngIf="question.id">
-            <app-image-uploader
+            <webui-image-uploader
               [loading]="pictureLoading.get(question.id)"
               [source]="pictures.get(question.id)"
               (remove)="onRemovePicture($event, question.id)"
               (images)="onUpload($event, question.id)"
-            ></app-image-uploader>
+            ></webui-image-uploader>
           </div>
 
           <div
@@ -63,7 +63,7 @@
 
               <webui-dynamic-form
                 [config]="answer"
-                (submitForm)="saveAnswer($event, index, question.id, getId(answer))"
+                (submitForm)="saveAnswer($event, index, question.id, !!getId(answer))"
               ></webui-dynamic-form>
             </div>
 

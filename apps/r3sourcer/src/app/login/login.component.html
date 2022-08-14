@@ -20,9 +20,9 @@
           [errors]="error"
           [checkEmail]="true"
           [showResponse]="true"
-          (redirect)="redirectHandler($event)"
+          (redirect)="redirectHandler()"
           (responseForm)="responseHandler($event)"
-          (errorForm)="errorHandler($event)"
+          (errorForm)="errorHandler()"
           (event)="formEvent($event)"
         >
           <div class="links form-group">
@@ -54,7 +54,7 @@
   <webui-site-loader></webui-site-loader>
 </ng-container>
 
-<!-- <app-toast></app-toast> -->
+<!-- <webui-toast></webui-toast> -->
 
 <ng-template #modal let-modal>
   <div class="modal-content-wrapper">

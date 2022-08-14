@@ -58,7 +58,7 @@
             "
             [endpoint]="pageData.endpoint"
             [id]="pageData.pathData.id"
-            [edit]="pageData.pathData.postfix"
+            [edit]="!!pageData.pathData.postfix"
             [mode]="formMode"
             [errors]="errors"
             [data]="additionalData"
@@ -66,8 +66,8 @@
             [metadataQuery]="pageData.pathData.metadataQuery"
             (event)="formEvent($event)"
             (modeEvent)="modeEvent($event)"
-            (errorForm)="formError($event)"
-            (permissionError)="permissionErrorHandler($event)"
+            (errorForm)="formError()"
+            (permissionError)="permissionErrorHandler()"
             (str)="changeFormLabel($event)"
           >
             <div class="d-flex">
@@ -137,13 +137,13 @@
           </webui-generic-form>
         </div>
         <div class="form-content" *ngIf="pageData.endpoint === '/core/forms/'">
-          <app-form-builder
+          <webui-form-builder
             [path]="pageData.pathData.path"
             [endpoint]="pageData.endpoint"
             [id]="pageData.pathData.id"
             (str)="changeFormLabel($event)"
           >
-          </app-form-builder>
+          </webui-form-builder>
         </div>
 
         <div
@@ -154,14 +154,14 @@
               pageData.pathData.id)
           "
         >
-          <app-test-builder [testData]="acceptenceTestData">
+          <webui-test-builder [testData]="acceptenceTestData">
             <webui-generic-form
               [endpoint]="pageData.endpoint"
               [id]="pageData.pathData.id"
               [path]="pageData.pathData.path"
               [mode]="formMode"
               (modeEvent)="modeEvent($event)"
-              (errorForm)="formError($event)"
+              (errorForm)="formError()"
               (event)="formEvent($event)"
               (str)="setTestData($event)"
             >
@@ -215,7 +215,7 @@
                 </button>
               </div>
             </webui-generic-form>
-          </app-test-builder>
+          </webui-test-builder>
         </div>
       </div>
 
@@ -277,7 +277,7 @@
         </div>
       </ng-container>
 
-      <app-map *ngSwitchCase="'map'"></app-map>
+      <webui-map *ngSwitchCase="'map'"></webui-map>
     </div>
   </ng-container>
 
@@ -346,7 +346,7 @@
     </div>
   </ng-template>
 
-  <app-master-guide *ngIf="user.data.is_primary"></app-master-guide>
+  <app-master-guide *ngIf="user?.data?.is_primary"></app-master-guide>
 </ng-container>
 
 <webui-site-loader *ngIf="loader"></webui-site-loader>

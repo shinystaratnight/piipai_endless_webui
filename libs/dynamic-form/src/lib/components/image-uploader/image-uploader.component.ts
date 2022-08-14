@@ -14,9 +14,9 @@ import { Observable, Subscriber, combineLatest } from 'rxjs';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ImageUploaderComponent {
-  @Input() source: Array<{ src: string; id: string }> = [];
+  @Input() source?: Array<{ src: string; id: string }> = [];
   @Input() count = 2;
-  @Input() loading!: boolean;
+  @Input() loading?: boolean;
   @Output() images: EventEmitter<string[]> = new EventEmitter();
   @Output() remove: EventEmitter<string> = new EventEmitter();
 
@@ -25,7 +25,7 @@ export class ImageUploaderComponent {
     const observables: Observable<any>[] = [];
 
     Array.from(files)
-      .slice(0, this.count - this.source.length)
+      .slice(0, this.count - (this.source as Array<{ src: string; id: string }>).length)
       .forEach((file: File) => {
         const reader = new FileReader();
 

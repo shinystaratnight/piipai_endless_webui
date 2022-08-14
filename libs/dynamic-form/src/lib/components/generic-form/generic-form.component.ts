@@ -83,7 +83,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
   @Input()
   public edit?: boolean;
   @Input()
-  public mode!: FormMode;
+  public mode!: FormMode | null;
   @Input()
   public delay!: boolean;
   @Input()
@@ -91,7 +91,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
   @Input()
   public path!: string;
   @Input()
-  public checkEmail!: string;
+  public checkEmail?: boolean;
   @Input()
   public title!: string;
   @Input()
@@ -266,7 +266,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
     }
 
     if (!this.formId && this.formId !== 0) {
-      this.formId = this.formService.registerForm(this.endpoint, this.mode);
+      this.formId = this.formService.registerForm(this.endpoint, this.mode as FormMode);
 
       this.event.emit({
         type: 'formRegistration',
@@ -289,7 +289,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
         this.resetData(this.errors);
         this.resetData(this.response);
 
-        this.toggleModeMetadata(this.mode);
+        this.toggleModeMetadata(this.mode as FormMode);
         this.formService.getForm(this.formId).setErrors(this.errors);
       }
     });
@@ -342,7 +342,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
 
   public generateActionToSetProps(): (el: Field) => void {
     this.formData = new BehaviorSubject({ data: {} });
-    this.modeBehaviorSubject = new BehaviorSubject<FormMode>(this.mode);
+    this.modeBehaviorSubject = new BehaviorSubject<FormMode>(this.mode as FormMode);
 
     this.subscriptions.push(
       this.timelineService.action$.subscribe((timeline) =>

@@ -5,7 +5,7 @@ import { GenericFormService } from '@webui/dynamic-form';
 import { ToastService, MessageType } from '@webui/core';
 
 @Component({
-  selector: 'app-fill-in',
+  selector: 'webui-fill-in',
   templateUrl: './fill-in.component.html',
   styleUrls: ['./fill-in.component.scss']
 })
@@ -13,12 +13,12 @@ import { ToastService, MessageType } from '@webui/core';
 export class FillInComponent implements OnInit {
 
   @Input()
-  public endpoint: string;
+  public endpoint!: string;
 
   @Input()
   public pageData: any;
 
-  public meta: any[];
+  public meta!: any[];
   public data: any;
   public err: any;
 
@@ -47,11 +47,11 @@ export class FillInComponent implements OnInit {
     ];
   }
 
-  public checkedObjects(e) {
-    const shifts = e.filters.keys.date.value.filter((el) => el.checked);
+  public checkedObjects(e: any) {
+    const shifts = e.filters.keys.date.value.filter((el: any) => el.checked);
     this.data = {
       candidates: e.checkedData,
-      shifts: shifts.map((el) => el.data.id)
+      shifts: shifts.map((el: any) => el.data.id)
     };
   }
 

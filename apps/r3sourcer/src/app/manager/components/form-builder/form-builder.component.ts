@@ -6,33 +6,33 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { GenericFormService } from '@webui/dynamic-form';
 
 @Component({
-  selector: 'app-form-builder',
+  selector: 'webui-form-builder',
   templateUrl: 'form-builder.component.html',
 })
 export class FormBuilderComponent {
   @Input()
-  public endpoint: string;
+  public endpoint!: string;
 
   @Input()
-  public id: string;
+  public id?: string | null;
 
   @Input()
-  public path: string;
+  public path!: string;
 
   @ViewChild('modal')
-  public modalTemplate: ElementRef;
+  public modalTemplate!: ElementRef;
 
   @Output()
   public str: EventEmitter<any> = new EventEmitter();
 
-  public label: string;
-  public previewLink: string;
+  public label!: string;
+  public previewLink!: string;
   public data: any;
   public error: any;
   public config: any;
-  public modalRef: NgbModalRef;
+  public modalRef!: NgbModalRef;
 
-  public links: any[];
+  public links!: any[];
   public domain = location.origin;
   public formLink: string;
 
@@ -69,7 +69,7 @@ export class FormBuilderComponent {
     }
   }
 
-  public eventForm(e) {
+  public eventForm(e: any) {
     if (e && e.data) {
       this.label = e.data.__str__;
       this.links = e.data.company_links;
@@ -98,7 +98,7 @@ export class FormBuilderComponent {
     return false;
   }
 
-  public setFormConfig(config) {
+  public setFormConfig(config: any) {
     this.config = config;
   }
 

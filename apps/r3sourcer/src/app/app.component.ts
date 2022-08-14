@@ -18,7 +18,7 @@ import { Subscription } from 'rxjs';
       (activate)="loader = false"
       (deactivate)="loader = true"
     ></router-outlet>
-    <app-toast></app-toast>
+    <webui-toast></webui-toast>
   `
 })
 export class AppComponent implements OnInit, OnDestroy {

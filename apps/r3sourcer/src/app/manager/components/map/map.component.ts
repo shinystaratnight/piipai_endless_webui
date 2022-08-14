@@ -1,32 +1,31 @@
 import { Component, OnInit, HostListener, ElementRef, ViewChild, OnDestroy } from '@angular/core';
 import { MapService, Marker } from './map.service';
 
-import { FilterService } from '@webui/dynamic-form';
-import { FilterEvent } from 'libs/dynamic-form/src/lib/interfaces';
+import { FilterEvent, FilterService } from '@webui/dynamic-form';
 
 @Component({
-  selector: 'app-map',
+  selector: 'webui-map',
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.scss'],
 })
 export class MapComponent implements OnInit, OnDestroy {
-  @ViewChild('filterBlock') public elementRef: ElementRef;
+  @ViewChild('filterBlock') public elementRef!: ElementRef;
 
-  public config: {
+  public config!: {
     list: string;
     filters?: any[];
   };
 
-  public filtersOfList: any[];
-  public markers: Marker[];
+  public filtersOfList!: any[];
+  public markers?: Marker[];
 
   public currentPosition: any;
-  public currentQuery: string;
+  public currentQuery!: string;
   public filterBlockHidden = true;
-  public preloader: boolean;
+  public preloader!: boolean;
 
   public icons: any;
-  public types: string[];
+  public types!: string[];
 
   public defaultLatitude = -33.865143;
   public defaultlongitude = 151.2099;
@@ -91,7 +90,7 @@ export class MapComponent implements OnInit, OnDestroy {
       this.icons[el].exist = false;
     });
 
-    this.mapService.getPositions(query).subscribe((res: Marker[]) => {
+    this.mapService.getPositions(query).subscribe((res) => {
       this.markers = res.map((el) => {
         el.latitude = parseFloat(<any>el.latitude);
         el.longitude = parseFloat(<any>el.longitude);
@@ -141,16 +140,16 @@ export class MapComponent implements OnInit, OnDestroy {
     );
   }
 
-  public trackByFn(index, item) {
+  public trackByFn(index: number, item: any) {
     return item.latitude + item.longitude;
   }
 
-  public mapReady(e) {
+  public mapReady() {
     this.preloader = false;
   }
 
   @HostListener('document:click', ['$event'])
-  public handleClick(event) {
+  public handleClick(event: MouseEvent) {
     let clickedComponent = event.target;
     let inside = false;
     do {
@@ -161,7 +160,7 @@ export class MapComponent implements OnInit, OnDestroy {
           this.filterBlockHidden = false;
         }
       }
-      clickedComponent = clickedComponent.parentNode;
+      clickedComponent = (clickedComponent as HTMLElement).parentNode;
     } while (clickedComponent);
     if (!inside) {
       this.filterBlockHidden = true;

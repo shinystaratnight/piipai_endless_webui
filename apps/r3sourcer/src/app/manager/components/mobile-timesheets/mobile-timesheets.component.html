@@ -1,7 +1,8 @@
 <div class="mobile-timesheets">
-  <ngb-tabset>
-    <ngb-tab title="Unapproved timesheets">
-      <ng-template ngbTabContent>
+  <ul ngbNav>
+    <li [ngbNavItem]="1">
+      <a ngbNavLink>Unapproved timesheets</a>
+      <ng-template ngbNavContent>
         <webui-generic-list
           [clientId]="clientId"
           [inForm]="true"
@@ -9,9 +10,10 @@
           endpoint="/hr/timesheets/unapproved/">
         </webui-generic-list>
       </ng-template>
-    </ngb-tab>
-    <ngb-tab title="All timesheets">
-      <ng-template ngbTabContent>
+    </li>
+    <li [ngbNavItem]="2">
+      <a ngbNavLink>All timesheets</a>
+      <ng-template ngbNavContent>
         <webui-generic-list
           [clientId]="clientId"
           [inForm]="true"
@@ -19,6 +21,6 @@
           endpoint="/hr/timesheets/history/">
         </webui-generic-list>
       </ng-template>
-    </ngb-tab>
-  </ngb-tabset>
+    </li>
+  </ul>
 </div>

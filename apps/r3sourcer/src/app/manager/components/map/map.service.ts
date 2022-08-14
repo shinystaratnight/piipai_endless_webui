@@ -97,7 +97,7 @@ export class MapService {
 
   public getPositions(query: string = '') {
     return this.http
-      .get(this.endpoint + query)
+      .get<Marker[]>(this.endpoint + query)
       .pipe(
         catchError((error: any) => this.errors.handleError(error))
       );

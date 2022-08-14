@@ -20,9 +20,10 @@ import {
   fillingForm,
   getElementFromMetadata,
   PassTestModalComponent,
-  PassTestModalConfig
+  PassTestModalConfig,
+  DynamicFormComponent,
+  FormMode
 } from '@webui/dynamic-form';
-import { Field, Endpoints } from '@webui/data';
 
 import {
   testMetadata,
@@ -31,7 +32,8 @@ import {
   MetadataType
 } from './test-builder.config';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { DynamicFormComponent } from 'libs/dynamic-form/src/lib/containers';
+import { Field } from '@webui/metadata';
+import { Endpoints } from '@webui/models';
 
 interface IAcceptanceTest {
   acceptance_test_questions: any[];
@@ -49,33 +51,33 @@ interface IAcceptanceTest {
 }
 
 @Component({
-  selector: 'app-test-builder',
+  selector: 'webui-test-builder',
   templateUrl: './test-builder.component.html',
   styleUrls: ['./test-builder.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TestBuilderComponent implements OnInit, OnChanges {
-  @Input() public testData: IAcceptanceTest;
+  @Input() public testData!: IAcceptanceTest;
 
-  @ViewChild('preview') public previewModal: TemplateRef<any>;
+  @ViewChild('preview') public previewModal!: TemplateRef<any>;
   @ViewChildren('question')
-  public questionList: QueryList<DynamicFormComponent>;
+  public questionList!: QueryList<DynamicFormComponent>;
 
-  public testMetadata: Field[];
+  public testMetadata!: Field[];
 
-  public testId: string;
+  public testId!: string;
 
-  public saveProcess: boolean;
-  public questionId: number;
-  public modalRef: NgbModalRef;
+  public saveProcess!: boolean;
+  public questionId!: number;
+  public modalRef!: NgbModalRef;
 
-  public questions = [];
-  public answers = {};
+  public questions: any[] = [];
+  public answers: Record<string, any[]> = {};
 
   pictures: Map<string, Array<{ id: string; src: string }>> = new Map();
   pictureLoading: Map<string, boolean> = new Map();
 
-  public configMap = {
+  public configMap: Record<string, any> = {
     [Endpoints.AcceptanceTest]: testMetadata,
     [Endpoints.AcceptanceTestQuestion]: questionMetadata,
     [Endpoints.AcceptanceTestAnswers]: answerMetadata
@@ -103,7 +105,7 @@ export class TestBuilderComponent implements OnInit, OnChanges {
     }
   }
 
-  public addModeProperty(metadata, mode) {
+  public addModeProperty(metadata: any[], mode: BehaviorSubject<FormMode>) {
     metadata.forEach((el) => {
       if (el.key) {
         el.mode = mode;
@@ -113,7 +115,7 @@ export class TestBuilderComponent implements OnInit, OnChanges {
     });
   }
 
-  public updateTestForm(data) {
+  public updateTestForm(data: any) {
     this.testId = data.id;
     this.createMetadata(Endpoints.AcceptanceTest, 'form', data).subscribe(
       (config: Field[]) => {
@@ -125,12 +127,12 @@ export class TestBuilderComponent implements OnInit, OnChanges {
   public createMetadata(
     endpoint: string,
     metadataType: MetadataType,
-    data?
+    data?: any
   ): Observable<Field[]> {
     return of(this.configMap[endpoint](metadataType)).pipe(
       map((config: Field[]) => {
-        const mode = new BehaviorSubject('edit');
-        const button = getElementFromMetadata(config, 'button', 'type');
+        const mode: BehaviorSubject<FormMode> = new BehaviorSubject<FormMode>(FormMode.Edit);
+        const button = getElementFromMetadata(config, 'button', 'type') as Field;
         const hidden = new BehaviorSubject(false);
         button.hidden = hidden;
         if (metadataType === 'form') {
@@ -138,7 +140,7 @@ export class TestBuilderComponent implements OnInit, OnChanges {
         }
 
         if (metadataType === 'form') {
-          mode.next('view');
+          mode.next(FormMode.View);
           hidden.next(true);
           fillingForm(config, data);
         }
@@ -148,7 +150,7 @@ export class TestBuilderComponent implements OnInit, OnChanges {
     );
   }
 
-  public addQuestion(create: boolean, question?) {
+  public addQuestion(create: boolean, question?: any) {
     const metadataType: MetadataType = create ? 'formadd' : 'form';
 
     this.createMetadata(
@@ -163,7 +165,7 @@ export class TestBuilderComponent implements OnInit, OnChanges {
           order.value = ++this.questionId;
         }
       } else {
-        const order = getElementFromMetadata(config, 'order');
+        const order = getElementFromMetadata(config, 'order') as Field;
 
         if (order.value > this.questionId) {
           this.questionId = order.value;
@@ -182,7 +184,7 @@ export class TestBuilderComponent implements OnInit, OnChanges {
     });
   }
 
-  public addAnswer(create: boolean, target, answerData?, questionData?) {
+  public addAnswer(create: boolean, target: any, answerData?: any, questionData?: any) {
     const metadataType: MetadataType = create ? 'formadd' : 'form';
 
     const exclude_from_score = questionData
@@ -210,7 +212,9 @@ export class TestBuilderComponent implements OnInit, OnChanges {
 
         if (score.hide) {
           score.value = 5;
-          score.templateOptions.required = false;
+          if (score.templateOptions) {
+            score.templateOptions.required = false;
+          }
         }
       }
 
@@ -218,11 +222,11 @@ export class TestBuilderComponent implements OnInit, OnChanges {
     });
   }
 
-  public getLastOrder(answers) {
+  public getLastOrder(answers: any[]) {
     let value = 0;
 
     answers.forEach((answer) => {
-      const order = getElementFromMetadata(answer, 'order');
+      const order = getElementFromMetadata(answer, 'order') as Field;
 
       value = value > order.value ? value : order.value;
     });
@@ -244,7 +248,7 @@ export class TestBuilderComponent implements OnInit, OnChanges {
 
   public checkAnswers(data: any) {
     if (data && data.acceptance_test_answers) {
-      const answers = data.acceptance_test_answers;
+      const answers = data.acceptance_test_answers as any[];
       const questionMetadataObservable = this.createMetadata(
         Endpoints.AcceptanceTestQuestion,
         'form',
@@ -263,9 +267,9 @@ export class TestBuilderComponent implements OnInit, OnChanges {
     }
   }
 
-  public saveQuestion(data, index: number, update: string) {
+  public saveQuestion(data: any, index: number, update: string) {
     data.acceptance_test = this.testData.id;
-    let action;
+    let action: keyof GenericFormService;
     if (update) {
       action = 'editForm';
     } else {
@@ -302,29 +306,33 @@ export class TestBuilderComponent implements OnInit, OnChanges {
     this.deleteObject(Endpoints.AcceptanceTestQuestion, target, index, id);
   }
 
-  public deleteAnswer(id: string, target: any[], index: number) {
+  public deleteAnswer(id?: string, target?: any[], index?: number) {
+    if (!id) {
+      return;
+    }
+
     this.deleteObject(Endpoints.AcceptanceTestAnswers, target, index, id);
   }
 
   public deleteObject(
     endpoint: string,
-    target: any[],
-    index: number,
-    id: string
+    target?: any[],
+    index?: number,
+    id?: string
   ) {
     if (id) {
       this.genericFormService.delete(endpoint, id).subscribe(() => {
-        target.splice(index, 1);
+        target?.splice(index as number, 1);
       });
     } else {
-      target.splice(index, 1);
+      target?.splice(index as number, 1);
     }
   }
 
-  public saveAnswer(data, index: number, id: string, update: string) {
+  public saveAnswer(data: any, index: number, id: string, update?: boolean) {
     data.acceptance_test_question = id;
 
-    let action;
+    let action: keyof GenericFormService;
     if (update) {
       action = 'editForm';
     } else {
@@ -345,7 +353,7 @@ export class TestBuilderComponent implements OnInit, OnChanges {
     });
   }
 
-  public getId(metadata: Field[]): string {
+  public getId(metadata: Field[]): string | undefined {
     const id = getElementFromMetadata(metadata, 'id');
 
     if (id) {
@@ -353,7 +361,7 @@ export class TestBuilderComponent implements OnInit, OnChanges {
     }
   }
 
-  public getType(metadata: Field[]): number {
+  public getType(metadata: Field[]): number | undefined {
     const type = getElementFromMetadata(metadata, 'type');
 
     if (type) {
@@ -372,30 +380,30 @@ export class TestBuilderComponent implements OnInit, OnChanges {
     } as PassTestModalConfig;
   }
 
-  public checkCount(type: number, length: number) {
+  public checkCount(type?: number, length?: number) {
     if (type === 0 || type === 3) {
       return true;
     }
 
-    if (type === 2 && length < 2) {
+    if (type === 2 && typeof length === 'number' && length < 2) {
       return true;
     }
 
     return false;
   }
 
-  public editQuestion(question) {
-    const field = getElementFromMetadata(question, 'question');
-    const button = getElementFromMetadata(question, 'button', 'type');
-    button.hidden.next(false);
-    field.mode.next('edit');
+  public editQuestion(question: any) {
+    const field = getElementFromMetadata(question, 'question') as Field;
+    const button = getElementFromMetadata(question, 'button', 'type') as Field;
+    button.hidden?.next(false);
+    field.mode?.next('edit');
   }
 
-  public editAnswer(answer) {
-    const field = getElementFromMetadata(answer, 'answer');
-    const button = getElementFromMetadata(answer, 'button', 'type');
-    button.hidden.next(false);
-    field.mode.next('edit');
+  public editAnswer(answer: any) {
+    const field = getElementFromMetadata(answer, 'answer') as Field;
+    const button = getElementFromMetadata(answer, 'button', 'type') as Field;
+    button.hidden?.next(false);
+    field.mode?.next('edit');
   }
 
   public onUpload(images: string[], id: string) {
@@ -411,7 +419,7 @@ export class TestBuilderComponent implements OnInit, OnChanges {
         .subscribe((res) => {
           if (this.pictures.has(id)) {
             this.pictures.set(id, [
-              ...this.pictures.get(id),
+              ...(this.pictures.get(id) as any[]),
               { id: res.id, src: res.picture.origin }
             ]);
           }
@@ -423,7 +431,7 @@ export class TestBuilderComponent implements OnInit, OnChanges {
     this.genericFormService
       .delete('/acceptance-tests/acceptancetestquestionpictures/', imageId)
       .subscribe(() => {
-        const pictures = this.pictures.get(id);
+        const pictures = this.pictures.get(id) as any[];
         const filteredList = pictures.filter(
           (picture) => picture.id !== imageId
         );
@@ -436,7 +444,7 @@ export class TestBuilderComponent implements OnInit, OnChanges {
     data.acceptance_test_questions.forEach((question) => {
       this.pictures.set(
         question.id,
-        question.pictures.map((el) => {
+        question.pictures.map((el: any) => {
           return { src: el.picture.origin, id: el.id };
         })
       );
@@ -469,9 +477,9 @@ export class TestBuilderComponent implements OnInit, OnChanges {
 
   private updateMetadataByProps(metadata: Field[]) {
     let hiddenFields = {
-      elements: [],
-      keys: [],
-      observers: []
+      elements: <any[]>[],
+      keys: <any[]>[],
+      observers: <any[]>[]
     };
 
     metadata.forEach((el) => {
@@ -495,7 +503,7 @@ export class TestBuilderComponent implements OnInit, OnChanges {
     return hiddenFields;
   }
 
-  private observeFields(fields: any[], observers) {
+  private observeFields(fields: any[], observers: any[]) {
     fields.forEach((field: any) => {
       if (field instanceof Object) {
         const keys = Object.keys(field);

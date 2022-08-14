@@ -8,5 +8,5 @@ import { Component, Input } from '@angular/core';
 export class MobileTimesheetsComponent {
 
   @Input()
-  public clientId: string;
+  public clientId?: string;
 }
