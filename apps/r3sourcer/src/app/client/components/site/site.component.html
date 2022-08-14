@@ -34,10 +34,10 @@
         >
           <webui-generic-form
             *ngIf="
-              (!reload &&
+              (!reload && formMode &&
                 pageData.endpoint !== '/core/forms/' &&
                 !pageData.pathData.postfix) ||
-              pageData.pathData.postfix === 'submit'
+              pageData.pathData.postfix === 'submit' && formMode
             "
             [title]="
               pageData.pathData.postfix === 'submit'
@@ -46,7 +46,7 @@
             "
             [endpoint]="pageData.endpoint"
             [id]="pageData.pathData.id"
-            [edit]="pageData.pathData.postfix"
+            [edit]="!!pageData.pathData.postfix"
             [mode]="formMode"
             [errors]="errors"
             [data]="additionalData"
@@ -54,8 +54,8 @@
             [metadataQuery]="pageData.pathData.metadataQuery"
             (event)="formEvent($event)"
             (modeEvent)="modeEvent($event)"
-            (errorForm)="formError($event)"
-            (permissionError)="permissionErrorHandler($event)"
+            (errorForm)="formError()"
+            (permissionError)="permissionErrorHandler()"
             (str)="changeFormLabel($event)"
           >
             <div class="d-flex">
@@ -121,10 +121,10 @@
     ></webui-calendar>
   </div>
 
-  <app-mobile-timesheets
+  <webui-mobile-timesheets
     [clientId]="getClientId()"
     *ngIf="identifyDevice()"
-  ></app-mobile-timesheets>
+  ></webui-mobile-timesheets>
 
   <ng-template #modal let-modal>
     <div class="modal-content-wrapper">

@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 
 @Component({
-  selector: 'app-mobile-timesheets',
+  selector: 'webui-mobile-timesheets',
   templateUrl: './mobile-timesheets.component.html',
   styleUrls: ['./mobile-timesheets.component.scss']
 })

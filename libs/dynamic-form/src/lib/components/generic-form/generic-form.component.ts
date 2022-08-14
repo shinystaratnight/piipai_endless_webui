@@ -77,17 +77,17 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
   @Input()
   public form: any;
   @Input()
-  public id!: string;
+  public id?: string | null;
   @Input()
   public hide!: boolean;
   @Input()
-  public edit!: boolean;
+  public edit?: boolean;
   @Input()
   public mode!: FormMode;
   @Input()
   public delay!: boolean;
   @Input()
-  public metadataQuery!: string;
+  public metadataQuery?: string;
   @Input()
   public path!: string;
   @Input()
@@ -137,7 +137,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
   public confirmProfileModal!: ElementRef;
 
   public currentEndpoint!: string;
-  public currentId!: string;
+  public currentId?: string | null;
   public formId!: number;
   public metadata: Field[] = [];
 
@@ -751,7 +751,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
     }
   }
 
-  public getDataForForm(endpoint: string, id: string) {
+  public getDataForForm(endpoint: string, id?: string | null) {
     if (this.replaceEndpoints[endpoint]) {
       endpoint = this.replaceEndpoints[endpoint];
       this.endpoint = endpoint;
@@ -1832,7 +1832,11 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
       );
   }
 
-  public syncInvoice(id: string, e: any) {
+  public syncInvoice(id?: string | null, e?: any) {
+    if (!id) {
+      return;
+    }
+
     const endpoint = `${Endpoints.Invoice}${id}/sync/`;
 
     this.service.submitForm(endpoint, {}).subscribe(() => {

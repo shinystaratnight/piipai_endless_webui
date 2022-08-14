@@ -8,7 +8,7 @@ import { of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-verify-email',
+  selector: 'webui-verify-email',
   template: '',
 })
 export class VerifyEmailComponent implements OnInit {

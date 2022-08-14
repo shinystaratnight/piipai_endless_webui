@@ -45,14 +45,14 @@ export class GenericListComponent implements OnInit, OnDestroy {
   @Input() supportData: any;
   @Input() paginated = 'on';
   @Input() responseField = 'results';
-  @Input() metaType!: string;
+  @Input() metaType!: boolean;
   @Input() actions = false;
   @Input() delay = false;
   @Input() allowPermissions!: string[];
   @Input() metadataQuery!: string;
   @Input() addMetadataQuery!: string;
   @Input() upload!: Subject<boolean>;
-  @Input() clientId!: string;
+  @Input() clientId?: string;
   @Input() listNameCache: any;
   @Input() disableActions!: boolean;
   @Input() inlineFilters!: boolean;

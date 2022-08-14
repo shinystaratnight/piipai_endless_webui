@@ -285,10 +285,10 @@
     <webui-dashboard></webui-dashboard>
   </div>
 
-  <app-mobile-timesheets
+  <webui-mobile-timesheets
     [clientId]="getClientId()"
     *ngIf="identifyDevice()"
-  ></app-mobile-timesheets>
+  ></webui-mobile-timesheets>
 
   <ng-template #modal let-modal>
     <div class="modal-content-wrapper">
