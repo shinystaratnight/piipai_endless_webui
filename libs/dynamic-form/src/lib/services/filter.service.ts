@@ -3,10 +3,10 @@ import { Subject } from 'rxjs';
 
 @Injectable()
 export class FilterService {
-  public _filters: any;
+  public _filters: Record<string, any> = {};
   public queries: any[] = [];
   public query: any;
-  public _paramsOfFilters: any;
+  public _paramsOfFilters: Record<string, any> = {};
   public filterList: any = [];
 
   private _reset: Subject<any> = new Subject();
@@ -15,31 +15,26 @@ export class FilterService {
     return this._reset.asObservable();
   }
 
-  constructor() {
-    this._filters = {};
-    this._paramsOfFilters = {};
-  }
-
-  set filters(filters) {
-    if (!this._filters[filters.endpoint]) {
-      this._filters[filters.endpoint] = [];
+  set filters(filters: Record<string, any>) {
+    if (!this._filters[filters['endpoint']]) {
+      this._filters[filters['endpoint']] = [];
       if (
         filters &&
-        filters.list &&
-        this.filterList.indexOf(filters.list.list) < 0
+        filters['list'] &&
+        this.filterList.indexOf(filters['list'].list) < 0
       ) {
-        this.filterList.push(filters.list.list);
-        filters.list.filters.forEach(el => {
-          el.listName = filters.list.list;
-          el.endpoint = filters.endpoint;
+        this.filterList.push(filters['list'].list);
+        filters['list'].filters.forEach((el: any) => {
+          el.listName = filters['list'].list;
+          el.endpoint = filters['endpoint'];
         });
         this.parseFilters(
-          filters.list.filters,
+          filters['list'].filters,
           this.paramsOfFilters,
-          filters.list.list,
+          filters['list'].list,
           true
         );
-        this._filters[filters.endpoint].push(...filters.list.filters);
+        this._filters[filters['endpoint']].push(...filters['list'].filters);
       } else {
         this._filters = {};
         this.filterList = [];
@@ -50,36 +45,37 @@ export class FilterService {
     }
   }
 
-  set paramsOfFilters(params) {
-    if (this._paramsOfFilters[params.param]) {
-      this._paramsOfFilters[params.param] += `&${params.value}`;
+  set paramsOfFilters(params: Record<string, any>) {
+    if (this._paramsOfFilters[params['param']]) {
+      this._paramsOfFilters[params['param']] += `&${params['value']}`;
     } else {
-      this._paramsOfFilters[params.param] = params.value;
+      this._paramsOfFilters[params['param']] = params['value'];
     }
-    const filters = this.getFiltersByEndpoint(params.endpoint);
+    const filters = this.getFiltersByEndpoint(params['endpoint']);
     if (filters) {
-      this.parseFilters(filters, this.paramsOfFilters, params.list);
+      this.parseFilters(filters, this.paramsOfFilters, params['list']);
     }
   }
 
-  public getFiltersByEndpoint(endpoint) {
+  public getFiltersByEndpoint(endpoint: string) {
     return this._filters[endpoint];
   }
 
+  // eslint-disable-next-line @typescript-eslint/adjacent-overload-signatures
   get paramsOfFilters() {
     return this._paramsOfFilters;
   }
 
-  public getFiltersOfList(endpoint, name) {
+  public getFiltersOfList(endpoint: string, name: string) {
     let result = [];
     if (endpoint && this._filters[endpoint]) {
-      result = this._filters[endpoint].filter(el => el.listName === name);
+      result = this._filters[endpoint].filter((el: any) => el.listName === name);
       this.deleteFilters(this._filters[endpoint], name);
     }
     return result;
   }
 
-  public deleteFilters(filters, name) {
+  public deleteFilters(filters: any[], name: string) {
     filters.forEach(el => {
       if (el.listName === name) {
         filters.splice(filters.indexOf(el), 1);
@@ -89,11 +85,11 @@ export class FilterService {
     this.filterList.splice(this.filterList.indexOf(name), 1);
   }
 
-  public getQuery(list) {
+  public getQuery(list: string) {
     return this.parseQueries(this.queries, list);
   }
 
-  public generateQuery(query, key, list, value?) {
+  public generateQuery(query: string, key: string, list: string, value?: any) {
     if (this.queries.length > 0) {
       const el = this.queries.filter(elem => elem.list === list);
       if (el[0]) {
@@ -114,7 +110,7 @@ export class FilterService {
     }
   }
 
-  public parseQueries(queries, list) {
+  public parseQueries(queries: any[], list: string) {
     let query = '';
     queries.forEach(el => {
       if (el.list === list) {
@@ -130,14 +126,14 @@ export class FilterService {
     return query;
   }
 
-  public parseFilters(filters, params, list, first = false) {
+  public parseFilters(filters: any[], params: Record<string, any>, list: string, first = false) {
     if (Object.keys(params).length > 0) {
       filters.forEach(el => {
         if (params[el.query]) {
           let query = '';
           if (params[el.query].indexOf('&') > -1) {
             const array = params[el.query].split('&');
-            array.forEach(elem => {
+            array.forEach((elem: string) => {
               query += `${el.query}=${elem}&`;
             });
             query = query.slice(0, -1);
@@ -147,7 +143,7 @@ export class FilterService {
           this.generateQuery(query, el.key, list);
         } else if (el.input) {
           let query = '';
-          el.input.forEach(elem => {
+          el.input.forEach((elem: any) => {
             if (params[elem.query]) {
               query += `${elem.query}=${params[elem.query]}&`;
             }
@@ -164,7 +160,7 @@ export class FilterService {
     }
   }
 
-  public getQueries(list, filterName) {
+  public getQueries(list: string, filterName: string): any {
     let result;
     this.queries.forEach(el => {
       if (el.list === list && el.keys[filterName]) {
@@ -181,7 +177,7 @@ export class FilterService {
     return result;
   }
 
-  public resetQueries(list) {
+  public resetQueries(list: string) {
     let result;
     this.queries.forEach(el => {
       if (el.list === list) {

@@ -35,10 +35,10 @@
   <div class="widget-body">
 
     <div class="filters filters-inline">
-      <app-filter-related *ngIf="calendarType === 0" (event)="changeQuery($event)" [config]="filters.client">
-      </app-filter-related>
-      <app-filter-related *ngIf="calendarType === 0" (event)="changeQuery($event)" [config]="filters.candidate">
-      </app-filter-related>
+      <webui-filter-related *ngIf="calendarType === 0" (event)="changeQuery($event)" [config]="filters.client">
+      </webui-filter-related>
+      <webui-filter-related *ngIf="calendarType === 0" (event)="changeQuery($event)" [config]="filters.candidate">
+      </webui-filter-related>
 
       <div class="filter-element" #filter>
         <label class="filter-label related">{{ 'info_layers' | translate: {"Default": "Info layers"} }}</label>
@@ -450,7 +450,7 @@
       </div>
     </div>
     <div class="modal-body">
-      <app-generic-form [endpoint]="modalInfo.endpoint" [data]="modalInfo.data" [mode]="modalInfo.mode"
+      <webui-generic-form [endpoint]="modalInfo.endpoint" [data]="modalInfo.data" [mode]="modalInfo.mode"
         [edit]="modalInfo.edit" (event)="formEvent($event, modal.close)" (errorForm)="formError()">
         <div class="text-center">
           <button webuiSubscriptionRequired type="submit" class="btn big-btn btn-shadow btn-primary text-white button-save mt-3 mb-4"
@@ -459,7 +459,7 @@
             <webui-spinner *ngIf="saveProcess"></webui-spinner>
           </button>
         </div>
-      </app-generic-form>
+      </webui-generic-form>
     </div>
   </div>
 </ng-template>

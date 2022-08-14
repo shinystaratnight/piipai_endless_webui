@@ -11,19 +11,19 @@ interface Option {
 }
 
 @Component({
-  selector: 'app-form-options',
+  selector: 'webui-form-options',
   templateUrl: 'form-options.component.html'
 })
 
 export class FormOptionsComponent extends BasicElementComponent implements OnInit, OnDestroy {
 
-  public config;
-  public group: FormGroup;
+  public override config: any;
+  public override group!: FormGroup;
   public errors: any;
   public message: any;
-  public key: any;
+  public override key: any;
 
-  public optionsArray: Option[];
+  public optionsArray!: Option[];
 
   private subscriptions: Subscription[];
 
@@ -39,10 +39,10 @@ export class FormOptionsComponent extends BasicElementComponent implements OnIni
     this.addControl(this.config, this.fb);
     this.setInitValue();
     if (this.config && this.config.hidden) {
-      const subscription = this.config.hidden.subscribe((hide) => {
+      const subscription = this.config.hidden.subscribe((hide: boolean) => {
         if (hide) {
           this.config.hide = hide;
-          this.group.get(this.key).patchValue(undefined);
+          this.group.get(this.key)?.patchValue(undefined);
           this.setInitValue();
         } else {
           this.config.hide = hide;
@@ -65,7 +65,7 @@ export class FormOptionsComponent extends BasicElementComponent implements OnIni
   public setInitValue() {
     if (this.config.value) {
       this.optionsArray = this.config.value;
-      this.group.get(this.key).patchValue(this.config.value);
+      this.group.get(this.key)?.patchValue(this.config.value);
     } else {
       this.optionsArray = [
         {
@@ -83,7 +83,7 @@ export class FormOptionsComponent extends BasicElementComponent implements OnIni
       }
     });
     if (value) {
-      this.group.get(this.key).patchValue(value);
+      this.group.get(this.key)?.patchValue(value);
     }
   }
 
@@ -94,7 +94,7 @@ export class FormOptionsComponent extends BasicElementComponent implements OnIni
     });
   }
 
-  public deleteOption(option) {
+  public deleteOption(option: any) {
     this.optionsArray.splice(this.optionsArray.indexOf(option), 1);
     this.updateValue();
   }

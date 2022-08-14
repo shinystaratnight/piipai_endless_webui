@@ -1,4 +1,4 @@
-<app-base-modal (dissmisEvent)="dismiss()">
+<webui-base-modal (dissmisEvent)="dismiss()">
   <header>
     <h5 class="modal-title" [class.text-center]="config.signature">
       <ng-container *ngIf="config.evaluate">
@@ -25,7 +25,7 @@
   </header>
 
   <div *ngIf="!config.evaluate" class="modal-body">
-    <app-generic-form
+    <webui-generic-form
       [endpoint]="config.endpoint"
       [data]="config.data"
       [extendData]="config.extendData"
@@ -39,7 +39,7 @@
           <webui-spinner *ngIf="saveProcess"></webui-spinner>
         </button>
       </div>
-    </app-generic-form>
+    </webui-generic-form>
   </div>
 
   <ng-container *ngIf="config.evaluate">
@@ -83,4 +83,4 @@
       </button>
     </div>
   </ng-container>
-</app-base-modal>
+</webui-base-modal>

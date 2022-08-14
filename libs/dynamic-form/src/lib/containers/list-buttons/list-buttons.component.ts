@@ -10,7 +10,7 @@ interface Button {
 }
 
 @Component({
-  selector: 'app-list-buttons',
+  selector: 'webui-list-buttons',
   templateUrl: 'list-buttons.component.html',
   styleUrls: ['./list-buttons.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -18,22 +18,22 @@ interface Button {
 export class ListButtonsComponent {
 
   @Input()
-  public buttons: Button[];
+  public buttons!: Button[];
 
   @Input()
-  public first: boolean;
+  public first!: boolean;
 
   @Input()
-  public inForm: boolean;
+  public inForm!: boolean;
 
   @Input()
-  public label: string;
+  public label!: string;
 
   @Input()
-  public poped: boolean;
+  public poped!: boolean;
 
-  @Input() public allowPermissions: string[];
-  @Input() public endpoint: string;
+  @Input() public allowPermissions!: string[];
+  @Input() public endpoint!: string;
 
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
@@ -54,6 +54,8 @@ export class ListButtonsComponent {
     if (action === 'sendSMS') {
       return !this.siteSettings.isSmsEnabled();
     }
+
+    return false;
   }
 
   public buttonAction(type: string): void {

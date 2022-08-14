@@ -85,7 +85,7 @@ import { RatingModule } from '@webui/rating';
     fromComponents.ImageUploaderComponent
   ],
   declarations: [
-    fromComponents.WebcamComponent,
+    // fromComponents.WebcamComponent,
 
     ...fromComponents.components,
     ...directives,

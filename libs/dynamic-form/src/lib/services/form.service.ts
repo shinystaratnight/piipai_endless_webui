@@ -57,7 +57,7 @@ export class FormService {
     form.hideEditButton = true;
   }
 
-  public disableSaveButton(formId: number, disbable?: boolean) {
+  public disableSaveButton(formId: number, disbable: boolean = false) {
     // TODO: remove if statement
     if (formId) {
       const form = this.getForm(formId);

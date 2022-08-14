@@ -6,7 +6,7 @@
 
     <ng-container
       *ngFor="let field of config; let last = last"
-      appFormElement
+      webuiFormElement
       [last]="last"
       [config]="field"
       [group]="form"
@@ -17,7 +17,7 @@
       [message]="message">
     </ng-container>
 
-    <app-form-errors [formId]="formId"></app-form-errors>
+    <webui-form-errors [formId]="formId"></webui-form-errors>
 
     <div class="text-success mt-1 mb-3" *ngIf="message && message.message">
       {{message.message}}

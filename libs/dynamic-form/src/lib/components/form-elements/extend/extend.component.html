@@ -2,7 +2,7 @@
   <div class="main title">{{'select_dates' | translate: {"Default": "Select Dates"} }}</div>
 
   <ng-container
-    appFormElement
+    webuiFormElement
     [config]="viewConfig.shiftsDates"
     [group]="viewData"
     (event)="eventHandler($event)">
@@ -13,32 +13,32 @@
       <b>{{'extend' | translate: {"Default": "Extend"} }}:</b>
 
       <ng-container
-        appFormElement
+        webuiFormElement
         [config]="viewConfig.extendDates"
         (event)="autofillDates($event)"
         [group]="viewData">
       </ng-container>
 
       <ng-container
-        appFormElement
+        webuiFormElement
         [config]="viewConfig.extendCandidates"
         (event)="autofillCandidates($event)"
         [group]="viewData">
       </ng-container>
 
-      <app-info class="pl-2"
+      <webui-info class="pl-2"
         *ngIf="!showAvailability || !viewData.value.extendCandidates"
         placement="right"
         [description]="fillinfo">
-      </app-info>
+      </webui-info>
 
-      <app-info class="pl-2"
+      <webui-info class="pl-2"
         *ngIf="showAvailability && viewData.value.extendCandidates"
         [danger]="true"
         placement="right"
         [triggersType]="'click:click'"
         [description]="availableinfo">
-      </app-info>
+      </webui-info>
 
       <span class="message" *ngIf="showAvailability && viewData.value.extendCandidates">{{'candidate_replaced' | translate: {"Default": "Candidate was replaced for some dates, due to unavailability"} }}</span>
   </div>
@@ -48,7 +48,7 @@
       <div class="title">{{'shifts' | translate: {"Default": "Shifts"} }} </div>
 
       <button type="button" class="btn btn-shadow btn-primary mr-3" (click)="autocompleteCandidates()">{{'autocomplete' | translate: {"Default": "Autocomplete"} }} <webui-spinner *ngIf="autocompleteProcess"></webui-spinner></button>
-      <app-info placement="left" [description]="requirements"></app-info>
+      <webui-info placement="left" [description]="requirements"></webui-info>
     </div>
 
     <div class="shift" *ngFor="let shift of shifts; let i = index">
@@ -103,7 +103,7 @@
   <div class="row">
     <div class="time">
       <ng-container
-        appFormElement
+        webuiFormElement
         [config]="config.time"
         (event)="timeChange($event, config)"
         [group]="group">
@@ -112,7 +112,7 @@
 
     <div class="workers">
       <ng-container
-        appFormElement
+        webuiFormElement
         [config]="config.workers"
         (event)="change($event)"
         [group]="group">
@@ -121,7 +121,7 @@
 
     <div class="candidates">
       <ng-container
-        appFormElement
+        webuiFormElement
         [config]="config.candidates"
         (event)="change($event)"
         [group]="group">

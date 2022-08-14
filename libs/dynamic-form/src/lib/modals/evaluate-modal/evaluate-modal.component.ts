@@ -20,14 +20,14 @@ export type EvaluateModalConfig = {
 };
 
 @Component({
-  selector: 'app-evaluate-modal',
+  selector: 'webui-evaluate-modal',
   templateUrl: './evaluate-modal.component.html',
   styleUrls: ['./evaluate-modal.component.scss']
 })
 export class EvaluateModalComponent extends Modal {
-  config: EvaluateModalConfig;
-  saveProcess: boolean;
-  approveEndpoint: string;
+  config!: EvaluateModalConfig;
+  saveProcess?: boolean;
+  approveEndpoint?: string | null;
 
   constructor(
     modal: NgbActiveModal,
@@ -36,7 +36,7 @@ export class EvaluateModalComponent extends Modal {
     super(modal);
   }
 
-  public formEvent(e) {
+  public formEvent(e: any) {
     if (e.type === 'saveStart') {
       this.saveProcess = true;
     }
@@ -59,7 +59,7 @@ export class EvaluateModalComponent extends Modal {
     this.saveProcess = false;
   }
 
-  public sendEvaluateData(endpoint, data) {
+  public sendEvaluateData(endpoint: string, data: any) {
     this.saveProcess = true;
 
     this.genericFormService

@@ -1,5 +1,5 @@
 <div class="datatable-wrapper">
-  <app-dynamic-list
+  <webui-dynamic-list
     *ngIf="tables[0].endpoint.includes('hr/job') ? tables[0].metadata && tables[0].data : tables[0].metadata"
     [inForm]="inForm"
     [config]="tables[0].metadata"
@@ -51,7 +51,7 @@
           <div class="double-bounce2"></div>
         </div>
       </div>
-  </app-dynamic-list>
+  </webui-dynamic-list>
 </div>
 
 <!-- <div #list class="d-flex justify-content-start datatable-list pt-2 flex-wrap" *ngIf="minimizedTable.length">

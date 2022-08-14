@@ -1,4 +1,4 @@
-<app-base-modal modalClass="approve-signature-modal" (dissmisEvent)="dismiss()">
+<webui-base-modal modalClass="approve-signature-modal" (dissmisEvent)="dismiss()">
 
   <header class="header">
     <webui-user-avatar
@@ -18,7 +18,7 @@
     <div [class.steps]="isMobile()" [class.signature-step]="isSignatureStep">
       <div class="content-info">
         <div [hidden]="!config.timesheetData" class="form-wrapper">
-          <app-generic-form
+          <webui-generic-form
             [needData]="false"
             [form]="config.form"
             [endpoint]="config.changeEndpoint"
@@ -30,13 +30,13 @@
             (event)="this.config.evaluateEvent($event, modal.close)"
           >
             <button #sendFormButton type="submit" [hidden]="true"></button>
-          </app-generic-form>
+          </webui-generic-form>
         </div>
 
-        <app-evaluate-field
+        <webui-evaluate-field
           [evaluated]="config.evaluated"
           [evaluatedScore]="config.data.evaluation_score"
-        ></app-evaluate-field>
+        ></webui-evaluate-field>
       </div>
 
       <div class="d-flex justify-content-center align-items-center flex-column">
@@ -62,11 +62,11 @@
               {{ 'clear' | translate: { Default: 'Clear area' } }}
             </button>
           </h3>
-          <app-signature
+          <webui-signature
             #signatureCanvas
             [supervisorSignature]="config.supervisor_signature"
             (signature)="updateSignature($event)"
-          ></app-signature>
+          ></webui-signature>
         </div>
       </div>
     </div>
@@ -120,4 +120,4 @@
       </button>
     </div>
   </div>
-</app-base-modal>
+</webui-base-modal>

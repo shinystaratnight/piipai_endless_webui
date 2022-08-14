@@ -1,7 +1,7 @@
 import { Component, Output, EventEmitter } from '@angular/core';
 
 @Component({
-  selector: 'app-list-column',
+  selector: 'webui-list-column',
   templateUrl: 'list-column.component.html'
 })
 export class ListColumnComponent {

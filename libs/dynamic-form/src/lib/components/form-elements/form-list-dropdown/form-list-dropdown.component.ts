@@ -13,32 +13,32 @@ import { GenericFormService, FormMode } from '../../../services';
 import { finalize } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-form-list-dropdown',
+  selector: 'webui-form-list-dropdown',
   templateUrl: './form-list-dropdown.component.html',
   styleUrls: ['./form-list-dropdown.component.scss']
 })
 export class FormListDropdownComponent implements OnInit, OnDestroy {
   config: any;
 
-  displayValue: string;
+  displayValue!: string;
 
   // Dropdown
-  list: any[];
-  editList: any[];
-  initList: any[];
+  list!: any[];
+  editList!: any[];
+  initList!: any[];
   showDropdown = false;
-  loading: boolean;
-  count: number;
+  loading!: boolean;
+  count!: number;
   limit = 10;
   offset = 0;
   searchValue = '';
 
-  display: string;
-  endpoint: string;
-  editEndpoint: string;
+  display!: string;
+  endpoint!: string;
+  editEndpoint!: string;
 
-  _mode: FormMode;
-  private viewSubscription: Subscription;
+  _mode!: FormMode;
+  private viewSubscription!: Subscription;
 
   get isViewMode() {
     return this._mode === FormMode.View;
@@ -94,8 +94,8 @@ export class FormListDropdownComponent implements OnInit, OnDestroy {
     });
   }
 
-  getDisplayValue<T>(data: Array<T>, field: string): T {
-    return data.find(el => el[field]);
+  getDisplayValue<T>(data: Array<T>, field: keyof T): T {
+    return data.find(el => el[field]) || {} as T;
   }
 
   updateList(data: any[]): any[] {
@@ -125,7 +125,7 @@ export class FormListDropdownComponent implements OnInit, OnDestroy {
       });
   }
 
-  onSet(value) {
+  onSet(value: any) {
     const editEl = this.editList.find(el => {
       const elParam = FormatString.format(
         this.config.templateOptions.param,
@@ -189,7 +189,7 @@ export class FormListDropdownComponent implements OnInit, OnDestroy {
   }
 
   @HostListener('document:click', ['$event'])
-  public handleClick(event) {
+  public handleClick(event: MouseEvent) {
     let clickedComponent = event.target;
     let inside = false;
     if (this.elementRef) {
@@ -197,7 +197,7 @@ export class FormListDropdownComponent implements OnInit, OnDestroy {
         if (clickedComponent === this.elementRef.nativeElement) {
           inside = true;
         }
-        clickedComponent = clickedComponent.parentNode;
+        clickedComponent = (clickedComponent as HTMLElement).parentNode;
       } while (clickedComponent);
       if (!inside) {
         this.showDropdown = false;

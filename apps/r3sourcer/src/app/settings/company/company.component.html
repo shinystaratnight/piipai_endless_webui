@@ -3,11 +3,11 @@
   <div class="double-bounce2"></div>
 </div>
 
-<app-dynamic-form
+<webui-dynamic-form
   *ngIf="purposeConfig"
   [config]="purposeConfig"
   (event)="changePurpose($event)"
-></app-dynamic-form>
+></webui-dynamic-form>
 
 <hr>
 
@@ -16,12 +16,12 @@
   <div class="double-bounce2"></div>
 </div>
 
-<app-workflow
+<webui-workflow
   *ngIf="showWorkflow"
   [company]="company"
   [advanced]="companySettingsData.advance_state_saving"
   (changeSaving)="changeWorkflowSaving($event)">
-</app-workflow>
+</webui-workflow>
 
 <hr>
 
@@ -30,7 +30,7 @@
   <div class="double-bounce2"></div>
 </div>
 
-<app-dynamic-form
+<webui-dynamic-form
   [config]="config"
   [formId]="formId"
   [hiddenFields]="hiddenFields"
@@ -42,4 +42,4 @@
       <webui-spinner *ngIf="saveProcess"></webui-spinner>
     </button>
   </div>
-</app-dynamic-form>
+</webui-dynamic-form>

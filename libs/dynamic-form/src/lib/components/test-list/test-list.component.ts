@@ -3,14 +3,14 @@ import { Component, OnInit } from '@angular/core';
 import { GenericFormService } from '../../services/generic-form.service';
 
 @Component({
-  selector: 'app-test-list',
+  selector: 'webui-test-list',
   templateUrl: './test-list.component.html',
   styleUrls: ['./test-list.component.scss']
 })
 export class TestListComponent implements OnInit {
 
   public config: any;
-  public tests: any[];
+  public tests!: any[];
   public colors = {
     0: '#515151',
     1: '#FA5C46',
@@ -35,7 +35,7 @@ export class TestListComponent implements OnInit {
     });
   }
 
-  public getScore(score) {
+  public getScore(score: string) {
     return Math.floor(parseFloat(score));
   }
 
@@ -43,8 +43,8 @@ export class TestListComponent implements OnInit {
     const keys = Object.keys(data);
     const values = keys.map((key) => {
       if (Array.isArray(data[key])) {
-        const result = [];
-        data[key].forEach((el) => {
+        const result: string[] = [];
+        data[key].forEach((el: any) => {
           result.push(`${key}=${el}`);
         });
         return result.join('&');

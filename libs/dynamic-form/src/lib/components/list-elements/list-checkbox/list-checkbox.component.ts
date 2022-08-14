@@ -1,7 +1,7 @@
 import { Component, OnInit, EventEmitter } from '@angular/core';
 
 @Component({
-  selector: 'app-list-checkbox',
+  selector: 'webui-list-checkbox',
   templateUrl: './list-checkbox.component.html',
   styleUrls: ['./list-checkbox.component.scss'],
 })
@@ -11,7 +11,7 @@ export class ListCheckboxComponent implements OnInit {
   public value: any;
   public iconClass = '';
 
-  public buttonAction: EventEmitter<any>;
+  public buttonAction!: EventEmitter<any>;
 
   public ngOnInit() {
     if (this.config.values) {
@@ -25,11 +25,11 @@ export class ListCheckboxComponent implements OnInit {
     }
   }
 
-  public buttonHandler(event) {
+  public buttonHandler(event: any) {
     this.buttonAction.emit(event);
   }
 
-  getTranslationKey(value) {
+  getTranslationKey(value: any) {
     return `list.${this.config.key}.${value}`;
   }
 

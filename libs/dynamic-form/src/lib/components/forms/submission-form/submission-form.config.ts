@@ -1,11 +1,12 @@
 import {
-  Endpoints,
   Models,
   NoteModel,
+  OverrideConfig,
   SkillModel,
   SkillWorkTypeModel
 } from '@webui/data';
 import { CheckboxType, DatepickerType, Form, InputType } from '@webui/metadata';
+import { Endpoints } from '@webui/models';
 
 export const details = () => [
   new Form.row.element().setChildren([
@@ -27,7 +28,7 @@ export const details = () => [
         .formElement({
           key: 'position',
           label: 'Position'
-        })
+        } as OverrideConfig)
         .updateValues(['name'])
         .readOnly()
         .updateModel({
@@ -47,7 +48,7 @@ export const times = () => [
           'Shift Start',
           DatepickerType.Datetime
         )
-          .setDropdonLeft()
+          .setDropdownLeft()
           .required(),
 
         new Form.datepicker.element(
@@ -55,7 +56,7 @@ export const times = () => [
           'Shift End',
           DatepickerType.Datetime
         )
-          .setDropdonLeft()
+          .setDropdownLeft()
           .setDefaultValue('{shift_ended_at}')
           .required(),
 
@@ -165,7 +166,7 @@ export const skillActivities = () => [
 export const notes = () => [
   new NoteModel().formListElement({
     model_content_type: '112'
-  })
+  } as OverrideConfig)
 ];
 
 export const workType = () => [

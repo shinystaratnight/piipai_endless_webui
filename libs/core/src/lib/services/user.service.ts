@@ -21,7 +21,7 @@ export class UserService {
   public authEndpoint = '/auth/restore_session/';
   public rolesEndpoint = '/core/users/roles/';
   public timezoneEndpoint = '/core/users/timezone/';
-  public user!: User;
+  public user?: User | null;
   public error: any;
   public roleRedirect!: string;
 
@@ -76,7 +76,7 @@ export class UserService {
             role = currentDomainRoles.find(el => el.id === storageRole.id);
           } else {
             role = currentDomainRoles.find(el =>
-              el.__str__.includes(this.user.data.contact.contact_type)
+              this.user && el.__str__.includes(this.user.data.contact.contact_type)
             );
           }
 
@@ -108,9 +108,11 @@ export class UserService {
   }
 
   public currentRole(role: Role) {
-    this.user.currentRole = role;
-    this.storage.store('role', role);
-    this.eventService.emit(EventType.RoleChanged);
+    if (this.user) {
+      this.user.currentRole = role;
+      this.storage.store('role', role);
+      this.eventService.emit(EventType.RoleChanged);
+    }
   }
 
   public resolve() {

@@ -7,19 +7,19 @@ interface JSONPreview {
 }
 
 @Component({
-  selector: 'app-form-json',
+  selector: 'webui-form-json',
   templateUrl: 'form-json.component.html'
 })
 
 export class FormJsonComponent implements OnInit {
 
-  public config;
-  public group: FormGroup;
+  public config: any;
+  public group!: FormGroup;
   public errors: any;
   public message: any;
   public key: any;
 
-  public previewData: JSONPreview[];
+  public previewData!: JSONPreview[];
 
   public ngOnInit() {
     if (this.config && this.config.value) {
@@ -37,7 +37,7 @@ export class FormJsonComponent implements OnInit {
         const fields: string[] = el.split('__');
         if (fields.length > 1) {
           this.previewData.push({
-            title: fields.pop().split('_').join(' '),
+            title: fields.pop()?.split('_').join(' ') || '',
             value: json[el]
           });
         } else {

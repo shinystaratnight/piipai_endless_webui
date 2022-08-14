@@ -8,7 +8,7 @@
       {{ getTranslationKey(config.key,'label') | translate: {"Default": config.templateOptions.label} }}:
     </label>
     <br>
-    <app-info *ngIf="config.templateOptions.description" [description]="getTranslationKey('description') | translate: {'Default': config.templateOptions.description || ''}"></app-info>
+    <webui-info *ngIf="config.templateOptions.description" [description]="getTranslationKey('description') | translate: {'Default': config.templateOptions.description || ''}"></webui-info>
     <input
       #picture
       accept="image/*,application/pdf"
@@ -109,8 +109,6 @@
   </div>
 
   <div class="modal-body picture d-flex justify-content-around flex-wrap" style="overflow: auto">
-    <!-- <app-webcam class="d-flex align-items-center" [options]="options" [onSuccess]="onSuccess" [onError]="onError">
-    </app-webcam> -->
     <webcam
       width="300"
       height="200"

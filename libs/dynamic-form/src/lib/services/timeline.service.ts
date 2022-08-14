@@ -5,7 +5,7 @@ import { Subject, Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
 import { ErrorsService } from '@webui/core';
-import { Endpoints } from '@webui/data';
+import { Endpoints } from '@webui/models';
 
 export enum TimelineAction {
   Reset,
@@ -22,7 +22,7 @@ export class TimelineService {
     return this._buttonAction.asObservable();
   }
 
-  private _action = new Subject();
+  private _action: Subject<TimelineAction> = new Subject();
   private _buttonAction = new Subject();
 
   constructor(private http: HttpClient, private errorsService: ErrorsService) {}
@@ -74,7 +74,7 @@ export class TimelineService {
       );
   }
 
-  editContact(action) {
+  editContact(action: any) {
     this._buttonAction.next(action);
   }
 }

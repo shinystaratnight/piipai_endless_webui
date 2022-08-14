@@ -42,7 +42,7 @@
           pageData.pathData.postfix === 'submit'
         "
       >
-        <app-generic-form
+        <webui-generic-form
           *ngIf="
             (!reload &&
               pageData.endpoint !== '/core/forms/' &&
@@ -84,7 +84,7 @@
               <webui-spinner *ngIf="saveProcess"></webui-spinner>
             </button>
           </div>
-        </app-generic-form>
+        </webui-generic-form>
       </div>
     </div>
 
@@ -96,13 +96,13 @@
         [scrollWindow]="true"
         (scrolled)="onModalScrollDown()"
       >
-        <app-generic-list
+        <webui-generic-list
           [upload]="upload"
           [listNameCache]="listNameCache"
           [allowPermissions]="permissionMethods"
           [endpoint]="pageData.endpoint"
         >
-        </app-generic-list>
+        </webui-generic-list>
       </div>
     </ng-container>
   </div>
@@ -131,7 +131,7 @@
         </div>
       </div>
       <div class="py-3">
-        <app-generic-form
+        <webui-generic-form
           [endpoint]="changePasswordEndpoint"
           [edit]="true"
           [needData]="false"
@@ -145,7 +145,7 @@
               {{ 'save' | translate: {"Default": "Save"} }}
             </button>
           </div>
-        </app-generic-form>
+        </webui-generic-form>
       </div>
     </div>
   </ng-template>
@@ -165,7 +165,7 @@
         </div>
       </div>
       <div class="py-3">
-        <app-generic-form
+        <webui-generic-form
           endpoint="/core/contacts/forgot_password/"
           [data]="passwordData"
           (event)="resetEvent($event)"
@@ -175,7 +175,7 @@
               {{'reset' | translate: {"Default": "Reset"} }}
             </button>
           </div>
-        </app-generic-form>
+        </webui-generic-form>
       </div>
     </div>
   </ng-template>

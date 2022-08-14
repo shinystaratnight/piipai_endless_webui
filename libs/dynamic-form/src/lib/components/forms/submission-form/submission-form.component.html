@@ -1,4 +1,4 @@
-<app-dynamic-form [config]="details"></app-dynamic-form>
+<webui-dynamic-form [config]="details"></webui-dynamic-form>
 
 <div class="buttons" *ngIf="!isEditTimesheet">
   <button *ngFor="let typeItem of types" class="btn btn-primary" [class.active]="type === typeItem.key" type="button"
@@ -7,7 +7,7 @@
   </button>
 </div>
 
-<app-dynamic-form *ngIf="type === timesheetType.Times && !formFilled" [config]="times" [hiddenFields]="hiddenFields"
+<webui-dynamic-form *ngIf="type === timesheetType.Times && !formFilled" [config]="times" [hiddenFields]="hiddenFields"
   (submitForm)="saveTimes($event)">
   <div class="footer">
     <div *ngIf="errors" class="text-danger mb-2">
@@ -18,16 +18,16 @@
       <webui-spinner *ngIf="saveProcess"></webui-spinner>
     </button>
   </div>
-</app-dynamic-form>
+</webui-dynamic-form>
 
-<app-dynamic-form
+<webui-dynamic-form
   *ngIf="type === timesheetType.Times && formFilled"
   [config]="timesFilled"
   [hiddenFields]="hiddenFields"
   (submitForm)="saveTimes($event)"
-></app-dynamic-form>
+></webui-dynamic-form>
 
-<app-dynamic-form *ngIf="type === timesheetType.Activity" [config]="skillActivity" [hiddenFields]="hiddenFields"
+<webui-dynamic-form *ngIf="type === timesheetType.Activity" [config]="skillActivity" [hiddenFields]="hiddenFields"
   (event)="eventHandler($event)" (submitForm)="saveSkillActivity($event)">
   <div *ngIf="!formFilled" class="footer">
     <div *ngIf="errors" class="text-danger mb-2">
@@ -38,12 +38,12 @@
       <webui-spinner *ngIf="saveProcess"></webui-spinner>
     </button>
   </div>
-</app-dynamic-form>
+</webui-dynamic-form>
 
-<app-dynamic-form
+<webui-dynamic-form
   *ngIf="type === timesheetType.Activities && isEditTimesheet"
   [config]="skillActivities"
-></app-dynamic-form>
+></webui-dynamic-form>
 
 <ng-container *ngIf="type === timesheetType.Activities && !isEditTimesheet">
   <table class="table">
@@ -70,7 +70,7 @@
   </div>
 </ng-container>
 
-<app-dynamic-form *ngIf="formFilled" [config]="notes"></app-dynamic-form>
+<webui-dynamic-form *ngIf="formFilled" [config]="notes"></webui-dynamic-form>
 
 <div class="footer" *ngIf="formFilled">
   <button class="btn btn-primary" type="button" (click)="saveTimesheet()">

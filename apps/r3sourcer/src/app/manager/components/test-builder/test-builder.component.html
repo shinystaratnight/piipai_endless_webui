@@ -22,13 +22,13 @@
             </button>
           </div>
 
-          <app-dynamic-form
+          <webui-dynamic-form
             #question
             [hiddenFields]="question.hiddenFields"
             [config]="question.config"
             (submitForm)="saveQuestion($event, index, question.id)"
           >
-          </app-dynamic-form>
+          </webui-dynamic-form>
 
           <div class="images" *ngIf="question.id">
             <app-image-uploader
@@ -61,10 +61,10 @@
                 ></fa-icon>
               </div>
 
-              <app-dynamic-form
+              <webui-dynamic-form
                 [config]="answer"
                 (submitForm)="saveAnswer($event, index, question.id, getId(answer))"
-              ></app-dynamic-form>
+              ></webui-dynamic-form>
             </div>
 
             <button

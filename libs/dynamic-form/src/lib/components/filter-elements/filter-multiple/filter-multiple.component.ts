@@ -18,16 +18,16 @@ enum FilterType {
 }
 
 @Component({
-  selector: 'app-filter-multiple',
+  selector: 'webui-filter-multiple',
   templateUrl: './filter-multiple.component.html',
 })
 export class FilterMultipleComponent implements OnInit, OnDestroy {
   public config: any;
-  public query: string;
-  public data: any[];
-  public type: string;
-  public filterSubscription: Subscription;
-  public querySubscription: Subscription;
+  public query!: string;
+  public data!: any[];
+  public type!: string;
+  public filterSubscription!: Subscription;
+  public querySubscription!: Subscription;
 
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
@@ -109,8 +109,8 @@ export class FilterMultipleComponent implements OnInit, OnDestroy {
     }
   }
 
-  public createData(type) {
-    this.data = this.config[type].map((data) => {
+  public createData(type: string) {
+    this.data = this.config[type].map((data: any) => {
       return {
         label: type === 'data' ? data[this.config.display] : data.label,
         query: this.config.query,
@@ -122,7 +122,7 @@ export class FilterMultipleComponent implements OnInit, OnDestroy {
     });
   }
 
-  public onChange(index: number, first?) {
+  public onChange(index: number, first?: boolean) {
     this.checkUniqueValues(this.config.unique, this.data, first, index);
     if (!this.config.multiple && this.config.type === 'checkbox') {
       this.data.forEach((item, i) => {
@@ -140,7 +140,7 @@ export class FilterMultipleComponent implements OnInit, OnDestroy {
     this.changeQuery();
   }
 
-  public genericQuery(query, data) {
+  public genericQuery(query: string, data: any[]) {
     const format = new FormatString();
     let result = '';
     if (data) {
@@ -171,7 +171,7 @@ export class FilterMultipleComponent implements OnInit, OnDestroy {
     });
   }
 
-  public parseQuery(query) {
+  public parseQuery(query: string) {
     const format = new FormatString();
     this.query = query;
     if (this.data) {
@@ -225,9 +225,9 @@ export class FilterMultipleComponent implements OnInit, OnDestroy {
     this.cd.detectChanges();
   }
 
-  public checkUniqueValues(unique, data, first?, index?) {
+  public checkUniqueValues(unique: any[], data: any[], first?: boolean, index?: number) {
     if (unique) {
-      const uniqueField = {};
+      const uniqueField: Record<string, any> = {};
       unique.forEach((field) => {
         if (index !== undefined && index !== null) {
           data.forEach((el, i) => {
@@ -248,7 +248,7 @@ export class FilterMultipleComponent implements OnInit, OnDestroy {
                 format: DATE_TIME_FORMAT,
               });
 
-              return uniqueField[field].some((name) => {
+              return uniqueField[field].some((name: any) => {
                 const elValue = Time.parse(name, { format: DATE_TIME_FORMAT });
                 return Math.abs(elValue.diff(currentValue, 'hours')) < 4;
               });

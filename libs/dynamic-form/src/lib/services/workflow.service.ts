@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 
 import { of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
@@ -13,7 +13,7 @@ export class WorkflowService {
   public workflowNodeEndpoint = '/core/workflownodes/';
   public companyWorkflowNodeEndpoint = '/core/companyworkflownodes/';
   public acceptenceTestEnpoint = '/acceptance-tests/acceptancetests/';
-  public acceptanceTestWorkflowNodesEndpoint = '/acceptance-tests/acceptancetestworkflownodes/'; //tslint:disable-line
+  public acceptanceTestWorkflowNodesEndpoint = '/acceptance-tests/acceptancetestworkflownodes/';
 
   constructor(
     private http: HttpClient,
@@ -29,8 +29,7 @@ export class WorkflowService {
   }
 
   public getNodesOfCompany(workflowId: string, companyId: string) {
-    const query = `?workflow_node__workflow=${workflowId}&company=${companyId}&active=true&limit=-1&only_parent=2&ordering=order,workflow_node.number`; //tslint:disable-line
-
+    const query = `?workflow_node__workflow=${workflowId}&company=${companyId}&active=true&limit=-1&only_parent=2&ordering=order,workflow_node.number`;
     return this.http
       .get(this.companyWorkflowNodeEndpoint + query)
       .pipe(
@@ -39,7 +38,7 @@ export class WorkflowService {
   }
 
   public getSubStates(workflowId: string, parentId: string) {
-    const query = `?workflow_node__workflow=${workflowId}&workflow_node__parent=${parentId}&active=true&limit=-1`; //tslint:disable-line
+    const query = `?workflow_node__workflow=${workflowId}&workflow_node__parent=${parentId}&active=true&limit=-1`;
 
     return this.http
       .get(this.companyWorkflowNodeEndpoint + query)
@@ -98,7 +97,7 @@ export class WorkflowService {
       );
   }
 
-  public addAcceptenceTest(body) {
+  public addAcceptenceTest(body: any) {
     return this.http
       .post(this.acceptanceTestWorkflowNodesEndpoint, body)
       .pipe(
@@ -106,7 +105,7 @@ export class WorkflowService {
       );
   }
 
-  public addWorkflowToCompany(data) {
+  public addWorkflowToCompany(data: any) {
     return this.http
       .post(this.companyWorkflowNodeEndpoint, data)
       .pipe(
@@ -118,11 +117,11 @@ export class WorkflowService {
     return this.http
       .patch(this.companyWorkflowNodeEndpoint + id + '/', data)
       .pipe(
-        catchError((err: any) => of([]))
+        catchError(() => of([]))
       );
   }
 
-  public errorHandler(error) {
+  public errorHandler(error: HttpErrorResponse) {
     return this.errors.handleError(error);
   }
 }

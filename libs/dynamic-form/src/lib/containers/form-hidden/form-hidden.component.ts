@@ -2,13 +2,13 @@ import { Component, Output, EventEmitter } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 
 @Component({
-  selector: 'app-form-hidden',
+  selector: 'webui-form-hidden',
   templateUrl: 'form-hidden.component.html'
 })
 
 export class FormHiddenComponent {
   public config: any;
-  public group: FormGroup;
+  public group!: FormGroup;
   public errors: any;
   public message: any;
 
@@ -18,11 +18,11 @@ export class FormHiddenComponent {
   @Output()
   public buttonAction: EventEmitter<any> = new EventEmitter();
 
-  public eventHandler(e) {
+  public eventHandler(e: any) {
     this.event.emit(e);
   }
 
-  public buttonActionHandler(e) {
+  public buttonActionHandler(e: any) {
     this.buttonAction.emit(e);
   }
 }

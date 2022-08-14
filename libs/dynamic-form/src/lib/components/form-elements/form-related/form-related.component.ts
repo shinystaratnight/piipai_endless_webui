@@ -12,7 +12,7 @@ import {
   Optional
 } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
@@ -28,12 +28,6 @@ import {
   ToastService,
   MessageType
 } from '@webui/core';
-import {
-  Field,
-  Endpoints,
-  CountryCodeLanguage,
-  translationCountryName
-} from '@webui/data';
 import {
   FormatString,
   isManager,
@@ -51,6 +45,9 @@ import {
 } from '../../../services';
 import { BasicElementComponent } from '../basic-element/basic-element.component';
 import { LocalStorageService } from 'ngx-webstorage';
+import { Field, ITemplateOptions } from '@webui/metadata';
+import { CountryCodeLanguage, Endpoints } from '@webui/models';
+import { stringify } from '@angular/compiler/src/util';
 
 export interface RelatedObject {
   id: string;
@@ -71,7 +68,7 @@ export interface CustomField {
 const translationMap = CountryCodeLanguage;
 
 @Component({
-  selector: 'app-form-related',
+  selector: 'webui-form-related',
   templateUrl: './form-related.component.html',
   styleUrls: ['./form-related.component.scss']
 })
@@ -79,41 +76,41 @@ export class FormRelatedComponent
   extends BasicElementComponent
   implements OnInit, OnDestroy, AfterViewChecked
 {
-  @ViewChild('search') search;
-  @ViewChild('searchElement') searchElement;
-  @ViewChild('modal') modal;
+  @ViewChild('search') search!: FormControl;
+  @ViewChild('searchElement') searchElement!: ElementRef;
+  @ViewChild('modal') modal!: ElementRef;
   @ViewChild('tableWrapper') tableWrapper: any;
   @ViewChild('messageDetail') messageDetail: any;
-  @ViewChild('autocomplete') elementRef: ElementRef;
+  @ViewChild('autocomplete') elementRef!: ElementRef;
 
-  @Output() event: EventEmitter<any> = new EventEmitter();
+  @Output() override event: EventEmitter<any> = new EventEmitter();
 
-  public config: Field;
-  public group: FormGroup;
+  public override config!: Field;
+  public override group!: FormGroup;
   public errors: any;
   public message: any;
-  public key: any;
+  public override key: any;
 
-  public label: boolean;
-  public isCollapsed: boolean;
-  public viewMode: boolean;
+  public label!: boolean;
+  public isCollapsed?: boolean;
+  public viewMode?: boolean;
   public editMode: boolean;
-  public saveProcess: boolean;
-  public linkPath: string;
+  public saveProcess!: boolean;
+  public linkPath!: string;
 
-  public display: string;
-  public param: string;
+  public display!: string;
+  public param!: string;
 
-  public list: any[];
-  public previewList: any[];
+  public list!: any[] | null;
+  public previewList!: any[] | null;
   public results: any;
   public displayValue: any;
 
   public lastElement = 0;
   public limit = 10;
-  public count: number;
+  public count!: number | null;
   public searchValue: any;
-  public fields: string[];
+  public fields!: string[];
 
   public hideAutocomplete = true;
   public modalData: any = {};
@@ -125,29 +122,29 @@ export class FormRelatedComponent
 
   public dataOfList: any;
   public formData: any = {};
-  public allowPermissions: string[];
+  public allowPermissions!: string[];
 
   public replaceElements: any = [];
 
-  public listElement: Field;
+  public listElement!: Field;
 
-  public skillEndpoint: boolean;
-  public customTemplate: CustomField[];
+  public skillEndpoint!: boolean;
+  public customTemplate!: CustomField[];
 
-  public autocompleteDisplay: boolean;
-  public currentQuery: string;
-  public currentId: string;
-  public update: Subject<any> = new Subject();
-  public manual: boolean;
-  public hideDetail: boolean;
-  public currentUser: boolean;
-  public listDefaultQuery: string;
-  public disableMessage: string;
-  public fieldDisabled: boolean;
-  public placeholder: string;
-  public loading: boolean;
+  public autocompleteDisplay!: boolean;
+  public currentQuery?: string | null;
+  public currentId?: string;
+  public update: Subject<void> = new Subject();
+  public manual!: boolean;
+  public hideDetail!: boolean;
+  public currentUser!: boolean;
+  public listDefaultQuery!: string;
+  public disableMessage!: string;
+  public fieldDisabled!: boolean;
+  public placeholder!: string;
+  public loading!: boolean;
 
-  private searchSubscription: Subscription;
+  private searchSubscription!: Subscription;
   private subscriptions: Subscription[] = [];
 
   public colors = {
@@ -164,19 +161,19 @@ export class FormRelatedComponent
 
   get canEdit() {
     return (
-      this.config.templateOptions.edit &&
+      this.config.templateOptions?.edit &&
       this.displayValue &&
       this.checkPermission('update')
     );
   }
 
   get canCreate() {
-    return this.config.templateOptions.add && this.checkPermission('post');
+    return this.config.templateOptions?.add && this.checkPermission('post');
   }
 
   get canDelete() {
     return (
-      this.config.templateOptions.delete &&
+      this.config.templateOptions?.delete &&
       this.displayValue &&
       this.checkPermission('delete')
     );
@@ -216,15 +213,15 @@ export class FormRelatedComponent
       this.config.key = this.config.replaceKey;
     }
 
-    this.addControl(this.config, this.fb, this.config.templateOptions.required);
+    this.addControl(this.config, this.fb, this.config.templateOptions?.required);
 
     this.skillEndpoint =
       this.config.endpoint === '/skills/skillbaserates/' ||
       this.config.endpoint === '/pricing/pricelistrates/';
 
-    this.display = this.config.templateOptions.display || '{__str__}';
-    this.param = this.config.templateOptions.param || 'id';
-    this.fields = this.config.templateOptions.values || ['__str__'];
+    this.display = this.config.templateOptions?.display || '{__str__}';
+    this.param = this.config.templateOptions?.param || 'id';
+    this.fields = this.config.templateOptions?.values || ['__str__'];
     this.isCollapsed = this.config.collapsed;
     this.viewMode = this.config.editForm && this.config.read_only;
 
@@ -250,8 +247,8 @@ export class FormRelatedComponent
     }
 
     this.placeholder =
-      this.config.templateOptions.placeholder ||
-      (this.config.templateOptions.edit ? 'Select or add new' : 'Select');
+      this.config.templateOptions?.placeholder ||
+      (this.config.templateOptions?.edit ? 'Select or add new' : 'Select');
 
     if (this.timelineService) {
       this.subscriptions.push(
@@ -284,9 +281,9 @@ export class FormRelatedComponent
   }
 
   public checkMetadataQuery() {
-    const properties = ['metadata_query', 'add_metadata_query'];
+    const properties: (keyof Field)[] = ['metadata_query', 'add_metadata_query'];
 
-    properties.forEach((prop: string) => {
+    properties.forEach((prop) => {
       this.config[prop] =
         this.config[prop] && this.parseMetadataQuery(this.config, prop);
     });
@@ -297,13 +294,13 @@ export class FormRelatedComponent
       this.config.data = {
         sendData: []
       };
-      this.config.delayData[this.config.endpoint] = this.config;
+      this.config.delayData[this.config.endpoint as string] = this.config;
     }
   }
 
   public checkIfListType() {
     if (this.config && this.config.list && this.config.data) {
-      const subscription = this.config.data.subscribe((data) => {
+      const subscription = this.config.data.subscribe((data: any) => {
         this.generateDataForList(this.config, data);
       });
 
@@ -321,7 +318,7 @@ export class FormRelatedComponent
     if (!this.allowPermissions) {
       this.allowPermissions = this.permission.getAllowMethods(
         undefined,
-        this.config.endpoint
+        this.config.endpoint as string
       );
     }
   }
@@ -329,11 +326,8 @@ export class FormRelatedComponent
   public getDefaultDataForListType() {
     if (this.config.defaultData) {
       let query = '?limit=-1&';
-      const params = [];
       const format = new FormatString();
       Object.keys(this.config.defaultData).forEach((el) => {
-        const value = format.format(this.config.defaultData[el], this.formData);
-
         query += `${el}=${
           format.format(this.config.defaultData[el], this.formData) || false
         }&`;
@@ -346,7 +340,7 @@ export class FormRelatedComponent
       this.listDefaultQuery = query;
 
       const metadata = JSON.parse(JSON.stringify(this.config.metadata));
-      metadata.forEach((el) => {
+      metadata.forEach((el: any) => {
         if (el.key) {
           el.mode = new BehaviorSubject('view');
           el.read_only = true;
@@ -359,14 +353,14 @@ export class FormRelatedComponent
       });
 
       this.genericFormService
-        .getByQuery(this.config.endpoint, query)
+        .getByQuery(this.config.endpoint as string, query)
         .subscribe((res) => {
           this.generateDataForList(<any>{ list: true, metadata }, res.results);
         });
     }
   }
 
-  public parseMetadataQuery(data, field) {
+  public parseMetadataQuery(data: any, field: any) {
     if (data[field] instanceof Object) {
       const keys = Object.keys(data[field]);
       const result = keys.map((query) => {
@@ -379,7 +373,7 @@ export class FormRelatedComponent
   }
 
   // Deprecated
-  public generateCustomTemplate(fieldsList) {
+  public generateCustomTemplate(fieldsList: any[]) {
     if (this.config.value) {
       this.customTemplate = fieldsList.map((el, index) => {
         const object = <CustomField>{};
@@ -411,7 +405,7 @@ export class FormRelatedComponent
       const subscription = this.config.hidden.subscribe((hide) => {
         if (hide && !this.config.hide) {
           this.displayValue = null;
-          this.group.get(this.key).patchValue('');
+          this.group.get(this.key)?.patchValue('');
           this.setInitValue();
         }
         this.config.hide = hide;
@@ -432,7 +426,7 @@ export class FormRelatedComponent
           this.viewMode = true;
           this.editMode = false;
 
-          this.group.get(this.key).patchValue('');
+          this.group.get(this.key)?.patchValue('');
           this.displayValue = undefined;
 
           this.autocompleteDisplay = false;
@@ -442,7 +436,7 @@ export class FormRelatedComponent
           this.setInitValue();
           this.eventHandler(
             { type: 'change' },
-            this.group.get(this.key).value,
+            this.group.get(this.key)?.value,
             this.resetAdditionalData()
           );
         } else if (mode === 'edit') {
@@ -455,8 +449,8 @@ export class FormRelatedComponent
   }
 
   public resetAdditionalData() {
-    const res = {};
-    if (this.group.get(this.key).value === '') {
+    const res: Record<string, any> = {};
+    if (this.group.get(this.key)?.value === '') {
       if (this.fields) {
         this.fields.forEach((el) => (res[el] = null));
       }
@@ -527,7 +521,7 @@ export class FormRelatedComponent
             if (this.checkIfMasterCompany(this.formData)) {
               if (this.config.if_master) {
                 if (this.config.if_master.includes('session')) {
-                  const id = this.userService.user.data.contact.contact_id;
+                  const id = this.userService.user?.data.contact.contact_id;
 
                   if (this.config.read_only) {
                     this.viewMode = true;
@@ -538,7 +532,7 @@ export class FormRelatedComponent
                   }
                 } else {
                   const format = new FormatString();
-                  let id;
+                  let id: any;
                   if (typeof this.config.if_master === 'string') {
                     id = format.format(this.config.if_master, this.formData);
                   } else if (Array.isArray(this.config.if_master)) {
@@ -548,7 +542,7 @@ export class FormRelatedComponent
                       }
                     });
                   }
-                  if (id && id !== this.group.get(this.key).value) {
+                  if (id && id !== this.group.get(this.key)?.value) {
                     this.getOptions.call(this, '', 0, false, this.setValue, id);
                     if (this.config.read_only) {
                       this.viewMode = true;
@@ -564,14 +558,14 @@ export class FormRelatedComponent
               !this.config.value
             ) {
               const format = new FormatString();
-              let id;
+              let id: any;
               if (typeof this.config.default === 'string') {
                 if (this.config.default === 'industry.default') {
                   if (this.formData.regular_company) {
                     const { industries } = this.formData.regular_company;
 
                     if (industries) {
-                      const industry = industries.find((el) => el.default);
+                      const industry = industries.find((el: any) => el.default);
 
                       if (industry) {
                         id = industry.id;
@@ -588,7 +582,7 @@ export class FormRelatedComponent
                   }
                 });
               }
-              if (id && id !== this.group.get(this.key).value) {
+              if (id && id !== this.group.get(this.key)?.value) {
                 this.getOptions.call(this, '', 0, false, this.setValue, id);
                 if (this.config.read_only) {
                   this.viewMode = true;
@@ -598,12 +592,12 @@ export class FormRelatedComponent
           }
 
           if (formData.reset && formData.reset.indexOf(this.config.key) > -1) {
-            if (this.group.get(this.key).value) {
+            if (this.group.get(this.key)?.value) {
               this.displayValue = '';
-              this.group.get(this.key).patchValue('');
+              this.group.get(this.key)?.patchValue('');
               this.eventHandler(
                 { type: 'reset' },
-                this.group.get(this.key).value,
+                this.group.get(this.key)?.value,
                 this.resetAdditionalData()
               );
             }
@@ -615,7 +609,7 @@ export class FormRelatedComponent
     }
   }
 
-  public checkIfMasterCompany(data) {
+  public checkIfMasterCompany(data: any) {
     const customerCompany = data.customer_company;
     const providerCompany = data.provider_company;
 
@@ -627,7 +621,7 @@ export class FormRelatedComponent
   public checkAutocomplete() {
     if (this.config.autocompleteData) {
       const subscription = this.config.autocompleteData.subscribe((data) => {
-        const key = this.propertyMatches(Object.keys(data), this.config.key);
+        const key = this.propertyMatches(Object.keys(data), this.config.key as string);
         if (key) {
           this.hideDetail = true;
           this.viewMode = true;
@@ -640,11 +634,11 @@ export class FormRelatedComponent
     }
   }
 
-  public propertyMatches(keys: string[], key: string): string {
+  public propertyMatches(keys: string[], key: string): string | undefined {
     return keys.find((el) => key.includes(el));
   }
 
-  public getLinkPath(endpoint): string {
+  public getLinkPath(endpoint: string): string {
     const list = this.navigation.linksList;
     let result;
     list.forEach((el) => {
@@ -666,10 +660,10 @@ export class FormRelatedComponent
   public setInitValue() {
     const formatString = new FormatString();
     this.results = [];
-    if (this.config.value || this.group.get(this.key).value) {
+    if (this.config.value || this.group.get(this.key)?.value) {
       const data = this.config.value
         ? this.config.value
-        : this.group.get(this.key).value;
+        : this.group.get(this.key)?.value;
       if (!this.config.many) {
         let value;
         if (data instanceof Object) {
@@ -678,7 +672,7 @@ export class FormRelatedComponent
               (el) => el[this.param] === data[this.param]
             );
             if (obj) {
-              const path = this.getLinkPath(this.config.endpoint);
+              const path = this.getLinkPath(this.config.endpoint as string);
               if (path) {
                 this.linkPath =
                   location.origin + path + data[this.param] + '/change';
@@ -688,7 +682,7 @@ export class FormRelatedComponent
               this.displayValue = formatString.format(this.display, obj);
             }
           } else {
-            const path = this.getLinkPath(this.config.endpoint);
+            const path = this.getLinkPath(this.config.endpoint as string);
             if (path) {
               this.linkPath =
                 location.origin + path + data[this.param] + '/change';
@@ -710,7 +704,7 @@ export class FormRelatedComponent
               (el) => el[this.param] === data
             );
             if (obj) {
-              const path = this.getLinkPath(this.config.endpoint);
+              const path = this.getLinkPath(this.config.endpoint as string);
               if (path) {
                 this.linkPath = location.origin + path + value + '/change';
               } else {
@@ -722,14 +716,14 @@ export class FormRelatedComponent
             this.getOptions.call(this, '', 0, false, this.setValue, data);
           }
         }
-        this.group.get(this.key).patchValue(value);
+        this.group.get(this.key)?.patchValue(value);
       } else {
         if (this.config.options && this.config.options.length) {
-          const results = [];
+          const results: any[] = [];
           this.config.options.forEach((el) => {
             if (el.translations) {
               const trans = data.translations.find(
-                (item) =>
+                (item: any) =>
                   item.language.id ===
                   translationMap[this.settingsService.settings.country_code]
               );
@@ -741,11 +735,11 @@ export class FormRelatedComponent
 
             el.__str__ = formatString.format(this.display, el);
             el.checked = false;
-            data.forEach((elem) => {
+            data.forEach((elem: any) => {
               if (elem instanceof Object) {
                 if (elem.translations) {
                   const trans = elem.translations.find(
-                    (el) =>
+                    (el: any) =>
                       el.language.id ===
                       translationMap[this.settingsService.settings.country_code]
                   );
@@ -778,10 +772,10 @@ export class FormRelatedComponent
         } else {
           this.results =
             data && data !== '-'
-              ? data.map((el) => {
+              ? data.map((el: any) => {
                   if (el.translations) {
                     const trans = el.translations.find(
-                      (item) =>
+                      (item: any) =>
                         item.language.id ===
                         translationMap[
                           this.settingsService.settings.country_code
@@ -795,7 +789,7 @@ export class FormRelatedComponent
 
                   if (el.industry && el.industry.translations) {
                     const trans = el.industry.translations.find(
-                      (item) =>
+                      (item: any) =>
                         item.language.id ===
                         translationMap[
                           this.settingsService.settings.country_code
@@ -822,7 +816,7 @@ export class FormRelatedComponent
       this.config.default.includes('session') &&
       !this.config.editForm
     ) {
-      const id = this.userService.user.data.contact.contact_id;
+      const id = this.userService.user?.data.contact.contact_id;
 
       if (this.config.read_only) {
         this.viewMode = true;
@@ -841,14 +835,14 @@ export class FormRelatedComponent
       const formatString = new FormatString();
       const id = formatString.format(
         this.config.default,
-        this.userService.user.currentRole
+        this.userService.user?.currentRole as any
       );
 
       if (this.config.read_only) {
         this.viewMode = true;
       }
 
-      this.group.get(this.key).patchValue(id);
+      this.group.get(this.key)?.patchValue(id);
       this.getOptions.call(this, '', 0, false, this.setValue, id);
     } else if (
       this.config.default &&
@@ -857,7 +851,7 @@ export class FormRelatedComponent
     ) {
       const id = this.settingsService.settings.company;
 
-      this.group.get(this.key).patchValue(id);
+      this.group.get(this.key)?.patchValue(id);
     } else {
       this.parseOptions();
     }
@@ -893,13 +887,13 @@ export class FormRelatedComponent
     });
   }
 
-  public generateDataForList(config: Field, data?): void {
+  public generateDataForList(config: Field, data?: any): void {
     if (config.list && config.metadata) {
       this.prefilledAttributes();
       this.dataOfList = [];
       const value = [];
       if (data) {
-        data.forEach((el) => {
+        data.forEach((el: any) => {
           const object = this.createObject(config.metadata);
           object['id'] = el.id;
           object['allData'] = el;
@@ -912,7 +906,7 @@ export class FormRelatedComponent
         if (data.length == 0) {
           this.addObject();
         }
-        this.group.get(this.key).patchValue(data);
+        this.group.get(this.key)?.patchValue(data);
       }
     }
   }
@@ -922,28 +916,26 @@ export class FormRelatedComponent
       this.config.metadata.forEach((el) => {
         if (el && el.attributes) {
           const formatString = new FormatString();
-          const attributes = Object.keys(el.attributes);
 
-          attributes.forEach((key) => {
-            el.templateOptions[key] = formatString.format(
-              el.attributes[key],
-              this.formData
-            );
-          });
+          for (const prop in el.attributes) {
+            if (el.templateOptions) {
+              el.templateOptions[prop as keyof ITemplateOptions] = formatString.format(el.attributes[prop as keyof ITemplateOptions], this.formData);
+            }
+          }
         }
       });
     }
   }
 
-  public createObject(metadata: Field[] = this.config.metadata): RelatedObject {
+  public createObject(metadata: Field[] | undefined = this.config.metadata) {
     const object = {
       id: undefined,
       allData: undefined,
       data: this.fb.group({}),
-      metadata: []
+      metadata: <Field[]>[]
     };
     const format = new FormatString();
-    object.metadata = metadata.map((el) => {
+    object.metadata = metadata ? metadata.map((el) => {
       const element = { ...el };
       element.mode = el.mode;
 
@@ -952,7 +944,7 @@ export class FormRelatedComponent
       }
 
       if (el.query) {
-        const newQuery = {};
+        const newQuery: Record<string, any> = {};
         Object.keys(el.query).forEach((query) => {
           newQuery[query] = format.format(el.query[query], this.formData);
         });
@@ -961,7 +953,7 @@ export class FormRelatedComponent
       }
 
       if (el.prefilled) {
-        const newPrefilled = {};
+        const newPrefilled: Record<string, any> = {};
         Object.keys(el.prefilled).forEach((field) => {
           newPrefilled[field] = format.format(
             el.prefilled[field],
@@ -981,7 +973,8 @@ export class FormRelatedComponent
       }
 
       return element;
-    });
+    }) : [];
+
     return object;
   }
 
@@ -993,14 +986,14 @@ export class FormRelatedComponent
     }
   }
 
-  public deleteObject(object: RelatedObject, e): void {
+  public deleteObject(object: RelatedObject, e: MouseEvent): void {
     e.stopPropagation();
     e.preventDefault();
     if (object.id) {
-      this.genericFormService.delete(this.config.endpoint, object.id).subscribe(
-        (response: any) => {
+      this.genericFormService.delete(this.config.endpoint as string, object.id).subscribe(
+        () => {
           this.dataOfList.splice(this.dataOfList.indexOf(object), 1);
-          this.updateValue({});
+          this.updateValue();
         },
         (error) => {
           this.toastr.sendMessage(error.errors.join(' '), MessageType.Error);
@@ -1009,7 +1002,7 @@ export class FormRelatedComponent
     }
   }
 
-  public editObject(object: RelatedObject, e): void {
+  public editObject(object: RelatedObject, e: MouseEvent): void {
     e.stopPropagation();
     e.preventDefault();
     if (object.id) {
@@ -1026,15 +1019,15 @@ export class FormRelatedComponent
       };
       this.genericFormService
         .editForm(endpoint, body)
-        .subscribe((res: any) => this.updateList());
+        .subscribe(() => this.updateList());
     }
   }
 
-  public updateValue(e): void {
-    if (e.type !== 'create' && e.type !== 'updateValue') {
+  public updateValue(e?: any): void {
+    if (e && e.type !== 'create' && e.type !== 'updateValue') {
       const value = this.dataOfList
-        .filter((el) => el.data.valid)
-        .map((el) => {
+        .filter((el: any) => el.data.valid)
+        .map((el: any) => {
           const object = el.data.value;
 
           if (el.id) {
@@ -1043,10 +1036,10 @@ export class FormRelatedComponent
           return object;
         });
       if (this.config.delayData) {
-        this.config.data.sendData = value.filter((el) => !el.id);
+        this.config.data.sendData = value.filter((el: any) => !el.id);
       }
 
-      const newValue = value.filter((el) => {
+      const newValue = value.filter((el: any) => {
         if (el.language) {
           if (el.language.id) {
             return true;
@@ -1058,11 +1051,11 @@ export class FormRelatedComponent
         }
       });
 
-      this.group.get(this.key).patchValue(newValue);
+      this.group.get(this.key)?.patchValue(newValue);
     }
   }
 
-  public fillingForm(metadata: Field[], data): void {
+  public fillingForm(metadata: Field[], data :any): void {
     metadata.forEach((el) => {
       if (el.key) {
         this.getValueOfData(data, el.key, el);
@@ -1072,9 +1065,9 @@ export class FormRelatedComponent
     });
   }
 
-  public getValueOfData(data, key: string, obj: Field): void {
+  public getValueOfData(data: any, key: string, obj: Field): void {
     const keys = key.split('.');
-    const prop = keys.shift();
+    const prop: string = keys.shift() as string;
     if (keys.length === 0) {
       if (data) {
         obj['value'] = data[key];
@@ -1104,7 +1097,7 @@ export class FormRelatedComponent
     }
   }
 
-  public deleteElement(closeModal): void {
+  public deleteElement(closeModal: () => void): void {
     closeModal();
     this.event.emit({
       type: 'delete',
@@ -1112,12 +1105,12 @@ export class FormRelatedComponent
       id: this.modalData.id,
       el: this.config
     });
-    this.group.get(this.key).patchValue('');
+    this.group.get(this.key)?.patchValue('');
     delete this.config.value;
     this.displayValue = null;
   }
 
-  public open(type, object?, event?) {
+  public open(type: 'post' | 'update' | 'delete', object?: any, event?: any) {
     if (isClient() && type !== 'post') {
       if (event) {
         event.preventDefault();
@@ -1134,7 +1127,7 @@ export class FormRelatedComponent
 
     const format = new FormatString();
 
-    if (type === 'update' && !this.config.templateOptions.edit) {
+    if (type === 'update' && !this.config.templateOptions?.edit) {
       return false;
     }
 
@@ -1146,12 +1139,12 @@ export class FormRelatedComponent
     }
     this.modalData = {};
     this.modalData.type = type;
-    this.modalData.title = this.config.templateOptions.label;
+    this.modalData.title = this.config.templateOptions?.label;
     if (object && object.endpoint) {
       const parts = object.endpoint.split('/');
       parts.pop();
       object[this.param] = parts.pop();
-      this.modalData.endpoint = [].concat(parts, '').join('/');
+      this.modalData.endpoint = Array.from([...parts, '']).join('/');
     } else {
       let endpoint;
       if (this.config.editEndpoint) {
@@ -1175,8 +1168,8 @@ export class FormRelatedComponent
         }
       } else {
         this.modalData.title =
-          this.config.templateOptions.editLabel || this.displayValue;
-        const description = this.config.templateOptions.editDescription
+          this.config.templateOptions?.editLabel || this.displayValue;
+        const description = this.config.templateOptions?.editDescription
           ? format.format(
               this.config.templateOptions.editDescription,
               this.formData
@@ -1187,10 +1180,10 @@ export class FormRelatedComponent
           this.modalData.description =
             this.sanitizer.bypassSecurityTrustHtml(description);
           this.currentUser =
-            this.formData['id'] === this.userService.user.data.user;
+            this.formData['id'] === this.userService.user?.data.user;
         }
         this.modalData.id =
-          !this.config.editEndpoint && this.group.get(this.key).value;
+          !this.config.editEndpoint && this.group.get(this.key)?.value;
 
         if (this.modalData.id instanceof Object) {
           this.modalData.id = this.modalData.id.id;
@@ -1287,7 +1280,7 @@ export class FormRelatedComponent
     }
   }
 
-  public generateList(value, concat = false): void {
+  public generateList(value: any, concat = false): void {
     if (!this.config.doNotChoice) {
       this.currentQuery = null;
       this.hideAutocomplete = false;
@@ -1295,7 +1288,7 @@ export class FormRelatedComponent
         if (this.searchValue) {
           this.filter(this.searchValue);
         } else {
-          this.list = this.config.options;
+          this.list = this.config.options as any[];
           this.generatePreviewList(this.list);
         }
       } else {
@@ -1305,7 +1298,7 @@ export class FormRelatedComponent
     }
   }
 
-  public generatePreviewList(list) {
+  public generatePreviewList(list: any[]) {
     if (this.config.options) {
       this.previewList = list;
       return;
@@ -1325,7 +1318,7 @@ export class FormRelatedComponent
     }, 150);
   }
 
-  public filter(value) {
+  public filter(value: any) {
     this.lastElement = 0;
     this.count = null;
     this.previewList = null;
@@ -1341,22 +1334,22 @@ export class FormRelatedComponent
         this.list = filteredList;
         this.generatePreviewList(this.list);
       } else {
-        this.generatePreviewList(this.config.options);
+        this.generatePreviewList(this.config.options as any[]);
       }
     } else {
       this.generateList(value);
     }
   }
 
-  public setValue(item, manual?: boolean, update?: boolean) {
+  public setValue(item: any, manual?: boolean, update?: boolean) {
     let updated = false;
 
     if (this.config.relatedData) {
-      const data = this.config.relatedData.find((el) => !!el[item[this.param]]);
-      const mapedData = {};
+      const data = this.config.relatedData.find((el: any) => !!el[item[this.param]]);
+      const mapedData: Record<string, any> = {};
 
       if (data) {
-        const relatedData = data[item[this.param]];
+        const relatedData: any[] = data[item[this.param]];
         relatedData.forEach((el, i) => {
           const key = this.config.relatedDataMap[i];
           mapedData[key] = el;
@@ -1402,17 +1395,17 @@ export class FormRelatedComponent
 
   public resetValue(): boolean {
     this.displayValue = '';
-    this.group.get(this.key).patchValue('');
+    this.group.get(this.key)?.patchValue('');
 
     return true;
   }
 
   public updateValueOfSingleType(item: any, update?: boolean): boolean {
-    if (item[this.param] !== this.group.get(this.key).value || update) {
+    if (item[this.param] !== this.group.get(this.key)?.value || update) {
       const formatString = new FormatString();
 
       this.displayValue = formatString.format(this.display, item);
-      this.group.get(this.key).patchValue(item[this.param]);
+      this.group.get(this.key)?.patchValue(item[this.param]);
 
       if (!(<any>this.cd).destroyed) {
         this.cd.markForCheck();
@@ -1447,24 +1440,24 @@ export class FormRelatedComponent
 
   public addTests(item: any) {
     if (this.config.tests) {
-      const testsMap = {
+      const testsMap: Record<string, any> = {
         skill: 'acceptance_tests_skills',
         tag: 'acceptance_tests_tags'
       };
 
       return this.config.tests.filter((test) => {
-        const list = test[testsMap[this.config.key]];
+        const list = test[testsMap[this.config.key as string]];
 
         if (!list.length) {
           return false;
         }
 
-        return list.some((el) => el[this.config.key].id === item.id);
+        return list.some((el: any) => el[this.config.key as string].id === item.id);
       });
     }
   }
 
-  public passTests(item: any, event) {
+  public passTests(item: any, event: MouseEvent) {
     event.stopPropagation();
     event.preventDefault();
 
@@ -1478,9 +1471,9 @@ export class FormRelatedComponent
     if (api || this.config.send === false) {
       this.genericFormService
         .delete(
-          this.config.endpoint,
+          this.config.endpoint as string,
           item[this.param],
-          this.config.send !== false && 'delete'
+          this.config.send !== false ? 'delete' : ''
         )
         .subscribe(() => {
           if (this.results[index]) {
@@ -1506,8 +1499,8 @@ export class FormRelatedComponent
     }
   }
 
-  public setDefault(i, item) {
-    this.results.forEach((el) => {
+  public setDefault(_: any, item: any) {
+    this.results.forEach((el: any) => {
       el.default = false;
       if (el === item) {
         el.default = true;
@@ -1516,7 +1509,7 @@ export class FormRelatedComponent
     this.updateData();
   }
 
-  public eventHandler(e, value, additionalData?, manual?: boolean) {
+  public eventHandler(e: any, value: any, additionalData?: any, manual?: boolean) {
     this.event.emit({
       type: e.type,
       el: this.config,
@@ -1535,9 +1528,9 @@ export class FormRelatedComponent
   }
 
   public updateData() {
-    const results = this.results.map((el) => {
+    const results = this.results.map((el: any) => {
       if (this.config.sendData) {
-        const result = {};
+        const result: Record<string, any> = {};
 
         this.config.sendData.forEach((key) => (result[key] = el[key]));
         return {
@@ -1547,10 +1540,10 @@ export class FormRelatedComponent
       }
       return el[this.param];
     });
-    this.group.get(this.key).patchValue(results);
+    this.group.get(this.key)?.patchValue(results);
   }
 
-  public formEvent(e, closeModal) {
+  public formEvent(e: any, closeModal: () => void) {
     if (e.type === 'saveStart') {
       this.saveProcess = true;
     }
@@ -1581,9 +1574,8 @@ export class FormRelatedComponent
       }
 
       if (this.modalData.endpoint !== this.config.addEndpoint) {
-        this.group
-          .get(this.key)
-          .patchValue(
+        this.group.get(this.key)
+          ?.patchValue(
             this.config.useValue
               ? this.config.value[this.param]
               : e.data[this.param]
@@ -1599,7 +1591,7 @@ export class FormRelatedComponent
         if (this.config.candidateForm) {
           this.eventHandler(
             { type: 'patchAddress' },
-            this.group.get(this.key).value
+            this.group.get(this.key)?.value
           );
         }
       }
@@ -1618,8 +1610,8 @@ export class FormRelatedComponent
     this.saveProcess = false;
   }
 
-  public updateList(data?) {
-    const object = this.dataOfList.find((el) => el.id === data.id);
+  public updateList(data?: any) {
+    const object = this.dataOfList.find((el: any) => el.id === data.id);
 
     if (object) {
       const newMetadata = object.metadata.slice();
@@ -1658,14 +1650,14 @@ export class FormRelatedComponent
     return query;
   }
 
-  public removeItem(index, e) {
+  public removeItem(index: number, e: MouseEvent) {
     e.stopPropagation();
     e.preventDefault();
     this.dataOfList.splice(index, 1);
-    this.updateValue({});
+    this.updateValue();
   }
 
-  public generateQuery(queries) {
+  public generateQuery(queries: Record<string, any>) {
     const format = new FormatString();
     let query = '&';
     if (queries) {
@@ -1701,17 +1693,17 @@ export class FormRelatedComponent
   }
 
   public getOptions(
-    value,
-    offset,
+    value: any,
+    offset: number,
     concat = false,
-    callback?,
-    id?,
-    customQuery?,
-    only?
+    callback?: (item: any, manual?: boolean, update?: boolean) => void,
+    id?: string,
+    customQuery?: any,
+    only?: boolean
   ) {
     const format = new FormatString();
 
-    const endpoint = format.format(this.config.endpoint, this.formData);
+    const endpoint = format.format(this.config.endpoint as string, this.formData);
     if (endpoint) {
       let query = '';
       if (value) {
@@ -1719,7 +1711,7 @@ export class FormRelatedComponent
       }
       query += !query ? '?' : '';
       query += `limit=${this.limit}&offset=${offset}`;
-      if (!this.config.templateOptions.dontSendFields) {
+      if (!this.config.templateOptions?.dontSendFields) {
         query += this.generateFields(this.fields);
       }
       query += this.generateQuery(this.config.query);
@@ -1753,7 +1745,7 @@ export class FormRelatedComponent
 
                 results.forEach((el) => {
                   const { templateOptions } = this.config;
-                  const { listParam, listDisplay, info } = templateOptions;
+                  const { listParam, listDisplay, info } = templateOptions as ITemplateOptions;
                   const display = listDisplay || this.display;
 
                   el.__str__ =
@@ -1767,7 +1759,7 @@ export class FormRelatedComponent
 
                   if (listParam) {
                     el[this.param] = FormatString.format(listParam, el);
-                    el['name'] = FormatString.format(listDisplay, el);
+                    el['name'] = FormatString.format(listDisplay as string, el);
                   }
 
                   if (info) {
@@ -1781,7 +1773,7 @@ export class FormRelatedComponent
                     ...this.config.options,
                     ...results.filter(
                       (element) =>
-                        !this.config.options.find(
+                        !this.config.options?.find(
                           (option) => option.id === element.id
                         )
                     )
@@ -1803,7 +1795,7 @@ export class FormRelatedComponent
                 if (this.config.unique) {
                   res = this.filterUniqueValue(res, this.results);
                 }
-                res.forEach((el) => {
+                res.forEach((el: any) => {
                   el.__str__ = formatString.format(this.display, el);
                 });
                 if (concat && this.previewList) {
@@ -1835,12 +1827,12 @@ export class FormRelatedComponent
                 }
 
                 if (canSetValue) {
-                  const target = res.results.find((el) => el.id === id);
+                  const target = res.results.find((el: any) => el.id === id);
 
                   const item = target || res.results[0];
 
                   if (item) {
-                    const path = this.getLinkPath(this.config.endpoint);
+                    const path = this.getLinkPath(this.config.endpoint as string);
                     if (path) {
                       this.linkPath =
                         location.origin + path + item[this.param] + '/change';
@@ -1879,7 +1871,7 @@ export class FormRelatedComponent
                   res.__str__
                 );
 
-                const path = this.getLinkPath(this.config.endpoint);
+                const path = this.getLinkPath(this.config.endpoint as any);
                 if (path) {
                   this.linkPath =
                     location.origin + path + res[this.param] + '/change';
@@ -1887,7 +1879,7 @@ export class FormRelatedComponent
                   this.linkPath = '/';
                 }
 
-                callback.call(this, res, false, true);
+                callback?.call(this, res, false, true);
               }
               this.cd.detectChanges();
             });
@@ -1900,7 +1892,7 @@ export class FormRelatedComponent
     return this.allowPermissions.indexOf(type) > -1;
   }
 
-  public checkRelatedField(key: string, data): boolean {
+  public checkRelatedField(key: string, data: any): boolean {
     let result;
     if (this.config.showIf && this.checkExistKey(this.config.showIf, key)) {
       result = this.checkShowRules(this.config.showIf, data);
@@ -1908,7 +1900,7 @@ export class FormRelatedComponent
     return result || false;
   }
 
-  public checkExistKey(rules, key) {
+  public checkExistKey(rules: any[], key: string) {
     let result = false;
     rules.forEach((rule) => {
       if (rule instanceof Object) {
@@ -1921,7 +1913,7 @@ export class FormRelatedComponent
     return result;
   }
 
-  public checkShowRules(rule: any[], data): boolean {
+  public checkShowRules(rule: any[], data: any): boolean {
     let approvedRules = 0;
     const rulesNumber = rule.length;
 
@@ -1952,7 +1944,7 @@ export class FormRelatedComponent
 
   public getValueByKey(key: string, data: any): any {
     const keysArray = key.split('.');
-    const firstKey = keysArray.shift();
+    const firstKey: string = keysArray.shift() as string;
     if (keysArray.length === 0) {
       return data && data[firstKey];
     } else if (keysArray.length > 0) {
@@ -1961,7 +1953,7 @@ export class FormRelatedComponent
     }
   }
 
-  public trackByFn(value) {
+  public trackByFn(value: any) {
     return value[this.param];
   }
 
@@ -1974,12 +1966,12 @@ export class FormRelatedComponent
   }
 
   public clearField() {
-    if (this.group.get(this.key).value) {
+    if (this.group.get(this.key)?.value) {
       this.displayValue = '';
-      this.group.get(this.key).patchValue('');
+      this.group.get(this.key)?.patchValue('');
       this.eventHandler(
         { type: 'reset' },
-        this.group.get(this.key).value,
+        this.group.get(this.key)?.value,
         this.resetAdditionalData()
       );
     }
@@ -1991,9 +1983,9 @@ export class FormRelatedComponent
     });
   }
 
-  public isDisabled(data) {
+  public isDisabled(data: any) {
     const config = this.config.disabled;
-    const messages = [];
+    const messages:  string[] = [];
     let disable = false;
 
     if (config) {
@@ -2011,7 +2003,7 @@ export class FormRelatedComponent
     };
   }
 
-  public getScore(score) {
+  public getScore(score: string) {
     return Math.floor(parseFloat(score));
   }
 
@@ -2021,7 +2013,7 @@ export class FormRelatedComponent
     }
 
     const { key } = this.config;
-    const error = this.errors[key];
+    const error = this.errors[key as string];
 
     if (error && Array.isArray(error) && error.length > 1) {
       return true;
@@ -2036,7 +2028,7 @@ export class FormRelatedComponent
     }
 
     const { key } = this.config;
-    const error = this.errors[key];
+    const error = this.errors[key as string];
 
     if (!error) {
       return false;
@@ -2054,7 +2046,7 @@ export class FormRelatedComponent
   }
 
   @HostListener('document:click', ['$event'])
-  public handleClick(event) {
+  public handleClick(event: MouseEvent) {
     let clickedComponent = event.target;
     let inside = false;
     if (this.elementRef) {
@@ -2062,7 +2054,7 @@ export class FormRelatedComponent
         if (clickedComponent === this.elementRef.nativeElement) {
           inside = true;
         }
-        clickedComponent = clickedComponent.parentNode;
+        clickedComponent = (clickedComponent as HTMLElement).parentNode;
       } while (clickedComponent);
       if (!inside) {
         if (this.previewList) {

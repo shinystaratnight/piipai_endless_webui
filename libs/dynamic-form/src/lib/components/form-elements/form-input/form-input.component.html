@@ -18,10 +18,10 @@
     >
       {{ getTranslationKey('label') | translate: { Default: config.templateOptions.label } }}:
     </label>
-    <app-info
+    <webui-info
       *ngIf="config.templateOptions.description"
       [description]="getTranslationKey('description') | translate: { Default: config.templateOptions.description || '' }"
-    ></app-info>
+    ></webui-info>
     <i
       class="data-list-trigger info-icon"
       *ngIf="dataListMap"

@@ -1,4 +1,4 @@
-import { Field } from '@webui/data';
+import { Field } from "@webui/metadata";
 
 export interface CustomEvent {
   type: string;

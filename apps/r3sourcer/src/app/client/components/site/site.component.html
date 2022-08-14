@@ -32,7 +32,7 @@
             pageData.pathData.postfix === 'submit'
           "
         >
-          <app-generic-form
+          <webui-generic-form
             *ngIf="
               (!reload &&
                 pageData.endpoint !== '/core/forms/' &&
@@ -66,7 +66,7 @@
                   <webui-spinner *ngIf="saveProcess"></webui-spinner>
               </button>
             </div>
-          </app-generic-form>
+          </webui-generic-form>
         </div>
       </div>
 
@@ -78,18 +78,18 @@
           [scrollWindow]="true"
           (scrolled)="onModalScrollDown()"
         >
-          <app-generic-list
+          <webui-generic-list
             [upload]="upload"
             [clientId]="getClientId()"
             [listNameCache]="listNameCache"
             [allowPermissions]="permissionMethods"
             [endpoint]="pageData.endpoint"
           >
-          </app-generic-list>
+          </webui-generic-list>
         </div>
 
         <div class="datatable-list" *ngIf="pageData.pathData.postfix && pageData.pathData.postfix === 'fillin'">
-          <app-generic-list
+          <webui-generic-list
             [responseField]="fillInData.responseField || 'results'"
             [paginated]="fillInData.paginated || 'on'"
             [supportData]="fillInData.supportData"
@@ -100,7 +100,7 @@
             [allowPermissions]="permissionMethods"
             [endpoint]="pageData.endpoint"
             (checkedObjects)="checkedObjects($event)"
-          ></app-generic-list>
+          ></webui-generic-list>
           <div class="buttons mb-5">
             <button type="button" class="btn btn-secondary" (click)="back()">
               {{'cancel' | translate: {"Default": "Cancel"} }}
@@ -141,7 +141,7 @@
         </div>
       </div>
       <div class="py-3">
-        <app-generic-form
+        <webui-generic-form
           [endpoint]="changePasswordEndpoint"
           [edit]="true"
           [needData]="false"
@@ -155,7 +155,7 @@
               {{ 'save' | translate: {"Default": "Save"} }}
             </button>
           </div>
-        </app-generic-form>
+        </webui-generic-form>
       </div>
     </div>
   </ng-template>
@@ -175,7 +175,7 @@
         </div>
       </div>
       <div class="py-3">
-        <app-generic-form
+        <webui-generic-form
           endpoint="/core/contacts/forgot_password/"
           [data]="passwordData"
           (event)="resetEvent($event)"
@@ -185,7 +185,7 @@
               {{'reset' | translate: {"Default": "Reset"} }}
             </button>
           </div>
-        </app-generic-form>
+        </webui-generic-form>
       </div>
     </div>
   </ng-template>

@@ -1,4 +1,4 @@
-<div appDropDown element=".autocomplete" [update]="update" *ngIf="(!viewMode || config.list) && !config.hide"  class="input_type_autocomplete" [ngClass]="['input_type_'+this.key]">
+<div webuiDropDown element=".autocomplete" [update]="update" *ngIf="(!viewMode || config.list) && !config.hide"  class="input_type_autocomplete" [ngClass]="['input_type_'+this.key]">
   <div *ngIf="!config.list" class="form-group" [formGroup]="group">
     <div class="form-element" *ngIf="!config.many">
       <label class="form-element-label" [attr.for]="key" [class.required]="config.templateOptions.required"
@@ -6,12 +6,12 @@
         {{ getTranslationKey(config.key, 'label') | translate: {"Default": config.templateOptions.label} }}:
       </label>
 
-      <app-info *ngIf="config.templateOptions.description"
+      <webui-info *ngIf="config.templateOptions.description"
         [description]="getTranslationKey(this.key, 'description') | translate: {'Default': config.templateOptions.description || ''}">
-      </app-info>
-      <app-info *ngIf="!viewMode && config.errorMessage && config.errorMessage.visible"
+      </webui-info>
+      <webui-info *ngIf="!viewMode && config.errorMessage && config.errorMessage.visible"
         [description]="getTranslationKey(config.key, 'error_message') | translate: {'Default': config.errorMessage.message}"
-        [danger]="true"></app-info>
+        [danger]="true"></webui-info>
 
       <div class="form-element-content flex-row edit position-relative" [class.disabled]="fieldDisabled"
         tooltipClass="dark-tooltip" placement="bottom" [ngbTooltip]="disableMessage">
@@ -74,9 +74,9 @@
         [class.required]="config.templateOptions.required">
         {{ getTranslationKey(config.key, 'label') | translate: {"Default": config.templateOptions.label} }}:
       </label>
-      <app-info *ngIf="config.templateOptions.description"
+      <webui-info *ngIf="config.templateOptions.description"
         [description]="getTranslationKey(this.key, 'description') | translate: {'Default': config.templateOptions.description || ''}">
-      </app-info>
+      </webui-info>
       <div #autocomplete *ngIf="config.many && results && !config.useOptions"
         class="form-element-content flex-column align-items-start edit" [class.many]="config.many && results"
         style="position: relative">
@@ -249,7 +249,7 @@
             <ng-container *ngFor="let field of object.metadata">
               <td *ngIf="!field.hide">
                 <ng-container
-                  appFormElement
+                  webuiFormElement
                   [label]="false"
                   [config]="field"
                   [group]="object.data"
@@ -418,7 +418,7 @@
       <div *ngIf="modalData.type !== 'delete'">
         <div class="description" *ngIf="modalData.description" [innerHTML]="modalData.description"></div>
 
-        <app-generic-form
+        <webui-generic-form
           [endpoint]="modalData.endpoint"
           [mode]="modalData.mode"
           [data]="modalData.data"
@@ -433,7 +433,7 @@
             {{'save' | translate}}
             <webui-spinner *ngIf="saveProcess"></webui-spinner>
           </button>
-        </app-generic-form>
+        </webui-generic-form>
       </div>
       <div *ngIf="modalData.type === 'delete'">
         {{'are_you_sure' | translate}}
@@ -471,8 +471,8 @@
     <webui-close-button class="close ml-2" (click)="modal.dismiss()"></webui-close-button>
   </div>
 
-  <app-generic-form [endpoint]="modalData.endpoint" [metadataQuery]="modalData.metadataQuery" [id]="modalData.id"
+  <webui-generic-form [endpoint]="modalData.endpoint" [metadataQuery]="modalData.metadataQuery" [id]="modalData.id"
     [mode]="modalData.mode" [data]="modalData.data" [edit]="modalData.edit" (str)="changeLabel($event)"
     (event)="formEvent($event, c)" (errorForm)="formError($event)">
-  </app-generic-form>
+  </webui-generic-form>
 </ng-template>

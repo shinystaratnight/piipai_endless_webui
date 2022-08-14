@@ -3,26 +3,26 @@ import { Component, OnInit } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { isMobile } from '@webui/utilities';
-import { Time } from '@webui/time';
+import { Moment, Time } from '@webui/time';
 
 @Component({
-  selector: 'app-tracking-modal',
+  selector: 'webui-tracking-modal',
   templateUrl: './tracking-modal.component.html',
   styleUrls: ['./tracking-modal.component.scss'],
 })
 export class TrackingModalComponent implements OnInit {
   timesheet: any;
-  data: any[];
+  data!: any[];
 
-  jobsite: string;
-  path: Array<{ lat: number; lng: number; log_at: string }>;
-  breakPath: Array<{ lat: number; lng: number; log_at: string }>;
-  timePoints: { start: any; end: any; break_start: any; break_end: any };
-  latitude: number;
-  longitude: number;
+  jobsite!: string;
+  path!: Array<{ lat: number; lng: number; log_at: string }>;
+  breakPath!: Array<{ lat: number; lng: number; log_at: string }>;
+  timePoints!: { start: any; end: any; break_start: any; break_end: any };
+  latitude!: number;
+  longitude!: number;
 
-  markerLatitude: number;
-  markerLongitude: number;
+  markerLatitude?: number;
+  markerLongitude?: number;
 
   timeInstance: any;
   isMobile = isMobile;
@@ -65,7 +65,7 @@ export class TrackingModalComponent implements OnInit {
     this.modal.dismiss();
   }
 
-  public trackingMarkerCoordinates(time) {
+  public trackingMarkerCoordinates(time: Moment) {
     const item = this.path.find(
       (el) =>
         time.format('hh:mm A') ===
@@ -78,7 +78,7 @@ export class TrackingModalComponent implements OnInit {
     }
   }
 
-  public trackByTracking(data) {
+  public trackByTracking(data: any) {
     return data.log_at;
   }
 }

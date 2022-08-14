@@ -14,7 +14,7 @@ export class SortService {
     return this._stream.asObservable();
   }
 
-  private initialized: boolean;
+  private initialized!: boolean;
 
   public init(data: SortData): void {
     if (!this.initialized) {
@@ -52,7 +52,7 @@ export class SortService {
   }
 
   public getSortData(config: any[]): SortData {
-    const result = {};
+    const result: Record<string, any> = {};
 
     config.forEach((el) => {
       if (el.sorted) {
@@ -60,12 +60,12 @@ export class SortService {
       }
 
       if (el.sortMap) {
-        el.sortMap.forEach(item => {
+        el.sortMap.forEach((item: any) => {
           if (item.sorted) {
             result[item.param] = item.sorted;
           }
         })
-      }
+      }w
     });
 
     return result;

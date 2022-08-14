@@ -30,18 +30,18 @@ type Name = {
 }
 
 @Component({
-  selector: 'app-list-column-header',
+  selector: 'webui-list-column-header',
   templateUrl: 'list-column-header.component.html',
   styleUrls: ['list-column-header.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ListColumnHeaderComponent implements OnInit {
-  @Input() public config: ListColumnHeaderConfig;
+  @Input() public config!: ListColumnHeaderConfig;
 
-  hasMultipleNames: boolean;
-  multipleNamesData: Name[];
-  icon$: Observable<string>;
-  translationKey: string;
+  hasMultipleNames!: boolean;
+  multipleNamesData!: Name[];
+  icon$!: Observable<string>;
+  translationKey!: string;
 
   @Output() public sortChange: EventEmitter<void> = new EventEmitter();
 
@@ -71,7 +71,7 @@ export class ListColumnHeaderComponent implements OnInit {
     if (this.hasMultipleNames) {
       const item = this.multipleNamesData.find(el => el.name === name);
 
-      this.sortService.updateWith(item.param);
+      this.sortService.updateWith(item?.param as string);
     } else {
       this.sortService.updateWith(this.config.sort_field);
     }
@@ -85,7 +85,7 @@ export class ListColumnHeaderComponent implements OnInit {
 
     this.multipleNamesData = names.map((name: string, index: number) => {
       let sorted;
-      let param;
+      let param: any;
 
       const sortData = this.config.sortMap.find(el => el.name === name);
       const iconStream$ = this.sortService.stream$

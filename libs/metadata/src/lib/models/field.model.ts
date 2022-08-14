@@ -3,6 +3,58 @@ import { Subject } from 'rxjs';
 
 export type IsHiddenFn = () => boolean;
 
+export interface ITemplateOptions {
+  hideLabel?: boolean;
+  dontSendFields?: boolean;
+  label?: string;
+  type?: string;
+  min?: number;
+  max?: number;
+  required?: boolean;
+  readonly?: boolean;
+  display?: string;
+  param?: string;
+  values?: string[];
+  text?: string;
+  description?: string;
+  editLabel?: string;
+  editDescription?: string;
+  info?: any;
+  bottom?: boolean;
+  inlineFilters?: boolean;
+  addon?: string;
+  placeholder?: string;
+  danger?: string;
+  step?: number;
+  icon?: string;
+  noneValue?: string;
+  full?: boolean;
+  add?: boolean;
+  edit?: boolean;
+  delete?: boolean;
+  hidePreviewError?: boolean;
+  customLabel?: {
+    field: string;
+    values: { [key: string]: any };
+  };
+  inline?: boolean;
+  additionalDescription?: string;
+  rows?: number;
+  showButtonIf?: boolean; // Checkbox button
+  color?: any;
+  bold?: any;
+  dropdownCount?: number;
+  currency?: boolean;
+  listDisplay?: string;
+  listParam?: string;
+  round?: true;
+  array?: boolean;
+  pattern?: string;
+  patterError?: string;
+  add_label?: string;
+  iconParsed?: string;
+}
+
 export interface Field {
   type?: string;
   key?: string;
@@ -56,7 +108,7 @@ export interface Field {
   updateFormData?: boolean;
   isPrefilled?: boolean;
   reset?: string[];
-  attributes?: { [key: string]: string };
+  attributes?: Record<keyof ITemplateOptions, any>;
   editEndpoint?: string;
   useValue?: boolean;
   if_master?: any;
@@ -102,55 +154,6 @@ export interface Field {
   max?: number;
   isHidden?: IsHiddenFn;
   addEndpoint?: string;
-  templateOptions?: {
-    hideLabel?: boolean;
-    dontSendFields?: boolean;
-    label?: string;
-    type?: string;
-    min?: number;
-    max?: number;
-    required?: boolean;
-    readonly?: boolean;
-    display?: string;
-    param?: string;
-    values?: string[];
-    text?: string;
-    description?: string;
-    editLabel?: string;
-    editDescription?: string;
-    info?: any;
-    bottom?: boolean;
-    inlineFilters?: boolean;
-    addon?: string;
-    placeholder?: string;
-    danger?: string;
-    step?: number;
-    icon?: string;
-    noneValue?: string;
-    full?: boolean;
-    add?: boolean;
-    edit?: boolean;
-    delete?: boolean;
-    hidePreviewError?: boolean;
-    customLabel?: {
-      field: string;
-      values: { [key: string]: any };
-    };
-    inline?: boolean;
-    additionalDescription?: string;
-    rows?: number;
-    showButtonIf?: boolean; // Checkbox button
-    color?: any;
-    bold?: any;
-    dropdownCount?: number;
-    currency?: boolean;
-    listDisplay?: string;
-    listParam?: string;
-    round?: true;
-    array?: boolean;
-    pattern?: string;
-    patterError?: string;
-    add_label?: string;
-    iconParsed?: string;
-  };
+  listKey?: string;
+  templateOptions?: ITemplateOptions;
 }

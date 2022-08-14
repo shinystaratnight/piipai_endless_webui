@@ -1,19 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
+import { Field } from '@webui/metadata';
 
-import { Field } from '@webui/data';
-import { BasicElementComponent
- } from '../basic-element/basic-element.component';
+import { BasicElementComponent } from '../basic-element/basic-element.component';
 
 @Component({
-  selector: 'app-form-editor',
+  selector: 'webui-form-editor',
   templateUrl: './form-editor.component.html',
   styleUrls: ['./form-editor.component.scss']
 })
 export class FormEditorComponent extends BasicElementComponent implements OnInit {
 
-  public config: Field;
-  public group: any;
+  public override config!: Field;
+  public override group: any;
   public htmlText: any;
 
   quillConfig = {
@@ -42,7 +41,7 @@ export class FormEditorComponent extends BasicElementComponent implements OnInit
   }
 
   ngOnInit() {
-    this.addControl(this.config, this.fb, this.config.templateOptions.required);
+    this.addControl(this.config, this.fb, this.config.templateOptions?.required);
     this.createEvent();
     this.htmlText = this.config.value;
   }

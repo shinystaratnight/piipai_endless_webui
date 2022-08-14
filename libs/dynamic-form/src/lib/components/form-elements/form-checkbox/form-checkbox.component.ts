@@ -6,7 +6,8 @@ import {
   ViewChild,
   AfterViewInit,
   OnDestroy,
-  ChangeDetectorRef
+  ChangeDetectorRef,
+  ElementRef
 } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 
@@ -16,9 +17,10 @@ import { BasicElementComponent } from './../basic-element/basic-element.componen
 import { SiteSettingsService } from '@webui/core';
 import { getTranslationKey } from '@webui/utilities';
 import { CheckboxType } from '@webui/metadata';
+import { FormMode } from '../../../services';
 
 @Component({
-  selector: 'app-form-checkbox',
+  selector: 'webui-form-checkbox',
   templateUrl: './form-checkbox.component.html',
   styleUrls: ['./form-checkbox.component.scss']
 })
@@ -26,29 +28,29 @@ export class FormCheckboxComponent
   extends BasicElementComponent
   implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('checkbox')
-  public checkbox;
+  public checkbox!: ElementRef;
 
-  public config;
-  public group: FormGroup;
+  public override config: any;
+  public override group!: FormGroup;
   public errors: any;
   public message: any;
-  public key: any;
+  public override key: any;
   public value = true;
-  public label: boolean;
+  public label!: boolean;
 
-  public checkboxValue: string;
+  public checkboxValue!: string;
   public checkboxClass = '';
   public checkboxColor = '';
 
-  public isDisabled: boolean;
-  public disabledTitle: string;
+  public isDisabled!: boolean;
+  public disabledTitle!: string;
 
-  public viewMode: boolean;
+  public viewMode!: boolean;
 
   getTranslationKey = getTranslationKey;
 
   @Output()
-  public event: EventEmitter<any> = new EventEmitter();
+  public override event: EventEmitter<any> = new EventEmitter();
 
   @Output()
   public buttonAction: EventEmitter<any> = new EventEmitter();
@@ -76,12 +78,12 @@ export class FormCheckboxComponent
     this.disabledTitle = this.getDisabledTitle(this.isDisabled);
 
     if (this.config.templateOptions.disabled) {
-      this.group.get(this.key).disable();
+      this.group.get(this.key)?.disable();
     }
 
     if (this.isDisabled) {
-      this.group.get(this.key).patchValue(false);
-      this.group.get(this.key).disable();
+      this.group.get(this.key)?.patchValue(false);
+      this.group.get(this.key)?.disable();
     }
   }
 
@@ -91,10 +93,10 @@ export class FormCheckboxComponent
 
   public checkHiddenProperty() {
     if (this.config && this.config.hidden) {
-      const subscription = this.config.hidden.subscribe((hide) => {
+      const subscription = this.config.hidden.subscribe((hide: boolean) => {
         if (hide) {
           this.config.hide = hide;
-          this.group.get(this.key).patchValue(undefined);
+          this.group.get(this.key)?.patchValue(undefined);
           this.setInitValue();
         } else {
           this.config.hide = hide;
@@ -111,7 +113,7 @@ export class FormCheckboxComponent
 
   public checkModeProperty() {
     if (this.config && this.config.mode) {
-      const subscription = this.config.mode.subscribe((mode) => {
+      const subscription = this.config.mode.subscribe((mode: FormMode) => {
         if (mode === 'view') {
           this.viewMode = true;
         } else {
@@ -128,8 +130,8 @@ export class FormCheckboxComponent
     let value;
     if (this.config.updateFromForm) {
       value =
-        this.group.get(this.key).value !== null
-          ? this.group.get(this.key).value
+        this.group.get(this.key)?.value !== null
+          ? this.group.get(this.key)?.value
           : this.config.value || (!this.viewMode && this.config.default);
     } else {
       value = this.config.value || (!this.viewMode && this.config.default);
@@ -147,12 +149,10 @@ export class FormCheckboxComponent
     if (this.config.templateOptions.type === 'icon') {
       this.customizeCheckbox(value);
     }
-    this.group
-      .get(this.key)
-      .patchValue(value === null ? value : value || false);
+    this.group.get(this.key)?.patchValue(value === null ? value : value || false);
   }
 
-  public defaultValues(value) {
+  public defaultValues(value: any) {
     if (value) {
       this.checkboxClass = 'text-success';
       this.checkboxValue = 'check-circle';
@@ -165,7 +165,7 @@ export class FormCheckboxComponent
     }
   }
 
-  public customizeCheckbox(value): void {
+  public customizeCheckbox(value: any): void {
     this.checkboxValue = this.config.templateOptions.values[value];
     const color = this.config.templateOptions.color;
     const classes = ['primary', 'danger', 'info', 'success', 'warning'];
@@ -181,7 +181,7 @@ export class FormCheckboxComponent
     }
   }
 
-  public eventHandler(e) {
+  public eventHandler(e: any) {
     this.event.emit({
       type: e.type,
       el: this.config,
@@ -206,7 +206,7 @@ export class FormCheckboxComponent
     return disabled ? this.siteSettings.getSmsSendTitle() : '';
   }
 
-  sendAction(e) {
+  sendAction(e: any) {
     this.buttonAction.emit({
       type: e.type,
       el: this.config,
@@ -215,7 +215,7 @@ export class FormCheckboxComponent
   }
 
   public patchValue(value: boolean): void {
-    this.group.get(this.key).patchValue(value);
+    this.group.get(this.key)?.patchValue(value);
     this.eventHandler({ type: 'change' });
   }
 
@@ -236,7 +236,7 @@ export class FormCheckboxComponent
   }
 
   public get currentValue(): boolean {
-    return this.group.get(this.key).value;
+    return this.group.get(this.key)?.value;
   }
 
   public get hasButton() {

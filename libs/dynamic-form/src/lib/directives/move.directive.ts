@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 
 @Directive({
-  selector: '[appMove]',
+  selector: '[webuiMove]',
 })
 export class MoveDirective {
   public elem: any;
@@ -32,17 +32,17 @@ export class MoveDirective {
   }
 
   @HostListener('mousedown', ['$event'])
-  public onMouseDown($event) {
+  public onMouseDown() {
     this.down();
   }
 
   @HostListener('document:mousemove', ['$event'])
-  public onMouseMove($event) {
+  public onMouseMove($event: MouseEvent) {
     this.move($event);
   }
 
   @HostListener('document:mouseup', ['$event'])
-  public onMouseUp($event) {
+  public onMouseUp() {
     this.end();
   }
 
@@ -52,7 +52,7 @@ export class MoveDirective {
   }
 
   @HostListener('document:touchmove', ['$event'])
-  public onToucMove($event) {
+  public onToucMove($event: MouseEvent) {
     this.move($event);
   }
 
@@ -78,7 +78,7 @@ export class MoveDirective {
     this.active.emit(true);
   }
 
-  public move($event) {
+  public move($event: MouseEvent) {
     if (!this.isMovable) {
       return;
     }

@@ -7,7 +7,7 @@ import { GenericFormService } from '../../../services';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
-  selector: 'app-form-replace',
+  selector: 'webui-form-replace',
   templateUrl: 'form-replace.component.html',
 })
 export class FormReplaceComponent extends BasicElementComponent implements OnInit, OnDestroy {
@@ -15,14 +15,14 @@ export class FormReplaceComponent extends BasicElementComponent implements OnIni
   public modalTemplate: any;
 
   @Output()
-  public event: EventEmitter<any> = new EventEmitter();
+  public override event: EventEmitter<any> = new EventEmitter();
 
-  public config;
-  public group: FormGroup;
+  public override config!: any;
+  public override group!: FormGroup;
   public errors: any;
   public message: any;
-  public key: any;
-  public label: boolean;
+  public override key: any;
+  public label: boolean | undefined;
 
   public metadata: any;
   public selfGroup: any;
@@ -75,7 +75,7 @@ export class FormReplaceComponent extends BasicElementComponent implements OnIni
 
   public getValueByKey(key: string, data: any): any {
     const keysArray = key.split('.');
-    const firstKey = keysArray.shift();
+    const firstKey: string = keysArray.shift() as string;
     if (data) {
       if (keysArray.length === 0) {
         return data[firstKey];
@@ -88,22 +88,24 @@ export class FormReplaceComponent extends BasicElementComponent implements OnIni
     }
   }
 
-  public eventHandler(event): void {
+  public eventHandler(event: any): void {
     let endpoint: string;
     let query: string;
+
+    const action = `${event.action}Action` as keyof FormReplaceComponent;
     if (event.target && event.target === 'form') {
       endpoint = event.endpoint;
       query = event.query;
-      this[`${event.action}Action`](endpoint, query, event.el);
+      this[action](endpoint, query, event.el);
     }
     if (event.type && event.type === 'click') {
       endpoint = event.el.endpoint;
       query = event.el.query;
-      this[`${event.action}Action`](endpoint, query, event.el);
+      this[action](endpoint, query, event.el);
     }
   }
 
-  public addAction(endpoint: string, query?, el?): void {
+  public addAction(endpoint: string, query?: string, el?: any): void {
     if (query) {
       endpoint += `?${query}`;
     }
@@ -141,14 +143,14 @@ export class FormReplaceComponent extends BasicElementComponent implements OnIni
     this.modalRef = this.modal.open(this.modalTemplate, { size: 'lg' });
   }
 
-  public deleteElement(closeModal) {
+  public deleteElement(closeModal: () => void) {
     closeModal();
     this.gfs.delete(this.modalData.endpoint, this.modalData.id).subscribe((res: any) => {
       this.updateReplace();
     });
   }
 
-  public formEvent(e, closeModal, el) {
+  public formEvent(e: any, closeModal: () => void, el: any) {
     if (e.type === 'sendForm' && e.status === 'success') {
       closeModal();
       this.updateReplace();

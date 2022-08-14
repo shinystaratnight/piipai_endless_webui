@@ -1,6 +1,7 @@
-import { Endpoints, Purpose } from '@webui/data';
+import { Purpose } from '@webui/data';
+import { Endpoints } from '@webui/models';
 
-export const activateSkill = function(res, config) {
+export const activateSkill = function(res: any, config: any) {
   const { purpose } = config;
   const { default_rate, price_list_default_rate, active } = res;
 
@@ -24,6 +25,6 @@ export const activateSkill = function(res, config) {
   }
 }
 
-export const listUpdateActions = {
+export const listUpdateActions: Record<string, any> = {
   [Endpoints.SkillName]: [ activateSkill ]
 };

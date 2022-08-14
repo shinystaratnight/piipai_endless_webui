@@ -1,7 +1,7 @@
 import { ActionElementComponent } from './action-element/action-element.component';
 
 import { InfoComponent } from './info/info.component';
-import { WebcamComponent } from './webcam/webcam.component';
+// import { WebcamComponent } from './webcam/webcam.component';
 import { WorkflowComponent } from './workflow/workflow.component';
 import { TestGeneratorComponent } from './test-generator/test-generator.component';
 import { TestListComponent } from './test-list/test-list.component';
@@ -83,7 +83,7 @@ import { SubmissionFormComponent } from './forms';
 export * from './generic-form/generic-form.component';
 export * from './generic-list/generic-list.component';
 export * from './action-element/action-element.component';
-export * from './webcam/webcam.component';
+// export * from './webcam/webcam.component';
 export * from './workflow/workflow.component';
 export * from './test-generator/test-generator.component';
 export * from './image-uploader/image-uploader.component';
@@ -156,7 +156,7 @@ export const components = [
   GenericFormComponent,
   GenericListComponent,
   ActionElementComponent,
-  WebcamComponent,
+  // WebcamComponent,
   WorkflowComponent,
   TestGeneratorComponent,
   FormElementViewComponent,

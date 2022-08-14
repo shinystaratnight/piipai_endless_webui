@@ -5,7 +5,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 interface Field {
   help_text: string;
-  isCollapsed: boolean;
+  isCollapsed?: boolean;
   label: string;
   model_fields?: Field[];
   name: string;
@@ -18,7 +18,7 @@ interface Field {
 }
 
 @Component({
-  selector: 'app-form-fields-group',
+  selector: 'webui-form-fields-group',
   templateUrl: 'form-fields-group.component.html',
   styleUrls: ['./form-fields-group.component.scss']
 })
@@ -32,24 +32,24 @@ export class FormFieldsGroupComponent implements OnInit {
   public formFieldGroupsEndpoint = '/core/formfieldgroups/';
   public formModelFieldEndpoint = '/core/modelformfields/';
   public relatedformfieldsEndpoint = '/core/relatedformfields/';
-  public groups: any[];
+  public groups!: any[];
   public fields: any;
-  public choosenType: string;
-  public types: string[];
+  public choosenType!: string | null;
+  public types!: string[];
 
   public config: any;
   public modalData: any;
   public modalRef: any;
 
-  public groupId: string;
+  public groupId!: string;
   public error: any;
 
-  public search: string;
-  public activeFields: any[];
+  public search!: string;
+  public activeFields!: any[];
 
   public lastPosition = 0;
 
-  public positions = {
+  public positions: Record<string, number> = {
     contact__title: 1,
     contact__first_name: 2,
     contact__last_name: 3,
@@ -92,7 +92,7 @@ export class FormFieldsGroupComponent implements OnInit {
         this.parseValueFromApi(value[0], this.config.fields);
         this.groups = this.config.fields;
         this.addCollapseProperty(this.groups);
-        this.activeFields = value[0].field_list.sort((p, n) => {
+        this.activeFields = value[0].field_list.sort((p: any, n: any) => {
           return p.position > n.position ? 1 : -1;
         });
         this.activeFields.forEach((el) => {
@@ -202,18 +202,18 @@ export class FormFieldsGroupComponent implements OnInit {
       );
   }
 
-  public addCollapseProperty(list): void {
+  public addCollapseProperty(list: any[]): void {
     list.forEach((el) => {
       this.lockUserField(el);
 
       if (el.model_fields) {
         el.isCollapsed = true;
-        el.model_fields.forEach((field) => {
+        el.model_fields.forEach((field: any) => {
           if (field.id) {
             el.isCollapsed = false;
           }
           if (field.model_fields) {
-            field.model_fields.forEach((nestedField) => {
+            field.model_fields.forEach((nestedField: any) => {
               if (nestedField.id) {
                 el.isCollapsed = false;
               }
@@ -225,9 +225,9 @@ export class FormFieldsGroupComponent implements OnInit {
     });
   }
 
-  public parseValueFromApi(groups, fields): void {
+  public parseValueFromApi(groups: any, fields: any[]): void {
     fields.forEach((el) => {
-      groups.field_list.forEach((field) => {
+      groups.field_list.forEach((field: any) => {
         if (el.name === field.name) {
           el.id = field.id;
           el.required = field.required;
@@ -240,7 +240,7 @@ export class FormFieldsGroupComponent implements OnInit {
     });
   }
 
-  public addField(group, id) {
+  public addField(group: any, id: string) {
     this.modalData = {};
     this.choosenType = null;
     this.modalData.type = 'field';
@@ -258,7 +258,7 @@ export class FormFieldsGroupComponent implements OnInit {
     this.modalRef = this.modalService.open(this.modal, { backdrop: 'static' });
   }
 
-  public toggleActiveState(field: Field, remove?): void {
+  public toggleActiveState(field: Field, remove?: boolean): void {
     const removeField = remove || this.isActive(field);
 
     const endpoint = this.getEndpoint(field);
@@ -270,7 +270,7 @@ export class FormFieldsGroupComponent implements OnInit {
     }
 
     if (field.id) {
-      this.genericFormService.delete(endpoint, field.id).subscribe(
+      this.genericFormService.delete(endpoint, field.id.toString()).subscribe(
         (res: any) => {
           delete field.id;
           delete field.position;
@@ -309,8 +309,8 @@ export class FormFieldsGroupComponent implements OnInit {
       : this.formModelFieldEndpoint;
   }
 
-  public getActiveFields(array) {
-    const results = [];
+  public getActiveFields(array: any[]) {
+    const results: any[] = [];
     array.forEach((el) => {
       if (el.id) {
         results.push(el);
@@ -323,7 +323,7 @@ export class FormFieldsGroupComponent implements OnInit {
     return results;
   }
 
-  public toggleRequireProperty(field, remove?): void {
+  public toggleRequireProperty(field: any, remove?: boolean): void {
     const removeField = remove || this.isRequired(field);
 
     const endpoint = this.getEndpoint(field);
@@ -361,7 +361,7 @@ export class FormFieldsGroupComponent implements OnInit {
     }
   }
 
-  public edit(object, container, type) {
+  public edit(object: any, container: any, type: any) {
     this.modalData = {};
     this.choosenType = object.field_type ? object.field_type : null;
     this.modalData.type = type;
@@ -401,7 +401,7 @@ export class FormFieldsGroupComponent implements OnInit {
     this.modalRef = this.modalService.open(this.modal, { backdrop: 'static' });
   }
 
-  public delete(object, container: any[], type) {
+  public delete(object: any, container: any[], type: any) {
     const endpoint =
       type === 'group'
         ? this.formFieldGroupsEndpoint
@@ -419,7 +419,7 @@ export class FormFieldsGroupComponent implements OnInit {
     );
   }
 
-  public formEvent(e, closeModal, container, edit, type) {
+  public formEvent(e: any, closeModal: () => void, container: any, edit: boolean, type: any) {
     if (e.type === 'sendForm' && e.status === 'success') {
       closeModal();
       if (edit) {
@@ -435,7 +435,7 @@ export class FormFieldsGroupComponent implements OnInit {
         }
         container.push(e.data);
       }
-      container.sort((p, n) => {
+      container.sort((p: any, n: any) => {
         return p.position > n.position ? 1 : -1;
       });
     } else if (
@@ -443,7 +443,7 @@ export class FormFieldsGroupComponent implements OnInit {
       this.choosenType === 'modelfield' &&
       e.el.key === 'name'
     ) {
-      const element = this.config.fields.filter((el) => el.name === e.value);
+      const element = this.config.fields.filter((el: any) => el.name === e.value);
       this.modalData.data = Object.assign({}, this.modalData.data);
       if (element && element[0]) {
         ['required', 'help_text', 'label', 'name'].forEach((el) => {
@@ -458,7 +458,7 @@ export class FormFieldsGroupComponent implements OnInit {
     }
   }
 
-  public updateObject(container: any[], object) {
+  public updateObject(container: any[], object: any) {
     container.forEach((el) => {
       if (el.id === object.id) {
         el = Object.assign(el, object);
@@ -469,7 +469,7 @@ export class FormFieldsGroupComponent implements OnInit {
     });
   }
 
-  public setType(type) {
+  public setType(type: string) {
     this.choosenType = type;
     this.modalData.endpoint = this.fields[type].endpoint;
     if (this.modalData.data && type === 'modelfield') {
@@ -482,7 +482,7 @@ export class FormFieldsGroupComponent implements OnInit {
     }
   }
 
-  public filter(value) {
+  public filter(value: any) {
     if (value && this.groups) {
       this.toggleElement(this.groups, true);
       this.checkElement(value, this.groups, true);
@@ -494,7 +494,7 @@ export class FormFieldsGroupComponent implements OnInit {
     }
   }
 
-  public checkElement(value, array, first = false) {
+  public checkElement(value: any, array: any[], first = false) {
     let result = false;
     array.forEach((el) => {
       let self = false;
@@ -515,9 +515,10 @@ export class FormFieldsGroupComponent implements OnInit {
     if (!first) {
       return result;
     }
+    return result;
   }
 
-  public toggleElement(array, hidden) {
+  public toggleElement(array: any[], hidden: boolean) {
     array.forEach((el) => {
       el.hidden = hidden;
       if (el.model_fields) {
@@ -532,10 +533,10 @@ export class FormFieldsGroupComponent implements OnInit {
     });
   }
 
-  public changePosition(item, type) {
+  public changePosition(item: any, type: 'up') {
     const currentPosition = item.position;
     const nextPosition = type === 'up' ? item.position - 1 : item.position + 1;
-    const element = this.getItemByPosition(this.activeFields, nextPosition);
+    const element: any = this.getItemByPosition(this.activeFields, nextPosition);
     item.position = nextPosition;
     const body = Object.assign({ group: this.groupId }, item);
     delete body.hidden;
@@ -544,13 +545,13 @@ export class FormFieldsGroupComponent implements OnInit {
     this.genericFormService
       .editForm(`${this.formModelFieldEndpoint}${item.id}/`, body)
       .subscribe((res: any) => {
-        const newBody = Object.assign({ group: this.groupId }, element);
+        const newBody: any = Object.assign({ group: this.groupId }, element);
         newBody.position = currentPosition;
         delete newBody.hidden;
         delete newBody.isCollapsed;
         delete newBody.model_fields;
         this.genericFormService
-          .editForm(`${this.formModelFieldEndpoint}${element.id}/`, newBody)
+          .editForm(`${this.formModelFieldEndpoint}${element?.id}/`, newBody)
           .subscribe((response: any) => {
             element.position = response.position;
             this.activeFields.sort((p, n) => {
@@ -560,7 +561,7 @@ export class FormFieldsGroupComponent implements OnInit {
       });
   }
 
-  public getItemByPosition(array, position) {
+  public getItemByPosition(array: any[], position: number) {
     let element;
     array.forEach((el) => {
       if (el.position === position) {
@@ -570,13 +571,13 @@ export class FormFieldsGroupComponent implements OnInit {
     return element;
   }
 
-  public setActiveForFields(data: any[], remove?): any {
+  public setActiveForFields(data: any[], remove?: boolean): any {
     data.forEach((el) => {
       this.toggleActiveState(el, remove);
     });
   }
 
-  public setRequireForFields(data: any[], remove?): any {
+  public setRequireForFields(data: any[], remove?: boolean): any {
     data.forEach((el) => {
       this.toggleRequireProperty(el, remove);
     });
@@ -594,15 +595,15 @@ export class FormFieldsGroupComponent implements OnInit {
     }
   }
 
-  public disableSubfields(field): boolean {
+  public disableSubfields(field: any): boolean {
     return field.name === 'bank_account' || field.name === 'contact__address';
   }
 
-  public disableRequired(field): boolean {
+  public disableRequired(field: any): boolean {
     return field.name === 'contact__address';
   }
 
-  public disableContactButton(field): boolean {
+  public disableContactButton(field: any): boolean {
     return field.name === 'contact';
   }
 

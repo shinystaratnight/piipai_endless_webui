@@ -44,7 +44,7 @@
             pageData.pathData.postfix === 'submit'
           "
         >
-          <app-generic-form
+          <webui-generic-form
             *ngIf="
               (!reload &&
                 pageData.endpoint !== '/core/forms/' &&
@@ -134,7 +134,7 @@
                 Approve
               </button>
             </div>
-          </app-generic-form>
+          </webui-generic-form>
         </div>
         <div class="form-content" *ngIf="pageData.endpoint === '/core/forms/'">
           <app-form-builder
@@ -155,7 +155,7 @@
           "
         >
           <app-test-builder [testData]="acceptenceTestData">
-            <app-generic-form
+            <webui-generic-form
               [endpoint]="pageData.endpoint"
               [id]="pageData.pathData.id"
               [path]="pageData.pathData.path"
@@ -214,7 +214,7 @@
                   <webui-spinner *ngIf="saveProcess"></webui-spinner>
                 </button>
               </div>
-            </app-generic-form>
+            </webui-generic-form>
           </app-test-builder>
         </div>
       </div>
@@ -227,14 +227,14 @@
           [scrollWindow]="true"
           (scrolled)="onModalScrollDown()"
         >
-          <app-generic-list
+          <webui-generic-list
             [upload]="upload"
             [clientId]="getClientId()"
             [listNameCache]="listNameCache"
             [allowPermissions]="permissionMethods"
             [endpoint]="pageData.endpoint"
           >
-          </app-generic-list>
+          </webui-generic-list>
         </div>
 
         <div
@@ -243,7 +243,7 @@
             pageData.pathData.postfix && pageData.pathData.postfix === 'fillin'
           "
         >
-          <app-generic-list
+          <webui-generic-list
             [responseField]="fillInData.responseField || 'results'"
             [paginated]="fillInData.paginated || 'on'"
             [supportData]="fillInData.supportData"
@@ -258,7 +258,7 @@
           >
             <webui-back-link label="Back to job info" (backEvent)="back()">
             </webui-back-link>
-          </app-generic-list>
+          </webui-generic-list>
           <div class="buttons mb-5">
             <button type="button" class="btn btn-secondary" (click)="back()">
               Cancel
@@ -303,7 +303,7 @@
         </div>
       </div>
       <div class="py-3">
-        <app-generic-form
+        <webui-generic-form
           [endpoint]="changePasswordEndpoint"
           [edit]="true"
           [needData]="false"
@@ -315,7 +315,7 @@
           <div class="d-flex align-items-center">
             <button webuiSubscriptionRequired type="submit" class="btn btn-primary ml-auto">Save</button>
           </div>
-        </app-generic-form>
+        </webui-generic-form>
       </div>
     </div>
   </ng-template>
@@ -333,7 +333,7 @@
         </div>
       </div>
       <div class="py-3">
-        <app-generic-form
+        <webui-generic-form
           endpoint="/core/contacts/forgot_password/"
           [data]="passwordData"
           (event)="resetEvent($event)"
@@ -341,7 +341,7 @@
           <div class="d-flex align-items-center">
             <button webuiSubscriptionRequired type="submit" class="btn btn-primary ml-auto">Reset</button>
           </div>
-        </app-generic-form>
+        </webui-generic-form>
       </div>
     </div>
   </ng-template>

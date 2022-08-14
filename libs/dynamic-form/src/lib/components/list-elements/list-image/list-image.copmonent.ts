@@ -3,23 +3,23 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { getContactAvatar, isCandidate, isMobile } from '@webui/utilities';
 
 @Component({
-  selector: 'app-list-image',
+  selector: 'webui-list-image',
   templateUrl: './list-image.component.html',
   styleUrls: ['./list-image.component.scss'],
 })
 export class ListImageComponent implements OnInit {
   public config: any;
-  public src: string;
-  public icon: string;
-  public iconClass: string;
-  public last: boolean;
-  public file: string;
-  public contactAvatar: string;
+  public src!: string;
+  public icon!: string;
+  public iconClass!: string;
+  public last!: boolean;
+  public file!: string;
+  public contactAvatar!: string;
 
   public isMobileDevice = isMobile() && isCandidate();
 
   @ViewChild('filelink')
-  public link: ElementRef<HTMLAnchorElement>;
+  public link!: ElementRef<HTMLAnchorElement>;
 
   public ngOnInit() {
     if (this.config.type === 'picture') {
@@ -44,11 +44,11 @@ export class ListImageComponent implements OnInit {
     }
   }
 
-  public getColor(value) {
+  public getColor(value: string) {
     this.iconClass = this.config.color[value] ? `text-${this.config.color[value]} mr-1` : 'text-muted mr-1';
   }
 
-  public setClass(value) {
+  public setClass(value: boolean) {
     this.iconClass = value === true ? 'text-success' : value === false ? 'text-danger' : 'text-muted';
   }
 

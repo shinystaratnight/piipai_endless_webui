@@ -307,7 +307,7 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, 0.3);
         display: none;
       }
 
-      app-list-column {
+      webui-list-column {
         display: flex;
         margin-bottom: -0.5rem;
 
@@ -888,11 +888,11 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, 0.3);
     height: 46px !important;
   }
 
-  app-list-text > span {
+  webui-list-text > span {
     width: 100%;
   }
 
-  .body app-form-button {
+  .body webui-form-button {
     display: flex;
     width: 100%;
 
@@ -995,7 +995,7 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, 0.3);
     //    display: none;
     //  }
     //
-    //  app-form-button {
+    //  webui-form-button {
     //    display: block;
     //  }
     //
@@ -1022,16 +1022,6 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, 0.3);
   }
 }
 
-.total-time-wrapper app-list-text {
+.total-time-wrapper webui-list-text {
   display: inline-flex;
 }
-
-//.no-signature {
-//  padding-left: 147px;
-//
-//  app-list-checkbox {
-//    position: absolute;
-//    top: 6px;
-//    left: 13px;
-//  }
-//}

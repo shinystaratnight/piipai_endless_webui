@@ -7,7 +7,7 @@
   ></webui-close-button>
 </header>
 
-<app-test-generator
+<webui-test-generator
   [workflowObject]="config.workflowObject"
   [send]="config.send"
   [id]="config.testId"
@@ -15,4 +15,4 @@
   [skipScore]="config.skipScoreForTest"
   (sended)="close($event)"
 >
-</app-test-generator>
+</webui-test-generator>

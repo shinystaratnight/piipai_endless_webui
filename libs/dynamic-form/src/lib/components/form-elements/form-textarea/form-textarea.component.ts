@@ -1,13 +1,13 @@
-import { 
-  Component, 
-  OnInit, 
-  ViewChild, 
-  AfterViewInit, 
-  OnDestroy, 
-  ChangeDetectorRef, 
-  ElementRef, 
-  EventEmitter, 
-  Output 
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  AfterViewInit,
+  OnDestroy,
+  ChangeDetectorRef,
+  ElementRef,
+  EventEmitter,
+  Output
 } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 
@@ -18,28 +18,28 @@ import { FormatString, getTranslationKey } from '@webui/utilities';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-form-textarea',
+  selector: 'webui-form-textarea',
   templateUrl: 'form-textarea.component.html',
   styleUrls: ['./form-textarea.component.scss'],
 })
 export class FormTextareaComponent extends BasicElementComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('textarea')
-  public textarea: ElementRef;
+  public textarea!: ElementRef;
 
   @Output()
-  public event: EventEmitter<any> = new EventEmitter();
+  public override event: EventEmitter<any> = new EventEmitter();
 
-  public config;
-  public group: FormGroup;
+  public override config: any;
+  public override group!: FormGroup;
   public errors: any;
   public message: any;
-  public key: any;
-  public label: boolean;
+  public override key: any;
+  public label!: boolean;
 
-  public viewMode: boolean;
-  public displayValue: string;
+  public viewMode!: boolean;
+  public displayValue!: string;
   public editMode: boolean;
-  public className: string;
+  public className!: string;
   public formData: any;
 
   private subscriptions: Subscription[];
@@ -60,11 +60,12 @@ export class FormTextareaComponent extends BasicElementComponent implements OnIn
     this.createEvent();
     this.checkFormData();
 
-    if (this.group.get(this.key)) {
+    const control = this.group.get(this.key);
+
+    if (control) {
       this.subscriptions.push(
-        this.group
-          .get(this.key)
-          .valueChanges.pipe(distinctUntilChanged(), debounceTime(400))
+        control.valueChanges
+          .pipe(distinctUntilChanged(), debounceTime(400))
           .subscribe(() => {
             this.eventHandler({ type: 'blur' });
           })
@@ -80,7 +81,7 @@ export class FormTextareaComponent extends BasicElementComponent implements OnIn
 
   public checkFormData() {
     if (this.config.formData) {
-      const subscription = this.config.formData.subscribe((value) => {
+      const subscription = this.config.formData.subscribe((value: any) => {
         const { data, key } = value;
 
         this.formData = data;
@@ -107,10 +108,10 @@ export class FormTextareaComponent extends BasicElementComponent implements OnIn
 
   public checkHiddenProperty() {
     if (this.config && this.config.hidden && this.config.type !== 'static') {
-      const subscription = this.config.hidden.subscribe((hide) => {
+      const subscription = this.config.hidden.subscribe((hide: any) => {
         if (hide) {
           this.config.hide = hide;
-          this.group.get(this.key).patchValue(undefined);
+          this.group.get(this.key)?.patchValue(undefined);
           this.setInitValue();
         } else {
           this.config.hide = hide;
@@ -127,12 +128,12 @@ export class FormTextareaComponent extends BasicElementComponent implements OnIn
 
   public checkModeProperty() {
     if (this.config && this.config.mode) {
-      const subscription = this.config.mode.subscribe((mode) => {
+      const subscription = this.config.mode.subscribe((mode: any) => {
         if (mode === 'view') {
           this.viewMode = true;
           this.editMode = false;
 
-          this.group.get(this.key).patchValue(undefined);
+          this.group.get(this.key)?.patchValue(undefined);
         } else {
           this.viewMode = this.config.read_only || false;
           this.editMode = true;
@@ -146,7 +147,7 @@ export class FormTextareaComponent extends BasicElementComponent implements OnIn
 
   public setInitValue(update?: boolean) {
     if (this.config.value || this.config.value === '') {
-      this.group.get(this.key).patchValue(this.config.value);
+      this.group.get(this.key)?.patchValue(this.config.value);
 
       if (this.config.templateOptions.array) {
         this.displayValue = this.config.value[0].content
@@ -161,8 +162,8 @@ export class FormTextareaComponent extends BasicElementComponent implements OnIn
             : this.config.default;
 
       if (defaultValue || update) {
-        this.group.get(this.key).patchValue(defaultValue);
-        this.displayValue = this.displayValue;
+        this.group.get(this.key)?.patchValue(defaultValue);
+        // this.displayValue = this.displayValue;
         return;
       }
 
@@ -182,11 +183,11 @@ export class FormTextareaComponent extends BasicElementComponent implements OnIn
     }
   }
 
-  public eventHandler(e) {
+  public eventHandler(e: any) {
     this.event.emit({
       type: e.type,
       el: this.config,
-      value: this.group.get(this.key).value,
+      value: this.group.get(this.key)?.value,
     });
   }
 }

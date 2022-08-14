@@ -120,11 +120,11 @@
 </div>
 
 <ng-template #descriptionTemplate>
-  <app-info
+  <webui-info
     *ngIf="config.templateOptions.description"
     [description]="getTranslationKey(this.key, 'description') | translate: { Default: config.templateOptions.description || '' }"
   >
-</app-info>
+</webui-info>
 </ng-template>
 
 <ng-template #labelTemplate>

@@ -23,22 +23,22 @@ interface Params {
 }
 
 @Component({
-  selector: 'app-filter-date',
+  selector: 'webui-filter-date',
   templateUrl: './filter-date.component.html',
   styleUrls: ['./filter-date.component.scss'],
 })
 export class FilterDateComponent implements OnInit, AfterViewInit, OnDestroy {
   public config: any;
-  public data: Params;
-  public query: string;
-  public mobileDevice: boolean;
+  public data!: Params;
+  public query!: string;
+  public mobileDevice!: boolean;
 
   public displayFormat = 'DD/MM/YYYY';
   public queryFormat = 'YYYY-MM-DD';
   public init = false;
 
-  public filterSubscription: Subscription;
-  public querySubscription: Subscription;
+  public filterSubscription!: Subscription;
+  public querySubscription!: Subscription;
 
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
@@ -84,7 +84,7 @@ export class FilterDateComponent implements OnInit, AfterViewInit, OnDestroy {
     if (!this.init && this.d) {
       const dateType = this.mobileDevice ? 'flipbox' : 'calbox';
       this.init = true;
-      this.d.forEach((el) => {
+      this.d.forEach((el: any) => {
         (window as any).$(el.nativeElement).datebox({
           mode: dateType,
           dateFormat: '%d/%m/%Y',
@@ -115,11 +115,11 @@ export class FilterDateComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  public getListElementQuery(type) {
+  public getListElementQuery(type: any) {
     return DateFilter.element.getQuery(this.config.key, type);
   }
 
-  public changeDateOnMobile(data) {
+  public changeDateOnMobile() {
     this.query = this.getQuery(this.data);
     this.fs.generateQuery(this.query, this.config.key, this.config.listName, {
       data: this.data,
@@ -179,7 +179,7 @@ export class FilterDateComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   public createInputs(inputs: any[]): Params {
-    const params = {};
+    const params: Record<string, any> = {};
 
     inputs.forEach((el) => {
       params[el.query] = '';
@@ -217,34 +217,34 @@ export class FilterDateComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   public resetFilter() {
-    this.query = null;
+    this.query = '';
     this.resetData(this.data);
 
     this.fs.generateQuery(this.query, this.config.key, this.config.listName);
     this.changeQuery();
   }
 
-  public convert(from: string, to: string, params: Params) {
+  public convert(format?: string, to?: string, params?: Params) {
     //tslint:disable-line
     const newParams = { ...params };
 
     Object.keys(newParams).forEach((el) => {
       newParams[el] = newParams[el]
-        ? this.parseDateValue(newParams[el], from).format(to)
+        ? this.parseDateValue(newParams[el], format).format(to)
         : '';
     });
 
     return newParams;
   }
 
-  public parseDateValue(date: string, format: string) {
+  public parseDateValue(date: string, format?: string) {
     //tslint:disable-line
     return format ? Time.parse(date, { format }) : Time.parse(date);
   }
 
   public getParams(query: string): Params {
     const params = query.split('&');
-    const result = {};
+    const result: Record<string, any> = {};
 
     params.forEach((param) => {
       const parts = param.split('=');

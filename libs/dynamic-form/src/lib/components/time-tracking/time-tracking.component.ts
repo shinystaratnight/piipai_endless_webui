@@ -3,13 +3,13 @@ import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core';
 import { Time, Moment } from '@webui/time';
 
 @Component({
-  selector: 'app-time-tracking',
+  selector: 'webui-time-tracking',
   templateUrl: './time-tracking.component.html',
   styleUrls: ['./time-tracking.component.scss'],
 })
 export class TimeTrackingComponent implements OnInit {
   @Input()
-  public timePoints: {
+  public timePoints!: {
     start: Moment;
     end: Moment;
     break_start: Moment;
@@ -21,7 +21,7 @@ export class TimeTrackingComponent implements OnInit {
   public changeTimeTracking: EventEmitter<any> = new EventEmitter();
 
   public breakStyles: any;
-  public time: Moment;
+  public time!: Moment;
 
   public ngOnInit() {
     this.setBreakStyles();
@@ -46,7 +46,7 @@ export class TimeTrackingComponent implements OnInit {
     };
   }
 
-  public checkPosition(event) {
+  public checkPosition(event: number) {
     const start = this.timePoints.start.valueOf();
     const end = this.timePoints.end.valueOf();
     const timesheet = end - start;

@@ -52,11 +52,11 @@
     </option>
   </select>
 
-  <app-info
+  <webui-info
     *ngIf="getState(currentState.value).state === 0"
     triggersType="click:click"
     [description]="requirements"
-  ></app-info>
+  ></webui-info>
   <button
     type="button"
     class="btn btn-sm btn-outline-success"
@@ -156,7 +156,7 @@
           (!modalData.tests && !modalData.substates) || modalData.setActive
         "
       >
-        <app-generic-form
+        <webui-generic-form
           [mode]="'edit'"
           [endpoint]="workflowObjectEndpoint"
           [id]="modalData.id"
@@ -168,7 +168,7 @@
             Save
             <webui-spinner *ngIf="saveProcess"></webui-spinner>
           </button>
-        </app-generic-form>
+        </webui-generic-form>
       </div>
     </div>
   </div>

@@ -14,7 +14,7 @@ export class ListStorageService {
   }
 
   hasTrackingInfo(id: string): boolean {
-    return this.trackingStorage.hasOwnProperty(id);
+    return id in this.trackingStorage;
   }
 
 }

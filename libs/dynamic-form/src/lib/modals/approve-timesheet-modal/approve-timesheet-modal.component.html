@@ -1,4 +1,4 @@
-<app-base-modal modalClass="approve-signature-modal" (dissmisEvent)="dismiss()">
+<webui-base-modal modalClass="approve-signature-modal" (dissmisEvent)="dismiss()">
   <header class="header">
     <webui-user-avatar
       [source]="config.label.avatar"
@@ -122,10 +122,10 @@
 
 
         <div>
-          <app-evaluate-field
+          <webui-evaluate-field
             [evaluated]="config.evaluated"
             [evaluatedScore]="config.data.evaluation_score"
-          ></app-evaluate-field>
+          ></webui-evaluate-field>
         </div>
       </div>
 
@@ -144,10 +144,10 @@
               {{ 'clear' | translate: { Default: 'Clear area' } }}
             </button>
           </h3>
-          <app-signature
+          <webui-signature
             #signatureCanvas
             (signature)="updateSignature($event)"
-          ></app-signature>
+          ></webui-signature>
         </div>
       </div>
     </div>
@@ -199,7 +199,7 @@
       </button>
     </div>
   </div>
-</app-base-modal>
+</webui-base-modal>
 
 <ng-template #line let-label="label" let-value="value" let-total="totalTime" let-muted="muted" let-key="key">
   <div

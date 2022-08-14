@@ -3,7 +3,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormGroup } from '@angular/forms';
 
 @Component({
-  selector: 'app-select-dates-modal',
+  selector: 'webui-select-dates-modal',
   templateUrl: './select-dates-modal.component.html',
   styleUrls: ['./select-dates-modal.component.scss']
 })

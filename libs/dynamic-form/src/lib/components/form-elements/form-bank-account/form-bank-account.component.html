@@ -1,4 +1,4 @@
-<app-form-element-view [label]="config.templateOptions.label" [many]="true">
+<webui-form-element-view [label]="config.templateOptions.label" [many]="true">
   <div class="d-flex flex-column" *ngIf="config.many">
     <span
       class="d-inline-flex align-items-center my-1"
@@ -71,7 +71,7 @@
       <span *ngIf="!account">-</span>
     </ng-container>
   </ng-container>
-</app-form-element-view>
+</webui-form-element-view>
 
 <ng-template #modal let-modal>
   <div class="modal-content-wrapper">
@@ -87,7 +87,7 @@
     </div>
 
     <div class="modal-body">
-      <app-dynamic-form
+      <webui-dynamic-form
         [config]="modalData.metadata"
         [errors]="modalData.errors"
         (submitForm)="submitForm($event)"
@@ -101,7 +101,7 @@
           Save
           <webui-spinner *ngIf="saveProcess"></webui-spinner>
         </button>
-      </app-dynamic-form>
+      </webui-dynamic-form>
     </div>
   </div>
 </ng-template>

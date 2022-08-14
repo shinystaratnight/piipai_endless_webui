@@ -1,5 +1,5 @@
 <div #tracker class="tracking-slider noselect">
-  <span class="marker" appSlider (position)="checkPosition($event)" [parentElement]="tracker">
+  <span class="marker" webuiSlider (position)="checkPosition($event)" [parentElement]="tracker">
     <span class="time">{{time | dateFormat: 'time'}}</span>
     <fa-icon [icon]="['fas', 'map-marker-alt']"></fa-icon>
   </span>

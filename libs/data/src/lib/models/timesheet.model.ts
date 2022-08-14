@@ -136,7 +136,7 @@ class Contact {
 
 class ApiModel {
   public id?: string;
-  public apiEndpoint?: string;
+  public apiEndpoint!: string;
   public get editApiEndpoint(): string {
     return `${this.apiEndpoint}${this.id}/`;
   }
@@ -149,10 +149,10 @@ class ApiModel {
 
 export class TimeSheet extends ApiModel {
   candidate: Contact;
-  startedAt: string;
-  endedAt: string;
-  breakStartedAt: string;
-  breakEndedAt: string;
+  startedAt: string | null;
+  endedAt: string | null;
+  breakStartedAt: string | null;
+  breakEndedAt: string | null;
   readonly timezone: string;
   status: number;
 

@@ -2,7 +2,7 @@
   <label *ngIf="label && config.templateOptions.label" [attr.for]="key">{{config.templateOptions.label}}</label>
   <ng-container
     *ngFor="let field of metadata;"
-    appFormElement
+    webuiFormElement
     [config]="field"
     [group]="selfGroup"
     [errors]="errors"
@@ -24,9 +24,9 @@
 
     <div class="modal-body">
       <div *ngIf="modalData.type !== 'delete'">
-        <app-generic-form [endpoint]="modalData.endpoint" [id]="modalData.id" (event)="formEvent($event, c, modalData.el)">
+        <webui-generic-form [endpoint]="modalData.endpoint" [id]="modalData.id" (event)="formEvent($event, c, modalData.el)">
           <button type="submit" class="btn btn-primary">Save</button>
-        </app-generic-form>
+        </webui-generic-form>
       </div>
       <div *ngIf="modalData.type === 'delete'">
         Are you sure?

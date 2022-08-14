@@ -12,14 +12,14 @@ import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-filter-choice',
+  selector: 'webui-filter-choice',
   templateUrl: 'filter-choice.component.html'
 })
 export class FilterChoiceComponent implements OnInit, OnDestroy {
   public config: any;
   public query: any;
   public isCollapsed = true;
-  public theme: string;
+  public theme!: string;
   public icons = {
     r3sourcer: {
       true: 'chevron-right',
@@ -31,7 +31,7 @@ export class FilterChoiceComponent implements OnInit, OnDestroy {
     }
   };
 
-  public querySubscription: Subscription;
+  public querySubscription!: Subscription;
 
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
@@ -57,10 +57,10 @@ export class FilterChoiceComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy() {
-    this.querySubscription.unsubscribe();
+    this.querySubscription.unsubscribe();w
   }
 
-  public select(value) {
+  public select(value: string) {
     let query = `${this.config.query}=${value}`;
     if (value === this.query) {
       this.query = null;

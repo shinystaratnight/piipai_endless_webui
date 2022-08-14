@@ -6,7 +6,7 @@ import {
   OnInit,
 } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
-import { Endpoints, TimeSheet, TimesheetRate } from '@webui/data';
+import { TimeSheet, TimesheetRate } from '@webui/data';
 import { DatepickerType, DropdownOption } from '@webui/form-controls';
 import { Icon, IconSize } from '@webui/icon';
 import { GenericFormService } from '../../services';
@@ -14,13 +14,14 @@ import { BehaviorSubject, forkJoin, Subject } from 'rxjs';
 import { finalize, takeUntil, tap } from 'rxjs/operators';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Modal, Status } from '../modal/modal.component';
+import { Endpoints } from '@webui/models';
 
 const isHourlyWork = (name: string): boolean => {
   return name.toLocaleLowerCase().replace(/ /g, '_').includes('hourly_work');
 };
 
 @Component({
-  selector: 'app-submission-modal',
+  selector: 'webui-submission-modal',
   templateUrl: './submission-modal.component.html',
   styleUrls: ['./submission-modal.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -31,14 +32,14 @@ export class SubmissionModalComponent
 {
   public data: any;
   public activityEndpoint = Endpoints.SkillWorkTypes;
-  public timeSheet: TimeSheet;
+  public timeSheet!: TimeSheet;
   public Icon = Icon;
   public IconSize = IconSize;
   public DatepickerType = DatepickerType;
   public processing$: BehaviorSubject<boolean> = new BehaviorSubject(false);
-  public formGroup?: FormGroup;
+  public formGroup!: FormGroup;
 
-  public activityParams: { [key: string]: any };
+  public activityParams?: { [key: string]: any };
 
   public get activitiesForm(): FormGroup[] {
     return (this.formGroup.get('activities') as FormArray)
@@ -93,9 +94,8 @@ export class SubmissionModalComponent
     );
     this.activityParams = this.getActivityParams();
 
-    this.formGroup
-      .get('activity')
-      .valueChanges.subscribe((option: DropdownOption) => {
+    this.formGroup.get('activity')?.valueChanges
+      .subscribe((option: DropdownOption) => {
         if (option && !this.formGroup.get('amount')) {
           this.formGroup.addControl('amount', new FormControl(0));
         } else if (!option) {
@@ -125,7 +125,7 @@ export class SubmissionModalComponent
   }
 
   public getAmountPrefix(activity: FormGroup): string {
-    const worktype: DropdownOption = activity.get('worktype').value;
+    const worktype: DropdownOption = activity.get('worktype')?.value;
 
     if (worktype instanceof DropdownOption) {
       if (worktype.getField('uom')) {
@@ -137,7 +137,7 @@ export class SubmissionModalComponent
   }
 
   public submitForm(): void {
-    const creationRequests = this.formGroup.value.activities.map((activity) => {
+    const creationRequests = this.formGroup.value.activities.map((activity: any) => {
       const timesheetRate = new TimesheetRate(activity);
 
       return timesheetRate.id
@@ -153,7 +153,7 @@ export class SubmissionModalComponent
 
     creationRequests.push(
       ...this.removedActivities.map((activity) =>
-        this.apiService.delete(activity.apiEndpoint, activity.id)
+        this.apiService.delete(activity.apiEndpoint, activity.id as string)
       )
     );
 
@@ -195,7 +195,7 @@ export class SubmissionModalComponent
     return !isHourlyWork(option.label);
   }
 
-  private updateTimeSheet(value) {
+  private updateTimeSheet(value: any) {
     if ('shiftStartedAt' in value) {
       this.timeSheet.startedAt = value.shiftStartedAt || null;
     }
@@ -217,12 +217,12 @@ export class SubmissionModalComponent
       })
       .subscribe((response) => {
         const activities = response.results
-          .map((activity) => new TimesheetRate(activity))
-          .filter((rate) => !isHourlyWork(rate.worktype.__str__));
+          .map((activity: any) => new TimesheetRate(activity))
+          .filter((rate: any) => !isHourlyWork(rate.worktype.__str__));
         this.formGroup.addControl(
           'activities',
           new FormArray(
-            activities.map((activity) => this.getActivityForm(activity))
+            activities.map((activity: any) => this.getActivityForm(activity))
           )
         );
         this.cd.detectChanges();
@@ -241,13 +241,12 @@ export class SubmissionModalComponent
       worktype: new FormControl(activity?.worktype, Validators.required),
     });
 
-    form
-      .get('worktype')
-      .valueChanges.pipe(takeUntil(this.destroy$))
+    form.get('worktype')?.valueChanges
+      .pipe(takeUntil(this.destroy$))
       .subscribe((worktype: DropdownOption) => {
         const rate = worktype.getField('skill_rate_ranges')[0]?.default_rate;
 
-        form.get('rate').patchValue(rate, { emitEvent: false });
+        form.get('rate')?.patchValue(rate, { emitEvent: false });
       });
 
     if (this.timeSheet.status === 7) {

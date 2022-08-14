@@ -8,14 +8,14 @@ import {
   ChangeDetectorRef
 } from '@angular/core';
 
-import { Field } from '@webui/data';
 import { CustomEvent } from '../../models/custom-event.model';
 import { SiteSettingsService } from '@webui/core';
 import { FormService } from '../../services';
 import { convertPhoneNumber } from '../../helpers';
+import { Field } from '@webui/metadata';
 
 @Component({
-  selector: 'app-dynamic-form',
+  selector: 'webui-dynamic-form',
   templateUrl: 'dynamic-form.component.html'
 })
 export class DynamicFormComponent implements OnInit {
@@ -30,13 +30,13 @@ export class DynamicFormComponent implements OnInit {
   @Input()
   public hiddenFields: any;
   @Input()
-  public formId: number;
+  public formId!: number;
   @Input()
-  public form: FormGroup;
+  public form!: FormGroup;
   @Input()
-  public formBuilder: boolean;
+  public formBuilder!: boolean;
   @Input()
-  public mode: string;
+  public mode!: string;
 
   @Output()
   public submitForm: EventEmitter<any> = new EventEmitter<any>();
@@ -66,7 +66,7 @@ export class DynamicFormComponent implements OnInit {
     this.addFormBuilderStatus(this.config);
   }
 
-  addFormBuilderStatus(config) {
+  addFormBuilderStatus(config: any[]) {
     if (config) {
       config.forEach((el) => {
         el.formBuilder = this.formBuilder;
@@ -78,8 +78,8 @@ export class DynamicFormComponent implements OnInit {
     }
   }
 
-  public getValues(data, list) {
-    const values = {};
+  public getValues(data: any, list: any[]) {
+    const values: Record<string, any> = {};
     if (list) {
       list.forEach((el) => {
         values[el] = this.getValue(data, el);
@@ -88,7 +88,7 @@ export class DynamicFormComponent implements OnInit {
     return values;
   }
 
-  public getValue(data, key) {
+  public getValue(data: any, key: string): any {
     if (data) {
       if (key.indexOf('.') > -1) {
         const keys = key.split('.');
@@ -122,7 +122,7 @@ export class DynamicFormComponent implements OnInit {
     this.replaceByData(this.config, data);
     this.filterSendData(this.config, data);
 
-    if (data.hasOwnProperty('skill_name') && data.skill_name === null) {
+    if ('skill_name' in data && data.skill_name === null) {
       data.skill_name = '';
     }
 
@@ -131,10 +131,10 @@ export class DynamicFormComponent implements OnInit {
     this.submitForm.emit(data);
   }
 
-  public setNullFields(metadata: any[], data) {
+  public setNullFields(metadata: any[], data: any) {
     metadata.forEach((el) => {
       if (el.setNull && data[el.key]) {
-        el.setNull.forEach((field) => {
+        el.setNull.forEach((field: any) => {
           data[field] = null;
         });
       } else if (el.children) {
@@ -149,9 +149,9 @@ export class DynamicFormComponent implements OnInit {
     if (e.type === 'change' || e.type === 'reset') {
       this.changeValue.emit(this.form.value);
     }
-    let key;
+    let key: string;
     if (e.el) {
-      key = e.el.type === 'related' ? e.el.key + '.id' : e.el.key;
+      key = (e.el.type === 'related' ? e.el.key + '.id' : e.el.key) as string;
     }
     setTimeout(() => {
       if (e.el && e.el.formData) {
@@ -195,9 +195,9 @@ export class DynamicFormComponent implements OnInit {
     }, 50);
   }
 
-  public generateData(key: string, data = {}, event: CustomEvent): any {
+  public generateData(key: string, data: Record<string, any> = {}, event: CustomEvent): any {
     const keys = key.split('.');
-    const firstKey = keys.shift();
+    const firstKey: string = keys.shift() as string;
 
     if (keys.length === 0) {
       if (event.el.type === 'related' && firstKey !== 'id') {
@@ -236,14 +236,14 @@ export class DynamicFormComponent implements OnInit {
     });
   }
 
-  public buttonActionHandler(e) {
+  public buttonActionHandler(e: any) {
     this.buttonAction.emit({ ...e, data: this.form.value });
   }
 
   public checkHiddenFields(field: Field): void {
     const rule = field.showIf;
-    const show = this.checkShowRules(rule);
-    field.hidden.next(!show);
+    const show = this.checkShowRules(rule as any[]);
+    field.hidden?.next(!show);
   }
 
   public checkShowRules(rule: any[]): boolean {
@@ -296,7 +296,7 @@ export class DynamicFormComponent implements OnInit {
 
   public getValueByKey(key: string, data: any): any {
     const keysArray = key.split('.');
-    const firstKey = keysArray.shift();
+    const firstKey: string = keysArray.shift() as string;
     if (keysArray.length === 0) {
       return data && data[firstKey];
     } else if (keysArray.length > 0) {
@@ -308,7 +308,7 @@ export class DynamicFormComponent implements OnInit {
     }
   }
 
-  public removeValuesOfHiddenFields(metadata: Field[], data): void {
+  public removeValuesOfHiddenFields(metadata: Field[], data: any): void {
     metadata.forEach((el: Field) => {
       if (el.hide && el.key && !el.saveField) {
         this.removeValue(el.key, data);
@@ -318,7 +318,7 @@ export class DynamicFormComponent implements OnInit {
 
   public removeValue(key: string, data: any): void {
     const keysArray = key.split('.');
-    const firstKey = keysArray.shift();
+    const firstKey: string = keysArray.shift() as string;
     if (keysArray.length === 0) {
       if (data) {
         delete data[firstKey];
@@ -329,20 +329,20 @@ export class DynamicFormComponent implements OnInit {
     }
   }
 
-  public filterSendData(metadata: Field[], data) {
+  public filterSendData(metadata: Field[], data: any) {
     metadata.forEach((el) => {
       if (el.send === false && !el.saveField) {
-        this.removeValue(el.key, data);
+        this.removeValue(el.key as string, data);
       } else if (el.children) {
         this.filterSendData(el.children, data);
       }
     });
   }
 
-  public replaceByData(metadata: Field[], data) {
+  public replaceByData(metadata: Field[], data: any) {
     metadata.forEach((el) => {
       if (el.replaceByData) {
-        const value = this.getValueByKey(el.key, data);
+        const value = this.getValueByKey(el.key as string, data);
 
         if (value.id) {
           if (el.key === 'language') {
@@ -368,14 +368,14 @@ export class DynamicFormComponent implements OnInit {
   }
 
   private updateIfTimeCollapsed(
-    formData: { [key: string]: any },
-    additionalData: { [key: string]: any }
+    formData: Record<string, any>,
+    additionalData: Record<string, any>
   ) {
-    if (additionalData && additionalData.times_collapsed) {
-      formData.break_ended_at = null;
-      formData.break_started_at = null;
-      formData.shift_ended_at = null;
-      formData.shift_started_at = null;
+    if (additionalData && additionalData['times_collapsed']) {
+      formData['break_ended_at'] = null;
+      formData['break_started_at'] = null;
+      formData['shift_ended_at'] = null;
+      formData['shift_started_at'] = null;
     }
 
     return {

@@ -8,7 +8,7 @@
       <div class="double-bounce1"></div>
       <div class="double-bounce2"></div>
     </div>
-    <app-dynamic-form
+    <webui-dynamic-form
       *ngIf="showForm"
       [mode]="mode"
       [config]="metadata"
@@ -23,7 +23,7 @@
       (buttonAction)="buttonActionHandler($event)"
       (changeValue)="parseCheckObject($event)">
       <ng-content *ngIf="canEdit"></ng-content>
-    </app-dynamic-form>
+    </webui-dynamic-form>
 </div>
 
 <ng-template #confirmProfileModal let-modal>

@@ -1,8 +1,8 @@
 <webui-dialog [title]="title | translate">
   <div class="content" dialog-content>
-    <app-timesheet-details-preview
+    <webui-timesheet-details-preview
       [timeSheet]="timeSheet"
-    ></app-timesheet-details-preview>
+    ></webui-timesheet-details-preview>
 
     <form *ngIf="formGroup" [formGroup]="formGroup" class="form" (ngSubmit)="submitForm()">
       <section class="times">
