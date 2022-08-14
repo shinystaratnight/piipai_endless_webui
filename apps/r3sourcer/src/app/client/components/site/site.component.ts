@@ -28,7 +28,7 @@ import { DialogRef, DialogService } from '@webui/dialog';
 import { ConfirmDeleteModalComponent } from '@webui/ui';
 
 @Component({
-  selector: 'app-site',
+  selector: 'webui-site',
   templateUrl: './site.component.html',
   styleUrls: ['./site.component.scss']
 })
