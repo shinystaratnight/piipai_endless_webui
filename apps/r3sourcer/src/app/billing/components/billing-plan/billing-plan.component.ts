@@ -1,25 +1,25 @@
-import { Component, EventEmitter, Output, Input, ViewChild, OnChanges, SimpleChanges, OnDestroy } from '@angular/core';
+import { Component, EventEmitter, Output, Input, ViewChild, OnChanges, SimpleChanges, OnDestroy, ElementRef } from '@angular/core';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 import { Plan, BillingSubscription } from '../../models';
 import { BillingService } from '../../services/billing-service';
 
 @Component({
-  selector: 'app-billing-plan',
+  selector: 'webui-billing-plan',
   templateUrl: 'billing-plan.component.html',
   styleUrls: ['./billing-plan.component.scss'],
 })
 export class BillingPlanComponent implements OnChanges, OnDestroy {
-  public modalRef: NgbModalRef;
+  public modalRef!: NgbModalRef;
 
-  @Input() public saveProcess: boolean;
-  @Input() public currentPlan: BillingSubscription;
-  @Input() public workerCount: number;
-  @Input() public plans: Plan[];
+  @Input() public saveProcess!: boolean;
+  @Input() public currentPlan?: BillingSubscription;
+  @Input() public workerCount!: number;
+  @Input() public plans!: Plan[];
   @Input() public currency = 'USD';
-  @Input() public cardExist: boolean;
+  @Input() public cardExist!: boolean;
 
-  @ViewChild('subscription') public modal;
+  @ViewChild('subscription') public modal!: ElementRef;
 
   @Output() public selectedPlan = new EventEmitter();
   @Output() public cancelingPlan = new EventEmitter();
@@ -27,8 +27,8 @@ export class BillingPlanComponent implements OnChanges, OnDestroy {
   constructor(private modalService: NgbModal, private billingService: BillingService) {}
 
   public ngOnChanges(changes: SimpleChanges) {
-    if (changes.saveProcess) {
-      if (!changes.saveProcess.currentValue && this.modalRef) {
+    if (changes['saveProcess']) {
+      if (!changes['saveProcess'].currentValue && this.modalRef) {
         this.modalRef.close();
       }
     }
@@ -41,7 +41,7 @@ export class BillingPlanComponent implements OnChanges, OnDestroy {
   }
 
   public planPay(plan: Plan): number {
-    const start = plan.start_range_price_annual || plan.start_range_price_monthly;
+    const start: number = plan.start_range_price_annual || plan.start_range_price_monthly;
 
     const price = start + (this.workerCount - plan.start_range) * (plan.step_change_val * plan.procent);
 
@@ -54,7 +54,7 @@ export class BillingPlanComponent implements OnChanges, OnDestroy {
     return Math.round(price * 12);
   }
 
-  public selectPlan(plan) {
+  public selectPlan(plan: Plan) {
     const body = {
       type: plan.type,
       worker_count: this.workerCount,

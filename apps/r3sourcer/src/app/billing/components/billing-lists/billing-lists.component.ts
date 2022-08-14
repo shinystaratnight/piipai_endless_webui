@@ -4,7 +4,7 @@ import { paymentMetadata, smsMetadata } from './billing-lists.metadata';
 import { ListService, SortService } from '@webui/dynamic-form';
 
 @Component({
-  selector: 'app-billing-lists',
+  selector: 'webui-billing-lists',
   templateUrl: './billing-lists.component.html',
   styleUrls: ['./billing-lists.component.scss'],
   providers: [ListService, SortService]

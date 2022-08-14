@@ -10,7 +10,7 @@ import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { ButtonsModule } from 'ngx-bootstrap/buttons';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
-import { GooglePlaceModule } from 'ngx-google-places-autocomplete';
+// import { GooglePlaceModule } from 'ngx-google-places-autocomplete';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { QuillModule } from 'ngx-quill';
 import { SignaturePadModule } from 'angular2-signaturepad';
@@ -49,7 +49,7 @@ import { RatingModule } from '@webui/rating';
     InfiniteScrollModule,
     SharedModule,
     ButtonsModule.forRoot(),
-    GooglePlaceModule,
+    // GooglePlaceModule,
     QuillModule,
     SignaturePadModule,
     DragDropModule,
