@@ -65,7 +65,7 @@ export class SortService {
             result[item.param] = item.sorted;
           }
         })
-      }w
+      }
     });
 
     return result;

@@ -21,7 +21,7 @@ export abstract class Model implements IModel {
     );
   }
 
-  protected _formListElement(config = {} as OverrideConfig) {
+  protected _formListElement(config = {} as Partial<OverrideConfig>) {
     const { label } = config;
 
     return new Form.list.element(

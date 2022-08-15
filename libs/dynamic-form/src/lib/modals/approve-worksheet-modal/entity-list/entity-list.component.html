@@ -4,7 +4,7 @@
       <tr>
         <th
           [class.last]="last"
-          *ngFor="let label of config.head; let last = last"
+          *ngFor="let label of config?.head; let last = last"
         >
           {{ label | translate }}
         </th>
@@ -12,7 +12,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let row of config.rows">
+      <tr *ngFor="let row of config?.rows">
         <td [class.last]="last" *ngFor="let cell of row.cells; let last = last">
           {{ cell.content }}
         </td>

@@ -16,6 +16,8 @@ export class MapComponent implements OnInit, OnDestroy {
     filters?: any[];
   };
 
+  public options!: google.maps.MapOptions;
+
   public filtersOfList!: any[];
   public markers?: Marker[];
 
@@ -75,6 +77,10 @@ export class MapComponent implements OnInit, OnDestroy {
       list: this.config,
     };
     this.filtersOfList = this.filterService.getFiltersByEndpoint(this.mapService.endpoint);
+
+    this.options = {
+      zoom: 13,
+    };
   }
 
   public ngOnDestroy() {

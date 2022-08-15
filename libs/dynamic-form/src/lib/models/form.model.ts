@@ -50,7 +50,7 @@ export class Form {
 
   constructor(endpoint: string, mode: FormMode, allowMethods: string[]) {
     this._mode = new BehaviorSubject(mode);
-    this._saveProcess = new BehaviorSubject(false);
+    this._saveProcess = new BehaviorSubject<boolean>(false);
     this.endpoint = endpoint;
     this.allowMethods = allowMethods;
   }

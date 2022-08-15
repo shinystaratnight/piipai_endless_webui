@@ -1,11 +1,11 @@
 <div class="form-tabs">
-  <ngb-tabset [activeId]="config.activeId">
+  <ul ngbNav [activeId]="config.activeId">
     <ng-container *ngFor="let field of config.children; let i = index">
-      <ngb-tab
-        [id]="'ngb-tab-' + i"
+      <li
+        [ngbNavItem]="'ngb-tab-' + i"
         *ngIf="!field.hide && (!config.editForm ? field.main : true)"
-        title="
-          {{
+      >
+        <a ngbNavLink>{{
           getTranslateKey(field.translateKey, 'name')
             | translate
               : {
@@ -13,10 +13,8 @@
                     field.name ||
                     (field.templateOptions && field.templateOptions.label)
                 }
-        }}
-        "
-      >
-        <ng-template ngbTabContent>
+        }}</a>
+        <ng-template ngbNavContent>
           <div
             class="label"
             *ngIf="field.main && !isMobileDevice && !config.notEdit"
@@ -30,7 +28,7 @@
               class="btn edit-mode"
               webuiSubscriptionRequired
               *ngIf="canUpdate && mode === 'view' && !hideEditButton()"
-              (click)="changeMode('edit')"
+              (click)="changeMode(FormMode.Edit)"
             >
               <fa-icon icon="pencil-alt"></fa-icon>
               {{ 'edit_mode' | translate: { Default: 'Edit mode' } }}
@@ -41,7 +39,7 @@
               class="btn close-btn"
               webuiSubscriptionRequired
               *ngIf="mode === 'edit'"
-              (click)="changeMode('view')"
+              (click)="changeMode(FormMode.View)"
             >
               {{
                 'close_without_save'
@@ -77,7 +75,7 @@
           >
           </ng-container>
         </ng-template>
-      </ngb-tab>
+      </li>
     </ng-container>
-  </ngb-tabset>
+  </ul>
 </div>

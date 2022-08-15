@@ -14,7 +14,7 @@ import { Observable, Subscriber, combineLatest } from 'rxjs';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ImageUploaderComponent {
-  @Input() source?: Array<{ src: string; id: string }> = [];
+  @Input() source: Array<{ src: string; id: string }> = [];
   @Input() count = 2;
   @Input() loading?: boolean;
   @Output() images: EventEmitter<string[]> = new EventEmitter();

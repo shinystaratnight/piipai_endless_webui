@@ -7,7 +7,7 @@ import { finalize } from 'rxjs/operators';
 import { FormatString } from '@webui/utilities';
 import { SiteSettingsService } from '@webui/core';
 
-import { TimelineService, TimelineAction } from '../../../services';
+import { TimelineService, TimelineAction, FormMode } from '../../../services';
 import { PassTestModalComponent, PassTestModalConfig } from '../../../modals';
 import { FormControl } from '@angular/forms';
 import { Endpoints } from '@webui/models';
@@ -41,6 +41,7 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
   public passTestAction!: BehaviorSubject<number>;
   public passedTests: Map<string, any[]> = new Map();
   public workflowObjectEndpoint = Endpoints.WorkflowObject;
+  public FormMode = FormMode;
 
   private subscriptions: Subscription[] = [];
 
@@ -387,6 +388,8 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
 
       return `${activeCount} / ${substatesCount}`;
     }
+
+    return;
   }
 
   public editContact(event: Event) {

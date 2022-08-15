@@ -21,7 +21,7 @@
 <ng-template #content let-payload="payload">
   <webui-dropdown-content>
     <cdk-virtual-scroll-viewport class="dropdown" #scroller itemSize="54">
-      <ul class="list" *ngIf="payload | async as data">
+      <ul class="list" *ngIf="toPayload(payload) | async as data">
         <ng-container *ngIf="data.results">
           <ng-container *ngIf="data.results.length">
             <li

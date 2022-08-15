@@ -55,7 +55,7 @@
       <br *ngIf="!config.delim && !config.fields">
     </span>
 
-    <span class="d-flex flex-column" *ngIf="arrayValue">
+    <span class="d-flex flex-column" *ngIf="arrayValue && isArray(value)">
       <span *ngFor="let item of value; let l = last; let i = index">
         <a
           *ngIf="item && !link"

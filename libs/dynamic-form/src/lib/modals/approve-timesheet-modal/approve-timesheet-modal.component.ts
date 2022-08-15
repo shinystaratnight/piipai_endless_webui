@@ -31,7 +31,7 @@ export type ApproveTimesheetModalConfig = {
     fullName: string;
   };
   data: {
-    evaluation_score: number;
+    evaluation_score: string;
   };
   signatureStep: boolean;
   approve: boolean;

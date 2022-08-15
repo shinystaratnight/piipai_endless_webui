@@ -9,7 +9,7 @@ export class NoteModel extends Model {
   override readonly endpoint = Endpoints.Note;
   override readonly translateKey = 'notes';
 
-  formListElement(config: OverrideConfig) {
+  formListElement(config: Partial<OverrideConfig>) {
     const { query, model_content_type } = config;
 
     return super

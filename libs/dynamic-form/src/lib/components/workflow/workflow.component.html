@@ -91,7 +91,7 @@
         [id]="editModalInfo.id"
         [data]="editModalInfo.data"
         (event)="formEvent($event, modal.close)"
-        (errorForm)="formError($event)">
+        (errorForm)="formError()">
           <button webuiSubscriptionRequired type="submit" class="btn btn-secondary bg-primary text-white button-save" [disabled]="saveProcess">
             Save
             <webui-spinner *ngIf="saveProcess"></webui-spinner>

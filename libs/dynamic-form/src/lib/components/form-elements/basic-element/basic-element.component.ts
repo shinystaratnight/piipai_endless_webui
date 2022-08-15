@@ -8,7 +8,7 @@ export class BasicElementComponent {
   public config: any;
   public event = new EventEmitter();
 
-  public addControl(config: any, fb: FormBuilder, ...validators: ValidatorFn[]) {
+  public addControl(config: any, fb: FormBuilder, ...validators: any[]) {
     if (config.key) {
       const keys = config.key.split('.');
       if (keys.length > 1) {
@@ -67,7 +67,7 @@ export class BasicElementComponent {
     });
   }
 
-  private addElement(group: FormGroup, el: string, fb: FormBuilder, validators: ValidatorFn[]) {
+  private addElement(group: FormGroup, el: string, fb: FormBuilder, validators: any[]) {
     group.addControl(el, fb.control('', this.getValidators(validators)));
   }
 
@@ -75,7 +75,7 @@ export class BasicElementComponent {
     group.addControl(el, fb.group({}));
   }
 
-  private addControls(group: FormGroup, keys: string[], fb: FormBuilder, validators: ValidatorFn[]) {
+  private addControls(group: FormGroup, keys: string[], fb: FormBuilder, validators: any[]) {
     const el: string = keys.shift() as string;
     if (keys.length === 0) {
       if (!group.get(el)) {
@@ -91,7 +91,7 @@ export class BasicElementComponent {
     }
   }
 
-  private getValidators(options: any): ValidatorFn[] {
+  private getValidators(options: any[]): ValidatorFn[] {
     const [
       required,
       min,

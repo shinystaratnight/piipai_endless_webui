@@ -677,6 +677,8 @@ export class DynamicListComponent
         return params;
       }
     }
+
+    return;
   }
 
   public updateValuesOfAsyncData(data: any[], target: any[]) {
@@ -1231,6 +1233,8 @@ export class DynamicListComponent
       });
       return !!value;
     }
+
+    return;
   }
 
   public selectAll(selected: any) {
@@ -1762,6 +1766,8 @@ export class DynamicListComponent
       this.modalRef.componentInstance.config = this.modalInfo;
       return this.handleFormClose(this.modalRef.result, refresh);
     }
+
+    return;
   }
 
   public sendSignature(submitButton?: any) {
@@ -2397,6 +2403,8 @@ export class DynamicListComponent
     if (changeDesign) {
       return isMobile();
     }
+
+    return false;
   }
 
   public editForm(e: any) {
@@ -2745,6 +2753,8 @@ export class DynamicListComponent
       case Endpoints.TimesheetUnapproved:
         return this.unapproved;
     }
+
+    return null;
   }
 
   public getElement(name: string, row: any[]): any {
@@ -2812,6 +2822,8 @@ export class DynamicListComponent
 
       return this.first && !editEndpoint && !this.inForm && !editDisable;
     }
+
+    return false;
   }
 
   openDetails(row: any, e: any) {

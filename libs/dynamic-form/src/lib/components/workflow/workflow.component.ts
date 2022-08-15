@@ -134,7 +134,7 @@ export class WorkflowComponent implements OnInit, OnDestroy {
     });
   }
 
-  public addState(e: MouseEvent, parent: string) {
+  public addState(e: MouseEvent, parent?: string) {
     e.preventDefault();
     e.stopPropagation();
 
@@ -228,7 +228,7 @@ export class WorkflowComponent implements OnInit, OnDestroy {
     this.openState(node, undefined, { size: 'lg' }, 'edit');
   }
 
-  public openState(node: any, closeModal: any, options?: any, type?: string) {
+  public openState(node: any, closeModal?: any, options?: any, type?: string) {
     if (closeModal) {
       closeModal();
     }

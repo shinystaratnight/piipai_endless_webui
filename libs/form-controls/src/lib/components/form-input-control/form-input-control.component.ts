@@ -26,7 +26,7 @@ export class FormInputControlComponent implements ControlValueAccessor {
   @Input() prefix?: string;
 
   public value?: string = '';
-  public onChange?: (value: string) => void;
+  public onChange!: (value: string) => void;
   public onTouched?: () => void;
 
   public writeValue(value: string): void {

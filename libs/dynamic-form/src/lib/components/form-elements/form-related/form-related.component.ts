@@ -12,7 +12,7 @@ import {
   Optional
 } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
@@ -48,6 +48,7 @@ import { LocalStorageService } from 'ngx-webstorage';
 import { Field, ITemplateOptions } from '@webui/metadata';
 import { CountryCodeLanguage, Endpoints } from '@webui/models';
 import { stringify } from '@angular/compiler/src/util';
+import { IconName } from '@fortawesome/fontawesome-svg-core';
 
 export interface RelatedObject {
   id: string;
@@ -59,7 +60,7 @@ export interface RelatedObject {
 export interface CustomField {
   key: string;
   value: any;
-  icon?: string;
+  icon?: IconName;
   link?: boolean;
   prefix?: string;
   outside?: boolean;
@@ -85,14 +86,14 @@ export class FormRelatedComponent
 
   @Output() override event: EventEmitter<any> = new EventEmitter();
 
-  public override config!: Field;
+  public override config!: Field & { key: string };
   public override group!: FormGroup;
   public errors: any;
-  public message: any;
+  public message!: Record<string, any>;
   public override key: any;
 
   public label!: boolean;
-  public isCollapsed?: boolean;
+  public isCollapsed = false;
   public viewMode?: boolean;
   public editMode: boolean;
   public saveProcess!: boolean;
@@ -147,7 +148,7 @@ export class FormRelatedComponent
   private searchSubscription!: Subscription;
   private subscriptions: Subscription[] = [];
 
-  public colors = {
+  public colors: Record<number, string> = {
     0: '#bdbdbd',
     1: '#FA5C46',
     2: '#fc9183',
@@ -222,7 +223,7 @@ export class FormRelatedComponent
     this.display = this.config.templateOptions?.display || '{__str__}';
     this.param = this.config.templateOptions?.param || 'id';
     this.fields = this.config.templateOptions?.values || ['__str__'];
-    this.isCollapsed = this.config.collapsed;
+    this.isCollapsed = this.config.collapsed || false;
     this.viewMode = this.config.editForm && this.config.read_only;
 
     if (this.fields.indexOf(this.param) === -1) {
@@ -616,6 +617,8 @@ export class FormRelatedComponent
     if (customerCompany && providerCompany && !this.config.editForm) {
       return customerCompany.id === providerCompany.id;
     }
+
+    return;
   }
 
   public checkAutocomplete() {
@@ -1280,7 +1283,7 @@ export class FormRelatedComponent
     }
   }
 
-  public generateList(value: any, concat = false): void {
+  public generateList(value?: any, concat = false): void {
     if (!this.config.doNotChoice) {
       this.currentQuery = null;
       this.hideAutocomplete = false;
@@ -1325,11 +1328,12 @@ export class FormRelatedComponent
     if (this.config.useOptions) {
       let filteredList;
       if (value && this.config.options) {
-        filteredList = this.config.options.filter((el) => {
+        filteredList = this.config.options.filter((el: any) => {
           const val = el.__str__;
           if (val) {
             return val.toLowerCase().indexOf(value.toLowerCase()) > -1;
           }
+          return false;
         });
         this.list = filteredList;
         this.generatePreviewList(this.list);
@@ -1455,6 +1459,8 @@ export class FormRelatedComponent
         return list.some((el: any) => el[this.config.key as string].id === item.id);
       });
     }
+
+    return;
   }
 
   public passTests(item: any, event: MouseEvent) {
@@ -1467,7 +1473,7 @@ export class FormRelatedComponent
     });
   }
 
-  public deleteItem(index: number, item: any, api: boolean) {
+  public deleteItem(index: number, item: any, api?: boolean) {
     if (api || this.config.send === false) {
       this.genericFormService
         .delete(

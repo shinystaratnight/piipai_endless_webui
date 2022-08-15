@@ -11,7 +11,7 @@ interface ICell {
   content: string;
 }
 
-interface IRow {
+export interface IRow {
   cells: ICell[];
   entity?: any;
 }
@@ -28,7 +28,7 @@ export interface ITable {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class EntityListComponent {
-  @Input() public config!: ITable;
+  @Input() public config?: ITable;
 
   public readonly Icon = Icon;
   public readonly IconSize = IconSize;

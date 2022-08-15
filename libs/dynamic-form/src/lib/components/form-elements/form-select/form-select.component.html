@@ -71,7 +71,7 @@
     class="text-danger"
     *ngIf="
       config.templateOptions.errorDescription &&
-      config.templateOptions.errorDescription.value === group.get(key).value
+      config.templateOptions.errorDescription.value === group.get(key)?.value
     "
   >
     {{ config.templateOptions.errorDescription.error }}

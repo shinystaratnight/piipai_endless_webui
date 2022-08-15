@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbAccordionModule, NgbCollapseModule, NgbDatepickerModule, NgbNavModule, NgbPaginationModule, NgbPopoverModule, NgbRatingModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 // import { AgmCoreModule } from '@agm/core';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
@@ -36,12 +36,13 @@ import { FormControlsModule } from "@webui/form-controls";
 import { StepperModule } from '@webui/stepper';
 import { CdkStepperModule } from '@angular/cdk/stepper';
 import { RatingModule } from '@webui/rating';
+import { GoogleMapsModule } from '@angular/google-maps';
 
 @NgModule({
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    NgbModule,
+    // NgbModule,
     FontAwesomeModule,
     FormsModule,
     RouterModule,
@@ -70,7 +71,16 @@ import { RatingModule } from '@webui/rating';
     FormControlsModule,
     StepperModule,
     CdkStepperModule,
-    RatingModule
+    RatingModule,
+    GoogleMapsModule,
+    NgbPopoverModule,
+    NgbPaginationModule,
+    NgbRatingModule,
+    NgbNavModule,
+    NgbCollapseModule,
+    NgbAccordionModule,
+    NgbTooltipModule,
+    NgbDatepickerModule
   ],
   exports: [
     fromComponents.GenericFormComponent,

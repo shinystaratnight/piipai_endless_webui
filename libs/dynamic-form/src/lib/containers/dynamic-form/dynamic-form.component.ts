@@ -10,7 +10,7 @@ import {
 
 import { CustomEvent } from '../../models/custom-event.model';
 import { SiteSettingsService } from '@webui/core';
-import { FormService } from '../../services';
+import { FormMode, FormService } from '../../services';
 import { convertPhoneNumber } from '../../helpers';
 import { Field } from '@webui/metadata';
 
@@ -36,7 +36,7 @@ export class DynamicFormComponent implements OnInit {
   @Input()
   public formBuilder!: boolean;
   @Input()
-  public mode!: string;
+  public mode!: FormMode | null;
 
   @Output()
   public submitForm: EventEmitter<any> = new EventEmitter<any>();

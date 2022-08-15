@@ -29,11 +29,11 @@ export class FormGroupComponent implements OnInit {
     this.translationKey = `group.${this.config.translateKey}`;
   }
 
-  public eventHandler(e) {
+  public eventHandler(e: any) {
     this.event.emit(e);
   }
 
-  public buttonActionHandler(e) {
+  public buttonActionHandler(e: any) {
     this.buttonAction.emit(e);
   }
 }

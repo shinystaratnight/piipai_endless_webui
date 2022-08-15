@@ -12,11 +12,11 @@ import {
 })
 export class EvaluateFieldComponent implements OnInit {
   @Input() evaluated!: boolean;
-  @Input() evaluatedScore!: number;
+  @Input() evaluatedScore!: string;
   score!: number;
   hovered: any;
 
   ngOnInit() {
-    this.score = this.evaluatedScore;
+    this.score = parseInt(this.evaluatedScore);
   }
 }

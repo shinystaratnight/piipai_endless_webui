@@ -9,7 +9,7 @@ export class ListFillinTagsComponent {
 
   public config!: any;
 
-  public labels = {
+  public labels: Record<string, string> = {
     required: 'Required',
     missing: 'Missing',
     existing: 'Existing'

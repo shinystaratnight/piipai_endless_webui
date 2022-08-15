@@ -32,7 +32,7 @@ export class FormCheckboxComponent
 {
   private destroy: Subject<void> = new Subject();
 
-  @Input() label?: string;
+  @Input() label!: string;
 
   public onChange?: (value: boolean) => void;
   public onTouched?: () => void;

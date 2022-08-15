@@ -1,6 +1,6 @@
 import { Directive, Input, OnInit, TemplateRef, ViewContainerRef } from '@angular/core';
 import { CheckPermissionService } from '@webui/core';
-import { Endpoints } from '@webui/data';
+import { Endpoints } from '@webui/models';
 
 type Action = 'post' | 'update' | 'delete' | 'get';
 

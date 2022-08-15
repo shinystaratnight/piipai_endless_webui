@@ -134,7 +134,7 @@ export class FormReplaceComponent extends BasicElementComponent implements OnIni
     this.modalRef = this.modal.open(this.modalTemplate, { size: 'lg' });
   }
 
-  public deleteAction(endpoint: string, query: string, el) {
+  public deleteAction(endpoint: string, query: string, el: any) {
     this.modalData = {};
     this.modalData.type = 'delete';
     this.modalData.endpoint = endpoint;

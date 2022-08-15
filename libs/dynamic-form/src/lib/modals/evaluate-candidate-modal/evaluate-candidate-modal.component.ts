@@ -18,7 +18,7 @@ export class EvaluateCandidateModalComponent extends Modal implements OnInit, On
   public data: any;
   public endpoint!: string;
   public timeSheet!: TimeSheet;
-  public processing$: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  public processing$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   public formGroup!: FormGroup;
 
   public get formInvalid(): boolean {

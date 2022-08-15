@@ -29,7 +29,7 @@
         </header>
 
         <ng-container *ngIf="timeViewType$ | async as type">
-          <div [formGroup]="formGroup.get('times')" *ngIf="type === 'form'">
+          <div [formGroup]="timesGroup" *ngIf="type === 'form'">
             <div class="form-row">
               <webui-form-datepicker-control
                 formControlName="shiftStartedAt"
@@ -82,7 +82,7 @@
           </div>
 
           <webui-entity-list
-            *ngIf="type == 'list'"
+            *ngIf="type === 'list'"
             [config]="timeTable"
             (edit)="editTime()"
             (delete)="deleteTime()"
@@ -108,7 +108,7 @@
           <ng-container *ngIf="activityViewType$ | async as type">
             <div
               *ngIf="type === 'form'"
-              [formGroup]="formGroup.get('activity')"
+              [formGroup]="activityGroup"
             >
               <div class="form-row">
                 <webui-form-dropdown-control
@@ -153,7 +153,7 @@
             <webui-entity-list
               *ngIf="type === 'list'"
               [config]="activityTable"
-              (edit)="editAvtivity($event)"
+              (edit)="editActivity($event)"
               (delete)="deleteActivity($event)"
             ></webui-entity-list>
           </ng-container>

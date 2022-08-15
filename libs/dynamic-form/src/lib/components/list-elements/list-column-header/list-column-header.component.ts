@@ -6,6 +6,7 @@ import { Sort } from '../../../helpers';
 import { SortData, SortService } from '../../../services';
 
 import { getTranslationKey } from '@webui/utilities';
+import { IconName } from '@fortawesome/fontawesome-svg-core';
 
 type ListColumnHeaderConfig = {
   delim: string;
@@ -26,7 +27,7 @@ type Name = {
   label: string;
   name: string;
   sort: boolean;
-  icon$?: Observable<string>;
+  icon$?: Observable<IconName>;
 }
 
 @Component({
@@ -40,12 +41,12 @@ export class ListColumnHeaderComponent implements OnInit {
 
   hasMultipleNames!: boolean;
   multipleNamesData!: Name[];
-  icon$!: Observable<string>;
+  icon$!: Observable<IconName>;
   translationKey!: string;
 
   @Output() public sortChange: EventEmitter<void> = new EventEmitter();
 
-  private icons = {
+  private icons: Record<Sort, IconName> = {
     [Sort.DEFAULT]: 'sort',
     [Sort.ASC]: 'sort-up',
     [Sort.DESC]: 'sort-down'
@@ -65,7 +66,7 @@ export class ListColumnHeaderComponent implements OnInit {
     }
   }
 
-  onSort(event: PointerEvent, name?: string) {
+  onSort(event: MouseEvent, name?: string) {
     event.preventDefault();
 
     if (this.hasMultipleNames) {
@@ -77,6 +78,14 @@ export class ListColumnHeaderComponent implements OnInit {
     }
 
     this.sortChange.emit();
+  }
+
+  public convertToIcon(icon: any): IconName | string {
+    if (typeof icon === 'string') {
+      return icon as IconName;
+    }
+
+    return '';
   }
 
   private generateMultipleNames() {

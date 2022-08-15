@@ -12,7 +12,7 @@ import { FormGroup } from '@angular/forms';
 import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { BehaviorSubject, Subscription, Observable, of, Subject } from 'rxjs';
 
-import { FormBuilderService, FormService } from '../../services';
+import { FormBuilderService, FormMode, FormService } from '../../services';
 import { MessageType, ToastService } from '@webui/core';
 import { HiddenFields } from '../../components/generic-form/generic-form.component';
 import { convertPhoneNumber, getElementFromMetadata } from '../../helpers';
@@ -53,9 +53,9 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
   public passedTests: Map<string, any[]> = new Map();
 
   private industryField = industryField;
-  private steps = steps;
-  private invalid: BehaviorSubject<boolean> = new BehaviorSubject(false);
-  private saving: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  public steps = steps;
+  private invalid: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  private saving: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   private _step: BehaviorSubject<Step> = new BehaviorSubject({} as Step);
   barWidth: any = 0;
   constructor(
@@ -94,7 +94,7 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
 
     this.formId = this.formService.registerForm(
       this.service.formEndpoint,
-      'edit'
+      FormMode.Edit
     );
   }
 
@@ -412,7 +412,7 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
               field.showIf,
               this.hiddenFields.observers
             );
-            field.hidden = new BehaviorSubject(true);
+            field.hidden = new BehaviorSubject<boolean>(true);
           }
         }
       });

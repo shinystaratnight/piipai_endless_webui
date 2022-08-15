@@ -7,7 +7,7 @@ import { FilterEvent } from '../../interfaces';
   styleUrls: ['./filter-block.component.scss']
 })
 export class FilterBlockComponent {
-  @Input() public config: any[] = [];
+  @Input() public config?: any[] = [];
   @Input() public inline!: boolean;
   @Input() public container!: boolean;
   @Input() public key!: string;
@@ -17,7 +17,7 @@ export class FilterBlockComponent {
 
   public direction = 'down';
 
-  public changeQuery(e) {
+  public changeQuery(e: any) {
     this.event.emit(e);
   }
 

@@ -86,7 +86,7 @@ export class FormRuleComponent extends BasicElementComponent implements OnInit, 
     }
   }
 
-  public open(content: any, type: any, rule: any, index: number, item: any, parent: any) {
+  public open(content: any, type: any, rule: any[], index?: number, item?: any, parent?: any) {
     this.editRule = rule;
     this.choice = '';
     this.editValue = '';
@@ -102,7 +102,7 @@ export class FormRuleComponent extends BasicElementComponent implements OnInit, 
     this.modelsArray = null;
     this.functionsArray = null;
 
-    if (rule && rule[index]) {
+    if (rule && typeof index === 'number' && rule[index]) {
       this.editIndex = index;
       this.editValue = rule[index];
     }

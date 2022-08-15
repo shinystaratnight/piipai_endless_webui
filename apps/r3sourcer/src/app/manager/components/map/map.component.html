@@ -7,33 +7,22 @@
 </div>
 
 <div class="map" *ngIf="markers">
-  <agm-map
-    (idle)="mapReady($event)"
-    [latitude]="
-      (currentPosition && currentPosition.latitude) || defaultLatitude
-    "
-    [longitude]="
-      (currentPosition && currentPosition.longitude) || defaultlongitude
-    "
-    [zoom]="13"
-    [disableDefaultUI]="true"
+  <google-map
+    [options]="options"
   >
-    <agm-marker
+    <map-marker
       *ngFor="let marker of markers; trackBy: trackByFn"
-      [iconUrl]="icons[marker.type].path"
-      [latitude]="marker.latitude"
-      [longitude]="marker.longitude"
     >
-      <agm-info-window>
+      <map-info-window>
         <strong>{{ marker.name }}</strong>
         <br />
         <p *ngIf="marker.contact">{{ marker.__str__ }}</p>
         <p *ngIf="marker.contact">
           {{ marker.contact.name }} {{ marker.contact.phone_mobile }}
         </p>
-      </agm-info-window>
-    </agm-marker>
-  </agm-map>
+      </map-info-window>
+    </map-marker>
+  </google-map>
 </div>
 
 <div *ngIf="markers" class="legend">

@@ -29,6 +29,10 @@ export class TimeTrackingComponent implements OnInit {
     this.time = this.timePoints.start;
   }
 
+  public convertMomentToString(val: Moment): string {
+    return val.format();
+  }
+
   public setBreakStyles() {
     const startValueOf = this.timePoints.start.valueOf();
     const endValueOf = this.timePoints.end.valueOf();

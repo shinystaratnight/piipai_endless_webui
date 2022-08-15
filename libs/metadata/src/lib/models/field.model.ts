@@ -53,6 +53,8 @@ export interface ITemplateOptions {
   patterError?: string;
   add_label?: string;
   iconParsed?: string;
+  deleteList?: boolean;
+  indent?: boolean;
 }
 
 export interface Field {
@@ -156,4 +158,8 @@ export interface Field {
   addEndpoint?: string;
   listKey?: string;
   templateOptions?: ITemplateOptions;
+  message?: any;
+  width?: any;
+  hideSelect?: boolean;
+  additional_text?: string;
 }

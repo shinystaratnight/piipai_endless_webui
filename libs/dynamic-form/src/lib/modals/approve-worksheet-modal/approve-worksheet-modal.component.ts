@@ -10,7 +10,7 @@ import { BehaviorSubject, forkJoin, Observable, of, Subject } from 'rxjs';
 import { finalize, switchMap, takeUntil } from 'rxjs/operators';
 import { GenericFormService } from '../../services';
 import { Modal, Status } from '../modal/modal.component';
-import { ITable } from './entity-list/entity-list.component';
+import { IRow, ITable } from './entity-list/entity-list.component';
 
 type ViewType = 'list' | 'form' | undefined;
 
@@ -26,7 +26,7 @@ const isHourlyWork = (name: string): boolean => {
 })
 export class ApproveWorksheetModalComponent extends Modal implements OnInit, OnDestroy {
   private destroy: Subject<void> = new Subject<void>();
-  private hasTimeForm: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  private hasTimeForm: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   private timeViewType: BehaviorSubject<ViewType | undefined> = new BehaviorSubject<ViewType | undefined>(undefined);
   private activityViewType: BehaviorSubject<ViewType | undefined> = new BehaviorSubject<ViewType | undefined>(undefined);
   private activities: BehaviorSubject<TimesheetRate[] | null> = new BehaviorSubject<TimesheetRate[] | null>(null);
@@ -43,7 +43,7 @@ export class ApproveWorksheetModalComponent extends Modal implements OnInit, OnD
   public IconSize = IconSize;
   public timeForm!: FormGroup;
   public DatepickerType = DatepickerType;
-  public processing$: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  public processing$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
   public timeViewType$ = this.timeViewType.asObservable();
   public activityViewType$ = this.activityViewType.asObservable();
@@ -104,6 +104,14 @@ export class ApproveWorksheetModalComponent extends Modal implements OnInit, OnD
     }
 
     return;
+  }
+
+  public get activityGroup(): FormGroup {
+    return this.formGroup.get('activity') as FormGroup;
+  }
+
+  public get timesGroup(): FormGroup {
+    return this.formGroup.get('times') as FormGroup;
   }
 
   constructor(
@@ -211,7 +219,7 @@ export class ApproveWorksheetModalComponent extends Modal implements OnInit, OnD
     return !isHourlyWork(option.label);
   }
 
-  public editAvtivity(row: { entity: TimesheetRate }): void {
+  public editActivity(row: IRow): void {
     const activity = this.activities?.value?.find((el) => el === row.entity);
     this.formGroup.addControl('activity', this.getActivityForm(activity, this.timeSheet.id));
     this.editingActivity = activity;
@@ -219,7 +227,7 @@ export class ApproveWorksheetModalComponent extends Modal implements OnInit, OnD
     this.activityViewType.next('form');
   }
 
-  public deleteActivity(row: { entity: TimesheetRate }) {
+  public deleteActivity(row: IRow) {
     const activity = this.activities?.value?.find((activity) => activity === row.entity);
     const newActivities = this.activities?.value?.filter((activity) => activity !== row.entity) || null;
     this.activities.next(newActivities);
@@ -257,7 +265,7 @@ export class ApproveWorksheetModalComponent extends Modal implements OnInit, OnD
       const note = new Note({
         object_id: this.timeSheet.id as string,
         note: formValue.note,
-        contact: this.userService.user.data.contact,
+        contact: this.userService.user?.data.contact,
         content_type: { id: ENoteContentType.TimeSheet.toString(), __str__: '' }
       });
 

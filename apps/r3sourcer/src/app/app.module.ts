@@ -75,6 +75,7 @@ import { SettingsModule } from './settings/settings.module';
 import { MasterGuideModule } from './master-guide/master-guide.module';
 import { HttpLoaderFactory } from './translate.loader';
 import { MissingTranslationHelper } from './helpers/translate.helper';
+// import { GoogleMapsModule } from '@angular/google-maps';
 
 @NgModule({
   declarations: [
@@ -98,6 +99,7 @@ import { MissingTranslationHelper } from './helpers/translate.helper';
     //   apiKey: environment.GOOGLE_GEO_CODING_API_KEY,
     //   libraries: ['places'],
     // }),
+    // GoogleMapsModule,
     TranslateModule.forRoot({
       defaultLanguage: 'en',
       missingTranslationHandler: {

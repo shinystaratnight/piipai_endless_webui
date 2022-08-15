@@ -1369,7 +1369,7 @@ const form = [
         },
         help: 'Here you can see favorite companies for candidate'
       },
-      new NoteModel().formListElement(),
+      new NoteModel().formListElement({}),
       {
         endpoint: `${Endpoints.JobOffer}candidate/`,
         templateOptions: {

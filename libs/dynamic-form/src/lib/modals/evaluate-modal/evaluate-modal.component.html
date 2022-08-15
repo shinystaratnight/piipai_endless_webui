@@ -30,7 +30,7 @@
       [data]="config.data"
       [extendData]="config.extendData"
       [edit]="config.edit"
-      (errorForm)="errorEvent($event)"
+      (errorForm)="errorEvent()"
       (event)="formEvent($event)"
     >
       <div class="d-flex">
@@ -63,11 +63,11 @@
       <p class="evaluate-label">{{ config.label.name }}</p>
       <hr width="100" />
 
-      <ngb-rating max="5" min="1" [(ngModel)]="config.data.evaluation_score">
+      <ngb-rating [max]="5" min="1" [(ngModel)]="config.data['evaluation_score']">
         <ng-template let-fill="fill" let-index="index">
           <span *ngIf="fill === 100" class="star star-lg full">&#9733;</span>
           <span *ngIf="fill === 0" class="star star-lg">
-            {{ config.data.evaluation_score ? '&#9733;' : '&#9734;' }}
+            {{ config.data['evaluation_score'] ? '&#9733;' : '&#9734;' }}
           </span>
         </ng-template>
       </ngb-rating>

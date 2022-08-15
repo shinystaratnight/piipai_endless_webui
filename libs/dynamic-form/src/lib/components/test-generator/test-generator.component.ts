@@ -31,6 +31,7 @@ interface IQuestionConfig {
   pictures: string[];
   last: boolean;
   first: boolean;
+  options: any[];
 }
 
 interface ITestConfig {
@@ -46,11 +47,11 @@ interface ITestConfig {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TestGeneratorComponent implements OnInit {
-  @Input() public id!: string;
-  @Input() public send = true;
-  @Input() public workflowObject!: string;
+  @Input() public id?: string;
+  @Input() public send? = true;
+  @Input() public workflowObject?: string;
   @Input() test: any;
-  @Input() skipScore!: boolean;
+  @Input() skipScore?: boolean;
 
   @ViewChild('cdkStepper') stepper!: CdkStepper;
 

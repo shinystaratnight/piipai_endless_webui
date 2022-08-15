@@ -34,7 +34,7 @@ export class ListInfoComponent implements OnInit {
   statusList!: any[];
   more!: boolean;
   isDefaultImage!: boolean;
-  colors = {
+  colors: Record<number, string> = {
     0: '#bdbdbd',
     1: '#FA5C46',
     2: '#fc9183',

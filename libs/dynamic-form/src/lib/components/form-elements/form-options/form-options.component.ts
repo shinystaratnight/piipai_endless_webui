@@ -81,6 +81,7 @@ export class FormOptionsComponent extends BasicElementComponent implements OnIni
       if ((el.label || el.label === '0') && (el.value || el.value === '0')) {
         return true;
       }
+      return false;
     });
     if (value) {
       this.group.get(this.key)?.patchValue(value);

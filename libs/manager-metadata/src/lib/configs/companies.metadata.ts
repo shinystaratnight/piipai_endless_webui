@@ -1,5 +1,5 @@
 import { createFilter, Type, Form } from '@webui/metadata';
-import { Endpoints } from '@webui/data';
+import { Endpoints } from '@webui/models';
 
 const weekOptions = [
   { value: 1, label: 'Monday' },

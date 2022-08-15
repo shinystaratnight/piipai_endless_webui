@@ -36,7 +36,7 @@ export class SubmissionModalComponent
   public Icon = Icon;
   public IconSize = IconSize;
   public DatepickerType = DatepickerType;
-  public processing$: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  public processing$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   public formGroup!: FormGroup;
 
   public activityParams?: { [key: string]: any };

@@ -84,7 +84,7 @@
       <div class="modal-header">
         <h5 class="modal-title">
           {{
-            config?.templateOptions?.add_label
+            config.templateOptions?.add_label || ''
               | translate: { Default: '+ Add' } || 'Add'
           }}
         </h5>
@@ -103,7 +103,7 @@
         [data]="modalData.data"
         [metadataQuery]="config.add_metadata_query"
         (event)="formEvent($event, modal.close)"
-        (errorForm)="formError($event)"
+        (errorForm)="formError()"
       >
         <button
           type="submit"

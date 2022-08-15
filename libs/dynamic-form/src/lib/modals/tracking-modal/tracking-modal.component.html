@@ -5,12 +5,9 @@
   <webui-close-button class="close ml-2 mt-2" (click)="dismiss()"></webui-close-button>
 </div>
 
-<agm-map
-  style="height: 320px"
-  [latitude]="latitude"
-  [longitude]="longitude"
-  [zoom]="13">
-  <agm-marker
+<google-map
+  style="height: 320px">
+  <!-- <agm-marker
     [latitude]="markerLatitude"
     [longitude]="markerLongitude">
   </agm-marker>
@@ -27,8 +24,8 @@
         *ngFor="let point of breakPath; trackBy: trackByTracking">
       </agm-polyline-point>
     </ng-container>
-  </agm-polyline>
-</agm-map>
+  </agm-polyline> -->
+</google-map>
 
 <div [class.tracking-desctop]="!isMobile()" [class.pt-4]="isMobile()">
   <div *ngIf="!isMobile()" class="tracking-title-wrapper">

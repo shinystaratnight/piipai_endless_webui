@@ -1,5 +1,6 @@
-import { Endpoints } from '@webui/data';
 // import { Filter } from '@webui/metadata';
+
+import { Endpoints } from "@webui/models";
 
 // const filters = {
 //   language: new Filter.related.element({

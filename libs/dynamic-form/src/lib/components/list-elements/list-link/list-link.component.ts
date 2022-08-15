@@ -1,6 +1,7 @@
 import { Component, OnInit, Output, EventEmitter, ViewEncapsulation, ViewChild, ElementRef } from '@angular/core';
 
 import { SiteSettingsService } from '@webui/core';
+import { isArray } from '@webui/utilities';
 
 @Component({
   selector: 'webui-list-link',
@@ -12,7 +13,7 @@ export class ListLinkComponent implements OnInit {
   public config!: any;
   public href!: string | string[];
   public link!: boolean;
-  public value!: string | string[];
+  public value!: string | any[];
   public last!: boolean;
   public arrayValue!: boolean;
   public smsDisabled!: boolean;
@@ -20,6 +21,7 @@ export class ListLinkComponent implements OnInit {
 
   public phone!: boolean;
   public linkClass = '';
+  public isArray = isArray;
 
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
@@ -77,7 +79,7 @@ export class ListLinkComponent implements OnInit {
     return reg.test(value) ? true : false;
   }
 
-  public action(e: MouseEvent, index: number) {
+  public action(e: MouseEvent, index?: number) {
     e.preventDefault();
     e.stopPropagation();
     if (index || index === 0) {

@@ -26,6 +26,7 @@ import { FormMode, FormService } from '../../../services';
 })
 export class FormPictureComponent extends BasicElementComponent
   implements OnInit, AfterViewInit, OnDestroy {
+  private subscriptions: Subscription[] = [];
   @ViewChild('modal')
   public modal!: ElementRef;
 
@@ -64,9 +65,7 @@ export class FormPictureComponent extends BasicElementComponent
 
   capture$ = this.capture.asObservable();
 
-  getTranslationKey = getTranslationKey;
-
-  private subscriptions: Subscription[] = [];
+  getTranslationKey = (key: string) => getTranslationKey(this.config.key, key);
 
   constructor(
     private fb: FormBuilder,
@@ -224,7 +223,7 @@ export class FormPictureComponent extends BasicElementComponent
     return false;
   }
 
-  public upload(e: MouseEvent): void {
+  public upload(e?: MouseEvent): void {
     if (e) {
       e.preventDefault();
       e.stopPropagation();

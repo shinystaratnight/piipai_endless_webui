@@ -10,7 +10,7 @@ import { FormGroup } from '@angular/forms';
 
 import { Subscription } from 'rxjs';
 
-import { FormService } from '../../services';
+import { FormMode, FormService } from '../../services';
 import { getValueOfData } from '../../helpers';
 import { isMobile, isCandidate } from '@webui/utilities';
 import { Form } from '../../models';
@@ -40,6 +40,7 @@ export class FormTabsComponent implements OnInit, OnDestroy {
   @Output() public buttonAction = new EventEmitter();
 
   public isMobileDevice = isMobile() && isCandidate();
+  FormMode = FormMode;
 
   constructor(
     private formService: FormService,
@@ -108,7 +109,7 @@ export class FormTabsComponent implements OnInit, OnDestroy {
     this.buttonAction.emit(e);
   }
 
-  public changeMode(mode: string): void {
+  public changeMode(mode: FormMode): void {
     this.mode = mode;
 
     this.formService.changeModeOfForm(this.formId, mode);

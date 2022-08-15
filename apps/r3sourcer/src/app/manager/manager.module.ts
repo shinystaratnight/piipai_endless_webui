@@ -44,6 +44,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { DialogModule } from '@webui/dialog';
 import { TranslateModule } from '@ngx-translate/core';
 import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
+import { GoogleMapsModule } from '@angular/google-maps';
 
 @NgModule({
   // bootstrap: [ ManagerComponent ],
@@ -82,6 +83,7 @@ import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
     DragDropModule,
     DialogModule,
     TranslateModule,
+    GoogleMapsModule
   ],
   providers: [
     // ...guards,

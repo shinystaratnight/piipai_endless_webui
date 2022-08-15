@@ -11,7 +11,7 @@ export class TestListComponent implements OnInit {
 
   public config: any;
   public tests!: any[];
-  public colors = {
+  public colors: Record<number, string> = {
     0: '#515151',
     1: '#FA5C46',
     2: '#fc9183',

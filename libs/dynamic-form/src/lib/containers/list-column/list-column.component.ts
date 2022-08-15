@@ -13,11 +13,11 @@ export class ListColumnComponent {
 
   public config: any;
 
-  public eventHandler(e) {
+  public eventHandler(e: any) {
     this.event.emit(e);
   }
 
-  public buttonHandler(e) {
+  public buttonHandler(e: any) {
     this.buttonAction.emit(e);
   }
 }

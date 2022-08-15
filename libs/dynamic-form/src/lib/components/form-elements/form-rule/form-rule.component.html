@@ -121,8 +121,8 @@
   </span>
 
   <span class="buttons" [class.hide]="data && data.data.length">
-    <button *ngIf="type === 'state'" type="button" class="btn btn-sm btn-link p-0 ml-2" (click)="open(element, type, data.data, index, data, parent)">+ State</button>
-    <button *ngIf="type === 'function'" type="button" class="btn btn-sm btn-link p-0 ml-2" (click)="open(element, type, data.data, index, data, parent)">+ Function</button>
+    <button *ngIf="type === 'state'" type="button" class="btn btn-sm btn-link p-0 ml-2" (click)="open(element, type, data.data, undefined, data, parent)">+ State</button>
+    <button *ngIf="type === 'function'" type="button" class="btn btn-sm btn-link p-0 ml-2" (click)="open(element, type, data.data, undefined, data, parent)">+ Function</button>
     <button type="button" class="btn btn-sm btn-link p-0 ml-1" (click)="addRule(data.data)">+ Rule</button>
   </span>
 

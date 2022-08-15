@@ -48,7 +48,7 @@ export class FormSelectComponent
 
   public viewMode!: boolean;
 
-  private translateKey!: string;
+  public translateKey!: string;
 
   @Output()
   public override event: EventEmitter<any> = new EventEmitter();

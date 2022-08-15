@@ -11,7 +11,7 @@
   (submitForm)="saveTimes($event)">
   <div class="footer">
     <div *ngIf="errors" class="text-danger mb-2">
-      {{ errors.non_field_errors }}
+      {{ errors['non_field_errors'] }}
     </div>
     <button class="btn btn-primary" type="submit">
       Save
@@ -31,7 +31,7 @@
   (event)="eventHandler($event)" (submitForm)="saveSkillActivity($event)">
   <div *ngIf="!formFilled" class="footer">
     <div *ngIf="errors" class="text-danger mb-2">
-      {{ errors.non_field_errors }}
+      {{ errors['non_field_errors'] }}
     </div>
     <button class="btn btn-primary" type="submit">
       Save

@@ -397,7 +397,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
             el.showIf,
             this.hiddenFields.observers
           );
-          el.hidden = new BehaviorSubject(true);
+          el.hidden = new BehaviorSubject<boolean>(true);
         }
       }
 

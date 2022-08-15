@@ -498,6 +498,8 @@ export class GenericListComponent implements OnInit, OnDestroy {
       });
       return result.slice(0, result.length - 1);
     }
+
+    return;
   }
 
   public createTable(endpoint: string) {

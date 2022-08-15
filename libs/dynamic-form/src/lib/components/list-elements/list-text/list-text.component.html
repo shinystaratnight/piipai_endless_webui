@@ -56,8 +56,8 @@
       {{ value }}
     </span>
     <fa-icon
-      *ngIf="iconView"
-      [icon]="['fas', value]"
+      *ngIf="iconView && iconName"
+      [icon]="['fas', iconName]"
       [ngClass]="[iconClass]"
       [ngStyle]="{ color: iconColor }"
     >
@@ -91,7 +91,7 @@
   </span>
 </ng-container>
 
-<ng-container *ngIf="arrayValue">
+<ng-container *ngIf="arrayValue && isArray(value)">
   <span
     [class.description]="config.description"
     *ngFor="let item of value; let l = last"
@@ -118,25 +118,27 @@
   </span>
 </ng-container>
 
-<span
-  class="score-text d-block"
-  [class.my-2]="isMobile()"
-  *ngIf="config.score && getScore(value)"
-  [style.color]="colors[getScore(value)]"
->
-  <div class="rating" [style.borderColor]="colors[getScore(value)]">
-    <ngb-rating [rate]="config.value" max="5" [readonly]="true">
-      <ng-template let-fill="fill" let-index="index">
-        <span *ngIf="fill === 100" class="star full">&#9733;</span>
-        <span *ngIf="fill === 0" class="star">&#9733;</span>
-        <span *ngIf="fill < 100 && fill > 0" class="star">
-          <span class="half" [style.width.%]="fill">&#9733;</span>&#9733;
-        </span>
-      </ng-template>
-    </ngb-rating>
-  </div>
-  &nbsp;{{ value | number: '1.1-1' }}
-</span>
+<ng-container *ngIf="isString(value)">
+  <span
+    class="score-text d-block"
+    [class.my-2]="isMobile()"
+    *ngIf="config.score && getScore(value)"
+    [style.color]="colors[getScore(value)]"
+  >
+    <div class="rating" [style.borderColor]="colors[getScore(value)]">
+      <ngb-rating [rate]="config.value" [max]="5" [readonly]="true">
+        <ng-template let-fill="fill" let-index="index">
+          <span *ngIf="fill === 100" class="star full">&#9733;</span>
+          <span *ngIf="fill === 0" class="star">&#9733;</span>
+          <span *ngIf="fill < 100 && fill > 0" class="star">
+            <span class="half" [style.width.%]="fill">&#9733;</span>&#9733;
+          </span>
+        </ng-template>
+      </ngb-rating>
+    </div>
+    &nbsp;{{ value | number: '1.1-1' }}
+  </span>
+</ng-container>
 
 <span [class.mr-1]="config.delim !== ' '" *ngIf="config.delim && !last">
   {{ config.delim }}

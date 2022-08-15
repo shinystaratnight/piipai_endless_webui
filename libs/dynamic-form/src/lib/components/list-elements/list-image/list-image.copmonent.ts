@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { IconName } from '@fortawesome/fontawesome-svg-core';
 
 import { getContactAvatar, isCandidate, isMobile } from '@webui/utilities';
 
@@ -10,7 +11,7 @@ import { getContactAvatar, isCandidate, isMobile } from '@webui/utilities';
 export class ListImageComponent implements OnInit {
   public config: any;
   public src!: string;
-  public icon!: string;
+  public icon!: IconName;
   public iconClass!: string;
   public last!: boolean;
   public file!: string;

@@ -28,7 +28,7 @@ const formadd = () => [
     .setActions({
       add: true
     })
-    .setPerfilledFields({
+    .setPrefilledFields({
       [Models.Skill]: `{${Models.Skill}.id}`
     })
     .updateValues(['translations', 'uom', 'skill_rate_ranges'])

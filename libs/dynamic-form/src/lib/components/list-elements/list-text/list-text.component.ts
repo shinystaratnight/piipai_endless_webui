@@ -3,6 +3,7 @@ import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { isMobile, getTranslationKey } from '@webui/utilities';
 import { getValueOfData, generateCssStyles } from '../../../helpers';
 import { DATE_FORMAT, DATE_TIME_FORMAT, Time } from '@webui/time';
+import { IconName } from '@fortawesome/fontawesome-svg-core';
 
 @Component({
   selector: 'webui-list-text',
@@ -16,7 +17,7 @@ export class ListTextComponent implements OnInit {
   public config: any;
   public length: any;
   public last!: boolean;
-  public value!: string | any[];
+  public value!: string | number | any[];
   public arrayValue!: boolean;
 
   public iconView!: boolean;
@@ -25,7 +26,7 @@ export class ListTextComponent implements OnInit {
   public workers: any;
   public cssClasses!: string[];
 
-  public colors = {
+  public colors: Record<number, string> = {
     1: '#FA5C46',
     2: '#fc9183',
     3: '#FFA236',
@@ -71,11 +72,27 @@ export class ListTextComponent implements OnInit {
     this.translationKey = getTranslationKey(
       `${this.config.key}.${this.config.name}`,
       typeof this.value === 'number'
-        ? this.value
+        ? this.value.toString()
         : this.config.label === 'Date'
         ? 'date'
         : 'label'
     );
+  }
+
+  public get iconName(): IconName | undefined {
+    if (typeof this.value === 'string') {
+      return this.value as IconName;
+    }
+
+    return;
+  }
+
+  public isArray(val: unknown): val is Array<any> {
+    return Array.isArray(val);
+  }
+
+  public isString(val: unknown): val is string {
+    return typeof val === 'string';
   }
 
   public getScore(score: string) {

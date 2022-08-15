@@ -111,7 +111,7 @@
           (click)="toggleFilterBlock()"
           *ngIf="showFilters && !(identifyDevice() || isMobileDevice)"
         >
-          <webui-icon icon="filter"></webui-icon>
+          <webui-svg-icon icon="filter"></webui-svg-icon>
           {{ 'filters' | translate: { Default: 'Filters' } }}
         </button>
         <webui-list-search-bar
@@ -183,13 +183,7 @@
 
       <ng-container *ngIf="identifyDevice()">
         <div class="mobile-item" *ngFor="let row of body">
-          <ng-container
-            *ngTemplateOutlet="
-              getView();
-              context: { data: row, status: getElement('status', row.content) }
-            "
-          >
-          </ng-container>
+          <ng-container *ngTemplateOutlet="getView(); context: { data: row, status: getElement('status', row.content) }"></ng-container>
         </div>
       </ng-container>
 
@@ -222,10 +216,10 @@
                     [class.text-center]="field.center"
                     *ngIf="!(field.tab && field.tab.is_collapsed)"
                   >
-                    <app-list-column-header
+                    <webui-list-column-header
                       [config]="field"
                       (sortChange)="onSortChange()"
-                    ></app-list-column-header>
+                    ></webui-list-column-header>
                   </th>
                 </ng-container>
               </ng-container>
@@ -321,13 +315,13 @@
                       (buttonAction)="buttonHandler($event)"
                     >
                     </ng-container>
-
+                    <!-- (cell.pop = pop) -->
                     <ng-template #actionsTemplate>
                       <ng-container
                         webuiListElement
                         [config]="cell.content"
                         (event)="eventHandler($event)"
-                        (buttonAction)="buttonHandler($event, (cell.pop = pop))"
+                        (buttonAction)="buttonHandler($event)"
                       >
                       </ng-container>
                     </ng-template>
@@ -544,7 +538,7 @@
         [data]="modalInfo.data"
         [edit]="modalInfo.edit"
         (event)="formEvent($event, modal.close)"
-        (errorForm)="formError($event)"
+        (errorForm)="formError()"
       >
         <button
           type="submit"
@@ -555,7 +549,16 @@
           <webui-spinner *ngIf="saveProcess"></webui-spinner>
         </button>
       </webui-generic-form>
-      <agm-map
+      <google-map
+        *ngSwitchCase="'map'"
+        [zoom]="13"
+      >
+        <!-- <agm-marker
+          [latitude]="modalInfo.latitude"
+          [longitude]="modalInfo.longitude"
+        ></agm-marker> -->
+      </google-map>
+      <!-- <agm-map
         *ngSwitchCase="'map'"
         [latitude]="modalInfo.latitude"
         [longitude]="modalInfo.longitude"
@@ -566,7 +569,7 @@
           [latitude]="modalInfo.latitude"
           [longitude]="modalInfo.longitude"
         ></agm-marker>
-      </agm-map>
+      </agm-map> -->
     </div>
   </div>
 </ng-template>
@@ -588,7 +591,7 @@
     [data]="modalInfo.data"
     [edit]="modalInfo.edit"
     (event)="formEvent($event, modal.close)"
-    (errorForm)="formError($event)"
+    (errorForm)="formError()"
   >
   </webui-generic-form>
 </ng-template>
@@ -693,7 +696,7 @@
     class="close-button"
     (click)="modal.close()"
   ></webui-close-button>
-  <agm-map
+  <!-- <agm-map
     [latitude]="modalInfo.latitude"
     [longitude]="modalInfo.longitude"
     [zoom]="13"
@@ -720,7 +723,33 @@
         </button>
       </agm-info-window>
     </agm-marker>
-  </agm-map>
+  </agm-map> -->
+
+  <google-map
+    [zoom]="13"
+  >
+    <!-- <agm-marker
+      [iconUrl]="marker.iconUrl"
+      *ngFor="let marker of modalInfo.markers"
+      [latitude]="marker.latitude"
+      [longitude]="marker.longitude"
+    >
+      <agm-info-window>
+        <strong>{{ marker.name }}</strong>
+        <br />
+        <p>{{ marker.description }}</p>
+        <button
+          *ngIf="!marker.label"
+          type="button"
+          class="btn btn-sm btn-success"
+          (click)="markerClick(marker)"
+          style="font-size: 10px"
+        >
+          {{ marker.selected ? 'Selected' : 'Select' }}
+        </button>
+      </agm-info-window>
+    </agm-marker> -->
+  </google-map>
 </ng-template>
 
 <ng-template #mapModal let-modal>
@@ -728,7 +757,7 @@
     class="close-button"
     (click)="modal.close()"
   ></webui-close-button>
-  <agm-map
+  <!-- <google-map
     [latitude]="modalInfo.latitude"
     [longitude]="modalInfo.longitude"
     [zoom]="13"
@@ -738,7 +767,15 @@
       [latitude]="modalInfo.latitude"
       [longitude]="modalInfo.longitude"
     ></agm-marker>
-  </agm-map>
+  </google-map> -->
+  <google-map
+    [zoom]="13"
+  >
+    <!-- <agm-marker
+      [latitude]="modalInfo.latitude"
+      [longitude]="modalInfo.longitude"
+    ></agm-marker> -->
+  </google-map>
 </ng-template>
 
 <ng-template #history let-data="data" let-status="status">

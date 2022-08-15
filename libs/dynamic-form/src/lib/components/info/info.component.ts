@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, TemplateRef } from '@angular/core';
 
 @Component({
   selector: 'webui-info',
@@ -15,7 +15,7 @@ import { Component, Input, OnInit } from '@angular/core';
   styleUrls: ['./info.component.scss']
 })
 export class InfoComponent implements OnInit {
-  @Input() public description!: string;
+  @Input() public description!: string | TemplateRef<any>;
   @Input() public text!: string;
   @Input() public placement!: string;
   @Input() public triggersType!: string;
