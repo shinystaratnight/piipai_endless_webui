@@ -14,7 +14,7 @@ export class FormBuilderComponent {
   public endpoint!: string;
 
   @Input()
-  public id!: string;
+  public id?: string = '';
 
   @Input()
   public path!: string;

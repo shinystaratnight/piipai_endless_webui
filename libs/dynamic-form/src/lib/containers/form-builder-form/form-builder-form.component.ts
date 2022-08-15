@@ -33,7 +33,7 @@ type Step = {
   providers: [FormService]
 })
 export class FormBuilderFormComponent implements OnInit, OnDestroy {
-  @Input() public id!: string;
+  @Input() public id?: string;
   @Input() public companyId!: string;
   @Input() public config: any;
 
@@ -173,20 +173,22 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
 
       convertPhoneNumber(body);
 
-      this.service.sendFormData(this.id, body).subscribe(
-        (res: any) => {
-          this.saving.next(false);
-          this.toastr.sendMessage(
-            this.config.submit_message,
-            MessageType.Success
-          );
-          this.router.navigate(['/login']);
-        },
-        (err: any) => {
-          this.saving.next(false);
-          this.parseError(err.errors);
-        }
-      );
+      if (this.id) {
+        this.service.sendFormData(this.id, body).subscribe(
+          (res: any) => {
+            this.saving.next(false);
+            this.toastr.sendMessage(
+              this.config.submit_message,
+              MessageType.Success
+            );
+            this.router.navigate(['/login']);
+          },
+          (err: any) => {
+            this.saving.next(false);
+            this.parseError(err.errors);
+          }
+        );
+      }
     });
   }
 
@@ -293,26 +295,28 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
   }
 
   private getRenderData() {
-    this.service.getRenderData(this.id).subscribe((res: any) => {
-      this.updatePhoneField(res.ui_config);
-      this.updateConfigByGroups(res.ui_config);
-      this.updateHiddenFields(res.ui_config);
-      // const formData = new BehaviorSubject({ data: {} });
+    if (this.id) {
+      this.service.getRenderData(this.id).subscribe((res: any) => {
+        this.updatePhoneField(res.ui_config);
+        this.updateConfigByGroups(res.ui_config);
+        this.updateHiddenFields(res.ui_config);
+        // const formData = new BehaviorSubject({ data: {} });
 
-      this.config = res;
-      this.formConfig.emit(res);
+        this.config = res;
+        this.formConfig.emit(res);
 
-      // this.updateConfig(this.config.ui_config);
-      // this.addAutocompleteProperty(this.config.ui_config);
+        // this.updateConfig(this.config.ui_config);
+        // this.addAutocompleteProperty(this.config.ui_config);
 
-      this.changeType('contact.title', 'radio');
-      this.changeType('contact.gender', 'radio');
-      this.changeType('transportation_to_work', 'radio');
-      this.changeTemplateType('contact.email', 'email');
+        this.changeType('contact.title', 'radio');
+        this.changeType('contact.gender', 'radio');
+        this.changeType('transportation_to_work', 'radio');
+        this.changeTemplateType('contact.email', 'email');
 
-      this.generateSteps();
-      this.changeStep(0);
-    });
+        this.generateSteps();
+        this.changeStep(0);
+      });
+    }
   }
 
   private updateHiddenFields(config: any[]) {

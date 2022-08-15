@@ -69,6 +69,7 @@ export class BillingPlanComponent implements OnChanges, OnDestroy {
     if (this.currentPlan) {
       return this.currentPlan.type === plan.type;
     }
+    return;
   }
 
   public setPlan() {

@@ -56,7 +56,7 @@
           "
           [endpoint]="pageData.endpoint"
           [id]="pageData.pathData.id"
-          [edit]="pageData.pathData.postfix"
+          [edit]="!!pageData.pathData.postfix"
           [mode]="formMode"
           [errors]="errors"
           [data]="additionalData"
@@ -64,8 +64,8 @@
           [metadataQuery]="pageData.pathData.metadataQuery"
           (event)="formEvent($event)"
           (modeEvent)="modeEvent($event)"
-          (errorForm)="formError($event)"
-          (permissionError)="permissionErrorHandler($event)"
+          (errorForm)="formError()"
+          (permissionError)="permissionErrorHandler()"
           (str)="changeFormLabel($event)"
         >
           <div class="d-flex">

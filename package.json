@@ -33,6 +33,7 @@
     "@sentry/angular": "^7.10.0",
     "@sentry/tracing": "^7.10.0",
     "angular2-signaturepad": "^4.0.2",
+    "bootstrap": "^5.2.0",
     "isobject": "^4.0.0",
     "moment-timezone": "^0.5.34",
     "ngx-bootstrap": "^6.2.0",

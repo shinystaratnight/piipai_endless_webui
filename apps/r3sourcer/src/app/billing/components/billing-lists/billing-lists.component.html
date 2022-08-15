@@ -1,15 +1,17 @@
 <div class="form-tabs">
-  <ngb-tabset>
-    <ngb-tab title="Payments">
+  <ul ngbNav>
+    <li [ngbNavItem]="'payment'">
+      <a ngbNavLink>Payments</a>
       <ng-template ngbTabContent>
         <webui-dynamic-form [config]="paymentConfig"></webui-dynamic-form>
       </ng-template>
-    </ngb-tab>
+    </li>
 
-    <ngb-tab title="SMS log">
-        <ng-template ngbTabContent>
-          <webui-dynamic-form [config]="smsConfig"></webui-dynamic-form>
-        </ng-template>
-      </ngb-tab>
-  </ngb-tabset>
+    <li [ngbNavItem]="'sms-log'">
+      <a ngbNavLink>SMS log</a>
+      <ng-template ngbTabContent>
+        <webui-dynamic-form [config]="smsConfig"></webui-dynamic-form>
+      </ng-template>
+    </li>
+  </ul>
 </div>

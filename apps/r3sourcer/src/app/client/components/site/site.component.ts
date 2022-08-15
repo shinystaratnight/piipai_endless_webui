@@ -470,6 +470,7 @@ export class SiteComponent implements OnInit, OnDestroy {
         return isMobile();
       }
     }
+    return;
   }
 
   public permissionErrorHandler() {

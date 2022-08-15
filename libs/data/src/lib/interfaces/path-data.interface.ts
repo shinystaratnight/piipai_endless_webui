@@ -1,7 +1,7 @@
 export interface PathData {
   type: string;
   path: string;
-  id?: string | null;
+  id?: string;
   postfix?: string;
   metadataQuery?: string;
 }

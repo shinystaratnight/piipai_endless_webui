@@ -220,14 +220,16 @@ export class SiteComponent implements OnInit, OnDestroy {
             pageData.endpoint
           );
         } else if (this.isProfilePage(pageData)) {
-          pageData.pathData.id = this.user?.data.contact.candidate_contact;
-          pageData.endpoint = '/candidate/candidatecontacts/';
-          this.formMode = FormMode.View;
-          this.pageData = pageData;
-          this.permissionMethods = this.permission.getAllowMethods(
-            undefined,
-            pageData.endpoint
-          );
+          if (this.user) {
+            pageData.pathData.id = this.user.data.contact.candidate_contact;
+            pageData.endpoint = '/candidate/candidatecontacts/';
+            this.formMode = FormMode.View;
+            this.pageData = pageData;
+            this.permissionMethods = this.permission.getAllowMethods(
+              undefined,
+              pageData.endpoint
+            );
+          }
         } else if (
           pageData.endpoint === '/' &&
           pageData.pathData.path !== '/'

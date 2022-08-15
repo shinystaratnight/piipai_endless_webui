@@ -32,7 +32,7 @@ export class SiteService {
     };
     if (pathData.postfix) {
       data.endpoint = data.endpoint + pathData.id + `/${pathData.postfix}/`;
-      pathData.id = null;
+      pathData.id = undefined;
     }
     return data;
   }
