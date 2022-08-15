@@ -195,6 +195,8 @@ export class FilterRelatedComponent
               val.toLowerCase().indexOf(this.searchValue?.toLowerCase()) > -1
             );
           }
+
+          return false;
         });
         this.previewList = filteredList;
       } else {
@@ -393,6 +395,8 @@ export class FilterRelatedComponent
         this.item.displayValue = res[display];
       });
     }
+
+    return;
   }
 
   public getOptions(value: any, concat = false) {

@@ -2,7 +2,7 @@
   <webui-filter-header
     [label]="config.label"
     [key]="config.key"
-    [resetButton]="query"
+    [resetButton]="!!query"
     (resetEvent)="resetFilter()"
   ></webui-filter-header>
 

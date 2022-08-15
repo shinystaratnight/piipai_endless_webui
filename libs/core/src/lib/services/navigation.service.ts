@@ -11,7 +11,7 @@ import { ErrorsService } from './errors.service';
 import { EventService, EventType } from './event.service';
 import { UserService } from './user.service';
 import { isManager, getCurrentRole, isClient } from '@webui/utilities';
-import { Endpoints, Role } from '@webui/models';
+import { Endpoints, Role, User } from '@webui/models';
 
 export interface Page {
   name: string;
@@ -65,7 +65,7 @@ export class NavigationService {
   public getPages(role?: Role, update?: boolean) {
     if (role) {
       const { id } = role;
-      const { country_code, allow_job_creation } = this.userService.user.data;
+      const { country_code, allow_job_creation } = (this.userService.user as User).data;
 
       if (!this.navigationList[id] || update) {
         const params = new HttpParams({

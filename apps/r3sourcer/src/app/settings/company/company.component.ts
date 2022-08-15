@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { Subscription, BehaviorSubject } from 'rxjs';
 
-import { GenericFormService, FormService } from '@webui/dynamic-form';
+import { GenericFormService, FormService, FormMode } from '@webui/dynamic-form';
 import {
   SiteSettingsService,
   CompanyPurposeService,
@@ -66,7 +66,7 @@ export class CompanyComponent implements OnInit, OnDestroy {
   ) {}
 
   public ngOnInit() {
-    this.formId = this.formService.registerForm(this.endpoint, 'edit');
+    this.formId = this.formService.registerForm(this.endpoint, FormMode.Edit);
     this.form = this.formService.getForm(this.formId);
     this.urlSubscription = this.route.url.subscribe((url) => {
       this.settingsService.url = <any>url;
@@ -119,7 +119,7 @@ export class CompanyComponent implements OnInit, OnDestroy {
             el.showIf,
             this.hiddenFields.observers
           );
-          el.hidden = new BehaviorSubject(true);
+          el.hidden = new BehaviorSubject<boolean>(true);
         }
       }
 

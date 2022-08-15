@@ -17,7 +17,7 @@ import {
   SortData
 } from './../../services';
 
-import { BehaviorSubject, forkJoin, Subject, Subscription } from 'rxjs';
+import { forkJoin, Subject, Subscription } from 'rxjs';
 import { catchError, debounceTime, map, skip } from 'rxjs/operators';
 import { Sort } from '../../helpers';
 import {
@@ -36,12 +36,12 @@ import isObject from 'isobject';
   providers: [ListService, SortService]
 })
 export class GenericListComponent implements OnInit, OnDestroy {
-  @Input() endpoint = '';
-  @Input() editEndpoint = '';
+  @Input() endpoint?: string;
+  @Input() editEndpoint?: string;
   @Input() inForm = false;
   @Input() data: any;
   @Input() query = '';
-  @Input() update!: BehaviorSubject<number>;
+  @Input() update!: Subject<number>;
   @Input() supportData: any;
   @Input() paginated = 'on';
   @Input() responseField = 'results';
@@ -53,9 +53,9 @@ export class GenericListComponent implements OnInit, OnDestroy {
   @Input() addMetadataQuery!: string;
   @Input() upload!: Subject<boolean>;
   @Input() clientId?: string;
-  @Input() listNameCache: any;
-  @Input() disableActions!: boolean;
-  @Input() inlineFilters!: boolean;
+  @Input() listNameCache?: Record<string, any>;
+  @Input() disableActions?: boolean;
+  @Input() inlineFilters?: boolean;
 
   @Output() checkedObjects: EventEmitter<any> = new EventEmitter();
   @Output() event: EventEmitter<any> = new EventEmitter();
@@ -94,6 +94,10 @@ export class GenericListComponent implements OnInit, OnDestroy {
   ) {}
 
   public ngOnInit() {
+    if (!this.endpoint) {
+      return;
+    }
+
     const mainTable = this.createTable(this.endpoint);
     this.tables.push(mainTable);
 
@@ -277,8 +281,8 @@ export class GenericListComponent implements OnInit, OnDestroy {
     this.existingIds.push(this.tableId);
     table.id = this.tableId++;
 
-    if (this.listNameCache && !this.listNameCache[this.endpoint]) {
-      this.listNameCache[this.endpoint] = label;
+    if (this.listNameCache && !this.listNameCache[this.endpoint || '']) {
+      this.listNameCache[this.endpoint || ''] = label;
     }
   }
 
@@ -485,7 +489,7 @@ export class GenericListComponent implements OnInit, OnDestroy {
     if (queries) {
       const patt = /\?/;
       let result = '';
-      if (patt.test(this.endpoint)) {
+      if (patt.test(this.endpoint || '')) {
         result = '&';
       } else {
         result = '?';

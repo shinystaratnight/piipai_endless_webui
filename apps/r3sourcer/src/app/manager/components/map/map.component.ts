@@ -19,7 +19,7 @@ export class MapComponent implements OnInit, OnDestroy {
   public options!: google.maps.MapOptions;
 
   public filtersOfList!: any[];
-  public markers?: Marker[];
+  public markers?: Marker[] = [];
 
   public currentPosition: any;
   public currentQuery!: string;
@@ -97,7 +97,7 @@ export class MapComponent implements OnInit, OnDestroy {
     });
 
     this.mapService.getPositions(query).subscribe((res) => {
-      this.markers = res.map((el) => {
+      this.markers = res.map((el: any) => {
         el.latitude = parseFloat(<any>el.latitude);
         el.longitude = parseFloat(<any>el.longitude);
         this.icons[el.type].exist = true;
@@ -107,7 +107,7 @@ export class MapComponent implements OnInit, OnDestroy {
       this.currentQuery = query;
       if (this.currentPosition) {
         this.icons['current'].exist = true;
-        this.markers.push(this.currentPosition);
+        this.markers?.push(this.currentPosition);
       } else {
         this.icons['current'].exist = false;
       }

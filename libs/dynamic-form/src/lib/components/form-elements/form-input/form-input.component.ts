@@ -10,7 +10,7 @@ import {
   OnDestroy,
   ChangeDetectorRef,
 } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 
 import {
   SearchCountryField,
@@ -29,6 +29,7 @@ import { isAddressField, isPhoneField } from '../../../helpers';
 import { FormEvent } from '../../../interfaces';
 import { Time } from '@webui/time';
 import { Field, ITemplateOptions } from '@webui/metadata';
+import { IconName } from '@fortawesome/fontawesome-svg-core';
 
 @Component({
   selector: 'webui-form-input',
@@ -52,7 +53,7 @@ export class FormInputComponent
   public formData: any;
   public autocompleteValue: any;
   public editMode: boolean;
-  public hovered!: number;
+  public hovered?: number;
 
   public query = '';
   public list: any[] | null = [];
@@ -75,7 +76,7 @@ export class FormInputComponent
   ];
   selectedCountryISO!: CountryISO;
 
-  public colors = {
+  public colors: Record<number, string> = {
     0: '#FA5C46',
     1: '#FA5C46',
     2: '#fc9183',
@@ -94,6 +95,16 @@ export class FormInputComponent
     const { key, intl } = this.config;
 
     return isPhoneField(key as string) && intl;
+  }
+
+  get formControl(): FormControl {
+    return this.group.get(this.key) as FormControl;
+  }
+
+  get addonIcon(): IconName | string | undefined {
+    const addon = this.config.templateOptions?.addon;
+
+    return addon ? addon : undefined;
   }
 
   @ViewChild('input') public input!: ElementRef;
@@ -603,7 +614,11 @@ export class FormInputComponent
 
   // Passowrd field
 
-  public switchType(type: 'text' | 'password') {
+  public switchType(type?: string) {
+    if (!type) {
+      return;
+    }
+
     if (this.config.templateOptions) {
       switch (type) {
         case 'text':
@@ -665,6 +680,10 @@ export class FormInputComponent
 
   getTranslationKey(type: string) {
     return `${this.config.key}.${type}`;
+  }
+
+  isIconName(val?: string): val is IconName {
+    return val ? val.indexOf('.') === -1 : false;
   }
 
   @HostListener('document:click', ['$event'])

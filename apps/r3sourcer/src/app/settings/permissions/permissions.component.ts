@@ -229,6 +229,7 @@ export class PermissionsComponent implements OnInit, OnDestroy {
         if (val) {
           return val.toLowerCase().indexOf(value.toLowerCase()) > -1;
         }
+        return false;
       });
       target.push(...newArray);
     } else {

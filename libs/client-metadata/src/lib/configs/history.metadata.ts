@@ -1,5 +1,5 @@
-import { Endpoints } from '@webui/data';
 import { createFilter, List, Type } from '@webui/metadata';
+import { Endpoints } from '@webui/models';
 import {
   getPictureColumn,
   getPositionColumn,
@@ -116,7 +116,7 @@ const list = function () {
             getApproveButton().setShowIfRule([{ status: 5 }]),
 
             getChangeButton().setShowIfRule([
-              { status: [5, 6] }, 
+              { status: [5, 6] },
               { is_30_days_old: false }
             ]),
           ])

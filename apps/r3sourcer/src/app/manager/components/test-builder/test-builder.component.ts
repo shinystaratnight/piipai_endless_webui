@@ -359,6 +359,7 @@ export class TestBuilderComponent implements OnInit, OnChanges {
     if (id) {
       return id.value;
     }
+    return;
   }
 
   public getType(metadata: Field[]): number | undefined {
@@ -367,6 +368,7 @@ export class TestBuilderComponent implements OnInit, OnChanges {
     if (type) {
       return type.value;
     }
+    return;
   }
 
   public showPreview() {
@@ -457,7 +459,7 @@ export class TestBuilderComponent implements OnInit, OnChanges {
     setTimeout(() => {
       const orderRequests = this.questionList
         .map((el, i) => {
-          const id = el.form.value.id;
+          const id: string = el.form.value.id;
 
           return {
             id,
@@ -491,7 +493,7 @@ export class TestBuilderComponent implements OnInit, OnChanges {
             el.showIf,
             hiddenFields.observers
           );
-          el.hidden = new BehaviorSubject(true);
+          el.hidden = new BehaviorSubject<boolean>(true);
         }
       }
 

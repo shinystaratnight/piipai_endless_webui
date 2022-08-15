@@ -31,6 +31,7 @@ export class SiteSettingsService {
     if (this.settings) {
       return this.settings.company;
     }
+    return;
   }
 
   constructor(
@@ -86,6 +87,7 @@ export class SiteSettingsService {
         tap((settings) => this.updateLanguage(settings))
       );
     }
+    return;
   }
 
   private updateBrowserStyles(settings: CompanySettings): void {

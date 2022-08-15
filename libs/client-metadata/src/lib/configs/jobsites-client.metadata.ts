@@ -1,4 +1,4 @@
-import { Endpoints } from '@webui/data';
+import { Endpoints } from '@webui/models';
 import { Time } from '@webui/time';
 
 const list = {

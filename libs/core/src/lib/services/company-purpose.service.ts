@@ -56,6 +56,8 @@ export class CompanyPurposeService {
           widgets
         );
     }
+
+    return;
   }
 
   public filterNavigationByPurpose(purpose: Purpose, navigation: any[]) {

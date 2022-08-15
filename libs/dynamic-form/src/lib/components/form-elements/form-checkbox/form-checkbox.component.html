@@ -6,7 +6,7 @@
         class="form-element-checkbox"
         *ngIf="label && config.templateOptions.label"
         [attr.title]="disabledTitle"
-        [class.disabled]="this.group.get(key).disabled"
+        [class.disabled]="formControl.disabled"
         [class.description]="isDisabled"
         [class.has-button]="hasButton"
       >
@@ -16,7 +16,7 @@
           [ngClass]="[checkboxClass]"
           [class.disabled]="isDisabled"
           [ngStyle]="{ color: checkboxColor }"
-          [icon]="['fas', config.templateOptions.values[group.get(key).value]]"
+          [icon]="['fas', config.templateOptions.values[formControl.value]]"
         ></fa-icon>
 
         <input
@@ -25,13 +25,13 @@
           hidden
           #checkbox
           (change)="eventHandler($event)"
-          [formControl]="group.get(key)"
+          [formControl]="formControl"
           [attr.id]="key"
           [attr.name]="key"
           [disabled]="config.readonly"
         />
 
-        <webui-checkbox [sm]="true" [checked]="group.get(key).value" *ngIf="isCheckboxType"></webui-checkbox>
+        <webui-checkbox [sm]="true" [checked]="group.get(key)?.value" *ngIf="isCheckboxType"></webui-checkbox>
 
         <span class="button-group" *ngIf="isButtonType">
           <button type="button" class="btn" [class.btn-primary]="currentValue === true" (click)="patchValue(true)">

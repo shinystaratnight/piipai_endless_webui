@@ -590,6 +590,7 @@ export class SiteComponent implements OnInit, OnDestroy {
         return isMobile();
       }
     }
+    return false;
   }
 
   public permissionErrorHandler() {

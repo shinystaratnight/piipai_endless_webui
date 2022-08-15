@@ -1,6 +1,5 @@
+import { Endpoints } from '@webui/models';
 import { GuideItem } from '../../interfaces';
-
-import { Endpoints } from '@webui/data';
 
 export const guide: GuideItem[] = [
   {

@@ -70,7 +70,7 @@ export class RelatedElement extends BasicFormElement {
     return this;
   }
 
-  setPrefilledFields(config: { [key: string]: string }) {
+  setPrefilledFields(config: Record<string, string>) {
     this.prefilled = { ...config };
 
     return this;

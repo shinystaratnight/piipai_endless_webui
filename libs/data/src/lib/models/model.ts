@@ -11,7 +11,7 @@ export abstract class Model implements IModel {
 
   constructor(readonly data: unknown = {}) {}
 
-  formElement(config = {} as OverrideConfig) {
+  formElement(config = {} as Partial<OverrideConfig>) {
     const { key, label } = config;
 
     return new Form.related.element(

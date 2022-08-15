@@ -8,7 +8,7 @@ import {
 import { IconSize, Icon } from '@webui/icon';
 
 interface ICell {
-  content: string;
+  content: string | undefined;
 }
 
 export interface IRow {

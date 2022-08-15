@@ -533,7 +533,7 @@ export class FormFieldsGroupComponent implements OnInit {
     });
   }
 
-  public changePosition(item: any, type: 'up') {
+  public changePosition(item: any, type: 'up' | 'down') {
     const currentPosition = item.position;
     const nextPosition = type === 'up' ? item.position - 1 : item.position + 1;
     const element: any = this.getItemByPosition(this.activeFields, nextPosition);
@@ -587,12 +587,16 @@ export class FormFieldsGroupComponent implements OnInit {
     if (field.model_fields) {
       return field.model_fields.some((item) => !!item.id);
     }
+
+    return false;
   }
 
   public isRequired(field: Field) {
     if (field.model_fields) {
       return field.model_fields.some((item) => !!item.required);
     }
+
+    return false;
   }
 
   public disableSubfields(field: any): boolean {

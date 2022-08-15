@@ -57,7 +57,7 @@ export class FilterChoiceComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy() {
-    this.querySubscription.unsubscribe();w
+    this.querySubscription.unsubscribe();
   }
 
   public select(value: string) {

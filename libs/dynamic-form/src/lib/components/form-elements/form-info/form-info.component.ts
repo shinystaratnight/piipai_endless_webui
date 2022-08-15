@@ -59,7 +59,7 @@ export class FormInfoComponent implements OnInit, OnDestroy {
   public disableButtons = true;
   public isMobileDevice = isMobile() && isCandidate();
 
-  public colors = {
+  public colors: Record<number, string> = {
     1: '#FA5C46',
     2: '#fc9183',
     3: '#FFA236',

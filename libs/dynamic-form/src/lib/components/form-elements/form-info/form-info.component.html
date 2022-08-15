@@ -26,13 +26,13 @@
       </span>
 
       <div class="map" *ngIf="map">
-        <agm-map [zoomControl]="false" [streetViewControl]="false" [latitude]="map.latitude" [longitude]="map.longitude" [zoom]="13">
-          <agm-marker [iconUrl]="'/assets/img/location-red.svg'" [latitude]="map.latitude" [longitude]="map.longitude">
+        <google-map [zoom]="13">
+          <!-- <agm-marker [iconUrl]="'/assets/img/location-red.svg'" [latitude]="map.latitude" [longitude]="map.longitude">
             <agm-info-window>
               <strong>{{map.__str__}}</strong>
             </agm-info-window>
-          </agm-marker>
-        </agm-map>
+          </agm-marker> -->
+        </google-map>
       </div>
 
       <ng-container webuiFormElement *ngIf="config && config.metadata['picture'] && !viewMode && config.editForm"
@@ -259,7 +259,7 @@
           [data]="modalInfo.data"
           [edit]="modalInfo.edit"
           (event)="formEvent($event, modal.close)"
-          (errorForm)="formError($event)">
+          (errorForm)="formError()">
           <div class="text-center">
             <button type="submit" class="btn btn-shadow btn-primary text-white button-save mt-3 mb-4"
               [disabled]="saveProcess">

@@ -34,7 +34,7 @@ export class RowElement {
     return this;
   }
 
-  setIsHidden(rule: () => boolean) {
+  setIsHidden(rule: (v?: any) => boolean) {
     this.isHidden = rule;
 
     return this;

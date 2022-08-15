@@ -50,7 +50,7 @@ export class FormListComponent implements OnInit, OnDestroy {
 
   public modalRef!: NgbModalRef;
 
-  public update!: Subject<boolean>;
+  public update!: Subject<number>;
   public query!: string;
   public showButton!: boolean;
 
@@ -273,7 +273,7 @@ export class FormListComponent implements OnInit, OnDestroy {
 
       this.updateDataInTheList(this.defaultValues, this.addedData);
     }
-    this.update.next(true);
+    this.update.next(Date.now());
   }
 
   public checkedHandler(e: any) {
@@ -384,12 +384,12 @@ export class FormListComponent implements OnInit, OnDestroy {
           .subscribe((res: any) => {
             this.defaultValues = res.results;
             this.updateDataInTheList(this.defaultValues, this.addedData);
-            this.update.next(true);
+            this.update.next(Date.now());
           });
       } else {
         this.defaultValues = [];
         this.updateDataInTheList(this.defaultValues, this.addedData);
-        this.update.next(true);
+        this.update.next(Date.now());
       }
       return;
     }

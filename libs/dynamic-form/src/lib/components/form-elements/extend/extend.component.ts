@@ -303,6 +303,8 @@ export class ExtendComponent
         return shiftDate === date;
       });
     }
+
+    return;
   }
 
   public addTime(shift: any) {
@@ -515,6 +517,8 @@ export class ExtendComponent
         })
       );
     }
+
+    return;
   }
 
   public updateShift(data: any, config: any, index: number, candidates: any[]) {

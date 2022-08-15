@@ -11,7 +11,7 @@
 
   <label
     class="btn btn-primary upload button-save mt-3"
-    *ngIf="source.length < this.count"
+    *ngIf="source && source.length < this.count"
   >
     {{ loading ? 'Uploading' : 'Upload Images' }}
 

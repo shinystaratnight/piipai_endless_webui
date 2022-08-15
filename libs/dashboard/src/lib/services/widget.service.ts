@@ -51,6 +51,8 @@ export class WidgetService {
             this.widgets = widgets;
             return this.widgets;
           }
+
+          return of([]);
         }),
         catchError((errors) => this.errorService.handleError(errors))
       );

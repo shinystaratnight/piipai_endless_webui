@@ -90,6 +90,8 @@ export class DashboardComponent implements OnInit {
         if (el.type === GridElementType.Widget) {
           return el.widget?.config.active;
         }
+
+        return false;
       });
     }
 
@@ -151,7 +153,12 @@ export class DashboardComponent implements OnInit {
   }
 
   addWidget(widget: Widget) {
-    const contactId = this.userService.user.data.contact.contact_id;
+    const contactId = this.userService.user?.data.contact.contact_id;
+
+    if (!contactId) {
+      return;
+    }
+
     const config = {
       coords: this.grid?.elements?.length.toString(),
       size: this.widgetService.getSizes(widget.type),
@@ -243,7 +250,7 @@ export class DashboardComponent implements OnInit {
 
   private initializeDashboard() {
     this.widgetService.getWidgets().subscribe((widgets) => {
-      if (!widgets) {
+      if (!widgets.length) {
         return;
       }
 

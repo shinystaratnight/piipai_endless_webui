@@ -48,7 +48,7 @@ export class ErrorsService {
       this.showErrorMessage(error);
     }
 
-    return close ? of([]) : throwError(error);
+    return close ? of(<any>[]) : throwError(error);
   }
 
   private showErrorMessage(error: Error, defaultMessage: string = '') {

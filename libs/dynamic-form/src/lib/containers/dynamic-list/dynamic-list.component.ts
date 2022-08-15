@@ -109,12 +109,12 @@ export class DynamicListComponent
   @Input() allowPermissions!: string[];
   @Input() metadataQuery!: string;
   @Input() addMetadataQuery!: string;
-  @Input() editEndpoint!: string;
+  @Input() editEndpoint?: string;
   @Input() addData: any;
   @Input() refresh = false;
   @Input() inForm = false;
-  @Input() disableActions!: boolean;
-  @Input() inlineFilters!: boolean;
+  @Input() disableActions?: boolean;
+  @Input() inlineFilters?: boolean;
   @Input() actionProcess!: boolean;
   @Input() uploadAll!: boolean;
 

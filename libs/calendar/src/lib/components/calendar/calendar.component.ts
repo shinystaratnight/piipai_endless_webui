@@ -458,7 +458,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
     const body = {
       confirmed_available: available,
       target_date: date,
-      candidate_contact: this.userService.user.data.contact.candidate_contact,
+      candidate_contact: this.userService.user?.data.contact.candidate_contact,
     };
 
     if (availableId) {
@@ -482,8 +482,8 @@ export class CalendarComponent implements OnInit, OnDestroy {
     });
   }
 
-  public canClientCreateJob(): boolean {
-    return isClient() && this.userService.user.data.allow_job_creation;
+  public canClientCreateJob(): boolean| undefined {
+    return isClient() && this.userService.user?.data.allow_job_creation;
   }
 
   public addJob() {

@@ -2,7 +2,7 @@
   <webui-filter-header
     [label]="config.label"
     [key]="config.key"
-    [resetButton]="query"
+    [resetButton]="!!query"
     (resetEvent)="resetFilter()"
   ></webui-filter-header>
   <div class="filter-date-wrapper">
@@ -39,7 +39,7 @@
           placeholder=""
           [attr.name]="input.query"
           [(ngModel)]="data[input.query]"
-          (ngModelChange)="changeDateOnMobile($event)"
+          (ngModelChange)="changeDateOnMobile()"
         />
         <div class="placeholder">
           {{ getTranslateKey(input.key) | translate: {"Default": input.label} }}

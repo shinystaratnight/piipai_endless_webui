@@ -50,7 +50,7 @@ export interface ITemplateOptions {
   round?: true;
   array?: boolean;
   pattern?: string;
-  patterError?: string;
+  patternError?: string;
   add_label?: string;
   iconParsed?: string;
   deleteList?: boolean;
@@ -112,6 +112,7 @@ export interface Field {
   reset?: string[];
   attributes?: Record<keyof ITemplateOptions, any>;
   editEndpoint?: string;
+  edit_endpoint?: string;
   useValue?: boolean;
   if_master?: any;
   relatedObjects?: any;
@@ -162,4 +163,10 @@ export interface Field {
   width?: any;
   hideSelect?: boolean;
   additional_text?: string;
+  responseField?: string;
+  paginated?: 'on';
+  supportData?: any;
+  metaType?: any;
+  actions?: any;
+  help?: any;
 }

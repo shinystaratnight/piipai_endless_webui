@@ -50,12 +50,12 @@ export class CounterWidgetComponent implements OnInit, OnDestroy {
     value: 'Counter'
   };
   rangeForm!: FormGroup;
-  hasForm$: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  hasForm$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   get loading$() {
     return this.loading.asObservable();
   }
 
-  private loading: BehaviorSubject<boolean> = new BehaviorSubject(true);
+  private loading: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
   private controlSubscription!: Subscription;
 
   constructor(
@@ -68,7 +68,11 @@ export class CounterWidgetComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    const candidateId = this.userService.user.data.contact.candidate_contact;
+    const candidateId = this.userService.user?.data.contact.candidate_contact;
+
+    if (!candidateId) {
+      return;
+    }
 
     this.data$ = this.dateParams$.pipe(
       switchMap((params: DateParams) =>

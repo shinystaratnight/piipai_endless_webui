@@ -9,7 +9,7 @@ import {
   ChangeDetectorRef,
   ElementRef
 } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 
 import { Subscription } from 'rxjs';
 
@@ -18,6 +18,7 @@ import { SiteSettingsService } from '@webui/core';
 import { getTranslationKey } from '@webui/utilities';
 import { CheckboxType } from '@webui/metadata';
 import { FormMode } from '../../../services';
+import { IconName } from '@fortawesome/fontawesome-svg-core';
 
 @Component({
   selector: 'webui-form-checkbox',
@@ -38,7 +39,7 @@ export class FormCheckboxComponent
   public value = true;
   public label!: boolean;
 
-  public checkboxValue!: string;
+  public checkboxValue!: IconName;
   public checkboxClass = '';
   public checkboxColor = '';
 
@@ -54,6 +55,10 @@ export class FormCheckboxComponent
 
   @Output()
   public buttonAction: EventEmitter<any> = new EventEmitter();
+
+  get formControl(): FormControl {
+    return this.group.get(this.key) as FormControl;
+  }
 
   private subscriptions: Subscription[];
 
@@ -245,6 +250,8 @@ export class FormCheckboxComponent
     if (typeof showButtonIf === 'boolean') {
       return this.config.templateOptions.showButtonIf === this.config.value;
     }
+
+    return false;
   }
 
   public get hasLabel(): boolean {

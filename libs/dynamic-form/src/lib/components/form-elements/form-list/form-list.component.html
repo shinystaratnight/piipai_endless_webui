@@ -4,7 +4,7 @@
       <h4 class="headline-4 title">
         {{
           labelTranslateKey
-            | translate: { Default: config.templateOptions.label }
+            | translate: { Default: config.templateOptions?.label }
         }}
       </h4>
       <p class="description" *ngIf="config.help">
@@ -19,7 +19,7 @@
       *ngIf="hasAddButton"
       (click)="addObject()"
     >
-      {{ config?.templateOptions?.add_label | translate: { Default: '+ Add' } || 'Add' }}
+      {{ (config.templateOptions?.add_label || '') | translate: { Default: '+ Add' } || 'Add' }}
     </button>
   </header>
 
@@ -54,7 +54,7 @@
       [query]="query"
       [inForm]="true"
       [data]="config.data"
-      [inlineFilters]="config.templateOptions.inlineFilters"
+      [inlineFilters]="config.templateOptions?.inlineFilters"
       [update]="update"
       [delay]="config.delay"
       [responseField]="config.responseField || 'results'"
