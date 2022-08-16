@@ -1,5 +1,4 @@
-@import '../../../../../../styles/variables';
-
+@use 'variables' as *;
 $shadow: 0 0 5px rgba($primary, 0.3);
 
 .loader {

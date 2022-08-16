@@ -1,5 +1,4 @@
-@import '../../../../styles/variables.scss';
-@import '../../../../styles/mixins';
+@use 'variables' as *;
 
 .dashboard {
   position: relative;
@@ -69,8 +68,9 @@
 }
 
 .widget-edit-btn {
-  @extend %flex-center-center;
-  @extend %circle;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
   display: none;
   position: absolute;
   top: -7px;

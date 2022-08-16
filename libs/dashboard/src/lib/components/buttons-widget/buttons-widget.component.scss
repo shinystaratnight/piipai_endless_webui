@@ -1,6 +1,4 @@
-@import '../../../../../../styles/variables';
-@import '../../../../../../styles/mixins';
-
+@use 'variables' as *;
 $min-widget-height: 198px;
 $min-button-width: 257px;
 
