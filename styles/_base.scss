@@ -1,6 +1,3 @@
-@import './utils';
-@import './mixins';
-
 $site-background: #f5f5f5;
 
 body {
@@ -12,69 +9,9 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-a:hover,
-a:focus,
-a.active {
-  opacity: 1;
-
-  @each $item in $themes {
-    .#{$item}-theme &:not(.disabled) {
-      color: map-get($theme-colors, $item);
-    }
-  }
-}
-
-a.disabled {
-  color: inherit;
-  cursor: default;
-
-  &.btn {
-    pointer-events: unset;
-  }
-}
-
 fa-icon {
   display: inline-flex;
   font-size: 12px;
-}
-
-input {
-  &:-webkit-autofill,
-  &:-webkit-autofill:hover,
-  &:-webkit-autofill:focus &:-webkit-autofill {
-    -webkit-box-shadow: 0 0 0px 1000px rgba($primary, 0.2) inset;
-    box-shadow: 0 0 0px 1000px rgba($primary, 0.2) inset;
-    transition: background-color 5000s ease-in-out 5000s;
-
-    @each $item in $themes {
-      .#{$item}-theme & {
-        -webkit-box-shadow: 0
-          0
-          0px
-          1000px
-          rgba(map-get($theme-colors, $item), 0.2)
-          inset;
-        box-shadow: 0
-          0
-          0px
-          1000px
-          rgba(map-get($theme-colors, $item), 0.2)
-          inset;
-      }
-    }
-  }
-}
-
-/* Chrome, Safari, Edge, Opera */
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-/* Firefox */
-input[type='number'] {
-  -moz-appearance: textfield;
 }
 
 .readonly-value {
@@ -90,12 +27,6 @@ input[type='number'] {
   &:focus {
     color: $gray !important;
     opacity: 0.6 !important;
-  }
-}
-
-@include media-breakpoint-up('md') {
-  .btn.only-mobile {
-    display: none;
   }
 }
 
@@ -330,20 +261,6 @@ iframe.send-sms {
   .datatable-body {
     padding-left: 0;
     padding-right: 0;
-  }
-}
-
-.button-save {
-  padding: 8px 20px;
-
-  &[disabled] {
-    cursor: not-allowed;
-  }
-}
-
-@include media-breakpoint-down('sm') {
-  .button-save {
-    width: 100%;
   }
 }
 

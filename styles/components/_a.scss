@@ -1,0 +1,25 @@
+a {
+  text-decoration: none;
+
+  &:hover,
+  &:focus,
+  &.active {
+    opacity: 1;
+    text-decoration: none;
+
+    @each $item in $themes {
+      .#{$item}-theme &:not(.disabled) {
+        color: map-get($theme-colors, $item);
+      }
+    }
+  }
+
+  &.disabled {
+    color: inherit;
+    cursor: default;
+
+    &.btn {
+      pointer-events: unset;
+    }
+  }
+}

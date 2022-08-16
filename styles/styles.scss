@@ -4,9 +4,9 @@
 @import '~hamburgers/_sass/hamburgers/hamburgers.scss';
 @import '~@angular/cdk/overlay-prebuilt.css';
 
-@import './base';
-@import './components/index';
-@import './typography';
+@import 'base';
+@import 'components/index';
+@import 'typography';
 
 .dropdown-backdrop {
   background-color: transparent;
