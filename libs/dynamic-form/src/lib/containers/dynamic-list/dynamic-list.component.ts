@@ -1706,7 +1706,6 @@ export class DynamicListComponent
       const keys = el.field.split('.');
       this.modalInfo[el.key || keys[keys.length - 1]] = +el.value;
     });
-    console.log(this.modalInfo);
     this.open(this.mapModal, { size: 'lg', windowClass: 'fillin-map' });
   }
 
@@ -2365,7 +2364,6 @@ export class DynamicListComponent
         lng: this.data[this.supportData].longitude
       };
     }
-    console.log(data);
     return data;
   }
 

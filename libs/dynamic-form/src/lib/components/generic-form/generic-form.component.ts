@@ -445,7 +445,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
     }
 
     if (infoElement && infoElement.type === 'info') {
-      const keys = Object.keys(infoElement.values).map((el) => parseInt(el));
+      const keys = Object.keys(infoElement.values);
       infoElement.metadata = {};
       infoElement.companyPicture = Endpoints.Company === this.endpoint;
       keys.forEach((el) => {
@@ -466,7 +466,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
 
           if (element) {
             element.saveField = element.saveField !== false;
-            (infoElement.metadata as any[])[el] = Object.assign(
+            infoElement.metadata[el] = Object.assign(
               {},
               element,
               { hide: false },

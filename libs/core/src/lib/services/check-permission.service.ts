@@ -82,7 +82,6 @@ export class CheckPermissionService {
 
     return forkJoin([permissions, page]).pipe(
       mergeMap((data: [Permission[], PageData]) => {
-        console.log(data);
         if (!this.navigationService.parsedByPermissions) {
           this.parseNavigation(data[0], list);
         }

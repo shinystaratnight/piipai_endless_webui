@@ -48,7 +48,7 @@
       <div *ngSwitchCase="'state'">
         <div class="form-group mt-2">
           <label for="state">State</label>
-          <select class="form-control custom-select"
+          <select class="form-control form-select"
             (focus)="generateArray('options')"
             [(ngModel)]="elementValue">
             <option *ngFor="let el of statesArray" [value]="el.name_before_activation">{{el.name_before_activation}}</option>
@@ -59,7 +59,7 @@
       <div *ngSwitchCase="'function'">
         <div class="form-group mt-2">
           <label for="app">App</label>
-          <select class="form-control custom-select" id="app"
+          <select class="form-control form-select" id="app"
             (focus)="generateArray('app')"
             (change)="getRelatedData('model')"
             [(ngModel)]="app">
@@ -68,7 +68,7 @@
 
           <div *ngIf="this.config.model">
             <label for="model" class="mt-2">Model</label>
-            <select class="form-control custom-select" id="model"
+            <select class="form-control form-select" id="model"
               (focus)="generateArray('model')"
               (change)="getRelatedData('function')"
               [(ngModel)]="model">
@@ -78,7 +78,7 @@
 
           <div *ngIf="this.config.function">
             <label for="function" class="mt-2">Function</label>
-            <select class="form-control custom-select"
+            <select class="form-control form-select"
               (focus)="generateArray('function')"
               [(ngModel)]="elementValue">
               <option *ngFor="let el of functionsArray" [value]="el">{{el}}</option>

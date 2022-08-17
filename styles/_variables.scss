@@ -59,7 +59,7 @@ $input-font-size: 14px;
 $input-line-height: 16px;
 $input-border-radius: 0;
 $input-focus-box-shadow: none;
-$custom-select-focus-box-shadow: none;
+$form-select-focus-box-shadow: none;
 
 // Popover
 $zindex-popover: 1;
@@ -73,6 +73,9 @@ $outline-color: rgba($gray, .1);
 // Button
 $btn-disabled-opacity: 0.5;
 
+// Table
+
+$table-border-width: 0;
 
 // Redesign
 

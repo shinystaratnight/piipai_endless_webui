@@ -1,5 +1,5 @@
 <div class="form-tabs">
-  <ul ngbNav [activeId]="config.activeId">
+  <ul ngbNav #nav="ngbNav" [(activeId)]="config.activeId">
     <ng-container *ngFor="let field of config.children; let i = index">
       <li
         [ngbNavItem]="'ngb-tab-' + i"
@@ -79,3 +79,5 @@
     </ng-container>
   </ul>
 </div>
+
+<div [ngbNavOutlet]="nav" class="mt-2"></div>

@@ -49,6 +49,7 @@ export class FormTabsComponent implements OnInit, OnDestroy {
 
   public ngOnInit() {
     this.form = this.formService.getForm(this.formId);
+    this.config.activeId = this.config.activeId || 'ngb-tab-0';
 
     this.canUpdate =
       this.formService.getAllowedMethods(this.formId).indexOf('update') > -1 &&
