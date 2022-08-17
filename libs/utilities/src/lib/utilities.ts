@@ -113,7 +113,7 @@ export function getStorageLang(): Language {
     return Language.English;
   }
 
-  return JSON.parse(lang as string) as Language;
+  return lang as Language;
 }
 
 export function getTotalTime(data: Record<string, MomentInput>, timezone?: string) {

@@ -24,7 +24,8 @@
         "styles": [
           "styles/styles.scss",
           "apps/r3sourcer/src/assets/css/style.css",
-          "node_modules/ngx-toastr/toastr.css"
+          "node_modules/ngx-toastr/toastr.css",
+          "node_modules/quill/dist/quill.snow.css"
         ],
         "scripts": [
           "node_modules/jquery/dist/jquery.min.js",

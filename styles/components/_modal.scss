@@ -82,7 +82,7 @@ $width: 510px;
           margin-right: 8px;
         }
 
-        &-addon {
+        &-append {
           padding: 5px 6px 5px 4px;
 
           border: 1px solid rgba($gray, 0.6) !important;
@@ -575,7 +575,7 @@ $width: 510px;
         border-radius: 0.25rem;
       }
 
-      .input-group-addon {
+      .input-group-append {
         display: none;
       }
     }
