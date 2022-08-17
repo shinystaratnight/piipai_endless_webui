@@ -728,13 +728,11 @@
   <google-map
     [zoom]="13"
   >
-    <!-- <agm-marker
-      [iconUrl]="marker.iconUrl"
+    <map-marker
       *ngFor="let marker of modalInfo.markers"
-      [latitude]="marker.latitude"
-      [longitude]="marker.longitude"
+      [position]="marker.position"
     >
-      <agm-info-window>
+      <map-info-window>
         <strong>{{ marker.name }}</strong>
         <br />
         <p>{{ marker.description }}</p>
@@ -747,8 +745,8 @@
         >
           {{ marker.selected ? 'Selected' : 'Select' }}
         </button>
-      </agm-info-window>
-    </agm-marker> -->
+      </map-info-window>
+    </map-marker>
   </google-map>
 </ng-template>
 
@@ -770,11 +768,10 @@
   </google-map> -->
   <google-map
     [zoom]="13"
+    [center]="modalInfo"
+    style="margin-top: 36px"
   >
-    <!-- <agm-marker
-      [latitude]="modalInfo.latitude"
-      [longitude]="modalInfo.longitude"
-    ></agm-marker> -->
+    <map-marker [position]="modalInfo"></map-marker>
   </google-map>
 </ng-template>
 

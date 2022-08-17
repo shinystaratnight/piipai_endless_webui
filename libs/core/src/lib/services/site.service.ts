@@ -17,7 +17,7 @@ export class SiteService {
 
   public generateData(list: Page[], url: any[]): PageData {
     const pathData: PathData = this.getTypeOfPage(url);
-    let element: Page = this.getElementFromList(list, pathData.path);
+    let element: Page | undefined = this.getElementFromList(list, pathData.path);
 
     // For job page on client side
     if (pathData.postfix === 'fillin') {
@@ -103,8 +103,8 @@ export class SiteService {
     return data;
   }
 
-  public getElementFromList(list: Page[], path: string): Page {
-    let element: Page = {} as Page;
+  public getElementFromList(list: Page[], path: string): Page | undefined {
+    let element: Page | undefined;
     list.forEach((el) => {
       if (el.url === path) {
         if (!element) {

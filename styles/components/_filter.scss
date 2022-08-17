@@ -144,7 +144,7 @@
           &:focus {
             border-right: none;
 
-            & ~ .input-group-addon {
+            & ~ .input-group-append {
               border-right: 1px solid $gray !important;
               border-top: 1px solid $gray;
               border-bottom: 1px solid $gray;
@@ -154,7 +154,7 @@
       }
     }
 
-    .input-group-addon {
+    .input-group-append {
       display: flex;
       align-items: center;
       justify-content: center;
@@ -262,7 +262,7 @@
     &.active {
       border-color: $gray;
 
-      & ~ .input-group-addon {
+      & ~ .input-group-append {
         border-color: $gray !important;
         background-color: #fdfdfd;
       }

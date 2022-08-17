@@ -82,6 +82,16 @@ export class GenericListComponent implements OnInit, OnDestroy {
   public afterEditOffset: any = 0;
   public isEditRecord: any = false;
 
+  get isTableReady(): boolean {
+    if (!this.tables?.length) {
+      return false;
+    }
+
+    const table = this.tables[0];
+
+    return table.endpoint.includes('hr/job') ? table.metadata && table.data : table.metadata
+  }
+
   constructor(
     private gfs: GenericFormService,
     private fs: FilterService,

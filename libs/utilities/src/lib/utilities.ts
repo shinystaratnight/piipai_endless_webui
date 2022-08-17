@@ -21,13 +21,13 @@ export const rangeFormats = {
 };
 
 export function getCurrentRole(): Role | undefined {
-  const role = getLocalStorageItem('web.role');
+  const role = getLocalStorageItem<Role>('web.role');
 
   if (!role) {
     return;
   }
 
-  return JSON.parse(role as string);
+  return role;
 }
 
 export function isCandidate(): boolean {
@@ -322,7 +322,7 @@ export function getFulfilledStatus(
   return;
 }
 
-export function getLocalStorageItem(key: string): unknown | undefined {
+export function getLocalStorageItem<T>(key: string): T | undefined {
   const value = localStorage.getItem(key);
 
   if (typeof value === 'string') {

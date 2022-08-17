@@ -20,7 +20,7 @@ $block-padding: 10px 32px;
   align-items: center;
   justify-content: space-between;
 
-  @include media-breakpoint-down('xs') {
+  @include media-breakpoint-down('sm') {
     flex-direction: column;
 
     & > *:not(:last-child) {

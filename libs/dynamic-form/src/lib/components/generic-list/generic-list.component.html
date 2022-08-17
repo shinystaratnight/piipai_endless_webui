@@ -1,6 +1,6 @@
 <div class="datatable-wrapper">
   <webui-dynamic-list
-    *ngIf="tables[0].endpoint.includes('hr/job') ? tables[0].metadata && tables[0].data : tables[0].metadata"
+    *ngIf="isTableReady"
     [inForm]="inForm"
     [config]="tables[0].metadata"
     [data]="tables[0].data"

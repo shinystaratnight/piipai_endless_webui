@@ -1704,8 +1704,9 @@ export class DynamicListComponent
     this.modalInfo = {};
     value.forEach((el: any) => {
       const keys = el.field.split('.');
-      this.modalInfo[keys[keys.length - 1]] = +el.value;
+      this.modalInfo[el.key || keys[keys.length - 1]] = +el.value;
     });
+    console.log(this.modalInfo);
     this.open(this.mapModal, { size: 'lg', windowClass: 'fillin-map' });
   }
 
@@ -2339,8 +2340,10 @@ export class DynamicListComponent
     data.markers = [];
     this.data[this.responseField].forEach((el: any) => {
       data.markers.push({
-        latitude: +this.getPropValue(el, 'contact.address.latitude'),
-        longitude: +this.getPropValue(el, 'contact.address.longitude'),
+        position: {
+          lat: +this.getPropValue(el, 'contact.address.latitude'),
+          lng: +this.getPropValue(el, 'contact.address.longitude')
+        },
         name: this.getPropValue(el, 'contact.__str__'),
         description: this.getPropValue(el, 'contact.address.__str__'),
         iconUrl: '/assets/img/location-blue.svg',
@@ -2357,9 +2360,12 @@ export class DynamicListComponent
         label: this.sanitizer.bypassSecurityTrustStyle('{ color: "green"}'),
         iconUrl: '/assets/img/location-red.svg',
       });
-      data.latitude = this.data[this.supportData].latitude;
-      data.longitude = this.data[this.supportData].longitude;
+      data.center = {
+        lat: this.data[this.supportData].latitude,
+        lng: this.data[this.supportData].longitude
+      };
     }
+    console.log(data);
     return data;
   }
 

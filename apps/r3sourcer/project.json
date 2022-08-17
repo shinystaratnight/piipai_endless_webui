@@ -23,9 +23,16 @@
         ],
         "styles": [
           "styles/styles.scss",
-          "apps/r3sourcer/src/assets/css/style.css"
+          "apps/r3sourcer/src/assets/css/style.css",
+          "node_modules/ngx-toastr/toastr.css"
         ],
-        "scripts": []
+        "scripts": [
+          "node_modules/jquery/dist/jquery.min.js",
+          "node_modules/jtsage-datebox-bootstrap4/jtsage-datebox.js"
+        ],
+        "allowedCommonJsDependencies": [
+          "moment-timezone"
+        ]
       },
       "configurations": {
         "production": {

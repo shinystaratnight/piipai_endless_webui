@@ -96,6 +96,9 @@ export class FilterDateComponent implements OnInit, AfterViewInit, OnDestroy {
           themeDatePick: 'primary',
           calHighToday: true,
           overrideCalStartDay: 1,
+          theme: {
+            clearBtn: 'clear'
+          },
           beforeOpenCallback: () => {
             setTimeout(() => {
               this.refreshDatebox(el.nativeElement);
