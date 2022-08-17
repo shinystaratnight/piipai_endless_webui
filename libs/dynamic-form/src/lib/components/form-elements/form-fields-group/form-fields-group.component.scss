@@ -42,11 +42,7 @@
   }
 }
 
-.btn-success:focus,
-.btn-success.focus,
-.btn:focus,
-.btn.focus,
-.btn-success:focus,
-.btn-success.focus {
-  box-shadow: none;
+.btn.btn-collapse fa-icon {
+  font-size: 16px;
+  line-height: 1.2;
 }

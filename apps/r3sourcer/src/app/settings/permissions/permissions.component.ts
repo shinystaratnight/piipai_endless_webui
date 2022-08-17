@@ -50,6 +50,7 @@ export class PermissionsComponent implements OnInit, OnDestroy {
     permission: '',
     group: ''
   };
+  public activeTab = 'group';
 
   public name!: string;
 

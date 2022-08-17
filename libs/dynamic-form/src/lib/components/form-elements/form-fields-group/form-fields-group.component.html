@@ -13,26 +13,28 @@
     <div *ngIf="item.model_fields && !item.hidden" class="d-flex justify-content-center flex-column">
       <div class="d-flex align-items-center p-2 group">
         <b class="field-name text-muted">{{item.label}}</b>
-        <div class="ms-auto d-flex align-items-center flex-wrap">
-          <button type="button" class="btn btn-sm m-1"
+        <div class="ms-auto d-flex align-items-center flex-wrap gap-3">
+          <button type="button" class="btn btn-sm"
                   [class.btn-success]="item.id || isActive(item) || disableContactButton(item)"
                   [disabled]="disableContactButton(item)"
                   (click)="toggleActiveState(item)">
             Active
           </button>
-          <button type="button" class="btn btn-sm m-1 ms-2"
+          <button type="button" class="btn btn-sm"
                   [class.btn-success]="item.required || isRequired(item) || disableContactButton(field)"
                   [disabled]="disableRequired(item) || disableContactButton(item)"
                   (click)="toggleRequireProperty(item)">
             Required
           </button>
-          <fa-icon
-             [icon]="['fas', item.isCollapsed ? 'plus-square' : 'minus-square']"
-             class="icon text-primary m-1 ms-2"
-             [class.text-primary]="item.isCollapsed"
-             [class.text-muted]="!item.isCollapsed"
-             (click)="item.isCollapsed = !item.isCollapsed">
-          </fa-icon>
+
+          <button class="btn btn-collapse" type="button" (click)="item.isCollapsed = !item.isCollapsed">
+            <fa-icon
+              [icon]="['fas', item.isCollapsed ? 'plus-square' : 'minus-square']"
+              class="icon text-primary"
+              [class.text-primary]="item.isCollapsed"
+              [class.text-muted]="!item.isCollapsed">
+            </fa-icon>
+          </button>
         </div>
       </div>
       <div class="pl-4" [ngbCollapse]="item.isCollapsed">

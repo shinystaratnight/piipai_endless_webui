@@ -39,20 +39,20 @@
   color: rgba($gray, .7);
 }
 
-.custom-button {
-  color: $gray;
-  opacity: 0.8;
+// .custom-button {
+//   color: $gray;
+//   opacity: 0.8;
 
-  cursor: pointer;
+//   cursor: pointer;
 
-  &:hover {
-    opacity: 1;
-  }
+//   &:hover {
+//     opacity: 1;
+//   }
 
-  fa-icon {
-    margin-right: 12px;
-  }
-}
+//   fa-icon {
+//     margin-right: 12px;
+//   }
+// }
 
 .clear-button {
   visibility: hidden;

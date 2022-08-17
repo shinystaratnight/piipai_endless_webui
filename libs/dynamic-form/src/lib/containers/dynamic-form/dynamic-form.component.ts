@@ -263,6 +263,11 @@ export class DynamicFormComponent implements OnInit {
       } else if (el instanceof Object) {
         const key = Object.keys(el)[0];
         const targetValue = el[key];
+
+        if (!targetValue) {
+          return;
+        }
+
         let value = this.getValueByKey(key, data);
 
         if (typeof targetValue === 'number') {

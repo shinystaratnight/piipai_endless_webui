@@ -1,26 +1,13 @@
 @use 'variables' as *;
 
-.custom-button {
-  display: inline-flex;
-  align-items: center;
-  color: $gray;
+.btn {
+  gap: 0.5rem;
   opacity: 0.7;
-  border: none;
-  background-color: transparent;
 
-  &:hover:not(:disabled)
-  &:hover:not(.disabled) {
+  &:hover,
+  &:active,
+  &:focus {
     opacity: 1;
-    cursor: pointer;
-  }
-
-  &:disabled,
-  &.disabled {
-    opacity: 0.5;
-  }
-
-  fa-icon {
-    margin-right: 5px;
   }
 }
 

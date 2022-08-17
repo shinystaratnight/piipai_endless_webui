@@ -12,4 +12,5 @@ import { ListService, SortService } from '@webui/dynamic-form';
 export class BillingListsComponent {
   public paymentConfig = paymentMetadata;
   public smsConfig = smsMetadata;
+  public activeTab = 'payment';
 }

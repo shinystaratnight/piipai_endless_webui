@@ -179,6 +179,12 @@ $shadow: 0px 4px 6px 0;
   color: $gray;
   background: $white;
   border: none;
+
+  &:hover,
+  &:active,
+  &:focus {
+    color: $white;
+  }
 }
 
 .btn-primary {
@@ -350,4 +356,16 @@ webui-form-button:not(:first-child) {
   height: 100%;
   margin-bottom: 0;
   width: 100%;
+}
+
+.btn-success,
+.btn-danger {
+  color: $white;
+
+  &:disabled,
+  &:hover,
+  &:active,
+  &:focus {
+    color: $white;
+  }
 }

@@ -193,7 +193,7 @@
           <span class="badge badge-outline mt-2 me-1" style="white-space: normal"
             *ngFor="let item of results; let i = index">
             {{ item.__str__ }}
-            <fa-icon class="ms-2 text-danger" icon="times" (click)="deleteItem(i, item)"></fa-icon>
+            <fa-icon class="text-danger" icon="times" (click)="deleteItem(i, item)"></fa-icon>
           </span>
         </div>
       </div>
@@ -271,11 +271,11 @@
                 <ng-template #actionsTemplate>
                   <button
                     webuiSubscriptionRequired
-                    class="custom-button d-flex align-items-center"
+                    class="btn"
                     *ngIf="config.templateOptions?.delete && checkPermission('delete')"
                     (click)="deleteObject(object, $event)">
                     <fa-icon
-                      class="icon text-danger me-2"
+                      class="icon text-danger"
                       title="Delete"
                       [icon]="['fas', 'trash']">
                     </fa-icon>
@@ -284,11 +284,11 @@
                   </button>
                   <button
                     webuiSubscriptionRequired
-                    class="custom-button d-flex align-items-center"
+                    class="btn"
                     *ngIf="config.templateOptions?.edit && checkPermission('update')"
                     (click)="editObject(object, $event)">
                     <fa-icon
-                      class="icon text-warning me-2"
+                      class="icon text-warning"
                       title="Edit"
                       [icon]="['fas', 'pencil-alt']">
                     </fa-icon>
@@ -297,11 +297,11 @@
                   </button>
                   <button
                     webuiSubscriptionRequired
-                    class="custom-button d-flex align-items-center"
+                    class="btn"
                     *ngIf="skillEndpoint && !object.allData.default_rate"
                     (click)="setAsDefault(object)">
                     <fa-icon
-                      class="icon text-primary me-2"
+                      class="icon text-primary"
                       title="Set as default"
                       [icon]="['fas', 'check']">
                     </fa-icon>
@@ -311,10 +311,10 @@
               <button
                 webuiSubscriptionRequired
                 *ngIf="!object.id"
-                class="custom-button d-flex align-items-center"
+                class="btn"
                 (click)="removeItem(index, $event)">
                 <fa-icon
-                  class="icon text-danger me-2"
+                  class="icon text-danger"
                   title="Delete"
                   [icon]="['fas', 'trash']">
                 </fa-icon>
@@ -377,7 +377,7 @@
       <span class="badge badge-outline mt-2 me-1" style="white-space: normal"
         *ngFor="let item of results; let i = index">
         {{ item.__str__ }}
-        <fa-icon class="ms-2 text-danger" [icon]="['fas', 'times']"
+        <fa-icon class="text-danger" [icon]="['fas', 'times']"
           (click)="deleteItem(i, item, config.templateOptions?.deleteList)"></fa-icon>
       </span>
     </div>

@@ -1,5 +1,9 @@
 @use 'variables' as *;
 
+:host:last-child .items {
+  border-bottom: none;
+}
+
 .items {
   position: relative;
   display: flex;

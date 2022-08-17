@@ -1,11 +1,13 @@
 <div class="permissions">
-  <ul ngbNav type="pills" (tabChange)="beforeChange()">
-    <li [ngbNavItem]="'group'">
+  <ul ngbNav #nav="ngbNav" class="nav-pills" [(activeId)]="activeTab">
+    <li ngbNavItem="group">
       <a ngbNavLink>Groups</a>
-      <ng-template ngbTabContent>
-        <div class="permission-block-add form-inline">
-          <input type="text" class="permission-input form-control me-2" [(ngModel)]="name">
-          <button type="button" class="btn bg-light" (click)="addGroup(name)">Add</button>
+      <ng-template ngbNavContent>
+        <div class="permission-block-add row">
+          <input type="text" class="col-auto permission-input form-control me-2" [(ngModel)]="name">
+          <div class="col">
+            <button type="button" class="btn bg-light" (click)="addGroup(name)">Add</button>
+          </div>
         </div>
         <div class="permission-wrapper">
           <ng-container *ngTemplateOutlet="list; context: {title: 'Groups', list: groups, param: 'name', element: 'group', type: 'list'}"></ng-container>
@@ -15,9 +17,9 @@
         </div>
       </ng-template>
     </li>
-    <li [ngbNavItem]="'user'">
+    <li ngbNavItem="user">
       <a ngbNavLink>Users</a>
-      <ng-template ngbTabContent>
+      <ng-template ngbNavContent>
         <div class="permission-wrapper">
           <ng-container *ngTemplateOutlet="list; context: {title: 'Users', list: users, param: 'name', element: 'user', type: 'list'}"></ng-container>
           <ng-container *ngIf="targetId">
@@ -29,6 +31,8 @@
     </li>
   </ul>
 </div>
+
+<div [ngbNavOutlet]="nav"></div>
 
 <ng-template #list let-t="title" let-l="list" let-p="param" let-a="actions" let-type="type" let-e="element">
   <div class="permission-block-wrapper">

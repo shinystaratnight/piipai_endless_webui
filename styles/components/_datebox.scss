@@ -1,231 +1,5 @@
 /*---------- jtsage-datebox-bootstrap4 ---------- */
 
-// .ui-datebox-container {
-//   top: 42px;
-//   margin-bottom: 5px;
-//   padding: 0px 6px;
-//   margin-top: -21px;
-
-//   border: 1px solid rgba($gray, 0.1);
-//   z-index: 6 !important;
-
-//   .registration-form & {
-//     top: 45px;
-//   }
-// }
-
-// .ui-datebox-container .form-control {
-//   padding-right: 0;
-// }
-
-// .ui-datebox-container .btn-group-vertical {
-//   display: flex;
-//   align-items: center;
-//   justify-content: space-between;
-//   flex-direction: row;
-
-//   .btn {
-//     margin-bottom: 0px;
-//     padding: 5px;
-
-//     font-size: 12px;
-
-//     &:last-child:not(:first-child),
-//     &:first-child:not(:last-child),
-//     &:not(:first-child):not(:last-child) {
-//       border-radius: 50px;
-//     }
-//   }
-// }
-
-// .ui-datebox-flipcontent div {
-//   width: 70px !important;
-// }
-
-// .ui-datebox-flipcenter {
-//   width: 236px !important;
-//   height: 36px !important;
-// }
-
-// .ui-datebox-container.dropdown-menu {
-//   width: auto;
-//   min-width: 210px;
-//   max-width: 250px;
-
-//   .ui-datebox-gridheader {
-//     display: flex;
-//     align-items: center;
-//     justify-content: space-between;
-
-//     h4 {
-//       margin-bottom: 0;
-//     }
-//   }
-
-//   .ui-datebox-gridplus {
-//     order: 2;
-
-//     span::before {
-//       content: '\f105';
-
-//       font-size: 18px;
-//     }
-//   }
-
-//   .ui-datebox-gridminus {
-//     color: $gray;
-
-//     span::before {
-//       font-size: 18px;
-
-//       content: '\f104';
-//     }
-//   }
-
-//   .ui-datebox-datebox-group {
-//     text-align: center;
-
-//     .fa-plus::before {
-//       font-size: 18px;
-
-//       content: '\f106';
-//     }
-
-//     .fa-minus::before {
-//       font-size: 18px;
-
-//       content: '\f107';
-//     }
-//   }
-
-//   .ui-datebox-controls {
-//     margin-bottom: 0.25rem;
-
-//     .btn {
-//       border-radius: 50px;
-
-//       .fa {
-//         margin-right: 0.25rem;
-//       }
-
-//       &:hover {
-//         border-color: $primary;
-
-//         background-color: $primary;
-
-//         color: white;
-
-//         @each $item in $themes {
-//           .#{$item}-theme & {
-//             border-color: map-get($theme-colors, $item);
-
-//             background-color: map-get($theme-colors, $item);
-//           }
-//         }
-//       }
-//     }
-//   }
-
-//   .btn-sm,
-//   .ui-datebox-griddate {
-//     display: inline-flex;
-//     align-items: center;
-//     justify-content: center;
-
-//     width: 27px;
-//     height: 27px;
-
-//     font-size: 0.7rem;
-//     line-height: 0.7rem;
-
-//     padding: 0;
-
-//     &.ui-datebox-griddate-label,
-//     &.ui-datebox-griddate-empty {
-//       font-weight: normal;
-//       color: rgba($gray, 0.4);
-//     }
-
-//     &.btn-info {
-//       background-color: rgba($gray, 0.2) !important;
-//     }
-//   }
-
-//   .btn-sm {
-//     border: none;
-//     border-radius: 50%;
-
-//     &:hover {
-//       border: none;
-
-//       background-color: $primary;
-//       color: white;
-
-//       @each $item in $themes {
-//         .#{$item}-theme & {
-//           background-color: map-get($theme-colors, $item) !important;
-//         }
-//       }
-//     }
-
-//     &.btn-disabled {
-//       opacity: 0.3;
-
-//       &:hover {
-//         background-color: transparent;
-//         color: inherit;
-//         cursor: default;
-//       }
-//     }
-//   }
-
-//   .btn-info {
-//     background-color: $primary;
-
-//     @each $item in $themes {
-//       .#{$item}-theme & {
-//         background-color: map-get($theme-colors, $item);
-//       }
-//     }
-//   }
-// }
-
-// .ui-datebox-container .ui-datebox-controls {
-//   a {
-//     margin-bottom: 5px;
-
-//     border-radius: 50px;
-
-//     &:hover {
-//       background-color: $primary;
-
-//       color: white;
-
-//       @each $item in $themes {
-//         .#{$item}-theme & {
-//           background-color: map-get($theme-colors, $item);
-//         }
-//       }
-//     }
-//   }
-// }
-
-// .jtsage-datebox-backdrop-div {
-//   z-index: 1;
-// }
-
-// .theme-green .bs-datepicker-head {
-//   background: $primary;
-// }
-
-// .theme-green .bs-datepicker-body table td.week span {
-//   color: $primary;
-// }
-
-// .theme-green .bs-datepicker-body table td span.selected {
-//   background-color: $primary;
-// }
-
 .dbCalGrid {
   .btn {
     width: 38px;
@@ -286,5 +60,19 @@
         display: inline-flex;
       }
     }
+  }
+}
+
+.dbBoxh,
+.dbBoxi {
+  align-items: center;
+
+  .dbBoxNext,
+  .dbBoxPrev {
+
+  }
+
+  input {
+    border-radius: 0.25rem;
   }
 }

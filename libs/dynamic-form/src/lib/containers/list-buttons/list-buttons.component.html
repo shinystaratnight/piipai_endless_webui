@@ -40,16 +40,22 @@
       webuiSubscriptionRequired
       *ngIf="first && !inForm && checkPermission('post')"
     >
-      <span class="button-icon me-1"></span>{{ 'add_new' | translate: {'Default': 'Add new'} }}&nbsp;
-      <span class="text-lowercase">{{ getTranslationKey(label.toLowerCase(), 'label') | translate: {'Default': label} }}</span>
+      <span class="button-icon"></span>
+      <span>
+        {{ 'add_new' | translate: {'Default': 'Add new'} }}
+        <span class="text-lowercase">{{ getTranslationKey(label.toLowerCase(), 'label') | translate: {'Default': label} }}</span>
+      </span>
     </a>
     <button
       *ngIf="(!first || inForm) && checkPermission('post')"
       class="datatable-button ms-auto"
       (click)="buttonAction('add_object')"
     >
-      <span class="button-icon me-1"></span>{{ 'add_new' | translate: {'Default': 'Add new'} }}&nbsp;
-      <span class="text-lowercase">{{ getTranslationKey(label.toLowerCase(), 'label') | translate: {'Default': label} }}</span>
+      <span class="button-icon"></span>
+      <span>
+        {{ 'add_new' | translate: {'Default': 'Add new'} }}
+        <span class="text-lowercase">{{ getTranslationKey(label.toLowerCase(), 'label') | translate: {'Default': label} }}</span>
+      </span>
     </button>
   </div>
   <button

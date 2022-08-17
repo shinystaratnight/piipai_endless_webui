@@ -739,3 +739,11 @@ $width: 510px;
 .modal-content .has-tabs .save {
   margin-left: auto;
 }
+
+.modal-content .form-tabs {
+  margin: 0 -16px !important;
+
+  .nav {
+    padding: 0 16px;
+  }
+}
