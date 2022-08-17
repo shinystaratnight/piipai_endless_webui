@@ -6,8 +6,10 @@ import { catchError } from 'rxjs/operators';
 import { ErrorsService } from '@webui/core';
 
 export interface Marker {
-  latitude: number;
-  longitude: number;
+  position: {
+    lat: number;
+    lng: number;
+  };
   contact: {
     phone_mobile: string;
     name: string;

@@ -9,19 +9,27 @@
 <div class="map" *ngIf="markers">
   <google-map
     [options]="options"
+    [center]="currentPosition"
+    (idle)="mapReady()"
+    width="100%"
+    height="100%"
   >
     <map-marker
-      *ngFor="let marker of markers; trackBy: trackByFn"
-    >
-      <map-info-window>
-        <strong>{{ marker.name }}</strong>
-        <br />
-        <p *ngIf="marker.contact">{{ marker.__str__ }}</p>
-        <p *ngIf="marker.contact">
-          {{ marker.contact.name }} {{ marker.contact.phone_mobile }}
-        </p>
-      </map-info-window>
-    </map-marker>
+      [position]="item.position"
+      [icon]="icons[item.type].path"
+      *ngFor="let item of markers; trackBy: trackByFn"
+      #marker="mapMarker"
+      (mapClick)="openInfo(item, marker)"
+    ></map-marker>
+
+    <map-info-window>
+      <strong>{{ currentMarker?.name }}</strong>
+      <br />
+      <p *ngIf="currentMarker?.contact">{{ currentMarker?.__str__ }}</p>
+      <p *ngIf="currentMarker?.contact">
+        {{ currentMarker?.contact?.name }} {{ currentMarker?.contact?.phone_mobile }}
+      </p>
+    </map-info-window>
   </google-map>
 </div>
 

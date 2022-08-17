@@ -130,12 +130,11 @@ export class FormInfoComponent implements OnInit, OnDestroy {
           this[key] = this.getValue(this.config.values[key], this.config.value);
 
           if (this[key]) {
-            if (this[key].latitude) {
-              this[key].latitude = parseFloat(this[key].latitude);
-            }
-
-            if (this[key].longitude) {
-              this[key].longitude = parseFloat(this[key].longitude);
+            if (this[key].latitude && this[key].longitude) {
+              this[key].center = {
+                lat: parseFloat(this[key].latitude),
+                lng: parseFloat(this[key].longitude)
+              }
             }
           }
         } else {

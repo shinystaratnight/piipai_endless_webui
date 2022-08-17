@@ -727,6 +727,8 @@
 
   <google-map
     [zoom]="13"
+    [center]="modalInfo.center"
+    style="margin-top: 36px"
   >
     <map-marker
       *ngFor="let marker of modalInfo.markers"

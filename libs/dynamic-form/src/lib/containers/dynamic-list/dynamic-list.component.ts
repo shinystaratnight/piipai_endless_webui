@@ -2352,8 +2352,10 @@ export class DynamicListComponent
     });
     if (this.supportData) {
       data.markers.push({
-        latitude: this.data[this.supportData].latitude,
-        longitude: this.data[this.supportData].longitude,
+        position: {
+          lat: this.data[this.supportData].latitude,
+          lng: this.data[this.supportData].longitude
+        },
         name: this.data[this.supportData].__str__,
         description: this.data[this.supportData].address,
         label: this.sanitizer.bypassSecurityTrustStyle('{ color: "green"}'),

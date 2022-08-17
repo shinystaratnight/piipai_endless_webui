@@ -90,11 +90,6 @@ p {
     background-color: $danger;
   }
 
-  .map {
-    width: 265px;
-    height: 150px;
-  }
-
   &-edit-link {
     display: flex;
     align-items: center;
@@ -330,4 +325,9 @@ p {
   &-title {
     margin-bottom: 4px;
   }
+}
+
+.map {
+  width: 265px;
+  height: 150px;
 }

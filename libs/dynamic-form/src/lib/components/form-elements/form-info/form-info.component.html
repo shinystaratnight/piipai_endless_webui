@@ -26,12 +26,12 @@
       </span>
 
       <div class="map" *ngIf="map">
-        <google-map [zoom]="13">
-          <!-- <agm-marker [iconUrl]="'/assets/img/location-red.svg'" [latitude]="map.latitude" [longitude]="map.longitude">
-            <agm-info-window>
+        <google-map [zoom]="13" [center]="map.center" height="150" width="265">
+          <map-marker [position]="map.center">
+            <map-info-window>
               <strong>{{map.__str__}}</strong>
-            </agm-info-window>
-          </agm-marker> -->
+            </map-info-window>
+          </map-marker>
         </google-map>
       </div>
 

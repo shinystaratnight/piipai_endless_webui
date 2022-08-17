@@ -2,6 +2,7 @@ import { Component, OnInit, HostListener, ElementRef, ViewChild, OnDestroy } fro
 import { MapService, Marker } from './map.service';
 
 import { FilterEvent, FilterService } from '@webui/dynamic-form';
+import { MapInfoWindow, MapMarker } from '@angular/google-maps';
 
 @Component({
   selector: 'webui-map',
@@ -10,6 +11,7 @@ import { FilterEvent, FilterService } from '@webui/dynamic-form';
 })
 export class MapComponent implements OnInit, OnDestroy {
   @ViewChild('filterBlock') public elementRef!: ElementRef;
+  @ViewChild(MapInfoWindow) infoWindow!: MapInfoWindow;
 
   public config!: {
     list: string;
@@ -31,6 +33,13 @@ export class MapComponent implements OnInit, OnDestroy {
 
   public defaultLatitude = -33.865143;
   public defaultlongitude = 151.2099;
+
+  public center!: {
+    lat: number,
+    lng: number
+  };
+
+  public currentMarker?: Marker;
 
   constructor(private mapService: MapService, private filterService: FilterService) {}
 
@@ -98,8 +107,10 @@ export class MapComponent implements OnInit, OnDestroy {
 
     this.mapService.getPositions(query).subscribe((res) => {
       this.markers = res.map((el: any) => {
-        el.latitude = parseFloat(<any>el.latitude);
-        el.longitude = parseFloat(<any>el.longitude);
+        el.position = {
+          lat: parseFloat(<any>el.latitude),
+          lng: parseFloat(<any>el.longitude)
+        }
         this.icons[el.type].exist = true;
         return el;
       });
@@ -142,7 +153,14 @@ export class MapComponent implements OnInit, OnDestroy {
 
         this.getPositions();
       },
-      (err) => this.getPositions()
+      (err) => {
+        this.currentPosition = {
+          type: 'current',
+          lat: this.defaultLatitude,
+          lng: this.defaultlongitude
+        }
+        this.getPositions();
+      }
     );
   }
 
@@ -152,6 +170,11 @@ export class MapComponent implements OnInit, OnDestroy {
 
   public mapReady() {
     this.preloader = false;
+  }
+
+  public openInfo(marker: Marker, anchor: any) {
+    this.currentMarker = marker;
+    this.infoWindow.open(anchor);
   }
 
   @HostListener('document:click', ['$event'])
