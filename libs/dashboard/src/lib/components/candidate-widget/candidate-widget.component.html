@@ -25,7 +25,7 @@
         (click)="toggleFilters()"
       >
         {{ 'filter.plural' | translate: { Default: 'Candidates' } }}
-        <fa-icon class="ml-2" icon="chevron-down"></fa-icon>
+        <fa-icon class="ms-2" icon="chevron-down"></fa-icon>
       </button>
     </h3>
   </div>
@@ -82,13 +82,13 @@
       </div>
       <b class="name">{{ candidate.name }}</b>
 
-      <div class="ml-auto">
+      <div class="ms-auto">
         <ng-container *ngTemplateOutlet="score; context: { value: candidate.score, right: true }"></ng-container>
       </div>
 
       <fa-icon
         icon="chevron-down"
-        class="extend-btn px-2 ml-1"
+        class="extend-btn px-2"
         (click)="togglePanel(candidate, $event)"
       ></fa-icon>
 
@@ -179,7 +179,7 @@
   <span class="score d-inline-flex align-items-center" [webuiAverageScore]="value">
     {{ value | averageScore }}
     <ng-container *ngIf="value">
-      <fa-icon class="ml-1" icon="star"></fa-icon>
+      <fa-icon class="ms-1" icon="star"></fa-icon>
     </ng-container>
   </span>
 </ng-template>

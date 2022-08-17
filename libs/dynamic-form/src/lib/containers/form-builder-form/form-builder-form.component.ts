@@ -245,9 +245,9 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
           if (metadata.length) {
             metadata.forEach((field, i) => {
               if (i === 0 && metadata.length > 1) {
-                field.className = 'mr-3';
+                field.className = 'me-3';
               } else if (i > 0 && metadata.length !== i + 1) {
-                field.className = 'mr-3';
+                field.className = 'me-3';
               }
             });
 

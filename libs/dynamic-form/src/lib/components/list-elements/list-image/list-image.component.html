@@ -1,4 +1,4 @@
-<span [class.mr-1]="config.label" *ngIf="icon && !config.setColorForLabel">
+<span [class.me-1]="config.label" *ngIf="icon && !config.setColorForLabel">
   <fa-icon
     [icon]="icon"
     [ngClass]="[iconClass]"
@@ -40,7 +40,7 @@
   <img *ngIf="src" [src]="src" width="60" height="60" />
 </ng-container>
 
-<span class="mr-1" *ngIf="config.delim && !last">{{ config.delim }}</span>
+<span class="me-1" *ngIf="config.delim && !last">{{ config.delim }}</span>
 
 <div *ngIf="file" [class.mobile]="isMobileDevice">
   <a #filelink [href]="file" target="_blank">

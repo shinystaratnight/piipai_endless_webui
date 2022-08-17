@@ -19,10 +19,10 @@
     [class.align-items-center]="!config.inline"
     [class.flex-wrap]="!config.inline"
     [class.bold]="config.boldClass"
-    [class.mr-1]="!config.inline"
+    [class.me-1]="!config.inline"
     [class.text-description]="config.muted"
   >
-    <span [ngClass]="{ 'label mr-1': length > 1 }" *ngIf="config.label">
+    <span [ngClass]="{ 'label me-1': length > 1 }" *ngIf="config.label">
       {{ translationKey | translate: { Default: config.label } }}:
     </span>
     <span
@@ -140,7 +140,7 @@
   </span>
 </ng-container>
 
-<span [class.mr-1]="config.delim !== ' '" *ngIf="config.delim && !last">
+<span [class.me-1]="config.delim !== ' '" *ngIf="config.delim && !last">
   {{ config.delim }}
 </span>
 <br

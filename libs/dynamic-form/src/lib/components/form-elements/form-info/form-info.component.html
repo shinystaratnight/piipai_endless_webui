@@ -46,7 +46,7 @@
   <div class="form-info-block">
     <p>
       <label *ngIf="config && viewMode && (available === true || available === false)" class="f-size-14" [class.text-success]="available" [class.text-danger]="!available">
-        <fa-icon class="mr-2" [icon]="['fas', available ? 'check-circle' : 'times-circle']"></fa-icon>
+        <fa-icon class="me-2" [icon]="['fas', available ? 'check-circle' : 'times-circle']"></fa-icon>
         {{available ? config.metadata['available'].templateOptions.label : 'Not ' + config.metadata['available'].templateOptions.label}}
       </label>
 
@@ -116,7 +116,7 @@
         </span>
 
         <span *ngIf="!titlePath && title">{{title}}</span>
-        <webui-info class="ml-1" [description]="description"></webui-info>
+        <webui-info class="ms-1" [description]="description"></webui-info>
       </span>
       <span *ngIf="averageScore || averageScore === 0">
         <span class="view-mode" *ngIf="titlePath">
@@ -248,7 +248,7 @@
         <div class="modal-header">
           <h5 class="modal-title">{{modalInfo.label}}</h5>
 
-          <webui-close-button class="ml-auto" (click)="modal.dismiss()"></webui-close-button>
+          <webui-close-button class="ms-auto" (click)="modal.dismiss()"></webui-close-button>
         </div>
       </div>
       <div class="modal-body">

@@ -206,7 +206,8 @@ $shadow: 0px 4px 6px 0;
 }
 
 .btn-link {
-  color: $primary;
+  // color: $primary;
+  text-decoration: none;
 
   @each $item in $themes {
     .#{$item}-theme & {

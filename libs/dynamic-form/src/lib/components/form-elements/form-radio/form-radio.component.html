@@ -14,14 +14,14 @@
     </label>
     <div class="edit inline" [class.column]="config.templateOptions.column">
       <ng-container *ngFor="let radio of config.templateOptions.options">
-        <div class="form-element-checkbox mr-4" *ngIf="radio.value">
+        <div class="form-element-checkbox me-4" *ngIf="radio.value">
           <label
             [attr.for]="radio.value"
             class="form-check-label d-flex align-items-center"
             [ngClass]="radio.value === isChecked ? 'checked' : ''"
           >
             <input
-              class="form-check-input mr-2"
+              class="form-check-input me-2"
               [hidden]="true"
               (change)="eventHandler($event)"
               type="radio"
@@ -38,7 +38,7 @@
               <div class="inner"></div>
             </div>
             <span
-              class="color-preview mr-2"
+              class="color-preview me-2"
               *ngIf="config.templateOptions.type === 'color'"
               [ngStyle]="{ backgroundColor: radio.label }"
             ></span>

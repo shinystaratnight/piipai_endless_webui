@@ -55,7 +55,7 @@
         </ng-container>
 
         <span *ngIf="!value && !contactAvatar && !link && viewMode">-</span>
-        <span *ngIf="!link && !value && !viewMode && !config.read_only && config.templateOptions?.file === undefined" class="link ml-0 mr-auto" (click)="upload()"
+        <span *ngIf="!link && !value && !viewMode && !config.read_only && config.templateOptions?.file === undefined" class="link ms-0 me-auto" (click)="upload()"
         >
             {{'upload_file' | translate: {"Default": 'Upload new file'} }}
         </span>
@@ -105,7 +105,7 @@
   <div class="modal-header">
     <h5 class="modal-title">{{ getTranslationKey('label_photo') | translate: {"Default": config.templateOptions.label_photo} }}</h5>
 
-    <webui-close-button class="ml-auto" (click)="c()"></webui-close-button>
+    <webui-close-button class="ms-auto" (click)="c()"></webui-close-button>
   </div>
 
   <div class="modal-body picture d-flex justify-content-around flex-wrap" style="overflow: auto">
@@ -158,7 +158,7 @@
     <div class="d-flex flex-column justify-content-center">
       <span class="description" [hidden]="true" >{{'drag_and_drop' | translate}}</span>
       <div class="d-flex align-items-center buttons-wrapper">
-        <button class="btn action mr-2" (click)="upload()">{{'add_photo' | translate: {"Default": 'Add photo'} }}</button>
+        <button class="btn action me-2" (click)="upload()">{{'add_photo' | translate: {"Default": 'Add photo'} }}</button>
         <button class="btn action" (click)="open()">{{'use_camera' | translate: {"Default": 'Use camera'} }}</button>
       </div>
     </div>

@@ -5,7 +5,7 @@
       class="btn btn-outline-info btn-refresh mb-2"
       (click)="onRefresh()"
     >
-      <fa-icon class="mr-0" icon="redo"></fa-icon>
+      <fa-icon class="me-0" icon="redo"></fa-icon>
     </button>
   </div>
 
@@ -64,16 +64,16 @@
     [class.active]="saveProcess"
     (click)="open(getState(currentState.value))"
   >
-    <fa-icon class="f-size-10 mr-0" icon="check" *ngIf="!saveProcess"></fa-icon>
+    <fa-icon class="f-size-10 me-0" icon="check" *ngIf="!saveProcess"></fa-icon>
     <webui-spinner *ngIf="saveProcess" [sm]="true"></webui-spinner>
   </button>
 
   <button
     type="button"
-    class="btn btn-outline-info btn-refresh ml-1"
+    class="btn btn-outline-info btn-refresh ms-1"
     (click)="onRefresh()"
   >
-    <fa-icon class="mr-0" [class.loading]="loading" icon="redo"></fa-icon>
+    <fa-icon class="me-0" [class.loading]="loading" icon="redo"></fa-icon>
   </button>
 </div>
 
@@ -83,7 +83,7 @@
       <h5 class="modal-title">{{ modalData.title }}</h5>
 
       <webui-close-button
-        class="ml-auto"
+        class="ms-auto"
         (click)="modal.dismiss()"
       ></webui-close-button>
     </div>

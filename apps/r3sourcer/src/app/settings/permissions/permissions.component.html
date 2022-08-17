@@ -4,7 +4,7 @@
       <a ngbNavLink>Groups</a>
       <ng-template ngbTabContent>
         <div class="permission-block-add form-inline">
-          <input type="text" class="permission-input form-control mr-2" [(ngModel)]="name">
+          <input type="text" class="permission-input form-control me-2" [(ngModel)]="name">
           <button type="button" class="btn bg-light" (click)="addGroup(name)">Add</button>
         </div>
         <div class="permission-wrapper">
@@ -56,7 +56,7 @@
         </div>
     </div>
     <div *ngIf="type === 'permission'" class="d-flex m-2 align-items-center">
-      <button class="btn btn-success mr-2" (click)="selectAll(e)">Select All</button>
+      <button class="btn btn-success me-2" (click)="selectAll(e)">Select All</button>
       <button class="btn btn-danger" (click)="removeAll(e)">Remove All</button>
     </div>
   </div>

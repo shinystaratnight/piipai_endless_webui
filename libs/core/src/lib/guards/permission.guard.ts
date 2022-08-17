@@ -51,6 +51,8 @@ export class PermissionGuard implements CanActivate {
 
           const requests = [this.navigationService.getPages(user.currentRole)];
 
+          console.log(this.isManager(user.currentRole));
+
           if (this.isManager(user.currentRole)) {
             const endTrial = Time.parse(user.data.end_trial_date);
             const trialExpired = endTrial.isBefore(Time.now());

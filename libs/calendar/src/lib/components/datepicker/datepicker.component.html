@@ -4,7 +4,7 @@
   <div class="body">
     <div class="calendar-row" *ngFor="let row of yearBody">
       <div class="calendar-item" *ngFor="let month of row">
-        <button type="button" class="calendar-button"
+        <button type="button" class="btn calendar-button"
           [class.active]="month.active"
           (click)="changeDate(month.date)">
             {{month.label}}

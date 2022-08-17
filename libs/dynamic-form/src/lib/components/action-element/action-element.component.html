@@ -1,6 +1,6 @@
 <div class="wrapper mb-0 form-group mt-3">
   <select
-    class="custom-select mr-2"
+    class="custom-select me-2"
     [class.default]="!action.endpoint"
     [(ngModel)]="action"
   >
@@ -27,7 +27,7 @@
     <p>{{ action.message }}</p>
 
     <webui-close-button
-      class="ml-auto"
+      class="ms-auto"
       (click)="modal.dismiss(false)"
     ></webui-close-button>
   </div>

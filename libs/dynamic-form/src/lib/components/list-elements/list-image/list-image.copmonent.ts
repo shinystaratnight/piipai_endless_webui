@@ -46,7 +46,7 @@ export class ListImageComponent implements OnInit {
   }
 
   public getColor(value: string) {
-    this.iconClass = this.config.color[value] ? `text-${this.config.color[value]} mr-1` : 'text-muted mr-1';
+    this.iconClass = this.config.color[value] ? `text-${this.config.color[value]} me-1` : 'text-muted me-1';
   }
 
   public setClass(value: boolean) {

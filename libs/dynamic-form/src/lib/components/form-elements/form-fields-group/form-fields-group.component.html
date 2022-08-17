@@ -13,14 +13,14 @@
     <div *ngIf="item.model_fields && !item.hidden" class="d-flex justify-content-center flex-column">
       <div class="d-flex align-items-center p-2 group">
         <b class="field-name text-muted">{{item.label}}</b>
-        <div class="ml-auto d-flex align-items-center flex-wrap">
+        <div class="ms-auto d-flex align-items-center flex-wrap">
           <button type="button" class="btn btn-sm m-1"
                   [class.btn-success]="item.id || isActive(item) || disableContactButton(item)"
                   [disabled]="disableContactButton(item)"
                   (click)="toggleActiveState(item)">
             Active
           </button>
-          <button type="button" class="btn btn-sm m-1 ml-2"
+          <button type="button" class="btn btn-sm m-1 ms-2"
                   [class.btn-success]="item.required || isRequired(item) || disableContactButton(field)"
                   [disabled]="disableRequired(item) || disableContactButton(item)"
                   (click)="toggleRequireProperty(item)">
@@ -28,7 +28,7 @@
           </button>
           <fa-icon
              [icon]="['fas', item.isCollapsed ? 'plus-square' : 'minus-square']"
-             class="icon text-primary m-1 ml-2"
+             class="icon text-primary m-1 ms-2"
              [class.text-primary]="item.isCollapsed"
              [class.text-muted]="!item.isCollapsed"
              (click)="item.isCollapsed = !item.isCollapsed">
@@ -48,13 +48,13 @@
 <ng-template #field let-i="field" let-d="disabled">
   <div class="d-flex align-items-center p-2 field">
     <span class="field-name">{{i.label}}</span>
-    <button type="button" class="btn btn-sm ml-auto"
+    <button type="button" class="btn btn-sm ms-auto"
             [class.btn-success]="i.id"
             [disabled]="d || i.disabled"
             (click)="toggleActiveState(i)">
       Active
     </button>
-    <button type="button" class="btn btn-sm ml-2"
+    <button type="button" class="btn btn-sm ms-2"
             [class.btn-success]="i.required"
             [disabled]="d || i.disabled"
             (click)="toggleRequireProperty(i)">
@@ -69,7 +69,7 @@
       <div class="modal-header bg-primary text-white">
         <h5 class="modal-title">{{(choosenType && fields[choosenType].label) || modalData.title}}</h5>
 
-        <webui-close-button class="ml-auto" (click)="c()"></webui-close-button>
+        <webui-close-button class="ms-auto" (click)="c()"></webui-close-button>
       </div>
     </div>
 
@@ -100,9 +100,9 @@
     <div class="modal-body">
       <div class="d-flex flex-column" *ngFor="let item of activeFields; let l = last; let f = first">
         <h4 class="badge badge-primary d-flex align-items-center p-2" [class.mb-0]="l">
-          <span class="mr-auto">{{item.label}}</span>
+          <span class="me-auto">{{item.label}}</span>
           <fa-icon *ngIf="!f" [icon]="['fas', 'chevron-up']" class="icon text-white m-1" (click)="changePosition(item, 'up')"></fa-icon>
-          <fa-icon *ngIf="!l" [icon]="['fas', 'chevron-down']" class="icon text-white m-1 ml-3" (click)="changePosition(item, 'down')"></fa-icon>
+          <fa-icon *ngIf="!l" [icon]="['fas', 'chevron-down']" class="icon text-white m-1 ms-3" (click)="changePosition(item, 'down')"></fa-icon>
         </h4>
       </div>
     </div>

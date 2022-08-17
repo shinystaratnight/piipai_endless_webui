@@ -6,22 +6,22 @@
 >
   <!-- <div webuiMove [parent]="datatable" *ngIf="poped" class="card-header bg-primary text-white" (active)="activeTable($event)">
     <h5 class="d-flex justify-content-between align-items-center mb-0 lead" *ngIf="config.list">
-      <span [ngClass]="{'mr-5': poped}">{{config.list.label}}</span>
+      <span [ngClass]="{'me-5': poped}">{{config.list.label}}</span>
       <div class="d-flex fustify-content-center align-items-center">
         <fa-icon
-          class="ml-2 icon"
+          class="ms-2 icon"
           [icon]="['fas', 'window-minimize']"
           (click)="minimizeTable()"
           aria-hidden="true">
         </fa-icon>
         <fa-icon
-          class="ml-2 icon"
+          class="ms-2 icon"
           [icon]="['fas', 'window-maximize']"
           (click)="unpopedTable()"
           aria-hidden="true">
         </fa-icon>
         <fa-icon
-          class="ml-2 icon"
+          class="ms-2 icon"
           [icon]="['fas', 'times']"
           (click)="closeTable()"
           aria-hidden="true">
@@ -77,7 +77,7 @@
           (!inForm && !poped)
         "
       >
-        <span *ngIf="!inForm && !description" class="mr-auto my-1">
+        <span *ngIf="!inForm && !description" class="me-auto my-1">
           {{
             getListLabelKey()
               | translate: { Default: label || config.list.label }
@@ -170,7 +170,7 @@
           *ngIf="showFilters"
           style="font-size: 14px"
         >
-          <svg class="mr-1" width="16" height="12" viewBox="0 0 20 15">
+          <svg class="me-1" width="16" height="12" viewBox="0 0 20 15">
             <path
               fill-rule="evenodd"
               clip-rule="evenodd"
@@ -228,7 +228,7 @@
                 <span (click)="openAllTabs()" class="more__header">
                   {{ 'more' | translate }}
                   <fa-icon
-                    class="ml-2 sort-icon"
+                    class="ms-2 sort-icon"
                     [icon]="['fas', collapsed ? 'chevron-down' : 'chevron-up']"
                   ></fa-icon>
                 </span>
@@ -377,7 +377,7 @@
                     (click)="toggleTab($event, row)"
                   >
                     <fa-icon
-                      class="more__icon mr-0"
+                      class="more__icon me-0"
                       [icon]="row.collapsed ? 'chevron-down' : 'chevron-up'"
                     >
                     </fa-icon>
@@ -498,7 +498,7 @@
           (pageChange)="pageChange()"
         >
         </ngb-pagination>
-        <div class="ml-2">
+        <div class="ms-2">
           {{ data.count }}
           <!-- {{ config.list.pagination_label || config.list.label }} -->
           {{
@@ -518,7 +518,7 @@
         <h5 class="modal-title">{{ modalInfo.label }}</h5>
         &nbsp;
         <webui-close-button
-          class="close-button ml-auto align-self-center"
+          class="close-button ms-auto align-self-center"
           (click)="modal.dismiss()"
         ></webui-close-button>
       </div>
@@ -578,7 +578,7 @@
   <div class="message-detail-header">
     <h5 class="message-label">{{ modalInfo.label }}</h5>
     <webui-close-button
-      class="close-button ml-auto"
+      class="close-button ms-auto"
       (click)="modal.dismiss()"
     ></webui-close-button>
   </div>
@@ -600,7 +600,7 @@
   <div class="modal-header">
     <p>{{ modalInfo.message }}</p>
     <webui-close-button
-      class="close-button ml-auto"
+      class="close-button ms-auto"
       (click)="modal.close()"
     ></webui-close-button>
   </div>
@@ -627,7 +627,7 @@
     <div class="modal-header-wrapper">
       <div class="modal-header">
         <webui-close-button
-          class="close-button ml-auto"
+          class="close-button ms-auto"
           (click)="modal.dismiss()"
         ></webui-close-button>
       </div>
@@ -660,7 +660,7 @@
       <div class="modal-header">
         <h5 class="modal-title">Send message</h5>
         <webui-close-button
-          class="close-button ml-auto"
+          class="close-button ms-auto"
           (click)="modal.dismiss()"
         ></webui-close-button>
       </div>
@@ -679,7 +679,7 @@
 
 <ng-template #pdfDocumentModal let-modal>
   <webui-close-button
-    class="close-button ml-auto mt-3 mr-3"
+    class="close-button ms-auto mt-3 me-3"
     (click)="modal.close()"
   ></webui-close-button>
   <div class="modal-body">
@@ -816,7 +816,7 @@
     </ng-container>
     <div class="mb-3 total-time-wrapper">
       <!-- <span
-        class="text-success mr-1"
+        class="text-success me-1"
         style="display: inline-block; font-size: 15px; width: 50%"
         >{{
           'total_time.label' | translate: { Default: 'Total time' }
@@ -932,7 +932,7 @@
     </ng-container>
     <div class="mb-3">
       <!-- <span
-        class="text-success mr-1"
+        class="text-success me-1"
         style="display: inline-block; font-size: 15px; width: 50%"
         >{{
           'totalTime.label' | translate: { Default: 'Total time' }
@@ -1034,7 +1034,7 @@
     </ng-container>
     <div class="mb-3 total-time-wrapper">
       <!-- <span
-        class="text-success mr-1"
+        class="text-success me-1"
         style="display: inline-block; font-size: 15px; width: 50%"
         >Total time:&nbsp;</span
       > -->

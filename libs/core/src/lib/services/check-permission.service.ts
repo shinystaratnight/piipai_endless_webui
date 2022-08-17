@@ -26,7 +26,7 @@ export interface PermissionResponse {
   providedIn: 'root'
 })
 export class CheckPermissionService {
-  private _permissions?: Permission[] | null;
+  private _permissions: Permission[] | null = null;
   private userPermissionEndpoint = `/permissions/user/`;
   private subscriptionEndpoint = `/billing/subscription/list/`;
 
@@ -52,7 +52,7 @@ export class CheckPermissionService {
   }
 
   get permissions() {
-    return this._permissions || [];
+    return this._permissions;
   }
 
   set permissions(permissions: Permission[] | null) {
@@ -82,6 +82,7 @@ export class CheckPermissionService {
 
     return forkJoin([permissions, page]).pipe(
       mergeMap((data: [Permission[], PageData]) => {
+        console.log(data);
         if (!this.navigationService.parsedByPermissions) {
           this.parseNavigation(data[0], list);
         }
@@ -194,7 +195,7 @@ export class CheckPermissionService {
     );
   }
 
-  private filterPermissions(array: Permission[] | null): Permission[] | undefined {
+  private filterPermissions(array: Permission[] | null): Permission[] | null {
     if (array) {
       const keys: Record<number, boolean> = {};
       const result: Permission[] = [];
@@ -209,6 +210,6 @@ export class CheckPermissionService {
       return result;
     }
 
-    return;
+    return null;
   }
 }
