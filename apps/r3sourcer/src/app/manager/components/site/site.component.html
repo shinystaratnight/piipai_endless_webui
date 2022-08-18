@@ -146,6 +146,10 @@
           </webui-form-builder>
         </div>
 
+        {{!reload &&
+          (pageData.endpoint === '/acceptance-tests/acceptancetests/' &&
+            pageData.pathData.id)}}
+
         <div
           class="form-content"
           *ngIf="
@@ -302,7 +306,7 @@
           ></webui-close-button>
         </div>
       </div>
-      <div class="py-3">
+      <div class="modal-body">
         <webui-generic-form
           [endpoint]="changePasswordEndpoint"
           [edit]="true"
@@ -332,7 +336,7 @@
           ></webui-close-button>
         </div>
       </div>
-      <div class="py-3">
+      <div class="modal-body">
         <webui-generic-form
           endpoint="/core/contacts/forgot_password/"
           [data]="passwordData"

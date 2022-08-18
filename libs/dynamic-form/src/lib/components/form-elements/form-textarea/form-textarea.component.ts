@@ -18,7 +18,7 @@ import { FormatString, getTranslationKey } from '@webui/utilities';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
-  selector: 'webui-form-textarea',
+  selector: 'webui-dynamic-form-textarea',
   templateUrl: 'form-textarea.component.html',
   styleUrls: ['./form-textarea.component.scss'],
 })

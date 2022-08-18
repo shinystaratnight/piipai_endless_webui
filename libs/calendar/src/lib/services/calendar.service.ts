@@ -83,6 +83,7 @@ export class CalendarService {
             availableId: availabilityData ? availabilityData.id : undefined,
             tooltip: this.generateTooltipForMonth(newData),
             isOpen: false,
+            loading: true
           };
         });
       });

@@ -8,7 +8,9 @@
     "start": "nx serve r3sourcer",
     "build": "nx build",
     "test": "nx test",
-    "lint": "nx lint"
+    "lint": "nx lint",
+    "prod": "nx build --prod --configuration=production",
+    "stage": "nx build --prod --configuration=stage"
   },
   "private": true,
   "dependencies": {

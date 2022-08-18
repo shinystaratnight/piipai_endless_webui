@@ -3,7 +3,7 @@ version: 2
 defaults: &defaults
   working_directory: /home/circleci/endless_webui
   docker:
-    - image: circleci/node:16
+    - image: circleci/node:18
 
 jobs:
   dependencies:
@@ -16,7 +16,7 @@ jobs:
           - v1-dependencies-{{ checksum "package.json" }}
           - v1-dependencies-
 
-      - run: yarn install --frozen-lockfile
+      - run: npm install
       - save_cache:
           paths:
             - node_modules
@@ -35,7 +35,7 @@ jobs:
       - attach_workspace:
           at: /home/circleci
 
-      - run: CI=false yarn stage
+      - run: CI=false npm run stage
 
       - persist_to_workspace:
           root: /home/circleci
@@ -50,7 +50,7 @@ jobs:
       - attach_workspace:
           at: /home/circleci
 
-      - run: CI=false yarn prod
+      - run: CI=false npm run prod
 
       - persist_to_workspace:
           root: /home/circleci

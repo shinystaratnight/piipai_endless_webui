@@ -55,7 +55,7 @@ export class SiteComponent implements OnInit, OnDestroy {
 
   public error: any;
 
-  public formMode?: FormMode;
+  public formMode!: FormMode | null;
 
   public saveProcess!: boolean;
   public permissionMethods!: string[];
@@ -135,7 +135,7 @@ export class SiteComponent implements OnInit, OnDestroy {
         this.getPageNavigation(url);
       }, 0);
       if (url.length) {
-        this.formMode = undefined;
+        this.formMode = null;
         this.dashboard = false;
       } else {
         this.dashboard = true;

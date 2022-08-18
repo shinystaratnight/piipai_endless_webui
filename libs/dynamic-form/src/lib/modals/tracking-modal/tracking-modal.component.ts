@@ -21,8 +21,12 @@ export class TrackingModalComponent implements OnInit {
   latitude!: number;
   longitude!: number;
 
+  markerPosition?: { lat: number; lng: number }
+
   markerLatitude?: number;
   markerLongitude?: number;
+
+  timezone!: string;
 
   timeInstance: any;
   isMobile = isMobile;
@@ -30,13 +34,13 @@ export class TrackingModalComponent implements OnInit {
   constructor(private modal: NgbActiveModal) {}
 
   ngOnInit() {
-    const timezone = this.timesheet.time_zone || this.timesheet.timezone;
-    const break_end = Time.parse(this.timesheet.break_ended_at, { timezone });
+    this.timezone = this.timesheet.time_zone || this.timesheet.timezone;
+    const break_end = Time.parse(this.timesheet.break_ended_at, { timezone: this.timezone });
     const break_start = Time.parse(this.timesheet.break_started_at, {
-      timezone,
+      timezone: this.timezone,
     });
-    const end = Time.parse(this.timesheet.shift_ended_at, { timezone });
-    const start = Time.parse(this.timesheet.shift_started_at, { timezone });
+    const end = Time.parse(this.timesheet.shift_ended_at, { timezone: this.timezone });
+    const start = Time.parse(this.timesheet.shift_started_at, { timezone: this.timezone });
 
     this.timePoints = { start, end, break_start, break_end };
     this.jobsite = this.timesheet.jobsite.__str__;
@@ -53,7 +57,7 @@ export class TrackingModalComponent implements OnInit {
     this.longitude = this.path[0].lng;
 
     this.breakPath = this.path.filter((el) => {
-      const time = this.timeInstance(el.log_at);
+      const time = Time.parse(el.log_at, { timezone: this.timezone });
 
       return time.isBefore(break_end) && time.isAfter(break_start);
     });
@@ -69,12 +73,14 @@ export class TrackingModalComponent implements OnInit {
     const item = this.path.find(
       (el) =>
         time.format('hh:mm A') ===
-        this.timeInstance(el.log_at).format('hh:mm A')
+        Time.parse(el.log_at, { timezone: this.timezone }).format('hh:mm A')
     );
 
     if (item) {
-      this.markerLatitude = item.lat;
-      this.markerLongitude = item.lng;
+      this.markerPosition = {
+        lat: item.lat,
+        lng: item.lng
+      }
     }
   }
 

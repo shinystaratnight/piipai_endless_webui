@@ -66,18 +66,21 @@ b {
   }
 }
 
+.row {
+  gap: 1rem;
+}
+
 .time {
-  width: 120px;
-  margin-right: 16px;
+  width: 160px;
 }
 
 .workers {
   width: 120px;
-  margin-right: 16px;
 }
 
 .candidates {
   flex-grow: 1;
+  width: auto;
 }
 
 .available-info {

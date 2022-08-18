@@ -17,6 +17,6 @@ export class EvaluateFieldComponent implements OnInit {
   hovered: any;
 
   ngOnInit() {
-    this.score = parseInt(this.evaluatedScore);
+    this.score = parseInt(this.evaluatedScore) || 0;
   }
 }

@@ -5,26 +5,14 @@
   <webui-close-button class="close ms-2 mt-2" (click)="dismiss()"></webui-close-button>
 </div>
 
-<google-map
-  style="height: 320px">
-  <!-- <agm-marker
-    [latitude]="markerLatitude"
-    [longitude]="markerLongitude">
-  </agm-marker>
-  <agm-polyline strokeColor="#28a3fc">
-    <agm-polyline-point
-      [latitude]="point.lat"
-      [longitude]="point.lng"
-      *ngFor="let point of path; trackBy: trackByTracking">
-    </agm-polyline-point>
-    <ng-container *ngIf="breakPath.length">
-      <agm-polyline-point
-        [latitude]="point.lat"
-        [longitude]="point.lng"
-        *ngFor="let point of breakPath; trackBy: trackByTracking">
-      </agm-polyline-point>
-    </ng-container>
-  </agm-polyline> -->
+<google-map [height]="320">
+  <map-marker
+    *ngIf="markerPosition"
+    [position]="markerPosition">
+  </map-marker>
+  <map-polyline [path]="breakPath"></map-polyline>
+  <map-polyline [path]="path">
+  </map-polyline>
 </google-map>
 
 <div [class.tracking-desctop]="!isMobile()" [class.pt-4]="isMobile()">

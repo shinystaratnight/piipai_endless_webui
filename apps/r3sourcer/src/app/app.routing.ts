@@ -19,25 +19,25 @@ import {
 } from '@webui/core';
 
 export const routes: Routes = [
-  // {
-  //   path: 'myob/oauth2_redirect_uri',
-  //   component: RedirectComponent,
-  // },
-  // {
-  //   path: 'contacts/verify_email',
-  //   component: VerifyEmailComponent,
-  // },
-  // {
-  //   path: 'login-as/:id',
-  //   component: LoginAsComponent,
-  //   canActivate: [NotAuthorizedGuard],
-  // },
-  // {
-  //   path: 'login/:token',
-  //   loadChildren: () =>
-  //     import('./login/login.module').then((m) => m.LoginModule),
-  //   canActivate: [NotAuthorizedGuard],
-  // },
+  {
+    path: 'myob/oauth2_redirect_uri',
+    component: RedirectComponent,
+  },
+  {
+    path: 'contacts/verify_email',
+    component: VerifyEmailComponent,
+  },
+  {
+    path: 'login-as/:id',
+    component: LoginAsComponent,
+    canActivate: [NotAuthorizedGuard],
+  },
+  {
+    path: 'login/:token',
+    loadChildren: () =>
+      import('./login/login.module').then((m) => m.LoginModule),
+    canActivate: [NotAuthorizedGuard],
+  },
   {
     path: 'login',
     loadChildren: () =>
@@ -81,9 +81,9 @@ export const routes: Routes = [
     canLoad: [AuthGuard, ManagerGuard],
     canActivate: [AuthGuard, ManagerGuard],
   },
-  // {
-  //   path: '**',
-  //   pathMatch: 'full',
-  //   redirectTo: 'mn',
-  // },
+  {
+    path: '**',
+    pathMatch: 'full',
+    redirectTo: 'login',
+  },
 ];
