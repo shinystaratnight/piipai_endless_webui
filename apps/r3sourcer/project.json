@@ -75,7 +75,7 @@
           "fileReplacements": [
             {
               "replace": "apps/r3sourcer/src/environments/environment.ts",
-              "with": "apps/r3sourcer/src/environments/environment.prod.ts"
+              "with": "apps/r3sourcer/src/environments/environment.stage.ts"
             }
           ],
           "outputHashing": "all"
