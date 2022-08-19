@@ -91,11 +91,11 @@ sup {
     position: relative;
     margin-top: -35px;
     /* margin-left: 278px; */
-    background-color: #eef6ff;
+    background-color: transparent;
     padding: 7px 8px 6px 16px;
     text-align: center;
     vertical-align: middle;
-    border: 1px solid #d3deea;
+    border: none;
     border-left: 0px !important;
     z-index: 99999;
     right: -88%;
@@ -125,14 +125,14 @@ sup {
 }
 .user-registration .input_type_gender {
     float: right;
-    margin-top: -70px;
+    margin-top: -88px;
 }
 .user-registration .input_type_postal_code {
     /* float:right;
     margin-top: -79px;   */
     position: relative;
     left: 574px;
-    top: -78px;
+    top: -87px;
 }
 .user-registration .input_type_postal_code input {
     width: 84px !important;
