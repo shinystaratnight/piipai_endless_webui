@@ -17,19 +17,20 @@ import { WidgetService } from './services/widget.service';
 import { UserService } from '@webui/core';
 
 import { WidgetItem } from './components';
+import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
-  selector: 'app-dashboard',
+  selector: 'webui-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit {
-  userWidgets: UserWidget[];
-  widgets: Widget[];
-  widgetList: WidgetItem[];
+  userWidgets!: UserWidget[];
+  widgets!: Widget[];
+  widgetList!: WidgetItem[];
 
-  grid: GridElement;
-  dragging: boolean;
+  grid!: GridElement | null;
+  dragging!: boolean;
 
   GridElementType = GridElementType;
 
@@ -43,14 +44,22 @@ export class DashboardComponent implements OnInit {
   }
 
   getColumnWidth(gridElement: GridElement): { [key: string]: any } {
-    const style = {};
+    const style: Record<string, any> = {};
 
     if (gridElement.type === GridElementType.Column && gridElement.id) {
       const elements = gridElement.elements;
 
+      if (!elements) {
+        return style;
+      }
+
       elements.forEach((el: GridElement) => {
         if (el.type === GridElementType.Widget) {
-          const size = el.widget.config.size * 100;
+          if (!el.widget) {
+            return;
+          }
+
+          const size = el.widget.config.size * 100 ;
 
           if (el.widget.config.active) {
             style['flexBasis'] = size + '%';
@@ -73,10 +82,16 @@ export class DashboardComponent implements OnInit {
     if (gridElement.type === GridElementType.Column && gridElement.id) {
       const elements = gridElement.elements;
 
-      return elements.some((el: GridElement) => {
+      if (!elements) {
+        return false;
+      }
+
+      return elements.some((el) => {
         if (el.type === GridElementType.Widget) {
-          return el.widget.config.active;
+          return el.widget?.config.active;
         }
+
+        return false;
       });
     }
 
@@ -85,7 +100,7 @@ export class DashboardComponent implements OnInit {
 
   isMove(gridElement: GridElement): boolean {
     if (gridElement.type === GridElementType.Widget) {
-      return gridElement.widget.move;
+      return gridElement.widget?.move || false;
     }
 
     return false;
@@ -108,7 +123,7 @@ export class DashboardComponent implements OnInit {
     ];
   }
 
-  toggleActions(tooltip, widget) {
+  toggleActions(tooltip: NgbTooltip, widget: any) {
     widget.tooltip = !widget.tooltip;
 
     if (widget.tooltip) {
@@ -118,13 +133,13 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-  moveWidget(tooltip, widget: UserWidget) {
+  moveWidget(tooltip: NgbTooltip, widget: UserWidget) {
     tooltip.close();
     widget.tooltip = false;
     widget.move = !widget.move;
   }
 
-  removeWidget(tooltip, widget: UserWidget) {
+  removeWidget(tooltip: NgbTooltip, widget: UserWidget) {
     tooltip.close();
     widget.tooltip = false;
 
@@ -138,9 +153,14 @@ export class DashboardComponent implements OnInit {
   }
 
   addWidget(widget: Widget) {
-    const contactId = this.userService.user.data.contact.contact_id;
+    const contactId = this.userService.user?.data.contact.contact_id;
+
+    if (!contactId) {
+      return;
+    }
+
     const config = {
-      coords: this.grid.elements.length.toString(),
+      coords: this.grid?.elements?.length.toString(),
       size: this.widgetService.getSizes(widget.type),
       active: true
     };
@@ -206,7 +226,9 @@ export class DashboardComponent implements OnInit {
     } else {
       const widget = this.widgets.find((el) => el.id === target.widgetId);
 
-      this.addWidget(widget);
+      if (widget) {
+        this.addWidget(widget);
+      }
     }
   }
 
@@ -214,21 +236,24 @@ export class DashboardComponent implements OnInit {
     this.widgetList = this.widgets.map((widget) => {
       const { name, id } = widget;
       const userWidget = this.userWidgets.find((el) => el.widgetId === id);
-      const active =
-        userWidget && userWidget.config ? userWidget.config.active : false;
+      const active = userWidget?.config ? userWidget.config.active : false;
 
       return {
         widgetId: id,
         name,
-        id: userWidget ? userWidget.id : null,
+        id: userWidget?.id || null,
         active,
-        translateKey: `widget.${name.toLowerCase()}`
+        translateKey: `widget.${name?.toLowerCase()}`
       };
     });
   }
 
   private initializeDashboard() {
-    this.widgetService.getWidgets().subscribe((widgets: Widget[]) => {
+    this.widgetService.getWidgets().subscribe((widgets) => {
+      if (!widgets.length) {
+        return;
+      }
+
       this.widgets = widgets;
 
       this.widgetService
@@ -254,10 +279,19 @@ export class DashboardComponent implements OnInit {
     const types = Object.values(Type);
     const availableWidgets = widgets.filter((el) => types.includes(el.type));
 
-    availableWidgets.sort((p, n) =>
-      p.config.coords > n.config.coords ? 1 : -1
-    );
+    availableWidgets.sort(this.compareCoords);
 
     return this.widgetService.generateGrid(availableWidgets);
+  }
+
+  private compareCoords(prev: UserWidget, next: UserWidget) {
+    const prevCoords = prev.config.coords;
+    const nextCoords = next.config.coords;
+
+    if (prevCoords && nextCoords) {
+      return prevCoords > nextCoords ? 1 : -1
+    }
+
+    return 1;
   }
 }

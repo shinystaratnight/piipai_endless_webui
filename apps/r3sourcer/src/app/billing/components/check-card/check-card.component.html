@@ -10,14 +10,14 @@
     <button class="btn btn-primary" (click)="showCardForm()">Add new CC</button>
   </div>
 
-  <form (submit)="checkCard($event)" class="mr-3" [hidden]="cardExist && !newCard">
-    <div class="form-row flex-grow-1 mr-3" [class.submited]="saving">
+  <form (submit)="checkCard($event)" class="me-3" [hidden]="cardExist && !newCard">
+    <div class="form-row flex-grow-1 me-3" [class.submited]="saving">
       <div id="card-element"></div>
       <div id="card-errors" role="alert">{{error}}</div>
     </div>
 
     <button class="btn btn-primary align-self-start mt-1">Save</button>
-    <button *ngIf="cardExist" class="btn btn-default align-self-start mt-1 ml-2" (click)="newCard = false">Cancel</button>
+    <button *ngIf="cardExist" class="btn btn-default align-self-start mt-1 ms-2" (click)="newCard = false">Cancel</button>
   </form>
 
 </div>

@@ -6,6 +6,7 @@ import { catchError } from 'rxjs/operators';
 
 import { CompanyPurposeService, ErrorsService, SiteSettingsService } from '@webui/core';
 import { getPropValue, FormatString } from '@webui/utilities';
+import { Purpose } from '@webui/data';
 
 @Injectable()
 export class ListService {
@@ -15,11 +16,11 @@ export class ListService {
 
   changes = new Map();
 
-  updateActions: Function[];
-  updateButtons: Map<string, BehaviorSubject<boolean | string>>;
+  updateActions!: ((data: any, options: { purpose?: Purpose }) => any)[];
+  updateButtons!: Map<string, BehaviorSubject<boolean | string>>;
 
   config: any;
-  data: any[];
+  data!: any[];
 
   get update$(): Observable<any> {
     return this._updateList.asObservable();
@@ -41,7 +42,7 @@ export class ListService {
   }
 
   saveChanges() {
-    const ids = [];
+    const ids: string[] = [];
     const { required } = this.config.update;
 
     this.changes.forEach((val, key, map) => {
@@ -55,7 +56,7 @@ export class ListService {
 
       this.saveObject(id, last);
       const button = this.updateButtons.get(id);
-      button.next('Please wait');
+      button?.next('Please wait');
     });
   }
 
@@ -68,11 +69,11 @@ export class ListService {
       this.send(id, last);
     } else if (create) {
       const endpoint = create.endpoint;
-      const body = {};
+      const body: Record<string, any> = {};
 
       Object.keys(create.fields).forEach((key: string) => {
         if (create.fields[key] === 'currentCompany') {
-          body[key] = this.settingsService.settings.company_settings.company;
+          body[key] = this.settingsService.settings['company_settings'].company;
         } else if (typeof create.fields[key] === 'string') {
           body[key] = getPropValue(data, create.fields[key]);
         } else {
@@ -82,7 +83,7 @@ export class ListService {
 
       this.post(endpoint, body)
         .subscribe((res: any) => {
-          const additionalData = {};
+          const additionalData: Record<string, any> = {};
           Object.keys(create.addFields).forEach((key) => {
             additionalData[key] = getPropValue(res, create.addFields[key]);
           });
@@ -96,7 +97,7 @@ export class ListService {
   send(id: string, updateList: boolean) {
     const data = this.getRowData(id);
     const { update } = this.config;
-    const method = update.method;
+    const method: keyof ListService = update.method;
     const changes = this.changes.get(id);
     const endpoint = FormatString.format(update.endpoint, data);
 
@@ -124,7 +125,7 @@ export class ListService {
     }
 
     if (update.fields) {
-      update.fields.forEach((field) => {
+      update.fields.forEach((field: string) => {
         data[field] = getPropValue(this.getChanges(id), field) || getPropValue(rowData, field);
       });
     }
@@ -145,10 +146,10 @@ export class ListService {
     const { required, requiredMessage } = this.config.update;
     const value = this.checkRequiredFields(id, required);
 
-    button.next(value || requiredMessage);
+    button?.next(value || requiredMessage);
   }
 
-  private checkRequiredFields(id: string, required: string | string[]): boolean {
+  private checkRequiredFields(id: string, required: string | string[]): boolean | undefined {
     let value;
 
     if (required) {

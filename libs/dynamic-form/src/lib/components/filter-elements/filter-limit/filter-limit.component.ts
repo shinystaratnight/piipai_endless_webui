@@ -11,19 +11,19 @@ import { Subscription } from 'rxjs';
 import { FilterService } from '../../../services';
 
 @Component({
-  selector: 'app-filter-limit',
+  selector: 'webui-filter-limit',
   templateUrl: 'filter-limit.component.html',
   styleUrls: ['./filter-limit.component.scss']
 })
 export class FilterLimitComponent implements OnInit, OnDestroy {
   public config: any;
-  public event: EventEmitter<any>;
+  public event!: EventEmitter<any>;
 
-  public query: string;
-  public inputs: any[];
+  public query!: string;
+  public inputs!: any[];
 
-  private filterSubscription: Subscription;
-  private querySubscription: Subscription;
+  private filterSubscription!: Subscription;
+  private querySubscription!: Subscription;
 
   constructor(
     private fs: FilterService,
@@ -109,13 +109,13 @@ export class FilterLimitComponent implements OnInit, OnDestroy {
   }
 
   private createInputs() {
-    this.inputs = this.config.input.map((input) => {
+    this.inputs = this.config.input.map((input: any) => {
       return Object.assign({}, input, { data: null });
     });
   }
 
   private parseQueryString(query: string): any {
-    const queryObject = {};
+    const queryObject: Record<string, any> = {};
 
     query.split('&').forEach((param) => {
       const paramArray = param.split('=');

@@ -1,5 +1,5 @@
 import { createFilter, Type, currency } from '@webui/metadata';
-import { Endpoints } from '@webui/data';
+import { Endpoints } from '@webui/models';
 
 const filters = {
   recruitmentAgent: createFilter(Type.Relared, {

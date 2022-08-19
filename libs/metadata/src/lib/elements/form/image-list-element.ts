@@ -5,11 +5,10 @@ import {
 
 export const ImageList = 'image_list';
 
-export interface ImageListElementTemplateOptions
-  extends BasicElementTemplateOptions {}
+export type ImageListElementTemplateOptions = BasicElementTemplateOptions;
 
 export class ImageListElement extends BasicFormElement {
-  templateOptions: ImageListElementTemplateOptions;
+  override templateOptions!: ImageListElementTemplateOptions;
 
   constructor(key: string, label: string) {
     super(key, label, ImageList);

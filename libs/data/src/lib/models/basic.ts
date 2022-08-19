@@ -32,11 +32,11 @@ export class Basic implements IBasic {
     this.updated_at = config.updated_at;
   }
 
-  public getPartialValue<T>(props: Array<keyof T>): Partial<T> {
-    const result = {};
+  public getPartialValue<T>(props: Array<keyof T>): Record<keyof Basic, any> {
+    const result: Record<keyof Basic, any> = {} as Record<keyof Basic, any>;
 
     props.forEach((prop) => {
-      const key = prop.toString();
+      const key = prop.toString() as keyof Basic;
 
       result[key] = this[key];
     });

@@ -22,21 +22,21 @@
             </button>
           </div>
 
-          <app-dynamic-form
+          <webui-dynamic-form
             #question
             [hiddenFields]="question.hiddenFields"
             [config]="question.config"
             (submitForm)="saveQuestion($event, index, question.id)"
           >
-          </app-dynamic-form>
+          </webui-dynamic-form>
 
           <div class="images" *ngIf="question.id">
-            <app-image-uploader
+            <webui-image-uploader
               [loading]="pictureLoading.get(question.id)"
               [source]="pictures.get(question.id)"
               (remove)="onRemovePicture($event, question.id)"
               (images)="onUpload($event, question.id)"
-            ></app-image-uploader>
+            ></webui-image-uploader>
           </div>
 
           <div
@@ -47,24 +47,27 @@
               class="test__answer"
               *ngFor="let answer of answers[question.id]; let index = index"
             >
-              <div class="test__actions">
-                <fa-icon
-                  icon="trash"
-                  class="text-danger hov-opacity"
-                  (click)="deleteAnswer(getId(answer), answers[question.id], index)"
-                ></fa-icon>
-                <fa-icon
-                  *ngIf="getId(answer)"
-                  icon="pencil-alt"
-                  class="text-warning hov-opacity ml-2"
-                  (click)="editAnswer(answer)"
-                ></fa-icon>
+              <div class="test__actions flex gap-2">
+                <button type="button" class="btn" (click)="deleteAnswer(getId(answer), answers[question.id], index)">
+                  <fa-icon
+                    icon="trash"
+                    class="text-danger hov-opacity"
+                  ></fa-icon>
+                </button>
+
+                <button type="button" class="btn" (click)="editAnswer(answer)">
+                  <fa-icon
+                    *ngIf="getId(answer)"
+                    icon="pencil-alt"
+                    class="text-warning hov-opacity"
+                  ></fa-icon>
+                </button>
               </div>
 
-              <app-dynamic-form
+              <webui-dynamic-form
                 [config]="answer"
-                (submitForm)="saveAnswer($event, index, question.id, getId(answer))"
-              ></app-dynamic-form>
+                (submitForm)="saveAnswer($event, index, question.id, !!getId(answer))"
+              ></webui-dynamic-form>
             </div>
 
             <button
@@ -81,7 +84,7 @@
     </div>
 
     <button
-      class="btn btn-secondary mr-2"
+      class="btn btn-secondary me-2"
       *ngIf="testData"
       type="button"
       (click)="addQuestion(true)"

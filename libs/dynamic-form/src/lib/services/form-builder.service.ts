@@ -33,7 +33,7 @@ export class FormBuilderService {
       );
   }
 
-  public parseAddress(data) {
+  public parseAddress(data: any) {
     return this.http
       .post(this.parseAddressEndpoint, data)
       .pipe(
@@ -41,7 +41,7 @@ export class FormBuilderService {
       );
   }
 
-  public validate(key, value) {
+  public validate(key: string, value: any) {
     return this.http
       .get(this.contactEndpoint + `?${key}=${value}`)
       .pipe(

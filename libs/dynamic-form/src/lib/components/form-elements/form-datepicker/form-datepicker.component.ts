@@ -29,6 +29,7 @@ import {
   TIME_FORMAT,
 } from '@webui/time';
 import { Moment } from '@webui/time';
+import { FormMode } from '../../../services';
 
 enum DateType {
   Date = 'date',
@@ -37,7 +38,7 @@ enum DateType {
 }
 
 @Component({
-  selector: 'app-form-datepicker',
+  selector: 'webui-form-datepicker',
   templateUrl: './form-datepicker.component.html',
   styleUrls: ['./form-datepicker.component.scss'],
 })
@@ -45,44 +46,44 @@ export class FormDatepickerComponent
   extends BasicElementComponent
   implements OnInit, AfterViewInit, OnDestroy
 {
-  @ViewChild('d') public d: ElementRef;
-  @ViewChild('t') public t: ElementRef;
+  @ViewChild('d') public d!: ElementRef;
+  @ViewChild('t') public t!: ElementRef;
 
   @HostBinding('class.mobile-device') mobile = isMobile();
 
-  public config;
-  public group: FormGroup;
+  public override config: any;
+  public override group!: FormGroup;
   public errors: any;
   public message: any;
-  public key: any;
+  public override key: any;
 
-  public model = {
-    date: null,
+  public model: Record<'date' | 'time', string> = {
+    date:  '',
     time: '',
   };
 
-  public label: boolean;
-  public init: boolean;
+  public label!: boolean;
+  public init!: boolean;
   public mobileDevice = isMobile();
-  public displayValue: string;
+  public displayValue!: string | null;
   public formData: any;
   public placement: any;
-  public maxDate: Date;
+  public maxDate!: Date;
 
-  public opened: ElementRef;
-  public update: Subject<any> = new Subject();
+  public opened!: ElementRef | null;
+  public update: Subject<void> = new Subject();
 
-  public timezone: string;
+  public timezone!: string;
   public formats = {
     date: DATE_FORMAT,
     datetime: DATE_TIME_FORMAT,
     time: TIME_FORMAT,
   };
 
-  public viewMode: boolean;
+  public viewMode!: boolean;
   public editMode = true;
 
-  public currentField: boolean;
+  public currentField!: boolean;
   locale = 'en-gb';
   getTranslationKey = getTranslationKey;
 
@@ -195,7 +196,7 @@ export class FormDatepickerComponent
   public removeDate(date: string): void {
     if (this.config.many) {
       const prevValue = this.formControl.value;
-      const newValue = prevValue.filter((item) => item !== date);
+      const newValue = prevValue.filter((item: any) => item !== date);
 
       this.formControl.patchValue(newValue.length ? newValue : null);
     }
@@ -207,7 +208,7 @@ export class FormDatepickerComponent
     }, 100);
   }
 
-  private checkOnCustomDatepicker(config) {
+  private checkOnCustomDatepicker(config: any) {
     const { value, customDatepicker, time_zone } = config;
 
     if (customDatepicker) {
@@ -226,7 +227,7 @@ export class FormDatepickerComponent
   }
 
   private subscribeOnChanges(): Subscription {
-    return this.group.get(this.key).valueChanges.subscribe((val) => {
+    return (this.group.get(this.key) as FormControl).valueChanges.subscribe((val) => {
       if (!val) {
         setTimeout(() => {
           this.event.emit({
@@ -240,11 +241,11 @@ export class FormDatepickerComponent
 
   private checkHiddenProperty() {
     if (this.config && this.config.hidden) {
-      const subscription = this.config.hidden.subscribe((hide) => {
+      const subscription = this.config.hidden.subscribe((hide: boolean) => {
         if (hide && !this.config.hide) {
           this.config.hide = hide;
-          if (this.group.get(this.key).value) {
-            this.group.get(this.key).patchValue(undefined);
+          if (this.group.get(this.key)?.value) {
+            this.group.get(this.key)?.patchValue(undefined);
           }
           this.setInitValue();
         } else {
@@ -262,13 +263,13 @@ export class FormDatepickerComponent
 
   private checkModeProperty() {
     if (this.config && this.config.mode) {
-      const subscription = this.config.mode.subscribe((mode) => {
+      const subscription = this.config.mode.subscribe((mode: FormMode) => {
         if (mode === 'view') {
           this.viewMode = true;
           this.editMode = false;
           this.model = { date: '', time: '' };
 
-          this.group.get(this.key).patchValue(undefined);
+          this.group.get(this.key)?.patchValue(undefined);
         } else {
           this.viewMode = this.config.read_only || false;
           this.editMode = true;
@@ -282,7 +283,7 @@ export class FormDatepickerComponent
 
   private checkFormData() {
     if (this.config.formData) {
-      const subscription = this.config.formData.subscribe((data) => {
+      const subscription = this.config.formData.subscribe((data: any) => {
         if (
           data.key !== this.config.key &&
           this.config.default &&
@@ -330,7 +331,7 @@ export class FormDatepickerComponent
     }
   }
 
-  private setDisplayValue(type: DateType, value?: Moment) {
+  private setDisplayValue(type: DateType, value?: Moment | null) {
     if (!value) {
       this.displayValue = null;
       return;
@@ -355,16 +356,16 @@ export class FormDatepickerComponent
   }
 
   private clearForm() {
-    this.model.date = null;
+    this.model.date = '';
     this.model.time = '';
-    this.group.get(this.key).patchValue(null);
+    this.group.get(this.key)?.patchValue(null);
   }
 
   private setInitValue() {
     const { shouldUpdate, updateFromForm } = this.config;
     const { type } = this.config.templateOptions;
     const initValue = this.config.value;
-    const formValue = this.group.get(this.key).value;
+    const formValue = this.group.get(this.key)?.value;
     const defaultValue = this.config.default;
 
     let value = updateFromForm
@@ -377,7 +378,7 @@ export class FormDatepickerComponent
         : defaultValue;
     }
 
-    if (value === this.group.get(this.key).value && !shouldUpdate) {
+    if (value === this.group.get(this.key)?.value && !shouldUpdate) {
       return;
     }
 
@@ -422,13 +423,13 @@ export class FormDatepickerComponent
 
       this.formControl.patchValue([...prevValue, data]);
     } else {
-      this.group.get(this.key).patchValue(data);
+      this.group.get(this.key)?.patchValue(data);
     }
 
     this.emitChanges();
   }
 
-  private getValue(type: DateType): Moment | null {
+  private getValue(type: DateType): Moment | undefined {
     if (this.mobileDevice) {
       const { date, time } = this.model;
 
@@ -453,8 +454,8 @@ export class FormDatepickerComponent
     type: DateType,
     date: { value: string; format: string },
     time: { value: string; format: string }
-  ): Moment {
-    let result;
+  ): Moment | undefined {
+    let result: Moment | undefined;
 
     switch (type) {
       case DateType.Date: {
@@ -463,13 +464,13 @@ export class FormDatepickerComponent
               timezone: this.timezone,
               format: date.format,
             })
-          : null;
+          : undefined;
         break;
       }
 
       case DateType.Datetime: {
         if (!date.value) {
-          result = null;
+          result = undefined;
         } else if (!time.value) {
           result = Time.parse(date.value, {
             timezone: this.timezone,
@@ -490,7 +491,7 @@ export class FormDatepickerComponent
               timezone: this.timezone,
               format: time.format,
             })
-          : null;
+          : undefined;
         break;
       }
     }
@@ -502,7 +503,7 @@ export class FormDatepickerComponent
     this.event.emit({
       el: this.config,
       type: 'change',
-      value: this.group.get(this.key).value,
+      value: this.group.get(this.key)?.value,
     });
   }
 

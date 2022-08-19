@@ -10,7 +10,7 @@ type TextareaTemplateOptions = {
 };
 
 export class TextareaElement extends BasicFormElement {
-  templateOptions: BasicElementTemplateOptions & TextareaTemplateOptions;
+  override templateOptions!: BasicElementTemplateOptions & TextareaTemplateOptions;
 
   constructor(key: string, label: string) {
     super(key, label, Textarea);

@@ -1,5 +1,5 @@
-import { Endpoints } from "@webui/data";
 import { Form } from "@webui/metadata";
+import { Endpoints } from "@webui/models";
 
 export const paymentMetadata = [
   new Form.list.element('Payments', Endpoints.Payments, 'payments')

@@ -1,13 +1,13 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageType, ToastService, UserService } from '@webui/core';
-import { Endpoints } from '@webui/data';
 import { GenericFormService } from '@webui/dynamic-form';
+import { Endpoints } from '@webui/models';
 import { of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-consent',
+  selector: 'webui-consent',
   templateUrl: './consent.component.html',
   styleUrls: ['./consent.component.scss']
 })

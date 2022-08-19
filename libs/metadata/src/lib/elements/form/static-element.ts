@@ -15,7 +15,7 @@ export interface StaticElementTemplateOptions extends BasicElementTemplateOption
 
 export class StaticElement extends BasicFormElement {
 
-  templateOptions: StaticElementTemplateOptions;
+  override templateOptions!: StaticElementTemplateOptions;
 
   constructor(key: string, label: string, type?: StaticType) {
     super(key, label, Static);

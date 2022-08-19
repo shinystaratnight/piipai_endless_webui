@@ -3,7 +3,7 @@ export const Tabs = 'tabs';
 export class TabsElement {
   type = Tabs;
 
-  children: any[];
+  children!: any[];
 
   hideEditButton?: boolean;
 

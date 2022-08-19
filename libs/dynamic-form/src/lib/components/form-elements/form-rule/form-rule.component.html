@@ -2,7 +2,7 @@
   <label *ngIf="label && config.templateOptions.label">{{config.templateOptions.label}}</label>
 
   <div class="card">
-    <app-dynamic-form [config]="config.activeMetadata" (event)="changeActiveStates($event)"></app-dynamic-form>
+    <webui-dynamic-form [config]="config.activeMetadata" (event)="changeActiveStates($event)"></webui-dynamic-form>
 
     <div class="form-element">
       <label class="form-element-label">
@@ -48,7 +48,7 @@
       <div *ngSwitchCase="'state'">
         <div class="form-group mt-2">
           <label for="state">State</label>
-          <select class="form-control custom-select"
+          <select class="form-control form-select"
             (focus)="generateArray('options')"
             [(ngModel)]="elementValue">
             <option *ngFor="let el of statesArray" [value]="el.name_before_activation">{{el.name_before_activation}}</option>
@@ -59,7 +59,7 @@
       <div *ngSwitchCase="'function'">
         <div class="form-group mt-2">
           <label for="app">App</label>
-          <select class="form-control custom-select" id="app"
+          <select class="form-control form-select" id="app"
             (focus)="generateArray('app')"
             (change)="getRelatedData('model')"
             [(ngModel)]="app">
@@ -68,7 +68,7 @@
 
           <div *ngIf="this.config.model">
             <label for="model" class="mt-2">Model</label>
-            <select class="form-control custom-select" id="model"
+            <select class="form-control form-select" id="model"
               (focus)="generateArray('model')"
               (change)="getRelatedData('function')"
               [(ngModel)]="model">
@@ -78,7 +78,7 @@
 
           <div *ngIf="this.config.function">
             <label for="function" class="mt-2">Function</label>
-            <select class="form-control custom-select"
+            <select class="form-control form-select"
               (focus)="generateArray('function')"
               [(ngModel)]="elementValue">
               <option *ngFor="let el of functionsArray" [value]="el">{{el}}</option>
@@ -112,7 +112,7 @@
         </ng-container>
 
         <span *ngIf="!last" class="btn-group-sm mx-1">
-          <a href="" class="operator mr-1" [(ngModel)]="data.operator" btnRadio="or" (click)="changeOperator($event, type)">or</a>
+          <a href="" class="operator me-1" [(ngModel)]="data.operator" btnRadio="or" (click)="changeOperator($event, type)">or</a>
           <a href="" class="operator" [(ngModel)]="data.operator" btnRadio="and" (click)="changeOperator($event, type)">and</a>
         </span>
       </span>
@@ -121,9 +121,9 @@
   </span>
 
   <span class="buttons" [class.hide]="data && data.data.length">
-    <button *ngIf="type === 'state'" type="button" class="btn btn-sm btn-link p-0 ml-2" (click)="open(element, type, data.data, index, data, parent)">+ State</button>
-    <button *ngIf="type === 'function'" type="button" class="btn btn-sm btn-link p-0 ml-2" (click)="open(element, type, data.data, index, data, parent)">+ Function</button>
-    <button type="button" class="btn btn-sm btn-link p-0 ml-1" (click)="addRule(data.data)">+ Rule</button>
+    <button *ngIf="type === 'state'" type="button" class="btn btn-sm btn-link p-0 ms-2" (click)="open(element, type, data.data, undefined, data, parent)">+ State</button>
+    <button *ngIf="type === 'function'" type="button" class="btn btn-sm btn-link p-0 ms-2" (click)="open(element, type, data.data, undefined, data, parent)">+ Function</button>
+    <button type="button" class="btn btn-sm btn-link p-0 ms-1" (click)="addRule(data.data)">+ Rule</button>
   </span>
 
 </ng-template>

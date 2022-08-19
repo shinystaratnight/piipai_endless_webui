@@ -11,27 +11,27 @@ import {
 } from '@angular/core';
 
 import {
-  ButtonsWidget,
+  ButtonsWidgetComponent,
   CalendarWidgetComponent,
-  CandidateWidget
+  CandidateWidgetComponent
 } from '../components';
 import { Type } from '../interfaces';
 
 const components = {
-  [Type.Buttons]: ButtonsWidget,
+  [Type.Buttons]: ButtonsWidgetComponent,
   [Type.Calendar]: CalendarWidgetComponent,
-  [Type.Candidates]: CandidateWidget
+  [Type.Candidates]: CandidateWidgetComponent
 };
 
 @Directive({
-  selector: '[appWidget]'
+  selector: '[webuiWidget]'
 })
 export class WidgetDirective implements OnInit, OnChanges {
-  @Input() public config;
+  @Input() public config!: any;
 
   @Output() public event: EventEmitter<any> = new EventEmitter();
 
-  public component: ComponentRef<any>;
+  public component!: ComponentRef<any>;
 
   constructor(
     private resolver: ComponentFactoryResolver,
@@ -46,7 +46,7 @@ export class WidgetDirective implements OnInit, OnChanges {
   }
 
   public ngOnInit() {
-    const component = components[this.config.type];
+    const component = components[this.config.type as Type];
     const factory = this.resolver.resolveComponentFactory<any>(component);
     this.component = this.container.createComponent(factory);
     this.component.instance.config = this.config;

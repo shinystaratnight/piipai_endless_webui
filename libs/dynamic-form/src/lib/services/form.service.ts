@@ -22,7 +22,7 @@ export class FormService {
     this.forms = {};
   }
 
-  public registerForm(endpoint: string, mode: string) {
+  public registerForm(endpoint: string, mode: FormMode) {
     const allowMethods = this.permissionService.getAllowMethods(undefined, endpoint);
     const form = new Form(endpoint, mode, allowMethods);
 
@@ -35,7 +35,7 @@ export class FormService {
     delete this.forms[endpoint];
   }
 
-  public changeModeOfForm(formId: number, mode: string) {
+  public changeModeOfForm(formId: number, mode: FormMode) {
     const form = this.getForm(formId);
 
     form.changeMode(mode);
@@ -57,7 +57,7 @@ export class FormService {
     form.hideEditButton = true;
   }
 
-  public disableSaveButton(formId: number, disbable?: boolean) {
+  public disableSaveButton(formId: number, disbable: boolean = false) {
     // TODO: remove if statement
     if (formId) {
       const form = this.getForm(formId);

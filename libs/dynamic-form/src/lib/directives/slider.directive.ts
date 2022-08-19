@@ -10,18 +10,18 @@ import {
 } from '@angular/core';
 
 @Directive({
-  selector: '[appSlider]'
+  selector: '[webuiSlider]'
 })
 export class SliderDirective implements AfterViewChecked {
   public offset = 0;
 
   public eventListener = this.changePosition.bind(this);
-  public move: boolean;
+  public move!: boolean;
   public minusWidth = 23;
   public width = 0;
 
   @Input()
-  public parentElement: HTMLElement;
+  public parentElement!: HTMLElement;
 
   @Output()
   public position: EventEmitter<number> = new EventEmitter();
@@ -38,7 +38,7 @@ export class SliderDirective implements AfterViewChecked {
 
   @HostListener('mousedown', ['$event.target'])
   @HostListener('touchstart', ['$event.target'])
-  public handleStarMove(target) {
+  public handleStarMove() {
     this.move = true;
   }
 
@@ -50,9 +50,9 @@ export class SliderDirective implements AfterViewChecked {
 
   @HostListener('document:mousemove', ['$event'])
   @HostListener('document:touchmove', ['$event'])
-  public changePosition(e) {
+  public changePosition(e: MouseEvent | TouchEvent) {
     if (this.move) {
-      const offset = e.clientX || e.targetTouches[0].clientX;
+      const offset = (e as MouseEvent).clientX || (e as TouchEvent).targetTouches[0].clientX;
 
       if (!this.offset) {
         this.offset = offset;

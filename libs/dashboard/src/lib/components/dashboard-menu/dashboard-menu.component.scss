@@ -1,6 +1,5 @@
+@use 'variables' as *;
 @use 'sass:math';
-@import '../../../../../../styles/variables';
-
 $text-color: rgba($gray, .8);
 $shadow: 0 0 5px rgba($gray, 0.3);
 

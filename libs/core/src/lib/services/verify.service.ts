@@ -13,7 +13,7 @@ export class VerifyService {
     private http: HttpClient
   ) {}
 
-  public verifyEmail(endpoint) {
+  public verifyEmail(endpoint: string) {
     return this.http
       .get(endpoint)
       .pipe(

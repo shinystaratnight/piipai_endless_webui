@@ -16,7 +16,7 @@ import { SharedModule } from '../../shared/shared.module';
 
 describe('GenericFormService', () => {
 
-  const url: string = `/login/`;
+  const url = `/login/`;
 
   beforeEach(() => {
     TestBed.configureTestingModule({

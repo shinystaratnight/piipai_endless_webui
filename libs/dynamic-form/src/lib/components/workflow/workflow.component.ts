@@ -9,40 +9,40 @@ import { config, workflowEl } from './workflow.config';
 import { getElementFromMetadata } from '../../helpers';
 
 @Component({
-  selector: 'app-workflow',
+  selector: 'webui-workflow',
   templateUrl: './workflow.component.html',
   styleUrls: ['./workflow.component.scss'],
 })
 export class WorkflowComponent implements OnInit, OnDestroy {
-  public currentWorkflowNodes: any[];
+  public currentWorkflowNodes!: any[];
 
-  public modalRef: NgbModalRef;
+  public modalRef!: NgbModalRef;
 
   public modalInfo: any;
   public editModalInfo: any;
 
-  public saveProcess: boolean;
+  public saveProcess!: boolean;
 
-  public workflowId: string;
-  public parentId: string;
+  public workflowId!: string;
+  public parentId?: string;
 
   public subStates: any;
   public acceptanceTests: any;
 
-  public addConfig: any[];
-  public config: any[];
+  public addConfig!: any[];
+  public config!: any[];
 
   public form: FormGroup = new FormGroup({});
-  public formSubscription: Subscription;
+  public formSubscription!: Subscription;
 
-  @Input() public company: string;
-  @Input() public advanced: boolean;
+  @Input() public company!: string;
+  @Input() public advanced!: boolean;
   @Output() public changeSaving: EventEmitter<any> = new EventEmitter();
 
-  @ViewChild('modal') public modal: TemplateRef<any>;
-  @ViewChild('add') public addModal: TemplateRef<any>;
-  @ViewChild('edit') public editModal: TemplateRef<any>;
-  @ViewChild('tests') public testModal: TemplateRef<any>;
+  @ViewChild('modal') public modal!: TemplateRef<any>;
+  @ViewChild('add') public addModal!: TemplateRef<any>;
+  @ViewChild('edit') public editModal!: TemplateRef<any>;
+  @ViewChild('tests') public testModal!: TemplateRef<any>;
 
   constructor(private workflowService: WorkflowService, private modalService: NgbModal) {}
 
@@ -77,7 +77,7 @@ export class WorkflowComponent implements OnInit, OnDestroy {
     moveItemInArray(this.currentWorkflowNodes, event.previousIndex, event.currentIndex);
 
     const states = this.currentWorkflowNodes;
-    const requests = [];
+    const requests: any[] = [];
     states.forEach((state, i) => {
       const body = {
         order: i,
@@ -93,7 +93,7 @@ export class WorkflowComponent implements OnInit, OnDestroy {
     this.workflowService.getWorkflowList().subscribe((res: any) => {
       const { results } = res;
       const options = results.length
-        ? results.map((el) => {
+        ? results.map((el: any) => {
             const { id, name } = el;
 
             return {
@@ -105,7 +105,7 @@ export class WorkflowComponent implements OnInit, OnDestroy {
 
       workflowEl.updateTemplate({ options });
       if (this.advanced) {
-        const saving = getElementFromMetadata(config, 'advance_state_saving');
+        const saving: any = getElementFromMetadata(config, 'advance_state_saving');
         saving.value = true;
       }
       this.config = config;
@@ -115,10 +115,14 @@ export class WorkflowComponent implements OnInit, OnDestroy {
   public getNodes(id: string) {
     this.workflowService
       .getNodesOfCompany(id, this.company)
-      .subscribe((res: any) => (this.currentWorkflowNodes = res.results.sort((p, n) => (p.order > n.order ? 1 : -1))));
+      .subscribe((res: any) => (this.currentWorkflowNodes = res.results.sort((p: any, n: any) => (p.order > n.order ? 1 : -1))));
   }
 
-  public getSubstates(workflowId: string, nodeId: string) {
+  public getSubstates(workflowId: string, nodeId?: string) {
+    if (!nodeId) {
+      return;
+    }
+
     this.workflowService
       .getSubStates(workflowId, nodeId)
       .subscribe((res: any) => (this.subStates[nodeId] = res.results));
@@ -130,7 +134,7 @@ export class WorkflowComponent implements OnInit, OnDestroy {
     });
   }
 
-  public addState(e, parent: string) {
+  public addState(e: MouseEvent, parent?: string) {
     e.preventDefault();
     e.stopPropagation();
 
@@ -145,7 +149,7 @@ export class WorkflowComponent implements OnInit, OnDestroy {
     this.modalRef = this.modalService.open(this.addModal, { windowClass: 'visible-mode', backdrop: 'static' });
   }
 
-  public addStateToCompany(data: any, closeModal) {
+  public addStateToCompany(data: any, closeModal: any) {
     closeModal();
     if (data.workflow_node && data.workflow_node.id) {
       data.company = {
@@ -160,7 +164,7 @@ export class WorkflowComponent implements OnInit, OnDestroy {
     }
   }
 
-  public setState(data, parentId?: string) {
+  public setState(data: any, parentId?: string) {
     data.order = this.getNextOrder();
 
     this.workflowService.addWorkflowToCompany(data).subscribe((res) => {
@@ -189,13 +193,13 @@ export class WorkflowComponent implements OnInit, OnDestroy {
     return order;
   }
 
-  public addSubstateToCompany(parentId: string, data) {
+  public addSubstateToCompany(parentId: string, data: any) {
     this.workflowService.setParentForSubstate(data.workflow_node.id, parentId).subscribe(() => {
       this.setState(data, parentId);
     });
   }
 
-  public addAcceptenceTest(data, closeModal) {
+  public addAcceptenceTest(data: any, closeModal: any) {
     closeModal();
 
     this.workflowService.addAcceptenceTest(data).subscribe((res: any) => {
@@ -203,13 +207,13 @@ export class WorkflowComponent implements OnInit, OnDestroy {
     });
   }
 
-  public addSubstate(e, node) {
+  public addSubstate(e: MouseEvent, node: any) {
     const parent = node.workflow_node.id;
 
     this.addState(e, parent);
   }
 
-  public addTest(e, node) {
+  public addTest(e: MouseEvent, node: any) {
     e.preventDefault();
     e.stopPropagation();
 
@@ -218,13 +222,13 @@ export class WorkflowComponent implements OnInit, OnDestroy {
     this.modalRef = this.modalService.open(this.testModal, { windowClass: 'visible-mode', backdrop: 'static' });
   }
 
-  public openEditModal(node, closeModal) {
+  public openEditModal(node: any, closeModal: any) {
     closeModal();
 
     this.openState(node, undefined, { size: 'lg' }, 'edit');
   }
 
-  public openState(node, closeModal, options?, type?: string) {
+  public openState(node: any, closeModal?: any, options?: any, type?: string) {
     if (closeModal) {
       closeModal();
     }
@@ -244,7 +248,7 @@ export class WorkflowComponent implements OnInit, OnDestroy {
     this.modalRef = this.modalService.open(modal, { ...options, backdrop: 'static' });
   }
 
-  public deleteNode(id, e) {
+  public deleteNode(id: string, e?: MouseEvent) {
     if (e) {
       e.stopPropagation();
       e.preventDefault();
@@ -255,13 +259,13 @@ export class WorkflowComponent implements OnInit, OnDestroy {
     });
   }
 
-  public deleteTest(test, node) {
+  public deleteTest(test: any, node: any) {
     this.workflowService.deleteTest(test.id).subscribe((res) => {
       this.getAcceptensTests(node.id);
     });
   }
 
-  public deleteSubstate(node, e) {
+  public deleteSubstate(node: any, e?: MouseEvent) {
     if (e) {
       e.stopPropagation();
       e.preventDefault();
@@ -274,7 +278,7 @@ export class WorkflowComponent implements OnInit, OnDestroy {
     });
   }
 
-  public formEvent(e, closeModal) {
+  public formEvent(e: any, closeModal: () => void) {
     if (e.type === 'saveStart') {
       this.saveProcess = true;
     }
@@ -284,11 +288,11 @@ export class WorkflowComponent implements OnInit, OnDestroy {
     }
   }
 
-  public formError(e) {
+  public formError() {
     this.saveProcess = false;
   }
 
-  public generateConfigForEditModal(node) {
+  public generateConfigForEditModal(node: any) {
     return {
       id: node.workflow_node.id,
       label: node.workflow_node.name_before_activation,
@@ -313,7 +317,7 @@ export class WorkflowComponent implements OnInit, OnDestroy {
     };
   }
 
-  public generateConfigForModal(node) {
+  public generateConfigForModal(node: any) {
     return {
       id: node.workflow_node.id,
       label: node.workflow_node.name_before_activation,
@@ -323,7 +327,7 @@ export class WorkflowComponent implements OnInit, OnDestroy {
     };
   }
 
-  public getAddConfig(company, workflow): any[] {
+  public getAddConfig(company: string, workflow: string): any[] {
     return [
       {
         type: 'related',
@@ -348,7 +352,7 @@ export class WorkflowComponent implements OnInit, OnDestroy {
     ];
   }
 
-  public getSubStatesConfig(company, workflow, parent): any[] {
+  public getSubStatesConfig(company: string, workflow: string, parent: string): any[] {
     return [
       {
         many: true,
@@ -374,7 +378,7 @@ export class WorkflowComponent implements OnInit, OnDestroy {
     ];
   }
 
-  public getAcceptenceTestsConfig(node) {
+  public getAcceptenceTestsConfig(node: any) {
     const formData = new BehaviorSubject({ data: {} });
 
     return [

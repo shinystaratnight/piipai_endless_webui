@@ -1,4 +1,4 @@
-export const getTimePickerConfig = config => {
+export const getTimePickerConfig = (config: { rightPosition: boolean } ) => {
   const dropdownRight = config.rightPosition === false ? false : true;
 
   return {

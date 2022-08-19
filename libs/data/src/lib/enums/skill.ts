@@ -1,4 +1,4 @@
-export const AverageScoreColor = {
+export const AverageScoreColor: Record<number, string> = {
   0: '#FA5C46',
   1: '#FA5C46',
   2: '#fc9183',

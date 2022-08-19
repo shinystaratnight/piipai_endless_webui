@@ -1,5 +1,9 @@
-@import '../node_modules/bootstrap/scss/functions';
-@import '../node_modules/bootstrap/scss/variables';
+@import '~bootstrap/scss/functions';
+@import '~bootstrap/scss/variables';
+@import '~bootstrap/scss/mixins';
+@import '~bootstrap/scss/utilities';
+
+@import './mixins';
 
 // Font
 $font-family-base: "Source Sans Pro", sans-serif;
@@ -10,11 +14,17 @@ $success: #32ba5e;
 $danger: #fa5c46;
 $info: #28a3fc;
 $gray: #333;
+$white: #fdfdfd;
 
 // Theme color
 $themes: ('default', 'labour', 'indigo', 'teal', 'brown');
 $theme-colors: (
+  'primary': $primary,
+  'success': $success,
+  'danger': $danger,
+  'info': $info,
   'default': $primary,
+  'warning': #f58926,
   'labour': #f58926,
   'indigo': #3f51b5,
   'teal': #009688,
@@ -50,10 +60,12 @@ $input-font-size: 14px;
 $input-line-height: 16px;
 $input-border-radius: 0;
 $input-focus-box-shadow: none;
-$custom-select-focus-box-shadow: none;
+$form-select-focus-box-shadow: none;
 
 // Popover
 $zindex-popover: 1;
+$popover-body-padding-y: 0.25rem;
+$popover-body-padding-x: 0.25rem;
 
 // Lists
 $list-group-border-radius: 0;
@@ -64,6 +76,9 @@ $outline-color: rgba($gray, .1);
 // Button
 $btn-disabled-opacity: 0.5;
 
+// Table
+
+$table-border-width: 0;
 
 // Redesign
 

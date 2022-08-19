@@ -1,11 +1,11 @@
 import { Directive, Input, HostBinding } from '@angular/core';
 
 @Directive({
-  selector: '[appIcon]'
+  selector: '[webuiIcon]'
 })
 export class IconDirective {
-  @Input() size: 'sm' | 'md';
-  @Input() color: 'primary';
+  @Input() size?: 'sm' | 'md';
+  @Input() color?: 'primary';
 
   @HostBinding('class') get className() {
     const classNames = [];

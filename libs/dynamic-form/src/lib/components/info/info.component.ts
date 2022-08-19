@@ -1,7 +1,7 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, TemplateRef } from '@angular/core';
 
 @Component({
-  selector: 'app-info',
+  selector: 'webui-info',
   template: `
     <i class="info"
       [class.danger]="danger"
@@ -15,11 +15,11 @@ import { Component, Input, OnInit } from '@angular/core';
   styleUrls: ['./info.component.scss']
 })
 export class InfoComponent implements OnInit {
-  @Input() public description: string;
-  @Input() public text: string;
-  @Input() public placement: string;
-  @Input() public triggersType: string;
-  @Input() public danger: boolean;
+  @Input() public description!: string | TemplateRef<any>;
+  @Input() public text!: string;
+  @Input() public placement!: string;
+  @Input() public triggersType!: string;
+  @Input() public danger!: boolean;
 
   public config: any;
 

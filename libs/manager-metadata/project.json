@@ -1,0 +1,26 @@
+{
+  "projectType": "library",
+  "root": "libs/manager-metadata",
+  "sourceRoot": "libs/manager-metadata/src",
+  "prefix": "webui",
+  "targets": {
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/manager-metadata"],
+      "options": {
+        "jestConfig": "libs/manager-metadata/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/manager-metadata/src/**/*.ts",
+          "libs/manager-metadata/src/**/*.html"
+        ]
+      }
+    }
+  },
+  "tags": []
+}

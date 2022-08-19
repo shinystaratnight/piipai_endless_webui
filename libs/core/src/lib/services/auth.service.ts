@@ -4,12 +4,12 @@ import { Router } from '@angular/router';
 
 import { LocalStorageService } from 'ngx-webstorage';
 import { catchError, tap } from 'rxjs/operators';
-import { Role, Endpoints } from '@webui/data';
 import { ErrorsService } from './errors.service';
 
 import { ENV } from './env.service';
 import { isClient, isCandidate, isManager } from '@webui/utilities';
 import { EventService, EventType } from './event.service';
+import { Endpoints, Role, User } from '@webui/models';
 
 interface AuthResponse {
   access_token: string;
@@ -21,7 +21,7 @@ interface AuthResponse {
   providedIn: 'root',
 })
 export class AuthService {
-  private _role: Role;
+  private _role?: Role;
 
   constructor(
     private http: HttpClient,
@@ -32,11 +32,11 @@ export class AuthService {
     @Optional() @Inject(ENV) private env: any
   ) {}
 
-  set role(role: Role) {
+  set role(role: Role | undefined) {
     this._role = role;
   }
 
-  get role(): Role {
+  get role(): Role | undefined {
     return this._role;
   }
 
@@ -44,7 +44,7 @@ export class AuthService {
     return !!this.storage.retrieve('user');
   }
 
-  public storeToken(response, rememberMe?: boolean, username?: string) {
+  public storeToken(response: any, rememberMe?: boolean, username?: string) {
     const data: AuthResponse = response.data || response || {};
 
     const {
@@ -73,9 +73,11 @@ export class AuthService {
     if (isManager()) {
       return 'mn';
     }
+
+    return '';
   }
 
-  public refreshJWTToken(user) {
+  public refreshJWTToken(user: User) {
     const { refresh_token = '', username = '' } = { ...user };
     const body = {
       refresh_token,
@@ -96,7 +98,7 @@ export class AuthService {
     );
   }
 
-  public loginWithToken(token) {
+  public loginWithToken(token: string) {
     const url = `/auth/${token}/login_by_token/`;
     return this.http.get(url).pipe(
       tap((response: any) => {

@@ -1,6 +1,6 @@
-<div class="d-flex align-items-center" *appHasPermission="{action: 'post', endpoint: endpoint}" [class.list-buttons]="first">
+<div class="d-flex align-items-center" *webuiHasPermission="{action: 'post', endpoint: convertedEndpoint}" [class.list-buttons]="first">
   <div
-    class="d-flex align-items-center flex-wrap ml-sm-auto"
+    class="d-flex align-items-center flex-wrap ms-sm-auto"
     *ngIf="buttons && buttons.length"
   >
     <div
@@ -33,27 +33,33 @@
       </button>
     </div>
   </div>
-  <div class="d-flex align-items-center ml-sm-auto w-100" *ngIf="!buttons">
+  <div class="d-flex align-items-center ms-sm-auto w-100" *ngIf="!buttons">
     <a
       class="btn btn-primary btn-shadow datatable-button first text-white"
       routerLink="add"
-      appSubscriptionRequired
+      webuiSubscriptionRequired
       *ngIf="first && !inForm && checkPermission('post')"
     >
-      <span class="button-icon mr-1"></span>{{ 'add_new' | translate: {'Default': 'Add new'} }}&nbsp;
-      <span class="text-lowercase">{{ getTranslationKey(label.toLowerCase(), 'label') | translate: {'Default': label} }}</span>
+      <span class="button-icon"></span>
+      <span>
+        {{ 'add_new' | translate: {'Default': 'Add new'} }}
+        <span class="text-lowercase">{{ getTranslationKey(label.toLowerCase(), 'label') | translate: {'Default': label} }}</span>
+      </span>
     </a>
     <button
       *ngIf="(!first || inForm) && checkPermission('post')"
-      class="datatable-button ml-auto"
+      class="datatable-button ms-auto"
       (click)="buttonAction('add_object')"
     >
-      <span class="button-icon mr-1"></span>{{ 'add_new' | translate: {'Default': 'Add new'} }}&nbsp;
-      <span class="text-lowercase">{{ getTranslationKey(label.toLowerCase(), 'label') | translate: {'Default': label} }}</span>
+      <span class="button-icon"></span>
+      <span>
+        {{ 'add_new' | translate: {'Default': 'Add new'} }}
+        <span class="text-lowercase">{{ getTranslationKey(label.toLowerCase(), 'label') | translate: {'Default': label} }}</span>
+      </span>
     </button>
   </div>
   <button
-    class="btn btn-primary btn-shadow datatable-button hidden-sm-down ml-2"
+    class="btn btn-primary btn-shadow datatable-button hidden-sm-down ms-2"
     *ngIf="!first && !poped"
     (click)="buttonAction('poped_table')"
   >

@@ -1,4 +1,4 @@
-<app-form-element-view [label]="config.templateOptions.label" [many]="true">
+<webui-form-element-view [label]="config.templateOptions.label" [many]="true">
   <div class="d-flex flex-column" *ngIf="config.many">
     <span
       class="d-inline-flex align-items-center my-1"
@@ -8,7 +8,7 @@
 
       <button
         type="button"
-        class="btn btn-danger ml-2"
+        class="btn btn-danger ms-2"
         (click)="deleteAccount(account)"
       >
         Delete
@@ -49,7 +49,7 @@
           *ngIf="account"
           type="button"
           class="btn btn-warning text-white"
-          (click)="viewAccount(account)"
+          (click)="viewAccount(account, $event)"
         >
           View
         </button>
@@ -71,7 +71,7 @@
       <span *ngIf="!account">-</span>
     </ng-container>
   </ng-container>
-</app-form-element-view>
+</webui-form-element-view>
 
 <ng-template #modal let-modal>
   <div class="modal-content-wrapper">
@@ -79,15 +79,15 @@
       <div class="modal-header">
         <h5 class="modal-title">{{ modalData.title }}</h5>
 
-        <app-close-button
-          class="ml-auto"
+        <webui-close-button
+          class="ms-auto"
           (click)="modal.dismiss()"
-        ></app-close-button>
+        ></webui-close-button>
       </div>
     </div>
 
     <div class="modal-body">
-      <app-dynamic-form
+      <webui-dynamic-form
         [config]="modalData.metadata"
         [errors]="modalData.errors"
         (submitForm)="submitForm($event)"
@@ -99,9 +99,9 @@
           [disabled]="saveProcess"
         >
           Save
-          <app-spinner *ngIf="saveProcess"></app-spinner>
+          <webui-spinner *ngIf="saveProcess"></webui-spinner>
         </button>
-      </app-dynamic-form>
+      </webui-dynamic-form>
     </div>
   </div>
 </ng-template>

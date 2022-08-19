@@ -1,5 +1,5 @@
-import { Endpoints } from '@webui/data';
 import { createFilter, Type } from '@webui/metadata';
+import { Endpoints } from '@webui/models';
 
 const contactTypes = [
   {

@@ -5,8 +5,8 @@ import {
   OnDestroy,
   OnInit
 } from '@angular/core';
-import { Form, IFormErrors } from '@webui/dynamic-form';
 import { BehaviorSubject, Subscription } from 'rxjs';
+import { Form, IFormErrors } from '../../models';
 import { FormService } from '../../services';
 
 interface IObjectExistError {
@@ -16,15 +16,13 @@ interface IObjectExistError {
 }
 
 @Component({
-  selector: 'app-form-errors',
+  selector: 'webui-form-errors',
   templateUrl: './form-errors.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FormErrorsComponent implements OnInit, OnDestroy {
-  private _details$: BehaviorSubject<string[]> = new BehaviorSubject(null);
-  private _objectExistError$: BehaviorSubject<IObjectExistError> = new BehaviorSubject(
-    null
-  );
+  private _details$: BehaviorSubject<string[] | null> = new BehaviorSubject<string[] | null>(null);
+  private _objectExistError$: BehaviorSubject<IObjectExistError | null> = new BehaviorSubject<IObjectExistError | null>(null);
 
   get errorList$() {
     return this._details$.asObservable();
@@ -34,9 +32,9 @@ export class FormErrorsComponent implements OnInit, OnDestroy {
     return this._objectExistError$.asObservable();
   }
 
-  @Input() formId: number;
+  @Input() formId!: number;
 
-  private errorSubscription: Subscription;
+  private errorSubscription!: Subscription;
 
   constructor(private formService: FormService) {}
 
@@ -57,7 +55,7 @@ export class FormErrorsComponent implements OnInit, OnDestroy {
 
   private updateErrors(errors: IFormErrors) {
     const { detail, non_field_errors } = errors;
-    let details = [];
+    let details: string[] = [];
     let objectExistError = null;
 
     if (Array.isArray(non_field_errors)) {
@@ -92,6 +90,6 @@ export class FormErrorsComponent implements OnInit, OnDestroy {
     const errorList = details.filter((el) => !!el && !!el.trim());
 
     this._objectExistError$.next(objectExistError);
-    this._details$.next(!!errorList.length ? errorList : null);
+    this._details$.next(errorList.length ? errorList : null);
   }
 }

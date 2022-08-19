@@ -1,0 +1,26 @@
+{
+  "projectType": "library",
+  "root": "libs/metadata",
+  "sourceRoot": "libs/metadata/src",
+  "prefix": "webui",
+  "targets": {
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/metadata"],
+      "options": {
+        "jestConfig": "libs/metadata/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/metadata/src/**/*.ts",
+          "libs/metadata/src/**/*.html"
+        ]
+      }
+    }
+  },
+  "tags": []
+}

@@ -3,27 +3,27 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { BillingService } from './services/billing-service';
 
-import { Plan, Payment, BillingSubscription } from './models';
+import { Plan, BillingSubscription } from './models';
 
-import { User } from '@webui/data';
-import { ToastService, EventService, EventType, SiteSettingsService, MessageType } from '@webui/core';
+import { ToastService, EventService, SiteSettingsService, MessageType } from '@webui/core';
 import { Subscription } from 'rxjs';
+import { User } from '@webui/models';
 
 @Component({
-  selector: 'app-billing-page',
+  selector: 'webui-billing-page',
   templateUrl: './billing.component.html',
   styleUrls: ['./billing.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
 export class BillingComponent implements OnInit, OnDestroy {
-  public user: User;
-  public pagesList: any[];
-  public currentPlan: BillingSubscription;
+  public user!: User;
+  public pagesList!: any[];
+  public currentPlan?: BillingSubscription;
   public checkInformation: boolean;
-  public saveProcess: boolean;
-  public cancelProcess: boolean;
-  public plans: Plan[];
-  public currency: string;
+  public saveProcess!: boolean;
+  public cancelProcess!: boolean;
+  public plans!: Plan[];
+  public currency!: string;
 
   subscriptions: Subscription[] = [];
 
@@ -42,7 +42,7 @@ export class BillingComponent implements OnInit, OnDestroy {
   public ngOnInit() {
     this.user = this.route.snapshot.data['user'];
     this.pagesList = this.route.snapshot.data['pagesList'];
-    const subscriptions = this.route.snapshot.data['subscription'].subscriptions;
+    const subscriptions: any[] = this.route.snapshot.data['subscription'].subscriptions;
 
     this.currency = this.siteSettings.settings.currency;
 
@@ -54,24 +54,31 @@ export class BillingComponent implements OnInit, OnDestroy {
 
     this.billingService
       .getSubscriptionTypes()
-      .subscribe((res: { subscription_types: Plan[] }) => {
-        this.plans = Object.keys(res.subscription_types).map(key => {
-          if (res.subscription_types[key].table_text) {
-            res.subscription_types[key].table = res.subscription_types[
-              key
-            ].table_text.split(';');
+      .subscribe((res) => {
+        if (Array.isArray(res)) {
+          return;
+        }
+
+        const plans: Plan[] = []
+
+        for (const plan of res.subscription_types) {
+          if (plan.table_text) {
+            plan.table = plan.table_text.split(';');
           }
-          return {
-            ...res.subscription_types[key],
-            procent: res.subscription_types[key].percentage_discount
-              ? (100 - res.subscription_types[key].percentage_discount) / 100
+
+          plans.push({
+            ...plan,
+            procent: plan.percentage_discount
+              ? (100 - plan.percentage_discount) / 100
               : 1
-          };
-        });
+          })
+        }
+
+        this.plans = plans;
       });
 
     this.subscriptions.push(
-      this.eventService.event$.subscribe((type: EventType) => {
+      this.eventService.event$.subscribe(() => {
         setTimeout(() => {
           this.router.navigate(['']);
         }, 150);
@@ -115,7 +122,7 @@ export class BillingComponent implements OnInit, OnDestroy {
 
   public getSubscriptionInformation() {
     this.billingService.getSubscriptionInfo().subscribe((data: any) => {
-      this.currentPlan = data.subscriptions.find(el => el.active);
+      this.currentPlan = data.subscriptions.find((el: any) => el.active);
     });
   }
 
@@ -135,7 +142,7 @@ export class BillingComponent implements OnInit, OnDestroy {
     });
   }
 
-  public setActivePage(pages, path) {
+  public setActivePage(pages: any[], path: string) {
     let active = false;
     pages.forEach(page => {
       if (path === page.url && page.url !== '/') {

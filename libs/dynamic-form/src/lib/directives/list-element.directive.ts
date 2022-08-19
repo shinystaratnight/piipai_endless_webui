@@ -30,7 +30,7 @@ import { ButtonGroupComponent } from '../containers/button-group/button-group.co
 import { ListColumnComponent } from '../containers/list-column/list-column.component';
 import { FormButtonComponent } from '../components/form-elements';
 
-const components = {
+const components: Record<string, any> = {
   text: ListTextComponent,
   column: ListColumnComponent,
   link: ListLinkComponent,
@@ -60,20 +60,20 @@ const components = {
 };
 
 @Directive({
-  selector: '[appListElement]'
+  selector: '[webuiListElement]'
 })
 export class ListElementDirective implements OnInit, OnChanges {
   @Input()
-  public config;
+  public config!: any;
 
   @Input()
-  public last;
+  public last!: boolean;
 
   @Input()
-  public length;
+  public length!: number;
 
   @Input()
-  public head;
+  public head!: boolean;
 
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
@@ -81,7 +81,7 @@ export class ListElementDirective implements OnInit, OnChanges {
   @Output()
   public buttonAction: EventEmitter<any> = new EventEmitter();
 
-  public component: ComponentRef<any>;
+  public component!: ComponentRef<any>;
 
   constructor(
     private resolver: ComponentFactoryResolver,

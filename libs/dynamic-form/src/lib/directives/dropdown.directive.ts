@@ -4,17 +4,17 @@ import { Subject } from 'rxjs';
 import { Subscription } from 'rxjs';
 
 @Directive({
-  selector: '[appDropDown]',
+  selector: '[webuiDropDown]',
 })
 export class DropdownDirective implements OnInit, OnDestroy {
   @Input() public element: any;
   @Input() public target: any;
-  @Input() public update: Subject<any>;
+  @Input() public update!: Subject<any>;
 
-  public top: string;
+  public top!: string;
   public dropDownElement: any;
-  public scrollHeight: number;
-  public subscription: Subscription;
+  public scrollHeight!: number;
+  public subscription!: Subscription;
 
   constructor(private el: ElementRef, public renderer: Renderer2) {}
 

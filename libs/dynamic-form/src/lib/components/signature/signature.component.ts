@@ -4,7 +4,7 @@ import { getOrientation } from '../../helpers';
 import { isMobile } from '@webui/utilities';
 
 @Component({
-  selector: 'app-signature',
+  selector: 'webui-signature',
   templateUrl: 'signature.component.html',
   styleUrls: ['signature.component.scss'],
   encapsulation: ViewEncapsulation.None,
@@ -13,14 +13,14 @@ export class SignatureComponent implements AfterViewInit {
   show = true;
 
   @Input()
-  public supervisorSignature: string;
+  public supervisorSignature!: string;
 
   @ViewChild('signaturePad', { static: false }) signatureElement: any;
 
   @Output()
   public signature: EventEmitter<string> = new EventEmitter();
 
-  public signaturePadOptions: Object = this.generateParams();
+  public signaturePadOptions: Record<string, any> = this.generateParams();
 
   ngAfterViewInit() {
     if (this.supervisorSignature) {
@@ -57,7 +57,7 @@ export class SignatureComponent implements AfterViewInit {
     }
   }
 
-  toDataURL(src, callback, outputFormat?) {
+  toDataURL(src: string, callback: (data: string) => void, outputFormat?: string) {
     const img = new Image();
     img.src = src;
     img.onload = (e) => {

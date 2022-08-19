@@ -3,14 +3,14 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Modal, Status } from '../modal/modal.component';
 
 @Component({
-  selector: 'app-signature-modal',
+  selector: 'webui-signature-modal',
   templateUrl: './signature-modal.component.html',
   styleUrls: ['./signature-modal.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SignatureModalComponent extends Modal {
 
-  private signature: string = '';
+  private signature = '';
 
   constructor(
     modal: NgbActiveModal

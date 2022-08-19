@@ -16,7 +16,7 @@ export interface CheckboxElementTemplateOptions extends BasicElementTemplateOpti
 
 export class CheckboxElement extends BasicFormElement {
 
-  templateOptions: CheckboxElementTemplateOptions;
+  override templateOptions!: CheckboxElementTemplateOptions;
 
   constructor(key: string, label: string, type: CheckboxType) {
     super(key, label, Checkbox);

@@ -1,11 +1,11 @@
 import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
 import { SiteSettingsService } from '@webui/core';
-import { CountryCodeLanguage } from '@webui/data';
+import { CountryCodeLanguage } from '@webui/models';
 
 const translationMap = CountryCodeLanguage;
 
 @Component({
-  selector: 'app-list-skills',
+  selector: 'webui-list-skills',
   templateUrl: 'list-skills.component.html',
   styleUrls: ['./list-skills.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -14,7 +14,7 @@ export class ListSkillsComponent implements OnInit {
 
   public config: any;
 
-  public colors = {
+  public colors: Record<number, string> = {
     0: '#bdbdbd',
     1: '#FA5C46',
     2: '#fc9183',
@@ -23,10 +23,10 @@ export class ListSkillsComponent implements OnInit {
     5: '#FFD042',
   };
   public countFields = ['candidate_scores.client_feedback', 'candidate_scores.skill_score'];
-  public list: boolean;
-  public dataList: any[];
-  public more: boolean;
-  public evaluationCount: string;
+  public list!: boolean;
+  public dataList!: any[];
+  public more!: boolean;
+  public evaluationCount!: string;
 
   constructor(private siteSetting: SiteSettingsService) {}
 
@@ -38,7 +38,7 @@ export class ListSkillsComponent implements OnInit {
 
       value.forEach(el => {
         const { skill: { name } } = el;
-        const trans = name.translations.find(el => el.language.id === translationMap[this.siteSetting.settings.country_code]);
+        const trans = name.translations.find((el: any) => el.language.id === translationMap[this.siteSetting.settings.country_code]);
 
         if (trans) {
           el.skill.__str__ = trans.value
@@ -63,11 +63,11 @@ export class ListSkillsComponent implements OnInit {
 
   }
 
-  public getScore(score) {
+  public getScore(score: string) {
     return Math.floor(parseFloat(score));
   }
 
-  public showMore(e) {
+  public showMore(e: MouseEvent) {
     e.stopPropagation();
     e.preventDefault();
 

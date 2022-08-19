@@ -5,7 +5,7 @@ export interface UserWidget {
   type: Type;
   widgetId: string;
   config: {
-    coords: string;
+    coords?: string;
     size: number;
     active?: boolean;
   };

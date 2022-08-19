@@ -4,13 +4,14 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { of } from 'rxjs';
 import { map, mergeMap, catchError } from 'rxjs/operators';
 
-import { Endpoints, Role, Purpose } from '@webui/data';
+import { Purpose } from '@webui/data';
 
 import { CompanyPurposeService } from './company-purpose.service';
 import { ErrorsService } from './errors.service';
 import { EventService, EventType } from './event.service';
 import { UserService } from './user.service';
 import { isManager, getCurrentRole, isClient } from '@webui/utilities';
+import { Endpoints, Role, User } from '@webui/models';
 
 export interface Page {
   name: string;
@@ -35,11 +36,11 @@ const jobEndpoints = [Endpoints.ClientJobs, Endpoints.JobsiteClient];
   providedIn: 'root'
 })
 export class NavigationService {
-  public currentRole: Role;
-  public error;
-  public parsedByPermissions: boolean;
+  public currentRole?: Role;
+  public error?: Record<string, any>;
+  public parsedByPermissions?: boolean;
 
-  public navigationList: any = {};
+  public navigationList: Record<string, any> = {};
   public linksList: Page[] = [];
 
   constructor(
@@ -61,10 +62,10 @@ export class NavigationService {
     });
   }
 
-  public getPages(role: Role, update?: boolean) {
+  public getPages(role?: Role, update?: boolean) {
     if (role) {
       const { id } = role;
-      const { country_code, allow_job_creation } = this.userService.user.data;
+      const { country_code, allow_job_creation } = (this.userService.user as User).data;
 
       if (!this.navigationList[id] || update) {
         const params = new HttpParams({
@@ -88,7 +89,13 @@ export class NavigationService {
 
                 return this.purposeService
                   .getPurpose(companyId)
-                  .pipe(map((purpose: Purpose) => ({ purpose, list })));
+                  .pipe(
+                    map((purpose) => {
+                      return {
+                        purpose,
+                        list
+                      };
+                    }));
               } else {
                 return of({ list, purpose: null });
               }
@@ -123,12 +130,17 @@ export class NavigationService {
                 return this.navigationList[id];
               }
             }),
-            catchError((errors) => this.errorService.handleError(errors))
+            catchError((errors) => {
+              this.errorService.handleError(errors);
+              return of([]);
+            })
           );
       } else {
         return of(this.navigationList[id]);
       }
     }
+
+    return of([]);
   }
 
   public updateNavigation() {
@@ -139,15 +151,15 @@ export class NavigationService {
     return this.getPages(this.currentRole);
   }
 
-  public setCurrentRole(role: Role) {
+  public setCurrentRole(role?: Role) {
     this.currentRole = role;
-    if (this.navigationList[role.id]) {
+    if (role?.id && this.navigationList[role.id]) {
       this.linksList.length = 0;
       this.generateLinks(this.navigationList[role.id], this.linksList);
     }
   }
 
-  public generateLinks(links, target) {
+  public generateLinks(links: any[], target: any[]) {
     links.forEach((el) => {
       target.push(el);
       if (el.children) {
@@ -206,7 +218,7 @@ export class NavigationService {
     });
   }
 
-  private renameField<T>(target: Array<T>, from: string, to: string): Array<T & { [key: string]: any }> {
+  private renameField<T>(target: Array<T & Record<string, any>>, from: string, to: string): Array<T & { [key: string]: any }> {
     return target.map((el) => {
       const result = {
         ...el,

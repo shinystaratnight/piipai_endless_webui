@@ -5,19 +5,19 @@ import { SiteSettingsService } from '@webui/core';
 import { FormatString } from '@webui/utilities';
 
 @Component({
-  selector: 'app-action-element',
+  selector: 'webui-action-element',
   templateUrl: 'action-element.component.html',
   styleUrls: ['./action-element.component.scss'],
 })
 export class ActionElementComponent implements OnChanges {
   @Input() public config: any;
-  @Input() public count: number;
-  @Input() public actionProcess: boolean;
+  @Input() public count!: number;
+  @Input() public actionProcess!: boolean;
   @ViewChild('content') public content: any;
 
-  public closeResult: string;
+  public closeResult!: string;
   public data: any;
-  public label: string;
+  public label!: string;
 
   @Output() public event: EventEmitter<any> = new EventEmitter();
 
@@ -43,7 +43,7 @@ export class ActionElementComponent implements OnChanges {
     }
   }
 
-  public open(content) {
+  public open(content: any) {
     this.modalService.open(content, { backdrop: 'static' }).result.then(
       (result) => {
         if (result) {
@@ -67,5 +67,7 @@ export class ActionElementComponent implements OnChanges {
     if (endpoint.indexOf('sendsms') !== -1) {
       return !this.siteSettings.isSmsEnabled();
     }
+
+    return false;
   }
 }

@@ -4,21 +4,7 @@ import { DateRange, rangeFormats, weekEnd, weekStart } from '@webui/utilities';
 import { DatepickerService } from './datepicker.service';
 import { TranslateHelperService } from '@webui/core';
 import { Moment, Time } from '@webui/time';
-
-export enum Status {
-  Unfilled,
-  Fullfilled,
-  Pending,
-  Open,
-  Filled,
-  Approved,
-}
-
-export interface CalendarData {
-  header: string[];
-  body: any;
-  date?: string;
-}
+import { ICalendarLine, Status, Tooltip, IDateRange } from '../models';
 
 @Injectable()
 export class CalendarService {
@@ -76,7 +62,7 @@ export class CalendarService {
     return date.format(rangeFormats[type]);
   }
 
-  public generateMonth(from: Moment, data: any): CalendarData {
+  public generateMonth(from: Moment, data: any[]) {
     return this.datepickerService.generateMonth(from, (body) => {
       return body.map((row) => {
         return row.map((day) => {
@@ -85,6 +71,7 @@ export class CalendarService {
           const availabilityData = data.find(
             (el) => el.target_date === day.date
           );
+
           return {
             ...day,
             data: newData,
@@ -96,22 +83,20 @@ export class CalendarService {
             availableId: availabilityData ? availabilityData.id : undefined,
             tooltip: this.generateTooltipForMonth(newData),
             isOpen: false,
+            loading: true
           };
         });
       });
     });
   }
 
-  public generateWeek(
-    from: Moment,
-    data: any,
-    range?: { start: Moment; end: Moment }
-  ) {
+  public generateWeek( from: Moment, data: any[], range?: IDateRange) {
     return this.datepickerService.generateWeek(
       from,
       (body) => {
         return body.map((day) => {
-          const newData = data.filter((el) => el.date === day.date);
+          const newData = data.filter((el: { date: string }) => el.date === day.date);
+
           return {
             ...day,
             data: newData,
@@ -125,8 +110,8 @@ export class CalendarService {
     );
   }
 
-  public generateDay(from: Moment, data: any) {
-    return this.datepickerService.generateDay(from, (body) => {
+  public generateDay(date: Moment, data: any[]) {
+    const config = this.datepickerService.generateDay(date, (body) => {
       return {
         ...body,
         data: data.filter((el) => el.date === body.date),
@@ -134,6 +119,8 @@ export class CalendarService {
         lines: this.calculateLines(),
       };
     });
+
+    return config;
   }
 
   getRangeDates(date: Moment, type: DateRange): { start: Moment; end: Moment } {
@@ -161,7 +148,7 @@ export class CalendarService {
 
   calculateTimes() {
     return this.calendarTimes.map((time, i, arr) => {
-      const result = {};
+      const result: Record<string, number | string> = {};
       if (i === 0) {
         result['top'] = 0;
         result['bottom'] = 'auto';
@@ -180,7 +167,7 @@ export class CalendarService {
     });
   }
 
-  calculateLines() {
+  calculateLines(): ICalendarLine[] {
     return this.calendarTimes.map((time, i) => {
       return {
         top: (this.calendarHeight / (this.calendarTimes.length - 1)) * i,
@@ -189,9 +176,9 @@ export class CalendarService {
     });
   }
 
-  private generateTooltipForMonth(data: any[]) {
+  private generateTooltipForMonth(data: any[]): Tooltip | undefined {
     if (data.length) {
-      const result = {
+      const result: Tooltip = {
         [Status.Unfilled]: [],
         [Status.Fullfilled]: [],
         [Status.Pending]: [],
@@ -224,6 +211,8 @@ export class CalendarService {
       });
 
       return result;
+    } else {
+      return;
     }
   }
 }

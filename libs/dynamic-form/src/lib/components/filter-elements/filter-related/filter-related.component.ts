@@ -19,9 +19,10 @@ import { FormatString } from '@webui/utilities';
 
 import { Subscription } from 'rxjs';
 import { debounceTime, skip, filter } from 'rxjs/operators';
+import { FormControl } from '@angular/forms';
 
 @Component({
-  selector: 'app-filter-related',
+  selector: 'webui-filter-related',
   templateUrl: 'filter-related.component.html',
   styleUrls: ['./filter-related.component.scss']
 })
@@ -31,37 +32,37 @@ export class FilterRelatedComponent
   @Input() public config: any;
   public data: any;
   public item: any;
-  public query: string;
+  public query!: string;
   public isCollapsed = false;
 
-  public searchValue: string;
+  public searchValue!: string | null;
 
   public modalScrollDistance = 2;
   public modalScrollThrottle = 50;
   public skipScroll = false;
 
-  public list: any[];
+  public list!: any[];
   public limit = 10;
-  public previewList: any[];
-  public topHeight: number;
+  public previewList: any[] = [];
+  public topHeight!: number;
 
   public settingValue = true;
 
   public defaultValue: any;
-  public theme: string;
-  public multiple: boolean;
+  public theme!: string;
+  public multiple!: boolean;
   public selected: any[] = [];
-  public selectedValues: any[];
+  public selectedValues!: any[];
 
-  public chashValues: any[];
+  public chashValues!: any[];
 
-  public cashResults: any[];
-  public subscription: Subscription;
-  public filterSubscription: Subscription;
-  public querySubscription: Subscription;
+  public cashResults!: any[];
+  public subscription!: Subscription;
+  public filterSubscription!: Subscription;
+  public querySubscription!: Subscription;
 
   @ViewChild('search')
-  public search;
+  public search!: FormControl;
 
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
@@ -101,7 +102,7 @@ export class FilterRelatedComponent
 
   public ngAfterViewInit() {
     if (this.search) {
-      this.subscription = this.search.valueChanges
+      this.subscription = this.search?.valueChanges
         .pipe(
           skip(2),
           filter((value) => value !== null),
@@ -135,17 +136,17 @@ export class FilterRelatedComponent
     }
   }
 
-  public generatePreviewList(list) {
+  public generatePreviewList(list: any[]) {
     this.item.lastElement += this.limit;
     this.previewList = list.slice(0, this.item.lastElement);
   }
 
-  public openAutocomplete($event) {
+  public openAutocomplete($event: any) {
     if (this.multiple && this.item && !this.item.hideAutocomplete) {
       this.item.hideAutocomplete = true;
       return;
     }
-    let autocomplete;
+    let autocomplete: any;
     const target = $event.target;
 
     this.searchValue = null;
@@ -182,7 +183,7 @@ export class FilterRelatedComponent
     if (!this.multiple) {
       this.item.lastElement = 0;
       this.item.count = null;
-      this.previewList = undefined;
+      this.previewList = [];
       this.generateList();
     } else {
       let filteredList;
@@ -191,9 +192,11 @@ export class FilterRelatedComponent
           const val = el[this.config.data.value];
           if (val) {
             return (
-              val.toLowerCase().indexOf(this.searchValue.toLowerCase()) > -1
+              val.toLowerCase().indexOf(this.searchValue?.toLowerCase()) > -1
             );
           }
+
+          return false;
         });
         this.previewList = filteredList;
       } else {
@@ -211,9 +214,9 @@ export class FilterRelatedComponent
     }
   }
 
-  public setValue(value, list?) {
+  public setValue(value: any, list: any[]) {
     if (this.multiple) {
-      this.selected = list.filter((item) => item.checked);
+      this.selected = list?.filter((item) => item.checked);
       this.item.data = this.selected.map((el) =>
         this.getValue(el, this.config.data.key)
       );
@@ -261,10 +264,10 @@ export class FilterRelatedComponent
     this.changeQuery();
   }
 
-  public genericQuery(query) {
+  public genericQuery(query: string) {
     let result = '';
     if (Array.isArray(this.item.data)) {
-      this.item.data.forEach((el) => {
+      this.item.data.forEach((el: any) => {
         result += `${query}=${el}&`;
       });
     } else {
@@ -282,13 +285,13 @@ export class FilterRelatedComponent
     });
   }
 
-  public parseQuery(query) {
+  public parseQuery(query: string) {
     this.query = query;
     const queries = query.split('&');
-    let data = queries.length && [];
+    let data: any[] | string = [];
     queries.forEach((el, i) => {
       if (queries.length) {
-        data.push(el.split('=')[1]);
+        (data as any[]).push(el.split('=')[1]);
       } else {
         data = el.split('=')[1];
       }
@@ -353,7 +356,7 @@ export class FilterRelatedComponent
     this.changeQuery();
   }
 
-  public getOption(value) {
+  public getOption(value: any) {
     if (this.multiple) {
       this.selected = value;
       this.getOptions(this.searchValue);
@@ -392,9 +395,11 @@ export class FilterRelatedComponent
         this.item.displayValue = res[display];
       });
     }
+
+    return;
   }
 
-  public getOptions(value, concat = false) {
+  public getOptions(value: any, concat = false) {
     const formatString = new FormatString();
     const endpoint = this.config.data.endpoint.includes('{')
       ? formatString.format(this.config.data.endpoint, {
@@ -425,7 +430,7 @@ export class FilterRelatedComponent
           if (res.results) {
             if (concat) {
               if (this.previewList) {
-                res.results.forEach((el) => {
+                res.results.forEach((el: any) => {
                   if (el) {
                     el.__str__ = this.getValue(el, this.config.data.value);
                   }
@@ -436,7 +441,7 @@ export class FilterRelatedComponent
             } else {
               if (!this.chashValues && this.multiple) {
                 if (this.selected) {
-                  res.results.forEach((el) => {
+                  res.results.forEach((el: any) => {
                     if (this.selected.indexOf(el[this.config.data.key]) > -1) {
                       el.checked = true;
                     }
@@ -447,7 +452,7 @@ export class FilterRelatedComponent
                 this.selected = this.filterSelectedValues(this.previewList);
                 return;
               }
-              res.results.forEach((el) => {
+              res.results.forEach((el: any) => {
                 if (el) {
                   el.__str__ = this.getValue(el, this.config.data.value);
                 }
@@ -463,8 +468,8 @@ export class FilterRelatedComponent
     }
   }
 
-  public getValue(data: any, value) {
-    let result;
+  public getValue(data: any, value: any) {
+    let result: any;
 
     if (Array.isArray(value)) {
       value.forEach((el) => {
@@ -486,7 +491,7 @@ export class FilterRelatedComponent
     query += `fields=${data.key}&`;
 
     if (Array.isArray(data.value)) {
-      data.value.forEach((el) => {
+      data.value.forEach((el: any) => {
         query += `fields=${el}&`;
       });
     } else {
@@ -496,27 +501,27 @@ export class FilterRelatedComponent
     return query;
   }
 
-  public selectAll(list) {
+  public selectAll(list: any[]) {
     list.forEach((el) => {
       el.checked = true;
     });
     this.setValue(null, list);
   }
 
-  public resetAll(list) {
+  public resetAll(list: any[]) {
     list.forEach((el) => {
       el.checked = false;
     });
     this.setValue(null, list);
   }
 
-  public filterSelectedValues(list) {
+  public filterSelectedValues(list: any[]) {
     return list.filter(
       (el) => this.selected && this.selected.indexOf(el.id) > -1
     );
   }
 
-  public removeItem(item) {
+  public removeItem(item: any) {
     item.checked = false;
     this.setValue(item, this.previewList);
   }
@@ -526,14 +531,14 @@ export class FilterRelatedComponent
   }
 
   @HostListener('document:click', ['$event'])
-  public handleClick(event) {
+  public handleClick(event: MouseEvent) {
     let clickedComponent = event.target;
     let inside = false;
     do {
       if (clickedComponent === this.elementRef.nativeElement) {
         inside = true;
       }
-      clickedComponent = clickedComponent.parentNode;
+      clickedComponent = (clickedComponent as HTMLElement).parentNode;
     } while (clickedComponent);
     if (!inside) {
       if (this.item && !this.item.hideAutocomplete) {

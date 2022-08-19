@@ -40,7 +40,7 @@ export const dateRangeLabel: LabelMap = {
   [DateRange.LastMonth]: { key: 'last_month', value: 'Last Month' },
 };
 
-const mapRangeDateToMoment = {
+const mapRangeDateToMoment: Partial<Record<DateRange, DateRangeMoment>> = {
   [DateRange.Today]: DateRangeMoment.Day,
   [DateRange.ThisWeek]: DateRangeMoment.Week,
   [DateRange.ThisMonth]: DateRangeMoment.Month,
@@ -48,7 +48,7 @@ const mapRangeDateToMoment = {
   [DateRange.LastMonth]: DateRangeMoment.Month,
 };
 
-const mapRangeDateOffset = {
+const mapRangeDateOffset: Partial<Record<DateRange, number>> = {
   [DateRange.LastMonth]: -1,
 };
 
@@ -56,6 +56,26 @@ const mapRangeDateOffset = {
   providedIn: 'root',
 })
 export class DateRangeService {
+  private static getRangeInstance(
+    type?: DateRangeMoment,
+    offset = 0
+  ): { from: Moment; to: Moment } {
+    return {
+      from: type ? Time.now().add(offset, type).startOf(type) : Time.now(),
+      to: type ? Time.now().add(offset, type).endOf(type) : Time.now(),
+    };
+  }
+
+  private static formatDates(
+    range: { from: Moment; to: Moment },
+    format: string
+  ): Range {
+    return {
+      from: range.from.format(format),
+      to: range.to.format(format),
+    };
+  }
+
   getDatesByRange(type: DateRange): Range {
     const rangeInstance = DateRangeService.getRangeInstance(
       mapRangeDateToMoment[type],
@@ -83,26 +103,6 @@ export class DateRangeService {
     return {
       from: rangeInstance.from.toDate(),
       to: rangeInstance.to.toDate(),
-    };
-  }
-
-  private static getRangeInstance(
-    type: DateRangeMoment,
-    offset = 0
-  ): { from: Moment; to: Moment } {
-    return {
-      from: Time.now().add(offset, type).startOf(type),
-      to: Time.now().add(offset, type).endOf(type),
-    };
-  }
-
-  private static formatDates(
-    range: { from: Moment; to: Moment },
-    format: string
-  ): Range {
-    return {
-      from: range.from.format(format),
-      to: range.to.format(format),
     };
   }
 }

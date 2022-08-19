@@ -9,4 +9,5 @@ export interface BillingSubscription {
   id: number;
   current_period_start: string;
   current_period_end: string;
+  subscription_type: string;
 }

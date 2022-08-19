@@ -12,7 +12,7 @@ export class MissingTranslationHelper implements MissingTranslationHandler {
     // console.log(`"${key}": "${interpolateParams[this.defaultKey]}"`);
 
     if (interpolateParams && this.defaultKey in interpolateParams) {
-      return interpolateParams[this.defaultKey];
+      return (interpolateParams as any)[this.defaultKey];
     }
     return key;
   }

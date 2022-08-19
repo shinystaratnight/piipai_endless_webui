@@ -1,0 +1,26 @@
+{
+  "projectType": "library",
+  "root": "libs/billing-metadata",
+  "sourceRoot": "libs/billing-metadata/src",
+  "prefix": "webui",
+  "targets": {
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/billing-metadata"],
+      "options": {
+        "jestConfig": "libs/billing-metadata/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/billing-metadata/src/**/*.ts",
+          "libs/billing-metadata/src/**/*.html"
+        ]
+      }
+    }
+  },
+  "tags": []
+}

@@ -1,9 +1,10 @@
-import { Field } from '@webui/data';
+import { Field } from "@webui/metadata";
 
 export type FormStep = {
   title: string;
   metadata: Field[];
   content: Array<string | string[]>;
+  empty: boolean;
 };
 
 export const industryField: Field = {
@@ -25,6 +26,7 @@ export const steps: FormStep[] = [
   {
     title: 'contact_information',
     metadata: [],
+    empty: false,
     content: [
       'contact.picture',
       'contact.first_name',
@@ -34,12 +36,13 @@ export const steps: FormStep[] = [
       'contact.birthday',
       'contact.email',
       'contact.phone_mobile'
-      
+
     ]
   },
   {
     title: 'additional_information',
     metadata: [],
+    empty: false,
     content: [
       'contact.address.street_address',
       "contact.address.city",
@@ -56,6 +59,7 @@ export const steps: FormStep[] = [
   {
     title: 'bank_and_superannuation_informatioin',
     metadata: [],
+    empty: false,
     content: [
       'contact.bank_accounts.bank_account_number',
       'contact.bank_accounts.bank_account_name',
@@ -72,6 +76,7 @@ export const steps: FormStep[] = [
   },
   {
     title: 'industry_and_skills',
+    empty: false,
     metadata: [],
     content: ['industry', 'skill', 'tag']
   }

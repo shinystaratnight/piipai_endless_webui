@@ -1,4 +1,4 @@
-<app-dynamic-form [config]="config" (event)="eventHandler($event)">
+<webui-dynamic-form [config]="config" (event)="eventHandler($event)">
   <div class="px-2">
     <button
       type="submit"
@@ -8,14 +8,14 @@
       (click)="connectHandler()"
     >
       {{ connectProcess ? 'Connecting' : connectButton.text }}
-      <app-spinner *ngIf="connectProcess"></app-spinner>
+      <webui-spinner *ngIf="connectProcess"></webui-spinner>
     </button>
     <p class="description">
-      <span class="border rounded-circle border-info mr-1">i</span>
+      <span class="border rounded-circle border-info me-1">i</span>
       Please click button to authorize access to your MYOB online files!
     </p>
   </div>
-</app-dynamic-form>
+</webui-dynamic-form>
 
 <div class="content">
   <h6
@@ -31,7 +31,7 @@
       style="cursor: pointer"
     >
     </fa-icon>
-    <span class="mr-auto">Company File</span>
+    <span class="me-auto">Company File</span>
 
     <span class="date"
       >Last refreshed -
@@ -83,7 +83,7 @@
 
       <button
         type="button"
-        class="test-btn btn btn-success mr-3 my-1"
+        class="test-btn btn btn-success me-3 my-1"
         (click)="testCompanyFile(file)"
       >
         Test
@@ -98,7 +98,7 @@
     </div>
 
     <p class="description" *ngIf="companyFile">
-      <span class="border rounded-circle border-info mr-1">i</span>
+      <span class="border rounded-circle border-info me-1">i</span>
       Please enter your company file credentials!
     </p>
   </div>
@@ -115,7 +115,7 @@
       aria-controls="collapseExample"
       style="cursor: pointer"
     ></fa-icon>
-    <span class="mr-auto">Payroll accounts</span>
+    <span class="me-auto">Payroll accounts</span>
 
     <span class="date"
       >Last refreshed -
@@ -151,7 +151,7 @@
 
             <div class="form-element-content">
               <select
-                class="form-control custom-select"
+                class="form-control form-select"
                 name="invoice_company_file"
                 required
                 [(ngModel)]="payrollAccounts.invoice_company_file.value"
@@ -191,7 +191,7 @@
 
             <div class="form-element-content">
               <select
-                class="form-control custom-select"
+                class="form-control form-select"
                 name="invoice_activity_account"
                 required
                 [(ngModel)]="payrollAccounts.invoice_activity_account.value"
@@ -232,7 +232,7 @@
 
             <div class="form-element-content">
               <select
-                class="form-control custom-select"
+                class="form-control form-select"
                 name="timesheet_company_file"
                 required
                 [(ngModel)]="payrollAccounts.timesheet_company_file.value"
@@ -273,7 +273,7 @@
         )
       "
     >
-      <span class="border rounded-circle border-info mr-1">i</span>
+      <span class="border rounded-circle border-info me-1">i</span>
       Please assign preferred company files and accounts in “Edit mode”!
     </p>
 
@@ -283,7 +283,7 @@
     >
       <button
         type="button"
-        class="btn btn-primary btn-shadow ml-auto button-edit"
+        class="btn btn-primary btn-shadow ms-auto button-edit"
         *ngIf="viewMode"
         (click)="viewMode = false"
       >
@@ -306,7 +306,7 @@
         (click)="sendForm(accountForm.value)"
       >
         Save
-        <app-spinner *ngIf="saveProcess"></app-spinner>
+        <webui-spinner *ngIf="saveProcess"></webui-spinner>
       </button>
     </div>
   </form>

@@ -5,7 +5,7 @@ import { skip } from 'rxjs/operators';
 
 export interface Message {
   text: string;
-  type: string;
+  type: MessageType;
 }
 
 export enum MessageType {

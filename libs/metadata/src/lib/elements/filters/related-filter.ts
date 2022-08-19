@@ -20,7 +20,7 @@ export class RelatedFilter implements FilterModel {
   public key: string;
   public label: string;
   public query: string;
-  public multiple: boolean;
+  public multiple?: boolean;
   public data: {
     value: string | string[];
     endpoint: string;

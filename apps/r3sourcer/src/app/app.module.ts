@@ -69,12 +69,13 @@ import { routes } from './app.routing';
 
 import { CoreModule } from '@webui/core';
 import { environment } from '../environments/environment';
-import { AgmCoreModule } from '@agm/core';
+// import { AgmCoreModule } from '@agm/core';
 import { SettingsModule } from './settings/settings.module';
 
 import { MasterGuideModule } from './master-guide/master-guide.module';
 import { HttpLoaderFactory } from './translate.loader';
 import { MissingTranslationHelper } from './helpers/translate.helper';
+// import { GoogleMapsModule } from '@angular/google-maps';
 
 @NgModule({
   declarations: [
@@ -94,10 +95,11 @@ import { MissingTranslationHelper } from './helpers/translate.helper';
     HttpClientModule,
     FontAwesomeModule,
     NgxWebstorageModule.forRoot({ prefix: 'web', separator: '.' }),
-    AgmCoreModule.forRoot({
-      apiKey: environment.GOOGLE_GEO_CODING_API_KEY,
-      libraries: ['places'],
-    }),
+    // AgmCoreModule.forRoot({
+    //   apiKey: environment.GOOGLE_GEO_CODING_API_KEY,
+    //   libraries: ['places'],
+    // }),
+    // GoogleMapsModule,
     TranslateModule.forRoot({
       defaultLanguage: 'en',
       missingTranslationHandler: {

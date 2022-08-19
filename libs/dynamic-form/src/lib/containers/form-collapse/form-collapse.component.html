@@ -13,7 +13,7 @@
 
   <div [ngbCollapse]="isCollapsed">
     <ng-container *ngFor="let field of config.children;"
-      appFormElement
+      webuiFormElement
       [config]="field"
       [group]="group"
       [errors]="errors"

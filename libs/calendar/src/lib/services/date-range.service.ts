@@ -42,7 +42,7 @@ export class DateRangeService {
     return type === DateRange.Day;
   }
 
-  private updateDate(date: Moment, type: DateRange, range) {
+  private updateDate(date: Moment, type: DateRange, range: number) {
     return date.add(range, type);
   }
 }

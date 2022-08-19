@@ -25,13 +25,13 @@ type DateParams = {
 };
 
 @Component({
-  selector: 'app-counter-widget',
+  selector: 'webui-counter-widget',
   templateUrl: './counter-widget.component.html',
   styleUrls: ['./counter-widget.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CounterWidgetComponent implements OnInit, OnDestroy {
-  data$: Observable<any>;
+  data$!: Observable<any>;
   dateParams$: BehaviorSubject<DateParams> = new BehaviorSubject(
     {} as DateParams
   );
@@ -49,14 +49,14 @@ export class CounterWidgetComponent implements OnInit, OnDestroy {
     key: 'counter',
     value: 'Counter'
   };
-  rangeForm: FormGroup;
-  hasForm$: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  rangeForm!: FormGroup;
+  hasForm$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   get loading$() {
     return this.loading.asObservable();
   }
 
-  private loading: BehaviorSubject<boolean> = new BehaviorSubject(true);
-  private controlSubscription: Subscription;
+  private loading: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
+  private controlSubscription!: Subscription;
 
   constructor(
     private widgetService: WidgetService,
@@ -68,7 +68,11 @@ export class CounterWidgetComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    const candidateId = this.userService.user.data.contact.candidate_contact;
+    const candidateId = this.userService.user?.data.contact.candidate_contact;
+
+    if (!candidateId) {
+      return;
+    }
 
     this.data$ = this.dateParams$.pipe(
       switchMap((params: DateParams) =>

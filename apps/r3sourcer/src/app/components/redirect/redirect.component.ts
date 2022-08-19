@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { environment } from '../../../environments/environment';
 
 @Component({
-  selector: 'app-redirect',
+  selector: 'webui-redirect',
   template: '',
 })
 export class RedirectComponent implements OnInit {

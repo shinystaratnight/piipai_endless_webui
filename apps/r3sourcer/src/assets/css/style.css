@@ -404,7 +404,7 @@ sup {
     .input_type_transportation_to_work {
         margin-bottom: 0px !important;
     }
-    .input_type_transportation_to_work .form-element-checkbox.mr-4 {
+    .input_type_transportation_to_work .form-element-checkbox.me-4 {
         margin-right: 1rem !important;
     }
     .user-registration .input_type_autocomplete .form-element .autocomplete-value.form-control {

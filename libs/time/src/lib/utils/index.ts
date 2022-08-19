@@ -1,4 +1,4 @@
-import { Time } from '@webui/time';
+import { Time } from '../models';
 
 export const getYesterday = () => {
   return Time.now().add(-1, 'day');

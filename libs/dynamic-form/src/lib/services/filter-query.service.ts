@@ -11,8 +11,8 @@ export type FilterType =
 
 @Injectable()
 export class FilterQueryService {
-  public generateQueryOf(type: FilterType, filter): string {
-    if (filter.hasOwnProperty('default')) {
+  public generateQueryOf(type: FilterType, filter: Record<string, any>): string {
+    if ('default' in filter) {
       switch (type) {
         case 'checkbox':
           return this.parseCheckboxQuery(filter);
@@ -21,11 +21,15 @@ export class FilterQueryService {
           return '';
       }
     }
+
+    return '';
   }
 
-  private parseCheckboxQuery(config) {
-    if (config.default) {
-      return `${config.query}=${config.default}`;
+  private parseCheckboxQuery(config: Record<string, any>) {
+    if (config['default']) {
+      return `${config['query']}=${config['default']}`;
     }
+
+    return '';
   }
 }

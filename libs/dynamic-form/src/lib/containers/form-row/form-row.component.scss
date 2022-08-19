@@ -1,5 +1,8 @@
-@import '../../../../../../styles/variables';
-@import '../../../../../../styles/mixins';
+@use 'variables' as *;
+
+:host:last-child .items {
+  border-bottom: none;
+}
 
 .items {
   position: relative;
@@ -38,7 +41,7 @@
 }
 
 @include media-breakpoint-down('md') {
-  app-form-checkbox .form-group {
+  webui-form-checkbox .form-group {
     position: absolute;
     width: 120px;
     top: 5px;

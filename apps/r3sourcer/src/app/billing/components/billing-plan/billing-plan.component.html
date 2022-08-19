@@ -1,5 +1,5 @@
 <div class="d-flex align-items-center mb-2">
-  <h5 class="mb-0 mr-1">Subscription details</h5>
+  <h5 class="mb-0 me-1">Subscription details</h5>
 
   <ng-container *ngIf="currentPlan">
 
@@ -28,7 +28,7 @@
     <div class="modal-header">
       <h5 class="modal-title">Select your plan</h5>
 
-      <app-close-button class="ml-auto" (click)="d()"></app-close-button>
+      <webui-close-button class="ms-auto" (click)="d()"></webui-close-button>
     </div>
   </div>
 
@@ -76,7 +76,7 @@
     <p *ngIf="workerCount > 1000" class="message">Please contact our sales staff for customized offer: <a href="mailto:sales@r3sourcer.com">sales@r3sourcer.com</a></p>
 
     <div class="spinner-wrapper" *ngIf="saveProcess">
-      Saving... <app-spinner></app-spinner>
+      Saving... <webui-spinner></webui-spinner>
     </div>
   </div>
 </ng-template>

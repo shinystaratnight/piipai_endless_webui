@@ -6,7 +6,8 @@ import {
   Output,
   EventEmitter,
   OnDestroy,
-  ChangeDetectorRef
+  ChangeDetectorRef,
+  ElementRef
 } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 
@@ -14,6 +15,7 @@ import { Subscription } from 'rxjs';
 
 import { BasicElementComponent } from './../basic-element/basic-element.component';
 import { getTranslationKey } from '@webui/utilities';
+import { FormMode } from '../../../services';
 
 type SelectOption = {
   value: string;
@@ -22,7 +24,7 @@ type SelectOption = {
 };
 
 @Component({
-  selector: 'app-form-select',
+  selector: 'webui-form-select',
   templateUrl: 'form-select.component.html'
 })
 export class FormSelectComponent
@@ -30,26 +32,26 @@ export class FormSelectComponent
   implements OnInit, AfterViewInit, OnDestroy
 {
   @ViewChild('select')
-  public select;
+  public select!: ElementRef;
 
-  public config;
-  public group: FormGroup;
+  public override config!: any;
+  public override group!: FormGroup;
   public errors: any;
   public message: any;
-  public key: any;
+  public override key: any;
   public options: any;
-  public label: boolean;
+  public label!: boolean;
 
-  public displayValue: string;
-  public displayValueKey: string;
-  public textColor: string;
+  public displayValue!: string;
+  public displayValueKey!: string;
+  public textColor!: string;
 
-  public viewMode: boolean;
+  public viewMode!: boolean;
 
-  private translateKey: string;
+  public translateKey!: string;
 
   @Output()
-  public event: EventEmitter<any> = new EventEmitter();
+  public override event: EventEmitter<any> = new EventEmitter();
 
   getTranslationKey = getTranslationKey;
 
@@ -77,10 +79,10 @@ export class FormSelectComponent
 
   public checkHiddenProperty() {
     if (this.config && this.config.hidden) {
-      const subscription = this.config.hidden.subscribe((hide) => {
+      const subscription = this.config.hidden.subscribe((hide: boolean) => {
         if (hide) {
           this.config.hide = hide;
-          this.group.get(this.key).patchValue(undefined);
+          this.group.get(this.key)?.patchValue(undefined);
           this.setInitValue();
         } else {
           this.config.hide = hide;
@@ -97,10 +99,10 @@ export class FormSelectComponent
 
   public checkModeProperty() {
     if (this.config && this.config.mode) {
-      const subscription = this.config.mode.subscribe((mode) => {
+      const subscription = this.config.mode.subscribe((mode: FormMode) => {
         if (mode === 'view') {
           this.viewMode = true;
-          this.group.get(this.key).patchValue(undefined);
+          this.group.get(this.key)?.patchValue(undefined);
         } else {
           this.viewMode = this.config.read_only || false;
         }
@@ -113,8 +115,8 @@ export class FormSelectComponent
     }
   }
 
-  public getOption(options: any[], value: unknown): SelectOption | null {
-    let element = options.find(
+  public getOption(options: any[], value: any): SelectOption | null {
+    const element = options.find(
       (el) => el.value.toString() === value.toString()
     );
 
@@ -132,7 +134,7 @@ export class FormSelectComponent
   public setInitValue() {
     const parsedValue = this.parseValue([
       this.config.value,
-      this.group.get(this.key).value,
+      this.group.get(this.key)?.value,
       this.config.default
     ]);
 
@@ -140,16 +142,16 @@ export class FormSelectComponent
       const option = this.getOption(this.options, parsedValue.value);
 
       if (option) {
-        this.displayValueKey = this.getOptionTranslationKey(option.key);
+        this.displayValueKey = this.getOptionTranslationKey(option.key as string);
         this.textColor = option.color ? `text-${option.color}` : '';
-        this.group.get(this.key).patchValue(parsedValue.value);
+        this.group.get(this.key)?.patchValue(parsedValue.value);
       } else {
         this.displayValue = '-';
       }
 
-      this.group.get(this.key).patchValue(parsedValue.value);
+      this.group.get(this.key)?.patchValue(parsedValue.value);
     } else {
-      this.group.get(this.key).patchValue(null);
+      this.group.get(this.key)?.patchValue(null);
     }
   }
 
@@ -159,11 +161,11 @@ export class FormSelectComponent
     }
   }
 
-  public eventHandler(e) {
+  public eventHandler(e: any) {
     this.event.emit({
       type: e.type,
       el: this.config,
-      value: this.group.get(this.key).value
+      value: this.group.get(this.key)?.value
     });
   }
 

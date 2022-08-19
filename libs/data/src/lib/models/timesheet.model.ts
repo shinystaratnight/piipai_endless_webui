@@ -2,9 +2,10 @@ import {
   checkAndReturnTranslation,
   getLocalStorageItem,
 } from '@webui/utilities';
-import { Endpoints, Models } from '../enums';
+import { Models } from '../enums';
 import { Model } from './model';
-import { DATE_TIME_FORMAT, Time } from '@webui/time';
+import { DATE_TIME_FORMAT, Moment, Time } from '@webui/time';
+import { Endpoints, Language } from '@webui/models';
 
 export type Timesheet = {
   id: string;
@@ -24,10 +25,10 @@ export type Timesheet = {
 };
 
 export class TimesheetModel extends Model {
-  readonly key = Models.Timesheet;
-  readonly label = 'Timesheet';
-  readonly endpoint = Endpoints.Timesheet;
-  readonly data: Timesheet;
+  override readonly key = Models.Timesheet;
+  override readonly label = 'Timesheet';
+  override readonly endpoint = Endpoints.Timesheet;
+  override data!: Timesheet;
   readonly endpoints = {
     not_agree: `${Endpoints.Timesheet}{id}/not_agree/`,
     evaluate: `${Endpoints.Timesheet}{id}/evaluate/`,
@@ -54,7 +55,7 @@ export class TimesheetModel extends Model {
       return defaultTime;
     }
 
-    let times = {
+    let times: Record<string, Moment | null> = {
       shift_ended_at: Time.parse(shift_ended_at, { timezone: timeZone }),
       shift_started_at: Time.parse(shift_started_at, { timezone: timeZone }),
       break_started_at: null,
@@ -63,7 +64,7 @@ export class TimesheetModel extends Model {
 
     let breakTime = 0;
 
-    if (times.shift_ended_at.isBefore(times.shift_started_at)) {
+    if ((times['shift_ended_at'] as Moment).isBefore(times['shift_started_at'])) {
       return defaultTime;
     }
 
@@ -75,18 +76,18 @@ export class TimesheetModel extends Model {
       };
 
       if (
-        times.break_started_at.isAfter(times.shift_ended_at) ||
-        times.break_ended_at.isAfter(times.shift_ended_at) ||
-        times.break_started_at.isBefore(times.shift_started_at) ||
-        times.break_ended_at.isBefore(times.shift_started_at)
+        (times['break_started_at'] as Moment).isAfter(times['shift_ended_at']) ||
+        (times['break_ended_at'] as Moment).isAfter(times['shift_ended_at']) ||
+        (times['break_started_at'] as Moment).isBefore(times['shift_started_at']) ||
+        (times['break_ended_at'] as Moment).isBefore(times['shift_started_at'])
       ) {
         return defaultTime;
       }
 
-      breakTime = times.break_ended_at.diff(times.break_started_at);
+      breakTime = (times['break_ended_at'] as Moment).diff(times['break_started_at']);
     }
 
-    const workTime = times.shift_ended_at.diff(times.shift_started_at);
+    const workTime = (times['shift_ended_at'] as Moment).diff(times['shift_started_at']);
     const totalTime = Time.duration(workTime - breakTime);
 
     return `${Math.floor(totalTime.asHours())}hr ${totalTime.minutes()}min`;
@@ -109,7 +110,7 @@ class RelatedObject {
 
   constructor(config: any) {
     this.__str__ = config
-      ? checkAndReturnTranslation(config, 'EN', getLocalStorageItem('web.lang'))
+      ? checkAndReturnTranslation(config, 'EN', getLocalStorageItem('web.lang') as Language)
       : '';
     this.id = config?.id;
   }
@@ -135,7 +136,7 @@ class Contact {
 
 class ApiModel {
   public id?: string;
-  public apiEndpoint?: string;
+  public apiEndpoint!: string;
   public get editApiEndpoint(): string {
     return `${this.apiEndpoint}${this.id}/`;
   }
@@ -148,10 +149,10 @@ class ApiModel {
 
 export class TimeSheet extends ApiModel {
   candidate: Contact;
-  startedAt: string;
-  endedAt: string;
-  breakStartedAt: string;
-  breakEndedAt: string;
+  startedAt: string | null;
+  endedAt: string | null;
+  breakStartedAt: string | null;
+  breakEndedAt: string | null;
   readonly timezone: string;
   status: number;
 
@@ -188,7 +189,7 @@ export class TimeSheet extends ApiModel {
       return defaultTime;
     }
 
-    let times = {
+    let times: Record<string, Moment | null> = {
       shift_ended_at: Time.parse(this.endedAt, { timezone: this.timezone }),
       shift_started_at: Time.parse(this.startedAt, { timezone: this.timezone }),
       break_started_at: null,
@@ -197,7 +198,7 @@ export class TimeSheet extends ApiModel {
 
     let breakTime = 0;
 
-    if (times.shift_ended_at.isBefore(times.shift_started_at)) {
+    if ((times['shift_ended_at'] as Moment).isBefore(times['shift_started_at'])) {
       return defaultTime;
     }
 
@@ -213,18 +214,18 @@ export class TimeSheet extends ApiModel {
       };
 
       if (
-        times.break_started_at.isAfter(times.shift_ended_at) ||
-        times.break_ended_at.isAfter(times.shift_ended_at) ||
-        times.break_started_at.isBefore(times.shift_started_at) ||
-        times.break_ended_at.isBefore(times.shift_started_at)
+        (times['break_started_at'] as Moment).isAfter(times['shift_ended_at']) ||
+        (times['break_ended_at'] as Moment).isAfter(times['shift_ended_at']) ||
+        (times['break_started_at'] as Moment).isBefore(times['shift_started_at']) ||
+        (times['break_ended_at'] as Moment).isBefore(times['shift_started_at'])
       ) {
         return defaultTime;
       }
 
-      breakTime = times.break_ended_at.diff(times.break_started_at);
+      breakTime = (times['break_ended_at'] as Moment).diff(times['break_started_at']);
     }
 
-    const workTime = times.shift_ended_at.diff(times.shift_started_at);
+    const workTime = (times['shift_ended_at'] as Moment).diff(times['shift_started_at']);
     const totalTime = Time.duration(workTime - breakTime);
 
     return `${Math.floor(totalTime.asHours())}hr ${totalTime.minutes()}min`;
@@ -238,7 +239,7 @@ export class TimeSheet extends ApiModel {
     return this.totalTime !== '0h 0min';
   }
 
-  get format(): { [key: string]: string } {
+  get format(): Record<string, string | undefined> {
     const startedAt = Time.parse(this.startedAt, {
       timezone: this.timezone,
     }).format(DATE_TIME_FORMAT);

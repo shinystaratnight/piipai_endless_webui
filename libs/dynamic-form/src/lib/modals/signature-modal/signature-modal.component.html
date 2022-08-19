@@ -1,10 +1,10 @@
-<app-base-modal (dissmisEvent)="dismiss()" title="Signature">
+<webui-base-modal (dissmisEvent)="dismiss()" title="Signature">
 
   <div class="modal-body">
-    <app-signature
+    <webui-signature
       #signatureCanvas
       (signature)="updateSignature($event)"
-    ></app-signature>
+    ></webui-signature>
   </div>
 
   <div class="modal-footer">
@@ -23,4 +23,4 @@
       {{ 'save' | translate: { Default: 'Save' } }}
     </button>
   </div>
-</app-base-modal>
+</webui-base-modal>

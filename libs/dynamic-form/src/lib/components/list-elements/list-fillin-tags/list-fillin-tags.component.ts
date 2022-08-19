@@ -1,15 +1,15 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-list-fillin-tags',
+  selector: 'webui-list-fillin-tags',
   templateUrl: './list-fillin-tags.component.html',
   styleUrls: ['./list-fillin-tags.component.scss']
 })
 export class ListFillinTagsComponent {
 
-  public config;
+  public config!: any;
 
-  public labels = {
+  public labels: Record<string, string> = {
     required: 'Required',
     missing: 'Missing',
     existing: 'Existing'
