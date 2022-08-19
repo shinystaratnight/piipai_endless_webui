@@ -2,7 +2,9 @@
   <header>
       <div class="row p-2 border-bottom">
           <div class="col-12 text-end">
-            <a href="/"><i class="fa fa-times" aria-hidden="true"></i></a>
+            <a routerLink="/">
+              <fa-icon [icon]="['fas', 'times']"></fa-icon>
+            </a>
           </div>
           <div class="col-12 text-center">
               <img class="logo" [src]="logo">

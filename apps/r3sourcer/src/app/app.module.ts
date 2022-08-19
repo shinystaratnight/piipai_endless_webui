@@ -13,6 +13,7 @@ import {
   faChevronLeft,
   faChevronRight,
   faCircle,
+  faCalendar,
   faPlus,
   faCheck,
   faMinusCircle,
@@ -49,6 +50,7 @@ import {
   faSortUp,
   faSortDown,
   faDotCircle,
+  faUser
 } from '@fortawesome/free-solid-svg-icons';
 import { NgxWebstorageModule } from 'ngx-webstorage';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
@@ -161,6 +163,8 @@ export class AppModule {
       faSortUp,
       faSortDown,
       faDotCircle,
+      faCalendar,
+      faUser
     ];
 
     library.addIcons(...icons);

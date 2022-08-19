@@ -151,7 +151,7 @@
         {{'add_photo' | translate: {"Default": 'Add photo'} }}
       </label>
       <div class="dropzone" #dropzone>
-        <i class="fa fa-user" aria-hidden="true"></i>
+        <fa-icon class="fa fa-user" [icon]="['fas', 'user']"></fa-icon>
         <img *ngIf="value" [src]="value" alt="" width="100" height="100" />
       </div>
     </div>

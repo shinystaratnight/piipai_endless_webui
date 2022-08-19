@@ -204,6 +204,7 @@ $shadow: 0px 4px 6px 0;
   &:disabled {
     pointer-events: initial;
     cursor: not-allowed;
+    color: $white;
   }
 
   &:hover {
