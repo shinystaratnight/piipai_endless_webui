@@ -45,13 +45,13 @@ export class FormDatepickerControlComponent
   private timerDropdown!: Dropdown;
   private destroy: Subject<void> = new Subject<void>();
 
-  @Input() label?: string;
+  @Input() label!: string;
   @Input() type?: DatepickerType;
-  @Input() initialValue?: string;
+  @Input() initialValue?: string | null;
   @Input() timezone?: string;
 
-  @Input() timerFrom?: string;
-  @Input() timerTo?: string;
+  @Input() timerFrom?: string | null;
+  @Input() timerTo?: string | null;
 
   @ViewChild(CdkOverlayOrigin) overlayOrigin?: CdkOverlayOrigin;
   @ViewChild('content') content?: TemplateRef<unknown>;

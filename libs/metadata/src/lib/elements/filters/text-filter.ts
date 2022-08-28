@@ -16,8 +16,8 @@ export class TextFilter implements FilterModel {
   public default: any;
   public key: string;
   public label: string;
-  public min: number;
-  public max: number;
+  public min: number | null;
+  public max: number | null;
   public query: string;
 
   constructor(options: TextFilterOptions) {

@@ -8,7 +8,7 @@
   <div class="field">
     <span>Current balance:</span>
     <span class="value active">{{smsBalance.balance | currency: currency}}</span>
-    <button type="button" class="btn btn-sm btn-primary ml-3 action-button" (click)="showAddFundsForm()" [disabled]="!cardExist">Add Funds</button>
+    <button type="button" class="btn btn-sm btn-primary ms-3 action-button" (click)="showAddFundsForm()" [disabled]="!cardExist">Add Funds</button>
   </div>
 
   <div class="field">
@@ -16,7 +16,7 @@
     <div class="value">
       <span class="on" [class.active]="smsBalance.auto_charge">on</span>/<span class="off" [class.active]="!smsBalance.auto_charge">off</span>
     </div>
-    <button type="button" class="btn btn-sm btn-primary ml-3 action-button" (click)="autoCharge()">Configure Auto-charge</button>
+    <button type="button" class="btn btn-sm btn-primary ms-3 action-button" (click)="autoCharge()">Configure Auto-charge</button>
   </div>
 
   <p *ngIf="smsBalance.auto_charge">If the balance falls below {{smsBalance.top_up_limit | currency: currency}}, recharge by adding {{smsBalance.top_up_amount | currency: currency}} from saved card</p>
@@ -28,12 +28,12 @@
     <div class="modal-header">
       <h5 class="modal-title">Auto-charge</h5>
 
-      <app-close-button class="ml-auto" (click)="d()"></app-close-button>
+      <webui-close-button class="ms-auto" (click)="d()"></webui-close-button>
     </div>
   </div>
 
   <div class="modal-body">
-    <app-dynamic-form
+    <webui-dynamic-form
       [config]="modalConfig"
       [form]="group">
       <div class="text-center">
@@ -41,7 +41,7 @@
           Save
         </button>
       </div>
-    </app-dynamic-form>
+    </webui-dynamic-form>
   </div>
 </ng-template>
 
@@ -50,7 +50,7 @@
     <div class="modal-header">
       <h5 class="modal-title">Add funds</h5>
 
-      <app-close-button class="ml-auto" (click)="d()"></app-close-button>
+      <webui-close-button class="ms-auto" (click)="d()"></webui-close-button>
     </div>
   </div>
 

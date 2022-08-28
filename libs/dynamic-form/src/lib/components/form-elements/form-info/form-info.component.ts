@@ -6,13 +6,13 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
 
 import { getContactAvatar, isCandidate, isMobile, FormatString, isClient, checkAndReturnTranslation } from '@webui/utilities';
-import { GenericFormService, FormService } from '../../../services';
-import { Endpoints, CountryCodeLanguage } from '@webui/data';
+import { GenericFormService, FormService, FormMode } from '../../../services';
 import { SiteSettingsService } from '@webui/core';
 import { LocalStorageService } from 'ngx-webstorage';
+import { Endpoints } from '@webui/models';
 
 @Component({
-  selector: 'app-form-info',
+  selector: 'webui-form-info',
   templateUrl: './form-info.component.html',
   styleUrls: ['./form-info.component.scss'],
 })
@@ -21,45 +21,45 @@ export class FormInfoComponent implements OnInit, OnDestroy {
   public group: any;
   public errors: any;
 
-  public picture: string;
-  public available: boolean;
-  public title: string;
-  public skill_title: string; //tslint:disable-line
-  public address: string;
-  public description: string;
-  public status: any[];
+  public picture!: string;
+  public available!: boolean;
+  public title!: string;
+  public skill_title!: string;
+  public address!: string;
+  public description!: string;
+  public status!: any[];
   public averageScore: any;
-  public contactAvatar: string;
-  public created_at: string; //tslint:disable-line
-  public updated_at: string; //tslint:disable-line
-  public job_title: string; //tslint:disable-line
-  public company: string;
-  public titlePath: boolean;
-  public carrier_reserve: number; //tslint:disable-line
+  public contactAvatar!: string | null;
+  public created_at!: string;
+  public updated_at!: string;
+  public job_title!: string;
+  public company!: string;
+  public titlePath!: boolean;
+  public carrier_reserve!: number;
   public map: any;
   public client: any;
-  public link: string;
+  public link!: string;
   public job: any;
   public jobsite: any;
   public tags: any;
-  public birthday: string;
-  public timezone: string;
+  public birthday!: string;
+  public timezone!: string;
 
   public color: any;
-  public colorAttr: string;
+  public colorAttr!: string;
   public className: any;
-  public viewMode: boolean;
+  public viewMode!: boolean;
 
-  public modalRef: NgbModalRef;
+  public modalRef!: NgbModalRef;
   public modalInfo: any;
-  public saveProcess: boolean;
+  public saveProcess!: boolean;
 
-  public statusList: any[];
-  public more: boolean;
+  public statusList!: any[];
+  public more!: boolean;
   public disableButtons = true;
   public isMobileDevice = isMobile() && isCandidate();
 
-  public colors = {
+  public colors: Record<number, string> = {
     1: '#FA5C46',
     2: '#fc9183',
     3: '#FFA236',
@@ -67,13 +67,13 @@ export class FormInfoComponent implements OnInit, OnDestroy {
     5: '#FFD042',
   };
 
-  formId: number;
+  formId!: number;
 
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
 
   @ViewChild('modal')
-  public modal: TemplateRef<any>;
+  public modal!: TemplateRef<any>;
 
   private subscriptions: Subscription[];
 
@@ -92,6 +92,8 @@ export class FormInfoComponent implements OnInit, OnDestroy {
     if (this.formId) {
       return this.formService.getForm(this.formId).endpoint === Endpoints.CandidateContact;
     }
+
+    return false;
   }
 
   public ngOnInit() {
@@ -128,16 +130,19 @@ export class FormInfoComponent implements OnInit, OnDestroy {
           this[key] = this.getValue(this.config.values[key], this.config.value);
 
           if (this[key]) {
-            if (this[key].latitude) {
-              this[key].latitude = parseFloat(this[key].latitude);
-            }
-
-            if (this[key].longitude) {
-              this[key].longitude = parseFloat(this[key].longitude);
+            if (this[key].latitude && this[key].longitude) {
+              this[key].center = {
+                lat: parseFloat(this[key].latitude),
+                lng: parseFloat(this[key].longitude)
+              }
             }
           }
         } else {
-          this[key] = this.getValue(this.config.values[key], this.config.value);
+          const prop: keyof FormInfoComponent = key as keyof FormInfoComponent;
+
+          if (prop !== 'isCandiateContactForm') {
+            this[prop] = this.getValue(this.config.values[key], this.config.value) as never;
+          }
         }
       });
 
@@ -159,7 +164,7 @@ export class FormInfoComponent implements OnInit, OnDestroy {
 
   public isCandidatePage(): boolean {
     if (this.config.value && this.config.value instanceof Object) {
-      return this.config.value.hasOwnProperty('average_score');
+      return 'average_score' in this.config.value;
     }
 
     return false;
@@ -189,7 +194,7 @@ export class FormInfoComponent implements OnInit, OnDestroy {
   public getValue(key: string, data: any, type?: string): any {
     if (key) {
       const keys = key.split('.');
-      const prop = keys.shift();
+      const prop: string = keys.shift() as string;
 
       if (!keys.length) {
         if (data[prop] instanceof Object && type === 'picture') {
@@ -208,7 +213,7 @@ export class FormInfoComponent implements OnInit, OnDestroy {
     }
   }
 
-  public checkClass(item) {
+  public checkClass(item: any) {
     let className;
     if (this.color && this.colorAttr) {
       const keys = Object.keys(this.color);
@@ -221,7 +226,7 @@ export class FormInfoComponent implements OnInit, OnDestroy {
     return className || 'success';
   }
 
-  public showMore(e) {
+  public showMore(e: any) {
     e.preventDefault();
     e.stopPropagation();
 
@@ -231,13 +236,13 @@ export class FormInfoComponent implements OnInit, OnDestroy {
     return false;
   }
 
-  public getScore(score) {
+  public getScore(score: string) {
     return Math.floor(parseFloat(score));
   }
 
   public checkModeProperty() {
     if (this.config && this.config.mode) {
-      const subscription = this.config.mode.subscribe((mode) => {
+      const subscription = this.config.mode.subscribe((mode: FormMode) => {
         this.viewMode = mode === 'view';
       });
 
@@ -286,7 +291,7 @@ export class FormInfoComponent implements OnInit, OnDestroy {
     }
   }
 
-  public formEvent(e, closeModal) {
+  public formEvent(e: any, closeModal: () => void) {
     if (e.type === 'saveStart') {
       this.saveProcess = true;
     }
@@ -298,7 +303,7 @@ export class FormInfoComponent implements OnInit, OnDestroy {
     }
   }
 
-  public eventHandler(e) {
+  public eventHandler(e: any) {
     if (e.type === 'patchPicture') {
       this.updateContact({ picture: e.value });
     }

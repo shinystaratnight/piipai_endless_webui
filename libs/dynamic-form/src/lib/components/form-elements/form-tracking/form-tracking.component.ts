@@ -6,13 +6,13 @@ import { GenericFormService } from '../../../services';
 import { TrackingModalComponent } from '../../../modals';
 
 @Component({
-  selector: 'app-form-tracking',
+  selector: 'webui-form-tracking',
   templateUrl: './form-tracking.component.html',
   styleUrls: ['./form-tracking.component.scss'],
 })
 export class FormTrackingComponent implements OnDestroy {
-  public config;
-  public modalRef: NgbModalRef;
+  public config: any;
+  public modalRef!: NgbModalRef;
 
   constructor(
     private genericFormService: GenericFormService,

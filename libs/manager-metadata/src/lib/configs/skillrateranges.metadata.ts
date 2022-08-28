@@ -1,4 +1,4 @@
-import { Endpoints, Models, SkillModel, SkillWorkTypeModel } from '@webui/data';
+import { Models, SkillModel, SkillWorkTypeModel } from '@webui/data';
 import { Form, InputType, List } from '@webui/metadata';
 
 const list = () =>
@@ -104,7 +104,7 @@ const formadd = () => [
       new SkillWorkTypeModel()
         .formElement()
         .setShowIfRule(['skill.id'])
-        .setPerfilledFields({
+        .setPrefilledFields({
           [Models.Skill]: '{skill.id}'
         })
         .updateValues(['translations'])

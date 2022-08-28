@@ -39,7 +39,7 @@ const formadd = () => [
     .setActions({ add: true })
     .updateValues(['translations', 'uom', 'skill_rate_ranges'])
     .required()
-    .setPerfilledFields({
+    .setPrefilledFields({
       [Models.Skill]: `{${Models.Skill}.id}`
     })
     .setQuery({

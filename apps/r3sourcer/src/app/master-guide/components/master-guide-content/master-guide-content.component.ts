@@ -12,14 +12,14 @@ import { FormatString } from '@webui/utilities';
 import { UserService } from '@webui/core';
 
 @Component({
-  selector: 'app-master-guide-content',
+  selector: 'webui-master-guide-content',
   templateUrl: './master-guide-content.component.html',
   styleUrls: ['./master-guide-content.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MasterGuideContentComponent implements OnInit {
   @Input()
-  guide: GuideItem[];
+  guide!: GuideItem[];
 
   @Output()
   updateEvent: EventEmitter<{
@@ -38,7 +38,7 @@ export class MasterGuideContentComponent implements OnInit {
         if (item.url) {
           item.url = format.format(
             item.url,
-            this.userService.user.data.contact
+            this.userService.user?.data.contact as any
           );
         }
       });

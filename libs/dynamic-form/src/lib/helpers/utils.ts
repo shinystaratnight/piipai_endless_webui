@@ -1,7 +1,7 @@
-import { Field } from '@webui/data';
+import { Field } from '@webui/metadata';
 import { isMobile } from '@webui/utilities';
 
-export function fillingForm(metadata: Field[], data): void {
+export function fillingForm(metadata: Field[], data: any): void {
   metadata.forEach((el) => {
     if (el.key) {
       getValueOfData(data, el.key, el);
@@ -11,9 +11,9 @@ export function fillingForm(metadata: Field[], data): void {
   });
 }
 
-export function getValueOfData(data, key: string, obj: Field): void {
+export function getValueOfData(data: any, key: string, obj: Field): void {
   const keys = key.split('.');
-  const prop = keys.shift();
+  const prop: string = keys.shift() as string;
   if (keys.length === 0) {
     if (data) {
       if (!obj['value']) {
@@ -34,8 +34,8 @@ export function getValueOfData(data, key: string, obj: Field): void {
   }
 }
 
-export function getElementFromMetadata(metadata: Field[], key: string, param = 'key'): Field {
-  let element = null;
+export function getElementFromMetadata(metadata: Field[], key: string, param: keyof Field = 'key'): Field | null {
+  let element: Field | null = null;
   metadata.forEach((el: Field) => {
     if (el[param] === key) {
       if (!element) {
@@ -52,7 +52,7 @@ export function getElementFromMetadata(metadata: Field[], key: string, param = '
 
 export function removeValue(key: string, data: any): void {
   const keysArray = key.split('.');
-  const firstKey = keysArray.shift();
+  const firstKey: string = keysArray.shift() as string;
 
   if (keysArray.length === 0) {
     if (data) {
@@ -60,18 +60,18 @@ export function removeValue(key: string, data: any): void {
     }
   } else if (keysArray.length > 0) {
     const combineKeys = keysArray.join('.');
-    this.removeValue(combineKeys, data[firstKey]);
+    removeValue(combineKeys, data[firstKey]);
   }
 }
 
-export function createAddAction(data) {
+export function createAddAction(data: any) {
   return {
     action: 'add',
     data
   };
 }
 
-export function getEvaluationScore(score) {
+export function getEvaluationScore(score: string) {
   return Math.floor(parseFloat(score));
 }
 

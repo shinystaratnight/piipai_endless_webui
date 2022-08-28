@@ -1,14 +1,14 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { catchError, of, Subscription } from 'rxjs';
 
 import { EventService, EventType, LocalEnvService } from '@webui/core';
 import { candidatecontacts, fillin } from '@webui/manager-metadata';
-import { FilterService } from '@webui/dynamic-form';
-import { AverageScoreColor, Endpoints } from '@webui/data';
 
 import { DashboardService } from '../../services';
 import { Router } from '@angular/router';
-import { FilterEvent } from 'libs/dynamic-form/src/lib/interfaces';
+// eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
+import { FilterEvent, FilterService } from '@webui/dynamic-form';
+import { Endpoints } from '@webui/models';
 
 const enum Lists {
   CandidateContact = 'candidatecontact',
@@ -16,12 +16,12 @@ const enum Lists {
 }
 
 @Component({
-  selector: 'app-candidate-widget',
+  selector: 'webui-candidate-widget',
   templateUrl: './candidate-widget.component.html',
   styleUrls: ['./candidate-widget.component.scss'],
   providers: [FilterService, LocalEnvService]
 })
-export class CandidateWidget implements OnInit, OnDestroy {
+export class CandidateWidgetComponent implements OnInit, OnDestroy {
   public modalScrollDistance = 2;
   public modalScrollThrottle = 50;
   public selectedCandidates: Set<string> = new Set();
@@ -30,19 +30,18 @@ export class CandidateWidget implements OnInit, OnDestroy {
   public loading = false;
   public filtersQuery = '';
   public activeList = Lists.CandidateContact;
-  public statusColors = {
+  public statusColors: Record<number, string> = {
     0: 'danger',
     80: 'danger',
     90: 'danger'
   };
-  public color_attr = 'number';
 
-  public showFilters: boolean;
-  public filtersOfList: any[];
-  public count: number;
-  public candidates: any[];
+  public showFilters!: boolean;
+  public filtersOfList!: any[];
+  public count!: number;
+  public candidates?: any[];
   public shift: any;
-  private subscription: Subscription;
+  private subscription!: Subscription;
 
   candidateContactsConfig = {
     list: Lists.CandidateContact,
@@ -73,11 +72,13 @@ export class CandidateWidget implements OnInit, OnDestroy {
     this.subscription.unsubscribe();
   }
 
-  public checkClass(item) {
-    return this.statusColors[item[this.color_attr]] || '';
+  public checkClass(item: { __str__: string, number: number }) {
+    const key: number = item.number;
+
+    return this.statusColors[key] || '';
   }
 
-  public selectCandidate(candidate) {
+  public selectCandidate(candidate: { selected: boolean, id: string }) {
     if (this.shift) {
       candidate.selected = !candidate.selected;
 
@@ -94,7 +95,7 @@ export class CandidateWidget implements OnInit, OnDestroy {
   }
 
   public onModalScrollDown() {
-    if (!this.loading && this.count > this.candidates.length) {
+    if (this.candidates && !this.loading && this.count > this.candidates.length) {
       this.offset += this.limit;
       this.loading = true;
       const queryObj = this.parseQuery(this.filtersQuery);
@@ -142,7 +143,7 @@ export class CandidateWidget implements OnInit, OnDestroy {
       });
   }
 
-  public togglePanel(candidate, event) {
+  public togglePanel(candidate: { extend: boolean }, event: MouseEvent) {
     event.stopPropagation();
     event.preventDefault();
     candidate.extend = !candidate.extend;
@@ -191,15 +192,17 @@ export class CandidateWidget implements OnInit, OnDestroy {
   ) {
     this.widgetService
       .getCandidates({ limit: this.limit, ...query })
-      .subscribe((data: { count: number; candidates: any[] }) => {
-        if (concat) {
-          this.candidates.push(...data.candidates);
-          this.loading = false;
-          return;
-        }
+      .subscribe((data: any) => {
+        if (data && data.candidates) {
+          if (concat) {
+            this.candidates?.push(...data.candidates);
+            this.loading = false;
+            return;
+          }
 
-        this.count = data.count;
-        this.candidates = data.candidates;
+          this.count = data.count;
+          this.candidates = data.candidates;
+        }
       });
   }
 
@@ -217,7 +220,7 @@ export class CandidateWidget implements OnInit, OnDestroy {
   }
 
   private parseQuery(query: string): { [key: string]: any } {
-    const result = {};
+    const result: Record<string, any> = {};
     if (query.length) {
       query.split('&').forEach((el) => {
         const parseEl = el.split('=');

@@ -1,4 +1,4 @@
-@import '../../../../../../../styles/variables';
+@use 'variables' as *;
 
 .group {
   border-bottom: 1px solid rgba($gray-600, 0.1);
@@ -42,11 +42,7 @@
   }
 }
 
-.btn-success:focus,
-.btn-success.focus,
-.btn:focus,
-.btn.focus,
-.btn-success:focus,
-.btn-success.focus {
-  box-shadow: none;
+.btn.btn-collapse fa-icon {
+  font-size: 16px;
+  line-height: 1.2;
 }

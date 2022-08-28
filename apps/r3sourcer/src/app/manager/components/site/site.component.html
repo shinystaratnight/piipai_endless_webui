@@ -1,6 +1,6 @@
 <ng-container *ngIf="!loader">
-  <app-navigation [user]="user" (changePasswordEmitter)="openChangePassword()">
-  </app-navigation>
+  <webui-navigation [user]="user" (changePasswordEmitter)="openChangePassword()">
+  </webui-navigation>
 
   <ng-container *ngIf="!identifyDevice()">
     <div
@@ -24,11 +24,11 @@
             !isProfilePage(pageData)
           "
         >
-          <app-back-link
+          <webui-back-link
             [label]="this.backToListLabel"
             [path]="pageData.pathData.path"
           >
-          </app-back-link>
+          </webui-back-link>
         </ng-container>
 
         <div
@@ -44,7 +44,7 @@
             pageData.pathData.postfix === 'submit'
           "
         >
-          <app-generic-form
+          <webui-generic-form
             *ngIf="
               (!reload &&
                 pageData.endpoint !== '/core/forms/' &&
@@ -58,7 +58,7 @@
             "
             [endpoint]="pageData.endpoint"
             [id]="pageData.pathData.id"
-            [edit]="pageData.pathData.postfix"
+            [edit]="!!pageData.pathData.postfix"
             [mode]="formMode"
             [errors]="errors"
             [data]="additionalData"
@@ -66,14 +66,14 @@
             [metadataQuery]="pageData.pathData.metadataQuery"
             (event)="formEvent($event)"
             (modeEvent)="modeEvent($event)"
-            (errorForm)="formError($event)"
-            (permissionError)="permissionErrorHandler($event)"
+            (errorForm)="formError()"
+            (permissionError)="permissionErrorHandler()"
             (str)="changeFormLabel($event)"
           >
             <div class="d-flex">
               <button
                 type="button"
-                appSubscriptionRequired
+                webuiSubscriptionRequired
                 class="btn button-delete custom-button"
                 *ngIf="showDeleteButton()"
                 (click)="deleteElement(pageData)"
@@ -84,7 +84,7 @@
 
               <button
                 type="button"
-                appSubscriptionRequired
+                webuiSubscriptionRequired
                 class="btn button-close mt-2"
                 *ngIf="formMode === FormMode.Edit"
                 (click)="changeMode(FormMode.View)"
@@ -94,8 +94,8 @@
 
               <button
                 type="button"
-                appSubscriptionRequired
-                class="btn btn-primary btn-shadow ml-auto button-edit"
+                webuiSubscriptionRequired
+                class="btn btn-primary btn-shadow ms-auto button-edit"
                 *ngIf="formMode === FormMode.View && checkPermission('update')"
                 (click)="changeMode(FormMode.Edit)"
               >
@@ -105,7 +105,7 @@
 
               <button
                 type="submit"
-                appSubscriptionRequired
+                webuiSubscriptionRequired
                 class="btn btn-primary button-save save mt-2"
                 *ngIf="
                   !formStorage &&
@@ -116,13 +116,13 @@
                 [disabled]="saveProcess"
               >
                 Save
-                <app-spinner *ngIf="saveProcess"></app-spinner>
+                <webui-spinner *ngIf="saveProcess"></webui-spinner>
               </button>
 
               <button
                 type="button"
-                appSubscriptionRequired
-                class="btn btn-success mr-2 ml-auto"
+                webuiSubscriptionRequired
+                class="btn btn-success me-2 ms-auto"
                 *ngIf="
                   formStorage &&
                   !approvedStorage &&
@@ -134,16 +134,16 @@
                 Approve
               </button>
             </div>
-          </app-generic-form>
+          </webui-generic-form>
         </div>
         <div class="form-content" *ngIf="pageData.endpoint === '/core/forms/'">
-          <app-form-builder
+          <webui-form-builder
             [path]="pageData.pathData.path"
             [endpoint]="pageData.endpoint"
             [id]="pageData.pathData.id"
             (str)="changeFormLabel($event)"
           >
-          </app-form-builder>
+          </webui-form-builder>
         </div>
 
         <div
@@ -154,21 +154,21 @@
               pageData.pathData.id)
           "
         >
-          <app-test-builder [testData]="acceptenceTestData">
-            <app-generic-form
+          <webui-test-builder [testData]="acceptenceTestData">
+            <webui-generic-form
               [endpoint]="pageData.endpoint"
               [id]="pageData.pathData.id"
               [path]="pageData.pathData.path"
               [mode]="formMode"
               (modeEvent)="modeEvent($event)"
-              (errorForm)="formError($event)"
+              (errorForm)="formError()"
               (event)="formEvent($event)"
               (str)="setTestData($event)"
             >
               <div class="d-flex">
                 <button
                   type="button"
-                  appSubscriptionRequired
+                  webuiSubscriptionRequired
                   class="btn button-delete custom-button"
                   *ngIf="pageData.pathData.id && checkPermission('delete')"
                   (click)="deleteElement(pageData)"
@@ -188,8 +188,8 @@
 
                 <button
                   type="button"
-                  appSubscriptionRequired
-                  class="btn btn-primary btn-shadow ml-auto button-edit"
+                  webuiSubscriptionRequired
+                  class="btn btn-primary btn-shadow ms-auto button-edit"
                   *ngIf="
                     formMode === FormMode.View && checkPermission('update')
                   "
@@ -201,7 +201,7 @@
 
                 <button
                   type="submit"
-                  appSubscriptionRequired
+                  webuiSubscriptionRequired
                   class="btn btn-primary button-save"
                   *ngIf="
                     !formStorage &&
@@ -211,11 +211,11 @@
                   [disabled]="saveProcess"
                 >
                   Save
-                  <app-spinner *ngIf="saveProcess"></app-spinner>
+                  <webui-spinner *ngIf="saveProcess"></webui-spinner>
                 </button>
               </div>
-            </app-generic-form>
-          </app-test-builder>
+            </webui-generic-form>
+          </webui-test-builder>
         </div>
       </div>
 
@@ -227,14 +227,14 @@
           [scrollWindow]="true"
           (scrolled)="onModalScrollDown()"
         >
-          <app-generic-list
+          <webui-generic-list
             [upload]="upload"
             [clientId]="getClientId()"
             [listNameCache]="listNameCache"
             [allowPermissions]="permissionMethods"
             [endpoint]="pageData.endpoint"
           >
-          </app-generic-list>
+          </webui-generic-list>
         </div>
 
         <div
@@ -243,7 +243,7 @@
             pageData.pathData.postfix && pageData.pathData.postfix === 'fillin'
           "
         >
-          <app-generic-list
+          <webui-generic-list
             [responseField]="fillInData.responseField || 'results'"
             [paginated]="fillInData.paginated || 'on'"
             [supportData]="fillInData.supportData"
@@ -256,39 +256,39 @@
             (checkedObjects)="checkedObjects($event)"
             (listUpdated)="data = null"
           >
-            <app-back-link label="Back to job info" (backEvent)="back()">
-            </app-back-link>
-          </app-generic-list>
+            <webui-back-link label="Back to job info" (backEvent)="back()">
+            </webui-back-link>
+          </webui-generic-list>
           <div class="buttons mb-5">
             <button type="button" class="btn btn-secondary" (click)="back()">
               Cancel
             </button>
             <button
               type="button"
-              appSubscriptionRequired
+              webuiSubscriptionRequired
               class="btn btn-primary pr-3"
               [disabled]="!data || fillInDataSending"
               (click)="sendData()"
             >
               Fill in
-              <app-spinner *ngIf="fillInDataSending"></app-spinner>
+              <webui-spinner *ngIf="fillInDataSending"></webui-spinner>
             </button>
           </div>
         </div>
       </ng-container>
 
-      <app-map *ngSwitchCase="'map'"></app-map>
+      <webui-map *ngSwitchCase="'map'"></webui-map>
     </div>
   </ng-container>
 
   <div class="dashboard" *ngIf="dashboard">
-    <app-dashboard></app-dashboard>
+    <webui-dashboard></webui-dashboard>
   </div>
 
-  <app-mobile-timesheets
+  <webui-mobile-timesheets
     [clientId]="getClientId()"
     *ngIf="identifyDevice()"
-  ></app-mobile-timesheets>
+  ></webui-mobile-timesheets>
 
   <ng-template #modal let-modal>
     <div class="modal-content-wrapper">
@@ -296,14 +296,14 @@
         <div class="modal-header">
           <h5 class="modal-title">Change Password</h5>
 
-          <app-close-button
-            class="ml-auto"
+          <webui-close-button
+            class="ms-auto"
             (click)="modal.dismiss()"
-          ></app-close-button>
+          ></webui-close-button>
         </div>
       </div>
-      <div class="py-3">
-        <app-generic-form
+      <div class="modal-body">
+        <webui-generic-form
           [endpoint]="changePasswordEndpoint"
           [edit]="true"
           [needData]="false"
@@ -313,9 +313,9 @@
             >Forgot Password?</a
           >
           <div class="d-flex align-items-center">
-            <button appSubscriptionRequired type="submit" class="btn btn-primary ml-auto">Save</button>
+            <button webuiSubscriptionRequired type="submit" class="btn btn-primary ms-auto">Save</button>
           </div>
-        </app-generic-form>
+        </webui-generic-form>
       </div>
     </div>
   </ng-template>
@@ -326,27 +326,27 @@
         <div class="modal-header">
           <h5 class="modal-title">Password Reset</h5>
 
-          <app-close-button
-            class="ml-auto"
+          <webui-close-button
+            class="ms-auto"
             (click)="modal.dismiss()"
-          ></app-close-button>
+          ></webui-close-button>
         </div>
       </div>
-      <div class="py-3">
-        <app-generic-form
+      <div class="modal-body">
+        <webui-generic-form
           endpoint="/core/contacts/forgot_password/"
           [data]="passwordData"
           (event)="resetEvent($event)"
         >
           <div class="d-flex align-items-center">
-            <button appSubscriptionRequired type="submit" class="btn btn-primary ml-auto">Reset</button>
+            <button webuiSubscriptionRequired type="submit" class="btn btn-primary ms-auto">Reset</button>
           </div>
-        </app-generic-form>
+        </webui-generic-form>
       </div>
     </div>
   </ng-template>
 
-  <app-master-guide *ngIf="user.data.is_primary"></app-master-guide>
+  <webui-master-guide *ngIf="user?.data?.is_primary"></webui-master-guide>
 </ng-container>
 
-<app-site-loader *ngIf="loader"></app-site-loader>
+<webui-site-loader *ngIf="loader"></webui-site-loader>

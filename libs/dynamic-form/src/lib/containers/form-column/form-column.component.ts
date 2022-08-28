@@ -1,7 +1,7 @@
 import { Component, Output, EventEmitter } from '@angular/core';
 
 @Component({
-  selector: 'app-form-column',
+  selector: 'webui-form-column',
   templateUrl: 'form-column.component.html'
 })
 
@@ -18,11 +18,11 @@ export class FormColumnComponent {
   @Output()
   public buttonAction: EventEmitter<any> = new EventEmitter();
 
-  public eventHandler(e) {
+  public eventHandler(e: any) {
     this.event.emit(e);
   }
 
-  public buttonActionHandler(e) {
+  public buttonActionHandler(e: any) {
     this.buttonAction.emit(e);
   }
 }

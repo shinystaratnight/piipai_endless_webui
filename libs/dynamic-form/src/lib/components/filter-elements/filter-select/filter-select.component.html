@@ -1,14 +1,14 @@
 <div class="filter-element">
-  <app-filter-header
+  <webui-filter-header
     [label]="config.label"
     [key]="config.key"
-    [resetButton]="query"
+    [resetButton]="!!query"
     (resetEvent)="resetFilter()"
-  ></app-filter-header>
+  ></webui-filter-header>
 
   <div class="filter-select-wrapper">
     <select
-      class="form-control custom-select filter-select"
+      class="form-control form-select filter-select"
       [(ngModel)]="data"
       (change)="onChange()"
       [class.active]="query"

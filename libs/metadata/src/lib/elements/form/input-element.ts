@@ -22,7 +22,7 @@ export interface InputElementTemplateOptions
 }
 
 export class InputElement extends BasicFormElement {
-  templateOptions: InputElementTemplateOptions;
+  override templateOptions!: InputElementTemplateOptions;
 
   constructor(key: string, label: string, type: InputType) {
     super(key, label, Input);

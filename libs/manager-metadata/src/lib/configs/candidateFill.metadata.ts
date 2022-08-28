@@ -1,5 +1,6 @@
-import { Endpoints, Models } from '@webui/data';
+import { Models } from '@webui/data';
 import { CheckboxType, Form } from '@webui/metadata';
+import { Endpoints } from '@webui/models';
 
 const form = [
   new Form.checkbox.element(

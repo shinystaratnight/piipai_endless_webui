@@ -12,7 +12,7 @@ import { Location } from '@angular/common';
 import { isClient, isCandidate, isManager } from '@webui/utilities';
 
 @Component({
-  selector: 'app-back-link',
+  selector: 'webui-back-link',
   templateUrl: './back-link.component.html',
   styleUrls: ['./back-link.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -23,15 +23,15 @@ export class BackLinkComponent implements OnInit {
     ? '/cl'
     : isCandidate()
     ? '/cd'
-    : isManager
+    : isManager()
     ? '/mn'
     : '';
 
-  @Input() label: string;
-  @Input() path: string;
-  @Input() key: string;
+  @Input() label?: string;
+  @Input() path?: string;
+  @Input() key?: string;
 
-  translationKey: string;
+  translationKey!: string;
 
   @Output() backEvent: EventEmitter<boolean> = new EventEmitter();
 

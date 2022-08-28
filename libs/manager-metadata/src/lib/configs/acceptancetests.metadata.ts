@@ -7,7 +7,7 @@ import {
   CheckboxType,
   generateOptions
 } from '@webui/metadata';
-import { Endpoints } from '@webui/data';
+import { Endpoints } from '@webui/models';
 
 const list = function () {
   return {
@@ -141,7 +141,7 @@ const form = function () {
             options: []
           })
           .setActions({ add: true, delete: true })
-          .setPerfilledFields({ acceptance_test: '{id}' })
+          .setPrefilledFields({ acceptance_test: '{id}' })
           .updateValues(['company_workflow_node'])
       ])
     ])

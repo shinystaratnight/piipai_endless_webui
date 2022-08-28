@@ -1,4 +1,3 @@
-import { Endpoints } from '@webui/data';
 import {
   metadataJoboffersCandidate,
   metadataTimesheetsCandidate,
@@ -6,6 +5,7 @@ import {
   metadataProfile,
   timesheetratescandidate
 } from '@webui/candidate-metadata';
+import { Endpoints } from '@webui/models';
 
 import {
   tagrels,

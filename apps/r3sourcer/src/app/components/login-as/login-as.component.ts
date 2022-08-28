@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { AuthService, UserService } from '@webui/core';
 
 @Component({
-  selector: 'app-login-as',
+  selector: 'webui-login-as',
   template: '',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -17,7 +17,7 @@ export class LoginAsComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    const userId = this.route.snapshot.params.id;
+    const userId = this.route.snapshot.params['id'];
 
     this.loginAs(userId);
   }

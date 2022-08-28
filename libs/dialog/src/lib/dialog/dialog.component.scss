@@ -1,4 +1,4 @@
-@import 'variables';
+@use 'variables' as *;
 @import 'mixins';
 
 $close-button-color: #7a7a7a;

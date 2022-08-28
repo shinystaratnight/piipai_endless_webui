@@ -1,8 +1,8 @@
 <webui-dialog [title]="'evaluate.label' | translate">
   <div class="content" dialog-content>
-    <app-timesheet-details-preview
+    <webui-timesheet-details-preview
       [timeSheet]="timeSheet"
-    ></app-timesheet-details-preview>
+    ></webui-timesheet-details-preview>
 
     <form
       class="form"
@@ -29,7 +29,7 @@
         </header>
 
         <ng-container *ngIf="timeViewType$ | async as type">
-          <div [formGroup]="formGroup.get('times')" *ngIf="type === 'form'">
+          <div [formGroup]="timesGroup" *ngIf="type === 'form'">
             <div class="form-row">
               <webui-form-datepicker-control
                 formControlName="shiftStartedAt"
@@ -81,12 +81,12 @@
             </footer>
           </div>
 
-          <app-entity-list
-            *ngIf="type == 'list'"
+          <webui-entity-list
+            *ngIf="type === 'list'"
             [config]="timeTable"
             (edit)="editTime()"
             (delete)="deleteTime()"
-          ></app-entity-list>
+          ></webui-entity-list>
         </ng-container>
       </section>
 
@@ -108,7 +108,7 @@
           <ng-container *ngIf="activityViewType$ | async as type">
             <div
               *ngIf="type === 'form'"
-              [formGroup]="formGroup.get('activity')"
+              [formGroup]="activityGroup"
             >
               <div class="form-row">
                 <webui-form-dropdown-control
@@ -150,12 +150,12 @@
               </footer>
             </div>
 
-            <app-entity-list
+            <webui-entity-list
               *ngIf="type === 'list'"
               [config]="activityTable"
-              (edit)="editAvtivity($event)"
+              (edit)="editActivity($event)"
               (delete)="deleteActivity($event)"
-            ></app-entity-list>
+            ></webui-entity-list>
           </ng-container>
         </ng-container>
       </section>
@@ -186,7 +186,7 @@
         >
           {{ 'approve' | translate }}
 
-          <app-spinner *ngIf="processing$ | async"></app-spinner>
+          <webui-spinner *ngIf="processing$ | async"></webui-spinner>
         </button>
       </footer>
     </form>

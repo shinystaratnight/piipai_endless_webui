@@ -12,15 +12,14 @@ import { FormGroup } from '@angular/forms';
 import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { BehaviorSubject, Subscription, Observable, of, Subject } from 'rxjs';
 
-import { FormBuilderService, FormService } from '../../services';
+import { FormBuilderService, FormMode, FormService } from '../../services';
 import { MessageType, ToastService } from '@webui/core';
 import { HiddenFields } from '../../components/generic-form/generic-form.component';
-import { Endpoints, Field } from '@webui/data';
 import { convertPhoneNumber, getElementFromMetadata } from '../../helpers';
 import { PassTestModalComponent, PassTestModalConfig } from '../../modals';
 import { FormStep, industryField, steps } from './form-builder-form.config';
-import { delay, finalize } from 'rxjs/operators';
-import { FormEvent } from '../../interfaces';
+import { Field } from '@webui/metadata';
+import { Endpoints } from '@webui/models';
 
 type Step = {
   key: number;
@@ -28,35 +27,35 @@ type Step = {
 } & FormStep;
 
 @Component({
-  selector: 'app-form-builder-form',
+  selector: 'webui-form-builder-form',
   templateUrl: './form-builder-form.component.html',
   styleUrls: ['./form-builder-form.component.scss'],
   providers: [FormService]
 })
 export class FormBuilderFormComponent implements OnInit, OnDestroy {
-  @Input() public id: string;
-  @Input() public companyId: string;
+  @Input() public id?: string;
+  @Input() public companyId!: string;
   @Input() public config: any;
 
   @Output() public formConfig: EventEmitter<any> = new EventEmitter();
 
-  public form: FormGroup;
-  public modalRef: NgbModalRef;
-  public formId: number;
+  public form!: FormGroup;
+  public modalRef!: NgbModalRef;
+  public formId!: number;
   public error = {};
   public hiddenFields: HiddenFields = {
     elements: [],
     keys: [],
     observers: []
   };
-  public formChangeSubscription: Subscription;
+  public formChangeSubscription!: Subscription;
 
   public passedTests: Map<string, any[]> = new Map();
 
   private industryField = industryField;
-  private steps = steps;
-  private invalid: BehaviorSubject<boolean> = new BehaviorSubject(false);
-  private saving: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  public steps = steps;
+  private invalid: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  private saving: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   private _step: BehaviorSubject<Step> = new BehaviorSubject({} as Step);
   barWidth: any = 0;
   constructor(
@@ -95,7 +94,7 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
 
     this.formId = this.formService.registerForm(
       this.service.formEndpoint,
-      'edit'
+      FormMode.Edit
     );
   }
 
@@ -139,11 +138,11 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
     const data = this.form.value;
     this.saving.next(true);
 
-    this.passTests(data).subscribe((success) => {
-      let body;
+    this.passTests(data).subscribe(() => {
+      let body: any;
 
       if (this.passedTests.size) {
-        const tests = [];
+        const tests: any[] = [];
         Array.from(this.passedTests.values()).forEach((el) => {
           if (el) {
             tests.push(...el);
@@ -174,20 +173,22 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
 
       convertPhoneNumber(body);
 
-      this.service.sendFormData(this.id, body).subscribe(
-        (res: any) => {
-          this.saving.next(false);
-          this.toastr.sendMessage(
-            this.config.submit_message,
-            MessageType.Success
-          );
-          this.router.navigate(['/login']);
-        },
-        (err: any) => {
-          this.saving.next(false);
-          this.parseError(err.errors);
-        }
-      );
+      if (this.id) {
+        this.service.sendFormData(this.id, body).subscribe(
+          (res: any) => {
+            this.saving.next(false);
+            this.toastr.sendMessage(
+              this.config.submit_message,
+              MessageType.Success
+            );
+            this.router.navigate(['/login']);
+          },
+          (err: any) => {
+            this.saving.next(false);
+            this.parseError(err.errors);
+          }
+        );
+      }
     });
   }
 
@@ -222,7 +223,7 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
 
   private changeTemplateType(key: string, to: string): void {
     const field = getElementFromMetadata(this.config.ui_config, key);
-    if (field) {
+    if (field && field.templateOptions) {
       field.templateOptions.type = to;
     }
   }
@@ -232,7 +233,7 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
       step.metadata = [];
       step.content.forEach((key: string | string[]) => {
         if (Array.isArray(key)) {
-          const metadata = [];
+          const metadata: any[] = [];
           key.forEach((el) => {
             const field = getElementFromMetadata(this.config.ui_config, el);
 
@@ -244,9 +245,9 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
           if (metadata.length) {
             metadata.forEach((field, i) => {
               if (i === 0 && metadata.length > 1) {
-                field.className = 'mr-3';
+                field.className = 'me-3';
               } else if (i > 0 && metadata.length !== i + 1) {
-                field.className = 'mr-3';
+                field.className = 'me-3';
               }
             });
 
@@ -259,7 +260,7 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
           const field = getElementFromMetadata(this.config.ui_config, key);
 
           if (field) {
-            if (key === 'superannuation_membership_number') {
+            if (field.templateOptions && key === 'superannuation_membership_number') {
               field.templateOptions.label = 'Superannuation membership number';
             }
 
@@ -268,14 +269,14 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
         }
       });
       if (step.metadata.length === 0) {
-        step['empty'] = true;
+        step.empty = true;
       }
     });
 
     this.steps = this.steps.filter((step) => !step['empty']);
   }
 
-  private getErrorStep(errors) {
+  private getErrorStep(errors: any) {
     let step = 3;
     this.steps.forEach((el, i) => {
       el.content.forEach((field) => {
@@ -294,29 +295,31 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
   }
 
   private getRenderData() {
-    this.service.getRenderData(this.id).subscribe((res: any) => {
-      this.updatePhoneField(res.ui_config);
-      this.updateConfigByGroups(res.ui_config, res.tests || []);
-      this.updateHiddenFields(res.ui_config);
-      // const formData = new BehaviorSubject({ data: {} });
+    if (this.id) {
+      this.service.getRenderData(this.id).subscribe((res: any) => {
+        this.updatePhoneField(res.ui_config);
+        this.updateConfigByGroups(res.ui_config);
+        this.updateHiddenFields(res.ui_config);
+        // const formData = new BehaviorSubject({ data: {} });
 
-      this.config = res;
-      this.formConfig.emit(res);
+        this.config = res;
+        this.formConfig.emit(res);
 
-      // this.updateConfig(this.config.ui_config);
-      // this.addAutocompleteProperty(this.config.ui_config);
+        // this.updateConfig(this.config.ui_config);
+        // this.addAutocompleteProperty(this.config.ui_config);
 
-      this.changeType('contact.title', 'radio');
-      this.changeType('contact.gender', 'radio');
-      this.changeType('transportation_to_work', 'radio');
-      this.changeTemplateType('contact.email', 'email');
+        this.changeType('contact.title', 'radio');
+        this.changeType('contact.gender', 'radio');
+        this.changeType('transportation_to_work', 'radio');
+        this.changeTemplateType('contact.email', 'email');
 
-      this.generateSteps();
-      this.changeStep(0);
-    });
+        this.generateSteps();
+        this.changeStep(0);
+      });
+    }
   }
 
-  private updateHiddenFields(config) {
+  private updateHiddenFields(config: any[]) {
     config.forEach((field) => {
       if (field.showIf && field.showIf.length) {
         if (this.hiddenFields.keys.indexOf(field.key) === -1) {
@@ -342,14 +345,14 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
     });
   }
 
-  private parseError(errors) {
+  private parseError(errors: any) {
     this.resetData(this.error);
     this.updateErrors(this.error, errors, {});
 
     this.changeStep(this.getErrorStep(errors));
   }
 
-  public resetData(data) {
+  public resetData(data: any) {
     if (data) {
       const keys = Object.keys(data);
       keys.forEach((el) => {
@@ -358,7 +361,7 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
     }
   }
 
-  private updateErrors(error, errors, response, field = '') {
+  private updateErrors(error: any, errors: any, response: any, field = '') {
     if (errors) {
       const keys = Object.keys(errors);
       keys.forEach((el) => {
@@ -384,6 +387,8 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
       if (field.key) {
         return field.key.includes('street_address');
       }
+
+      return false;
     });
 
     if (streetAddress) {
@@ -404,14 +409,14 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
         }
 
         if (field.showIf && field.showIf.length) {
-          if (this.hiddenFields.keys.indexOf(field.key) === -1) {
-            this.hiddenFields.keys.push(field.key);
+          if (this.hiddenFields.keys.indexOf(field.key as string) === -1) {
+            this.hiddenFields.keys.push(field.key as string);
             this.hiddenFields.elements.push(field);
             this.hiddenFields.observers = this.observeFields(
               field.showIf,
               this.hiddenFields.observers
             );
-            field.hidden = new BehaviorSubject(true);
+            field.hidden = new BehaviorSubject<boolean>(true);
           }
         }
       });
@@ -422,12 +427,14 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
     const pickers = config.filter((el) => el.type === 'datepicker');
     if (pickers.length) {
       pickers.forEach((el) => {
-        el.templateOptions.hidePreviewError = true;
+        if (el.templateOptions) {
+          el.templateOptions.hidePreviewError = true;
+        }
       });
     }
   }
 
-  private observeFields(fields: any[], observers) {
+  private observeFields(fields: any[], observers: any[]) {
     fields.forEach((field: any) => {
       if (field instanceof Object) {
         const keys = Object.keys(field);
@@ -455,7 +462,7 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
       return result;
     }
 
-    if (target[index].key && target[index].key.includes(key)) {
+    if (target[index].key && target[index].key?.includes(key)) {
       result = [...result, ...target.splice(index, 1)];
 
       index = index - 1;
@@ -511,7 +518,7 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
   }
 
   private validate(): void {
-    let keys = [];
+    let keys: string[] = [];
     const currentStep = this._step.getValue();
     currentStep.content.forEach((el) => {
       keys = Array.isArray(el) ? [...keys, ...el] : [...keys, el];
@@ -520,13 +527,13 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
     const invalid = keys.some((key) => {
       const control = this.form.get(key);
 
-      return Boolean(control) ? control.invalid : false;
+      return control ? control.invalid : false;
     });
 
     this.invalid.next(invalid);
   }
 
-  private updateConfigByGroups(fields: Field[], tests: any[]): void {
+  private updateConfigByGroups(fields: Field[]): void {
     const skills = this.getFields([], 'skill', fields, 0);
     const tags = this.getFields([], 'tag', fields, 0);
 
@@ -551,12 +558,12 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
     const chosenSkills = formData.skill || [];
     const chosenTags = formData.tag || [];
 
-    let testsForPassing = this.config.tests.filter((test) => {
+    let testsForPassing = this.config.tests.filter((test: any) => {
       const industries = test.acceptance_tests_industries.map(
-        ({ industry }) => industry.id
+        (test: any) => test.industry.id
       );
-      const skills = test.acceptance_tests_skills.map(({ skill }) => skill.id);
-      const tags = test.acceptance_tests_tags.map(({ tag }) => tag.id);
+      const skills = test.acceptance_tests_skills.map((test: any) => test.skill.id);
+      const tags = test.acceptance_tests_tags.map((test: any) => test.tag.id);
 
       if (!industries.length && !skills.length && !tags.length) {
         return true;
@@ -564,20 +571,20 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
 
       return (
         industries.includes(chosenIndustry) ||
-        chosenSkills.some((id) => skills.includes(id)) ||
-        chosenTags.some((id) => tags.includes(id))
+        chosenSkills.some((id: string) => skills.includes(id)) ||
+        chosenTags.some((id: string) => tags.includes(id))
       );
     });
 
     const notRelevantTests = Array.from(this.passedTests.keys()).filter(
-      (id) => !testsForPassing.some((test) => test.id === id)
+      (id) => !testsForPassing.some((test: any) => test.id === id)
     );
     notRelevantTests.forEach((id) => {
       this.passedTests.delete(id);
     });
 
     testsForPassing = testsForPassing.filter(
-      (test) => !this.passedTests.has(test.id)
+      (test: any) => !this.passedTests.has(test.id)
     );
 
     if (!testsForPassing.length) {
@@ -617,16 +624,14 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
 
     return success.asObservable();
   }
- updateStepProgressBar(step){ 
 
-    if(step == 1){
+  updateStepProgressBar(step: number) {
+    if (step == 1) {
       this.barWidth = 30;
-    }else if(step == 2){
+    } else if (step == 2) {
       this.barWidth = 65;
-    }else if(step == 3){
-
+    } else if (step == 3) {
       this.barWidth = 96;
-
     }
   }
 }

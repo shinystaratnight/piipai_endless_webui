@@ -1,48 +1,47 @@
-import { Component, ViewChild, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Component, ViewChild, OnInit, OnDestroy, ChangeDetectorRef, ElementRef } from '@angular/core';
 
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription, BehaviorSubject } from 'rxjs';
 import { finalize } from 'rxjs/operators';
 
 import { FormatString } from '@webui/utilities';
-// import { GenericFormService } from '../../../services';
-// import { PassTestModalComponent, PassTestModalConfig } from '../../../modals';
 import { SiteSettingsService } from '@webui/core';
 
-import { TimelineService, TimelineAction } from '../../../services';
+import { TimelineService, TimelineAction, FormMode } from '../../../services';
 import { PassTestModalComponent, PassTestModalConfig } from '../../../modals';
-import { Endpoints } from '@webui/data';
 import { FormControl } from '@angular/forms';
+import { Endpoints } from '@webui/models';
 
 @Component({
-  selector: 'app-form-timeline',
+  selector: 'webui-form-timeline',
   templateUrl: 'form-timeline.component.html',
   styleUrls: ['./form-timeline.component.scss'],
 })
 export class FormTimelineComponent implements OnInit, OnDestroy {
-  @ViewChild('stateModal') stateModal;
+  @ViewChild('stateModal') stateModal!: ElementRef;
 
   public config: any;
   public modalData: any;
   public stateData: any = {};
-  public requirements: any[];
-  public modalRef: NgbModalRef;
-  public objectId: string;
+  public requirements!: any[];
+  public modalRef!: NgbModalRef;
+  public objectId!: string;
   public query: { [key: string]: string } = {};
-  public testId: string;
+  public testId!: string;
 
   public currentState = new FormControl();
 
-  public dropdown: boolean;
-  public selectArray: any[];
-  public updated: boolean;
-  public loading: boolean;
-  public saveProcess: boolean;
-  public advancedSeving: boolean;
+  public dropdown!: boolean;
+  public selectArray!: any[];
+  public updated!: boolean;
+  public loading!: boolean;
+  public saveProcess!: boolean;
+  public advancedSeving!: boolean;
 
-  public passTestAction: BehaviorSubject<number>;
+  public passTestAction!: BehaviorSubject<number>;
   public passedTests: Map<string, any[]> = new Map();
   public workflowObjectEndpoint = Endpoints.WorkflowObject;
+  public FormMode = FormMode;
 
   private subscriptions: Subscription[] = [];
 
@@ -92,7 +91,7 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
             this.objectId = formatString.format(this.config.query[el][2], this.config.value);
           }
 
-          this.config.query[el].forEach((query) => {
+          this.config.query[el].forEach((query: any) => {
             if (!this.objectId) {
               this.objectId = formatString.format(query, this.config.value);
             }
@@ -121,7 +120,7 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
 
   public updateDropdown() {
     if (this.dropdown) {
-      this.selectArray = this.config.options.filter((el) => {
+      this.selectArray = this.config.options.filter((el: any) => {
         return el.state < 3;
       });
 
@@ -138,7 +137,7 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
 
   public getState(state: string): any {
     if (this.config.options) {
-      return this.config.options.find((el) => el.id === state);
+      return this.config.options.find((el: any) => el.id === state);
     }
   }
 
@@ -150,7 +149,7 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
     this.subscriptions.forEach((s) => s && s.unsubscribe());
   }
 
-  public open(state, closeModal?): void {
+  public open(state: any, closeModal?: () => void): void {
     if (closeModal) {
       closeModal();
     }
@@ -170,7 +169,7 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
     }
 
     if (state.acceptance_tests.length) {
-      const tests = state.acceptance_tests.filter((test) => test.score === 0);
+      const tests = state.acceptance_tests.filter((test: any) => test.score === 0);
 
       if (tests.length) {
         const passTestAction = new BehaviorSubject(0);
@@ -186,7 +185,7 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
           this.modalRef.result
             .then((res: any[]) => {
               if (this.passedTests.has(testId)) {
-                this.passedTests.set(testId, [...this.passedTests.get(testId), ...res]);
+                this.passedTests.set(testId, [...(this.passedTests.get(testId) as any[]), ...res]);
               } else {
                 this.passedTests.set(testId, res);
               }
@@ -232,7 +231,7 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
       this.modalData.title = title;
       this.modalData.tests =
         state.acceptance_tests.length &&
-        state.acceptance_tests.map((el) => {
+        state.acceptance_tests.map((el: any) => {
           if (el.score) {
             const score = parseFloat(el.score);
 
@@ -264,7 +263,7 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
   }
 
   public updateTests(id: string) {
-    const tests = [];
+    const tests: any[] = [];
     Array.from(this.passedTests.values()).forEach((el) => {
       if (el) {
         el.forEach((q) => (q.workflow_object = id));
@@ -286,9 +285,9 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
       });
   }
 
-  public setDataForState(state, hideScore) {
+  public setDataForState(state: any, hideScore: any) {
     const fields = ['object_id', 'state', 'active'];
-    const result = {};
+    const result: Record<string, any> = {};
     fields.forEach((el) => {
       const value = el === 'state' ? state.id : el === 'object_id' ? this.objectId : true;
       result[el] = {
@@ -315,7 +314,7 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
     return result;
   }
 
-  public sendEventHandler(e, closeModal): void {
+  public sendEventHandler(e: any, closeModal: () => void): void {
     if (e.type === 'saveStart') {
       this.saveProcess = true;
     }
@@ -331,7 +330,7 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
     this.saveProcess = false;
   }
 
-  public fillinTest(e, id: string, closeModal) {
+  public fillinTest(e: any, id: string, closeModal: () => any) {
     e.preventDefault();
     e.stopPropagation();
     closeModal();
@@ -368,20 +367,20 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
     });
   }
 
-  public testComplete(closeModal) {
+  public testComplete(closeModal: () => void) {
     closeModal();
 
     this.getTimeline();
     this.modalData = null;
   }
 
-  public calculateProgress(state) {
+  public calculateProgress(state: any) {
     if (state.substates && state.substates.length) {
       const substatesCount = state.substates.length;
 
       let activeCount = 0;
 
-      state.substates.forEach((el) => {
+      state.substates.forEach((el: any) => {
         if (el.state === 2 || el.state === 3) {
           activeCount += 1;
         }
@@ -389,6 +388,8 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
 
       return `${activeCount} / ${substatesCount}`;
     }
+
+    return;
   }
 
   public editContact(event: Event) {

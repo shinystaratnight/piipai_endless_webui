@@ -1,25 +1,27 @@
-import { Component, OnInit, Output, EventEmitter, ViewEncapsulation, ViewChild } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, ViewEncapsulation, ViewChild, ElementRef } from '@angular/core';
 
 import { SiteSettingsService } from '@webui/core';
+import { isArray } from '@webui/utilities';
 
 @Component({
-  selector: 'app-list-link',
+  selector: 'webui-list-link',
   templateUrl: 'list-link.component.html',
   styleUrls: ['./list-link.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
 export class ListLinkComponent implements OnInit {
-  public config;
-  public href: string | string[];
-  public link: boolean;
-  public value: string | string[];
-  public last: boolean;
-  public arrayValue: boolean;
-  public smsDisabled: boolean;
-  public smsDisabledTitle: string;
+  public config!: any;
+  public href!: string | string[];
+  public link!: boolean;
+  public value!: string | any[];
+  public last!: boolean;
+  public arrayValue!: boolean;
+  public smsDisabled!: boolean;
+  public smsDisabledTitle!: string;
 
-  public phone: boolean;
+  public phone!: boolean;
   public linkClass = '';
+  public isArray = isArray;
 
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
@@ -28,7 +30,7 @@ export class ListLinkComponent implements OnInit {
   public buttonAction: EventEmitter<any> = new EventEmitter();
 
   @ViewChild('view')
-  public linkView;
+  public linkView!: ElementRef<any>;
 
   constructor(private siteSettings: SiteSettingsService) {}
 
@@ -47,7 +49,7 @@ export class ListLinkComponent implements OnInit {
     if (Array.isArray(this.value) && Array.isArray(this.href)) {
       this.link = !(this.isEmail(this.value[0]) || this.isPhone(this.value[0]));
     } else {
-      this.link = !(this.isEmail(this.value) || this.isPhone(this.value));
+      this.link = !(this.isEmail(this.value as string) || this.isPhone(this.value as string));
     }
 
     if (!this.link && this.config.link.indexOf('tel:') > -1) {
@@ -64,19 +66,20 @@ export class ListLinkComponent implements OnInit {
     this.smsDisabledTitle = this.smsDisabled ? this.siteSettings.getSmsSendTitle() : '';
   }
 
-  public isEmail(value) {
-    let reg = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/; //tslint:disable-line
+  public isEmail(value: string) {
+    // eslint-disable-next-line no-useless-escape
+    const reg = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
     return reg.test(value) ? true : false;
   }
 
-  public isPhone(value) {
+  public isPhone(value: string) {
     const reg = /^\+(?:[0-9] ?){6,14}[0-9]$/;
 
     return reg.test(value) ? true : false;
   }
 
-  public action(e, index) {
+  public action(e: MouseEvent, index?: number) {
     e.preventDefault();
     e.stopPropagation();
     if (index || index === 0) {
@@ -112,22 +115,22 @@ export class ListLinkComponent implements OnInit {
         this.event.emit({
           target: 'form',
           endpoint: endpoint || this.config.endpoint,
-          label: e.target.innerText,
+          label: (e.target as HTMLElement).innerText,
           id: id || this.config.id,
         });
       }
     }
   }
 
-  public eventHandler(e) {
+  public eventHandler(e: any) {
     this.event.emit(e);
   }
 
-  public buttonHandler(e) {
+  public buttonHandler(e: any) {
     this.buttonAction.emit(e);
   }
 
-  public sendSms(event) {
+  public sendSms(event: MouseEvent) {
     event.stopPropagation();
 
     if (!this.smsDisabled) {
@@ -147,7 +150,7 @@ export class ListLinkComponent implements OnInit {
     }
   }
 
-  clickHandler(event) {
+  clickHandler(event: MouseEvent) {
     event.stopPropagation();
   }
 }

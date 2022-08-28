@@ -1,3 +1,5 @@
+import { IsHiddenFn } from '../../models';
+
 export const List = 'list';
 
 export interface ListElementTemplateOptions {
@@ -18,8 +20,8 @@ export class ListElement {
   metadata_query?: { [key: string]: any };
   translateKey?: string;
   add_form?: boolean;
-  isHidden?: Function;
-  showIf: Array<string | { [key: string]: any }>;
+  isHidden?: IsHiddenFn;
+  showIf?: Array<string | { [key: string]: any }>;
 
   constructor(label: string, endpoint: string, translateKey?: string) {
     this.templateOptions = {

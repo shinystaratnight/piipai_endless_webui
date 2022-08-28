@@ -1,11 +1,11 @@
 <div *ngIf="!this.config.hide && !this.dropdown && !loading" class="timeline">
-  <div class="text-right">
+  <div class="text-end">
     <button
       type="button"
       class="btn btn-outline-info btn-refresh mb-2"
       (click)="onRefresh()"
     >
-      <fa-icon class="mr-0" icon="redo"></fa-icon>
+      <fa-icon class="me-0" icon="redo"></fa-icon>
     </button>
   </div>
 
@@ -52,11 +52,11 @@
     </option>
   </select>
 
-  <app-info
+  <webui-info
     *ngIf="getState(currentState.value).state === 0"
     triggersType="click:click"
     [description]="requirements"
-  ></app-info>
+  ></webui-info>
   <button
     type="button"
     class="btn btn-sm btn-outline-success"
@@ -64,16 +64,16 @@
     [class.active]="saveProcess"
     (click)="open(getState(currentState.value))"
   >
-    <fa-icon class="f-size-10 mr-0" icon="check" *ngIf="!saveProcess"></fa-icon>
-    <app-spinner *ngIf="saveProcess" [sm]="true"></app-spinner>
+    <fa-icon class="f-size-10 me-0" icon="check" *ngIf="!saveProcess"></fa-icon>
+    <webui-spinner *ngIf="saveProcess" [sm]="true"></webui-spinner>
   </button>
 
   <button
     type="button"
-    class="btn btn-outline-info btn-refresh ml-1"
+    class="btn btn-outline-info btn-refresh ms-1"
     (click)="onRefresh()"
   >
-    <fa-icon class="mr-0" [class.loading]="loading" icon="redo"></fa-icon>
+    <fa-icon class="me-0" [class.loading]="loading" icon="redo"></fa-icon>
   </button>
 </div>
 
@@ -82,10 +82,10 @@
     <div class="modal-header">
       <h5 class="modal-title">{{ modalData.title }}</h5>
 
-      <app-close-button
-        class="ml-auto"
+      <webui-close-button
+        class="ms-auto"
         (click)="modal.dismiss()"
-      ></app-close-button>
+      ></webui-close-button>
     </div>
 
     <div class="modal-body timeline" *ngIf="modalData">
@@ -156,8 +156,8 @@
           (!modalData.tests && !modalData.substates) || modalData.setActive
         "
       >
-        <app-generic-form
-          [mode]="'edit'"
+        <webui-generic-form
+          [mode]="FormMode.Edit"
           [endpoint]="workflowObjectEndpoint"
           [id]="modalData.id"
           [data]="stateData"
@@ -166,9 +166,9 @@
         >
           <button type="submit" class="btn btn-primary">
             Save
-            <app-spinner *ngIf="saveProcess"></app-spinner>
+            <webui-spinner *ngIf="saveProcess"></webui-spinner>
           </button>
-        </app-generic-form>
+        </webui-generic-form>
       </div>
     </div>
   </div>
@@ -230,7 +230,7 @@
 
     <span class="state-progress">{{ calculateProgress(state) }}</span>
 
-    <app-spinner *ngIf="state.saveProcess" [sm]="true"></app-spinner>
+    <webui-spinner *ngIf="state.saveProcess" [sm]="true"></webui-spinner>
   </div>
   <ng-template #requir>
     <div class="info-block">

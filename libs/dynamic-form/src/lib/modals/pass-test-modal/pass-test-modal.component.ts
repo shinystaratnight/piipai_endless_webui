@@ -12,13 +12,13 @@ export interface PassTestModalConfig {
 }
 
 @Component({
-  selector: 'app-pass-test-modal',
+  selector: 'webui-pass-test-modal',
   templateUrl: './pass-test-modal.component.html',
   styleUrls: ['./pass-test-modal.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PassTestModalComponent {
-  config: PassTestModalConfig;
+  config!: PassTestModalConfig;
 
   constructor(
     private modal: NgbActiveModal,
@@ -26,7 +26,7 @@ export class PassTestModalComponent {
   ) {}
 
   public get logo(): string {
-    return this.settings.settings.logo || '/assets/img/logo.svg';
+    return this.settings.settings['logo'] || '/assets/img/logo.svg';
   }
 
   close(data: any) {

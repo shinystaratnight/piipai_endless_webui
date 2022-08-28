@@ -4,7 +4,7 @@
       <h4 class="headline-4 title">
         {{
           labelTranslateKey
-            | translate: { Default: config.templateOptions.label }
+            | translate: { Default: config.templateOptions?.label }
         }}
       </h4>
       <p class="description" *ngIf="config.help">
@@ -14,18 +14,18 @@
 
     <button
       type="button"
-      appSubscriptionRequired
+      webuiSubscriptionRequired
       class="btn btn-primary btn-shadow"
       *ngIf="hasAddButton"
       (click)="addObject()"
     >
-      {{ config?.templateOptions?.add_label | translate: { Default: '+ Add' } || 'Add' }}
+      {{ (config.templateOptions?.add_label || '') | translate: { Default: '+ Add' } || 'Add' }}
     </button>
   </header>
 
   <div [ngbCollapse]="isCollapsed">
     <div class="form" *ngIf="hasAddForm">
-      <app-generic-form
+      <webui-generic-form
         class="d-block"
         [delay]="config.delay"
         [endpoint]="addFormConfig.endpoint"
@@ -36,25 +36,25 @@
       >
         <div class="d-flex">
           <button
-            appSubscriptionRequired
+            webuiSubscriptionRequired
             type="submit"
-            class="btn btn-primary ml-auto"
+            class="btn btn-primary ms-auto"
             [disabled]="saveProcess"
           >
             Add Note
-            <app-spinner *ngIf="saveProcess"></app-spinner>
+            <webui-spinner *ngIf="saveProcess"></webui-spinner>
           </button>
         </div>
-      </app-generic-form>
+      </webui-generic-form>
     </div>
 
-    <app-generic-list
+    <webui-generic-list
       [endpoint]="config.endpoint"
       [editEndpoint]="config.edit_endpoint"
       [query]="query"
       [inForm]="true"
       [data]="config.data"
-      [inlineFilters]="config.templateOptions.inlineFilters"
+      [inlineFilters]="config.templateOptions?.inlineFilters"
       [update]="update"
       [delay]="config.delay"
       [responseField]="config.responseField || 'results'"
@@ -70,7 +70,7 @@
       (checkedObjects)="checkedHandler($event)"
       (event)="eventHandler($event)"
     >
-    </app-generic-list>
+    </webui-generic-list>
 
     <div class="text-danger my-2" *ngIf="config.message">
       {{ config.message }}
@@ -84,26 +84,26 @@
       <div class="modal-header">
         <h5 class="modal-title">
           {{
-            config?.templateOptions?.add_label
+            config.templateOptions?.add_label || ''
               | translate: { Default: '+ Add' } || 'Add'
           }}
         </h5>
 
-        <app-close-button
-          class="ml-auto"
+        <webui-close-button
+          class="ms-auto"
           (click)="modal.dismiss()"
-        ></app-close-button>
+        ></webui-close-button>
       </div>
     </div>
 
     <div class="modal-body">
-      <app-generic-form
+      <webui-generic-form
         [delay]="config.delay"
         [endpoint]="modalData.endpoint"
         [data]="modalData.data"
         [metadataQuery]="config.add_metadata_query"
         (event)="formEvent($event, modal.close)"
-        (errorForm)="formError($event)"
+        (errorForm)="formError()"
       >
         <button
           type="submit"
@@ -111,9 +111,9 @@
           [disabled]="saveProcess"
         >
           {{ 'save' | translate: { Default: 'Save' } }}
-          <app-spinner *ngIf="saveProcess"></app-spinner>
+          <webui-spinner *ngIf="saveProcess"></webui-spinner>
         </button>
-      </app-generic-form>
+      </webui-generic-form>
     </div>
   </div>
 </ng-template>

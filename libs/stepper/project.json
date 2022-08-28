@@ -1,0 +1,26 @@
+{
+  "projectType": "library",
+  "root": "libs/stepper",
+  "sourceRoot": "libs/stepper/src",
+  "prefix": "webui",
+  "targets": {
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/stepper"],
+      "options": {
+        "jestConfig": "libs/stepper/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/stepper/src/**/*.ts",
+          "libs/stepper/src/**/*.html"
+        ]
+      }
+    }
+  },
+  "tags": []
+}

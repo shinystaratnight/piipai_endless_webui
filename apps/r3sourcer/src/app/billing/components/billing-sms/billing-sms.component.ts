@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, OnDestroy, Input } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy, Input, ElementRef } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
@@ -7,23 +7,23 @@ import { autoChargeMetadata } from './billing-sms.metadata';
 import { ToastService, MessageType } from '@webui/core';
 
 @Component({
-  selector: 'app-billing-sms',
+  selector: 'webui-billing-sms',
   templateUrl: './billing-sms.component.html',
   styleUrls: ['./billing-sms.component.scss'],
 })
 export class BillingSmsComponent implements OnInit, OnDestroy {
   @Input() currency = 'USD';
-  @Input() cardExist: boolean;
+  @Input() cardExist!: boolean;
 
   public smsBalance: any;
   public amount = 20;
   public modalConfig = autoChargeMetadata;
-  public modalRef: NgbModalRef;
-  public group: FormGroup;
+  public modalRef!: NgbModalRef;
+  public group!: FormGroup;
   public additionalData: any;
 
-  @ViewChild('charge') public modal;
-  @ViewChild('funds') public fundsModal;
+  @ViewChild('charge') public modal!: ElementRef;
+  @ViewChild('funds') public fundsModal!: ElementRef;
 
   constructor(private billingService: BillingService, private modalService: NgbModal, private toastr: ToastService) {}
 
@@ -74,7 +74,7 @@ export class BillingSmsComponent implements OnInit, OnDestroy {
     this.openModal(this.modal);
   }
 
-  public openModal(modal) {
+  public openModal(modal: any) {
     this.modalRef = this.modalService.open(modal, { backdrop: 'static' });
   }
 

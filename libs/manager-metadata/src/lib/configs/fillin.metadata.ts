@@ -1,4 +1,3 @@
-import { Endpoints } from '@webui/data';
 import { createFilter, Type, Filter } from '@webui/metadata';
 
 const filters = {

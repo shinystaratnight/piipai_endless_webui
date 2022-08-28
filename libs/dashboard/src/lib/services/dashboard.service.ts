@@ -4,8 +4,9 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { map, catchError } from 'rxjs/operators';
 
 import { ErrorsService, SiteSettingsService } from '@webui/core';
-import { Endpoints, CountryCodeLanguage } from '@webui/data';
 import { getContactAvatar } from '@webui/utilities';
+import { CountryCodeLanguage, Endpoints } from '@webui/models';
+import { Observable } from 'rxjs';
 
 @Injectable()
 export class DashboardService {
@@ -30,8 +31,8 @@ export class DashboardService {
       fromObject: { ...query, fields: this.fields }
     });
 
-    return this.http.get(Endpoints.CandidateContact, { params }).pipe(
-      map((response: { count: number; results: any[] }) => {
+    return this.http.get<{ count: number; results: any[] }>(Endpoints.CandidateContact, { params }).pipe(
+      map((response) => {
         const { results, count } = response;
 
         const candidates = results.map((candidate) => {
@@ -51,12 +52,12 @@ export class DashboardService {
             contactAvatar: getContactAvatar(contact.__str__),
             score: average_score,
             state: latest_state[0],
-            skills: skill_list.map((el) => {
+            skills: skill_list.map((el: any) => {
               const {
                 skill: { name }
               } = el;
               const trans = name.translations.find(
-                (item) =>
+                (item: any) =>
                   item.language.id ===
                   CountryCodeLanguage[this.siteSettings.settings.country_code]
               );
@@ -67,10 +68,10 @@ export class DashboardService {
 
               return { name: el.skill.__str__, score: el.score };
             }),
-            tags: tag_list.map((el) => {
+            tags: tag_list.map((el: any) => {
               const { tag } = el;
               const trans = tag.translations.find(
-                (item) =>
+                (item: any) =>
                   item.language.id ===
                   CountryCodeLanguage[this.siteSettings.settings.country_code]
               );
@@ -93,8 +94,8 @@ export class DashboardService {
   getFillinCandidates(jobId: string, query: { [key: string]: any } = {}) {
     const params = new HttpParams({ fromObject: query });
 
-    return this.http.get(`${Endpoints.Job}${jobId}/fillin/`, { params }).pipe(
-      map((response: { list: any[]; job: any }) => {
+    return this.http.get<{ list: any[]; job: any }>(`${Endpoints.Job}${jobId}/fillin/`, { params }).pipe(
+      map((response) => {
         const candidates = response.list;
 
         return candidates.map((candidate) => {
@@ -140,7 +141,7 @@ export class DashboardService {
   }
 
   private generateScores(scores: { [key: string]: string }) {
-    const skillMap = {
+    const skillMap: Record<string, string> = {
       recruitment_score: 'Average test',
       client_feedback: 'Client feedback',
       skill_score: 'Average skills',

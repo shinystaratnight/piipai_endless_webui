@@ -1,11 +1,12 @@
-@import 'variables';
-@import 'mixins';
+@use 'variables' as *;
 
 :host {
   display: flex;
 
-  @include media-breakpoint-down('xs') {
-    flex-direction: column;
+  @include media-breakpoint-down('sm') {
+    & {
+      flex-direction: column;
+    }
   }
 }
 

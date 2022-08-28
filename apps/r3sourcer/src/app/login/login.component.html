@@ -1,5 +1,5 @@
 <ng-container *ngIf="!token">
-  <app-navigation></app-navigation>
+  <webui-navigation></webui-navigation>
 
   <div class="container">
     <div class="login-wrapper">
@@ -14,47 +14,47 @@
           <p class="description">{{'login.subtitle' | translate}}</p>
         </div>
 
-        <app-generic-form
+        <webui-generic-form
           [endpoint]="endpoint"
           [data]="data"
           [errors]="error"
           [checkEmail]="true"
           [showResponse]="true"
-          (redirect)="redirectHandler($event)"
+          (redirect)="redirectHandler()"
           (responseForm)="responseHandler($event)"
-          (errorForm)="errorHandler($event)"
+          (errorForm)="errorHandler()"
           (event)="formEvent($event)"
         >
           <div class="links form-group">
             <label class="form-element-checkbox" [class.active]="rememberMe">
               <input type="checkbox" class="form-check-input" [(ngModel)]="rememberMe" hidden />
-              <app-checkbox [checked]="rememberMe"></app-checkbox>
+              <webui-checkbox [checked]="rememberMe"></webui-checkbox>
               <span>{{'login.remember_me' | translate}}</span>
             </label>
             <a class="forgot" href="" (click)="openResetForm()">{{'login.forgot_password' | translate}}</a>
           </div>
           <button class="btn btn-primary login-button" type="submit">
-            {{'login.login' | translate}} <app-spinner *ngIf="loginProcess"></app-spinner>
+            {{'login.login' | translate}} <webui-spinner *ngIf="loginProcess"></webui-spinner>
           </button>
-          <app-language-selector></app-language-selector>
-        </app-generic-form>
+          <webui-language-selector></webui-language-selector>
+        </webui-generic-form>
       </div>
     </div>
   </div>
 
   <div *ngIf="subdomain" class="register-link">
     <a [routerLink]="['/registration']">
-      <app-icon-plus appIcon size="sm" color="primary"></app-icon-plus>
+      <webui-icon-plus webuiIcon size="sm" color="primary"></webui-icon-plus>
       {{'login.register' | translate}}
     </a>
   </div>
 </ng-container>
 
 <ng-container *ngIf="token">
-  <app-site-loader></app-site-loader>
+  <webui-site-loader></webui-site-loader>
 </ng-container>
 
-<!-- <app-toast></app-toast> -->
+<!-- <webui-toast></webui-toast> -->
 
 <ng-template #modal let-modal>
   <div class="modal-content-wrapper">
@@ -62,15 +62,15 @@
       <div class="modal-header">
         <h5 class="modal-title">{{'password.reset' | translate}}</h5>
 
-        <app-close-button class="ml-auto" (click)="modal.dismiss()"></app-close-button>
+        <webui-close-button class="ms-auto" (click)="modal.dismiss()"></webui-close-button>
       </div>
     </div>
     <div class="py-3">
-      <app-generic-form [showResponse]="true" [showToastr]="false" endpoint="/core/contacts/forgot_password/">
+      <webui-generic-form [showResponse]="true" [showToastr]="false" endpoint="/core/contacts/forgot_password/">
         <div class="d-flex align-items-center">
-          <button type="submit" class="btn btn-primary ml-auto">{{'reset' | translate}}</button>
+          <button type="submit" class="btn btn-primary ms-auto">{{'reset' | translate}}</button>
         </div>
-      </app-generic-form>
+      </webui-generic-form>
     </div>
   </div>
 </ng-template>

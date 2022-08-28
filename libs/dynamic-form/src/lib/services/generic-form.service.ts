@@ -18,7 +18,7 @@ export class GenericFormService {
     @Optional() @Inject(METADATA) private metadata: any
   ) {}
 
-  get(endpoint, params = {}): Observable<any> {
+  get(endpoint: string, params = {}): Observable<any> {
     const options = {
       params: new HttpParams({ fromObject: params})
     };
@@ -29,7 +29,7 @@ export class GenericFormService {
       );
   }
 
-  public getByQuery(endpoint, query): Observable<any> {
+  public getByQuery(endpoint: string, query: string): Observable<any> {
     return this.http
       .get(`${endpoint}${query}`)
       .pipe(
@@ -37,7 +37,7 @@ export class GenericFormService {
       );
   }
 
-  public getAll(endpoint): Observable<any> {
+  public getAll(endpoint: string): Observable<any> {
     return this.http
       .get(endpoint)
       .pipe(
@@ -45,11 +45,11 @@ export class GenericFormService {
       );
   }
 
-  public getMetadata(endpoint: string, query = ''): Observable<any> {
+  public getMetadata(endpoint: string, query = ''): Observable<any> | undefined {
     return this.metadataService.get(endpoint, query, this.metadata);
   }
 
-  public submitForm(endpoint, data, options?: ParseErrorOptions): Observable<any> {
+  public submitForm(endpoint :string, data: any, options?: ParseErrorOptions): Observable<any> {
     return this.http
       .post(endpoint, data)
       .pipe(
@@ -57,7 +57,7 @@ export class GenericFormService {
       );
   }
 
-  public editForm(endpoint, data): Observable<any> {
+  public editForm(endpoint: string, data: any): Observable<any> {
     return this.http
       .put(endpoint, data)
       .pipe(
@@ -65,7 +65,7 @@ export class GenericFormService {
       );
   }
 
-  public updateForm(endpoint, data): Observable<any> {
+  public updateForm(endpoint: string, data: any): Observable<any> {
     return this.http
       .patch(endpoint, data)
       .pipe(
@@ -73,7 +73,7 @@ export class GenericFormService {
       );
   }
 
-  public callAction(endpoint, data): Observable<any> {
+  public callAction(endpoint: string, data: any): Observable<any> {
     return this.http
       .post(endpoint, data)
       .pipe(
@@ -81,7 +81,7 @@ export class GenericFormService {
       );
   }
 
-  public delete(endpoint, id, postfix?): Observable<any> {
+  public delete(endpoint: string, id: string, postfix?: string): Observable<any> {
     return this.http
       .delete(`${endpoint}${id}/` + (postfix ? `${postfix}/` : ''))
       .pipe(
@@ -89,7 +89,7 @@ export class GenericFormService {
       );
   }
 
-  public uploadFile(endpoint, data): Observable<any> {
+  public uploadFile(endpoint: string, data: any): Observable<any> {
     const headers = new HttpHeaders();
     headers.append('Content-Type', 'multipart/form-data');
     return this.http

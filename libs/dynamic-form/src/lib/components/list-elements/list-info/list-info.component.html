@@ -26,11 +26,11 @@
     <h5 class="list-info-title" [class.position]="position">
       <span class="title" *ngIf="!getScore(averageScore) && !config.hideTitle">
         {{ title }}
-        <app-info
+        <webui-info
           *ngIf="description"
-          class="ml-1"
+          class="ms-1"
           [description]="description"
-        ></app-info>
+        ></webui-info>
       </span>
 
       <span style="font-size: 14px" *ngIf="config.hideTitle"

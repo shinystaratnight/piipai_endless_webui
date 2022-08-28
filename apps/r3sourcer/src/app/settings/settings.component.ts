@@ -4,20 +4,21 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
 import { SettingsService } from './settings.service';
-import { UserService, EventService, EventType } from '@webui/core';
-import { Page, Role, User } from '@webui/data';
+import { EventService, EventType } from '@webui/core';
+import { Page } from '@webui/data';
+import { User } from '@webui/models';
 
 @Component({
-  selector: 'app-settings-page',
+  selector: 'webui-settings-page',
   templateUrl: './settings.component.html'
 })
 export class SettingsComponent implements OnInit, OnDestroy {
-  public user: User;
-  public pagesList: Page[];
+  public user!: User;
+  public pagesList!: Page[];
 
   public url: any;
 
-  private settingsSubscription: Subscription;
+  private settingsSubscription!: Subscription;
   private subscriptions: Subscription[] = [];
 
   constructor(
@@ -33,11 +34,11 @@ export class SettingsComponent implements OnInit, OnDestroy {
     this.user = this.route.snapshot.data['user'];
     this.pagesList = this.route.snapshot.data['pagesList'];
     this.settingsSubscription = this.settingsService.url.subscribe(child => {
-      this.url = [].concat(currentURL, child);
+      this.url = Array.from([currentURL, child]);
 
       this.setActivePage(
         this.pagesList,
-        `/${this.url.map(el => el.path).join('/')}/`
+        `/${this.url.map((el: any) => el.path).join('/')}/`
       );
     });
 
@@ -66,7 +67,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
   //   }, 150);
   // }
 
-  public setActivePage(pages, path) {
+  public setActivePage(pages: any[], path: string) {
     let active = false;
     pages.forEach(page => {
       if (path === page.url && page.url !== '/') {

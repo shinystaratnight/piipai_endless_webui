@@ -5,13 +5,13 @@ import { CustomEvent } from '../../../models';
 import { ListService } from '../../../services';
 
 @Component({
-  selector: 'app-list-form',
+  selector: 'webui-list-form',
   templateUrl: './list-form.component.html',
   styleUrls: ['./list-form.component.scss']
 })
 export class ListFormComponent implements OnInit {
   config: any;
-  value: string;
+  value!: string;
 
   group = new FormGroup({});
 

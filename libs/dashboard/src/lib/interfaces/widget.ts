@@ -5,7 +5,7 @@ export enum Type {
 }
 
 export interface Widget {
-  id: string;
+  id: string | null;
   type: Type;
   name?: string;
   img?: string;

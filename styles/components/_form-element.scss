@@ -80,7 +80,7 @@
     }
   }
 
-  .custom-select,
+  .form-select,
   select.form-control {
     background: #fff url(/assets/img/down-arrow.svg) no-repeat;
     background-position: right 0.75rem center;
@@ -117,7 +117,7 @@
     }
   }
 
-  .input-group-addon {
+  .input-group-append {
     width: auto;
 
     background-color: transparent;
@@ -131,6 +131,12 @@
     font-size: 14px !important;
 
     border-bottom: 1px solid rgba($gray, 0.1);
+
+    .dbOpenButton {
+      padding: 0;
+      line-height: 1;
+      margin-bottom: 2px;
+    }
 
     .registration-form & {
       position: absolute;
@@ -302,6 +308,7 @@
     display: inline-flex;
     align-items: center;
     margin-bottom: 4px;
+    gap: 0.5rem;
 
     &.disabled {
       opacity: 0.4;
@@ -332,10 +339,11 @@
   }
 
   .form-element-label {
-    margin-bottom: 0;
+    margin-bottom: 4px;
     font-family: Roboto;
     font-size: 12px;
     line-height: 14px;
+    display: inline-flex;
 
     color: rgba($gray, 0.3);
 
@@ -399,6 +407,8 @@
 }
 
 .form-group {
+  margin-bottom: 1rem;
+
   .mobile-device & {
     margin-bottom: 0.5rem;
   }

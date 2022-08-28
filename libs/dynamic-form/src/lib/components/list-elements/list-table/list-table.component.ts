@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 
 @Component({
-  selector: 'app-list-table',
+  selector: 'webui-list-table',
   templateUrl: 'list-table.component.html'
 })
 

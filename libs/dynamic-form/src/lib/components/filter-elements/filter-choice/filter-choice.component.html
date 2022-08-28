@@ -1,10 +1,10 @@
 <div class="filter-element" [class.active]="!isCollapsed">
-  <app-filter-header
+  <webui-filter-header
     [label]="config.label"
     [key]="config.key"
     [resetButton]="query"
     (resetEvent)="resetFilter()"
-  ></app-filter-header>
+  ></webui-filter-header>
 
   <ul class="list-unstyled filter-choice">
     <li

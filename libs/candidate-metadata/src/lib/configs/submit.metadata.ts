@@ -1,10 +1,11 @@
 import {
-  Endpoints,
   Models,
   NoteModel,
+  OverrideConfig,
   SkillModel,
 } from '@webui/data';
 import { Form, CheckboxType, DatepickerType } from '@webui/metadata';
+import { Endpoints } from '@webui/models';
 
 const form = function () {
   return [

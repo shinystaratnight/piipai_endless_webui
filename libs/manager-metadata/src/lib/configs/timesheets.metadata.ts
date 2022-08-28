@@ -1,5 +1,6 @@
-import { Endpoints, Color, Models, NoteModel } from '@webui/data';
+import { Color, Models, NoteModel, OverrideConfig } from '@webui/data';
 import { createFilter, Type, Form, List } from '@webui/metadata';
+import { Endpoints } from '@webui/models';
 
 const filters = {
   shift_started_at: createFilter(Type.Date, {
@@ -1281,7 +1282,7 @@ const form = [
       },
       new NoteModel().formListElement({
         query: 'formset',
-        model_content_type: '112'
+        model_content_type: '112',
       })
     ]
   },

@@ -1,5 +1,6 @@
-import { Color, Endpoints } from '@webui/data';
+import { Color } from '@webui/data';
 import { List, Filter } from '@webui/metadata';
+import { Endpoints } from '@webui/models';
 
 const list = function () {
   return {

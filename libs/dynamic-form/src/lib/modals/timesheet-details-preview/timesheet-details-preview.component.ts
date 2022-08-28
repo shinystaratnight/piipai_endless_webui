@@ -3,13 +3,13 @@ import { TimeSheet } from '@webui/data';
 import { Icon } from '@webui/icon';
 
 @Component({
-  selector: 'app-timesheet-details-preview',
+  selector: 'webui-timesheet-details-preview',
   templateUrl: './timesheet-details-preview.component.html',
   styleUrls: ['./timesheet-details-preview.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TimesheetDetailsPreviewComponent {
-  @Input() timeSheet: TimeSheet;
+  @Input() timeSheet!: TimeSheet;
 
   public get info() {
     return [

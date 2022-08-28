@@ -45,7 +45,7 @@ export type FilterOptions =
   | MultipleFilter
   | TextFilter;
 
-export function createFilter(type: Type, options: FilterOptions): Filter {
+export function createFilter(type: Type, options: FilterOptions): Filter | undefined {
   switch (type) {
     case Type.Range:
       return new RangeFilter(options as RangeFilterOptions);
@@ -71,6 +71,8 @@ export function createFilter(type: Type, options: FilterOptions): Filter {
     default:
       break;
   }
+
+  return;
 }
 
 export const range = { element: RangeFilter, type: Range };

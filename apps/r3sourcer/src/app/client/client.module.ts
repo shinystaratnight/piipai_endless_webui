@@ -1,18 +1,17 @@
-import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
-import { NgbTabsetModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { ClientComponent } from './client.component';
 import { components } from './components';
 
 import { routes } from './client.routing';
 
-// import { SharedModule } from '@webui/shared';
+import { SharedModule as LibSharedModule } from '@webui/shared';
 import { DynamicFormModule } from '@webui/dynamic-form';
 import { CalendarModule } from '@webui/calendar';
 
@@ -34,9 +33,10 @@ import { TranslateModule } from '@ngx-translate/core';
 
     FontAwesomeModule,
     InfiniteScrollModule,
-    NgbTabsetModule,
+    NgbNavModule,
 
-    // SharedModule,
+    LibSharedModule,
+    SharedModule,
     DynamicFormModule.forChild({ metadata: Metadata }),
     CalendarModule,
     SharedModule,

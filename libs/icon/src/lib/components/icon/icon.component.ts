@@ -17,7 +17,7 @@ export class IconComponent implements OnInit {
   @Input() size?: IconSize;
 
   public Icon = Icon;
-  public classes?: { [cssClasses: string]: boolean };
+  public classes: { [cssClasses: string]: boolean } = {};
 
   public ngOnInit() {
     this.classes = {

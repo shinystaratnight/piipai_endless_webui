@@ -1,14 +1,14 @@
 import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
-  selector: 'app-base-modal',
+  selector: 'webui-base-modal',
   templateUrl: './base-modal.component.html',
   styleUrls: ['./base-modal.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BaseModalComponent {
-  @Input() title: string = '';
-  @Input() modalClass: string = '';
+  @Input() title = '';
+  @Input() modalClass = '';
 
   @Output() dissmisEvent: EventEmitter<void> = new EventEmitter();
 

@@ -171,9 +171,9 @@ const form = [
     templateOptions: {
       required: false,
       label: 'Population',
-      max: 9223372036854775807,
+      max: 99999999,
       type: 'number',
-      min: -9223372036854775808
+      min: 0
     },
     read_only: false
   },
@@ -360,9 +360,9 @@ const formadd = [
     templateOptions: {
       required: false,
       label: 'Population',
-      max: 9223372036854775807,
+      max: 99999999,
       type: 'number',
-      min: -9223372036854775808
+      min: 0
     },
     read_only: false
   },

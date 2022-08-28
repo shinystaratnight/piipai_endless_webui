@@ -15,7 +15,7 @@ import { SiteSettingsService } from '@webui/core';
 import { generateCssStyles } from '../../../helpers';
 
 @Component({
-  selector: 'app-form-button',
+  selector: 'webui-form-button',
   templateUrl: 'form-button.component.html',
   styleUrls: ['./form-button.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -23,18 +23,18 @@ import { generateCssStyles } from '../../../helpers';
 export class FormButtonComponent implements OnInit, OnDestroy {
   private stylePrefix = 'app-button';
 
-  public config;
-  public group: FormGroup;
-  public label: boolean;
-  public replacyValue: string;
-  public buttonColor: string;
-  public repeatArray: any[];
-  public showButton: boolean = true;
-  public last: boolean;
+  public config: any;
+  public group!: FormGroup;
+  public label!: boolean;
+  public replacyValue!: string;
+  public buttonColor!: string;
+  public repeatArray!: any[];
+  public showButton = true;
+  public last!: boolean;
 
-  public isDisabled: boolean;
-  public disabledTitle: string;
-  public saveProcess: boolean;
+  public isDisabled?: boolean;
+  public disabledTitle!: string;
+  public saveProcess!: boolean;
 
   public cssClasses = '';
   public buttonClass = '';
@@ -71,7 +71,7 @@ export class FormButtonComponent implements OnInit, OnDestroy {
     this.customizeButton();
 
     if (this.config.process) {
-      const processSubscription = this.config.process.subscribe((value) => {
+      const processSubscription = this.config.process.subscribe((value: boolean) => {
         this.saveProcess = value;
         this.cd.detectChanges();
       });
@@ -95,7 +95,7 @@ export class FormButtonComponent implements OnInit, OnDestroy {
     const hidden = this.config.hidden;
 
     if (hidden && hidden.subscribe) {
-      const hiddenSubscription = hidden.subscribe((hide) => {
+      const hiddenSubscription = hidden.subscribe((hide: boolean) => {
         this.showButton = !hide;
 
         this.cd.detectChanges();
@@ -112,7 +112,7 @@ export class FormButtonComponent implements OnInit, OnDestroy {
 
     if (show && show.subscribe) {
       this.config.hidden = true;
-      const showSubscription = show.subscribe((value) => {
+      const showSubscription = show.subscribe((value: any) => {
         if (typeof value !== 'boolean') {
           this.isDisabled = true;
           this.disabledTitle = value;
@@ -156,7 +156,7 @@ export class FormButtonComponent implements OnInit, OnDestroy {
     }
   }
 
-  public action(e) {
+  public action(e: any) {
     if (this.config.list) {
       e.stopPropagation();
     }
@@ -180,7 +180,7 @@ export class FormButtonComponent implements OnInit, OnDestroy {
     }
   }
 
-  public checkSmsDisabled(endpoint = ''): boolean {
+  public checkSmsDisabled(endpoint = ''): boolean | undefined {
     if (!this.siteSettings.isSmsEnabled()) {
       if (this.config.templateOptions.action === 'resend') {
         return true;
@@ -197,6 +197,8 @@ export class FormButtonComponent implements OnInit, OnDestroy {
         return endpoint.indexOf(part) !== -1;
       });
     }
+
+    return;
   }
 
   public getSmsTitle(disabled?: boolean): string {

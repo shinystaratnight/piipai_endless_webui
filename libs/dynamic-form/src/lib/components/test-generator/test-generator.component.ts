@@ -31,6 +31,7 @@ interface IQuestionConfig {
   pictures: string[];
   last: boolean;
   first: boolean;
+  options: any[];
 }
 
 interface ITestConfig {
@@ -40,19 +41,19 @@ interface ITestConfig {
 }
 
 @Component({
-  selector: 'app-test-generator',
+  selector: 'webui-test-generator',
   templateUrl: './test-generator.component.html',
   styleUrls: ['./test-generator.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TestGeneratorComponent implements OnInit {
-  @Input() public id: string;
-  @Input() public send = true;
-  @Input() public workflowObject: string;
+  @Input() public id?: string;
+  @Input() public send? = true;
+  @Input() public workflowObject?: string;
   @Input() test: any;
-  @Input() skipScore: boolean;
+  @Input() skipScore?: boolean;
 
-  @ViewChild('cdkStepper') stepper: CdkStepper;
+  @ViewChild('cdkStepper') stepper!: CdkStepper;
 
   @Output() public sended: EventEmitter<any> = new EventEmitter();
 
@@ -61,11 +62,9 @@ export class TestGeneratorComponent implements OnInit {
   public testData: any;
   public form: FormGroup = new FormGroup({});
 
-  private testConfig: BehaviorSubject<ITestConfig | null> = new BehaviorSubject(
-    null
-  );
+  private testConfig: BehaviorSubject<ITestConfig | null> = new BehaviorSubject<ITestConfig | null>(null);
 
-  public testConfig$: Observable<ITestConfig> = this.testConfig.asObservable();
+  public testConfig$: Observable<ITestConfig | null> = this.testConfig.asObservable();
   public QuestionType = QuestionType;
 
   constructor(private genericFormService: GenericFormService) {}
@@ -78,15 +77,15 @@ export class TestGeneratorComponent implements OnInit {
     const config = {
       name: data.test_name,
       description: data.description,
-      questions: data.acceptance_test_questions.map((question, index, arr) => {
+      questions: data.acceptance_test_questions.map((question: any, index: number) => {
         return this.generateQuestion(question, {
-          last: index === arr.length - 1,
+          last: index === data.acceptance_test_questions.length - 1,
           first: index === 0
         });
       })
     };
 
-    config.questions.sort((p, n) => (p.order > n.order ? 1 : -1));
+    config.questions.sort((p: any, n: any) => (p.order > n.order ? 1 : -1));
 
     this.testConfig.next(config);
   }
@@ -107,7 +106,7 @@ export class TestGeneratorComponent implements OnInit {
       order: data.order,
       workflow_object: this.workflowObject,
       group: questionForm,
-      pictures: data.pictures.map((el) => el.picture.origin),
+      pictures: data.pictures.map((el: any) => el.picture.origin),
       last: config.last,
       first: config.first
     };
@@ -119,13 +118,13 @@ export class TestGeneratorComponent implements OnInit {
     ].includes(data.type);
 
     if (hasOptions) {
-      options = data.acceptance_test_answers.map(({ answer, id }) => ({
+      options = data.acceptance_test_answers.map(({ answer, id }: { answer: any, id: string }) => ({
         label: answer,
         value: id
       }));
 
-      if (question.type === QuestionType.Checkboxes) {
-        options.forEach((option) => {
+      if (question['type'] === QuestionType.Checkboxes) {
+        options.forEach((option: any) => {
           questionForm.addControl(option.value, new FormControl(''));
         });
       } else {
@@ -136,7 +135,7 @@ export class TestGeneratorComponent implements OnInit {
       }
     }
 
-    if (question.type === QuestionType.Text) {
+    if (question['type'] === QuestionType.Text) {
       (this.form.get(data.id) as FormGroup).addControl(
         'answer_text',
         new FormControl('', Validators.required)
@@ -147,7 +146,7 @@ export class TestGeneratorComponent implements OnInit {
       );
     }
 
-    question.options = options;
+    question['options'] = options;
 
     return question;
   }

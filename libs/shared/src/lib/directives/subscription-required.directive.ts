@@ -1,16 +1,16 @@
-import { AfterViewInit, Directive, ElementRef, HostListener, OnDestroy, OnInit, Optional, Renderer2, TemplateRef } from '@angular/core';
+import { AfterViewInit, Directive, ElementRef, OnDestroy, Optional, Renderer2 } from '@angular/core';
 import { SubscriptionService } from '@webui/core';
 import { TranslateService } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
 import { RouterLink, RouterLinkWithHref } from '@angular/router';
 
 @Directive({
-  selector: '[appSubscriptionRequired]'
+  selector: '[webuiSubscriptionRequired]'
 })
-export class SubscriptionRequiredDirective implements OnInit, OnDestroy, AfterViewInit {
+export class SubscriptionRequiredDirective implements OnDestroy, AfterViewInit {
 
   private _destroy: Subject<void> = new Subject();
-  private disabled: boolean;
+  private disabled!: boolean;
 
   constructor(
     private subscriptionService: SubscriptionService,
@@ -35,9 +35,6 @@ export class SubscriptionRequiredDirective implements OnInit, OnDestroy, AfterVi
         }
       };
     }
-  }
-
-  public ngOnInit() {
   }
 
   public ngAfterViewInit() {

@@ -12,23 +12,23 @@ import {
 import { Time } from '@webui/time';
 
 @Component({
-  selector: 'app-time',
+  selector: 'webui-time',
   templateUrl: './time.component.html',
   styleUrls: ['./time.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TimeComponent implements OnInit, OnDestroy {
-  @Input() timezone: string;
-  @Input() description: string;
-  @Input() differMessage: string;
-  @Input() translateKey: string;
+  @Input() timezone!: string;
+  @Input() description!: string;
+  @Input() differMessage = '';
+  @Input() translateKey = '';
 
   @Output() init: EventEmitter<boolean> = new EventEmitter();
 
-  time: string;
-  differTimezone: boolean;
+  time!: string;
+  differTimezone!: boolean;
 
-  private intervalId: any;
+  private intervalId!: number;
   private timeFormat = 'HH:mm DD/MM/YYYY (UTCZ)';
 
   constructor(private cd: ChangeDetectorRef) {}

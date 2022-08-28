@@ -4,8 +4,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 // import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 
-import { AgmCoreModule } from '@agm/core';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+// import { AgmCoreModule } from '@agm/core';
+// import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ButtonsModule } from 'ngx-bootstrap/buttons';
 // import { NgxWebstorageModule } from 'ngx-webstorage';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
@@ -43,6 +43,8 @@ import { UiModule } from '@webui/ui';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { DialogModule } from '@webui/dialog';
 import { TranslateModule } from '@ngx-translate/core';
+import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
+import { GoogleMapsModule } from '@angular/google-maps';
 
 @NgModule({
   // bootstrap: [ ManagerComponent ],
@@ -56,12 +58,12 @@ import { TranslateModule } from '@ngx-translate/core';
     FormsModule,
     ReactiveFormsModule,
     // HttpClientModule,
-    AgmCoreModule,
+    // AgmCoreModule,
     // AgmCoreModule.forRoot({
     //   apiKey: environment.GOOGLE_GEO_CODING_API_KEY,
     //   libraries: ['places']
     // }),
-    NgbModule,
+    // NgbModule,
     ButtonsModule.forRoot(),
     // NgxWebstorageModule.forRoot({ prefix: 'web', separator: '.' }),
     RouterModule.forChild(routes),
@@ -69,6 +71,7 @@ import { TranslateModule } from '@ngx-translate/core';
     // SharedModule,
     InfiniteScrollModule,
     MasterGuideModule,
+    NgbNavModule,
 
     FontAwesomeModule,
     // CoreModule.forRoot(environment),
@@ -80,6 +83,7 @@ import { TranslateModule } from '@ngx-translate/core';
     DragDropModule,
     DialogModule,
     TranslateModule,
+    GoogleMapsModule
   ],
   providers: [
     // ...guards,

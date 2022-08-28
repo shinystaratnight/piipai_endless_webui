@@ -10,36 +10,37 @@ import { FormGroup } from '@angular/forms';
 
 import { Subscription } from 'rxjs';
 
-import { FormService } from '../../services';
+import { FormMode, FormService } from '../../services';
 import { getValueOfData } from '../../helpers';
 import { isMobile, isCandidate } from '@webui/utilities';
 import { Form } from '../../models';
 
 @Component({
-  selector: 'app-form-tabs',
+  selector: 'webui-form-tabs',
   templateUrl: './form-tabs.component.html',
   styleUrls: ['./form-tabs.component.scss']
 })
 export class FormTabsComponent implements OnInit, OnDestroy {
   public config: any;
 
-  public group: FormGroup;
+  public group!: FormGroup;
   public errors: any;
   public message: any;
-  public formId: number;
+  public formId!: number;
 
-  public canUpdate: boolean;
-  public mode: string;
-  public modeSubscription: Subscription;
+  public canUpdate!: boolean;
+  public mode!: string;
+  public modeSubscription!: Subscription;
 
-  public saving: boolean;
-  public saveSubscription: Subscription;
-  public form: Form;
+  public saving!: boolean;
+  public saveSubscription!: Subscription;
+  public form!: Form;
 
   @Output() public event = new EventEmitter();
   @Output() public buttonAction = new EventEmitter();
 
   public isMobileDevice = isMobile() && isCandidate();
+  FormMode = FormMode;
 
   constructor(
     private formService: FormService,
@@ -48,12 +49,13 @@ export class FormTabsComponent implements OnInit, OnDestroy {
 
   public ngOnInit() {
     this.form = this.formService.getForm(this.formId);
+    this.config.activeId = this.config.activeId || 'ngb-tab-0';
 
     this.canUpdate =
       this.formService.getAllowedMethods(this.formId).indexOf('update') > -1 &&
       this.config.editForm; //tslint:disable-line
 
-    this.config.children.forEach((tab) => {
+    this.config.children.forEach((tab: any) => {
       this.checkCustomLabel(tab);
     });
 
@@ -70,7 +72,7 @@ export class FormTabsComponent implements OnInit, OnDestroy {
     }
   }
 
-  public checkCustomLabel(field): void {
+  public checkCustomLabel(field: any): void {
     const { templateOptions, formData } = field;
 
     if (templateOptions && templateOptions.customLabel) {
@@ -100,15 +102,15 @@ export class FormTabsComponent implements OnInit, OnDestroy {
     }
   }
 
-  public eventHandler(e) {
+  public eventHandler(e: any) {
     this.event.emit(e);
   }
 
-  public buttonActionHandler(e): void {
+  public buttonActionHandler(e: any): void {
     this.buttonAction.emit(e);
   }
 
-  public changeMode(mode: string): void {
+  public changeMode(mode: FormMode): void {
     this.mode = mode;
 
     this.formService.changeModeOfForm(this.formId, mode);
@@ -121,7 +123,7 @@ export class FormTabsComponent implements OnInit, OnDestroy {
     );
   }
 
-  public getTranslateKey(key, type) {
+  public getTranslateKey(key: string, type: string) {
     return `tabs.${key}.${type}`;
   }
 }

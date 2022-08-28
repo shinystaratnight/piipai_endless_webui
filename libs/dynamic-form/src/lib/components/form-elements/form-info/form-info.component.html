@@ -26,16 +26,16 @@
       </span>
 
       <div class="map" *ngIf="map">
-        <agm-map [zoomControl]="false" [streetViewControl]="false" [latitude]="map.latitude" [longitude]="map.longitude" [zoom]="13">
-          <agm-marker [iconUrl]="'/assets/img/location-red.svg'" [latitude]="map.latitude" [longitude]="map.longitude">
-            <agm-info-window>
+        <google-map [zoom]="13" [center]="map.center" height="150" width="265">
+          <map-marker [position]="map.center">
+            <map-info-window>
               <strong>{{map.__str__}}</strong>
-            </agm-info-window>
-          </agm-marker>
-        </agm-map>
+            </map-info-window>
+          </map-marker>
+        </google-map>
       </div>
 
-      <ng-container appFormElement *ngIf="config && config.metadata['picture'] && !viewMode && config.editForm"
+      <ng-container webuiFormElement *ngIf="config && config.metadata['picture'] && !viewMode && config.editForm"
         [config]="config.metadata['picture']"
         [group]="group"
         (event)="eventHandler($event)">
@@ -46,18 +46,18 @@
   <div class="form-info-block">
     <p>
       <label *ngIf="config && viewMode && (available === true || available === false)" class="f-size-14" [class.text-success]="available" [class.text-danger]="!available">
-        <fa-icon class="mr-2" [icon]="['fas', available ? 'check-circle' : 'times-circle']"></fa-icon>
-        {{available ? config.metadata['available'].templateOptions.label : 'Not ' + config.metadata['available'].templateOptions.label}}
+        <fa-icon class="me-2" [icon]="['fas', available ? 'check-circle' : 'times-circle']"></fa-icon>
+        {{available ? config.metadata['available']?.templateOptions.label : 'Not ' + config.metadata['available']?.templateOptions.label}}
       </label>
 
-      <ng-container appFormElement *ngIf="config && config.metadata['available'] && !viewMode && config.editForm"
+      <ng-container webuiFormElement *ngIf="config && config.metadata['available'] && !viewMode && config.editForm"
         [config]="config.metadata['available']"
         [group]="group">
       </ng-container>
 
       <a class="client-link" target="_blanck" [href]="link" *ngIf="config && viewMode && link">{{link}}</a>
 
-      <ng-container appFormElement *ngIf="config && config.metadata['link'] && !viewMode && config.editForm"
+      <ng-container webuiFormElement *ngIf="config && config.metadata['link'] && !viewMode && config.editForm"
         [config]="getConfig('link')"
         [group]="group">
       </ng-container>
@@ -72,7 +72,7 @@
 
     <div *ngIf="config && config.metadata['client'] && config.editForm"
       [class.remove-margin]="viewMode">
-      <ng-container appFormElement
+      <ng-container webuiFormElement
         [config]="getConfig('client')"
         [group]="group">
       </ng-container>
@@ -86,7 +86,7 @@
 
     <div class="job-title" *ngIf="config && viewMode && job_title">{{job_title}}</div>
     <div *ngIf="config && config.metadata['job_title'] && !viewMode && config.editForm">
-      <ng-container appFormElement
+      <ng-container webuiFormElement
         [config]="getConfig('job_title')"
         [group]="group">
       </ng-container>
@@ -94,7 +94,7 @@
 
     <p class="job" *ngIf="!titlePath && job">{{job}}</p>
     <p class="jobsite" *ngIf="!titlePath && jobsite && config && config.metadata['jobsite']">
-      <ng-container appFormElement
+      <ng-container webuiFormElement
         [config]="getConfig('jobsite')"
         [group]="group">
       </ng-container>
@@ -108,7 +108,7 @@
 
       <span *ngIf="!averageScore && averageScore !== 0">
         <span class="view-mode" *ngIf="titlePath">
-          <ng-container appFormElement *ngIf="config && config.metadata['title'] && viewMode && !config.metadata['title_title']"
+          <ng-container webuiFormElement *ngIf="config && config.metadata['title'] && viewMode && !config.metadata['title_title']"
             [config]="getConfig('title')"
             (event)="eventHandler($event)"
             [group]="group">
@@ -116,11 +116,11 @@
         </span>
 
         <span *ngIf="!titlePath && title">{{title}}</span>
-        <app-info class="ml-1" [description]="description"></app-info>
+        <webui-info class="ms-1" [description]="description"></webui-info>
       </span>
       <span *ngIf="averageScore || averageScore === 0">
         <span class="view-mode" *ngIf="titlePath">
-          <ng-container appFormElement *ngIf="config && config.metadata['title'] && viewMode && !config.metadata['title_title']"
+          <ng-container webuiFormElement *ngIf="config && config.metadata['title'] && viewMode && !config.metadata['title_title']"
             [config]="getConfig('title')"
             (event)="eventHandler($event)"
             [group]="group">
@@ -140,7 +140,7 @@
       </span>
     </h5>
     <p>
-      <ng-container appFormElement *ngIf="config && config.metadata['title'] && !viewMode && !config.metadata['title_title']"
+      <ng-container webuiFormElement *ngIf="config && config.metadata['title'] && !viewMode && !config.metadata['title_title']"
         [config]="getConfig('title')"
         (event)="eventHandler($event)"
         [group]="group">
@@ -155,29 +155,29 @@
 
     <div *ngIf="config && config.metadata['tags']" class="tags-wrapper">
       <label>Tags:</label>
-      <ng-container appFormElement
+      <ng-container webuiFormElement
         [config]="config.metadata['tags']"
         [group]="group">
       </ng-container>
     </div>
 
-    <ng-container appFormElement *ngIf="config && config.metadata['title_title'] && !viewMode"
+    <ng-container webuiFormElement *ngIf="config && config.metadata['title_title'] && !viewMode"
       [config]="getConfig('title_title')"
       [group]="group">
     </ng-container>
 
-    <ng-container appFormElement *ngIf="config && config.metadata['first_name'] && !viewMode"
+    <ng-container webuiFormElement *ngIf="config && config.metadata['first_name'] && !viewMode"
       [config]="getConfig('first_name')"
       [group]="group">
     </ng-container>
 
-    <ng-container appFormElement *ngIf="config && config.metadata['last_name'] && !viewMode"
+    <ng-container webuiFormElement *ngIf="config && config.metadata['last_name'] && !viewMode"
       [config]="getConfig('last_name')"
       [group]="group">
     </ng-container>
 
     <div *ngIf="config && config.metadata['company'] && config.editForm">
-      <ng-container appFormElement
+      <ng-container webuiFormElement
         [config]="config.metadata['company']"
         [group]="group">
       </ng-container>
@@ -187,13 +187,13 @@
       <span >Carrier list reserve: {{carrier_reserve}}</span>
     </p>
 
-    <ng-container *ngIf="!viewMode && config.metadata['carrier_reserve']" appFormElement
+    <ng-container *ngIf="!viewMode && config.metadata['carrier_reserve']" webuiFormElement
       [config]="config.metadata['carrier_reserve']"
       [group]="group">
     </ng-container>
 
     <p class="address-field" *ngIf="config && config.metadata['address'] && config.editForm">
-      <ng-container appFormElement
+      <ng-container webuiFormElement
         *ngIf="!viewMode || address"
         [config]="config.metadata['address']"
         [group]="group"
@@ -201,22 +201,22 @@
       </ng-container>
     </p>
 
-    <app-time
+    <webui-time
       *ngIf="timezone"
       [timezone]="timezone"
       description="Time at jobsite:"
       differMessage="Timezone at jobsite differs from Your timezone!">
-    </app-time>
+    </webui-time>
 
     <p *ngIf="config && config.metadata['birthday']">
       <span class="description">{{ 'birthday' | translate: {"Default": "Birthday"} }} :</span>&nbsp;
-      <ng-container appFormElement
+      <ng-container webuiFormElement
         [config]="config.metadata['birthday']"
         [group]="group">
       </ng-container>
     </p>
 
-    <ng-container appFormElement *ngIf="config && config.metadata['timeline'] && config.editForm"
+    <ng-container webuiFormElement *ngIf="config && config.metadata['timeline'] && config.editForm"
       [config]="config.metadata['timeline']"
       (event)="event.emit($event)">
     </ng-container>
@@ -226,10 +226,10 @@
       <p class="body">{{ 'add_shifts_and_workers.description' | translate: {"Default": "Create dates, shifts and time for tasks, add workers."} }}</p>
 
       <div class="actions">
-        <button appSubscriptionRequired class="btn btn-primary" type="button" (click)="extendJob()">
+        <button webuiSubscriptionRequired class="btn btn-primary" type="button" (click)="extendJob()">
           {{ 'add_shifts_and_workers' | translate: {"Default": "Add shifts and workers"} }}
         </button>
-        <button appSubscriptionRequired class="btn btn-primary" type="button" (click)="fillInJob()">
+        <button webuiSubscriptionRequired class="btn btn-primary" type="button" (click)="fillInJob()">
           {{ 'fill_in.label' | translate: {"Default": "Fill In"} }}
         </button>
       </div>
@@ -248,26 +248,26 @@
         <div class="modal-header">
           <h5 class="modal-title">{{modalInfo.label}}</h5>
 
-          <app-close-button class="ml-auto" (click)="modal.dismiss()"></app-close-button>
+          <webui-close-button class="ms-auto" (click)="modal.dismiss()"></webui-close-button>
         </div>
       </div>
       <div class="modal-body">
-        <app-generic-form
+        <webui-generic-form
           [endpoint]="modalInfo.endpoint"
           [data]="modalInfo.data"
           [mode]="modalInfo.mode"
           [data]="modalInfo.data"
           [edit]="modalInfo.edit"
           (event)="formEvent($event, modal.close)"
-          (errorForm)="formError($event)">
+          (errorForm)="formError()">
           <div class="text-center">
             <button type="submit" class="btn btn-shadow btn-primary text-white button-save mt-3 mb-4"
               [disabled]="saveProcess">
                 {{ 'save' | translate: {"Default": "Save"} }}
-                <app-spinner *ngIf="saveProcess"></app-spinner>
+                <webui-spinner *ngIf="saveProcess"></webui-spinner>
             </button>
           </div>
-        </app-generic-form>
+        </webui-generic-form>
       </div>
     </div>
   </ng-template>

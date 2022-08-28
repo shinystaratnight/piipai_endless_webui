@@ -8,7 +8,7 @@
       <div class="double-bounce1"></div>
       <div class="double-bounce2"></div>
     </div>
-    <app-dynamic-form
+    <webui-dynamic-form
       *ngIf="showForm"
       [mode]="mode"
       [config]="metadata"
@@ -23,7 +23,7 @@
       (buttonAction)="buttonActionHandler($event)"
       (changeValue)="parseCheckObject($event)">
       <ng-content *ngIf="canEdit"></ng-content>
-    </app-dynamic-form>
+    </webui-dynamic-form>
 </div>
 
 <ng-template #confirmProfileModal let-modal>
@@ -31,7 +31,7 @@
     <div class="modal-header-wrapper">
       <div class="modal-header">
 
-        <app-close-button class="close ml-auto" (click)="modal.dismiss()"></app-close-button>
+        <webui-close-button class="close ms-auto" (click)="modal.dismiss()"></webui-close-button>
       </div>
     </div>
     <div class="modal-body">
@@ -43,7 +43,7 @@
         <button type="button" class="btn big-btn btn-shadow btn-primary button-save"
           (click)="confirmCandidateBuy()">
             Confirm
-            <app-spinner *ngIf="saveProcess"></app-spinner>
+            <webui-spinner *ngIf="saveProcess"></webui-spinner>
         </button>
       </div>
   </div>

@@ -11,7 +11,6 @@ import {
 
 import { BillingService } from '../../services/billing-service';
 import { ENV } from '@webui/core';
-// import { environment } from '../../../../environments/environment';
 
 const style = {
   base: {
@@ -31,19 +30,19 @@ const style = {
 };
 
 @Component({
-  selector: 'app-check-card',
+  selector: 'webui-check-card',
   templateUrl: './check-card.component.html',
   styleUrls: ['./check-card.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
 export class CheckCardComponent implements OnInit {
 
-  public error: string;
-  public saving: boolean;
-  public newCard: boolean;
+  public error!: string;
+  public saving!: boolean;
+  public newCard!: boolean;
 
   @Input()
-  public cardExist: boolean;
+  public cardExist!: boolean;
 
   @Output()
   public cardChange = new EventEmitter();
@@ -65,7 +64,7 @@ export class CheckCardComponent implements OnInit {
       this.card = elements.create('card', { style });
       this.card.mount('#card-element');
 
-      this.card.addEventListener('change', (event) => {
+      this.card.addEventListener('change', (event: any) => {
         if (event.error) {
           this.error = event.error.message;
         } else {
@@ -76,12 +75,12 @@ export class CheckCardComponent implements OnInit {
     });
   }
 
-  public checkCard(event) {
+  public checkCard(event: any) {
     event.preventDefault();
 
     this.saving = true;
 
-    this.stripe.createToken(this.card).then((result) => {
+    this.stripe.createToken(this.card).then((result: any) => {
       if (result.error) {
         this.error = result.error.message;
         this.saving = false;
@@ -91,7 +90,7 @@ export class CheckCardComponent implements OnInit {
     });
   }
 
-  public sendToken(token) {
+  public sendToken(token: string) {
     if (this.cardExist) {
       this.billingService.changeCard({
         source: token

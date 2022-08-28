@@ -7,8 +7,8 @@ import { BasicElementComponent } from './../basic-element/basic-element.componen
 
 interface OutputData {
   active: number[];
-  required_states: number[] | string[];
-  required_functions: number[] | string[];
+  required_states: number[] | string[] | null;
+  required_functions: number[] | string[] | null;
 }
 
 interface Rule {
@@ -18,40 +18,42 @@ interface Rule {
   data: any[];
 }
 
+type RuleType = 'app' | 'model' | 'function' | 'options';
+
 @Component({
-  selector: 'app-form-rule',
+  selector: 'webui-form-rule',
   templateUrl: './form-rule.component.html',
   styleUrls: ['./form-rule.component.scss'],
 })
 export class FormRuleComponent extends BasicElementComponent implements OnInit, OnDestroy {
   @Output()
-  public event: EventEmitter<any> = new EventEmitter();
+  public override event: EventEmitter<any> = new EventEmitter();
 
   @ViewChild('element')
   public element: any;
 
-  public config;
-  public group: FormGroup;
+  public override config!: any;
+  public override group!: FormGroup;
   public errors: any;
   public message: any;
-  public key: any;
-  public label: boolean;
+  public override key: any;
+  public label!: boolean;
 
-  public elementValue: string;
-  public app: string;
-  public model: string;
-  public statesArray: any[];
-  public appsArray: any[];
-  public modelsArray: any[];
-  public functionsArray: any[];
+  public elementValue!: string | null;
+  public app!: string;
+  public model!: string | null;
+  public statesArray!: any[];
+  public appsArray!: any[];
+  public modelsArray!: any[] | null;
+  public functionsArray!: any[] | null;
 
   public editRule: any;
   public parentRule: any;
   public editItem: any;
-  public choice: string;
-  public editIndex: number;
-  public data: OutputData;
-  public editValue: string;
+  public choice!: string;
+  public editIndex!: number | null;
+  public data!: OutputData;
+  public editValue!: string;
 
   public modalRef: any;
 
@@ -68,13 +70,13 @@ export class FormRuleComponent extends BasicElementComponent implements OnInit, 
     if (this.config.value && Object.keys(this.config.value).length) {
       this.data = JSON.parse(JSON.stringify(this.config.value));
       this.generateView(this.data);
-      this.group.get(this.key).patchValue(this.data);
+      this.group.get(this.key)?.patchValue(this.data);
     } else {
       this.config.activeMetadata[0].value = null;
 
       this.states = this.createRule();
       this.functions = this.createRule();
-      this.group.get(this.key).patchValue(null);
+      this.group.get(this.key)?.patchValue(null);
     }
   }
 
@@ -84,7 +86,7 @@ export class FormRuleComponent extends BasicElementComponent implements OnInit, 
     }
   }
 
-  public open(content, type, rule, index = null, item, parent) {
+  public open(content: any, type: any, rule: any[], index?: number, item?: any, parent?: any) {
     this.editRule = rule;
     this.choice = '';
     this.editValue = '';
@@ -100,7 +102,7 @@ export class FormRuleComponent extends BasicElementComponent implements OnInit, 
     this.modelsArray = null;
     this.functionsArray = null;
 
-    if (rule && rule[index]) {
+    if (rule && typeof index === 'number' && rule[index]) {
       this.editIndex = index;
       this.editValue = rule[index];
     }
@@ -110,9 +112,9 @@ export class FormRuleComponent extends BasicElementComponent implements OnInit, 
     this.modalRef = this.modalService.open(content, { backdrop: 'static' });
   }
 
-  public done(closeModal, type) {
+  public done(closeModal: () => void, type: any) {
     closeModal();
-    if (this.elementValue && this.editRule) {
+    if (this.elementValue && this.editRule && this.editIndex != null) {
       if (this.editRule[this.editIndex]) {
         this.editRule[this.editIndex] = this.elementValue;
       } else {
@@ -123,7 +125,7 @@ export class FormRuleComponent extends BasicElementComponent implements OnInit, 
     this.generateData(type);
   }
 
-  public delete(closeModal, type) {
+  public delete(closeModal: () => void, type: any) {
     closeModal();
     this.editRule.splice(this.editIndex, 1);
     if (this.editRule.length === 0) {
@@ -147,18 +149,18 @@ export class FormRuleComponent extends BasicElementComponent implements OnInit, 
     this.choice = '';
   }
 
-  public parseValue(data: any, type?) {
+  public parseValue(data: any, type?: any) {
     let parseValue;
 
     if (data && data.data) {
-      parseValue = data.data.map((el) => {
+      parseValue = data.data.map((el: any) => {
         if (el) {
           if (el instanceof Object) {
             el = this.parseValue(el, type);
           }
 
           if (type === 'state') {
-            const state = this.config.options.find((elem) => elem.name_before_activation === el);
+            const state = this.config.options.find((elem: any) => elem.name_before_activation === el);
             if (state) {
               el = state.number;
             }
@@ -176,19 +178,24 @@ export class FormRuleComponent extends BasicElementComponent implements OnInit, 
     return parseValue;
   }
 
-  public generateArray(type) {
-    const props = {
+  public generateArray(type: RuleType) {
+    const props: Record<RuleType, keyof FormRuleComponent> = {
       app: 'appsArray',
       model: 'modelsArray',
       function: 'functionsArray',
       options: 'statesArray',
     };
 
-    this[props[type]] = [].concat(this.config[type]);
+    const arr = props[type];
+    if (!arr) {
+      return;
+    }
+
+    this[arr] = Array.from(this.config[type]) as never;
   }
 
-  public getRelatedData(type) {
-    const params = {
+  public getRelatedData(type: 'model' | 'function') {
+    const params: Record<'model' | 'function', any> = {
       model: {
         param: 'app',
         query: `?app_name=`,
@@ -221,7 +228,7 @@ export class FormRuleComponent extends BasicElementComponent implements OnInit, 
           prop: type,
         },
       },
-      value: [{ [params[type].param]: this[params[type].param] }],
+      value: [{ [params[type].param]: this[params[type].param as keyof FormRuleComponent] }],
     });
   }
 
@@ -234,19 +241,19 @@ export class FormRuleComponent extends BasicElementComponent implements OnInit, 
       this.data.required_functions = this.parseValue(this.functions);
     }
 
-    this.group.get(this.key).patchValue(this.data);
+    this.group.get(this.key)?.patchValue(this.data);
   }
 
-  public changeActiveStates(e) {
+  public changeActiveStates(e: any) {
     if (e && e.list) {
-      this.data.active = e.list.map((el) => {
+      this.data.active = e.list.map((el: any) => {
         return el.number;
       });
     }
-    this.group.get(this.key).patchValue(this.data);
+    this.group.get(this.key)?.patchValue(this.data);
   }
 
-  public generateView(data) {
+  public generateView(data: any) {
     const attr = Object.keys(data);
     attr.forEach((el) => {
       if (el === 'active') {
@@ -274,23 +281,23 @@ export class FormRuleComponent extends BasicElementComponent implements OnInit, 
     }
   }
 
-  public generateViewForType(data: any[], type?) {
+  public generateViewForType(data: any[], type?: any) {
     const operator = data.length > 1 ? data.shift() : 'or';
 
     const element = {
       type,
       operator,
-      data: [],
+      data: <any[]>[],
     };
 
     data.forEach((el) => {
       if (Array.isArray(el)) {
         const nestedType = 'rule';
 
-        element.data.push(this.generateViewForType([].concat(el), nestedType));
+        element.data.push(this.generateViewForType(([] as any[]).concat(el as any[]), nestedType));
       } else {
         if (this.config.options) {
-          const obj = this.config.options.find((prop) => prop.number === el);
+          const obj = this.config.options.find((prop: any) => prop.number === el);
           if (obj) {
             el = obj.name_before_activation;
           }
@@ -303,7 +310,7 @@ export class FormRuleComponent extends BasicElementComponent implements OnInit, 
     return element;
   }
 
-  public createRule(type?) {
+  public createRule(type?: any) {
     return {
       type: type || '',
       operator: 'or',
@@ -319,7 +326,7 @@ export class FormRuleComponent extends BasicElementComponent implements OnInit, 
     return target instanceof Object;
   }
 
-  public changeOperator(e, type) {
+  public changeOperator(e: MouseEvent, type: any) {
     e.preventDefault();
     e.stopPropagation();
 
@@ -347,6 +354,6 @@ export class FormRuleComponent extends BasicElementComponent implements OnInit, 
       }
     }
 
-    this.group.get(this.key).patchValue(this.data);
+    this.group.get(this.key)?.patchValue(this.data);
   }
 }

@@ -1,9 +1,9 @@
-<app-base-modal modalClass="approve-signature-modal" (dissmisEvent)="dismiss()">
+<webui-base-modal modalClass="approve-signature-modal" (dissmisEvent)="dismiss()">
   <header class="header">
-    <app-user-avatar
+    <webui-user-avatar
       [source]="config.label.avatar"
       [fullName]="config.label.fullName"
-    ></app-user-avatar>
+    ></webui-user-avatar>
 
     <h3 class="title">
       <span>{{ 'approve_timesheet' | translate: { Default: 'Approve timesheet' } }}</span>
@@ -122,10 +122,10 @@
 
 
         <div>
-          <app-evaluate-field
+          <webui-evaluate-field
             [evaluated]="config.evaluated"
             [evaluatedScore]="config.data.evaluation_score"
-          ></app-evaluate-field>
+          ></webui-evaluate-field>
         </div>
       </div>
 
@@ -138,16 +138,16 @@
             <button
               *ngIf="config.signature"
               type="button"
-              class="btn btn-link text-danger ml-auto pr-0 py-0 only-mobile"
+              class="btn btn-link text-danger ms-auto pr-0 py-0 only-mobile"
               (click)="signatureCanvas.clear()"
             >
               {{ 'clear' | translate: { Default: 'Clear area' } }}
             </button>
           </h3>
-          <app-signature
+          <webui-signature
             #signatureCanvas
             (signature)="updateSignature($event)"
-          ></app-signature>
+          ></webui-signature>
         </div>
       </div>
     </div>
@@ -169,7 +169,7 @@
         (click)="config.sendSignature()"
       >
         {{ 'approve' | translate: { Default: 'Approve' } }}
-        <app-spinner *ngIf="saveProcess"></app-spinner>
+        <webui-spinner *ngIf="saveProcess"></webui-spinner>
       </button>
 
       <button
@@ -180,7 +180,7 @@
       >
         {{ 'next' | translate: { Default: 'Next' } }}
         <svg
-          class="ml-1"
+          class="ms-1"
           width="16"
           height="11"
           viewBox="0 0 16 11"
@@ -199,7 +199,7 @@
       </button>
     </div>
   </div>
-</app-base-modal>
+</webui-base-modal>
 
 <ng-template #line let-label="label" let-value="value" let-total="totalTime" let-muted="muted" let-key="key">
   <div

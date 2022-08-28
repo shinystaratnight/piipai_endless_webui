@@ -3,9 +3,9 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbAccordionModule, NgbCollapseModule, NgbDatepickerModule, NgbNavModule, NgbPaginationModule, NgbPopoverModule, NgbRatingModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { AgmCoreModule } from '@agm/core';
+// import { AgmCoreModule } from '@agm/core';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { ButtonsModule } from 'ngx-bootstrap/buttons';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
@@ -13,7 +13,7 @@ import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { GooglePlaceModule } from 'ngx-google-places-autocomplete';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { QuillModule } from 'ngx-quill';
-import { Angular2SignaturepadModule } from 'angular2-signaturepad';
+import { SignaturePadModule } from 'angular2-signaturepad';
 import { WebcamModule } from 'ngx-webcam';
 import { NgxDropzoneModule } from 'ngx-dropzone';
 
@@ -36,22 +36,23 @@ import { FormControlsModule } from "@webui/form-controls";
 import { StepperModule } from '@webui/stepper';
 import { CdkStepperModule } from '@angular/cdk/stepper';
 import { RatingModule } from '@webui/rating';
+import { GoogleMapsModule } from '@angular/google-maps';
 
 @NgModule({
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    NgbModule,
+    // NgbModule,
     FontAwesomeModule,
     FormsModule,
     RouterModule,
-    AgmCoreModule,
+    // AgmCoreModule,
     InfiniteScrollModule,
     SharedModule,
     ButtonsModule.forRoot(),
     GooglePlaceModule,
     QuillModule,
-    Angular2SignaturepadModule,
+    SignaturePadModule,
     DragDropModule,
 
     BsDropdownModule.forRoot(),
@@ -70,7 +71,16 @@ import { RatingModule } from '@webui/rating';
     FormControlsModule,
     StepperModule,
     CdkStepperModule,
-    RatingModule
+    RatingModule,
+    GoogleMapsModule,
+    NgbPopoverModule,
+    NgbPaginationModule,
+    NgbRatingModule,
+    NgbNavModule,
+    NgbCollapseModule,
+    NgbAccordionModule,
+    NgbTooltipModule,
+    NgbDatepickerModule
   ],
   exports: [
     fromComponents.GenericFormComponent,
@@ -85,7 +95,7 @@ import { RatingModule } from '@webui/rating';
     fromComponents.ImageUploaderComponent
   ],
   declarations: [
-    fromComponents.WebcamComponent,
+    // fromComponents.WebcamComponent,
 
     ...fromComponents.components,
     ...directives,

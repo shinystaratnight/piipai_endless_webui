@@ -31,18 +31,20 @@ export class TokenInterceptor implements HttpInterceptor {
             }),
             catchError((err) => {
               this.authService.logout();
-              return of(err);
+              return of();
             })
           );
       } else if (user) {
         return next.handle(this.createRequest(req, user));
+      } else {
+        return next.handle(req);
       }
     } else {
       return next.handle(req);
     }
   }
 
-  createRequest(request, user) {
+  createRequest(request: HttpRequest<any>, user: any) {
     if (!user) {
       return request;
     }

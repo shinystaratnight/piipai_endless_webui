@@ -1,12 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Billing } from '@webui/data';
+import { BillingSubscription } from '@webui/models';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { ErrorsService } from './errors.service';
 
 type Payload = {
-  subscriptions: Array<Billing.Subscription>
+  subscriptions: Array<BillingSubscription>
 };
 
 @Injectable({
@@ -15,9 +15,9 @@ type Payload = {
 export class SubscriptionService {
 
   private _endpoint = '/billing/subscription/list/';
-  private _subscription: BehaviorSubject<Billing.Subscription | null> = new BehaviorSubject(null);
+  private _subscription: BehaviorSubject<BillingSubscription | null> = new BehaviorSubject<BillingSubscription | null>(null);
 
-  public get activePlan$(): Observable<Billing.Subscription | null> {
+  public get activePlan$(): Observable<BillingSubscription | null> {
     return this._subscription.asObservable();
   }
 
@@ -34,21 +34,21 @@ export class SubscriptionService {
   }
 
   public useTrialPermissions(): void {
-    this._subscription.next({} as Billing.Subscription);
+    this._subscription.next({} as BillingSubscription);
   }
 
   public useClientPermissions(): void {
-    this._subscription.next({} as Billing.Subscription);
+    this._subscription.next({} as BillingSubscription);
   }
 
-  private getActiveSubscription(): Observable<Billing.Subscription | null> {
+  private getActiveSubscription(): Observable<BillingSubscription | null> {
     return this.http
       .get<Payload>(this._endpoint)
       .pipe(
         map((payload) => {
-          const subscription: Billing.Subscription = payload.subscriptions.find((el) => el.active);
+          const subscription: BillingSubscription | undefined = payload.subscriptions.find((el) => el.active);
 
-          if (!!subscription) {
+          if (subscription) {
             return subscription;
           }
 

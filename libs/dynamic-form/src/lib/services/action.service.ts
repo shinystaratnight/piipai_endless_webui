@@ -13,7 +13,7 @@ export class ActionService {
   }
 
   get buttonEvent$() {
-    return this.buttonEvent$.asObservable();
+    return this.buttonEvent.asObservable();
   }
 
   get completedEvent$() {

@@ -12,13 +12,13 @@ import { Subscription } from 'rxjs';
 import { FilterService } from '../../../services';
 
 @Component({
-  selector: 'app-filter-select',
+  selector: 'webui-filter-select',
   templateUrl: 'filter-select.component.html'
 })
 export class FilterSelectComponent implements OnInit, OnDestroy {
   public config: any;
-  public data: string;
-  public query: string;
+  public data!: string;
+  public query!: string;
   // public isCollapsed = true;
   public options: any;
   // public icons = {
@@ -32,8 +32,8 @@ export class FilterSelectComponent implements OnInit, OnDestroy {
   //   }
   // };
   // public theme: string;
-  public filterSubscription: Subscription;
-  public querySubscription: Subscription;
+  public filterSubscription!: Subscription;
+  public querySubscription!: Subscription;
   // translationKey = '';
 
   @Output()
@@ -46,7 +46,7 @@ export class FilterSelectComponent implements OnInit, OnDestroy {
   ) {}
 
   public ngOnInit() {
-    this.options = this.config.options.sort((p, n) =>
+    this.options = this.config.options.sort((p: any, n: any) =>
       p.label > n.label ? 1 : -1
     );
     // this.isCollapsed =
@@ -86,7 +86,7 @@ export class FilterSelectComponent implements OnInit, OnDestroy {
     this.changeQuery();
   }
 
-  public genericQuery(query, data) {
+  public genericQuery(query: string, data: string) {
     let result = '';
     if (data) {
       result = `${query}=${data}`;
@@ -101,11 +101,11 @@ export class FilterSelectComponent implements OnInit, OnDestroy {
     });
   }
 
-  public parseQuery(query) {
+  public parseQuery(query: string) {
     this.query = query;
     const value = query.split('=')[1];
     const existValue = this.config.options.find(
-      (el) => el.value + '' === value + ''
+      (el: any) => el.value + '' === value + ''
     );
     if (existValue) {
       this.data = existValue.value;

@@ -34,14 +34,14 @@
     </ul>
   </nav>
 
-  <app-time
+  <webui-time
     *ngIf="user"
     class="time"
     translateKey="local_time"
     description="Local time"
     [hidden]="!initTime"
     (init)="initTime = true"
-  ></app-time>
+  ></webui-time>
 
   <div #userBlock class="user order-1" *ngIf="user">
     <div class="user-block">
@@ -90,13 +90,13 @@
 
     <ul *ngIf="!hideUserMenu" class="user-menu">
       <li class="px-3">
-        <app-language-selector></app-language-selector>
+        <webui-language-selector></webui-language-selector>
       </li>
       <!-- <li
         *ngIf="user && user.data.roles && user.data.roles.length > 1"
         class="form-inline role"
       >
-        <span class="mr-1">Role:</span>
+        <span class="me-1">Role:</span>
         <select
           class="form-control form-control-sm"
           id="role"

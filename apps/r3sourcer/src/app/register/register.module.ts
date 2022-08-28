@@ -5,9 +5,10 @@ import { RouterModule } from '@angular/router';
 import { DynamicFormModule } from '@webui/dynamic-form';
 import { routes } from './register.routing';
 import { RegisterComponent } from './register.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @NgModule({
   declarations: [RegisterComponent],
-  imports: [CommonModule, DynamicFormModule, RouterModule.forChild(routes)]
+  imports: [CommonModule, DynamicFormModule, RouterModule.forChild(routes), FontAwesomeModule]
 })
 export class RegisterModule {}

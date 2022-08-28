@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy, ElementRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { Subject, Subscription } from 'rxjs';
@@ -8,13 +8,11 @@ import {
   UserService,
   AuthService,
   NavigationService,
-  SiteSettingsService,
-  CompanyPurposeService,
   EventService,
   EventType
 } from '@webui/core';
-import { PageData, User, Role } from '@webui/data';
-import { GenericFormService, FormMode } from '@webui/dynamic-form';
+import { PageData } from '@webui/data';
+import { FormMode } from '@webui/dynamic-form';
 import { CheckPermissionService, ToastService, MessageType } from '@webui/core';
 import {
   isMobile,
@@ -23,24 +21,24 @@ import {
   isManager,
   getCurrentRole
 } from '@webui/utilities';
-import { Endpoints } from '@webui/data';
+import { Endpoints, Role, User } from '@webui/models';
 
 @Component({
-  selector: 'app-site',
+  selector: 'webui-site',
   templateUrl: './site.component.html',
   styleUrls: ['./site.component.scss']
 })
 export class SiteComponent implements OnInit, OnDestroy {
-  public pageData: PageData;
-  public user: User;
+  public pageData!: PageData | null;
+  public user?: User | null;
   public dashboard = true;
-  public currentRole: Role;
-  public changePasswordEndpoint: string;
+  public currentRole?: Role;
+  public changePasswordEndpoint!: string;
 
   public modulesList: any;
   public userModules: any;
   public pagesList: any;
-  public formLabel: string;
+  public formLabel!: string;
   public fillInData = {
     responseField: 'list',
     paginated: 'off',
@@ -50,23 +48,23 @@ export class SiteComponent implements OnInit, OnDestroy {
   };
   public FormMode = FormMode;
 
-  public formStorage: boolean;
+  public formStorage!: boolean;
   public formStorageEndpoint = '/core/formstorages/';
-  public approvedStorage: boolean;
+  public approvedStorage!: boolean;
 
   public error: any;
 
-  public formMode: FormMode;
+  public formMode!: FormMode | null;
 
-  public saveProcess: boolean;
-  public permissionMethods: string[];
-  public reload: boolean;
+  public saveProcess!: boolean;
+  public permissionMethods!: string[];
+  public reload!: boolean;
 
   public Jira: any;
-  public jiraLoaded: boolean;
+  public jiraLoaded!: boolean;
 
   public upload: Subject<boolean> = new Subject();
-  public listName: string;
+  public listName!: string;
 
   public listNameCache = {};
   public errors: any = {};
@@ -77,15 +75,15 @@ export class SiteComponent implements OnInit, OnDestroy {
   public endpointWithoutViewMode: string[] = ['/core/users/'];
   public passwordData: any;
 
-  public modalRef: NgbModalRef;
+  public modalRef!: NgbModalRef;
 
-  public mobileDesign = [
+  public mobileDesign: string[] = [
     '/hr/timesheets/approved/',
     '/hr/timesheets/history/',
     '/hr/timesheets/unapproved/'
   ];
 
-  public loader: boolean;
+  public loader!: boolean;
 
   private subscriptions: Subscription[] = [];
 
@@ -105,8 +103,8 @@ export class SiteComponent implements OnInit, OnDestroy {
     return `Back to ${this.listName.toLocaleLowerCase()} list`;
   }
 
-  @ViewChild('modal') public modal;
-  @ViewChild('forgotPassword') public forgotPasswordModal;
+  @ViewChild('modal') public modal!: ElementRef;
+  @ViewChild('forgotPassword') public forgotPasswordModal!: ElementRef;
 
   constructor(
     private router: Router,
@@ -124,9 +122,9 @@ export class SiteComponent implements OnInit, OnDestroy {
   public ngOnInit() {
     this.loadScript();
     this.user = this.userService.user;
-    this.currentRole = this.user.currentRole;
-    this.changePasswordEndpoint = `${Endpoints.Contact}${this.user.data.contact.id}/change_password/`;
-    this.updateJiraTask(this.user.currentRole);
+    this.currentRole = this.user?.currentRole;
+    this.changePasswordEndpoint = `${Endpoints.Contact}${this.user?.data.contact.id}/change_password/`;
+    this.updateJiraTask(this.user?.currentRole);
 
     this.route.url.subscribe((url: any) => {
       this.formLabel = '';
@@ -176,7 +174,7 @@ export class SiteComponent implements OnInit, OnDestroy {
     }
   }
 
-  public changeFormLabel(e) {
+  public changeFormLabel(e: any) {
     if (e && e.str) {
       this.formLabel = e.str;
       if (e.data && this.formStorage) {
@@ -189,12 +187,12 @@ export class SiteComponent implements OnInit, OnDestroy {
     this.upload.next(true);
   }
 
-  public getPageData(url) {
+  public getPageData(url: Array<{path: string}>) {
     this.siteService
       .getDataOfPage(url, this.pagesList)
       .subscribe((pageData: PageData) => {
         if (this.isProfilePage(pageData)) {
-          pageData.pathData.id = this.user.data.contact.candidate_contact;
+          pageData.pathData.id = this.user?.data.contact.candidate_contact;
           pageData.endpoint = '/candidate/candidatecontacts/';
           this.formMode = FormMode.View;
           this.pageData = pageData;
@@ -228,7 +226,11 @@ export class SiteComponent implements OnInit, OnDestroy {
       });
   }
 
-  public updateNavigationList(role: Role) {
+  public updateNavigationList(role?: Role) {
+    if (!role) {
+      return;
+    }
+
     this.updateJiraTask(role);
     const client = isClient();
     this.userService.currentRole(role);
@@ -253,7 +255,11 @@ export class SiteComponent implements OnInit, OnDestroy {
     }
   }
 
-  public updateJiraTask(role: Role) {
+  public updateJiraTask(role?: Role): void {
+    if (!role) {
+      return;
+    }
+
     const trigger = document.getElementById('atlwdg-trigger');
     if (role.__str__.includes('client') || role.__str__.includes('candidate')) {
       if (!trigger) {
@@ -262,7 +268,11 @@ export class SiteComponent implements OnInit, OnDestroy {
         setTimeout(() => {
           const link = document.getElementById('atlwdg-trigger');
           if (link) {
-            document.getElementById('atlwdg-trigger').style.display = 'block';
+            const el = document.getElementById('atlwdg-trigger');
+
+            if (el) {
+              el.style.display = 'block';
+            }
           }
         }, 1000);
       }
@@ -282,8 +292,8 @@ export class SiteComponent implements OnInit, OnDestroy {
     }
   }
 
-  public getPages(url) {
-    const role = this.user.currentRole;
+  public getPages(url: Array<{path: string}>) {
+    const role = this.user?.currentRole;
 
     this.navigationService.getPages(role).subscribe((res: any) => {
       this.pagesList = res;
@@ -298,20 +308,20 @@ export class SiteComponent implements OnInit, OnDestroy {
     this.formMode = mode;
   }
 
-  public formEvent(e) {
+  public formEvent(e: any) {
     if (e.type === 'saveStart') {
       this.saveProcess = true;
       return;
     }
     if (e.type === 'sendForm' && e.status === 'success') {
-      if (this.pageData.pathData.postfix === 'submit') {
+      if (this.pageData?.pathData.postfix === 'submit') {
         this.router.navigate([this.pageData.pathData.path]);
         this.saveProcess = false;
         return;
       }
-      if (!this.pageData.pathData.id) {
+      if (!this.pageData?.pathData.id) {
         this.router.navigate([
-          this.pageData.pathData.path + e.data.id + '/change'
+          this.pageData?.pathData.path + e.data.id + '/change'
         ]);
         this.saveProcess = false;
         return;
@@ -333,7 +343,7 @@ export class SiteComponent implements OnInit, OnDestroy {
     this.formMode = mode;
   }
 
-  public setActivePage(pages, path) {
+  public setActivePage(pages: any[], path: string) {
     let active = false;
     pages.forEach((page) => {
       if (path === page.url && page.url !== '/') {
@@ -357,7 +367,7 @@ export class SiteComponent implements OnInit, OnDestroy {
       email: {
         action: 'add',
         data: {
-          value: this.user.data.contact.email,
+          value: this.user?.data.contact.email,
           read_only: true
         }
       }
@@ -370,17 +380,17 @@ export class SiteComponent implements OnInit, OnDestroy {
     return false;
   }
 
-  public resetEvent(response) {
+  public resetEvent(response: any) {
     if (response && response.status === 'success') {
       this.authService.logout();
     }
   }
 
-  public checkedObjects(e) {
-    const shifts = e.filters.keys.date.value.filter((el) => el.checked);
+  public checkedObjects(e: any) {
+    const shifts = e.filters.keys.date.value.filter((el: any) => el.checked);
     this.data = {
       candidates: e.checkedData,
-      shifts: shifts.map((el) => el.data.id)
+      shifts: shifts.map((el: any) => el.data.id)
     };
   }
 

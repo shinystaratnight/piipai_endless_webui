@@ -9,7 +9,7 @@ import { getValueOfData } from '../../helpers/utils';
 import { FormatString } from '@webui/utilities';
 
 @Component({
-  selector: 'app-button-group',
+  selector: 'webui-button-group',
   templateUrl: './button-group.component.html'
 })
 export class ButtonGroupComponent implements OnInit {
@@ -20,14 +20,14 @@ export class ButtonGroupComponent implements OnInit {
   public buttonAction: EventEmitter<any> = new EventEmitter();
 
   public config: any;
-  public data: any[];
+  public data!: any[];
 
   public ngOnInit() {
     if (this.config.value && this.config.value.length) {
       const formatString = new FormatString();
 
-      this.data = this.config.value.map((item, i) => {
-        const result = this.config.content.map((el) => {
+      this.data = this.config.value.map((item: any, i: number) => {
+        const result = this.config.content.map((el: any) => {
           const obj = {
             ...el,
             endpoint: formatString.format(el.endpoint, item)
@@ -53,11 +53,11 @@ export class ButtonGroupComponent implements OnInit {
     }
   }
 
-  public eventHandler(e) {
+  public eventHandler(e: any) {
     this.event.emit(e);
   }
 
-  public buttonHandler(e) {
+  public buttonHandler(e: any) {
     this.buttonAction.emit(e);
   }
 }

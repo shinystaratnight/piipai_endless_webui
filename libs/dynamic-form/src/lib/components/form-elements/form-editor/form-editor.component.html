@@ -2,11 +2,11 @@
   <div class="form-element">
     <label
       class="form-element-label mb-2"
-      *ngIf="config.templateOptions.label"
-      [class.required]="config.templateOptions.required"
+      *ngIf="config.templateOptions?.label"
+      [class.required]="config.templateOptions?.required"
       [attr.for]="key"
     >
-      {{ config.templateOptions.label }}:
+      {{ config.templateOptions?.label }}:
     </label>
 
     <quill-editor
@@ -15,8 +15,8 @@
       placeholder="Enter Text"
       [modules]="quillConfig"
       [customOptions]="customOptions"
-      (onSelectionChanged)="onSelectionChanged($event)"
-      (onContentChanged)="onContentChanged($event)"
+      (onSelectionChanged)="onSelectionChanged()"
+      (onContentChanged)="onContentChanged()"
     >
     </quill-editor>
   </div>

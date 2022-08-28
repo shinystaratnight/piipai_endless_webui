@@ -127,5 +127,7 @@ export class MetadataService {
 
       return of(JSON.parse(stringifyMetadata));
     }
+
+    return;
   }
 }

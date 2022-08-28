@@ -1,10 +1,11 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { UserService } from '@webui/core';
-import { Endpoints } from '@webui/data';
+import { Field } from '@webui/metadata';
+import { Endpoints } from '@webui/models';
 import { FormatString, getPropValue } from '@webui/utilities';
 import { BehaviorSubject, forkJoin, of } from 'rxjs';
-import { catchError, finalize, switchMap } from 'rxjs/operators';
+import { catchError, finalize, map, switchMap } from 'rxjs/operators';
 import {
   createAddAction,
   getElementFromMetadata
@@ -27,21 +28,21 @@ enum TimesheetType {
 }
 
 @Component({
-  selector: 'app-submission-form',
+  selector: 'webui-submission-form',
   templateUrl: './submission-form.component.html',
   styleUrls: ['./submission-form.component.scss']
 })
-export class SubmissionFormComponent {
+export class SubmissionFormComponent implements OnInit {
   @Input() config: any;
   @Output() event: EventEmitter<{ type: string; status: string }> =
     new EventEmitter();
 
-  typeControl: FormControl;
+  typeControl!: FormControl;
   timesheetType = TimesheetType;
   formData = new BehaviorSubject<any>({ data: {} });
   formGroup = new FormGroup({});
 
-  skillActivityData: any[];
+  skillActivityData!: any[];
   timesData: any;
   eventData: Map<any, any> = new Map();
 
@@ -52,17 +53,17 @@ export class SubmissionFormComponent {
   skillActivities = skillActivities();
   notes = notes();
 
-  saveProcess: boolean;
-  formFilled: boolean;
+  saveProcess!: boolean;
+  formFilled!: boolean;
 
-  errors: { [key: string]: any };
+  errors!: { [key: string]: any };
   mode = new BehaviorSubject('edit');
-  isEditTimesheet: boolean;
+  isEditTimesheet!: boolean;
 
   hiddenFields = {
-    elements: [],
-    keys: [],
-    observers: []
+    elements: <any[]>[],
+    keys: <any[]>[],
+    observers: <any[]>[]
   };
 
   types = [
@@ -109,7 +110,7 @@ export class SubmissionFormComponent {
     }
   }
 
-  public formEvent(e) {
+  public formEvent(e: any) {
     if (e.type === 'saveStart') {
       this.saveProcess = true;
     }
@@ -142,7 +143,7 @@ export class SubmissionFormComponent {
     }
   }
 
-  eventHandler(event) {
+  eventHandler(event: any) {
     if (event.type === 'change' || event.type === 'blur') {
       if (event.el.key === 'worktype') {
         this.eventData.set(event.value, {
@@ -162,7 +163,7 @@ export class SubmissionFormComponent {
     return getPropValue(el, key);
   }
 
-  saveTimes(data) {
+  saveTimes(data: any) {
     this.timesData = { ...data };
     this.formFilled = true;
     Object.keys(this.timesData).forEach((key) => {
@@ -179,7 +180,7 @@ export class SubmissionFormComponent {
     this.updateMetadata(this.getMetadataConfig(this.notes));
   }
 
-  saveSkillActivity(data) {
+  saveSkillActivity(data: any) {
     this.skillActivityData = [
       ...this.skillActivityData,
       data,
@@ -190,18 +191,14 @@ export class SubmissionFormComponent {
   }
 
   saveTimesheet() {
-    let request;
+    let request: any;
+    const { status } = this.config.extendData;
 
     if (this.type === TimesheetType.Activities) {
-      request = this.createSkillActivity().pipe(
-        switchMap(() => {
-          if (this.config.extendData.status === 5) {
-            return this.gfs.editForm(this.config.endpoint, {});
-          }
-
-          return this.gfs.editForm(this.config.endpoint, { hours: false });
-        })
-      );
+      request = forkJoin([
+        this.createSkillActivity(),
+        this.gfs.editForm(this.config.endpoint, status === 5 ? {} : { hours: false })
+      ]);
     }
 
     if (this.type === TimesheetType.Times) {
@@ -213,7 +210,7 @@ export class SubmissionFormComponent {
 
     this.saveProcess = true;
     request
-      .pipe(
+      ?.pipe(
         finalize(() => (this.saveProcess = false)),
         catchError((err) => {
           this.errors = err.errors;
@@ -243,7 +240,7 @@ export class SubmissionFormComponent {
     this.skillActivityData.splice(this.skillActivityData.indexOf(activity), 1);
   }
 
-  private getMetadataConfig(metadata) {
+  private getMetadataConfig(metadata: any[]) {
     return {
       metadata,
       formData: this.formData,
@@ -252,12 +249,12 @@ export class SubmissionFormComponent {
     };
   }
 
-  private parseMetadata(metadata, params) {
+  private parseMetadata(metadata: any[], params: any) {
     metadata.forEach((el) => {
       if (el && el.key && params && !!params[el.key]) {
         if (params[el.key].action === 'add') {
-          let elem = getElementFromMetadata(metadata, el.key);
-          elem = Object.assign(elem, params[elem.key].data);
+          let elem = getElementFromMetadata(metadata, el.key) as Field;
+          elem = Object.assign(elem, params[elem.key as keyof Field].data);
         }
       } else if (el && el.children) {
         this.parseMetadata(el.children, params);
@@ -265,10 +262,10 @@ export class SubmissionFormComponent {
     });
   }
 
-  private updateMetadata(config) {
+  private updateMetadata(config: any) {
     const { metadata, formData, data, mode } = config;
 
-    metadata.forEach((el) => {
+    metadata.forEach((el: any) => {
       this.parseParams(el.prefilled, data);
       this.parseParams(el.query, data);
 
@@ -295,8 +292,8 @@ export class SubmissionFormComponent {
 
   private parseParams(
     params: { [key: string]: any },
-    data
-  ): { [key: string]: any } {
+    data: any
+  ): { [key: string]: any } | undefined {
     if (!params) {
       return;
     }
@@ -316,7 +313,7 @@ export class SubmissionFormComponent {
     return params;
   }
 
-  private observeFields(fields: any[], observers) {
+  private observeFields(fields: any[], observers: any[]) {
     fields.forEach((field: any) => {
       if (field instanceof Object) {
         const keys = Object.keys(field);
@@ -334,7 +331,7 @@ export class SubmissionFormComponent {
     return observers;
   }
 
-  private updateDatepickerByTimezone(metadata, data) {
+  private updateDatepickerByTimezone(metadata: any[], data: any) {
     metadata.forEach((el) => {
       if (el.type === 'datepicker') {
         if (data && (data.time_zone || data.timezone)) {

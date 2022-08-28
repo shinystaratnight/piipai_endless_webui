@@ -7,7 +7,7 @@ import {
   ComponentRef,
   OnChanges,
   Output,
-  EventEmitter
+  EventEmitter,
 } from '@angular/core';
 
 import {
@@ -19,7 +19,7 @@ import {
   FilterLimitComponent
 } from '../components/filter-elements';
 
-const components = {
+const components: Record<string, any> = {
   date: FilterDateComponent,
   checkbox: FilterMultipleComponent,
   related: FilterRelatedComponent,
@@ -30,16 +30,16 @@ const components = {
 };
 
 @Directive({
-  selector: '[appFilterElement]'
+  selector: '[webuiFilterElement]'
 })
 export class FilterElementDirective implements OnInit, OnChanges {
   @Input()
-  public config;
+  public config: any;
 
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
 
-  public component: ComponentRef<any>;
+  public component!: ComponentRef<any>;
 
   constructor(
     private resolver: ComponentFactoryResolver,

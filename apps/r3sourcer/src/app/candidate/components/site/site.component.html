@@ -1,6 +1,6 @@
 <ng-container *ngIf="!loader">
-  <app-navigation [user]="user" (changePasswordEmitter)="openChangePassword()">
-  </app-navigation>
+  <webui-navigation [user]="user" (changePasswordEmitter)="openChangePassword()">
+  </webui-navigation>
 
   <div
     class="site-page"
@@ -22,11 +22,11 @@
           !isProfilePage(pageData)
         "
       >
-        <app-back-link
+        <webui-back-link
           [label]="this.backToListLabel"
           [path]="pageData.pathData.path"
         >
-        </app-back-link>
+        </webui-back-link>
       </ng-container>
 
       <div
@@ -42,7 +42,7 @@
           pageData.pathData.postfix === 'submit'
         "
       >
-        <app-generic-form
+        <webui-generic-form
           *ngIf="
             (!reload &&
               pageData.endpoint !== '/core/forms/' &&
@@ -56,7 +56,7 @@
           "
           [endpoint]="pageData.endpoint"
           [id]="pageData.pathData.id"
-          [edit]="pageData.pathData.postfix"
+          [edit]="!!pageData.pathData.postfix"
           [mode]="formMode"
           [errors]="errors"
           [data]="additionalData"
@@ -64,8 +64,8 @@
           [metadataQuery]="pageData.pathData.metadataQuery"
           (event)="formEvent($event)"
           (modeEvent)="modeEvent($event)"
-          (errorForm)="formError($event)"
-          (permissionError)="permissionErrorHandler($event)"
+          (errorForm)="formError()"
+          (permissionError)="permissionErrorHandler()"
           (str)="changeFormLabel($event)"
         >
           <div class="d-flex">
@@ -81,10 +81,10 @@
               [disabled]="saveProcess"
             >
               {{ 'save' | translate }}
-              <app-spinner *ngIf="saveProcess"></app-spinner>
+              <webui-spinner *ngIf="saveProcess"></webui-spinner>
             </button>
           </div>
-        </app-generic-form>
+        </webui-generic-form>
       </div>
     </div>
 
@@ -96,24 +96,24 @@
         [scrollWindow]="true"
         (scrolled)="onModalScrollDown()"
       >
-        <app-generic-list
+        <webui-generic-list
           [upload]="upload"
           [listNameCache]="listNameCache"
           [allowPermissions]="permissionMethods"
           [endpoint]="pageData.endpoint"
         >
-        </app-generic-list>
+        </webui-generic-list>
       </div>
     </ng-container>
   </div>
 
   <div class="dashboard" *ngIf="dashboard">
-    <app-calendar
+    <webui-calendar
       class="dashboard-item"
       [class.alone]="!isManager"
-    ></app-calendar>
+    ></webui-calendar>
 
-    <app-counter-widget></app-counter-widget>
+    <webui-counter-widget></webui-counter-widget>
   </div>
 
   <ng-template #modal let-modal>
@@ -124,14 +124,14 @@
             {{'change_password' | translate: {"Default": "Change Password"} }}
           </h5>
 
-          <app-close-button
-            class="ml-auto"
+          <webui-close-button
+            class="ms-auto"
             (click)="modal.dismiss()"
-          ></app-close-button>
+          ></webui-close-button>
         </div>
       </div>
-      <div class="py-3">
-        <app-generic-form
+      <div class="modal-body">
+        <webui-generic-form
           [endpoint]="changePasswordEndpoint"
           [edit]="true"
           [needData]="false"
@@ -141,11 +141,11 @@
             {{ 'forgot_password' | translate: {"Default": "Forgot Password?"} }}
           </a>
           <div class="d-flex align-items-center">
-            <button type="submit" class="btn btn-primary ml-auto">
+            <button type="submit" class="btn btn-primary ms-auto">
               {{ 'save' | translate: {"Default": "Save"} }}
             </button>
           </div>
-        </app-generic-form>
+        </webui-generic-form>
       </div>
     </div>
   </ng-template>
@@ -158,27 +158,27 @@
             {{ 'password_reset' | translate: {"Default": "Password Reset"} }}
           </h5>
 
-          <app-close-button
-            class="ml-auto"
+          <webui-close-button
+            class="ms-auto"
             (click)="modal.dismiss()"
-          ></app-close-button>
+          ></webui-close-button>
         </div>
       </div>
-      <div class="py-3">
-        <app-generic-form
+      <div class="modal-body">
+        <webui-generic-form
           endpoint="/core/contacts/forgot_password/"
           [data]="passwordData"
           (event)="resetEvent($event)"
         >
           <div class="d-flex align-items-center">
-            <button type="submit" class="btn btn-primary ml-auto">
+            <button type="submit" class="btn btn-primary ms-auto">
               {{'reset' | translate: {"Default": "Reset"} }}
             </button>
           </div>
-        </app-generic-form>
+        </webui-generic-form>
       </div>
     </div>
   </ng-template>
 </ng-container>
 
-<app-site-loader *ngIf="loader"></app-site-loader>
+<webui-site-loader *ngIf="loader"></webui-site-loader>

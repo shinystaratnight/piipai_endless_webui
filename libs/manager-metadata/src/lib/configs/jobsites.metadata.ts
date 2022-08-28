@@ -1,5 +1,5 @@
-import { Endpoints } from '@webui/data';
 import { createFilter, Type } from '@webui/metadata';
+import { Endpoints } from '@webui/models';
 import { Time } from '@webui/time';
 
 const filters = {

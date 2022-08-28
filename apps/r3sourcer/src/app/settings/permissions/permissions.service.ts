@@ -29,7 +29,7 @@ export class PermissionsService {
     private errors: ErrorsService
   ) { }
 
-  public getAllPermissions(query?) {
+  public getAllPermissions() {
     const endpoint = `${this.endpoints.base}${this.endpoints.all}?limit=-1`;
     return this.http
       .get(endpoint)
@@ -47,7 +47,7 @@ export class PermissionsService {
       );
   }
 
-  public getPermissionsOfUser(id) {
+  public getPermissionsOfUser(id: string) {
     const endpoint = `${this.endpoints.user}${id}/`;
     return this.http
       .get(endpoint)
@@ -107,7 +107,7 @@ export class PermissionsService {
       );
   }
 
-  public getAllPermissionsOfTheGroup(id) {
+  public getAllPermissionsOfTheGroup(id: string) {
     const endpoint = `${this.endpoints.group}${id}/`;
     return this.http
       .get(endpoint)

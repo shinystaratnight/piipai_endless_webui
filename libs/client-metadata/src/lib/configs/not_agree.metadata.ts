@@ -1,5 +1,6 @@
-import { Endpoints, Models, NoteModel } from '@webui/data';
+import { Models, NoteModel } from '@webui/data';
 import { Form, DatepickerType, CheckboxType, InputType } from '@webui/metadata';
+import { Endpoints } from '@webui/models';
 
 const shiftStartField = function () {
   return new Form.datepicker.element(

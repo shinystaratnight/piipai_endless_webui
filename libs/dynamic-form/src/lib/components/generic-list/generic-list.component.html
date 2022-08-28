@@ -1,6 +1,6 @@
 <div class="datatable-wrapper">
-  <app-dynamic-list
-    *ngIf="tables[0].endpoint.includes('hr/job') ? tables[0].metadata && tables[0].data : tables[0].metadata"
+  <webui-dynamic-list
+    *ngIf="isTableReady"
     [inForm]="inForm"
     [config]="tables[0].metadata"
     [data]="tables[0].data"
@@ -51,7 +51,7 @@
           <div class="double-bounce2"></div>
         </div>
       </div>
-  </app-dynamic-list>
+  </webui-dynamic-list>
 </div>
 
 <!-- <div #list class="d-flex justify-content-start datatable-list pt-2 flex-wrap" *ngIf="minimizedTable.length">
@@ -60,20 +60,20 @@
       <div class="card">
         <div class="card-header bg-primary text-white">
           <h6 class="d-flex justify-content-between align-items-center mb-0">
-            <span class="mr-3 title" placement="top" ngbTooltip="{{table.metadata.list.label}}">{{table.metadata.list.label}}</span>
+            <span class="me-3 title" placement="top" ngbTooltip="{{table.metadata.list.label}}">{{table.metadata.list.label}}</span>
             <div class="d-flex fustify-content-center align-items-center">
               <fa-icon
-                class="ml-2 icon"
+                class="ms-2 icon"
                 [icon]="['fas', 'window-minimize']"
                 (click)="action('minimize', table)"
                 aria-hidden="true"></fa-icon>
               <fa-icon
-                class="ml-2 icon"
+                class="ms-2 icon"
                 [icon]="['fas', 'window-maximize']"
                 (click)="action('maximize', table)"
                 aria-hidden="true"></fa-icon>
               <fa-icon
-                class="ml-2 icon"
+                class="ms-2 icon"
                 [icon]="['fas', 'times']"
                 (click)="action('close', table)"
                 aria-hidden="true"></fa-icon>

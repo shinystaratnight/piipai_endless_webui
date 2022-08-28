@@ -7,12 +7,12 @@ import {
 import { SelectDateService } from '../services';
 
 @Directive({
-  selector: '[appSelectDate]',
+  selector: '[webuiSelectDate]',
 })
 export class SelectDateDirective {
 
-  @Input() disable: boolean;
-  @Input() date: string;
+  @Input() disable!: boolean;
+  @Input() date?: string;
 
   constructor(
     private service: SelectDateService
@@ -20,14 +20,14 @@ export class SelectDateDirective {
 
   @HostListener('click')
   clickHandler() {
-    if (!this.disable) {
+    if (!this.disable && this.date) {
       this.service.selectDate(this.date);
     }
   }
 
   @HostListener('mousedown')
   mouseDownHandler() {
-    if (!this.disable) {
+    if (!this.disable && this.date) {
       this.service.startSelection(this.date);
     }
   }
@@ -41,7 +41,7 @@ export class SelectDateDirective {
 
   @HostListener('mouseover')
   mouseEntetHandler() {
-    if (!this.disable) {
+    if (!this.disable && this.date) {
       this.service.selectMore(this.date);
     }
   }

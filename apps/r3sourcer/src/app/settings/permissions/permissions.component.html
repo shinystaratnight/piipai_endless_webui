@@ -1,10 +1,13 @@
 <div class="permissions">
-  <ngb-tabset type="pills" (tabChange)="beforeChange()">
-    <ngb-tab id="group" title="Groups">
-      <ng-template ngbTabContent>
-        <div class="permission-block-add form-inline">
-          <input type="text" class="permission-input form-control mr-2" [(ngModel)]="name">
-          <button type="button" class="btn bg-light" (click)="addGroup(name)">Add</button>
+  <ul ngbNav #nav="ngbNav" class="nav-pills" [(activeId)]="activeTab">
+    <li ngbNavItem="group">
+      <a ngbNavLink>Groups</a>
+      <ng-template ngbNavContent>
+        <div class="permission-block-add row">
+          <input type="text" class="col-auto permission-input form-control me-2" [(ngModel)]="name">
+          <div class="col">
+            <button type="button" class="btn bg-light" (click)="addGroup(name)">Add</button>
+          </div>
         </div>
         <div class="permission-wrapper">
           <ng-container *ngTemplateOutlet="list; context: {title: 'Groups', list: groups, param: 'name', element: 'group', type: 'list'}"></ng-container>
@@ -13,9 +16,10 @@
           </ng-container>
         </div>
       </ng-template>
-    </ngb-tab>
-    <ngb-tab id="user" title="Users">
-      <ng-template ngbTabContent>
+    </li>
+    <li ngbNavItem="user">
+      <a ngbNavLink>Users</a>
+      <ng-template ngbNavContent>
         <div class="permission-wrapper">
           <ng-container *ngTemplateOutlet="list; context: {title: 'Users', list: users, param: 'name', element: 'user', type: 'list'}"></ng-container>
           <ng-container *ngIf="targetId">
@@ -24,9 +28,11 @@
           </ng-container>
         </div>
       </ng-template>
-    </ngb-tab>
-  </ngb-tabset>
+    </li>
+  </ul>
 </div>
+
+<div [ngbNavOutlet]="nav"></div>
 
 <ng-template #list let-t="title" let-l="list" let-p="param" let-a="actions" let-type="type" let-e="element">
   <div class="permission-block-wrapper">
@@ -54,7 +60,7 @@
         </div>
     </div>
     <div *ngIf="type === 'permission'" class="d-flex m-2 align-items-center">
-      <button class="btn btn-success mr-2" (click)="selectAll(e)">Select All</button>
+      <button class="btn btn-success me-2" (click)="selectAll(e)">Select All</button>
       <button class="btn btn-danger" (click)="removeAll(e)">Remove All</button>
     </div>
   </div>

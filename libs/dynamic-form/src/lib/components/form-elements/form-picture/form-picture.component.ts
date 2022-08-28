@@ -17,56 +17,55 @@ import { Subject, Subscription } from 'rxjs';
 import { BasicElementComponent } from './../basic-element/basic-element.component';
 import { getContactAvatar, getTranslationKey } from '@webui/utilities';
 
-import { FormService } from '../../../services';
+import { FormMode, FormService } from '../../../services';
 
 @Component({
-  selector: 'app-form-picture',
+  selector: 'webui-form-picture',
   templateUrl: 'form-picture.component.html',
   styleUrls: ['./form-picture.component.scss'],
 })
 export class FormPictureComponent extends BasicElementComponent
   implements OnInit, AfterViewInit, OnDestroy {
+  private subscriptions: Subscription[] = [];
   @ViewChild('modal')
-  public modal;
+  public modal!: ElementRef;
 
   @ViewChild('picture')
-  public picture;
+  public picture!: ElementRef;
 
   @ViewChild('dropzone')
-  public dropzone;
+  public dropzone!: ElementRef;
 
   @Output()
-  public event: EventEmitter<any> = new EventEmitter();
+  public override event: EventEmitter<any> = new EventEmitter();
 
-  public config;
-  public group: FormGroup;
+  public override config: any;
+  public override group!: FormGroup;
   public errors: any;
   public message: any;
-  public key: any;
-  public label: boolean;
+  public override key: any;
+  public label!: boolean;
   public photoExist = false;
-  public mime: string;
+  public mime!: string;
   public fileName = '';
   public err: any;
-  public base64: string;
-  public link: string;
-  public sizeError: boolean;
+  public base64!: string;
+  public link!: string;
+  public sizeError!: boolean;
 
   public value: any;
 
-  public viewMode: boolean;
+  public viewMode!: boolean;
 
-  public contactAvatar: string;
+  public contactAvatar!: string;
 
-  isRemoved: boolean;
+  isRemoved!: boolean;
 
-  private capture = new Subject();
+  private capture: Subject<void> = new Subject();
 
   capture$ = this.capture.asObservable();
 
-  getTranslationKey = getTranslationKey;
-
-  private subscriptions: Subscription[] = [];
+  getTranslationKey = (key: string) => getTranslationKey(this.config.key, key);
 
   constructor(
     private fb: FormBuilder,
@@ -76,18 +75,9 @@ export class FormPictureComponent extends BasicElementComponent
     private formService: FormService
   ) {
     super();
-    // this.onSuccess = (stream: any) => {
-    //   if (stream instanceof FallbackDispatcher) {
-    //     this.flashPlayer = stream;
-    //     this.onFallback();
-    //   }
-    // };
-    // this.onError = (err) => {
-    //   this.err = err;
-    // };
   }
 
-  public onImageCapture(data) {
+  public onImageCapture(data: any) {
     const { imageAsDataUrl } = data;
 
     if (imageAsDataUrl) {
@@ -127,10 +117,10 @@ export class FormPictureComponent extends BasicElementComponent
 
   public checkHiddenProperty() {
     if (this.config && this.config.hidden) {
-      const subscription = this.config.hidden.subscribe((hide) => {
+      const subscription = this.config.hidden.subscribe((hide: boolean) => {
         if (hide) {
           this.config.hide = hide;
-          this.group.get(this.key).patchValue(undefined);
+          this.group.get(this.key)?.patchValue(undefined);
           this.setInitValue();
         } else {
           this.config.hide = hide;
@@ -147,7 +137,7 @@ export class FormPictureComponent extends BasicElementComponent
 
   public checkModeProperty() {
     if (this.config && this.config.mode) {
-      const subscription = this.config.mode.subscribe((mode) => {
+      const subscription = this.config.mode.subscribe((mode: FormMode) => {
         if (mode === 'view') {
           this.viewMode = true;
         } else {
@@ -161,8 +151,8 @@ export class FormPictureComponent extends BasicElementComponent
   }
 
   public setInitValue() {
-    if (this.config.value || this.group.get(this.key).value) {
-      this.config.value = this.config.value || this.group.get(this.key).value;
+    if (this.config.value || this.group.get(this.key)?.value) {
+      this.config.value = this.config.value || this.group.get(this.key)?.value;
       if (this.config.value instanceof Object && this.config.value.origin) {
         this.value = this.config.value.origin;
       } else if (typeof this.config.value === 'string') {
@@ -187,7 +177,7 @@ export class FormPictureComponent extends BasicElementComponent
       }
     }
 
-    this.group.get(this.key).patchValue(undefined);
+    this.group.get(this.key)?.patchValue(undefined);
 
     if (
       this.config.value &&
@@ -195,11 +185,11 @@ export class FormPictureComponent extends BasicElementComponent
       this.config.value.indexOf('data:image') > -1
     ) {
       this.value = this.config.value;
-      this.group.get(this.key).patchValue(this.config.value);
+      this.group.get(this.key)?.patchValue(this.config.value);
     }
 
     if (this.config.templateOptions.signature) {
-      this.group.get(this.key).patchValue(this.config.value);
+      this.group.get(this.key)?.patchValue(this.config.value);
     }
   }
 
@@ -225,7 +215,7 @@ export class FormPictureComponent extends BasicElementComponent
     }
   }
 
-  public stopEvent(e) {
+  public stopEvent(e: MouseEvent) {
     if (e) {
       e.preventDefault();
       e.stopPropagation();
@@ -233,7 +223,7 @@ export class FormPictureComponent extends BasicElementComponent
     return false;
   }
 
-  public upload(e): void {
+  public upload(e?: MouseEvent): void {
     if (e) {
       e.preventDefault();
       e.stopPropagation();
@@ -257,7 +247,7 @@ export class FormPictureComponent extends BasicElementComponent
     // this.base64 = canvas.toDataURL(this.mime);
   }
 
-  public save(closeModal) {
+  public save(closeModal: () => void) {
     if (this.base64) {
       this.updateValue('image.jpeg', this.base64, true);
       closeModal();
@@ -279,7 +269,7 @@ export class FormPictureComponent extends BasicElementComponent
   //   return canvas;
   // }
 
-  public fileChangeEvent(e) {
+  public fileChangeEvent(e: any) {
     this.updateValue('', '', true);
     const file = e.target.files[0];
 
@@ -362,12 +352,12 @@ export class FormPictureComponent extends BasicElementComponent
   //   }
   // }
 
-  public updateValue(name, value, image = false) {
+  public updateValue(name: string, value: any, image = false) {
     this.fileName = name;
     if (image) {
       this.value = value;
     }
-    this.group.get(this.key).patchValue(value);
+    this.group.get(this.key)?.patchValue(value);
     this.event.emit({
       type: 'changeImage',
     });
@@ -377,7 +367,7 @@ export class FormPictureComponent extends BasicElementComponent
     return link.split('.').pop();
   }
 
-  handleDrop(e) {
+  handleDrop(e: any) {
     const dt = e.dataTransfer;
     const files = dt.files;
     this.fileChangeEvent({ target: { files } });
@@ -386,16 +376,16 @@ export class FormPictureComponent extends BasicElementComponent
   patchPicture() {
     this.event.emit({
       type: 'patchPicture',
-      value: this.group.get(this.key).value,
+      value: this.group.get(this.key)?.value,
     });
 
     this.fileName = '';
   }
 
   removeImage() {
-    this.group.get(this.key).patchValue(null);
+    this.group.get(this.key)?.patchValue(null);
     this.value = null;
-    this.fileName = null;
+    this.fileName = '';
     if (this.config.contactName) {
       this.contactAvatar = getContactAvatar(this.config.contactName);
     }
