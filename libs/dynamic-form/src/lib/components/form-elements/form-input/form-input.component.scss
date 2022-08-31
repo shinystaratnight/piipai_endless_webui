@@ -123,6 +123,10 @@ button.password {
 .input-icon {
   position: absolute;
   opacity: .3;
+
+  & ~ input {
+    padding-left: 1.5rem !important;
+  }
 }
 
 .list {
