@@ -1,13 +1,13 @@
 {
   "/api": {
-    "target": "https://api.piipai.com",
+    "target": "https://api.piipaitest.com",
     "secure": true,
     "pathRewrite": {
       "^/api": ""
     },
     "changeOrigin": true,
     "headers": {
-      "Origin": "https://laviin.piipai.com"
+      "Origin": "https://piiprent.piipaitest.com"
     },
     "logLevel": "debug"
   },
