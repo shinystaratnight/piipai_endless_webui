@@ -231,7 +231,6 @@ export class Metadata {
   [Endpoints.ContactChangePassword] = passwordchange;
   [Endpoints.ContactPassword] = userpassword;
   [Endpoints.SkillName] = skillname;
-  // [Endpoints.SmsLog] = smslogs;
   [Endpoints.SkillRateCoefficient] = skillratecoefficient;
   [Endpoints.PriceListRateModifiers] = priselistratemodifiers;
   'candidate_languages' = candidateLanguage;
