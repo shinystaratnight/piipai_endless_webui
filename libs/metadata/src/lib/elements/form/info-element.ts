@@ -4,7 +4,7 @@ export class InfoElement {
   type = Info;
 
   key: string;
-  values: { [key: string]: string };
+  values!: { [key: string]: string };
 
   hideOnMobile?: boolean;
 

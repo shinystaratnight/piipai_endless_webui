@@ -4,11 +4,11 @@ type IsCollapsed = (data: any) => boolean;
 
 export class CollapseElement {
   type = Collapse;
-  children: any[];
+  children!: any[];
   name?: string;
   translateKey?: string;
   collapsed: boolean;
-  isCollapsed: IsCollapsed;
+  isCollapsed?: IsCollapsed;
 
   constructor(
     name?: string,

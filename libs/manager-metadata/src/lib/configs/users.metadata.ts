@@ -1,6 +1,4 @@
-import { getToday } from '@webui/utilities';
-
-const todayFormatDate = getToday().format();
+import { Time } from '@webui/time';
 
 const list = {
   list: {
@@ -13,49 +11,49 @@ const list = {
           {
             endpoint: '/core/contacts/',
             field: 'contact',
-            type: 'related'
-          }
+            type: 'related',
+          },
         ],
         name: 'contact',
         sort_field: 'contact',
         label: 'Contact',
-        sort: true
+        sort: true,
       },
       {
         content: [
           {
             field: 'contact.email',
-            type: 'input'
-          }
+            type: 'input',
+          },
         ],
         name: 'contact.email',
         sort_field: 'contact.email',
         label: 'E-mail',
-        sort: true
+        sort: true,
       },
       {
         content: [
           {
             field: 'contact.phone_mobile',
-            type: 'input'
-          }
+            type: 'input',
+          },
         ],
         name: 'contact.phone_mobile',
         sort_field: 'contact.phone_mobile',
         label: 'Mobile Phone',
-        sort: true
+        sort: true,
       },
       {
         content: [
           {
             field: 'date_joined',
-            type: 'datepicker'
-          }
+            type: 'datepicker',
+          },
         ],
         name: 'date_joined',
         sort_field: 'date_joined',
         label: 'Date joined',
-        sort: true
+        sort: true,
       },
       {
         content: [
@@ -66,14 +64,14 @@ const list = {
             type: 'button',
             label: 'Login as',
             text: 'Login',
-            redirect: '/'
-          }
+            redirect: '/',
+          },
         ],
         name: 'login_as',
         title: null,
         label: 'Login as',
-        delim: null
-      }
+        delim: null,
+      },
     ],
     pagination_label: 'User',
     search_enabled: true,
@@ -85,21 +83,21 @@ const list = {
         options: [
           {
             value: 'candidate',
-            label: 'Candidate'
+            label: 'Candidate',
           },
           {
             value: 'client',
-            label: 'Client'
+            label: 'Client',
           },
           {
             value: 'manager',
-            label: 'Manager'
-          }
+            label: 'Manager',
+          },
         ],
         query: 'role',
-        type: 'select'
-      }
-    ]
+        type: 'select',
+      },
+    ],
   },
   fields: [
     {
@@ -109,9 +107,9 @@ const list = {
         action: 'emptyPost',
         label: 'Login as',
         type: 'button',
-        text: 'Login'
+        text: 'Login',
       },
-      read_only: true
+      read_only: true,
     },
     {
       list: false,
@@ -123,12 +121,12 @@ const list = {
         delete: false,
         values: ['__str__'],
         type: 'related',
-        edit: true
+        edit: true,
       },
       collapsed: false,
       type: 'related',
       key: 'contact',
-      many: false
+      many: false,
     },
     {
       key: 'date_joined',
@@ -137,9 +135,9 @@ const list = {
       templateOptions: {
         required: false,
         label: 'Date joined',
-        type: 'datetime'
+        type: 'datetime',
       },
-      read_only: true
+      read_only: true,
     },
     {
       key: 'contact.phone_mobile',
@@ -147,9 +145,9 @@ const list = {
       templateOptions: {
         required: false,
         label: 'Mobile Phone',
-        type: 'text'
+        type: 'text',
       },
-      read_only: true
+      read_only: true,
     },
     {
       key: 'contact.email',
@@ -158,11 +156,11 @@ const list = {
         required: false,
         label: 'E-mail',
         type: 'email',
-        max: 255
+        max: 255,
       },
-      read_only: true
-    }
-  ]
+      read_only: true,
+    },
+  ],
 };
 
 const form = [
@@ -176,12 +174,12 @@ const form = [
       delete: false,
       values: ['__str__'],
       type: 'related',
-      edit: true
+      edit: true,
     },
     collapsed: false,
     type: 'related',
     key: 'contact',
-    many: false
+    many: false,
   },
   {
     key: 'date_joined',
@@ -190,9 +188,9 @@ const form = [
     templateOptions: {
       required: false,
       label: 'Date joined',
-      type: 'datetime'
+      type: 'datetime',
     },
-    read_only: true
+    read_only: true,
   },
   {
     type: 'collapse',
@@ -204,7 +202,7 @@ const form = [
         key: 'password',
         value: {
           id: true,
-          __str__: '******'
+          __str__: '******',
         },
         endpoint: '/core/contacts/{id}/password/',
         editEndpoint: '/core/contacts/{contact.id}/password/',
@@ -216,8 +214,8 @@ const form = [
           editLabel: 'Change password',
           editDescription:
             'Enter a new password for the user: <b style="color: black; font-weight: bold"> {contact.__str__} </b>', //tslint:disable-line
-          edit: true
-        }
+          edit: true,
+        },
       },
       {
         label: 'Auto generate',
@@ -230,11 +228,11 @@ const form = [
             templateOptions: {
               required: false,
               label: 'Send to email',
-              type: 'checkbox'
+              type: 'checkbox',
             },
             value: true,
             send: false,
-            type: 'checkbox'
+            type: 'checkbox',
           },
           {
             key: 'by_phone',
@@ -242,11 +240,11 @@ const form = [
             templateOptions: {
               required: false,
               label: 'Send to mobile phone',
-              type: 'checkbox'
+              type: 'checkbox',
             },
             value: true,
             send: false,
-            type: 'checkbox'
+            type: 'checkbox',
           },
           {
             type: 'button',
@@ -257,29 +255,29 @@ const form = [
               type: 'button',
               small: true,
               icon: 'envelope',
-              p: true
-            }
-          }
-        ]
-      }
-    ]
+              p: true,
+            },
+          },
+        ],
+      },
+    ],
   },
   {
     endpoint: '/company-settings/globalpermissions/',
     templateOptions: {
       label: 'Global Permissions',
       type: 'list',
-      text: 'Global Permissions'
+      text: 'Global Permissions',
     },
     collapsed: false,
     prefilled: {
-      user: '{id}'
+      user: '{id}',
     },
     type: 'list',
     query: {
-      user: '{id}'
-    }
-  }
+      user: '{id}',
+    },
+  },
 ];
 
 const formadd = [
@@ -293,44 +291,44 @@ const formadd = [
       delete: false,
       values: ['__str__'],
       type: 'related',
-      edit: true
+      edit: true,
     },
     collapsed: false,
     type: 'related',
     key: 'contact',
-    many: false
+    many: false,
   },
   {
     key: 'date_joined',
-    default: todayFormatDate,
+    default: Time.now().format(),
     type: 'datepicker',
     templateOptions: {
       required: false,
       label: 'Date joined',
-      type: 'datetime'
+      type: 'datetime',
     },
-    read_only: true
+    read_only: true,
   },
   {
     endpoint: '/company-settings/globalpermissions/',
     templateOptions: {
       label: 'Global Permissions',
       type: 'list',
-      text: 'Global Permissions'
+      text: 'Global Permissions',
     },
     collapsed: false,
     prefilled: {
-      user: '{id}'
+      user: '{id}',
     },
     type: 'list',
     query: {
-      user: '{id}'
-    }
-  }
+      user: '{id}',
+    },
+  },
 ];
 
 export const users = {
   list,
   form,
-  formadd
+  formadd,
 };

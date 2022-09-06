@@ -1,17 +1,17 @@
-<div appDropDown element=".autocomplete" [update]="update" *ngIf="(!viewMode || config.list) && !config.hide"  class="input_type_autocomplete" [ngClass]="['input_type_'+this.key]">
+<div webuiDropDown element=".autocomplete" [update]="update" *ngIf="(!viewMode || config.list) && !config.hide"  class="input_type_autocomplete" [ngClass]="['input_type_'+this.key]">
   <div *ngIf="!config.list" class="form-group" [formGroup]="group">
     <div class="form-element" *ngIf="!config.many">
-      <label class="form-element-label" [attr.for]="key" [class.required]="config.templateOptions.required"
-        *ngIf="label && config.templateOptions.label">
-        {{ getTranslationKey(config.key, 'label') | translate: {"Default": config.templateOptions.label} }}:
+      <label class="form-element-label" [attr.for]="key" [class.required]="config.templateOptions?.required"
+        *ngIf="label && config.templateOptions?.label">
+        {{ getTranslationKey(config.key, 'label') | translate: {"Default": config.templateOptions?.label} }}:
       </label>
 
-      <app-info *ngIf="config.templateOptions.description"
-        [description]="getTranslationKey(this.key, 'description') | translate: {'Default': config.templateOptions.description || ''}">
-      </app-info>
-      <app-info *ngIf="!viewMode && config.errorMessage && config.errorMessage.visible"
+      <webui-info *ngIf="config.templateOptions?.description"
+        [description]="getTranslationKey(this.key, 'description') | translate: {'Default': config.templateOptions?.description || ''}">
+      </webui-info>
+      <webui-info *ngIf="!viewMode && config.errorMessage && config.errorMessage.visible"
         [description]="getTranslationKey(config.key, 'error_message') | translate: {'Default': config.errorMessage.message}"
-        [danger]="true"></app-info>
+        [danger]="true"></webui-info>
 
       <div class="form-element-content flex-row edit position-relative" [class.disabled]="fieldDisabled"
         tooltipClass="dark-tooltip" placement="bottom" [ngbTooltip]="disableMessage">
@@ -23,16 +23,16 @@
         </div>
 
         <div class="form-element-content-actions align-items-center" *ngIf="hasActions">
-          <button *ngIf="displayValue" class="clear-button mr-1" type="button" (click)="clearField()">
+          <button *ngIf="displayValue" class="clear-button me-1" type="button" (click)="clearField()">
             <fa-icon class="text-secondary" [icon]="['fas', 'times']"></fa-icon>
           </button>
-          <button appSubscriptionRequired type="button" class="btn btn-primary text-white" [class.alone]="!canEdit && !canDelete" *ngIf="canCreate" (click)="open('post')">
+          <button webuiSubscriptionRequired type="button" class="btn btn-primary text-white" [class.alone]="!canEdit && !canDelete" *ngIf="canCreate" (click)="open('post')">
             {{'add_new' | translate}}
           </button>
-          <button appSubscriptionRequired type="button" class="btn btn-warning text-white mr-1" *ngIf="canEdit" (click)="open('update')">
+          <button webuiSubscriptionRequired type="button" class="btn btn-warning text-white me-1" *ngIf="canEdit" (click)="open('update')">
             {{'edit' | translate}}
           </button>
-          <button appSubscriptionRequired type="button" class="btn btn-danger text-white" *ngIf="" (click)="open('delete')">
+          <button webuiSubscriptionRequired type="button" class="btn btn-danger text-white" *ngIf="" (click)="open('delete')">
             {{'delete' | translate}}
           </button>
         </div>
@@ -42,13 +42,13 @@
             [(ngModel)]="searchValue" [ngModelOptions]="{ standalone: true }" />
 
           <div class="text-center" *ngIf="loading">
-            <app-loader></app-loader>
+            <webui-loader></webui-loader>
           </div>
 
           <div class="autocomplete-list" infinite-scroll [infiniteScrollDistance]="modalScrollDistance"
             [infiniteScrollThrottle]="modalScrollThrottle" [scrollWindow]="false" (scrolled)="onModalScrollDown()"
             [hidden]="!(previewList && previewList.length)"
-            [ngStyle]="{maxHeight: config.templateOptions.dropdownCount ? config.templateOptions.dropdownCount * 30 + 'px' : '120px'}">
+            [ngStyle]="{maxHeight: config.templateOptions?.dropdownCount ? (config.templateOptions?.dropdownCount || 5) * 30 + 'px' : '120px'}">
             <ul class="list-group w-100">
               <li [class.bold]="config.endpoint === '/core/tags/' && option.owner === 'system'"
                 class="list-group-item autocomplete-item p-1 pl-2" style="cursor: pointer"
@@ -58,25 +58,25 @@
             </ul>
 
             <div class="autocomplete-preloader" *ngIf="skipScroll">
-              <app-spinner></app-spinner>
+              <webui-spinner></webui-spinner>
             </div>
           </div>
         </div>
       </div>
 
-      <div *ngIf="config.additional_text" class="additional-text">
+      <div *ngIf="config?.additional_text" class="additional-text">
         {{ getTranslationKey(config.key, 'additional_text') | translate:{"Default": config.additional_text} }}
       </div>
     </div>
 
     <div class="form-element" *ngIf="config.many">
-      <label class="form-element-label" [attr.for]="key" *ngIf="label && config.templateOptions.label"
-        [class.required]="config.templateOptions.required">
-        {{ getTranslationKey(config.key, 'label') | translate: {"Default": config.templateOptions.label} }}:
+      <label class="form-element-label" [attr.for]="key" *ngIf="label && config.templateOptions?.label"
+        [class.required]="config.templateOptions?.required">
+        {{ getTranslationKey(config.key, 'label') | translate: {"Default": config.templateOptions?.label} }}:
       </label>
-      <app-info *ngIf="config.templateOptions.description"
-        [description]="getTranslationKey(this.key, 'description') | translate: {'Default': config.templateOptions.description || ''}">
-      </app-info>
+      <webui-info *ngIf="config.templateOptions?.description"
+        [description]="getTranslationKey(this.key, 'description') | translate: {'Default': config.templateOptions?.description || ''}">
+      </webui-info>
       <div #autocomplete *ngIf="config.many && results && !config.useOptions"
         class="form-element-content flex-column align-items-start edit" [class.many]="config.many && results"
         style="position: relative">
@@ -85,10 +85,10 @@
             #search="ngModel" #searchElement [(ngModel)]="searchValue" [ngModelOptions]="{ standalone: true }"
             placeholder="{{ 'select' | translate: {'Default': 'Select'} }}" (focus)="generateList()" />
 
-          <div class="form-element-content-actions" *ngIf="config.options && config.templateOptions.add">
-            <button appSubscriptionRequired type="button" class="btn btn-primary text-white alone"
-              *ngIf="config.templateOptions.add && checkPermission('post')" (click)="open('post')">
-              <!-- <i class="text-white mr-1" fa name="plus"></i>  -->
+          <div class="form-element-content-actions" *ngIf="config.options && config.templateOptions?.add">
+            <button webuiSubscriptionRequired type="button" class="btn btn-primary text-white alone"
+              *ngIf="config.templateOptions?.add && checkPermission('post')" (click)="open('post')">
+              <!-- <i class="text-white me-1" fa name="plus"></i>  -->
               {{'add_new' | translate}}
             </button>
           </div>
@@ -101,24 +101,24 @@
                 class="list-group-item autocomplete-item p-1 pl-2" style="cursor: pointer"
                 *ngFor="let option of previewList; trackBy: trackByFn" (click)="setValue(option, true)">
                 {{ option.__str__ }}
-                <span *ngIf="config.templateOptions.info">
+                <span *ngIf="config.templateOptions?.info">
                   <span class="d-inline-flex align-items-center mx-1" [style.color]="colors[getScore(option.score)]">
                     {{ option.score | number: '1.1-1' }}
-                    <fa-icon class="ml-1" icon="star"></fa-icon>
+                    <fa-icon class="ms-1" icon="star"></fa-icon>
                   </span>
                   <span>{{ option.distance }} km</span>
                 </span>
               </li>
             </ul>
             <div class="autocomplete-preloader" *ngIf="skipScroll">
-              <app-spinner></app-spinner>
+              <webui-spinner></webui-spinner>
             </div>
           </div>
         </div>
-        <ng-container *ngIf="!config.tests && !config.templateOptions.info">
+        <ng-container *ngIf="!config.tests && !config.templateOptions?.info">
           <div class="d-flex flex-wrap mt-2">
             <ng-container *ngFor="let item of results; let i = index">
-              <span class="d-flex align-items-center text-left badge badge-outline mt-2 mr-1"
+              <span class="d-flex align-items-center text-left badge badge-outline mt-2 me-1"
                 style="white-space: normal">
                 <span>
                   {{ item.__str__ }}
@@ -130,7 +130,7 @@
                     </button>
                   </ng-container>
                 </span>
-                <fa-icon class="ml-2 text-danger" icon="times" (click)="deleteItem(i, item)"></fa-icon>
+                <fa-icon class="ms-2 text-danger" icon="times" (click)="deleteItem(i, item)"></fa-icon>
               </span>
             </ng-container>
           </div>
@@ -139,7 +139,7 @@
         <div class="object-list" *ngIf="config.tests">
           <div class="object-list__item" *ngFor="let item of results; let i = index">
             {{ item.__str__ }}
-            <fa-icon class="ml-2 mr-3 text-danger" icon="times" (click)="deleteItem(i, item)"></fa-icon>
+            <fa-icon class="ms-2 me-3 text-danger" icon="times" (click)="deleteItem(i, item)"></fa-icon>
             <button type="button" *ngIf="item.tests && item.tests.length && !item.passed"
               class="object-list__btn btn btn-outline-primary" (click)="passTests(item, $event)">
               {{'pass_test' | translate}}
@@ -150,17 +150,17 @@
             </button>
           </div>
         </div>
-        <ng-container *ngIf="config.templateOptions.info">
+        <ng-container *ngIf="config.templateOptions?.info">
           <div *ngFor="let item of results; let i = index" class="candidate-info">
             <span>{{ item.__str__ }}</span>
             <span class="d-inline-flex align-items-center mx-1">
               {{ item.score || (item.candidate_scores && item.candidate_scores.average_score) | number: '1.1-1' }}
-              <fa-icon class="ml-1" icon="star"></fa-icon>
+              <fa-icon class="ms-1" icon="star"></fa-icon>
             </span>
             <span>{{ item.distance }} km</span>
 
-            <app-close-button class="ml-2" *ngIf="!config.doNotChoice" [sm]="true" (click)="deleteItem(i, item)">
-            </app-close-button>
+            <webui-close-button class="ms-2" *ngIf="!config.doNotChoice" [sm]="true" (click)="deleteItem(i, item)">
+            </webui-close-button>
           </div>
         </ng-container>
       </div>
@@ -180,7 +180,7 @@
                 <label class="d-flex align-items-center w-100">
                   <input type="checkbox" class="form-check-input" [(ngModel)]="option.checked" name="checked"
                     [ngModelOptions]="{ standalone: true }" (ngModelChange)="setValue(option, true)" hidden />
-                  <app-checkbox [sm]="true" [checked]="option.checked"></app-checkbox>
+                  <webui-checkbox [sm]="true" [checked]="option.checked"></webui-checkbox>
                   {{ option.__str__ }}
                 </label>
               </li>
@@ -190,10 +190,10 @@
         </div>
 
         <div *ngIf="results && results.length" class="d-flex flex-wrap align-items-center">
-          <span class="badge badge-outline mt-2 mr-1" style="white-space: normal"
+          <span class="badge badge-outline mt-2 me-1" style="white-space: normal"
             *ngFor="let item of results; let i = index">
             {{ item.__str__ }}
-            <fa-icon class="ml-2 text-danger" icon="times" (click)="deleteItem(i, item)"></fa-icon>
+            <fa-icon class="text-danger" icon="times" (click)="deleteItem(i, item)"></fa-icon>
           </span>
         </div>
       </div>
@@ -202,12 +202,12 @@
 
   <div class="form-list" *ngIf="config.list">
     <div class="d-flex">
-      <div class="mr-auto d-flex flex-column justify-content-center">
-        <h4 class="mb-0">{{ getTranslationKey(config.key, 'label') | translate: {"Default": config.templateOptions.label} }}</h4>
+      <div class="me-auto d-flex flex-column justify-content-center">
+        <h4 class="mb-0">{{ getTranslationKey(config.key, 'label') | translate: {"Default": config.templateOptions?.label} }}</h4>
       </div>
 
       <button
-        appSubscriptionRequired
+        webuiSubscriptionRequired
         *ngIf="config.delay && checkPermission('post')"
         type="button"
         class="btn btn-primary btn-shadow align-self-center"
@@ -216,8 +216,8 @@
       </button>
 
       <button
-        appSubscriptionRequired
-        *ngIf="config.templateOptions.add_label && config.templateOptions.add"
+        webuiSubscriptionRequired
+        *ngIf="config.templateOptions?.add_label && config.templateOptions?.add"
         type="button"
         class="btn btn-primary btn-shadow align-self-center" (click)="addObject()">
         {{'add' | translate}}
@@ -231,10 +231,10 @@
             <ng-container *ngFor="let col of config.metadata">
               <th
                 *ngIf="!col.hide"
-                [class.required]="col.templateOptions.required"
-                [style.width.px]="col.width"
+                [class.required]="col.templateOptions?.required"
+                [style.width.px]="col?.width"
               >
-                <span class="opacity-15">{{ col.templateOptions.label }}</span>
+                <span class="opacity-15">{{ col.templateOptions?.label }}</span>
               </th>
             </ng-container>
 
@@ -249,7 +249,7 @@
             <ng-container *ngFor="let field of object.metadata">
               <td *ngIf="!field.hide">
                 <ng-container
-                  appFormElement
+                  webuiFormElement
                   [label]="false"
                   [config]="field"
                   [group]="object.data"
@@ -270,12 +270,12 @@
 
                 <ng-template #actionsTemplate>
                   <button
-                    appSubscriptionRequired
-                    class="custom-button d-flex align-items-center"
-                    *ngIf="config.templateOptions.delete && checkPermission('delete')"
+                    webuiSubscriptionRequired
+                    class="btn"
+                    *ngIf="config.templateOptions?.delete && checkPermission('delete')"
                     (click)="deleteObject(object, $event)">
                     <fa-icon
-                      class="icon text-danger mr-2"
+                      class="icon text-danger"
                       title="Delete"
                       [icon]="['fas', 'trash']">
                     </fa-icon>
@@ -283,12 +283,12 @@
                     {{'delete' | translate}}
                   </button>
                   <button
-                    appSubscriptionRequired
-                    class="custom-button d-flex align-items-center"
-                    *ngIf="config.templateOptions.edit && checkPermission('update')"
+                    webuiSubscriptionRequired
+                    class="btn"
+                    *ngIf="config.templateOptions?.edit && checkPermission('update')"
                     (click)="editObject(object, $event)">
                     <fa-icon
-                      class="icon text-warning mr-2"
+                      class="icon text-warning"
                       title="Edit"
                       [icon]="['fas', 'pencil-alt']">
                     </fa-icon>
@@ -296,12 +296,12 @@
                     {{'edit' | translate}}
                   </button>
                   <button
-                    appSubscriptionRequired
-                    class="custom-button d-flex align-items-center"
+                    webuiSubscriptionRequired
+                    class="btn"
                     *ngIf="skillEndpoint && !object.allData.default_rate"
                     (click)="setAsDefault(object)">
                     <fa-icon
-                      class="icon text-primary mr-2"
+                      class="icon text-primary"
                       title="Set as default"
                       [icon]="['fas', 'check']">
                     </fa-icon>
@@ -309,12 +309,12 @@
                 </ng-template>
               </span>
               <button
-                appSubscriptionRequired
+                webuiSubscriptionRequired
                 *ngIf="!object.id"
-                class="custom-button d-flex align-items-center"
+                class="btn"
                 (click)="removeItem(index, $event)">
                 <fa-icon
-                  class="icon text-danger mr-2"
+                  class="icon text-danger"
                   title="Delete"
                   [icon]="['fas', 'trash']">
                 </fa-icon>
@@ -333,7 +333,7 @@
   </div>
 </div>
 
-<div class="form-group form-element" [ngClass]="{ indent: config.templateOptions.indent }"
+<div class="form-group form-element" [ngClass]="{ indent: config.templateOptions?.indent }"
   [class.custom]="customTemplate" *ngIf="
     viewMode &&
     !config.list &&
@@ -341,9 +341,9 @@
     !(!this.displayValue && !results.length && config.hideIfNull)
   ">
   <label class="form-element-label" *ngIf="
-      label && config.templateOptions.label && !config.templateOptions.hideLabel
+      label && config.templateOptions?.label && !config.templateOptions?.hideLabel
     ">
-    {{ getTranslationKey(config.key, 'label') | translate: {"Default": config.templateOptions.label} }}<span
+    {{ getTranslationKey(config.key, 'label') | translate: {"Default": config.templateOptions?.label} }}<span
       *ngIf="!customTemplate">:</span>
   </label>
   <div class="form-element-content" [class.many]="config.many && results">
@@ -352,7 +352,7 @@
         !(customTemplate && customTemplate.length) &&
         (!results || results.length === 0)
       ">-</span>
-    <a [class.readonly-value]="editMode" [class.readonly]="!config.templateOptions.edit" *ngIf="
+    <a [class.readonly-value]="editMode" [class.readonly]="!config.templateOptions?.edit" *ngIf="
         !config.many &&
         displayValue &&
         this.linkPath &&
@@ -360,9 +360,9 @@
       " href="{{ hideDetail || isClient() ? '' : this.linkPath }}" (click)="open('update', undefined, $event)">{{
       displayValue }}</a>
     <div [ngClass]="{ 'd-flex align-items-top flex-wrap': config.key === 'tags' }"
-      *ngIf="config.many && results && !config.templateOptions.deleteList">
+      *ngIf="config.many && results && !config.templateOptions?.deleteList">
       <span [ngClass]="{
-          'badge badge-outline mb-2 mr-1': config.key === 'tags',
+          'badge badge-outline mb-2 me-1': config.key === 'tags',
           'd-block': config.column
         }" *ngFor="let item of results; let l = last">
         <a *ngIf="config.key !== 'tags'" [class.readonly-value]="editMode" href="/" (click)="open('update', item)">{{
@@ -372,13 +372,13 @@
           }}</span>
       </span>
     </div>
-    <div *ngIf="config.many && results && config.templateOptions.deleteList"
+    <div *ngIf="config.many && results && config.templateOptions?.deleteList"
       class="d-flex flex-wrap align-items-center mt-2">
-      <span class="badge badge-outline mt-2 mr-1" style="white-space: normal"
+      <span class="badge badge-outline mt-2 me-1" style="white-space: normal"
         *ngFor="let item of results; let i = index">
         {{ item.__str__ }}
-        <fa-icon class="ml-2 text-danger" [icon]="['fas', 'times']"
-          (click)="deleteItem(i, item, config.templateOptions.deleteList)"></fa-icon>
+        <fa-icon class="text-danger" [icon]="['fas', 'times']"
+          (click)="deleteItem(i, item, config.templateOptions?.deleteList)"></fa-icon>
       </span>
     </div>
   </div>
@@ -410,7 +410,7 @@
       <div class="modal-header">
         <h5 class="modal-title">{{ modalData.title }}</h5>
 
-        <app-close-button class="ml-auto" (click)="c()"></app-close-button>
+        <webui-close-button class="ms-auto" (click)="c()"></webui-close-button>
       </div>
     </div>
 
@@ -418,7 +418,7 @@
       <div *ngIf="modalData.type !== 'delete'">
         <div class="description" *ngIf="modalData.description" [innerHTML]="modalData.description"></div>
 
-        <app-generic-form
+        <webui-generic-form
           [endpoint]="modalData.endpoint"
           [mode]="modalData.mode"
           [data]="modalData.data"
@@ -431,9 +431,9 @@
         >
           <button *ngIf="checkPermission(modalData.type)" type="submit" class="btn btn-primary button-save" [disabled]="saveProcess">
             {{'save' | translate}}
-            <app-spinner *ngIf="saveProcess"></app-spinner>
+            <webui-spinner *ngIf="saveProcess"></webui-spinner>
           </button>
-        </app-generic-form>
+        </webui-generic-form>
       </div>
       <div *ngIf="modalData.type === 'delete'">
         {{'are_you_sure' | translate}}
@@ -464,15 +464,15 @@
   <div *ngIf="customTemplate && !customTemplate.length" class="d-flex flex-column justify-content-center">-</div>
 </ng-template>
 
-<ng-template #messageDetail let-modal>
+<ng-template #messageDetail let-modal let-c>
   <div class="message-detail-header">
     <h5 class="message-label">{{ modalData.label }}</h5>
 
-    <app-close-button class="close ml-2" (click)="modal.dismiss()"></app-close-button>
+    <webui-close-button class="close ms-2" (click)="modal.dismiss()"></webui-close-button>
   </div>
 
-  <app-generic-form [endpoint]="modalData.endpoint" [metadataQuery]="modalData.metadataQuery" [id]="modalData.id"
+  <webui-generic-form [endpoint]="modalData.endpoint" [metadataQuery]="modalData.metadataQuery" [id]="modalData.id"
     [mode]="modalData.mode" [data]="modalData.data" [edit]="modalData.edit" (str)="changeLabel($event)"
-    (event)="formEvent($event, c)" (errorForm)="formError($event)">
-  </app-generic-form>
+    (event)="formEvent($event, c)" (errorForm)="formError()">
+  </webui-generic-form>
 </ng-template>

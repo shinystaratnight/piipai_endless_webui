@@ -1,5 +1,4 @@
-@import '../../../../../../../styles/variables';
-@import '../../../../../../../styles/mixins';
+@use 'variables' as *;
 
 label {
   display: flex;
@@ -89,11 +88,6 @@ p {
 
   .unavailable {
     background-color: $danger;
-  }
-
-  .map {
-    width: 265px;
-    height: 150px;
   }
 
   &-edit-link {
@@ -331,4 +325,9 @@ p {
   &-title {
     margin-bottom: 4px;
   }
+}
+
+.map {
+  width: 265px;
+  height: 150px;
 }

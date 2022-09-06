@@ -3,7 +3,7 @@
   .outside,
   .btn-secondary,
   .btn-light {
-    @extend %circle;
+    border-radius: 50%;
 
     padding: 7px;
 

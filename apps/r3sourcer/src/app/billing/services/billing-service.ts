@@ -36,7 +36,7 @@ export class BillingService {
       );
   }
 
-  public setCardInfo(body) {
+  public setCardInfo(body: any) {
     return this.http
       .post(this.endpoints.cardInfo, body)
       .pipe(
@@ -44,7 +44,7 @@ export class BillingService {
       );
   }
 
-  public changeCard(body) {
+  public changeCard(body: any) {
     return this.http
       .put(this.endpoints.cardInfo, body)
       .pipe(
@@ -100,7 +100,7 @@ export class BillingService {
       );
   }
 
-  public setCreditDetails(body) {
+  public setCreditDetails(body: any) {
     return this.http
       .post(this.endpoints.autoCharge, body)
       .pipe(
@@ -108,7 +108,7 @@ export class BillingService {
       );
   }
 
-  public addFunds(body) {
+  public addFunds(body: any) {
     return this.http
       .post(this.endpoints.fund, body)
       .pipe(
@@ -118,7 +118,7 @@ export class BillingService {
 
   public getSubscriptionTypes() {
     return this.http
-      .get(this.endpoints.subscriptionTypes)
+      .get<{ subscription_types: Plan[] }>(this.endpoints.subscriptionTypes)
       .pipe(
         catchError((err: any) => this.errorService.handleError(err))
        );

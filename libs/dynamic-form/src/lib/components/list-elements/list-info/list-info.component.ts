@@ -3,38 +3,38 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { getContactAvatar } from '@webui/utilities';
 import { getValueOfData } from '../../../helpers';
 
-const defaultImage = {
+const defaultImage: Record<string, string> = {
   client: '/assets/img/logo.svg',
   contact: '/assets/img/avatar.png'
 };
 
 @Component({
-  selector: 'app-list-info',
+  selector: 'webui-list-info',
   templateUrl: 'list-info.component.html',
   styleUrls: ['./list-info.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
 export class ListInfoComponent implements OnInit {
   config: any;
-  picture: string;
-  available: boolean;
-  title: string;
-  address: string;
-  description: string;
-  status: any[];
+  picture!: string;
+  available!: boolean;
+  title!: string;
+  address!: string;
+  description!: string;
+  status!: any[];
   averageScore: any;
   averageScoreDescription: any;
-  contactAvatar: string;
-  job_title: string;
-  company: string;
-  position: string;
+  contactAvatar!: string;
+  job_title!: string;
+  company!: string;
+  position!: string;
   color: any;
-  colorAttr: string;
+  colorAttr!: string;
   className: any;
-  statusList: any[];
-  more: boolean;
-  isDefaultImage: boolean;
-  colors = {
+  statusList!: any[];
+  more!: boolean;
+  isDefaultImage!: boolean;
+  colors: Record<number, string> = {
     0: '#bdbdbd',
     1: '#FA5C46',
     2: '#fc9183',
@@ -42,15 +42,15 @@ export class ListInfoComponent implements OnInit {
     4: '#ffbf00',
     5: '#FFD042'
   };
-  hideAvailability: boolean;
+  hideAvailability!: boolean;
 
   public ngOnInit() {
     if (this.config.values) {
-      const keys = Object.keys(this.config.values);
+      const keys: (keyof ListInfoComponent)[] = Object.keys(this.config.values) as (keyof ListInfoComponent)[];
 
       this.averageScore = this.config.value.average_score;
 
-      keys.forEach((key) => {
+      keys.forEach((key: keyof ListInfoComponent) => {
         if (key === 'status') {
           this[key] = this.getValue(
             this.config.values[key].field,
@@ -83,10 +83,10 @@ export class ListInfoComponent implements OnInit {
             : this.config.hideTitle
             ? 'contact'
             : null;
-          this[key] = defaultImage[defaultImageKey];
+          this[key] = defaultImage[defaultImageKey as string];
           this.isDefaultImage = true;
         } else {
-          this[key] = this.getValue(this.config.values[key], this.config.value);
+          this[key] = this.getValue(this.config.values[key], this.config.value) as never;
         }
       });
 
@@ -100,7 +100,7 @@ export class ListInfoComponent implements OnInit {
     }
   }
 
-  public generateAverageScoreTooltip(data) {
+  public generateAverageScoreTooltip(data: any) {
     const scores = [
       { label: 'Loyalty', key: 'candidate_scores.loyalty' },
       { label: 'Client feedback', key: 'candidate_scores.client_feedback' },
@@ -117,13 +117,13 @@ export class ListInfoComponent implements OnInit {
 
   public isCandidatePage(): boolean {
     if (this.config.value && this.config.value instanceof Object) {
-      return this.config.value.hasOwnProperty('average_score');
+      return 'average_score' in this.config.value;
     }
 
     return false;
   }
 
-  public filterScores(scores, data, type?: string) {
+  public filterScores(scores: any[], data: any, type?: string) {
     return scores.filter((el) => {
       getValueOfData(data, el.key, el);
       const score = this.getScore(el.value);
@@ -136,7 +136,7 @@ export class ListInfoComponent implements OnInit {
   public getValue(key: string, data: any): any {
     if (typeof key === 'string') {
       const keys = key.split('.');
-      const prop = keys.shift();
+      const prop: string = keys.shift() as string;
 
       if (!keys.length) {
         return data[prop];
@@ -148,7 +148,7 @@ export class ListInfoComponent implements OnInit {
     }
   }
 
-  public checkClass(item) {
+  public checkClass(item: any) {
     let className;
     if (this.color && this.colorAttr) {
       const keys = Object.keys(this.color);
@@ -162,7 +162,7 @@ export class ListInfoComponent implements OnInit {
     return className || 'success';
   }
 
-  public showMore(e) {
+  public showMore(e: MouseEvent) {
     e.preventDefault();
     e.stopPropagation();
 
@@ -172,7 +172,7 @@ export class ListInfoComponent implements OnInit {
     return false;
   }
 
-  public getScore(score) {
+  public getScore(score: string) {
     return Math.floor(parseFloat(score));
   }
 }

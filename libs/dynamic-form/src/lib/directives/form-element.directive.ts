@@ -48,7 +48,7 @@ import { FormCollapseComponent } from '../containers/form-collapse/form-collapse
 import { FormRowComponent } from '../containers/form-row/form-row.component';
 import { ListLinkComponent } from '../components/list-elements';
 
-const components = {
+const components: Record<string, any> = {
   input: FormInputComponent,
   row: FormRowComponent,
   button: FormButtonComponent,
@@ -86,20 +86,20 @@ const components = {
 };
 
 @Directive({
-  selector: '[appFormElement]'
+  selector: '[webuiFormElement]'
 })
 export class FormElementDirective implements OnInit, OnChanges {
   @Input()
-  public config;
+  public config!: any;
 
   @Input()
   public label = true;
 
   @Input()
-  public last: boolean;
+  public last!: boolean;
 
   @Input()
-  public group: FormGroup;
+  public group!: FormGroup;
 
   @Input()
   public errors: any;
@@ -107,7 +107,7 @@ export class FormElementDirective implements OnInit, OnChanges {
   @Input()
   public message: any;
 
-  @Input() public formId: number;
+  @Input() public formId!: number;
 
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
@@ -115,14 +115,14 @@ export class FormElementDirective implements OnInit, OnChanges {
   @Output()
   public buttonAction: EventEmitter<any> = new EventEmitter();
 
-  public component: ComponentRef<any>;
+  public component!: ComponentRef<any>;
 
   constructor(
     private resolver: ComponentFactoryResolver,
     private container: ViewContainerRef
   ) {}
 
-  public ngOnChanges(changes: SimpleChanges) {
+  public ngOnChanges() {
     if (this.component) {
       this.component.instance.config = this.config;
       this.component.instance.label = this.label;
@@ -162,14 +162,14 @@ export class FormElementDirective implements OnInit, OnChanges {
     }
   }
 
-  public checkElement(type) {
+  public checkElement(type: string) {
     if (components[type]) {
       return true;
     }
     return false;
   }
 
-  public getComponent(type, edit?) {
+  public getComponent(type: string, edit?: boolean) {
     if (type === 'address' && edit) {
       return FormRelatedComponent;
     }

@@ -1,5 +1,5 @@
-@import '../../../../../../styles/variables';
-
+@use 'variables' as *;
+@use 'sass:math';
 $text-color: rgba($gray, .8);
 $shadow: 0 0 5px rgba($gray, 0.3);
 
@@ -32,7 +32,7 @@ $top: 100px;
     margin-bottom: 1rem;
     border-bottom: 1px solid rgba($text-color, .2);
     font-size: $font-size;
-    line-height: 28px / $font-size;
+    line-height: math.div(28px, $font-size);
     color: $text-color;
   }
 

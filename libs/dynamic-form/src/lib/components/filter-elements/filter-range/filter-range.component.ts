@@ -11,24 +11,24 @@ import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 
 import * as nouislider from 'nouislider';
-import * as wnumb from 'wnumb';
+import wnumb from 'wnumb';
 
 import { FilterService } from './../../../services';
 
 @Component({
-  selector: 'app-filter-range',
+  selector: 'webui-filter-range',
   templateUrl: 'filter-range.component.html'
 })
 export class FilterRangeComponent implements OnInit, OnDestroy, AfterViewInit {
   public config: any;
-  public query: string;
+  public query!: string;
   public data: any;
   public slider: any;
   public noUiSlider: any;
-  public toggle: boolean;
+  public toggle!: boolean;
 
-  public filterSubscription: Subscription;
-  public querySubscription: Subscription;
+  public filterSubscription!: Subscription;
+  public querySubscription!: Subscription;
 
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
@@ -90,7 +90,7 @@ export class FilterRangeComponent implements OnInit, OnDestroy, AfterViewInit {
         this.noUiSlider.set(this.data + '');
       }
 
-      this.noUiSlider.on('set.one', (e, handle) => {
+      this.noUiSlider.on('set.one', (e: any) => {
         const value = parseInt(e[0], 10);
         if (this.data !== value) {
           this.data = value;
@@ -101,13 +101,13 @@ export class FilterRangeComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-  public toggleRange(event) {
+  public toggleRange(event: any) {
     if (!event) {
       this.resetFilter();
     }
   }
 
-  public genericQuery(query, data) {
+  public genericQuery(query: string, data: string) {
     let result = '';
     if (data) {
       result = `${query}=${data}`;

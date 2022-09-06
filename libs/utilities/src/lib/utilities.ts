@@ -1,43 +1,11 @@
-import { Role } from '@webui/data';
-import { getTimeInstanceByTimezone } from './time';
-
-enum Language {
-  English = 'en',
-  Russian = 'ru',
-  Estonian = 'et',
-  Finnish = 'fi'
-}
-
-enum LanguageFullName {
-  English = 'English',
-  Russian = 'Russian',
-  Estonian = 'Estonian',
-  Finnish = 'Finnish'
-}
-
-enum CountryCodeLanguage {
-  EE = Language.Estonian,
-  FI = Language.Finnish
-}
-
-const translationCountryName = {
-  EE: LanguageFullName.Estonian,
-  FI: LanguageFullName.Finnish
-};
-
-export type Translation = {
-  language: {
-    id: Language;
-    name: LanguageFullName;
-  };
-  value: string;
-};
+import { MomentInput, Time } from '@webui/time';
+import {CountryCodeLanguage, ITranslationPayload, Language, Role, Translation} from '@webui/models';
 
 export enum DateRange {
   Year = 'year',
   Month = 'month',
   Week = 'week',
-  Day = 'day'
+  Day = 'day',
 }
 
 export const filterDateFormat = 'YYYY-MM-DD';
@@ -49,10 +17,60 @@ export const rangeFormats = {
   [DateRange.Year]: 'YYYY',
   [DateRange.Month]: 'MMMM YYYY',
   [DateRange.Week]: 'MMM D',
-  [DateRange.Day]: 'D MMMM YYYY'
+  [DateRange.Day]: 'D MMMM YYYY',
 };
 
-export function getContactAvatar(name): string {
+export function getCurrentRole(): Role | undefined {
+  const role = getLocalStorageItem<Role>('web.role');
+
+  if (!role) {
+    return;
+  }
+
+  return role;
+}
+
+export function isCandidate(): boolean {
+  const role = getCurrentRole();
+
+  if (role) {
+    return role.__str__.includes('candidate');
+  }
+
+  return false;
+}
+
+export function isClient(): boolean {
+  const role = getCurrentRole();
+
+  if (role) {
+    return role.__str__.includes('client');
+  }
+
+  return false;
+}
+
+export function isManager(): boolean {
+  const role = getCurrentRole();
+
+  if (role) {
+    return role.__str__.includes('manager') || role.__str__.includes('trial');
+  }
+
+  return false;
+}
+
+export function getRoleId(): string | undefined {
+  const role = getCurrentRole();
+
+  if (role) {
+    return role.id;
+  }
+
+  return;
+}
+
+export function getContactAvatar(name: string): string {
   const nameElements = name.split(' ');
 
   if (nameElements && nameElements.length) {
@@ -69,63 +87,42 @@ export function getContactAvatar(name): string {
         .toUpperCase();
     }
   }
+
+  return '';
 }
 
 export function isTouchDevice(): boolean {
-  const deviceNamesReg = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i;
+  const deviceNamesReg =
+    /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i;
 
   return deviceNamesReg.test(navigator.userAgent.toLowerCase());
 }
 
-export function getCurrentRole() {
-  return JSON.parse(localStorage.getItem('web.role'));
-}
-
 export function isMobile(): boolean {
-  if (isTouchDevice) {
+  if (isTouchDevice()) {
     return window.innerWidth < 768;
   }
-}
 
-export function isCandidate(): boolean {
-  const role: Role = getCurrentRole();
-  if (role) {
-    return role.__str__.includes('candidate');
-  }
-}
-
-export function isClient(): boolean {
-  const role: Role = getCurrentRole();
-  if (role) {
-    return role.__str__.includes('client');
-  }
-}
-
-export function isManager(): boolean {
-  const role: Role = getCurrentRole();
-  if (role) {
-    return role.__str__.includes('manager') || role.__str__.includes('trial');
-  }
-}
-
-export function getRoleId(): string {
-  const role: Role = getCurrentRole();
-  if (role) {
-    return role.id;
-  }
+  return false;
 }
 
 export function getStorageLang(): Language {
-  return JSON.parse(localStorage.getItem('web.lang'));
+  const lang = getLocalStorageItem('web.lang');
+
+  if (!lang) {
+    return Language.English;
+  }
+
+  return lang as Language;
 }
 
-export function getTotalTime(time, data) {
-  const shift_ended_at = time(data.shift_ended_at);
-  const shift_started_at = time(data.shift_started_at);
+export function getTotalTime(data: Record<string, MomentInput>, timezone?: string) {
+  const shift_ended_at = Time.parse(data['shift_ended_at'], { timezone });
+  const shift_started_at = Time.parse(data['shift_started_at'], { timezone });
 
   let breakTime = 0;
 
-  if (!data.shift_ended_at) {
+  if (!data['shift_ended_at']) {
     return '0hr 0min';
   }
 
@@ -133,9 +130,9 @@ export function getTotalTime(time, data) {
     return '0hr 0min';
   }
 
-  if (data.break_ended_at && data.break_started_at) {
-    const break_ended_at = time(data.break_ended_at);
-    const break_started_at = time(data.break_started_at);
+  if (data['break_ended_at'] && data['break_started_at']) {
+    const break_ended_at = Time.parse(data['break_ended_at'], { timezone });
+    const break_started_at = Time.parse(data['break_started_at'], { timezone });
 
     if (
       break_started_at.isAfter(shift_ended_at) ||
@@ -150,14 +147,18 @@ export function getTotalTime(time, data) {
   }
 
   const workTime = shift_ended_at.diff(shift_started_at);
-  const totalTime = time.duration(workTime - breakTime);
+  const totalTime = Time.duration(workTime - breakTime);
 
   return `${Math.floor(totalTime.asHours())}hr ${totalTime.minutes()}min`;
 }
 
-export function getPropValue(data, key: string): any {
+export function getPropValue(data: Record<string, unknown>, key: string): unknown | undefined {
   const props = key.split('.');
   const prop = props.shift();
+
+  if (!prop) {
+    return;
+  }
 
   if (!props.length) {
     if (data) {
@@ -165,16 +166,20 @@ export function getPropValue(data, key: string): any {
     }
   } else {
     if (data) {
-      if (Array.isArray(data[prop])) {
-        return getPropValue(data[prop][0], props.join('.'));
+      const newData = data[prop];
+
+      if (Array.isArray(newData)) {
+        return getPropValue(newData[0], props.join('.'));
       }
 
-      return getPropValue(data[prop], props.join('.'));
+      return getPropValue(data[prop] as Record<string, unknown>, props.join('.'));
     }
   }
+
+  return;
 }
 
-export function format(str, data) {
+export function format(str: string, data: Record<string, unknown>) {
   const open = '{';
   const close = '}';
   const pieces = [];
@@ -195,25 +200,20 @@ export function format(str, data) {
     }
 
     if (data) {
-      const shift_started_at = getTimeInstanceByTimezone(data.timezone || data.time_zone)(
-        data.shift_started_at
-      );
+      const shift_started_at = Time.parse(data['shift_started_at'] as MomentInput, {
+        timezone: data['timezone'] as string || data['time_zone'] as string || undefined,
+      });
 
-      switch (key) {
-        case 'shift_ended_at': {
-          data['shift_ended_at'] =
-            data['shift_ended_at'] ||
-            shift_started_at.clone().add(8, 'hour').add(30, 'minute').format();
-        }
-        case 'break_started_at': {
-          data['break_started_at'] =
-            data['break_started_at'] || shift_started_at.clone().add(4, 'hour').format();
-        }
-        case 'break_ended_at': {
-          data['break_ended_at'] =
-            data['break_ended_at'] ||
-            shift_started_at.clone().add(4, 'hour').add(30, 'minute').format();
-        }
+      if (key === 'shift_ended_at') {
+        data['shift_ended_at'] = data['shift_ended_at'] || shift_started_at.clone().add(8, 'hour').add(30, 'minute').format();
+      }
+
+      if (key === 'break_started_at') {
+        data['break_started_at'] = data['break_started_at'] || shift_started_at.clone().add(4, 'hour').format();
+      }
+
+      if (key === 'break_ended_at') {
+        data['break_ended_at'] = data['break_ended_at'] || shift_started_at.clone().add(4, 'hour').add(30, 'minute').format();
       }
     }
 
@@ -231,31 +231,29 @@ export class FormatString {
   format = format;
 }
 
-export function getTranslationKey(key, type) {
+export function getTranslationKey(key: string, type: string) {
   return `${key}.${type}`;
 }
 
 export function checkAndReturnTranslation(
-  element: {
-    translations?: Translation[];
-    translation?: Translation[];
-    name?: { name: string; translations: Translation[] } | string;
-    __str__?: string;
-  },
+  element: ITranslationPayload,
   countryCode: string,
   lang?: Language
 ): string {
-  const { translations, translation, name, __str__ } = element;
+  const { translations, translation, name } = element;
   const translationList =
-    translations || translation || (name && typeof name !== 'string' && name.translations) || [];
+    translations ||
+    translation ||
+    (name && typeof name !== 'string' && name.translations) ||
+    [];
 
   if (!translationList.length) {
     return getDefaultValue(element);
   }
 
-  const target: Translation = translationList.find((element: Translation) => {
+  const target = translationList.find((element: Translation) => {
     const { id } = element.language;
-    const languageCode: Language = lang || CountryCodeLanguage[countryCode];
+    const languageCode = lang || CountryCodeLanguage[countryCode as keyof typeof CountryCodeLanguage];
 
     return id === languageCode;
   });
@@ -270,7 +268,7 @@ export function checkAndReturnTranslation(
 function getDefaultValue(element: {
   name?: { name: string; translations: Translation[] } | string;
   __str__?: string;
-}) {
+}): string {
   const { __str__, name } = element;
 
   if (typeof name === 'string') {
@@ -281,26 +279,36 @@ function getDefaultValue(element: {
     return name.name;
   }
 
-  return __str__;
+  return __str__ || '';
 }
 
-export function setPropValue(key: string, target: { [key: string]: any }, value: any): void {
+export function setPropValue(
+  key: string,
+  target: Record<string, unknown>,
+  value: Record<string, unknown>
+): void {
   const path = key.split('.');
   const prop = path.shift();
+
+  if (!prop) {
+    return;
+  }
 
   if (!path.length) {
     target[prop] = value;
   } else {
-    setPropValue(path.join('.'), target[prop], value);
+    const newTaget = target[prop] as Record<string, unknown>;
+
+    setPropValue(path.join('.'), newTaget, value);
   }
 }
 
 export function getFulfilledStatus(
   status: number,
   workers: { undefined: number; accepted: number; cancelled: number }
-) {
+): number | undefined {
   if (status === 1) {
-    return status;
+    return 1;
   }
 
   if (status === 0 && !workers.undefined) {
@@ -310,14 +318,20 @@ export function getFulfilledStatus(
   if (status === 0 && workers.undefined) {
     return 2;
   }
+
+  return;
 }
 
-export function getLocalStorageItem(key: string): any | undefined {
+export function getLocalStorageItem<T>(key: string): T | undefined {
   const value = localStorage.getItem(key);
 
-  if (value !== undefined) {
+  if (typeof value === 'string') {
     return JSON.parse(value);
   }
 
   return undefined;
+}
+
+export function isArray(val: unknown): val is Array<any> {
+  return Array.isArray(val);
 }

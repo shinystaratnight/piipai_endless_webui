@@ -1,8 +1,6 @@
-import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy, ElementRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-
 import { Subject, Subscription } from 'rxjs';
 
 import {
@@ -10,13 +8,11 @@ import {
   UserService,
   AuthService,
   NavigationService,
-  SiteSettingsService,
-  CompanyPurposeService,
   EventService,
   EventType
 } from '@webui/core';
-import { PageData, User, Role } from '@webui/data';
-import { GenericFormService, FormMode } from '@webui/dynamic-form';
+import { PageData } from '@webui/data';
+import { FormMode } from '@webui/dynamic-form';
 import { CheckPermissionService, ToastService, MessageType } from '@webui/core';
 import {
   isMobile,
@@ -25,24 +21,24 @@ import {
   isManager,
   getCurrentRole
 } from '@webui/utilities';
-import { Endpoints } from '@webui/data';
+import { Endpoints, Role, User } from '@webui/models';
 
 @Component({
-  selector: 'app-site',
+  selector: 'webui-site',
   templateUrl: './site.component.html',
   styleUrls: ['./site.component.scss']
 })
 export class SiteComponent implements OnInit, OnDestroy {
-  public pageData: PageData;
-  public user: User;
+  public pageData!: PageData | null;
+  public user?: User | null;
   public dashboard = true;
-  public currentRole: Role;
-  public changePasswordEndpoint: string;
+  public currentRole?: Role;
+  public changePasswordEndpoint!: string;
 
   public modulesList: any;
   public userModules: any;
   public pagesList: any;
-  public formLabel: string;
+  public formLabel!: string;
   public fillInData = {
     responseField: 'list',
     paginated: 'off',
@@ -52,23 +48,23 @@ export class SiteComponent implements OnInit, OnDestroy {
   };
   public FormMode = FormMode;
 
-  public formStorage: boolean;
+  public formStorage!: boolean;
   public formStorageEndpoint = '/core/formstorages/';
-  public approvedStorage: boolean;
+  public approvedStorage!: boolean;
 
   public error: any;
 
-  public formMode: FormMode;
+  public formMode!: FormMode | null;
 
-  public saveProcess: boolean;
-  public permissionMethods: string[];
-  public reload: boolean;
+  public saveProcess!: boolean;
+  public permissionMethods!: string[];
+  public reload!: boolean;
 
   public Jira: any;
-  public jiraLoaded: boolean;
+  public jiraLoaded!: boolean;
 
   public upload: Subject<boolean> = new Subject();
-  public listName: string;
+  public listName!: string;
 
   public listNameCache = {};
   public errors: any = {};
@@ -79,15 +75,15 @@ export class SiteComponent implements OnInit, OnDestroy {
   public endpointWithoutViewMode: string[] = ['/core/users/'];
   public passwordData: any;
 
-  public modalRef: NgbModalRef;
+  public modalRef!: NgbModalRef;
 
-  public mobileDesign = [
+  public mobileDesign: string[] = [
     '/hr/timesheets/approved/',
     '/hr/timesheets/history/',
     '/hr/timesheets/unapproved/'
   ];
 
-  public loader: boolean;
+  public loader!: boolean;
 
   private subscriptions: Subscription[] = [];
 
@@ -107,31 +103,28 @@ export class SiteComponent implements OnInit, OnDestroy {
     return `Back to ${this.listName.toLocaleLowerCase()} list`;
   }
 
-  @ViewChild('modal') public modal;
-  @ViewChild('forgotPassword') public forgotPasswordModal;
+  @ViewChild('modal') public modal!: ElementRef;
+  @ViewChild('forgotPassword') public forgotPasswordModal!: ElementRef;
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
     private siteService: SiteService,
-    private genericFormService: GenericFormService,
     private navigationService: NavigationService,
     private userService: UserService,
     private authService: AuthService,
     private permission: CheckPermissionService,
     private ts: ToastService,
-    private siteSettingsService: SiteSettingsService,
     private modalService: NgbModal,
-    private purposeService: CompanyPurposeService,
     private eventService: EventService
   ) {}
 
   public ngOnInit() {
     this.loadScript();
     this.user = this.userService.user;
-    this.currentRole = this.user.currentRole;
-    this.changePasswordEndpoint = `${Endpoints.Contact}${this.user.data.contact.id}/change_password/`;
-    this.updateJiraTask(this.user.currentRole);
+    this.currentRole = this.user?.currentRole;
+    this.changePasswordEndpoint = `${Endpoints.Contact}${this.user?.data.contact.id}/change_password/`;
+    this.updateJiraTask(this.user?.currentRole);
 
     this.route.url.subscribe((url: any) => {
       this.formLabel = '';
@@ -181,7 +174,7 @@ export class SiteComponent implements OnInit, OnDestroy {
     }
   }
 
-  public changeFormLabel(e) {
+  public changeFormLabel(e: any) {
     if (e && e.str) {
       this.formLabel = e.str;
       if (e.data && this.formStorage) {
@@ -194,28 +187,13 @@ export class SiteComponent implements OnInit, OnDestroy {
     this.upload.next(true);
   }
 
-  public getPageData(url) {
+  public getPageData(url: Array<{path: string}>) {
     this.siteService
       .getDataOfPage(url, this.pagesList)
       .subscribe((pageData: PageData) => {
-        // if (pageData.endpoint === '/core/workflownodes/') {
-        //   this.additionalData = {
-        //     company: {
-        //       action: 'add',
-        //       data: {
-        //         value: {
-        //           id: this.siteSettingsService.settings.company_settings.company
-        //         }
-        //       }
-        //     }
-        //   };
-        //   this.pageData = pageData;
-        //   this.permissionMethods = this.permission.getAllowMethods(undefined, pageData.endpoint);
-        // } else
         if (this.isProfilePage(pageData)) {
-          pageData.pathData.id = this.user.data.contact.candidate_contact;
+          pageData.pathData.id = this.user?.data.contact.candidate_contact;
           pageData.endpoint = '/candidate/candidatecontacts/';
-          // pageData.endpoint = pageData.pathData.path;
           this.formMode = FormMode.View;
           this.pageData = pageData;
           this.permissionMethods = this.permission.getAllowMethods(
@@ -241,60 +219,20 @@ export class SiteComponent implements OnInit, OnDestroy {
             ) {
               this.formMode = FormMode.View;
             }
-            // if (isClient()) {
             this.permissionMethods = ['delete', 'get', 'post', 'update'];
-            // } else {
-            //   this.permissionMethods = this.permission.getAllowMethods(undefined, pageData.endpoint);
-            // }
-            // if (pageData.endpoint === '/core/formstorages/') {
-            //   this.formStorage = true;
-            // } else {
-            //   this.formStorage = false;
-            // }
           }, 0);
         }
         this.setActivePage(this.pagesList, pageData.pathData.path);
-
-        // this.getNameOfList(pageData);
       });
   }
 
-  // public getNameOfList(pageData: PageData) {
-  //   if (pageData.pathData.type === 'form') {
-  //     if (this.listNameCache[pageData.endpoint]) {
-  //       this.listName = this.listNameCache[pageData.endpoint];
-  //       return;
-  //     }
+  public updateNavigationList(role?: Role) {
+    if (!role) {
+      return;
+    }
 
-  //     this.genericFormService.getMetadata(pageData.endpoint)
-  //       .subscribe((list) => {
-  //         if (list && list.list && list.list.label) {
-  //           this.listName = list.list.label;
-  //           this.listNameCache[pageData.endpoint] = list.list.label;
-  //         }
-  //       });
-  //   }
-  // }
-
-  public updateNavigationList(role: Role) {
-    // this.pageData = null;
     this.updateJiraTask(role);
-    // this.dashboard = false;
-
-    // this.userService.currentRole(role);
-    // this.currentRole = role;
-    // if (isManager()) {
-    //   location.href = '/';
-    // } else if (isClient()) {
-    //   location.href = '/cl/';
-    // }
-
     const client = isClient();
-
-    // this.pageData = null;
-    // // this.updateJiraTask(role);
-    // this.dashboard = false;
-
     this.userService.currentRole(role);
     this.loader = true;
 
@@ -315,25 +253,13 @@ export class SiteComponent implements OnInit, OnDestroy {
     if (isCandidate()) {
       this.router.navigate(['/cd']);
     }
-
-    // this.navigationService.getPages(role)
-    //   .subscribe((pages: any) => {
-    //     if (!role.__str__.includes('candidate') && !role.__str__.includes('client')) {
-    //       this.permission.parseNavigation(this.permission.permissions, pages);
-    //     }
-    //     this.pagesList = pages;
-
-    //     if (this.router.url !== '/') {
-    //       this.router.navigate(['']);
-    //     } else {
-    //       setTimeout(() => {
-    //         this.dashboard = true;
-    //       }, 100);
-    //     }
-    //   });
   }
 
-  public updateJiraTask(role: Role) {
+  public updateJiraTask(role?: Role): void {
+    if (!role) {
+      return;
+    }
+
     const trigger = document.getElementById('atlwdg-trigger');
     if (role.__str__.includes('client') || role.__str__.includes('candidate')) {
       if (!trigger) {
@@ -342,7 +268,11 @@ export class SiteComponent implements OnInit, OnDestroy {
         setTimeout(() => {
           const link = document.getElementById('atlwdg-trigger');
           if (link) {
-            document.getElementById('atlwdg-trigger').style.display = 'block';
+            const el = document.getElementById('atlwdg-trigger');
+
+            if (el) {
+              el.style.display = 'block';
+            }
           }
         }, 1000);
       }
@@ -354,38 +284,16 @@ export class SiteComponent implements OnInit, OnDestroy {
   }
 
   public getPageNavigation(url: any[]) {
-    // if (!this.modulesList && !url.length) {
-    //   this.getModelsList(url);
-    // }
     if (!this.pagesList) {
       this.getPages(url);
     }
-    // if (!this.userModules && !url.length) {
-    //   this.getUserModules(url);
-    // }
     if (this.pagesList) {
       this.getPageData(url);
     }
   }
 
-  // public getModelsList(url) {
-  //   this.navigationService.getModules().subscribe(
-  //     (res: any) => {
-  //       const data = this.purposeService.filterModules(res);
-  //       this.modulesList = data;
-  //     }
-  //   );
-  // }
-
-  // public getUserModules(url) {
-  //   this.navigationService.getUserModules().subscribe(
-  //     (res: any) => this.userModules = res
-  //   );
-  // }
-
-  public getPages(url) {
-    const role = this.user.currentRole;
-    // const companyId = isManager() ? this.user.data.contact.company_id : '';
+  public getPages(url: Array<{path: string}>) {
+    const role = this.user?.currentRole;
 
     this.navigationService.getPages(role).subscribe((res: any) => {
       this.pagesList = res;
@@ -400,20 +308,20 @@ export class SiteComponent implements OnInit, OnDestroy {
     this.formMode = mode;
   }
 
-  public formEvent(e) {
+  public formEvent(e: any) {
     if (e.type === 'saveStart') {
       this.saveProcess = true;
       return;
     }
     if (e.type === 'sendForm' && e.status === 'success') {
-      if (this.pageData.pathData.postfix === 'submit') {
+      if (this.pageData?.pathData.postfix === 'submit') {
         this.router.navigate([this.pageData.pathData.path]);
         this.saveProcess = false;
         return;
       }
-      if (!this.pageData.pathData.id) {
+      if (!this.pageData?.pathData.id) {
         this.router.navigate([
-          this.pageData.pathData.path + e.data.id + '/change'
+          this.pageData?.pathData.path + e.data.id + '/change'
         ]);
         this.saveProcess = false;
         return;
@@ -435,62 +343,19 @@ export class SiteComponent implements OnInit, OnDestroy {
     this.formMode = mode;
   }
 
-  // public deleteElement(element) {
-  //   this.genericFormService.delete(element.endpoint, element.pathData.id).subscribe(
-  //     (res: any) => this.router.navigate([element.pathData.path]),
-  //     (err: any) => {
-  //       if (err.status === 'error') {
-  //         this.ts.sendMessage(err.errors.error, MessageType.Error);
-  //       }
-  //       this.errors = err.errors;
-  //     }
-  //   );
-  // }
-
-  // public updateNavigation(e) {
-  //   if (e.changed) {
-  //     this.userModules = null;
-  //     this.modulesList = null;
-  //     this.getPageNavigation([]);
-  //   }
-  // }
-
-  // public approveFormStorage(element) {
-  //   const endpoint = `${this.formStorageEndpoint}${element.pathData.id}/approve/`;
-  //   const body = {
-  //     status: 'True'
-  //   };
-  //   this.genericFormService.submitForm(endpoint, body).subscribe(
-  //     (res: any) => this.router.navigate([element.pathData.path]),
-  //     (err: any) => this.error = err
-  //   );
-  // }
-
-  public setActivePage(pages, path) {
+  public setActivePage(pages: any[], path: string) {
     let active = false;
     pages.forEach((page) => {
       if (path === page.url && page.url !== '/') {
         active = true;
         page.active = true;
-      } else if (page.childrens) {
-        page.active = this.setActivePage(page.childrens, path);
+      } else if (page.children) {
+        page.active = this.setActivePage(page.children, path);
         active = active || page.active;
       }
     });
     return active;
   }
-
-  // public getClientId(): string | undefined {
-  //   if (this.currentRole.__str__.includes('client')) {
-  //     return this.currentRole.id;
-  //   }
-
-  //   return undefined;
-  // }
-
-  // public setTestData(data) {
-  //   this.acceptenceTestData = data.data;
-  // }
 
   public openChangePassword() {
     this.modalRef = this.modalService.open(this.modal, { backdrop: 'static' });
@@ -502,7 +367,7 @@ export class SiteComponent implements OnInit, OnDestroy {
       email: {
         action: 'add',
         data: {
-          value: this.user.data.contact.email,
+          value: this.user?.data.contact.email,
           read_only: true
         }
       }
@@ -515,48 +380,19 @@ export class SiteComponent implements OnInit, OnDestroy {
     return false;
   }
 
-  public resetEvent(response) {
+  public resetEvent(response: any) {
     if (response && response.status === 'success') {
       this.authService.logout();
     }
   }
 
-  public checkedObjects(e) {
-    const shifts = e.filters.keys.date.value.filter((el) => el.checked);
+  public checkedObjects(e: any) {
+    const shifts = e.filters.keys.date.value.filter((el: any) => el.checked);
     this.data = {
       candidates: e.checkedData,
-      shifts: shifts.map((el) => el.data.id)
+      shifts: shifts.map((el: any) => el.data.id)
     };
   }
-
-  // public back() {
-  //   this.router.navigate([this.pageData.pathData.path + '/' + this.getId(this.pageData.endpoint) + '/change']); //tslint:disable-line
-
-  //   return false;
-  // }
-
-  // public sendData() {
-  //   if (this.data) {
-  //     this.genericFormService.submitForm(this.pageData.endpoint, this.data).subscribe(
-  //       (res: any) => this.router.navigate([this.pageData.pathData.path + '/' + this.getId(this.pageData.endpoint) + '/change']), //tslint:disable-line
-  //       (err: any) => this.error = err
-  //     );
-  //   }
-  // }
-
-  // public getId(path: string): string {
-  //   const keys = path.split('/');
-
-  //   return keys[keys.length - 3];
-  // }
-
-  // public identifyDevice() {
-  //   if (this.pageData) {
-  //     if (this.user.currentRole.__str__.includes('client') && this.pageData.pathData.path === '/' ) {
-  //       return isMobile();
-  //     }
-  //   }
-  // }
 
   public permissionErrorHandler() {
     const path =
@@ -566,12 +402,6 @@ export class SiteComponent implements OnInit, OnDestroy {
       '/';
     this.router.navigate([path]);
   }
-
-  // public showDeleteButton() {
-  //   return this.pageData.pathData.id
-  //     && this.checkPermission('delete')
-  //     && !this.isProfilePage(this.pageData);
-  // }
 
   public isProfilePage(page: PageData) {
     return page.pathData.path === '/profile/';

@@ -1,7 +1,7 @@
-import { Component, ChangeDetectionStrategy, ViewEncapsulation } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
-  selector: 'app-loader',
+  selector: 'webui-loader',
   template: `
     <div class="lds-ellipsis">
       <div></div>
@@ -11,7 +11,6 @@ import { Component, ChangeDetectionStrategy, ViewEncapsulation } from '@angular/
     </div>
   `,
   styleUrls: ['./loader.component.scss'],
-  // encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LoaderComponent {}

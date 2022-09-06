@@ -1,6 +1,6 @@
-import { Endpoints, NoteModel } from '@webui/data';
+import { NoteModel } from '@webui/data';
 import { createFilter, Type } from '@webui/metadata';
-import { CheckboxFilter } from 'libs/metadata/src/lib/elements/filters/checkbox-filter';
+import { Endpoints } from '@webui/models';
 
 const filters = {
   avarageScore: createFilter(Type.Range, {
@@ -27,7 +27,7 @@ const filters = {
     display: ['name_after_activation', 'name_before_activation'],
     parameter: 'number'
   }),
-  gender: new CheckboxFilter({
+  gender: createFilter(Type.Checkbox, {
     key: 'contact.gender',
     query: 'contact.gender',
     label: 'Gender',
@@ -49,7 +49,7 @@ const filters = {
     label: 'Recruitment agent',
     endpoint: `${Endpoints.CompanyContact}?master_company=current`
   }),
-  transportation_to_work: new CheckboxFilter({
+  transportation_to_work: createFilter(Type.Checkbox, {
     key: 'transportation_to_work',
     query: 'transportation_to_work',
     label: 'Transportation',
@@ -1369,7 +1369,7 @@ const form = [
         },
         help: 'Here you can see favorite companies for candidate'
       },
-      new NoteModel().formListElement(),
+      new NoteModel().formListElement({}),
       {
         endpoint: `${Endpoints.JobOffer}candidate/`,
         templateOptions: {

@@ -4,7 +4,7 @@ export const Button = 'button';
 
 export class ButtonElement extends BasicListElement {
   action: string;
-  endpoint: string;
+  endpoint?: string;
 
   customLink?: boolean;
   image?: string;
@@ -19,7 +19,7 @@ export class ButtonElement extends BasicListElement {
   svg?: string;
   shadow?: boolean;
   replace_by?: string;
-  translationKey: string;
+  translationKey?: string;
 
   constructor(field: string, action: string, title?: string) {
     super(field, Button);

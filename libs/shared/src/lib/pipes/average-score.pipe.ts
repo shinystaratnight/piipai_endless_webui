@@ -19,7 +19,7 @@ export class AverageScorePipe implements PipeTransform {
 
     const res = this.decimalPipe.transform(value, '1.1-1');
 
-    return res;
+    return res || '';
   }
 
 }

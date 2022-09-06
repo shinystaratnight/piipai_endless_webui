@@ -1,8 +1,8 @@
 <webui-dialog [title]="'evaluate.label' | translate">
   <div class="content" dialog-content>
-    <app-timesheet-details-preview
+    <webui-timesheet-details-preview
       [timeSheet]="timeSheet"
-    ></app-timesheet-details-preview>
+    ></webui-timesheet-details-preview>
 
     <form
       class="form"
@@ -20,7 +20,7 @@
         >
           {{ 'submit' | translate }}
 
-          <app-spinner *ngIf="processing$ | async"></app-spinner>
+          <webui-spinner *ngIf="processing$ | async"></webui-spinner>
         </button>
       </footer>
     </form>

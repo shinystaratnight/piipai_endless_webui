@@ -1,4 +1,4 @@
-<app-form-element-view [label]="config.templateOptions.label">
+<webui-form-element-view [label]="config.templateOptions.label">
   <span *ngIf="isViewMode">{{ displayValue }}</span>
 
   <ng-container *ngIf="isEditMode">
@@ -6,14 +6,14 @@
       {{ displayValue }}
     </div>
 
-    <app-dropdown
+    <webui-dropdown
       *ngIf="showDropdown"
       [count]="count"
       [loading]="loading"
       [data]="list"
-      (upload)="onUploadMore($event)"
+      (upload)="onUploadMore()"
       (set)="onSet($event)"
       (search)="onSearch($event)"
-    ></app-dropdown>
+    ></webui-dropdown>
   </ng-container>
-</app-form-element-view>
+</webui-form-element-view>

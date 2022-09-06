@@ -5,14 +5,14 @@
 </div>
 
 <div *ngIf="!grid" class="dashboard loading">
-  <app-loader></app-loader>
+  <webui-loader></webui-loader>
 </div>
 
-<app-dashboard-menu
+<webui-dashboard-menu
   *ngIf="widgetList"
   [widgets]="widgetList"
   (changed)="updateUserWidgets($event)">
-</app-dashboard-menu>
+</webui-dashboard-menu>
 
 <ng-template #column let-gridElement="gridElement">
   <div
@@ -100,7 +100,7 @@
       <fa-icon class="f-size-14" icon="ellipsis-h"></fa-icon>
     </div>
 
-    <ng-container appWidget [config]="widget"></ng-container>
+    <ng-container webuiWidget [config]="widget"></ng-container>
 
     <ng-template #actions>
       <div class="actions">

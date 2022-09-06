@@ -9,7 +9,7 @@ import { Page, PageData, PathData } from '@webui/data';
 })
 export class SiteService {
 
-  public list: Page[];
+  public list!: Page[];
 
   public getDataOfPage(url: any, list: Page[]) {
     return of(this.generateData(list, url));
@@ -17,7 +17,7 @@ export class SiteService {
 
   public generateData(list: Page[], url: any[]): PageData {
     const pathData: PathData = this.getTypeOfPage(url);
-    let element: Page = this.getElementFromList(list, pathData.path);
+    let element: Page | undefined = this.getElementFromList(list, pathData.path);
 
     // For job page on client side
     if (pathData.postfix === 'fillin') {
@@ -32,7 +32,7 @@ export class SiteService {
     };
     if (pathData.postfix) {
       data.endpoint = data.endpoint + pathData.id + `/${pathData.postfix}/`;
-      pathData.id = null;
+      pathData.id = undefined;
     }
     return data;
   }
@@ -41,7 +41,7 @@ export class SiteService {
     return `/${url.join('/')}/`;
   }
 
-  public getTypeOfPage(url): PathData {
+  public getTypeOfPage(url: Array<{path: string}>): PathData {
     if (!url.length) {
       return {
         type: 'list',
@@ -49,7 +49,7 @@ export class SiteService {
       };
     }
 
-    let data: PathData;
+    let data: PathData = {} as PathData;
     const urlCopy = url.map((el) => {
       return el.path;
     });
@@ -86,7 +86,7 @@ export class SiteService {
         type: 'map',
         path: this.generatePath(urlCopy)
       };
-    } else {
+    } else if (lastElement) {
       urlCopy.push(lastElement);
       if (urlCopy.indexOf('settings') > -1) {
         data = <any> {
@@ -103,16 +103,16 @@ export class SiteService {
     return data;
   }
 
-  public getElementFromList(list: Page[], path: string): Page {
-    let element;
+  public getElementFromList(list: Page[], path: string): Page | undefined {
+    let element: Page | undefined;
     list.forEach((el) => {
       if (el.url === path) {
         if (!element) {
           element = el;
         }
-      } else if (el.childrens.length) {
+      } else if (el.children.length) {
         if (!element) {
-          element = this.getElementFromList(el.childrens, path);
+          element = this.getElementFromList(el.children, path);
         }
       }
     });

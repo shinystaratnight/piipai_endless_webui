@@ -1,6 +1,4 @@
-@import '../../../../../../styles/variables';
-@import '../../../../../../styles/mixins';
-
+@use 'variables' as *;
 $border-radius: 0.2rem;
 $block-padding: 10px 32px;
 
@@ -22,7 +20,7 @@ $block-padding: 10px 32px;
   align-items: center;
   justify-content: space-between;
 
-  @include media-breakpoint-down('xs') {
+  @include media-breakpoint-down('sm') {
     flex-direction: column;
 
     & > *:not(:last-child) {
@@ -209,7 +207,7 @@ h2 {
   left: -1px;
 }
 
-app-datepicker {
+webui-datepicker {
   position: absolute;
   right: 0;
   top: 40px;
@@ -353,6 +351,7 @@ app-datepicker {
 .shift {
   &-action {
     flex: 1 1;
+    padding: 0 0.25rem;
 
     border: 0;
 

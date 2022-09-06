@@ -27,18 +27,18 @@
 
       <fa-icon class="px-2 calendar-icon" [icon]="['fas', 'chevron-down']" (click)="openDropdown()"></fa-icon>
 
-      <app-datepicker *ngIf="showCalendarDropdown" [date]="currentDate" [type]="rangeForDropdown"
-        (update)="setDate($event)" [range]="customRange"></app-datepicker>
+      <webui-datepicker *ngIf="showCalendarDropdown" [date]="currentDate" [type]="rangeForDropdown"
+        (update)="setDate($event)" [range]="customRange"></webui-datepicker>
     </div>
   </div>
 
   <div class="widget-body">
 
     <div class="filters filters-inline">
-      <app-filter-related *ngIf="calendarType === 0" (event)="changeQuery($event)" [config]="filters.client">
-      </app-filter-related>
-      <app-filter-related *ngIf="calendarType === 0" (event)="changeQuery($event)" [config]="filters.candidate">
-      </app-filter-related>
+      <webui-filter-related *ngIf="calendarType === 0" (event)="changeQuery($event)" [config]="filters.client">
+      </webui-filter-related>
+      <webui-filter-related *ngIf="calendarType === 0" (event)="changeQuery($event)" [config]="filters.candidate">
+      </webui-filter-related>
 
       <div class="filter-element" #filter>
         <label class="filter-label related">{{ 'info_layers' | translate: {"Default": "Info layers"} }}</label>
@@ -49,7 +49,7 @@
               <div style="overflow: hidden; white-space: nowrap">{{status.displayValue(status.data)}}
                 {{'layers' | translate: {"Default": 'layers'} }}</div>
               <fa-icon [icon]="['fas', status.hideAutocomplete ? 'chevron-down' : 'chevron-up']"
-                class="text-md-white ml-2"></fa-icon>
+                class="text-md-white ms-2"></fa-icon>
             </div>
 
             <div class="autocomplete" [hidden]="status.hideAutocomplete" [ngStyle]="{'top.px': topHeight}">
@@ -70,7 +70,7 @@
 
     <div class="calendar noselect">
       <div class="d-flex justify-content-center align-items-center flex-fill" *ngIf="!calendarData">
-        <app-loader></app-loader>
+        <webui-loader></webui-loader>
       </div>
       <ng-container *ngIf="isMonthRange && calendarData">
         <ng-container *ngTemplateOutlet="monthCalendar"></ng-container>
@@ -102,11 +102,11 @@
         </div>
 
         <ng-container *ngIf="canCreateJob">
-          <span class="f-size-12 hov-opacity ml-auto" (click)="clearSelectedDates()">
+          <span class="f-size-12 hov-opacity ms-auto" (click)="clearSelectedDates()">
             {{'reset_dates' | translate: {"Default": "Reset selected dates"} }}
           </span>
 
-          <button appSubscriptionRequired type="button" class="btn job-btn ml-3" (click)="addJob()">
+          <button webuiSubscriptionRequired type="button" class="btn job-btn ms-3" (click)="addJob()">
             {{'create_job' | translate: {"Default": "Create Job"} }}
           </button>
         </ng-container>
@@ -120,7 +120,7 @@
   <label class="d-flex align-items-center">
     <input type="checkbox" class="form-check-input" [(ngModel)]="status.data[type]" (ngModelChange)="updateLayers()"
       hidden>
-    <app-checkbox [sm]="true" [checked]="status.data[type]" [className]="className"></app-checkbox>
+    <webui-checkbox [sm]="true" [checked]="status.data[type]" [className]="className"></webui-checkbox>
     {{display | lowercase | translate}}
   </label>
 </ng-template>
@@ -135,7 +135,7 @@
         class="grid-item month-day"
         [class.date-selected]="isSelected(day.date)"
         *ngIf="!day.tooltip && calendarType !== 2"
-        appSelectDate
+        webuiSelectDate
         [class.holiday]="day.holiday"
         [attr.title]="day.holiday"
         [disable]="!(isManager() || canClientCreateJob())"
@@ -160,7 +160,7 @@
               "Confirm"}) }}
             </h5>
             <div class="d-flex align-items-center justify-content-between">
-              <button type="button" class="btn btn-sm btn-primary mr-3" (click)="setAvailability($event, day, true)">
+              <button type="button" class="btn btn-sm btn-primary me-3" (click)="setAvailability($event, day, true)">
                 {{ 'available.label' | translate: {"Default": "Available"} }}
               </button>
               <button type="button" class="btn btn-sm btn-primary" (click)="setAvailability($event, day, false)">
@@ -175,7 +175,7 @@
         class="grid-item month-day"
         [class.holiday]="day.holiday"
         [class.date-selected]="isSelected(day.date)"
-        appSelectDate
+        webuiSelectDate
         [date]="day.date"
         [disable]="!(isManager() || canClientCreateJob())"
         *ngIf="day.tooltip"
@@ -208,7 +208,7 @@
         </div>
 
         <ng-template #monthTooltip>
-          <app-loader *ngIf="day.loading"></app-loader>
+          <webui-loader *ngIf="day.loading"></webui-loader>
 
           <div *ngIf="!day.loading" class="shift-tooltip">
             <ng-container
@@ -239,15 +239,15 @@
 
                 <ng-container *ngTemplateOutlet="shiftItem; context: { shift: jobOffer }"></ng-container>
                 <div class="d-flex align-items-center mt-1 mb-2">
-                  <button type="button" class="d-flex align-items-center btn btn-success btn-sm px-2 mr-2 text-white"
+                  <button type="button" class="d-flex align-items-center btn btn-success btn-sm px-2 me-2 text-white"
                     (click)="acceptJobOffer(jobOffer.jobOffer.id)">
-                    <fa-icon [icon]="['fas', 'check-circle']" class="mr-1 p-0"></fa-icon>
+                    <fa-icon [icon]="['fas', 'check-circle']" class="me-1 p-0"></fa-icon>
                     {{ 'accept' | translate: {"Default": "Accept"} }}
                   </button>
 
                   <button type="button" class="d-flex align-items-center btn btn-danger btn-sm px-2 text-white"
                     (click)="declineJobOffer(jobOffer.jobOffer.id)">
-                    <fa-icon [icon]="['fas', 'times-circle']" class="mr-1 p-0"></fa-icon>
+                    <fa-icon [icon]="['fas', 'times-circle']" class="me-1 p-0"></fa-icon>
                     {{ 'decline' | translate: {"Default": "Decline"} }}
                   </button>
                 </div>
@@ -272,26 +272,26 @@
     <div class="times">
       <ng-container *ngTemplateOutlet="times"></ng-container>
     </div>
-    <span class="grid-item week-item" appSelectDate [class.date-selected]="isSelected(day.date)" [date]="day.date"
+    <span class="grid-item week-item" webuiSelectDate [class.date-selected]="isSelected(day.date)" [date]="day.date"
       [disable]="!(isManager() || canClientCreateJob())" *ngFor="let day of calendarData?.body">
       <ng-container *ngFor="let shift of day.data; let index = index">
-        <div class="shift-item" [class.active]="activeShift === shift.shift.id" appCalendarTooltip
+        <div class="shift-item" [class.active]="activeShift === shift.shift.id" webuiCalendarTooltip
           [active]="activeShift === shift.shift.id" [ngStyle]="shift.timesheet" [style.margin-left.px]="index * 8"
-          (show)="getShiftDataWeekCalendar(shift)" (click)="selectJob($event, shift)">
+          (showed)="getShiftDataWeekCalendar(shift)" (click)="selectJob($event, shift)">
           <div [ngClass]="['border', getColor(shift.is_fulfilled)]"></div>
 
           <div class="content" *ngIf="shift.loading">
-            <app-loader></app-loader>
+            <webui-loader></webui-loader>
           </div>
 
           <div *ngIf="!shift.loading" class="content">
-            <div class="d-flex justify-content-between mr-2">
+            <div class="d-flex justify-content-between me-2">
               <span [ngClass]="['badge', getColor(shift.is_fulfilled)]">Start - {{shift.time}}</span>
 
               <!-- <span class="badge badge-success" *ngIf="activeShift === shift.shift.id">Fillin</span> -->
             </div>
 
-            <div class="d-flex mr-2">
+            <div class="d-flex me-2">
               <ng-container
                 *ngTemplateOutlet="shiftItem; context: { shift: shift, status: getStatus(shift.is_fulfilled)}">
               </ng-container>
@@ -305,7 +305,7 @@
 </ng-template>
 
 <ng-template #times>
-  <span class="times-item" [class.time-selected]="isSelectedTime(time.time) && isSelected(calendarData.date)"
+  <span class="times-item" [class.time-selected]="isSelectedTime(time.time) && isSelected(calendarData?.date)"
     [style.top.px]="time.top" [style.bottom.px]="time.bottom" *ngFor="let time of calendarTimes"
     (click)="selectTime(time.time)">{{time.time}}</span>
 </ng-template>
@@ -321,27 +321,27 @@
     <div class="times">
       <ng-container *ngTemplateOutlet="times"></ng-container>
     </div>
-    <span class="grid-item day-item" appSelectDate [class.date-selected]="isSelected(calendarData.date)"
-      [date]="calendarData.date" [disable]="!(isManager() || canClientCreateJob())">
+    <span class="grid-item day-item" webuiSelectDate [class.date-selected]="isSelected(calendarData?.date)"
+      [date]="calendarData?.date" [disable]="!(isManager() || canClientCreateJob())">
       <ng-container *ngFor="let shift of calendarData?.body.data; let index = index">
         <div class="shift-item preview" [class.active]="activeShift === shift.shift.id"
-          [active]="activeShift === shift.shift.id" appCalendarTooltip [ngStyle]="shift.timesheet"
-          [style.margin-left.px]="index * 120 + index * 8" (show)="getShiftDataWeekCalendar(shift)"
+          [active]="activeShift === shift.shift.id" webuiCalendarTooltip [ngStyle]="shift.timesheet"
+          [style.margin-left.px]="index * 120 + index * 8" (showed)="getShiftDataWeekCalendar(shift)"
           (click)="selectJob($event, shift)">
           <div [ngClass]="['border', getColor(shift.is_fulfilled)]"></div>
 
           <div class="content" *ngIf="shift.loading">
-            <app-loader></app-loader>
+            <webui-loader></webui-loader>
           </div>
 
           <div class="content" *ngIf="!shift.loading">
-            <div class="d-flex justify-content-between mr-2">
+            <div class="d-flex justify-content-between me-2">
               <span [ngClass]="['badge', getColor(shift.is_fulfilled)]">Start - {{shift.time}}</span>
 
               <!-- <span class="badge badge-success" *ngIf="activeShift === shift.shift.id">Fillin</span> -->
             </div>
 
-            <div class="d-flex mr-2">
+            <div class="d-flex me-2">
               <ng-container
                 *ngTemplateOutlet="shiftItem; context: { shift: shift, status: getStatus(shift.is_fulfilled)}">
               </ng-container>
@@ -360,7 +360,7 @@
 <ng-template #shiftGroup let-shifts="shifts" let-className="className" let-name="name" let-status="status">
   <div class="mb-3" *ngIf="shifts.length">
     <p *ngIf="status" class="shift-tooltip-title">
-      <span class="mr-1" [ngClass]="'badge badge-' + className">{{status === 'cancelled' ? shifts.length :
+      <span class="me-1" [ngClass]="'badge badge-' + className">{{status === 'cancelled' ? shifts.length :
         getShiftCount(shifts, status)}}</span>
       {{name | translate}}
     </p>
@@ -392,7 +392,7 @@
     <span *ngIf="shift.shift">Workers: {{shift.shift.workers}}</span>
     <div *ngIf="status && ((shift.candidates[status].length || shift.candidates[getStatus(1)].length))"
       class="shift-candidates">
-      <span class="mr-1">Candidate&nbsp;({{shift.candidates[status].length ||
+      <span class="me-1">Candidate&nbsp;({{shift.candidates[status].length ||
         shift.candidates[getStatus(1)].length}}):</span>
       <div>
         <div *ngFor="let candidate of shift.candidates[status]">
@@ -402,40 +402,40 @@
           </fa-icon>
           <fa-icon *ngIf="getStatus(2) === status" [icon]="['fas', 'minus-circle']" class="candidate-icon text-warning">
           </fa-icon>
-          <a class="ml-1" *ngIf="isManager()" [routerLink]="getCandidateLink(candidate.id)">{{candidate.name}}</a>
-          <span class="ml-1" *ngIf="!isManager()">{{candidate.name}}</span>
+          <a class="ms-1" *ngIf="isManager()" [routerLink]="getCandidateLink(candidate.id)">{{candidate.name}}</a>
+          <span class="ms-1" *ngIf="!isManager()">{{candidate.name}}</span>
         </div>
 
         <ng-container *ngIf="shift.candidates[getStatus(0)].length && getStatus(0) !== status">
           <div *ngFor="let candidate of shift.candidates[getStatus(0)]">
             <fa-icon [icon]="['fas', 'times']" class="candidate-icon text-danger"></fa-icon>
-            <a class="ml-1" *ngIf="isManager()" [routerLink]="getCandidateLink(candidate.id)">{{candidate.name}}</a>
-            <span class="ml-1" *ngIf="!isManager()">{{candidate.name}}</span>
+            <a class="ms-1" *ngIf="isManager()" [routerLink]="getCandidateLink(candidate.id)">{{candidate.name}}</a>
+            <span class="ms-1" *ngIf="!isManager()">{{candidate.name}}</span>
           </div>
         </ng-container>
 
         <ng-container *ngIf="shift.candidates[getStatus(1)].length && getStatus(1) !== status">
           <div *ngFor="let candidate of shift.candidates[getStatus(1)]">
             <fa-icon [icon]="['fas', 'check']" class="candidate-icon text-success"></fa-icon>
-            <a class="ml-1" *ngIf="isManager()" [routerLink]="getCandidateLink(candidate.id)">{{candidate.name}}</a>
-            <span class="ml-1" *ngIf="!isManager()">{{candidate.name}}</span>
+            <a class="ms-1" *ngIf="isManager()" [routerLink]="getCandidateLink(candidate.id)">{{candidate.name}}</a>
+            <span class="ms-1" *ngIf="!isManager()">{{candidate.name}}</span>
           </div>
         </ng-container>
 
         <ng-container *ngIf="shift.candidates[getStatus(2)].length && getStatus(2) !== status">
           <div *ngFor="let candidate of shift.candidates[getStatus(2)]">
             <fa-icon [icon]="['fas', 'minus-circle']" class="text-warning"></fa-icon>
-            <a class="ml-1" *ngIf="isManager()" [routerLink]="getCandidateLink(candidate.id)">{{candidate.name}}</a>
-            <span class="ml-1" *ngIf="!isManager()">{{candidate.name}}</span>
+            <a class="ms-1" *ngIf="isManager()" [routerLink]="getCandidateLink(candidate.id)">{{candidate.name}}</a>
+            <span class="ms-1" *ngIf="!isManager()">{{candidate.name}}</span>
           </div>
         </ng-container>
       </div>
     </div>
   </div>
   <div *ngIf="hasActions" class="shift-action-wrapper">
-    <button appSubscriptionRequired class="shift-action" type="button" (click)="extendJob(shift)">Extend</button>
-    <button appSubscriptionRequired class="shift-action" *ngIf="fillinAccess(shift)" type="button" (click)="fillInJob(shift)">Fill in</button>
-    <button appSubscriptionRequired class="shift-action" [class.bg-success]="activeShift === shift.shift.id"
+    <button webuiSubscriptionRequired class="shift-action" type="button" (click)="extendJob(shift)">Extend</button>
+    <button webuiSubscriptionRequired class="shift-action" *ngIf="fillinAccess(shift)" type="button" (click)="fillInJob(shift)">Fill in</button>
+    <button webuiSubscriptionRequired class="shift-action" [class.bg-success]="activeShift === shift.shift.id"
       *ngIf="fillinAccess(shift) && isManager()" type="button" (click)="selectJob($event, shift)">Fill</button>
   </div>
 </ng-template>
@@ -446,20 +446,20 @@
       <div class="modal-header">
         <h5 class="modal-title">{{modalInfo.label}}</h5>
 
-        <app-close-button class="ml-auto" (click)="modal.dismiss()"></app-close-button>
+        <webui-close-button class="ms-auto" (click)="modal.dismiss()"></webui-close-button>
       </div>
     </div>
     <div class="modal-body">
-      <app-generic-form [endpoint]="modalInfo.endpoint" [data]="modalInfo.data" [mode]="modalInfo.mode"
+      <webui-generic-form [endpoint]="modalInfo.endpoint" [data]="modalInfo.data" [mode]="modalInfo.mode"
         [edit]="modalInfo.edit" (event)="formEvent($event, modal.close)" (errorForm)="formError()">
         <div class="text-center">
-          <button appSubscriptionRequired type="submit" class="btn big-btn btn-shadow btn-primary text-white button-save mt-3 mb-4"
+          <button webuiSubscriptionRequired type="submit" class="btn big-btn btn-shadow btn-primary text-white button-save mt-3 mb-4"
             [disabled]="saveProcess || extendFormInvalid">
             Save
-            <app-spinner *ngIf="saveProcess"></app-spinner>
+            <webui-spinner *ngIf="saveProcess"></webui-spinner>
           </button>
         </div>
-      </app-generic-form>
+      </webui-generic-form>
     </div>
   </div>
 </ng-template>

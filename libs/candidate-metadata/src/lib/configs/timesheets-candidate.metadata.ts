@@ -1,5 +1,6 @@
-import { Color, Endpoints } from '@webui/data';
+import { Color } from '@webui/data';
 import { List, Filter } from '@webui/metadata';
+import { Endpoints } from '@webui/models';
 
 const list = function () {
   return {
@@ -13,7 +14,7 @@ const list = function () {
           label: 'Shift date',
           yesterday: true,
           today: true,
-          tomorrow: true
+          tomorrow: true,
         }),
 
         new Filter.select.element({
@@ -22,9 +23,9 @@ const list = function () {
           values: [
             { label: 'Pending submission', value: '4' },
             { label: 'Pending approval', value: '5' },
-            { label: 'Approved', value: '7' }
-          ]
-        })
+            { label: 'Approved', value: '7' },
+          ],
+        }),
       ])
       .setColumns([
         new List.column.element('jobsite', 'Position / Jobsite')
@@ -33,8 +34,8 @@ const list = function () {
             new List.text.element('position').setStyles(['bolder']),
 
             new List.related.element('jobsite', Endpoints.Jobsite).setStyles([
-              'secondary'
-            ])
+              'secondary',
+            ]),
           ]),
 
         new List.column.element('tracking', 'Tracking')
@@ -44,7 +45,7 @@ const list = function () {
               .setEndpoint(
                 `${Endpoints.CandidateLocation}{job_offer.candidate_contact.id}/history/`
               )
-              .setCustomLink('/assets/img/map-lg.jpg')
+              .setCustomLink('/assets/img/map-lg.jpg'),
           ]),
 
         new List.column.element('times', 'Times').setContent([
@@ -74,7 +75,7 @@ const list = function () {
           new List.static.element('shift_ended_at')
             .setLabel('End')
             .setDisplay('{shift_ended_at__time}')
-            .setShowIfRule([{ status: [5, 6, 7] }])
+            .setShowIfRule([{ status: [5, 6, 7] }]),
         ]),
 
         new List.column.element('mobileTimes', 'Times').setHide().setContent([
@@ -100,7 +101,7 @@ const list = function () {
           new List.static.element('break_started_at')
             .setLabel('Break start/end')
             .setDisplay('{break_started_at__time} / {break_ended_at__time}')
-            .setShowIfRule([{ status: [5, 6, 7] }])
+            .setShowIfRule([{ status: [5, 6, 7] }]),
         ]),
 
         new List.column.element('activity', 'Activity')
@@ -127,8 +128,8 @@ const list = function () {
             {
               field: 'timesheet_rates',
               type: 'skillactivity',
-              label: 'Skill Activities'
-            }
+              label: 'Skill Activities',
+            },
           ]),
 
         new List.column.element('status', 'Status').setContent([
@@ -141,7 +142,7 @@ const list = function () {
               4: 'Submit pending',
               5: 'Approval pending',
               6: 'Supervisor modified',
-              7: 'Approved'
+              7: 'Approved',
             })
             .setColors({
               0: Color.Primary,
@@ -151,7 +152,7 @@ const list = function () {
               4: Color.Primary,
               5: Color.Primary,
               6: Color.Danger,
-              7: Color.Success
+              7: Color.Success,
             }),
 
           new List.static.element('status')
@@ -178,7 +179,7 @@ const list = function () {
               'shadow-success',
               'size-m',
               'mr',
-              'resize'
+              'resize',
             ])
             .setShowIfRule([{ status: 1 }])
             .withoutDelim(),
@@ -216,6 +217,11 @@ const list = function () {
             .setStyles(['size-l', 'default'])
             .setShowIfRule([{ status: 5 }]),
 
+          new List.button.element('id', 'submitTimesheet')
+            .setDisplay('View')
+            .setStyles(['size-l', 'default', 'view'])
+            .setShowIfRule([{ status: 7 }]),
+
           new List.static.element('status')
             .setDisplay('Timesheet will be automatically approved in 4 hours')
             .setTranslationKey('timesheet_will_approved')
@@ -223,7 +229,7 @@ const list = function () {
             .setShowIfRule([{ status: 6 }]),
 
           new List.static.element('supervisor.name').setShowIfRule([
-            { status: 7 }
+            { status: 7 },
           ]),
 
           new List.static.element('supervisor_approved_at')
@@ -232,7 +238,7 @@ const list = function () {
             .setShowIfRule([
               { status: 7 },
               'supervisor_approved_at',
-              { supervisor_modified_at: null }
+              { supervisor_modified_at: null },
             ]),
 
           new List.static.element('supervisor_modified_at')
@@ -242,12 +248,12 @@ const list = function () {
 
           new List.picture.element('supervisor_signature', false)
             .setSignature()
-            .setShowIfRule([{ status: 7 }, 'supervisor_signature.origin'])
-        ])
-      ])
+            .setShowIfRule([{ status: 7 }, 'supervisor_signature.origin']),
+        ]),
+      ]),
   };
 };
 
 export const metadataTimesheetsCandidate = {
-  list
+  list,
 };

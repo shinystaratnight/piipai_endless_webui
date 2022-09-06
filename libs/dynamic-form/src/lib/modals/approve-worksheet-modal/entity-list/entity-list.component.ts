@@ -8,10 +8,10 @@ import {
 import { IconSize, Icon } from '@webui/icon';
 
 interface ICell {
-  content: string;
+  content: string | undefined;
 }
 
-interface IRow {
+export interface IRow {
   cells: ICell[];
   entity?: any;
 }
@@ -22,13 +22,13 @@ export interface ITable {
 }
 
 @Component({
-  selector: 'app-entity-list',
+  selector: 'webui-entity-list',
   templateUrl: './entity-list.component.html',
   styleUrls: ['./entity-list.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class EntityListComponent {
-  @Input() public config: ITable;
+  @Input() public config?: ITable;
 
   public readonly Icon = Icon;
   public readonly IconSize = IconSize;

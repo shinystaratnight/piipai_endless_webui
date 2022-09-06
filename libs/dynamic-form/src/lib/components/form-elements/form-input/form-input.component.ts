@@ -7,93 +7,85 @@ import {
   EventEmitter,
   ElementRef,
   HostListener,
-  ViewEncapsulation,
   OnDestroy,
-  ChangeDetectorRef
+  ChangeDetectorRef,
 } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 
 import {
   SearchCountryField,
-  TooltipLabel,
-  CountryISO
+  CountryISO,
 } from 'ngx-intl-tel-input';
 
 import { Subscription } from 'rxjs';
-import { distinctUntilChanged, debounceTime } from 'rxjs/operators';
+import { distinctUntilChanged } from 'rxjs/operators';
 
-import { Field } from '@webui/data';
-import {
-  FormatString,
-  getTotalTime,
-  getTimeInstance,
-  getPropValue
-} from '@webui/utilities';
+import { FormatString, getTotalTime, getPropValue } from '@webui/utilities';
 
 import { BasicElementComponent } from '../basic-element/basic-element.component';
 import { SiteSettingsService } from '@webui/core';
 import { formatCurrency, getCurrencySymbol } from '@angular/common';
 import { isAddressField, isPhoneField } from '../../../helpers';
 import { FormEvent } from '../../../interfaces';
+import { Time } from '@webui/time';
+import { Field, ITemplateOptions } from '@webui/metadata';
+import { IconName } from '@fortawesome/fontawesome-svg-core';
 
 @Component({
-  selector: 'app-form-input',
+  selector: 'webui-form-input',
   templateUrl: './form-input.component.html',
-  styleUrls: ['./form-input.component.scss']
+  styleUrls: ['./form-input.component.scss'],
 })
 export class FormInputComponent
   extends BasicElementComponent
   implements OnInit, AfterViewInit, OnDestroy
 {
-  public config: Field;
-  public group: FormGroup;
+  public override config!: Field;
+  public override group!: FormGroup;
   public errors: any;
   public message: any;
-  public key: any;
+  public override key: any;
 
-  public label: boolean;
-  public filteredList: any[];
-  public displayValue: string;
-  public viewMode: boolean;
+  public label!: boolean;
+  public filteredList!: any[] | null;
+  public displayValue!: string;
+  public viewMode!: boolean;
   public formData: any;
   public autocompleteValue: any;
   public editMode: boolean;
-  public hovered: number;
+  public hovered?: number;
 
   public query = '';
-  public list = [];
+  public list: any[] | null = [];
   public limit = 10;
   public lastElement = 0;
   public hideAutocomplete = true;
   public modalScrollDistance = 2;
   public modalScrollThrottle = 50;
   public address = '';
-  public timeInstance = getTimeInstance();
-  dataListMap: any[];
+  dataListMap!: any[];
 
-  public intl;
-  separateDialCode = true;
+  public intl!: any;
   SearchCountryField = SearchCountryField;
-  TooltipLabel = TooltipLabel;
-  CountryISO = CountryISO;
+  // TooltipLabel = TooltipLabel;
   preferredCountries: CountryISO[] = [
     CountryISO.Australia,
     CountryISO.Estonia,
     CountryISO.Finland,
-    CountryISO.Ukraine
+    CountryISO.Ukraine,
   ];
-  selectedCountryISO: CountryISO;
+  selectedCountryISO!: CountryISO;
 
-  public colors = {
+  public colors: Record<number, string> = {
     0: '#FA5C46',
     1: '#FA5C46',
     2: '#fc9183',
     3: '#FFA236',
     4: '#ffbf00',
-    5: '#FFD042'
+    5: '#FFD042',
   };
 
-  public requiredField: boolean;
+  public requiredField?: boolean;
 
   get isAddressField() {
     return isAddressField(this.config);
@@ -102,14 +94,24 @@ export class FormInputComponent
   get isPhoneField() {
     const { key, intl } = this.config;
 
-    return isPhoneField(key) && intl;
+    return isPhoneField(key as string) && intl;
   }
 
-  @ViewChild('input') public input;
-  @ViewChild('inputPhone') public inputPhone;
+  get formControl(): FormControl {
+    return this.group.get(this.key) as FormControl;
+  }
+
+  get addonIcon(): IconName | string | undefined {
+    const addon = this.config.templateOptions?.addon;
+
+    return addon ? addon : undefined;
+  }
+
+  @ViewChild('input') public input!: ElementRef;
+  @ViewChild('inputPhone') public inputPhone!: ElementRef;
 
   @Output()
-  public event: EventEmitter<any> = new EventEmitter();
+  public override event: EventEmitter<any> = new EventEmitter();
 
   private subscriptions: Subscription[];
 
@@ -133,41 +135,43 @@ export class FormInputComponent
     ) {
       this.requiredField =
         (this.config.key === 'score' || this.config.key === 'hourly_rate') &&
-        this.config.templateOptions.required;
+        this.config.templateOptions?.required;
       this.requiredField =
         this.requiredField ||
-        (this.config.templateOptions.required &&
+        (this.config.templateOptions?.required &&
           !(this.config.hide || this.config.send === false));
 
-      if (this.config.templateOptions.type === 'number') {
+      if (this.config.templateOptions?.type === 'number') {
+        const { min, max, pattern } = this.config.templateOptions;
+
         this.addControl(
           this.config,
           this.fb,
           this.requiredField,
-          this.config.templateOptions.min,
-          this.config.templateOptions.max,
-          this.config.templateOptions.pattern
+          min,
+          max,
+          pattern
         );
 
-        this.subscriptions.push(
-          this.group.get(this.key).valueChanges.subscribe((value) => {
-            if (value) {
-              this.group.get(this.key).patchValue(parseFloat(value), {
-                onlySelf: true,
-                emitEvent: false
-              });
-            }
-          })
-        );
+        // this.subscriptions.push(
+        //   this.group.get(this.key).valueChanges.subscribe((value) => {
+        //     if (value) {
+        //       this.group.get(this.key).patchValue(parseFloat(value), {
+        //         onlySelf: true,
+        //         emitEvent: false
+        //       });
+        //     }
+        //   })
+        // );
       } else {
         this.addControl(this.config, this.fb, this.requiredField);
       }
     }
-    if (this.group.get(this.key)) {
+
+    const control = this.group.get(this.key);
+    if (control) {
       this.subscriptions.push(
-        this.group
-          .get(this.key)
-          .valueChanges.pipe(distinctUntilChanged())
+        control.valueChanges.pipe(distinctUntilChanged())
           .subscribe(() => {
             this.eventHandler({ type: FormEvent.Change });
           })
@@ -200,7 +204,7 @@ export class FormInputComponent
   }
 
   updateIcon() {
-    if (this.config.templateOptions.icon) {
+    if (this.config.templateOptions?.icon) {
       const currency = getCurrencySymbol(
         this.siteSettings.settings.currency,
         'wide'
@@ -223,7 +227,7 @@ export class FormInputComponent
         value: el.value,
         label: el.type.name,
         default: el.default,
-        id: el.id
+        id: el.id,
       };
     });
   }
@@ -245,7 +249,7 @@ export class FormInputComponent
     }
   }
 
-  public checkTotalTime(data) {
+  public checkTotalTime(data: any) {
     if (this.config.key === 'total_time') {
       const formatString = new FormatString();
       const newData = { ...data };
@@ -257,7 +261,7 @@ export class FormInputComponent
 
       this.displayValue = formatString.format('{totalTime}', {
         ...newData,
-        totalTime: getTotalTime(this.timeInstance, newData)
+        totalTime: getTotalTime(newData),
       });
     }
   }
@@ -265,14 +269,13 @@ export class FormInputComponent
   public checkAttributes() {
     if (this.config.attributes) {
       const formatString = new FormatString();
-      const attributes = Object.keys(this.config.attributes);
+      const attributes = this.config.attributes;
 
-      attributes.forEach((key) => {
-        this.config.templateOptions[key] = formatString.format(
-          this.config.attributes[key],
-          this.formData
-        );
-      });
+      for (const prop in attributes) {
+        if (this.config.templateOptions) {
+          this.config.templateOptions[prop as keyof ITemplateOptions] = formatString.format(this.config.attributes[prop as keyof ITemplateOptions], this.formData);
+        }
+      }
 
       if (!this.config.read_only) {
         if (this.input) {
@@ -287,29 +290,29 @@ export class FormInputComponent
       'shift_started_at',
       'shift_ended_at',
       'break_started_at',
-      'break_ended_at'
+      'break_ended_at',
     ];
 
     if (keys.indexOf(data.key) > -1) {
       if (this.config.type === 'static' && this.config.key === 'total_worked') {
-        const shiftStart = this.timeInstance(data.data.shift_started_at);
-        const shiftEnded = this.timeInstance(data.data.shift_ended_at);
-        const breakStart = this.timeInstance(data.data.break_started_at);
-        const breakEnded = this.timeInstance(data.data.break_ended_at);
+        const shiftStart = Time.parse(data.data.shift_started_at);
+        const shiftEnded = Time.parse(data.data.shift_ended_at);
+        const breakStart = Time.parse(data.data.break_started_at);
+        const breakEnded = Time.parse(data.data.break_ended_at);
 
         if (
           shiftStart.isBefore(shiftEnded) &&
           breakStart.isBefore(breakEnded)
         ) {
-          const shiftTime = this.timeInstance.utc(shiftEnded.diff(shiftStart));
-          const breakTime = this.timeInstance.utc(breakEnded.diff(breakStart));
+          const shiftTime = Time.utc(shiftEnded.diff(shiftStart));
+          const breakTime = Time.utc(breakEnded.diff(breakStart));
 
           const shiftDiff = shiftTime.format('HH:mm');
           if (breakStart && breakEnded && !data.data.no_break) {
             const breakDiff = breakTime.format('HH:mm');
-            const totalTime = this.timeInstance
-              .utc(shiftTime.diff(breakTime))
-              .format('HH:mm');
+            const totalTime = Time.utc(shiftTime.diff(breakTime)).format(
+              'HH:mm'
+            );
 
             this.displayValue = `${shiftDiff} - ${breakDiff} = ${totalTime} hours`;
           } else {
@@ -343,20 +346,22 @@ export class FormInputComponent
       const subscription = hidden.subscribe((hide) => {
         if (hide) {
           this.config.hide = hide;
-          this.group.get(this.key).patchValue(undefined);
+          this.group.get(this.key)?.patchValue(undefined);
           this.setInitValue();
         } else {
           this.config.hide = hide;
 
-          if (this.config.templateOptions.pattern) {
-            const pattern = getPropValue(
-              formData.value.data,
-              templateOptions.pattern
-            );
+          if (this.config.templateOptions?.pattern) {
+            const pattern: string = getPropValue(
+              formData?.value.data,
+              templateOptions?.pattern as string
+            ) as string;
             const control = this.group.get(this.key);
 
-            control.setValidators(Validators.pattern(pattern));
-            control.updateValueAndValidity({ onlySelf: true });
+            if (control) {
+              control.setValidators(Validators.pattern(pattern));
+              control.updateValueAndValidity({ onlySelf: true });
+            }
           }
         }
 
@@ -377,7 +382,7 @@ export class FormInputComponent
           this.editMode = false;
 
           if (this.group.get(this.key) && !this.config.hide) {
-            this.group.get(this.key).patchValue(undefined);
+            this.group.get(this.key)?.patchValue(undefined);
           }
         } else {
           this.viewMode = this.config.read_only || false;
@@ -403,12 +408,12 @@ export class FormInputComponent
   public checkAutocomplete() {
     if (this.config.autocompleteData) {
       const subscription = this.config.autocompleteData.subscribe((data) => {
-        const key = this.propertyMatches(Object.keys(data), this.config.key);
+        const key = this.propertyMatches(Object.keys(data), this.config.key as string);
         if (
           key &&
           this.config.type !== 'address' &&
           this.config.key !== 'address' &&
-          !this.config.key.includes('street_address')
+          !this.config.key?.includes('street_address')
         ) {
           this.viewMode = true;
           this.autocompleteValue = data[key] || '-';
@@ -424,7 +429,7 @@ export class FormInputComponent
     }
   }
 
-  public propertyMatches(keys: string[], key: string): string {
+  public propertyMatches(keys: string[], key: string): string | undefined {
     return keys.find((el) => key.includes(el));
   }
 
@@ -432,7 +437,7 @@ export class FormInputComponent
     const format = new FormatString();
     const initValue = this.config.value;
 
-    if (initValue && this.config.templateOptions.round) {
+    if (initValue && this.config.templateOptions?.round) {
       this.config.value = parseInt(initValue, 10);
     }
 
@@ -499,13 +504,13 @@ export class FormInputComponent
           this.siteSettings.settings.currency,
           'wide'
         );
-        const text = format.format(this.config.templateOptions.text, {
-          [this.config.key]: value,
-          currency
+        const text = format.format(this.config.templateOptions?.text as string, {
+          [this.config.key as string]: value,
+          currency,
         });
         this.displayValue = text || (value || value === 0 ? value : '-');
 
-        if (this.config.templateOptions.display) {
+        if (this.config.templateOptions?.display) {
           if (this.config.templateOptions.currency) {
             this.displayValue = formatCurrency(
               parseFloat(this.displayValue),
@@ -526,13 +531,13 @@ export class FormInputComponent
       }
     } else {
       if (this.config.value instanceof Object) {
-        const displayFormat = this.config.templateOptions.display
+        const displayFormat = this.config.templateOptions?.display;
         this.displayValue = displayFormat
           ? format.format(displayFormat, this.config.value)
           : this.config.value.__str__ || '-';
       } else {
-        const text = format.format(this.config.templateOptions.text, {
-          [this.config.key]: this.config.value
+        const text = format.format(this.config.templateOptions?.text as string, {
+          [this.config.key as string]: this.config.value,
         });
 
         this.displayValue = text || this.config.value || '-';
@@ -554,19 +559,19 @@ export class FormInputComponent
     }
   }
 
-  public eventHandler(e) {
+  public eventHandler(e: any) {
     this.event.emit({
       type: e.type,
       el: this.config,
-      value: this.group.get(this.key).value
+      value: this.group.get(this.key)?.value,
     });
   }
 
   // Autocomplete
 
-  public filter(key) {
+  public filter(key: string) {
     this.lastElement = 0;
-    const query = this.group.get(key).value;
+    const query = this.group.get(key)?.value;
     if (query !== '') {
       if (this.config.autocomplete) {
         this.filteredList = this.config.autocomplete.filter((el) => {
@@ -580,8 +585,8 @@ export class FormInputComponent
     }
   }
 
-  public select(item) {
-    this.group.get(this.key).patchValue(item);
+  public select(item: any) {
+    this.group.get(this.key)?.patchValue(item);
     this.filteredList = null;
     this.generateList();
   }
@@ -600,7 +605,7 @@ export class FormInputComponent
     this.generatePreviewList(this.filteredList);
   }
 
-  public generatePreviewList(list) {
+  public generatePreviewList(list: any[] | null) {
     this.lastElement += this.limit;
     if (list) {
       this.list = list.slice(0, this.lastElement);
@@ -609,36 +614,42 @@ export class FormInputComponent
 
   // Passowrd field
 
-  public switchType(type) {
-    switch (type) {
-      case 'text':
-        this.config.templateOptions.type = 'password';
-        break;
-      case 'password':
-        this.config.templateOptions.type = 'text';
-        break;
-      default:
-        break;
+  public switchType(type?: string) {
+    if (!type) {
+      return;
+    }
+
+    if (this.config.templateOptions) {
+      switch (type) {
+        case 'text':
+          this.config.templateOptions.type = 'password';
+          break;
+        case 'password':
+          this.config.templateOptions.type = 'text';
+          break;
+        default:
+          break;
+      }
     }
   }
 
   // Address field
 
-  public getAddress(address, value: string) {
+  public getAddress(address: any, value: string) {
     const data = address;
 
-    this.group.get(this.key).patchValue(data);
+    this.group.get(this.key)?.patchValue(data);
 
     this.event.emit({
       type: 'change',
       el: this.config,
-      value: data
+      value: data,
     });
 
     this.event.emit({
       type: 'address',
       el: this.config,
-      value: data
+      value: data,
     });
 
     setTimeout(() => {
@@ -648,7 +659,7 @@ export class FormInputComponent
     }, 1000);
   }
 
-  public parseScore(score) {
+  public parseScore(score: string) {
     if (!score) {
       return 0;
     }
@@ -667,19 +678,23 @@ export class FormInputComponent
   //   }
   // }
 
-  getTranslationKey(type) {
+  getTranslationKey(type: string) {
     return `${this.config.key}.${type}`;
   }
 
+  isIconName(val?: string): val is IconName {
+    return val ? val.indexOf('.') === -1 : false;
+  }
+
   @HostListener('document:click', ['$event'])
-  public handleClick(event) {
+  public handleClick(event: MouseEvent) {
     let clickedComponent = event.target;
     let inside = false;
     do {
       if (clickedComponent === this.elementRef.nativeElement) {
         inside = true;
       }
-      clickedComponent = clickedComponent.parentNode;
+      clickedComponent = (clickedComponent as HTMLElement).parentNode;
     } while (clickedComponent);
     if (!inside) {
       this.filteredList = [];

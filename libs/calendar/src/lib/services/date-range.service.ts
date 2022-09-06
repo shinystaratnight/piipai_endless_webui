@@ -1,12 +1,10 @@
 import { Injectable } from '@angular/core';
-
-import { Moment } from 'moment-timezone';
+import { Moment } from '@webui/time';
 
 import { rangeFormats, DateRange, weekEnd, weekStart } from '@webui/utilities';
 
 @Injectable()
 export class DateRangeService {
-
   public nextRange(date: Moment, type: DateRange) {
     return this.updateDate(date, type, 1);
   }
@@ -20,7 +18,9 @@ export class DateRangeService {
       const start = date.clone().weekday(weekStart);
       const end = date.clone().weekday(weekEnd);
 
-      return `${start.format(rangeFormats[type])} - ${end.format(rangeFormats[type])}`;
+      return `${start.format(rangeFormats[type])} - ${end.format(
+        rangeFormats[type]
+      )}`;
     }
 
     return date.format(rangeFormats[type]);
@@ -42,7 +42,7 @@ export class DateRangeService {
     return type === DateRange.Day;
   }
 
-  private updateDate(date: Moment, type: DateRange, range) {
+  private updateDate(date: Moment, type: DateRange, range: number) {
     return date.add(range, type);
   }
 }

@@ -6,11 +6,11 @@ import { Subscription } from 'rxjs';
 import { ToastService, Message } from '@webui/core';
 
 @Component({
-  selector: 'app-toast',
+  selector: 'webui-toast',
   template: ''
 })
 export class ToastComponent implements OnInit, OnDestroy {
-  private subscription: Subscription;
+  private subscription!: Subscription;
 
   constructor(
     private toastr: ToastrService,

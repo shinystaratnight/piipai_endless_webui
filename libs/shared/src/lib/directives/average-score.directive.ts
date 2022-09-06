@@ -2,11 +2,11 @@ import { Directive, ElementRef, Input, OnInit, Renderer2 } from '@angular/core';
 import { AverageScoreColor } from '@webui/data';
 
 @Directive({
-  selector: '[appAverageScore]'
+  selector: '[webuiAverageScore]'
 })
 export class AverageScoreDirective implements OnInit {
 
-  @Input() appAverageScore: number | string;
+  @Input() webuiAverageScore!: number | string;
 
   constructor(
     private elementRef: ElementRef,
@@ -14,10 +14,10 @@ export class AverageScoreDirective implements OnInit {
   ) { }
 
   public ngOnInit(): void {
-    let score = this.appAverageScore || 0;
+    let score = this.webuiAverageScore || 0;
 
-    if (typeof this.appAverageScore === 'string') {
-      score = Math.floor(parseFloat(this.appAverageScore));
+    if (typeof score === 'string') {
+      score = Math.floor(parseFloat(score));
     }
 
     this.renderer.setStyle(this.elementRef.nativeElement, 'color', AverageScoreColor[score]);

@@ -30,7 +30,7 @@
           </svg>
         </a>
         <a
-          appSubscriptionRequired
+          webuiSubscriptionRequired
           [routerLink]="[getLinkToCreateForm(button)]"
           class="widget-button-footer"
         >
@@ -40,7 +40,7 @@
     </ng-container>
 
     <div class="flex-grow-1 d-flex justify-content-center" *ngIf="!buttons">
-      <app-loader></app-loader>
+      <webui-loader></webui-loader>
     </div>
   </div>
 </div>

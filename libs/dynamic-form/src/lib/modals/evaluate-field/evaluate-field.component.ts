@@ -6,17 +6,17 @@ import {
 } from '@angular/core';
 
 @Component({
-  selector: 'app-evaluate-field',
+  selector: 'webui-evaluate-field',
   templateUrl: './evaluate-field.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class EvaluateFieldComponent implements OnInit {
-  @Input() evaluated: boolean;
-  @Input() evaluatedScore: number;
-  score: number;
+  @Input() evaluated!: boolean;
+  @Input() evaluatedScore!: string;
+  score!: number;
   hovered: any;
 
   ngOnInit() {
-    this.score = this.evaluatedScore;
+    this.score = parseInt(this.evaluatedScore) || 0;
   }
 }

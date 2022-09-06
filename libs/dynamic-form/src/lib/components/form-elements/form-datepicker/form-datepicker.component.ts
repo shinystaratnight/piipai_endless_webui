@@ -15,72 +15,75 @@ defineLocale('en-gb', enGbLocale);
 
 import { Subscription, Subject } from 'rxjs';
 
-import {
-  getTimePickerConfig
-} from './form-datepicker.config';
-import { BasicElementComponent } from './../basic-element/basic-element.component';
+import { getTimePickerConfig } from './form-datepicker.config';
+import { BasicElementComponent } from '../basic-element/basic-element.component';
 
-import {
-  FormatString,
-  isMobile,
-  getTranslationKey
-} from '@webui/utilities';
-import { DateService, DateInstance, Format } from '@webui/core';
+import { FormatString, isMobile, getTranslationKey } from '@webui/utilities';
 import { BsLocaleService } from 'ngx-bootstrap/datepicker';
+import {
+  API_DATE_FORMAT,
+  DATE_FORMAT,
+  DATE_TIME_FORMAT,
+  FULL_TIME_FORMAT,
+  Time,
+  TIME_FORMAT,
+} from '@webui/time';
+import { Moment } from '@webui/time';
+import { FormMode } from '../../../services';
 
 enum DateType {
   Date = 'date',
   Datetime = 'datetime',
-  Time = 'time'
+  Time = 'time',
 }
 
 @Component({
-  selector: 'app-form-datepicker',
+  selector: 'webui-form-datepicker',
   templateUrl: './form-datepicker.component.html',
-  styleUrls: ['./form-datepicker.component.scss']
+  styleUrls: ['./form-datepicker.component.scss'],
 })
 export class FormDatepickerComponent
   extends BasicElementComponent
   implements OnInit, AfterViewInit, OnDestroy
 {
-  @ViewChild('d') public d: ElementRef;
-  @ViewChild('t') public t: ElementRef;
+  @ViewChild('d') public d!: ElementRef;
+  @ViewChild('t') public t!: ElementRef;
 
   @HostBinding('class.mobile-device') mobile = isMobile();
 
-  public config;
-  public group: FormGroup;
+  public override config: any;
+  public override group!: FormGroup;
   public errors: any;
   public message: any;
-  public key: any;
+  public override key: any;
 
-  public model = {
-    date: null,
-    time: ''
+  public model: Record<'date' | 'time', string> = {
+    date:  '',
+    time: '',
   };
 
-  public label: boolean;
-  public init: boolean;
+  public label!: boolean;
+  public init!: boolean;
   public mobileDevice = isMobile();
-  public displayValue: string;
+  public displayValue!: string | null;
   public formData: any;
   public placement: any;
-  public maxDate: Date;
+  public maxDate!: Date;
 
-  public opened: ElementRef;
-  public update: Subject<any> = new Subject();
+  public opened!: ElementRef | null;
+  public update: Subject<void> = new Subject();
 
-  public timezone: string;
+  public timezone!: string;
   public formats = {
-    date: Format.Date,
-    datetime: Format.DateTime,
-    time: Format.Time
+    date: DATE_FORMAT,
+    datetime: DATE_TIME_FORMAT,
+    time: TIME_FORMAT,
   };
 
-  public viewMode: boolean;
+  public viewMode!: boolean;
   public editMode = true;
 
-  public currentField: boolean;
+  public currentField!: boolean;
   locale = 'en-gb';
   getTranslationKey = getTranslationKey;
 
@@ -93,7 +96,6 @@ export class FormDatepickerComponent
   constructor(
     private fb: FormBuilder,
     private cd: ChangeDetectorRef,
-    private dateService: DateService,
     private localeService: BsLocaleService
   ) {
     super();
@@ -151,21 +153,21 @@ export class FormDatepickerComponent
           this.refreshDatebox(this.t);
         },
 
-        closeCallback: ({ date }) => {
-          const hours = date.getHours();
-          const minutes = date.getMinutes();
+        closeCallback: () => {
+          // closeCallback: ({ date }) => {
+          // const hours = date.getHours();
+          // const minutes = date.getMinutes();
 
-          const dateInstance = this.dateService.parse(
-            `${hours}:${minutes}`,
-            this.timezone,
-            'H:m'
-          );
+          // const dateInstance = this.dateService.parse(
+          //   `${hours}:${minutes}`,
+          //   { timezone: this.timezone, format: 'H:m' }
+          // );
 
-          const time = this.dateService.getTime(dateInstance);
+          // const time = dateInstance.format(TIME_FORMAT);
           this.updateForm(type, this.getValue(type));
 
           this.opened = null;
-        }
+        },
       });
 
       this.getDatepicker(this.t).datebox(config);
@@ -180,7 +182,7 @@ export class FormDatepickerComponent
     this.updateForm(type, this.getValue(type));
   }
 
-  public updateFromMobile(data) {
+  public updateFromMobile() {
     setTimeout(() => {
       const { type } = this.config.templateOptions;
       this.updateForm(type, this.getValue(type));
@@ -194,7 +196,7 @@ export class FormDatepickerComponent
   public removeDate(date: string): void {
     if (this.config.many) {
       const prevValue = this.formControl.value;
-      const newValue = prevValue.filter((item) => item !== date);
+      const newValue = prevValue.filter((item: any) => item !== date);
 
       this.formControl.patchValue(newValue.length ? newValue : null);
     }
@@ -206,7 +208,7 @@ export class FormDatepickerComponent
     }, 100);
   }
 
-  private checkOnCustomDatepicker(config) {
+  private checkOnCustomDatepicker(config: any) {
     const { value, customDatepicker, time_zone } = config;
 
     if (customDatepicker) {
@@ -214,24 +216,23 @@ export class FormDatepickerComponent
       this.formats.date = dateFormat;
 
       if (value) {
-        const dateInstance = this.dateService.parse(
-          value,
-          time_zone,
-          parseFormat
-        );
+        const dateInstance = Time.parse(value, {
+          timezone: time_zone,
+          format: parseFormat,
+        });
 
-        this.config.value = this.dateService.format(dateInstance, 'YYYY-MM-DD');
+        this.config.value = dateInstance.format(API_DATE_FORMAT);
       }
     }
   }
 
   private subscribeOnChanges(): Subscription {
-    return this.group.get(this.key).valueChanges.subscribe((val) => {
+    return (this.group.get(this.key) as FormControl).valueChanges.subscribe((val) => {
       if (!val) {
         setTimeout(() => {
           this.event.emit({
             el: this.config,
-            type: 'change'
+            type: 'change',
           });
         }, 150);
       }
@@ -240,11 +241,11 @@ export class FormDatepickerComponent
 
   private checkHiddenProperty() {
     if (this.config && this.config.hidden) {
-      const subscription = this.config.hidden.subscribe((hide) => {
+      const subscription = this.config.hidden.subscribe((hide: boolean) => {
         if (hide && !this.config.hide) {
           this.config.hide = hide;
-          if (this.group.get(this.key).value) {
-            this.group.get(this.key).patchValue(undefined);
+          if (this.group.get(this.key)?.value) {
+            this.group.get(this.key)?.patchValue(undefined);
           }
           this.setInitValue();
         } else {
@@ -262,13 +263,13 @@ export class FormDatepickerComponent
 
   private checkModeProperty() {
     if (this.config && this.config.mode) {
-      const subscription = this.config.mode.subscribe((mode) => {
+      const subscription = this.config.mode.subscribe((mode: FormMode) => {
         if (mode === 'view') {
           this.viewMode = true;
           this.editMode = false;
           this.model = { date: '', time: '' };
 
-          this.group.get(this.key).patchValue(undefined);
+          this.group.get(this.key)?.patchValue(undefined);
         } else {
           this.viewMode = this.config.read_only || false;
           this.editMode = true;
@@ -282,7 +283,7 @@ export class FormDatepickerComponent
 
   private checkFormData() {
     if (this.config.formData) {
-      const subscription = this.config.formData.subscribe((data) => {
+      const subscription = this.config.formData.subscribe((data: any) => {
         if (
           data.key !== this.config.key &&
           this.config.default &&
@@ -298,33 +299,39 @@ export class FormDatepickerComponent
     }
   }
 
-  private updateModel(value: DateInstance) {
+  private updateModel(value: Moment) {
     if (this.mobileDevice) {
-      this.model.date = this.dateService.format(value, 'YYYY-MM-DD');
-      this.model.time = this.dateService.format(value, 'HH:mm');
+      this.model.date = value.format(API_DATE_FORMAT);
+      this.model.time = value.format(TIME_FORMAT);
     } else {
-      this.model.date = this.dateService.format(value, this.formats.date);
-      this.model.time = this.dateService.format(value, this.formats.time);
+      this.model.date = value.format(this.formats.date);
+      this.model.time = value.format(this.formats.time);
     }
   }
 
-  private parseValue(type: DateType, value: string): DateInstance {
+  private parseValue(type: DateType, value: string): Moment {
     switch (type) {
       case DateType.Date: {
-        return this.dateService.parse(value, this.timezone, 'YYYY-MM-DD');
+        return Time.parse(value, {
+          timezone: this.timezone,
+          format: API_DATE_FORMAT,
+        });
       }
 
       case DateType.Datetime: {
-        return this.dateService.parse(value, this.timezone);
+        return Time.parse(value, { timezone: this.timezone });
       }
 
       case DateType.Time: {
-        return this.dateService.parse(value, this.timezone, 'HH:mm:ss');
+        return Time.parse(value, {
+          timezone: this.timezone,
+          format: FULL_TIME_FORMAT,
+        });
       }
     }
   }
 
-  private setDisplayValue(type: DateType, value?: DateInstance) {
+  private setDisplayValue(type: DateType, value?: Moment | null) {
     if (!value) {
       this.displayValue = null;
       return;
@@ -332,36 +339,33 @@ export class FormDatepickerComponent
 
     switch (type) {
       case DateType.Date: {
-        this.displayValue = this.dateService.format(value, this.formats.date);
+        this.displayValue = value.format(this.formats.date);
         break;
       }
 
       case DateType.Datetime: {
-        this.displayValue = this.dateService.format(
-          value,
-          this.formats.datetime
-        );
+        this.displayValue = value.format(this.formats.datetime);
         break;
       }
 
       case DateType.Time: {
-        this.displayValue = this.dateService.format(value, this.formats.time);
+        this.displayValue = value.format(this.formats.time);
         break;
       }
     }
   }
 
   private clearForm() {
-    this.model.date = null;
+    this.model.date = '';
     this.model.time = '';
-    this.group.get(this.key).patchValue(null);
+    this.group.get(this.key)?.patchValue(null);
   }
 
   private setInitValue() {
     const { shouldUpdate, updateFromForm } = this.config;
     const { type } = this.config.templateOptions;
     const initValue = this.config.value;
-    const formValue = this.group.get(this.key).value;
+    const formValue = this.group.get(this.key)?.value;
     const defaultValue = this.config.default;
 
     let value = updateFromForm
@@ -374,7 +378,7 @@ export class FormDatepickerComponent
         : defaultValue;
     }
 
-    if (value === this.group.get(this.key).value && !shouldUpdate) {
+    if (value === this.group.get(this.key)?.value && !shouldUpdate) {
       return;
     }
 
@@ -389,22 +393,22 @@ export class FormDatepickerComponent
     }
   }
 
-  private updateForm(type: DateType, value?: DateInstance): void {
+  private updateForm(type: DateType, value?: Moment): void {
     let data: string | null;
 
     switch (type) {
       case DateType.Date: {
-        data = value ? this.dateService.format(value, 'YYYY-MM-DD') : null;
+        data = value ? value.format(API_DATE_FORMAT) : null;
         break;
       }
 
       case DateType.Datetime: {
-        data = value ? this.dateService.getUtc(value) : null;
+        data = value ? value.utc().format() : null;
         break;
       }
 
       case DateType.Time: {
-        data = value ? this.dateService.format(value, 'HH:mm:ss') : null;
+        data = value ? value.format(FULL_TIME_FORMAT) : null;
         break;
       }
     }
@@ -419,20 +423,20 @@ export class FormDatepickerComponent
 
       this.formControl.patchValue([...prevValue, data]);
     } else {
-      this.group.get(this.key).patchValue(data);
+      this.group.get(this.key)?.patchValue(data);
     }
 
     this.emitChanges();
   }
 
-  private getValue(type: DateType): DateInstance | null {
+  private getValue(type: DateType): Moment | undefined {
     if (this.mobileDevice) {
       const { date, time } = this.model;
 
       return this.parseValues(
         type,
-        { value: date, format: 'YYYY-MM-DD' },
-        { value: time, format: 'HH:mm' }
+        { value: date, format: API_DATE_FORMAT },
+        { value: time, format: this.formats.time }
       );
     }
 
@@ -450,40 +454,44 @@ export class FormDatepickerComponent
     type: DateType,
     date: { value: string; format: string },
     time: { value: string; format: string }
-  ): DateInstance {
-    let result;
+  ): Moment | undefined {
+    let result: Moment | undefined;
 
     switch (type) {
       case DateType.Date: {
         result = date.value
-          ? this.dateService.parse(date.value, this.timezone, date.format)
-          : null;
+          ? Time.parse(date.value, {
+              timezone: this.timezone,
+              format: date.format,
+            })
+          : undefined;
         break;
       }
 
       case DateType.Datetime: {
         if (!date.value) {
-          result = null;
+          result = undefined;
         } else if (!time.value) {
-          result = this.dateService.parse(
-            date.value,
-            this.timezone,
-            date.format
-          );
+          result = Time.parse(date.value, {
+            timezone: this.timezone,
+            format: date.format,
+          });
         } else {
-          result = this.dateService.parse(
-            `${date.value} ${time.value}`,
-            this.timezone,
-            `${date.format} ${time.format}`
-          );
+          result = Time.parse(`${date.value} ${time.value}`, {
+            timezone: this.timezone,
+            format: `${date.format} ${time.format}`,
+          });
         }
         break;
       }
 
       case DateType.Time: {
         result = time.value
-          ? this.dateService.parse(time.value, this.timezone, time.format)
-          : null;
+          ? Time.parse(time.value, {
+              timezone: this.timezone,
+              format: time.format,
+            })
+          : undefined;
         break;
       }
     }
@@ -495,7 +503,7 @@ export class FormDatepickerComponent
     this.event.emit({
       el: this.config,
       type: 'change',
-      value: this.group.get(this.key).value
+      value: this.group.get(this.key)?.value,
     });
   }
 

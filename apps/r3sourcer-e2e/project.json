@@ -1,0 +1,28 @@
+{
+  "root": "apps/r3sourcer-e2e",
+  "sourceRoot": "apps/r3sourcer-e2e/src",
+  "projectType": "application",
+  "targets": {
+    "e2e": {
+      "executor": "@nrwl/cypress:cypress",
+      "options": {
+        "cypressConfig": "apps/r3sourcer-e2e/cypress.json",
+        "devServerTarget": "r3sourcer:serve:development"
+      },
+      "configurations": {
+        "production": {
+          "devServerTarget": "r3sourcer:serve:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/r3sourcer-e2e/**/*.{js,ts}"]
+      }
+    }
+  },
+  "tags": [],
+  "implicitDependencies": ["r3sourcer"]
+}

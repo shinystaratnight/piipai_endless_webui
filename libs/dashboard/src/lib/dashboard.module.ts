@@ -18,7 +18,6 @@ import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { CalendarModule } from '@webui/calendar';
-import { DynamicFormModule } from '@webui/dynamic-form';
 import { UiModule } from '@webui/ui';
 import { ButtonsModule } from 'ngx-bootstrap/buttons';
 import { TranslateModule } from '@ngx-translate/core';
@@ -26,8 +25,8 @@ import { SharedModule } from '@webui/shared';
 
 import { DashboardService, WidgetService } from './services';
 import {
-  ButtonsWidget,
-  CandidateWidget,
+  ButtonsWidgetComponent,
+  CandidateWidgetComponent,
   CalendarWidgetComponent,
   DashboardMenuComponent,
   CounterWidgetComponent,
@@ -37,6 +36,8 @@ import {
 } from './components';
 import { WidgetDirective } from './directives';
 import { DashboardComponent } from './dashboard.component';
+// eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
+import { DynamicFormModule } from '@webui/dynamic-form';
 
 @NgModule({
   imports: [
@@ -46,7 +47,6 @@ import { DashboardComponent } from './dashboard.component';
     InfiniteScrollModule,
     SharedModule,
     CalendarModule,
-    DynamicFormModule,
     NgbTooltipModule,
     FormsModule,
     NgbModalModule,
@@ -55,12 +55,13 @@ import { DashboardComponent } from './dashboard.component';
     UiModule,
     ButtonsModule,
     TranslateModule,
-    BsDatepickerModule
+    BsDatepickerModule,
+    DynamicFormModule
   ],
   declarations: [
     DashboardComponent,
-    ButtonsWidget,
-    CandidateWidget,
+    ButtonsWidgetComponent,
+    CandidateWidgetComponent,
     CalendarWidgetComponent,
     WidgetDirective,
     DashboardMenuComponent,
@@ -70,7 +71,7 @@ import { DashboardComponent } from './dashboard.component';
     RangeFieldComponent
   ],
   providers: [DashboardService, WidgetService],
-  entryComponents: [ButtonsWidget, CandidateWidget, CalendarWidgetComponent],
+  entryComponents: [ButtonsWidgetComponent, CandidateWidgetComponent, CalendarWidgetComponent],
   exports: [DashboardComponent, CounterWidgetComponent]
 })
 export class DashboardModule {

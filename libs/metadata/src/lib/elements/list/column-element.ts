@@ -12,7 +12,7 @@ export class ColumnElement {
 
   timezone?: string;
 
-  content: any[];
+  content?: any[];
 
   constructor(name: string, label: string) {
     this.name = name;

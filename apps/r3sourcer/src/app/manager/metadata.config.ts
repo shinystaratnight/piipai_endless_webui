@@ -113,6 +113,7 @@ import {
   timesheetrates,
   jobrates
 } from '@webui/manager-metadata';
+import { Endpoints } from '@webui/models';
 
 import {
   tagrels,
@@ -127,8 +128,6 @@ import {
   passwordforgot,
   worktypes
 } from '@webui/shared-metadata';
-
-import { Endpoints } from '@webui/data';
 
 export class Metadata {
   [Endpoints.Address] = address;

@@ -11,18 +11,18 @@ import { checkAndReturnTranslation } from '@webui/utilities';
 import { BehaviorSubject, Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-list-skill-activity',
+  selector: 'webui-list-skill-activity',
   templateUrl: './list-skill-activity.component.html',
   styleUrls: ['./list-skill-activity.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ListSkillActivityComponent implements OnInit, OnDestroy {
   config: any;
-  list: boolean;
-  more: boolean;
+  list!: boolean;
+  more!: boolean;
 
-  private _dataList: BehaviorSubject<any[]> = new BehaviorSubject(null);
-  private langSubscription: Subscription;
+  private _dataList: BehaviorSubject<any[] | null> = new BehaviorSubject<any[] | null>(null);
+  private langSubscription!: Subscription;
 
   get dataList$() {
     return this._dataList.asObservable();
@@ -38,7 +38,7 @@ export class ListSkillActivityComponent implements OnInit, OnDestroy {
     this.initViewData();
 
     this.langSubscription = this.translate.langChange$.subscribe(
-      (lang: string) => {
+      () => {
         this.initViewData();
       }
     );

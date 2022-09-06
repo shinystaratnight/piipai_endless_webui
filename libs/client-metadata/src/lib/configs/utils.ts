@@ -1,5 +1,5 @@
 import { List } from '@webui/metadata';
-import { Endpoints } from '@webui/data';
+import { Endpoints } from '@webui/models';
 
 export function getPictureColumn() {
   return new List.column.element(

@@ -3,37 +3,38 @@ import {
   OnInit,
   ViewEncapsulation,
   ViewChild,
-  OnDestroy
+  OnDestroy,
+  ElementRef
 } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { catchError } from 'rxjs/operators';
-import { combineLatest } from 'rxjs';
 import { AuthService, UserService } from '@webui/core';
 
 import { environment } from '../../environments/environment';
+import { IFormErrors } from '@webui/dynamic-form';
 
 @Component({
-  selector: 'app-login',
+  selector: 'webui-login',
   templateUrl: 'login.component.html',
   styleUrls: ['./login.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
 export class LoginComponent implements OnInit, OnDestroy {
-  @ViewChild('modal') public modal;
+  @ViewChild('modal') public modal!: ElementRef;
 
   public label: any;
   public response: any;
-  public loginProcess: boolean;
+  public loginProcess!: boolean;
   public settings: any;
-  public modalRef: NgbModalRef;
+  public modalRef!: NgbModalRef;
 
-  public error = {};
-  public token = false;
+  public error: IFormErrors = {} as IFormErrors;
+  public token = '';
   public endpoint = `/auth/login/`;
   public rememberMe = false;
-  public subdomain: boolean;
+  public subdomain!: boolean;
 
   public data = {
     client_id: {
@@ -96,7 +97,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
   }
 
-  public tokenAuth(token) {
+  public tokenAuth(token: string) {
     this.authService.loginWithToken(token)
       .pipe(
         catchError(() => this.router.navigate(['login']))
@@ -119,7 +120,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     );
   }
 
-  public responseHandler(response) {
+  public responseHandler(response: any) {
     if (response.message) {
       this.loginProcess = false;
     }
@@ -143,13 +144,13 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
   }
 
-  public redirectHandler(data) {
+  public redirectHandler() {
     if (this.subdomain) {
       this.router.navigate(['/registration']);
     }
   }
 
-  public formEvent(e) {
+  public formEvent(e: any) {
     if (e.type === 'saveStart') {
       this.loginProcess = true;
     }

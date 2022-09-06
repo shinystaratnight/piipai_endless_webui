@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpParams, HttpClient } from '@angular/common/http';
 
-import { Endpoints } from '@webui/data';
 import { catchError, map } from 'rxjs/operators';
 import { ErrorsService } from '@webui/core';
 import { Observable } from 'rxjs';
+import { Endpoints } from '@webui/models';
+import { IHoliday } from '../models';
 
 export enum Calendar {
   Manager,
@@ -14,12 +15,15 @@ export enum Calendar {
 
 @Injectable()
 export class CalendarDataService {
-  private endpoints = {
+  private endpoints: Record<Calendar, string> = {
     [Calendar.Manager]: Endpoints.Shift,
     [Calendar.Client]: `${Endpoints.Shift}client_contact_shifts/`,
+    [Calendar.Candidate]: '',
   };
 
-  private timesheetEndpoints = {
+  private timesheetEndpoints: Record<Calendar, string> = {
+    [Calendar.Manager]: '',
+    [Calendar.Client]: '',
     [Calendar.Candidate]: Endpoints.TimesheetCandidate
   };
 
@@ -89,9 +93,9 @@ export class CalendarDataService {
     };
 
     return this.http
-      .get('/core/publicholidays/', { params: new HttpParams({ fromObject: params }) })
+      .get<{ results: IHoliday[] }>('/core/publicholidays/', { params: new HttpParams({ fromObject: params }) })
       .pipe(
-        map((response: any) => response.results.map((el) => ({ holiday_date: el.date, name: el.name })))
+        map((response) => response.results.map((el) => ({ holiday_date: el.date, name: el.name })))
       );
   }
 }

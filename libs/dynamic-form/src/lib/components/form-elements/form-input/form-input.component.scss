@@ -1,5 +1,4 @@
-@import '../../../../../../../styles/variables';
-@import '../../../../../../../styles/mixins';
+@use 'variables' as *;
 
 @include media-breakpoint-down('sm') {
   .form-element.inline {
@@ -124,6 +123,10 @@ button.password {
 .input-icon {
   position: absolute;
   opacity: .3;
+
+  & ~ input {
+    padding-left: 1.5rem !important;
+  }
 }
 
 .list {

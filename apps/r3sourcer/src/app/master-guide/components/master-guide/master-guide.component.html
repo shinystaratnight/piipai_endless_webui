@@ -3,28 +3,28 @@
   [class.guide--placeholder]="showPlaceholder"
   [class.guide--pulse]="!inactiveIcon && !showPlaceholder"
   [class.guide--show]="showContent">
-    <app-master-guide-icon [inactive]="inactiveIcon" (toggle)="togglePlaceholder($event)"></app-master-guide-icon>
+    <webui-master-guide-icon [inactive]="inactiveIcon" (toggle)="togglePlaceholder()"></webui-master-guide-icon>
 
     <h5 class="guide__title" [class.guide__title--show]="showContent">
       Start-Up Guide
-      <span *ngIf="showContent" class="guide__minimize-btn" (click)="minimize($event)">
+      <span *ngIf="showContent" class="guide__minimize-btn" (click)="minimize()">
         Minimize
-        <fa-icon class="f-size-8 ml-1" icon="chevron-down"></fa-icon>
+        <fa-icon class="f-size-8 ms-1" icon="chevron-down"></fa-icon>
       </span>
     </h5>
 
-    <app-master-guide-content
+    <webui-master-guide-content
       [guide]="guide"
       *ngIf="showContent"
       (updateEvent)="update($event)">
-    </app-master-guide-content>
+    </webui-master-guide-content>
 
     <div *ngIf="!showContent" class="guide-progress">
       <div class="guide-progress__indicator" [ngStyle]="{'width': getProgress() + '%'}"></div>
     </div>
 
     <div class="guide__footer" [class.guide__footer--show]="showContent">
-      <button type="button" class="btn guide__btn" (click)="skipGuide($event)">Skip</button>
-      <button *ngIf="!showContent" type="button" class="btn guide__btn guide__btn-primary" (click)="onShowContent($event)">Show</button>
+      <button type="button" class="btn guide__btn" (click)="skipGuide()">Skip</button>
+      <button *ngIf="!showContent" type="button" class="btn guide__btn guide__btn-primary" (click)="onShowContent()">Show</button>
     </div>
 </div>

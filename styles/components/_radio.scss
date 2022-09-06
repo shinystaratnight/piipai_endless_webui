@@ -1,4 +1,4 @@
-@import '../variables';
+@use 'sass:math';
 
 $diameter: 14px;
 
@@ -35,8 +35,8 @@ input:checked ~ .radio-circle {
   .inner {
     visibility: hidden;
 
-    width: ($diameter / 2) - 1;
-    height: ($diameter / 2) - 1;
+    width: math.div($diameter, 2) - 1;
+    height: math.div($diameter, 2) - 1;
 
     border-radius: 50%;
 

@@ -1,0 +1,26 @@
+{
+  "projectType": "library",
+  "root": "libs/form-controls",
+  "sourceRoot": "libs/form-controls/src",
+  "prefix": "webui",
+  "targets": {
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/form-controls"],
+      "options": {
+        "jestConfig": "libs/form-controls/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/form-controls/src/**/*.ts",
+          "libs/form-controls/src/**/*.html"
+        ]
+      }
+    }
+  },
+  "tags": []
+}

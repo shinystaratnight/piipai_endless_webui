@@ -1,7 +1,7 @@
-<app-dynamic-form
+<webui-dynamic-form
   [config]="config"
   [form]="form">
-</app-dynamic-form>
+</webui-dynamic-form>
 
 <div *ngIf="!config" class="spinner">
   <div class="double-bounce1"></div>
@@ -14,12 +14,12 @@
       cdkDrag
       (click)="openState(node)"
       *ngFor="let node of currentWorkflowNodes">
-        <fa-icon class="mr-2 circle" icon="dot-circle"></fa-icon>
+        <fa-icon class="me-2 circle" icon="dot-circle"></fa-icon>
         <div class="title">
           {{node.workflow_node.name_before_activation}}
         </div>
 
-        <fa-icon class="icon text-danger ml-2" icon="times" (click)="deleteNode(node.id, $event)"></fa-icon>
+        <fa-icon class="icon text-danger ms-2" icon="times" (click)="deleteNode(node.id, $event)"></fa-icon>
     </div>
 
   </div>
@@ -33,12 +33,12 @@
       <div class="modal-header">
         <h5 class="modal-title">{{modalInfo.label}}</h5>
 
-        <app-close-button class="close ml-auto" (click)="modal.dismiss()"></app-close-button>
+        <webui-close-button class="close ms-auto" (click)="modal.dismiss()"></webui-close-button>
       </div>
     </div>
     <div class="modal-body">
       <div class="buttons">
-        <button appSubscriptionRequired type="button" class="btn btn-warning text-white" (click)="openEditModal(modalInfo.node, modal.close)">
+        <button webuiSubscriptionRequired type="button" class="btn btn-warning text-white" (click)="openEditModal(modalInfo.node, modal.close)">
           <fa-icon icon="pencil-alt"></fa-icon>
           Edit
         </button>
@@ -49,27 +49,27 @@
           <label class="field-title">Substates:</label>
 
           <div>
-            <span class="badge badge-outline mb-1 mr-1" style="white-space: normal"
+            <span class="badge badge-outline mb-1 me-1" style="white-space: normal"
               (click)="openState(state, modal.close)"
               *ngFor="let state of subStates[modalInfo.id]">
                 {{state.workflow_node.name_before_activation}}
-                <fa-icon class="ml-2 text-danger" icon="times" (click)="deleteSubstate(state, $event)"></fa-icon>
+                <fa-icon class="ms-2 text-danger" icon="times" (click)="deleteSubstate(state, $event)"></fa-icon>
             </span>
           </div>
 
-          <a href="" class="add-link mt-1" appSubscriptionRequired (click)="addSubstate($event, modalInfo.node)">Add Substate</a>
+          <a href="" class="add-link mt-1" webuiSubscriptionRequired (click)="addSubstate($event, modalInfo.node)">Add Substate</a>
         </div>
 
         <div class="substates-item">
           <label class="field-title">Acceptance Tests:</label>
           <div>
-            <span class="badge badge-outline mb-1 mr-1" style="white-space: normal"
+            <span class="badge badge-outline mb-1 me-1" style="white-space: normal"
               *ngFor="let test of acceptanceTests[modalInfo.node.id]">
                 {{test.acceptance_test.name}}
-                <fa-icon class="ml-2 text-danger" icon="times" (click)="deleteTest(test, modalInfo.node)"></fa-icon>
+                <fa-icon class="ms-2 text-danger" icon="times" (click)="deleteTest(test, modalInfo.node)"></fa-icon>
             </span>
           </div>
-          <a href="" class="add-link mt-1" appSubscriptionRequired (click)="addTest($event, modalInfo.node)">Add Acceptence Test</a>
+          <a href="" class="add-link mt-1" webuiSubscriptionRequired (click)="addTest($event, modalInfo.node)">Add Acceptence Test</a>
         </div>
       </div>
     </div>
@@ -82,21 +82,21 @@
       <div class="modal-header">
         <h5 class="modal-title">{{editModalInfo.label}}</h5>
 
-        <app-close-button class="close ml-auto" (click)="modal.dismiss()"></app-close-button>
+        <webui-close-button class="close ms-auto" (click)="modal.dismiss()"></webui-close-button>
       </div>
     </div>
     <div class="modal-body">
-      <app-generic-form
+      <webui-generic-form
         [endpoint]="editModalInfo.endpoint"
         [id]="editModalInfo.id"
         [data]="editModalInfo.data"
         (event)="formEvent($event, modal.close)"
-        (errorForm)="formError($event)">
-          <button appSubscriptionRequired type="submit" class="btn btn-secondary bg-primary text-white button-save" [disabled]="saveProcess">
+        (errorForm)="formError()">
+          <button webuiSubscriptionRequired type="submit" class="btn btn-secondary bg-primary text-white button-save" [disabled]="saveProcess">
             Save
-            <app-spinner *ngIf="saveProcess"></app-spinner>
+            <webui-spinner *ngIf="saveProcess"></webui-spinner>
           </button>
-      </app-generic-form>
+      </webui-generic-form>
     </div>
   </div>
 </ng-template>
@@ -107,19 +107,19 @@
       <div class="modal-header">
         <h5 class="modal-title">{{parentId ? 'Add Substate' : 'Add State'}}</h5>
 
-        <app-close-button class="close ml-auto" (click)="modal.dismiss()"></app-close-button>
+        <webui-close-button class="close ms-auto" (click)="modal.dismiss()"></webui-close-button>
       </div>
     </div>
     <div class="modal-body">
-      <app-dynamic-form
+      <webui-dynamic-form
         [config]="addConfig"
         (submitForm)="addStateToCompany($event, modal.close)">
-          <button appSubscriptionRequired type="submit" class="btn btn-secondary bg-primary text-white button-save"
+          <button webuiSubscriptionRequired type="submit" class="btn btn-secondary bg-primary text-white button-save"
             [disabled]="saveProcess">
             Add
-            <app-spinner *ngIf="saveProcess"></app-spinner>
+            <webui-spinner *ngIf="saveProcess"></webui-spinner>
           </button>
-      </app-dynamic-form>
+      </webui-dynamic-form>
     </div>
   </div>
 </ng-template>
@@ -130,19 +130,19 @@
       <div class="modal-header">
         <h5 class="modal-title">Add Acceptance Test</h5>
 
-        <app-close-button class="close ml-auto" (click)="modal.dismiss()"></app-close-button>
+        <webui-close-button class="close ms-auto" (click)="modal.dismiss()"></webui-close-button>
       </div>
     </div>
     <div class="modal-body">
-      <app-dynamic-form
+      <webui-dynamic-form
         [config]="addConfig"
         (submitForm)="addAcceptenceTest($event, modal.close)">
-          <button appSubscriptionRequired type="submit" class="btn btn-secondary bg-primary text-white button-save"
+          <button webuiSubscriptionRequired type="submit" class="btn btn-secondary bg-primary text-white button-save"
             [disabled]="saveProcess">
             Add
-            <app-spinner *ngIf="saveProcess"></app-spinner>
+            <webui-spinner *ngIf="saveProcess"></webui-spinner>
           </button>
-      </app-dynamic-form>
+      </webui-dynamic-form>
     </div>
   </div>
 </ng-template>

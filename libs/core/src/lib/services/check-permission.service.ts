@@ -26,7 +26,7 @@ export interface PermissionResponse {
   providedIn: 'root'
 })
 export class CheckPermissionService {
-  private _permissions: Permission[];
+  private _permissions: Permission[] | null = null;
   private userPermissionEndpoint = `/permissions/user/`;
   private subscriptionEndpoint = `/billing/subscription/list/`;
 
@@ -39,9 +39,10 @@ export class CheckPermissionService {
   ) {
     this.eventService.event$.subscribe((type: EventType) => {
       if (type === EventType.PurposeChanged) {
-        this.navigationService.updateNavigation().subscribe((pages: Page[]) => {
-          this.parseNavigation(this.permissions, pages);
-        });
+        this.navigationService.updateNavigation()
+          .subscribe((pages: Page[]) => {
+            this.parseNavigation(this.permissions, pages);
+          });
       }
 
       if (type === EventType.Logout) {
@@ -54,7 +55,7 @@ export class CheckPermissionService {
     return this._permissions;
   }
 
-  set permissions(permissions: Permission[]) {
+  set permissions(permissions: Permission[] | null) {
     this._permissions = this.filterPermissions(permissions);
   }
 
@@ -98,7 +99,7 @@ export class CheckPermissionService {
   }
 
   public getAllowMethods(
-    permissions: Permission[] = this.permissions,
+    permissions: Permission[] | null = this.permissions,
     endpoint: string
   ): string[] {
     //tslint:disable-line
@@ -126,7 +127,7 @@ export class CheckPermissionService {
 
       return allowMethods.length
         ? allowMethods.map((permission: Permission) => {
-            return permission.codename.split('_').pop();
+            return permission.codename.split('_').pop() || '';
           })
         : [];
     } else {
@@ -134,7 +135,7 @@ export class CheckPermissionService {
     }
   }
 
-  public parseNavigation(permissions: Permission[], list: Page[]): void {
+  public parseNavigation(permissions: Permission[] | null, list: Page[]): void {
     list.forEach((page: Page) => {
       if (page.endpoint !== '/') {
         const allowMethods = this.getAllowMethods(permissions, page.endpoint);
@@ -142,8 +143,8 @@ export class CheckPermissionService {
         page.disabled = allowMethods.indexOf('get') === -1;
       }
 
-      if (page.childrens && page.childrens.length) {
-        this.parseNavigation(permissions, page.childrens);
+      if (page.children && page.children.length) {
+        this.parseNavigation(permissions, page.children);
       }
     });
   }
@@ -157,11 +158,11 @@ export class CheckPermissionService {
       );
   }
 
-  public hasPermission(type: string, endpoint): boolean {
+  public hasPermission(type: string, endpoint: string): boolean {
     return this.getAllowMethods(this.permissions, endpoint).includes(type);
   }
 
-  private parseMethod(type: string, id?: string): string {
+  private parseMethod(type: string, id?: string | null): string {
     if (type === 'list' || (type === 'form' && id)) {
       return 'get';
     }
@@ -180,7 +181,7 @@ export class CheckPermissionService {
       this.http.get<PermissionResponse>(this.userPermissionEndpoint + id + '/')
     ]).pipe(
       map(([response]) => {
-        let permissions: Permission[] = [
+        const permissions: Permission[] = [
           ...response.permission_list,
           ...response.group_permission_list
         ];
@@ -193,10 +194,10 @@ export class CheckPermissionService {
     );
   }
 
-  private filterPermissions(array: Permission[]): Permission[] {
+  private filterPermissions(array: Permission[] | null): Permission[] | null {
     if (array) {
-      const keys = {};
-      const result = [];
+      const keys: Record<number, boolean> = {};
+      const result: Permission[] = [];
 
       array.forEach((el: Permission) => {
         if (!keys[el.id]) {
@@ -207,5 +208,7 @@ export class CheckPermissionService {
 
       return result;
     }
+
+    return null;
   }
 }

@@ -2,12 +2,12 @@ import { Component, OnInit } from '@angular/core';
 
 import { FormatString } from '@webui/utilities';
 import { SiteSettingsService } from '@webui/core';
-import { CountryCodeLanguage } from '@webui/data';
+import { CountryCodeLanguage } from '@webui/models';
 
 const translationMap = CountryCodeLanguage;
 
 @Component({
-  selector: 'app-list-tags',
+  selector: 'webui-list-tags',
   templateUrl: 'list-tags.component.html',
   styleUrls: ['./list-tags.component.scss']
 })
@@ -15,11 +15,11 @@ const translationMap = CountryCodeLanguage;
 export class ListTagsComponent implements OnInit {
   public config: any;
 
-  public display: string;
-  public tags: any[];
+  public display!: string;
+  public tags!: any[];
 
   public color: any;
-  public colorAttr: string;
+  public colorAttr!: string;
 
   constructor(private siteSettings: SiteSettingsService) {}
 
@@ -33,10 +33,10 @@ export class ListTagsComponent implements OnInit {
       const { tag } = el;
       let trans;
       if (tag && tag.translations) {
-        trans = tag.translations.find(item => item.language.id === translationMap[this.siteSettings.settings.country_code]);
+        trans = tag.translations.find((item: any) => item.language.id === translationMap[this.siteSettings.settings.country_code]);
       }
 
-      let val = trans && trans.value ;
+      const val: any = trans && trans.value;
 
       if (el) {
         el.__str__ = val || formatSting.format(this.display, el);
@@ -47,7 +47,7 @@ export class ListTagsComponent implements OnInit {
     this.colorAttr = this.config.color_attr;
   }
 
-  public checkClass(item) {
+  public checkClass(item: any) {
     if (this.config.outline) {
       let className;
       if (this.color && this.colorAttr) {

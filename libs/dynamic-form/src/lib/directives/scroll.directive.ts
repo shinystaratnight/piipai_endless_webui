@@ -1,12 +1,12 @@
 import { Directive, HostListener, ElementRef, Input, AfterViewInit, Renderer2 } from '@angular/core';
 
 @Directive({
-  selector: '[appScroll]',
+  selector: '[webuiScroll]',
 })
 export class ScrollDirective implements AfterViewInit {
   public offsetTop: number;
 
-  @Input() public enable: boolean;
+  @Input() public enable!: boolean;
 
   constructor(private el: ElementRef, public renderer: Renderer2) {
     this.offsetTop = el.nativeElement.offsetTop;

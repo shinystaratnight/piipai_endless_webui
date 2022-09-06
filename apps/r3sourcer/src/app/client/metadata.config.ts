@@ -1,4 +1,3 @@
-import { Endpoints } from '@webui/data';
 import {
   history,
   unapproved,
@@ -11,6 +10,7 @@ import {
   joboffers,
   timesheetratesclient,
 } from '@webui/client-metadata';
+import { Endpoints } from '@webui/models';
 
 import {
   passwordchange,

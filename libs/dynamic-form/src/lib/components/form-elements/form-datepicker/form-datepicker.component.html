@@ -1,5 +1,5 @@
 <div
-  appDropDown
+  webuiDropDown
   class="form-group"
   [element]="'.ui-datebox-container'"
   [class.target]="currentField"
@@ -22,13 +22,13 @@
           | translate: { Default: config.templateOptions.label }
       }}:
     </label>
-    <app-info
+    <webui-info
       *ngIf="config.templateOptions.description"
       [description]="
         getTranslationKey(config.key, 'description')
           | translate: { Default: config.templateOptions.description }
       "
-    ></app-info>
+    ></webui-info>
     <div
       *ngIf="!mobileDevice"
       class="input-group form-element-content datepicker mb-2 edit"
@@ -55,7 +55,7 @@
         />
 
         <div class="input-group-addon">
-          <div class="fa fa-calendar"></div>
+          <fa-icon [icon]="['fas', 'calendar']"></fa-icon>
         </div>
       </div>
 
@@ -104,7 +104,7 @@
         class="form-control mobile-datepicker fa-calendar"
         [hidden]="config.templateOptions.type === 'time'"
         [(ngModel)]="model.date"
-        (ngModelChange)="updateFromMobile($event)"
+        (ngModelChange)="updateFromMobile()"
         [attr.id]="key"
         [attr.name]="key"
       />
@@ -119,7 +119,7 @@
               config.templateOptions.type === 'time'
             )
           "
-          (ngModelChange)="updateFromMobile($event)"
+          (ngModelChange)="updateFromMobile()"
           [(ngModel)]="model.time"
         />
         <span
@@ -158,13 +158,13 @@
           | translate: { Default: config.templateOptions.label }
       }}:
     </label>
-    <app-info
+    <webui-info
       *ngIf="config.templateOptions.description"
       [description]="
         getTranslationKey(config.key, 'description')
           | translate: { Default: config.templateOptions.description }
       "
-    ></app-info>
+    ></webui-info>
     <div [class.readonly-value]="editMode" class="form-element-content">
       {{ displayValue || '-' }}
     </div>

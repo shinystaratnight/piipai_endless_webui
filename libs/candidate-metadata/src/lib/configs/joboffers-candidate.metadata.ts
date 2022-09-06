@@ -1,5 +1,5 @@
 import { List } from '@webui/metadata';
-import { Endpoints } from '@webui/data';
+import { Endpoints } from '@webui/models';
 
 const list = function () {
   return {
@@ -44,8 +44,8 @@ const list = function () {
               .setTranslationKey('open_map')
               .setIcon('map-marker-alt')
               .setFields([
-                { type: 'static', field: 'latitude' },
-                { type: 'static', field: 'longitude' }
+                { type: 'static', field: 'latitude', key: 'lat' },
+                { type: 'static', field: 'longitude', key: 'lng' }
               ])
           ]),
 

@@ -754,5 +754,7 @@
   "skill_rel.label": "Taito",
   "rate_coefficient.placeholder": "Valitse",
   "rate_coefficient_modifier.placeholder": "Valitse",
-  "rate_coefficient_modifier.label": "Korkokertoimen muokkaaja"
+  "rate_coefficient_modifier.label": "Korkokertoimen muokkaaja",
+  "confirm_delete_instance": "Are you sure you would like to DELETE {{name}}?",
+  "do_not_delete": "Do not delete!"
 }

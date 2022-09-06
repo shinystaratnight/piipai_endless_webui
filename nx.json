@@ -1,87 +1,49 @@
 {
   "npmScope": "webui",
-  "implicitDependencies": {
-    "angular.json": "*",
-    "package.json": "*",
-    "tslint.json": "*",
-    "nx.json": "*",
-    "tsconfig.base.json": "*"
+  "affected": {
+    "defaultBase": "master"
   },
-  "projects": {
-    "billing-metadata": {
-      "tags": []
+  "cli": {
+    "defaultCollection": "@nrwl/angular",
+    "packageManager": "npm"
+  },
+  "implicitDependencies": {
+    "package.json": {
+      "dependencies": "*",
+      "devDependencies": "*"
     },
-    "calendar": {
-      "tags": []
-    },
-    "candidate-metadata": {
-      "tags": []
-    },
-    "client-metadata": {
-      "tags": []
-    },
-    "core": {
-      "tags": []
-    },
-    "dashboard": {
-      "tags": []
-    },
-    "data": {
-      "tags": []
-    },
-    "dialog": {
-      "tags": []
-    },
-    "dynamic-form": {
-      "tags": []
-    },
-    "form-controls": {
-      "tags": []
-    },
-    "icon": {
-      "tags": []
-    },
-    "manager-metadata": {
-      "tags": []
-    },
-    "metadata": {
-      "tags": []
-    },
-    "r3sourcer": {
-      "tags": []
-    },
-    "r3sourcer-e2e": {
-      "tags": [],
-      "implicitDependencies": ["r3sourcer"]
-    },
-    "rating": {
-      "tags": []
-    },
-    "shared": {
-      "tags": []
-    },
-    "shared-metadata": {
-      "tags": []
-    },
-    "stepper": {
-      "tags": []
-    },
-    "ui": {
-      "tags": []
-    },
-    "utilities": {
-      "tags": []
-    }
+    ".eslintrc.json": "*"
   },
   "tasksRunnerOptions": {
     "default": {
-      "runner": "@nrwl/workspace/tasks-runners/default",
+      "runner": "nx/tasks-runners/default",
       "options": {
         "cacheableOperations": ["build", "lint", "test", "e2e"]
       }
     }
   },
-  "affected": {
-    "defaultBase": "master"
-  }
+  "targetDependencies": {
+    "build": [
+      {
+        "target": "build",
+        "projects": "dependencies"
+      }
+    ]
+  },
+  "generators": {
+    "@nrwl/angular:application": {
+      "style": "scss",
+      "linter": "eslint",
+      "unitTestRunner": "jest",
+      "e2eTestRunner": "cypress"
+    },
+    "@nrwl/angular:library": {
+      "linter": "eslint",
+      "unitTestRunner": "jest"
+    },
+    "@nrwl/angular:component": {
+      "style": "scss"
+    }
+  },
+  "defaultProject": "r3sourcer"
 }

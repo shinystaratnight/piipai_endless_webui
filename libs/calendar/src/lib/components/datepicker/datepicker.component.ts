@@ -1,30 +1,29 @@
 import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core';
 
-import { Moment } from 'moment-timezone';
-
 import { DateRangeService, DatepickerService } from '../../services';
 import { DateRange, filterDateFormat } from '@webui/utilities';
+import { Moment } from '@webui/time';
+import { IDateRange } from '../../models';
 
 @Component({
-  selector: 'app-datepicker',
+  selector: 'webui-datepicker',
   templateUrl: './datepicker.component.html',
-  styleUrls: ['./datepicker.component.scss']
+  styleUrls: ['./datepicker.component.scss'],
 })
 export class DatepickerComponent implements OnInit {
-
-  @Input() type: DateRange;
-  @Input() date: Moment;
-  @Input() range: { start: Moment, end: Moment };
+  @Input() type!: DateRange;
+  @Input() date!: Moment;
+  @Input() range?: IDateRange;
 
   @Output() update = new EventEmitter();
 
   dateRange = DateRange;
   showCustomWeek = false;
 
-  rangeTitle: string;
+  rangeTitle!: string;
   yearBody: any;
   monthBody: any;
-  activeDates: string[];
+  activeDates!: string[];
 
   get isYearRange() {
     return this.dateRangeService.isYearRange(this.type);
@@ -49,7 +48,7 @@ export class DatepickerComponent implements OnInit {
     this.setActiveDates(this.date, this.range);
   }
 
-  public setActiveDates(from: Moment, range: { start: Moment, end: Moment }) {
+  public setActiveDates(from: Moment, range?: IDateRange) {
     range = range || this.datepickerService.getRangeDates(from, DateRange.Week);
     this.activeDates = [];
     const day = range.start.clone();
@@ -95,10 +94,10 @@ export class DatepickerComponent implements OnInit {
   }
 
   public isLastActiveDay(day: any) {
-    return this.activeDates.indexOf(day.date) === (this.activeDates.length - 1);
+    return this.activeDates.indexOf(day.date) === this.activeDates.length - 1;
   }
 
-  public showCustomWeekCalendar(event) {
+  public showCustomWeekCalendar(event: MouseEvent) {
     event.preventDefault();
     event.stopPropagation();
 
@@ -108,7 +107,7 @@ export class DatepickerComponent implements OnInit {
   public setCustomWeek(date: Moment) {
     this.update.emit({
       start: date.clone(),
-      end: date.clone().add(1, DateRange.Week)
+      end: date.clone().add(1, DateRange.Week),
     });
   }
 
@@ -118,7 +117,7 @@ export class DatepickerComponent implements OnInit {
         return row.map((month) => {
           return {
             ...month,
-            active: month.month === this.date.month()
+            active: month.month === this.date.month(),
           };
         });
       });
@@ -137,5 +136,4 @@ export class DatepickerComponent implements OnInit {
       });
     });
   }
-
 }

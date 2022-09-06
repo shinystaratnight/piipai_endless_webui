@@ -1,18 +1,18 @@
-import { Component, Input, ElementRef, ViewChild, Output, EventEmitter } from '@angular/core';
+import { Component, Input, ElementRef, ViewChild, Output, EventEmitter, OnInit, OnDestroy } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-dropdown',
+  selector: 'webui-dropdown',
   templateUrl: './dropdown.component.html',
 })
-export class DropdownComponent {
-  @ViewChild('autocomplete') elementRef: ElementRef;
+export class DropdownComponent implements OnInit, OnDestroy {
+  @ViewChild('autocomplete') elementRef!: ElementRef;
 
-  @Input() data: any[];
-  @Input() count: number;
-  @Input() loading: boolean;
+  @Input() data!: any[];
+  @Input() count!: number;
+  @Input() loading!: boolean;
 
   @Output() search: EventEmitter<string> = new EventEmitter();
   @Output() set: EventEmitter<any> = new EventEmitter();
@@ -21,13 +21,13 @@ export class DropdownComponent {
   modalScrollDistance = 2;
   modalScrollThrottle = 50;
 
-  searchInput: FormControl;
+  searchInput!: FormControl;
 
   get isCanUploadMore() {
     return this.count > this.data.length;
   }
 
-  private searchSubscription: Subscription;
+  private searchSubscription!: Subscription;
 
   ngOnInit() {
     this.searchInput = new FormControl('');
@@ -56,7 +56,7 @@ export class DropdownComponent {
     this.search.next(text);
   }
 
-  trackByFn(value) {
+  trackByFn(value: any) {
     return value.id;
   }
 }

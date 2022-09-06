@@ -4,30 +4,30 @@ import {
   Output,
   EventEmitter,
   OnDestroy,
-  ChangeDetectorRef
+  ChangeDetectorRef,
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 
 import { FilterService } from '../../../services';
-import { FormatString, getTimeInstance } from '@webui/utilities';
-import { DateFormat } from '@webui/data';
+import { FormatString } from '@webui/utilities';
+import { DATE_TIME_FORMAT, Time } from '@webui/time';
 
 enum FilterType {
-  Multiple = 'multiple'
+  Multiple = 'multiple',
 }
 
 @Component({
-  selector: 'app-filter-multiple',
-  templateUrl: './filter-multiple.component.html'
+  selector: 'webui-filter-multiple',
+  templateUrl: './filter-multiple.component.html',
 })
 export class FilterMultipleComponent implements OnInit, OnDestroy {
   public config: any;
-  public query: string;
-  public data: any[];
-  public type: string;
-  public filterSubscription: Subscription;
-  public querySubscription: Subscription;
+  public query!: string;
+  public data!: any[];
+  public type!: string;
+  public filterSubscription!: Subscription;
+  public querySubscription!: Subscription;
 
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
@@ -109,20 +109,20 @@ export class FilterMultipleComponent implements OnInit, OnDestroy {
     }
   }
 
-  public createData(type) {
-    this.data = this.config[type].map((data) => {
+  public createData(type: string) {
+    this.data = this.config[type].map((data: any) => {
       return {
         label: type === 'data' ? data[this.config.display] : data.label,
         query: this.config.query,
         param: this.config.param,
         checked: type === 'data' ? true : false,
         data: type === 'data' ? data : data.value,
-        key: data.key
+        key: data.key,
       };
     });
   }
 
-  public onChange(index: number, first?) {
+  public onChange(index: number, first?: boolean) {
     this.checkUniqueValues(this.config.unique, this.data, first, index);
     if (!this.config.multiple && this.config.type === 'checkbox') {
       this.data.forEach((item, i) => {
@@ -140,7 +140,7 @@ export class FilterMultipleComponent implements OnInit, OnDestroy {
     this.changeQuery();
   }
 
-  public genericQuery(query, data) {
+  public genericQuery(query: string, data: any[]) {
     const format = new FormatString();
     let result = '';
     if (data) {
@@ -167,11 +167,11 @@ export class FilterMultipleComponent implements OnInit, OnDestroy {
 
   public changeQuery() {
     this.event.emit({
-      list: this.config.listName
+      list: this.config.listName,
     });
   }
 
-  public parseQuery(query) {
+  public parseQuery(query: string) {
     const format = new FormatString();
     this.query = query;
     if (this.data) {
@@ -225,9 +225,9 @@ export class FilterMultipleComponent implements OnInit, OnDestroy {
     this.cd.detectChanges();
   }
 
-  public checkUniqueValues(unique, data, first?, index?) {
+  public checkUniqueValues(unique: any[], data: any[], first?: boolean, index?: number) {
     if (unique) {
-      const uniqueField = {};
+      const uniqueField: Record<string, any> = {};
       unique.forEach((field) => {
         if (index !== undefined && index !== null) {
           data.forEach((el, i) => {
@@ -244,15 +244,14 @@ export class FilterMultipleComponent implements OnInit, OnDestroy {
 
           const condition = () => {
             if (field === 'name' && el.data.date) {
-              const timeInstance = getTimeInstance();
-              const currentValue = timeInstance(el.data[field], DateFormat.DateTime);
-
-              const result = uniqueField[field].some((name) => {
-                const elValue = timeInstance(name, DateFormat.DateTime);
-                return Math.abs(elValue.diff(currentValue, 'hours')) < 4;
+              const currentValue = Time.parse(el.data[field], {
+                format: DATE_TIME_FORMAT,
               });
 
-              return result;
+              return uniqueField[field].some((name: any) => {
+                const elValue = Time.parse(name, { format: DATE_TIME_FORMAT });
+                return Math.abs(elValue.diff(currentValue, 'hours')) < 4;
+              });
             } else {
               return uniqueField[field].indexOf(el.data[field]) > -1;
             }

@@ -4,18 +4,18 @@
       <img class="image" [src]="image.src" alt="" />
 
       <button class="btn remove" type="button" (click)="onRemove(image.id)">
-        <fa-icon class="mr-0" icon="times"></fa-icon>
+        <fa-icon class="me-0" icon="times"></fa-icon>
       </button>
     </div>
   </div>
 
   <label
     class="btn btn-primary upload button-save mt-3"
-    *ngIf="source.length < this.count"
+    *ngIf="source && source.length < this.count"
   >
     {{ loading ? 'Uploading' : 'Upload Images' }}
 
-    <app-spinner *ngIf="loading"></app-spinner>
+    <webui-spinner *ngIf="loading"></webui-spinner>
 
     <input
       type="file"

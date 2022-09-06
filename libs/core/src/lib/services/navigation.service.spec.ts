@@ -48,14 +48,14 @@ describe('NaviagationService', () => {
   //             url: '/contact/',
   //             endpoint: '/contacts',
   //             __str__: 'Contact',
-  //             childrens: []
+  //             children: []
   //           },
   //           {
   //             name: 'Login',
   //             url: '/login/',
   //             endpoint: '/login',
   //             __str__: 'Login',
-  //             childrens: []
+  //             children: []
   //           }
   //         ]
   //       };

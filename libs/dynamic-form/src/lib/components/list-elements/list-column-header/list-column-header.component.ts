@@ -6,6 +6,7 @@ import { Sort } from '../../../helpers';
 import { SortData, SortService } from '../../../services';
 
 import { getTranslationKey } from '@webui/utilities';
+import { IconName } from '@fortawesome/fontawesome-svg-core';
 
 type ListColumnHeaderConfig = {
   delim: string;
@@ -26,26 +27,26 @@ type Name = {
   label: string;
   name: string;
   sort: boolean;
-  icon$?: Observable<string>;
+  icon$?: Observable<IconName>;
 }
 
 @Component({
-  selector: 'app-list-column-header',
+  selector: 'webui-list-column-header',
   templateUrl: 'list-column-header.component.html',
   styleUrls: ['list-column-header.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ListColumnHeaderComponent implements OnInit {
-  @Input() public config: ListColumnHeaderConfig;
+  @Input() public config!: ListColumnHeaderConfig;
 
-  hasMultipleNames: boolean;
-  multipleNamesData: Name[];
-  icon$: Observable<string>;
-  translationKey: string;
+  hasMultipleNames!: boolean;
+  multipleNamesData!: Name[];
+  icon$!: Observable<IconName>;
+  translationKey!: string;
 
   @Output() public sortChange: EventEmitter<void> = new EventEmitter();
 
-  private icons = {
+  private icons: Record<Sort, IconName> = {
     [Sort.DEFAULT]: 'sort',
     [Sort.ASC]: 'sort-up',
     [Sort.DESC]: 'sort-down'
@@ -65,18 +66,26 @@ export class ListColumnHeaderComponent implements OnInit {
     }
   }
 
-  onSort(event: PointerEvent, name?: string) {
+  onSort(event: MouseEvent, name?: string) {
     event.preventDefault();
 
     if (this.hasMultipleNames) {
       const item = this.multipleNamesData.find(el => el.name === name);
 
-      this.sortService.updateWith(item.param);
+      this.sortService.updateWith(item?.param as string);
     } else {
       this.sortService.updateWith(this.config.sort_field);
     }
 
     this.sortChange.emit();
+  }
+
+  public convertToIcon(icon: any): IconName | string {
+    if (typeof icon === 'string') {
+      return icon as IconName;
+    }
+
+    return '';
   }
 
   private generateMultipleNames() {
@@ -85,7 +94,7 @@ export class ListColumnHeaderComponent implements OnInit {
 
     this.multipleNamesData = names.map((name: string, index: number) => {
       let sorted;
-      let param;
+      let param: any;
 
       const sortData = this.config.sortMap.find(el => el.name === name);
       const iconStream$ = this.sortService.stream$

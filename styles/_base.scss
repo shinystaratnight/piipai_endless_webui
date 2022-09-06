@@ -1,6 +1,3 @@
-@import './utils';
-@import './mixins';
-
 $site-background: #f5f5f5;
 
 body {
@@ -12,69 +9,9 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-a:hover,
-a:focus,
-a.active {
-  opacity: 1;
-
-  @each $item in $themes {
-    .#{$item}-theme &:not(.disabled) {
-      color: map-get($theme-colors, $item);
-    }
-  }
-}
-
-a.disabled {
-  color: inherit;
-  cursor: default;
-
-  &.btn {
-    pointer-events: unset;
-  }
-}
-
 fa-icon {
   display: inline-flex;
   font-size: 12px;
-}
-
-input {
-  &:-webkit-autofill,
-  &:-webkit-autofill:hover,
-  &:-webkit-autofill:focus &:-webkit-autofill {
-    -webkit-box-shadow: 0 0 0px 1000px rgba($primary, 0.2) inset;
-    box-shadow: 0 0 0px 1000px rgba($primary, 0.2) inset;
-    transition: background-color 5000s ease-in-out 5000s;
-
-    @each $item in $themes {
-      .#{$item}-theme & {
-        -webkit-box-shadow: 0
-          0
-          0px
-          1000px
-          rgba(map-get($theme-colors, $item), 0.2)
-          inset;
-        box-shadow: 0
-          0
-          0px
-          1000px
-          rgba(map-get($theme-colors, $item), 0.2)
-          inset;
-      }
-    }
-  }
-}
-
-/* Chrome, Safari, Edge, Opera */
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-/* Firefox */
-input[type='number'] {
-  -moz-appearance: textfield;
 }
 
 .readonly-value {
@@ -90,12 +27,6 @@ input[type='number'] {
   &:focus {
     color: $gray !important;
     opacity: 0.6 !important;
-  }
-}
-
-@include media-breakpoint-up('md') {
-  .btn.only-mobile {
-    display: none;
   }
 }
 
@@ -258,7 +189,7 @@ iframe.send-sms {
   position: relative;
   width: 100%;
 
-  padding: 32px 0;
+  padding: 32px 40px;
 
   border-radius: 5px;
 
@@ -276,15 +207,17 @@ iframe.send-sms {
 
   .button-delete {
     position: absolute;
-    top: 34px;
-    right: 24px;
+    top: 30px;
+    right: 40px;
+    min-height: 40px;
 
     font-size: 14px;
     line-height: 19px !important;
 
     color: rgba($gray, 0.3);
 
-    background-color: white;
+    background-color: $white;
+    border-radius: 0;
 
     @include media-breakpoint-down('md') {
       top: 4px;
@@ -295,7 +228,7 @@ iframe.send-sms {
     &:not(:disabled):focus {
       color: $gray;
 
-      background-color: white;
+      background-color: $white;
       border-color: transparent;
     }
   }
@@ -333,23 +266,9 @@ iframe.send-sms {
   }
 }
 
-.button-save {
-  padding: 8px 20px;
-
-  &[disabled] {
-    cursor: not-allowed;
-  }
-}
-
-@include media-breakpoint-down('sm') {
-  .button-save {
-    width: 100%;
-  }
-}
-
 .edit-form .form-name {
   top: 16px !important;
-  left: 55px !important;
+  left: 36px !important;
 
   @include media-breakpoint-down('md') {
     top: 4px !important;
@@ -358,8 +277,6 @@ iframe.send-sms {
 }
 
 .dynamic-form {
-  margin: 0 20px;
-
   .has-tabs {
     margin: 40px;
     margin-bottom: 0;
@@ -378,13 +295,9 @@ iframe.send-sms {
   }
 }
 
-// .sebm-google-map-container-inner {
-//   height: 100% !important;
+// .permissions .nav {
+//   margin-left: 3rem;
 // }
-
-.permissions .nav {
-  margin-left: 3rem;
-}
 
 /* Mobile */
 
@@ -404,19 +317,13 @@ iframe.send-sms {
 }
 
 .timesheet-submit-form {
-  // .items {
-  //   @include media-breakpoint-down('md') {
-  //     display: block !important;
-  //   }
-  // }
-
   @include media-breakpoint-down('md') {
     .button-save {
       width: 100%;
     }
   }
 
-  app-form-group {
+  webui-form-group {
     .mobile {
       position: relative;
       margin-top: 6px;
@@ -456,10 +363,9 @@ iframe.send-sms {
                                   supported by Chrome and Opera */
 }
 
-// Styles for none encapsulation elements
-app-checkbox {
-  display: flex;
-}
+// webui-checkbox {
+//   display: flex;
+// }
 
 .form-control,
 .btn,
@@ -467,4 +373,8 @@ form {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
+}
+
+.row {
+  position: relative;
 }

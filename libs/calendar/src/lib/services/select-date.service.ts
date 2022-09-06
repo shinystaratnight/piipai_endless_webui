@@ -1,12 +1,10 @@
 import { Injectable } from '@angular/core';
-
-import { getTimeInstance } from '@webui/utilities';
+import { Time } from '@webui/time';
 
 @Injectable()
 export class SelectDateService {
-
-  startDate: string;
-  endDate: string;
+  startDate!: string | null;
+  endDate!: string | null;
 
   selectedDates = new Map();
 
@@ -26,7 +24,7 @@ export class SelectDateService {
     const exist = this.selectedDates.has(date);
 
     if (exist && value === undefined) {
-      this.selectedDates.set(date, !this.selectedDates.get(date))
+      this.selectedDates.set(date, !this.selectedDates.get(date));
     } else {
       this.selectedDates.set(date, true);
     }
@@ -43,7 +41,7 @@ export class SelectDateService {
       const dates = this.betweenDates(this.startDate, this.endDate);
 
       dates.forEach((el) => {
-        this.selectDate(el, true)
+        this.selectDate(el, true);
       });
     }
   }
@@ -53,8 +51,8 @@ export class SelectDateService {
     this.endDate = null;
   }
 
-  getSlectedDates() {
-    const dates = [];
+  getSelectedDates(): string[] | undefined {
+    const dates: string[] = [];
     this.selectedDates.forEach((val, key) => {
       if (val) {
         dates.push(key);
@@ -64,6 +62,8 @@ export class SelectDateService {
     if (dates.length) {
       return dates;
     }
+
+    return undefined
   }
 
   clear() {
@@ -71,16 +71,15 @@ export class SelectDateService {
   }
 
   private betweenDates(start: string, end: string) {
-    const time = getTimeInstance();
-    const startDate = time(start, 'YYYY-MM-DD');
+    const startDate = Time.parse(start, { format: 'YYYY-MM-DD' });
 
     if (!end) {
       return [start];
     }
 
     const dates = [];
-    const endDate = time(end, 'YYYY-MM-DD');
-    while(endDate.isAfter(startDate)) {
+    const endDate = Time.parse(end, { format: 'YYYY-MM-DD' });
+    while (endDate.isAfter(startDate)) {
       dates.push(startDate.format('YYYY-MM-DD'));
 
       startDate.add(1, 'day');
@@ -90,5 +89,4 @@ export class SelectDateService {
 
     return dates;
   }
-
 }

@@ -2,33 +2,18 @@
   <h5 class="title">Candidate Tracking</h5>
   <p class="jobsite">{{jobsite}}</p>
 
-  <app-close-button class="close ml-2 mt-2" (click)="dismiss()"></app-close-button>
+  <webui-close-button class="close ms-2 mt-2" (click)="dismiss()"></webui-close-button>
 </div>
 
-<agm-map
-  style="height: 320px"
-  [latitude]="latitude"
-  [longitude]="longitude"
-  [zoom]="13">
-  <agm-marker
-    [latitude]="markerLatitude"
-    [longitude]="markerLongitude">
-  </agm-marker>
-  <agm-polyline strokeColor="#28a3fc">
-    <agm-polyline-point
-      [latitude]="point.lat"
-      [longitude]="point.lng"
-      *ngFor="let point of path; trackBy: trackByTracking">
-    </agm-polyline-point>
-    <ng-container *ngIf="breakPath.length">
-      <agm-polyline-point
-        [latitude]="point.lat"
-        [longitude]="point.lng"
-        *ngFor="let point of breakPath; trackBy: trackByTracking">
-      </agm-polyline-point>
-    </ng-container>
-  </agm-polyline>
-</agm-map>
+<google-map [height]="320">
+  <map-marker
+    *ngIf="markerPosition"
+    [position]="markerPosition">
+  </map-marker>
+  <map-polyline [path]="breakPath"></map-polyline>
+  <map-polyline [path]="path">
+  </map-polyline>
+</google-map>
 
 <div [class.tracking-desctop]="!isMobile()" [class.pt-4]="isMobile()">
   <div *ngIf="!isMobile()" class="tracking-title-wrapper">
@@ -39,8 +24,8 @@
     <p class="tracking-description">Moving the time slider and look the path</p>
   </div>
 
-  <app-time-tracking
+  <webui-time-tracking
     [timePoints]="timePoints"
     (changeTimeTracking)="trackingMarkerCoordinates($event)">
-  </app-time-tracking>
+  </webui-time-tracking>
 </div>

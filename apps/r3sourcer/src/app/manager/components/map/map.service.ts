@@ -6,8 +6,10 @@ import { catchError } from 'rxjs/operators';
 import { ErrorsService } from '@webui/core';
 
 export interface Marker {
-  latitude: number;
-  longitude: number;
+  position: {
+    lat: number;
+    lng: number;
+  };
   contact: {
     phone_mobile: string;
     name: string;
@@ -97,7 +99,7 @@ export class MapService {
 
   public getPositions(query: string = '') {
     return this.http
-      .get(this.endpoint + query)
+      .get<Marker[]>(this.endpoint + query)
       .pipe(
         catchError((error: any) => this.errors.handleError(error))
       );

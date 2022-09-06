@@ -1,6 +1,6 @@
 <div class="wrapper mb-0 form-group mt-3">
   <select
-    class="custom-select mr-2"
+    class="form-select me-2"
     [class.default]="!action.endpoint"
     [(ngModel)]="action"
   >
@@ -13,12 +13,12 @@
     class="btn btn-primary mb-0"
     type="button"
     (click)="toDoAction()"
-    appSubscriptionRequired
+    webuiSubscriptionRequired
     [attr.title]="getSmsTitle(action.endpoint)"
     [disabled]="isDisableSmsButton(action.endpoint)"
   >
     {{ label }}
-    <app-spinner *ngIf="actionProcess"></app-spinner>
+    <webui-spinner *ngIf="actionProcess"></webui-spinner>
   </button>
 </div>
 
@@ -26,10 +26,10 @@
   <div class="modal-header">
     <p>{{ action.message }}</p>
 
-    <app-close-button
-      class="ml-auto"
+    <webui-close-button
+      class="ms-auto"
       (click)="modal.dismiss(false)"
-    ></app-close-button>
+    ></webui-close-button>
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-secondary" (click)="modal.close(true)">

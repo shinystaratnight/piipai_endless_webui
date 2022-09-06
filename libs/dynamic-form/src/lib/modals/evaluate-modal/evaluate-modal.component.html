@@ -1,4 +1,4 @@
-<app-base-modal (dissmisEvent)="dismiss()">
+<webui-base-modal (dissmisEvent)="dismiss()">
   <header>
     <h5 class="modal-title" [class.text-center]="config.signature">
       <ng-container *ngIf="config.evaluate">
@@ -25,21 +25,21 @@
   </header>
 
   <div *ngIf="!config.evaluate" class="modal-body">
-    <app-generic-form
+    <webui-generic-form
       [endpoint]="config.endpoint"
       [data]="config.data"
       [extendData]="config.extendData"
       [edit]="config.edit"
-      (errorForm)="errorEvent($event)"
+      (errorForm)="errorEvent()"
       (event)="formEvent($event)"
     >
       <div class="d-flex">
-        <button class="btn btn-shadow btn-primary button-save ml-lg-auto">
+        <button class="btn btn-shadow btn-primary button-save ms-lg-auto">
           {{ 'save' | translate: { Default: 'Save' } }}
-          <app-spinner *ngIf="saveProcess"></app-spinner>
+          <webui-spinner *ngIf="saveProcess"></webui-spinner>
         </button>
       </div>
-    </app-generic-form>
+    </webui-generic-form>
   </div>
 
   <ng-container *ngIf="config.evaluate">
@@ -63,11 +63,11 @@
       <p class="evaluate-label">{{ config.label.name }}</p>
       <hr width="100" />
 
-      <ngb-rating max="5" min="1" [(ngModel)]="config.data.evaluation_score">
+      <ngb-rating [max]="5" min="1" [(ngModel)]="config.data['evaluation_score']">
         <ng-template let-fill="fill" let-index="index">
           <span *ngIf="fill === 100" class="star star-lg full">&#9733;</span>
           <span *ngIf="fill === 0" class="star star-lg">
-            {{ config.data.evaluation_score ? '&#9733;' : '&#9734;' }}
+            {{ config.data['evaluation_score'] ? '&#9733;' : '&#9734;' }}
           </span>
         </ng-template>
       </ngb-rating>
@@ -79,8 +79,8 @@
         (click)="sendEvaluateData(config.endpoint, config.data)"
       >
         {{ 'save' | translate: { Default: 'Save' } }}
-        <app-spinner *ngIf="saveProcess"></app-spinner>
+        <webui-spinner *ngIf="saveProcess"></webui-spinner>
       </button>
     </div>
   </ng-container>
-</app-base-modal>
+</webui-base-modal>

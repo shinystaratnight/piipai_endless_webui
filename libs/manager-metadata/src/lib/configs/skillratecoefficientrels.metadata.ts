@@ -1,5 +1,5 @@
-import { Endpoints } from '@webui/data';
 import { List } from '@webui/metadata';
+import { Endpoints } from '@webui/models';
 
 const list = {
   list: {

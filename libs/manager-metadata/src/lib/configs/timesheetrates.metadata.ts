@@ -28,7 +28,7 @@ const formadd = () => [
     .setActions({
       add: true
     })
-    .setPerfilledFields({
+    .setPrefilledFields({
       [Models.Skill]: `{${Models.Skill}.id}`
     })
     .updateValues(['translations', 'uom', 'skill_rate_ranges'])
@@ -37,12 +37,12 @@ const formadd = () => [
       company: '{company}'
     }),
   new SkillModel().formElement().updateValues(['name']),
-  new Form.input.element('rate', 'Rate', InputType.Number).setDefaultValue(
-    '{worktype.skill_rate_ranges.default_rate}'
-  ),
-  new Form.input.element('value', 'Value', InputType.Number).setIcon(
-    '{worktype.uom.short_name}'
-  )
+  new Form.input.element('rate', 'Rate', InputType.Number)
+    .setDefaultValue('{worktype.skill_rate_ranges.default_rate}')
+    .setNumberOptions(0.01),
+  new Form.input.element('value', 'Value', InputType.Number)
+    .setIcon('{worktype.uom.short_name}')
+    .setNumberOptions(0.01)
 ];
 
 const formset = () => ({

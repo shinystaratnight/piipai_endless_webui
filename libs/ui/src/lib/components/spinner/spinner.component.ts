@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 
 @Component({
-  selector: 'app-spinner',
+  selector: 'webui-spinner',
   template: `
     <div class="lds-spinner" [class.sm]="sm">
       <div></div>
@@ -22,5 +22,5 @@ import { Component, Input } from '@angular/core';
 })
 
 export class SpinnerComponent {
-  @Input() sm: boolean;
+  @Input() sm?: boolean;
 }

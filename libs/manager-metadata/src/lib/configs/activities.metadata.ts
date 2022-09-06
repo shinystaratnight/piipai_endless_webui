@@ -1,8 +1,4 @@
-import { getYesterday, getToday, getTommorrow } from '@webui/utilities';
-
-const yesterdayFormatDate = getYesterday();
-const todayFormatDate = getToday().format();
-const tomorrowFormatDate = getTommorrow();
+import { createFilter, Type } from '@webui/metadata';
 
 const list = {
   list: {
@@ -13,11 +9,11 @@ const list = {
         content: [
           {
             field: 'contact.__str__',
-            type: 'static'
-          }
+            type: 'static',
+          },
         ],
         name: 'contact.__str__',
-        label: 'Contact'
+        label: 'Contact',
       },
       {
         content: [
@@ -27,16 +23,16 @@ const list = {
               2: 'Low',
               3: 'Normal',
               4: 'High',
-              5: 'Top'
+              5: 'Top',
             },
             field: 'priority',
-            type: 'select'
-          }
+            type: 'select',
+          },
         ],
         name: 'priority',
         sort_field: 'priority',
         label: 'Priority',
-        sort: true
+        sort: true,
       },
       {
         delim: null,
@@ -46,12 +42,12 @@ const list = {
           {
             field: 'starts_at',
             type: 'datepicker',
-            label: 'Starts at'
-          }
+            label: 'Starts at',
+          },
         ],
         name: 'starts_at',
         title: null,
-        sort_field: 'starts_at'
+        sort_field: 'starts_at',
       },
       {
         delim: null,
@@ -61,12 +57,12 @@ const list = {
           {
             field: 'ends_at',
             type: 'datepicker',
-            label: 'Ends at'
-          }
+            label: 'Ends at',
+          },
         ],
         name: 'ends_at',
         title: null,
-        sort_field: 'ends_at'
+        sort_field: 'ends_at',
       },
       {
         content: [
@@ -74,17 +70,17 @@ const list = {
             values: {
               null: 'New',
               false: 'SEEN',
-              true: 'Done'
+              true: 'Done',
             },
             field: 'done',
-            type: 'select'
-          }
+            type: 'select',
+          },
         ],
         name: 'done',
         sort_field: 'done',
         label: 'Done',
-        sort: true
-      }
+        sort: true,
+      },
     ],
     pagination_label: 'Activity',
     search_enabled: false,
@@ -96,28 +92,28 @@ const list = {
         options: [
           {
             value: 1,
-            label: 'Bottom'
+            label: 'Bottom',
           },
           {
             value: 2,
-            label: 'Low'
+            label: 'Low',
           },
           {
             value: 3,
-            label: 'Normal'
+            label: 'Normal',
           },
           {
             value: 4,
-            label: 'High'
+            label: 'High',
           },
           {
             value: 5,
-            label: 'Top'
-          }
+            label: 'Top',
+          },
         ],
         query: 'priority',
         default: null,
-        type: 'select'
+        type: 'select',
       },
       {
         key: 'done',
@@ -125,80 +121,36 @@ const list = {
         options: [
           {
             value: null,
-            label: 'New'
+            label: 'New',
           },
           {
             value: false,
-            label: 'SEEN'
+            label: 'SEEN',
           },
           {
             value: true,
-            label: 'Done'
-          }
+            label: 'Done',
+          },
         ],
         query: 'done',
         default: null,
-        type: 'select'
+        type: 'select',
       },
-      {
-        list: [
-          {
-            label: 'Yesterday',
-            query: `starts_at_0=${yesterdayFormatDate}&starts_at_1=${yesterdayFormatDate}`
-          },
-          {
-            label: 'Today',
-            query: `starts_at_0=${todayFormatDate}&starts_at_1=${todayFormatDate}`
-          },
-          {
-            label: 'Tomorrow',
-            query: `starts_at_0=${tomorrowFormatDate}&starts_at_1=${tomorrowFormatDate}`
-          }
-        ],
+      createFilter(Type.Date, {
         key: 'starts_at',
         label: 'Starts at',
-        type: 'date',
-        input: [
-          {
-            label: 'From',
-            query: 'starts_at_0'
-          },
-          {
-            label: 'To',
-            query: 'starts_at_1'
-          }
-        ]
-      },
-      {
-        list: [
-          {
-            label: 'Yesterday',
-            query: `ends_at_0=${yesterdayFormatDate}&ends_at_1=${yesterdayFormatDate}`
-          },
-          {
-            label: 'Today',
-            query: `ends_at_0=${todayFormatDate}&ends_at_1=${todayFormatDate}`
-          },
-          {
-            label: 'Tomorrow',
-            query: `ends_at_0=${tomorrowFormatDate}&ends_at_1=${tomorrowFormatDate}`
-          }
-        ],
+        yesterday: true,
+        today: true,
+        tomorrow: true,
+      }),
+      createFilter(Type.Date, {
         key: 'ends_at',
         label: 'Ends at',
-        type: 'date',
-        input: [
-          {
-            label: 'From',
-            query: 'ends_at_0'
-          },
-          {
-            label: 'To',
-            query: 'ends_at_1'
-          }
-        ]
-      }
-    ]
+        yesterday: true,
+        today: true,
+        tomorrow: true,
+      }),
+    ],
   },
   fields: [
     {
@@ -211,28 +163,28 @@ const list = {
         options: [
           {
             value: 1,
-            label: 'Bottom'
+            label: 'Bottom',
           },
           {
             value: 2,
-            label: 'Low'
+            label: 'Low',
           },
           {
             value: 3,
-            label: 'Normal'
+            label: 'Normal',
           },
           {
             value: 4,
-            label: 'High'
+            label: 'High',
           },
           {
             value: 5,
-            label: 'Top'
-          }
+            label: 'Top',
+          },
         ],
-        type: 'select'
+        type: 'select',
       },
-      read_only: true
+      read_only: true,
     },
     {
       key: 'starts_at',
@@ -241,9 +193,9 @@ const list = {
       templateOptions: {
         required: false,
         label: 'Starts at',
-        type: 'datetime'
+        type: 'datetime',
       },
-      read_only: true
+      read_only: true,
     },
     {
       key: 'done',
@@ -254,20 +206,20 @@ const list = {
         options: [
           {
             value: null,
-            label: 'New'
+            label: 'New',
           },
           {
             value: false,
-            label: 'SEEN'
+            label: 'SEEN',
           },
           {
             value: true,
-            label: 'Done'
-          }
+            label: 'Done',
+          },
         ],
-        type: 'select'
+        type: 'select',
       },
-      read_only: true
+      read_only: true,
     },
     {
       key: 'contact.__str__',
@@ -275,9 +227,9 @@ const list = {
       templateOptions: {
         required: false,
         label: 'Contact',
-        type: 'static'
+        type: 'static',
       },
-      read_only: true
+      read_only: true,
     },
     {
       key: 'ends_at',
@@ -285,11 +237,11 @@ const list = {
       templateOptions: {
         required: true,
         label: 'Ends at',
-        type: 'datetime'
+        type: 'datetime',
       },
-      read_only: true
-    }
-  ]
+      read_only: true,
+    },
+  ],
 };
 
 const form = [
@@ -300,9 +252,9 @@ const form = [
     templateOptions: {
       required: false,
       label: 'Id',
-      type: 'text'
+      type: 'text',
     },
-    read_only: false
+    read_only: false,
   },
   {
     key: 'starts_at',
@@ -311,9 +263,9 @@ const form = [
     templateOptions: {
       required: false,
       label: 'Starts at',
-      type: 'datetime'
+      type: 'datetime',
     },
-    read_only: false
+    read_only: false,
   },
   {
     key: 'ends_at',
@@ -321,9 +273,9 @@ const form = [
     templateOptions: {
       required: true,
       label: 'Ends at',
-      type: 'datetime'
+      type: 'datetime',
     },
-    read_only: false
+    read_only: false,
   },
   {
     key: 'priority',
@@ -336,27 +288,27 @@ const form = [
       options: [
         {
           value: 1,
-          label: 'Bottom'
+          label: 'Bottom',
         },
         {
           value: 2,
-          label: 'Low'
+          label: 'Low',
         },
         {
           value: 3,
-          label: 'Normal'
+          label: 'Normal',
         },
         {
           value: 4,
-          label: 'High'
+          label: 'High',
         },
         {
           value: 5,
-          label: 'Top'
-        }
-      ]
+          label: 'Top',
+        },
+      ],
     },
-    read_only: false
+    read_only: false,
   },
   {
     key: 'done',
@@ -368,20 +320,20 @@ const form = [
       options: [
         {
           value: null,
-          label: 'New'
+          label: 'New',
         },
         {
           value: false,
-          label: 'SEEN'
+          label: 'SEEN',
         },
         {
           value: true,
-          label: 'Done'
-        }
-      ]
+          label: 'Done',
+        },
+      ],
     },
-    read_only: false
-  }
+    read_only: false,
+  },
 ];
 
 const formadd = [
@@ -392,9 +344,9 @@ const formadd = [
     templateOptions: {
       required: false,
       label: 'Id',
-      type: 'text'
+      type: 'text',
     },
-    read_only: false
+    read_only: false,
   },
   {
     key: 'starts_at',
@@ -403,9 +355,9 @@ const formadd = [
     templateOptions: {
       required: false,
       label: 'Starts at',
-      type: 'datetime'
+      type: 'datetime',
     },
-    read_only: false
+    read_only: false,
   },
   {
     key: 'ends_at',
@@ -413,9 +365,9 @@ const formadd = [
     templateOptions: {
       required: true,
       label: 'Ends at',
-      type: 'datetime'
+      type: 'datetime',
     },
-    read_only: false
+    read_only: false,
   },
   {
     key: 'priority',
@@ -428,27 +380,27 @@ const formadd = [
       options: [
         {
           value: 1,
-          label: 'Bottom'
+          label: 'Bottom',
         },
         {
           value: 2,
-          label: 'Low'
+          label: 'Low',
         },
         {
           value: 3,
-          label: 'Normal'
+          label: 'Normal',
         },
         {
           value: 4,
-          label: 'High'
+          label: 'High',
         },
         {
           value: 5,
-          label: 'Top'
-        }
-      ]
+          label: 'Top',
+        },
+      ],
     },
-    read_only: false
+    read_only: false,
   },
   {
     key: 'done',
@@ -460,24 +412,24 @@ const formadd = [
       options: [
         {
           value: null,
-          label: 'New'
+          label: 'New',
         },
         {
           value: false,
-          label: 'SEEN'
+          label: 'SEEN',
         },
         {
           value: true,
-          label: 'Done'
-        }
-      ]
+          label: 'Done',
+        },
+      ],
     },
-    read_only: false
-  }
+    read_only: false,
+  },
 ];
 
 export const activities = {
   list,
   form,
-  formadd
+  formadd,
 };

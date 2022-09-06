@@ -1,5 +1,6 @@
-import { ApiMethod, Endpoints } from '@webui/data';
+import { ApiMethod } from '@webui/data';
 import { List } from '@webui/metadata';
+import { Endpoints } from '@webui/models';
 
 import {
   getTrackingElement,

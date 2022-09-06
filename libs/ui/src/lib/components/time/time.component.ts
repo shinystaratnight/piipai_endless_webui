@@ -6,29 +6,29 @@ import {
   Output,
   EventEmitter,
   ChangeDetectionStrategy,
-  ChangeDetectorRef
+  ChangeDetectorRef,
 } from '@angular/core';
 
-import { getTimeByTimezone, getLocalTime } from '@webui/utilities';
+import { Time } from '@webui/time';
 
 @Component({
-  selector: 'app-time',
+  selector: 'webui-time',
   templateUrl: './time.component.html',
   styleUrls: ['./time.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TimeComponent implements OnInit, OnDestroy {
-  @Input() timezone: string;
-  @Input() description: string;
-  @Input() differMessage: string;
-  @Input() translateKey: string;
+  @Input() timezone!: string;
+  @Input() description!: string;
+  @Input() differMessage = '';
+  @Input() translateKey = '';
 
   @Output() init: EventEmitter<boolean> = new EventEmitter();
 
-  time: string;
-  differTimezone: boolean;
+  time!: string;
+  differTimezone!: boolean;
 
-  private intervalId: any;
+  private intervalId!: number;
   private timeFormat = 'HH:mm DD/MM/YYYY (UTCZ)';
 
   constructor(private cd: ChangeDetectorRef) {}
@@ -39,11 +39,8 @@ export class TimeComponent implements OnInit, OnDestroy {
         this.init.emit(true);
       }
 
-      const localTime = getLocalTime().format(this.timeFormat);
-      const momentTime = this.timezone
-        ? getTimeByTimezone(this.timezone)
-        : getLocalTime();
-      this.time = momentTime.format(this.timeFormat);
+      const localTime = Time.now().format(this.timeFormat);
+      this.time = Time.now(this.timezone).format(this.timeFormat);
 
       this.differTimezone = localTime !== this.time;
       this.cd.detectChanges();

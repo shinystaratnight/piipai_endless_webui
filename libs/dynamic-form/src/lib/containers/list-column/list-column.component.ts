@@ -1,7 +1,7 @@
 import { Component, Output, EventEmitter } from '@angular/core';
 
 @Component({
-  selector: 'app-list-column',
+  selector: 'webui-list-column',
   templateUrl: 'list-column.component.html'
 })
 export class ListColumnComponent {
@@ -13,11 +13,11 @@ export class ListColumnComponent {
 
   public config: any;
 
-  public eventHandler(e) {
+  public eventHandler(e: any) {
     this.event.emit(e);
   }
 
-  public buttonHandler(e) {
+  public buttonHandler(e: any) {
     this.buttonAction.emit(e);
   }
 }

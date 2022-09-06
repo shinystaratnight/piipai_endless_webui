@@ -1,0 +1,26 @@
+{
+  "projectType": "library",
+  "root": "libs/rating",
+  "sourceRoot": "libs/rating/src",
+  "prefix": "webui",
+  "targets": {
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/rating"],
+      "options": {
+        "jestConfig": "libs/rating/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/rating/src/**/*.ts",
+          "libs/rating/src/**/*.html"
+        ]
+      }
+    }
+  },
+  "tags": []
+}

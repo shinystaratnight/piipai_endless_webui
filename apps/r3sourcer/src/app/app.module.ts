@@ -7,12 +7,13 @@ import { RouterModule, NoPreloading } from '@angular/router';
 
 import {
   FontAwesomeModule,
-  FaIconLibrary
+  FaIconLibrary,
 } from '@fortawesome/angular-fontawesome';
 import {
   faChevronLeft,
   faChevronRight,
   faCircle,
+  faCalendar,
   faPlus,
   faCheck,
   faMinusCircle,
@@ -48,75 +49,77 @@ import {
   faSort,
   faSortUp,
   faSortDown,
-  faDotCircle
+  faDotCircle,
+  faUser
 } from '@fortawesome/free-solid-svg-icons';
 import { NgxWebstorageModule } from 'ngx-webstorage';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
 import {
   TranslateModule,
   TranslateLoader,
-  MissingTranslationHandler
+  MissingTranslationHandler,
 } from '@ngx-translate/core';
 
-import { VerifyEmailComponent, ToastComponent } from './components';
+import {
+  VerifyEmailComponent,
+  ToastComponent,
+  RedirectComponent,
+  LoginAsComponent,
+} from './components';
 
 import { routes } from './app.routing';
 
 import { CoreModule } from '@webui/core';
 import { environment } from '../environments/environment';
-import { AgmCoreModule } from '@agm/core';
-// import { UiModule } from '@webui/ui';
+// import { AgmCoreModule } from '@agm/core';
 import { SettingsModule } from './settings/settings.module';
 
 import { MasterGuideModule } from './master-guide/master-guide.module';
-import { RedirectComponent } from './redirect.component';
 import { HttpLoaderFactory } from './translate.loader';
 import { MissingTranslationHelper } from './helpers/translate.helper';
+// import { GoogleMapsModule } from '@angular/google-maps';
 
 @NgModule({
   declarations: [
     AppComponent,
     VerifyEmailComponent,
     RedirectComponent,
-    ToastComponent
+    ToastComponent,
+    LoginAsComponent,
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     RouterModule.forRoot(routes, {
       useHash: false,
-      preloadingStrategy: NoPreloading
+      preloadingStrategy: NoPreloading,
     }),
     HttpClientModule,
     FontAwesomeModule,
     NgxWebstorageModule.forRoot({ prefix: 'web', separator: '.' }),
-    AgmCoreModule.forRoot({
-      apiKey: environment.GOOGLE_GEO_CODING_API_KEY,
-      libraries: ['places']
-    }),
+    // AgmCoreModule.forRoot({
+    //   apiKey: environment.GOOGLE_GEO_CODING_API_KEY,
+    //   libraries: ['places'],
+    // }),
+    // GoogleMapsModule,
     TranslateModule.forRoot({
       defaultLanguage: 'en',
       missingTranslationHandler: {
         provide: MissingTranslationHandler,
-        useClass: MissingTranslationHelper
+        useClass: MissingTranslationHelper,
       },
       loader: {
         provide: TranslateLoader,
         useFactory: HttpLoaderFactory,
-        deps: [HttpClient]
-      }
+        deps: [HttpClient],
+      },
     }),
 
     CoreModule.forRoot(environment),
-    // DynamicFormModule.forRoot({ metadata: Metadata }),
     MasterGuideModule,
-    // UiModule,
-
-    SettingsModule
+    SettingsModule,
   ],
-  providers: [],
   bootstrap: [AppComponent],
-  exports: [SettingsModule],
 })
 export class AppModule {
   constructor(library: FaIconLibrary) {
@@ -159,7 +162,9 @@ export class AppModule {
       faSort,
       faSortUp,
       faSortDown,
-      faDotCircle
+      faDotCircle,
+      faCalendar,
+      faUser
     ];
 
     library.addIcons(...icons);

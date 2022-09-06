@@ -1,4 +1,5 @@
-@import '../../../../../../../styles/variables';
+@use 'variables' as *;
+@use 'sass:math';
 
 :host {
   display: block;
@@ -18,8 +19,8 @@ $icon-width: 70px;
   justify-content: space-between;
   height: $icon-width;
   width: $icon-width;
-  padding: 7px $icon-width / 2;
-  border-radius: $icon-width / 2;
+  padding: 7px math.div($icon-width, 2);
+  border-radius: math.div($icon-width, 2);
   background-color: white;
   transition: all 0.4s ease-out;
   overflow: hidden;

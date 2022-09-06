@@ -1,7 +1,7 @@
-@import 'variables';
+@use 'variables' as *;
 @import 'mixins';
 
-.custom-select {
+.form-select {
   width: auto;
 
   color: #828282;

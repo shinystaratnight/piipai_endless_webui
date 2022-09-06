@@ -23,10 +23,10 @@ export class NoteFile {
 }
 
 export interface INote extends IBasic {
-  content_type: IRelatedModel;
+  content_type?: IRelatedModel;
   object_id: ID;
   note: string;
-  contact: IRelatedModel;
+  contact?: IRelatedModel;
   files?: INoteFile[];
   __str__?: string;
   created_by?: string;
@@ -34,10 +34,10 @@ export interface INote extends IBasic {
 }
 
 export class Note extends Basic implements INote {
-  content_type: RelatedModel;
+  content_type?: RelatedModel;
   object_id: ID;
   note: string;
-  contact: RelatedModel;
+  contact?: RelatedModel;
   files?: NoteFile[];
   __str__?: string;
   created_by?: string;

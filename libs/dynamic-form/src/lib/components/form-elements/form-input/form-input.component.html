@@ -1,52 +1,44 @@
 <div
   class="form-group"
   *ngIf="!config.hide"
-  [class.mb-0]="config.templateOptions.bottom"
+  [class.mb-0]="config.templateOptions?.bottom"
   [formGroup]="group"
   style="position: relative"
   [ngClass]="['input_type_'+key]"
 >
-  <div class="form-element" [class.inline]="config.templateOptions.inline">
+  <div class="form-element" [class.inline]="config.templateOptions?.inline">
     <label
       class="form-element-label"
-      *ngIf="label && config.templateOptions.label"
-      [class.inline]="config.templateOptions.inline"
-      [ngClass]="[
-        config.templateOptions.inline ? config.templateOptions.color : ''
-      ]"
-      [class.bold]="config.templateOptions.bold"
-      [class.required]="config.templateOptions.required"
+      *ngIf="label && config.templateOptions?.label"
+      [class.inline]="config.templateOptions?.inline"
+      [ngClass]="[config.templateOptions?.inline ? config.templateOptions?.color : '']"
+      [class.bold]="config.templateOptions?.bold"
+      [class.required]="config.templateOptions?.required"
       [attr.for]="key"
     >
-      {{
-        getTranslationKey('label')
-          | translate: { Default: config.templateOptions.label }
-      }}:
+      {{ getTranslationKey('label') | translate: { Default: config.templateOptions?.label } }}:
     </label>
-    <app-info
-      *ngIf="config.templateOptions.description"
-      [description]="
-        getTranslationKey('description')
-          | translate: { Default: config.templateOptions.description || '' }
-      "
-    ></app-info>
+    <webui-info
+      *ngIf="config.templateOptions?.description"
+      [description]="getTranslationKey('description') | translate: { Default: config.templateOptions?.description || '' }"
+    ></webui-info>
     <i
       class="data-list-trigger info-icon"
       *ngIf="dataListMap"
       triggers="mouseover:mouseout"
       [placement]="'bottom'"
       [ngbTooltip]="dataListTemplate"
-      >View</i
     >
+      View
+    </i>
     <div
       class="form-element-content edit"
       [class.showAll]="viewMode || config.type === 'static'"
-      [class.full]="config.templateOptions.addon"
-      [class.flex-column]="(!viewMode && isPhoneField) || config.templateOptions.type === 'email'"
-      (blur)="onBlur($event)"
+      [class.full]="addonIcon"
+      [class.flex-column]="(!viewMode && isPhoneField) || config.templateOptions?.type === 'email'"
     >
-      <span class="input-icon" *ngIf="config.templateOptions.icon">
-        {{ config.templateOptions.iconParsed }}
+      <span class="input-icon" *ngIf="config.templateOptions?.icon">
+        {{ config.templateOptions?.iconParsed }}
       </span>
 
       <ng-container *ngIf="!viewMode && isPhoneField">
@@ -54,22 +46,18 @@
       </ng-container>
 
       <ng-container
-        *ngIf="
-          (this.config.type !== 'static' ||
-            (this.config.type === 'static' && !this.config.read_only)) &&
+        *ngIf="(this.config.type !== 'static' || (this.config.type === 'static' && !this.config.read_only)) &&
           !viewMode &&
           !config.read_only &&
           !isAddressField &&
           !isPhoneField &&
-          config.templateOptions.type !== 'score'
+          config.templateOptions?.type !== 'score'
         "
       >
         <ng-container *ngTemplateOutlet="inputField"></ng-container>
       </ng-container>
 
-      <ng-container
-        *ngIf="config.type !== 'static' && !viewMode && isAddressField"
-      >
+      <ng-container *ngIf="config.type !== 'static' && !viewMode && isAddressField">
         <ng-container *ngTemplateOutlet="addressField"></ng-container>
       </ng-container>
 
@@ -77,7 +65,7 @@
         *ngIf="
           !viewMode &&
           !config.read_only &&
-          config.templateOptions.type === 'score'
+          config.templateOptions?.type === 'score'
         "
       >
         <ng-container *ngTemplateOutlet="scoreField"></ng-container>
@@ -113,40 +101,38 @@
         *ngIf="
           (viewMode || config.read_only) &&
           config.type !== 'static' &&
-          config.templateOptions.type !== 'score'
+          config.templateOptions?.type !== 'score'
         "
       >
         {{ displayValue }}
       </div>
 
-      <div *ngIf="config.templateOptions.addon" class="addon">
+      <div *ngIf="addonIcon" class="addon">
         <fa-icon
-          *ngIf="config.templateOptions.addon.indexOf('.') === -1"
-          [icon]="['fas', config.templateOptions.addon]"
+          *ngIf="isIconName(addonIcon)"
+          [icon]="['fas', addonIcon]"
         ></fa-icon>
         <img
-          *ngIf="config.templateOptions.addon.indexOf('.') > -1"
-          [src]="config.templateOptions.addon"
+          *ngIf="addonIcon && addonIcon.indexOf('.') > -1"
+          [src]="addonIcon"
         />
       </div>
 
       <button
         type="button"
-        *ngIf="config.key === 'password' && config.templateOptions.addon"
+        *ngIf="config.key === 'password' && config.templateOptions?.addon"
         class="password"
-        (click)="switchType(config.templateOptions.type)"
+        (click)="switchType(config.templateOptions?.type)"
       >
         <ng-container *ngTemplateOutlet="iconEye"></ng-container>
       </button>
 
       <span
         class="readonly"
-        *ngIf="
-          config.type === 'static' && config.templateOptions.type !== 'score'
-        "
-        [ngClass]="config.templateOptions.color"
+        *ngIf="config.type === 'static' && config.templateOptions?.type !== 'score'"
+        [ngClass]="config.templateOptions?.color"
         [ngStyle]="{
-          fontWeight: config.templateOptions.bold ? 'bold' : 'normal'
+          fontWeight: config.templateOptions?.bold ? 'bold' : 'normal'
         }"
       >
         {{ displayValue }}
@@ -156,11 +142,11 @@
         class="rating"
         *ngIf="
           (viewMode || config.read_only) &&
-          config.templateOptions.type === 'score' &&
-          (parseScore(config.value) || !config.templateOptions.danger)
+          config.templateOptions?.type === 'score' &&
+          (parseScore(config.value) || !config.templateOptions?.danger)
         "
       >
-        <ngb-rating [rate]="config.value" max="5" [readonly]="true">
+        <ngb-rating [rate]="config.value" [max]="5" [readonly]="true">
           <ng-template let-fill="fill" let-index="index">
             <span *ngIf="fill === 100" class="star full">&#9733;</span>
             <span *ngIf="fill === 0" class="star">&#9733;</span>
@@ -175,29 +161,29 @@
         class="text-danger"
         *ngIf="
           (viewMode || config.read_only) &&
-          config.templateOptions.type === 'score' &&
+          config.templateOptions?.type === 'score' &&
           !parseScore(config.value) &&
-          config.templateOptions.danger
+          config.templateOptions?.danger
         "
       >
-        {{ config.templateOptions.danger }}
+        {{ config.templateOptions?.danger }}
       </div>
     </div>
   </div>
   <div
     class="text-danger mt-3"
-    *ngIf="group.get(this.key) && group.get(this.key).getError('pattern')"
+    *ngIf="formControl && formControl.getError('pattern')"
   >
-    {{ config.templateOptions.patternError }}
+    {{ config.templateOptions?.patternError }}
   </div>
   <div *ngIf="errors">
-    <div class="text-danger mt-3" *ngIf="errors[config.key]">
-      {{ errors[config.key] }}
+    <div class="text-danger mt-3" *ngIf="errors[config.key || '']">
+      {{ errors[config.key || ''] }}
     </div>
   </div>
   <div *ngIf="message">
-    <div *ngIf="message[config.key]" class="text-success mt-1">
-      {{ message[config.key] }}
+    <div *ngIf="message[config.key || '']" class="text-success mt-1">
+      {{ message[config.key || ''] }}
     </div>
   </div>
 </div>
@@ -206,33 +192,33 @@
   <input
     #input
     class="form-control"
-    appInputFocus
+    webuiInputFocus
     autocomplete="new-password"
     [class.password-field]="config.key === 'password'"
-    [class.pl-4]="config.templateOptions.icon"
-    [class.not-empty]="group.get(key).value"
-    [class.addon-input]="config.templateOptions.addon"
-    [formControl]="group.get(key)"
+    [class.pl-4]="config.templateOptions?.icon"
+    [class.not-empty]="formControl.value"
+    [class.addon-input]="config.templateOptions?.addon"
+    [formControl]="formControl"
     [attr.type]="
-      config.templateOptions.type
-        ? (config.templateOptions.type === 'score' && 'number') ||
-          config.templateOptions.type
+      config.templateOptions?.type
+        ? (config.templateOptions?.type === 'score' && 'number') ||
+          config.templateOptions?.type
         : 'text'
     "
     [attr.id]="key"
     [attr.name]="key"
     [attr.placeholder]="
       getTranslationKey('placeholder')
-        | translate: { Default: config.templateOptions.placeholder || '' }
+        | translate: { Default: config.templateOptions?.placeholder || '' }
     "
     [readonly]="config.read_only"
-    pattern="{{ config.templateOptions.pattern }}"
-    [email]="config.templateOptions.type === 'email'"
+    pattern="{{ config.templateOptions?.pattern }}"
+    [email]="config.templateOptions?.type === 'email'"
     (focus)="generateList()"
     (keyup)="filter(key)"
   />
 
-  <div *ngIf="config.templateOptions.type === 'email' && (!errors || !errors[config.key])" class="error-message">Invalid e-mail address</div>
+  <div *ngIf="config.templateOptions?.type === 'email' && (!errors || !errors[config.key || ''])" class="error-message">Invalid e-mail address</div>
 </ng-template>
 
 <ng-template #addressField>
@@ -257,56 +243,55 @@
 <ng-template #scoreField>
   <ngb-rating
     *ngIf="
-      !viewMode && !config.read_only && config.templateOptions.type === 'score'
+      !viewMode && !config.read_only && config.templateOptions?.type === 'score'
     "
-    max="5"
+    [max]="5"
     (hover)="hovered = $event"
     (leave)="hovered = undefined"
     (rateChange)="hovered = undefined"
-    [formControl]="group.get(key)"
+    [formControl]="formControl"
   >
     <ng-template let-fill="fill" let-index="index">
       <span
         *ngIf="fill === 100"
-        [style.color]="colors[hovered || group.get(key).value]"
+        [style.color]="colors[hovered || formControl.value]"
         class="star full"
         >&#9733;</span
       >
       <span
         *ngIf="fill === 0"
-        [class.text-danger]="!hovered && !group.get(key).value"
+        [class.text-danger]="!hovered && !formControl.value"
         class="star"
-        >{{ group.get(key).value ? '&#9733;' : '&#9734;' }}</span
+        >{{ formControl.value ? '&#9733;' : '&#9734;' }}</span
       >
       <span
         *ngIf="fill < 100 && fill > 0"
-        [class.text-danger]="!group.get(key).value"
+        [class.text-danger]="!formControl.value"
         class="star"
       >
         <span class="half" [style.width.%]="fill">
-          {{ group.get(key).value ? '&#9733;' : '&#9734;' }} </span
-        >{{ group.get(key).value ? '&#9733;' : '&#9734;' }}</span
-      >
+          {{ formControl.value ? '&#9733;' : '&#9734;' }}
+        </span>
+        {{ formControl.value ? '&#9733;' : '&#9734;' }}
+      </span>
     </ng-template>
   </ngb-rating>
 
   <span
     class="score"
-    *ngIf="
-      !viewMode && !config.read_only && config.templateOptions.type === 'score'
-    "
-    [style.borderColor]="colors[hovered || group.get(key).value]"
-    [style.color]="colors[hovered || group.get(key).value]"
+    *ngIf="!viewMode && !config.read_only && config.templateOptions?.type === 'score'"
+    [style.borderColor]="colors[hovered || formControl.value]"
+    [style.color]="colors[hovered || formControl.value]"
   >
-    <span *ngIf="!hovered && !group.get(key).value" class="text-danger">
-      {{ config.templateOptions.noneValue }}
+    <span *ngIf="!hovered && !formControl.value" class="text-danger">
+      {{ config.templateOptions?.noneValue }}
     </span>
     <span
       class="d-flex align-items-center"
-      *ngIf="hovered || group.get(key).value"
+      *ngIf="hovered || formControl.value"
     >
       &nbsp;
-      {{ hovered || group.get(key).value | number: '1.1-1' }}
+      {{ hovered || formControl.value | number: '1.1-1' }}
       &nbsp;
       <fa-icon [icon]="['fas', 'star']"></fa-icon>
     </span>
@@ -329,15 +314,13 @@
     [selectFirstCountry]="false"
     [selectedCountryISO]="selectedCountryISO"
     [maxLength]="15"
-    numberFormat="E164"
-    [tooltipField]="TooltipLabel.Name"
     [phoneValidation]="true"
-    [formControl]="group.get(key)"
+    [formControl]="formControl"
     name="phone"
   >
   </ngx-intl-tel-input>
 
-  <div *ngIf="!errors || !errors[config.key]" class="error-message">Invalid phone number</div>
+  <div *ngIf="!errors || !errors[config.key || '']" class="error-message">Invalid phone number</div>
 </ng-template>
 
 <ng-template #dataListTemplate>

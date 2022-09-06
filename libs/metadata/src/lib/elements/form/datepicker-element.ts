@@ -17,7 +17,7 @@ interface DatepickerElementTemplateOptions extends BasicElementTemplateOptions {
 }
 
 export class DatepickerElement extends BasicFormElement {
-  templateOptions: DatepickerElementTemplateOptions;
+  override templateOptions!: DatepickerElementTemplateOptions;
 
   inline?: boolean;
   rightPosition: boolean;
@@ -41,7 +41,7 @@ export class DatepickerElement extends BasicFormElement {
     return this;
   }
 
-  setDropdonLeft() {
+  setDropdownLeft() {
     this.rightPosition = false;
 
     return this;

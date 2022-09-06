@@ -1,5 +1,5 @@
-import { Endpoints } from '@webui/data';
 import { List, Form, InputType } from '@webui/metadata';
+import { Endpoints } from '@webui/models';
 
 const formset = {
   fields: [],

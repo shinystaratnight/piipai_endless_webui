@@ -1,5 +1,5 @@
 import { ApiMethod } from '@webui/data';
-import { getTimeZoneOffset } from '@webui/utilities';
+import { Time } from '@webui/time';
 
 const list = {
   list: {
@@ -12,7 +12,7 @@ const list = {
         sort: true,
         content: [{ field: 'shift.date.shift_date', type: 'datepicker' }],
         name: 'shift.date.shift_date',
-        label: 'Shift date'
+        label: 'Shift date',
       },
       {
         content: [
@@ -21,27 +21,27 @@ const list = {
               0: 'minus-circle',
               1: 'check-circle',
               2: 'times-circle',
-              null: 'minus-circle'
+              null: 'minus-circle',
             },
             color: {
               1: 'danger',
-              2: 'success'
+              2: 'success',
             },
             type: 'icon',
-            field: 'status'
+            field: 'status',
           },
           {
             values: { 0: 'Undefined', 1: 'Accepted', 2: 'Cancelled' },
             field: 'status',
-            type: 'select'
-          }
+            type: 'select',
+          },
         ],
         delim: ' ',
         name: 'status',
         sort_field: 'status',
         label: 'Status',
-        sort: true
-      }
+        sort: true,
+      },
     ],
     pagination_label: 'Job Offer',
     search_enabled: false,
@@ -54,18 +54,18 @@ const list = {
         data: {
           value: '__str__',
           endpoint: '/candidate/candidatecontacts/',
-          key: 'id'
+          key: 'id',
         },
-        query: 'candidate_contact'
-      }
-    ]
+        query: 'candidate_contact',
+      },
+    ],
   },
   fields: [
     {
       key: 'shift.date.shift_date',
       type: 'datepicker',
       templateOptions: { required: true, label: 'Shift date', type: 'date' },
-      read_only: true
+      read_only: true,
     },
     {
       key: 'status',
@@ -77,13 +77,13 @@ const list = {
         options: [
           { value: 0, label: 'Undefined' },
           { value: 1, label: 'Accepted' },
-          { value: 2, label: 'Cancelled' }
+          { value: 2, label: 'Cancelled' },
         ],
-        type: 'select'
+        type: 'select',
       },
-      read_only: true
-    }
-  ]
+      read_only: true,
+    },
+  ],
 };
 
 const formset = {
@@ -94,9 +94,9 @@ const formset = {
         action: 'editModal',
         label: '',
         type: 'button',
-        text: 'Offer'
+        text: 'Offer',
       },
-      type: 'button'
+      type: 'button',
     },
     {
       key: 'candidate_rate',
@@ -105,9 +105,9 @@ const formset = {
         required: false,
         display: '{currency}{field}/h',
         label: 'Candidate rate',
-        type: 'static'
+        type: 'static',
       },
-      type: 'static'
+      type: 'static',
     },
     {
       many: false,
@@ -121,16 +121,16 @@ const formset = {
         edit: true,
         values: ['__str__'],
         label: 'Candidate contact',
-        type: 'related'
+        type: 'related',
       },
       read_only: true,
-      type: 'related'
+      type: 'related',
     },
     {
       key: 'shift.time',
       read_only: false,
       templateOptions: { required: true, label: 'Time', type: 'time' },
-      type: 'datepicker'
+      type: 'datepicker',
     },
     {
       key: 'reply_received_by_sms.id',
@@ -138,15 +138,15 @@ const formset = {
         action: 'editModal',
         label: '',
         type: 'button',
-        text: 'Reply'
+        text: 'Reply',
       },
-      type: 'button'
+      type: 'button',
     },
     {
       key: 'shift.date.shift_date',
       read_only: false,
       templateOptions: { required: true, label: 'Shift date', type: 'date' },
-      type: 'datepicker'
+      type: 'datepicker',
     },
     {
       key: 'has_accept_action',
@@ -154,9 +154,9 @@ const formset = {
         action: 'emptyPost',
         label: '',
         type: 'button',
-        text: ''
+        text: '',
       },
-      type: 'button'
+      type: 'button',
     },
     {
       showIf: ['scheduled_sms_datetime'],
@@ -166,17 +166,17 @@ const formset = {
         required: false,
         label: 'Will send',
         type: 'datetime',
-        listLabel: 'Will send'
+        listLabel: 'Will send',
       },
-      type: 'datepicker'
+      type: 'datepicker',
     },
     {
       key: 'credit_approved',
       type: 'datepicker',
       templateOptions: {
         listLabel: 'Was sent',
-        type: 'datetime'
-      }
+        type: 'datetime',
+      },
     },
     {
       key: 'has_send_action',
@@ -184,9 +184,9 @@ const formset = {
         action: 'emptyPost',
         label: '',
         type: 'button',
-        text: ''
+        text: '',
       },
-      type: 'button'
+      type: 'button',
     },
     {
       key: 'timesheets',
@@ -194,9 +194,9 @@ const formset = {
         link: null,
         label: 'Timesheets',
         type: 'link',
-        text: 'Link to TimeSheet'
+        text: 'Link to TimeSheet',
       },
-      type: 'link'
+      type: 'link',
     },
     {
       key: 'client_rate',
@@ -205,9 +205,9 @@ const formset = {
         required: false,
         display: '{currency}{field}/h',
         label: 'Client rate',
-        type: 'static'
+        type: 'static',
       },
-      type: 'static'
+      type: 'static',
     },
     {
       key: 'has_cancel_action',
@@ -215,9 +215,9 @@ const formset = {
         action: 'emptyPost',
         label: '',
         type: 'button',
-        text: ''
+        text: '',
       },
-      type: 'button'
+      type: 'button',
     },
     {
       default: 0,
@@ -228,18 +228,18 @@ const formset = {
         options: [
           { value: 0, label: 'Undefined' },
           { value: 1, label: 'Accepted' },
-          { value: 2, label: 'Cancelled' }
+          { value: 2, label: 'Cancelled' },
         ],
         values: {
           0: 'minus-circle',
           1: 'check-circle',
           2: 'times-circle',
-          null: 'minus-circle'
+          null: 'minus-circle',
         },
         label: 'Status',
-        type: 'select'
+        type: 'select',
       },
-      type: 'select'
+      type: 'select',
     },
     {
       key: 'has_resend_action',
@@ -247,9 +247,9 @@ const formset = {
         action: 'emptyPost',
         label: '',
         type: 'button',
-        text: ''
+        text: '',
       },
-      type: 'button'
+      type: 'button',
     },
     {
       key: 'id',
@@ -257,10 +257,10 @@ const formset = {
         action: 'delete',
         label: '',
         type: 'button',
-        text: ''
+        text: '',
       },
-      type: 'button'
-    }
+      type: 'button',
+    },
   ],
   list: {
     columns: [
@@ -272,15 +272,15 @@ const formset = {
           {
             endpoint: '/candidate/candidatecontacts/',
             type: 'related',
-            field: 'candidate_contact'
+            field: 'candidate_contact',
           },
           {
             field: 'candidate_contact.contact.phone_mobile',
             type: 'link',
-            link: 'tel:{candidate_contact.contact.phone_mobile}'
-          }
+            link: 'tel:{candidate_contact.contact.phone_mobile}',
+          },
         ],
-        label: 'Candidate contact'
+        label: 'Candidate contact',
       },
       {
         name: 'client/candidate_rate',
@@ -289,18 +289,18 @@ const formset = {
             display: '{currency}{field}/h',
             type: 'static',
             field: 'candidate_rate',
-            help: 'candidate'
+            help: 'candidate',
           },
           {
             display: '{currency}{field}/h',
             type: 'static',
             field: 'client_rate',
-            help: 'client'
-          }
+            help: 'client',
+          },
         ],
         label: 'Rate',
         title: null,
-        delim: null
+        delim: null,
       },
       {
         name: 'shift.date.shift_date',
@@ -310,14 +310,14 @@ const formset = {
         content: [
           {
             type: 'datepicker',
-            field: 'shift.date.shift_date'
+            field: 'shift.date.shift_date',
           },
           {
             type: 'datepicker',
-            field: 'shift.time'
-          }
+            field: 'shift.time',
+          },
         ],
-        label: 'Shift info'
+        label: 'Shift info',
       },
       {
         name: 'timesheets',
@@ -331,11 +331,11 @@ const formset = {
             endpoint: '/hr/timesheets/{timesheets}',
             label: 'Timesheets',
             type: 'link',
-            field: 'timesheets'
-          }
+            field: 'timesheets',
+          },
         ],
         label: 'Timesheets',
-        delim: null
+        delim: null,
       },
       {
         name: 'sms_history',
@@ -344,21 +344,21 @@ const formset = {
             showIf: ['scheduled_sms_datetime'],
             label: 'Will send',
             type: 'datepicker',
-            field: 'scheduled_sms_datetime'
+            field: 'scheduled_sms_datetime',
           },
           {
             action: 'emptyPost',
             text: 'Send now',
             endpoint: '/hr/joboffers/{id}/send',
             type: 'button',
-            field: 'has_send_action'
+            field: 'has_send_action',
           },
 
           {
             type: 'static',
             hideValue: true,
             field: 'credit_approved',
-            showIf: ['offer_sent_by_sms']
+            showIf: ['offer_sent_by_sms'],
           },
 
           {
@@ -376,7 +376,7 @@ const formset = {
                 postfix: '|',
                 type: 'button',
                 color: 'link',
-                field: 'offer_sent_by_sms'
+                field: 'offer_sent_by_sms',
               },
 
               {
@@ -389,9 +389,9 @@ const formset = {
                 emptyValue: '-',
                 type: 'button',
                 color: 'link',
-                field: 'reply_received_by_sms'
-              }
-            ]
+                field: 'reply_received_by_sms',
+              },
+            ],
           },
 
           {
@@ -399,11 +399,11 @@ const formset = {
             text: 'Resend new',
             endpoint: '/hr/joboffers/{id}/resend',
             type: 'button',
-            field: 'has_resend_action'
-          }
+            field: 'has_resend_action',
+          },
         ],
         label: 'SMS History',
-        title: null
+        title: null,
       },
       {
         name: 'status',
@@ -412,12 +412,12 @@ const formset = {
             values: {
               0: 'Undefined',
               1: 'Accepted',
-              2: 'Cancelled'
+              2: 'Cancelled',
             },
             color: {
               0: 'muted',
               1: 'success',
-              2: 'danger'
+              2: 'danger',
             },
             content: [
               {
@@ -430,8 +430,8 @@ const formset = {
                 list: true,
                 field: 'has_accept_action',
                 templateOptions: {
-                  icon: 'check'
-                }
+                  icon: 'check',
+                },
               },
               {
                 action: 'emptyPost',
@@ -443,16 +443,16 @@ const formset = {
                 list: true,
                 field: 'has_cancel_action',
                 templateOptions: {
-                  icon: 'times'
-                }
-              }
+                  icon: 'times',
+                },
+              },
             ],
             type: 'select',
-            field: 'status'
-          }
+            field: 'status',
+          },
         ],
         label: 'Status',
-        title: null
+        title: null,
       },
       {
         name: 'actions',
@@ -462,13 +462,13 @@ const formset = {
             icon: 'fa-trash',
             title: 'Delete',
             type: 'button',
-            field: 'id'
-          }
+            field: 'id',
+          },
         ],
         label: 'Actions',
         title: null,
-        delim: null
-      }
+        delim: null,
+      },
     ],
     list: 'joboffer',
     editDisable: false,
@@ -483,7 +483,7 @@ const formset = {
           selectionError: 'Please select at least one job offer!',
           required: true,
           multiple: true,
-          property: 'id'
+          property: 'id',
         },
         {
           endpoint: '/hr/joboffers/{id}/cancel/',
@@ -491,7 +491,7 @@ const formset = {
           selectionError: 'Please select at least one job offer!',
           required: true,
           multiple: true,
-          property: 'id'
+          property: 'id',
         },
         {
           endpoint: '/hr/joboffers/',
@@ -500,15 +500,15 @@ const formset = {
           selectionError: 'Please select at least one job offer!',
           required: true,
           multiple: true,
-          property: 'id'
-        }
+          property: 'id',
+        },
       ],
       label: 'Actions',
       agree_label: 'Agree',
       button_label: 'Go',
-      decline_label: 'Decline'
-    }
-  }
+      decline_label: 'Decline',
+    },
+  },
 };
 
 const form = [
@@ -517,38 +517,38 @@ const form = [
     type: 'input',
     hide: true,
     templateOptions: { required: false, label: 'Id', type: 'text' },
-    read_only: false
+    read_only: false,
   },
   {
     key: 'updated_at',
     type: 'datepicker',
     templateOptions: { required: false, label: 'Updated at', type: 'datetime' },
-    read_only: true
+    read_only: true,
   },
   {
     key: 'created_at',
     type: 'datepicker',
     templateOptions: { required: false, label: 'Created at', type: 'datetime' },
-    read_only: true
+    read_only: true,
   },
   {
     key: 'shift.id',
     type: 'input',
     hide: true,
     templateOptions: { required: false, label: 'Id', type: 'text' },
-    read_only: false
+    read_only: false,
   },
   {
     key: 'shift.time',
     type: 'datepicker',
     templateOptions: { required: true, label: 'Time', type: 'time' },
-    read_only: false
+    read_only: false,
   },
   {
     key: 'shift.date.shift_date',
     type: 'datepicker',
     templateOptions: { required: true, label: 'Shift date', type: 'date' },
-    read_only: false
+    read_only: false,
   },
   {
     list: false,
@@ -560,12 +560,12 @@ const form = [
       delete: false,
       values: ['__str__'],
       type: 'related',
-      edit: true
+      edit: true,
     },
     collapsed: false,
     type: 'related',
     key: 'shift.date',
-    many: false
+    many: false,
   },
   {
     list: false,
@@ -577,12 +577,12 @@ const form = [
       delete: false,
       values: ['__str__'],
       type: 'related',
-      edit: true
+      edit: true,
     },
     collapsed: false,
     type: 'related',
     key: 'shift',
-    many: false
+    many: false,
   },
   {
     list: false,
@@ -594,19 +594,19 @@ const form = [
       delete: false,
       values: ['__str__'],
       type: 'related',
-      edit: true
+      edit: true,
     },
     collapsed: false,
     type: 'related',
     key: 'candidate_contact',
-    many: false
+    many: false,
   },
   {
     key: 'offer_sent_by_sms.id',
     type: 'input',
     hide: true,
     templateOptions: { required: false, label: 'Id', type: 'text' },
-    read_only: false
+    read_only: false,
   },
   {
     list: false,
@@ -618,19 +618,19 @@ const form = [
       delete: false,
       values: ['__str__'],
       type: 'related',
-      edit: true
+      edit: true,
     },
     collapsed: false,
     type: 'related',
     key: 'offer_sent_by_sms',
-    many: false
+    many: false,
   },
   {
     key: 'reply_received_by_sms.id',
     type: 'input',
     hide: true,
     templateOptions: { required: false, label: 'Id', type: 'text' },
-    read_only: false
+    read_only: false,
   },
   {
     list: false,
@@ -642,12 +642,12 @@ const form = [
       delete: false,
       values: ['__str__'],
       type: 'related',
-      edit: true
+      edit: true,
     },
     collapsed: false,
     type: 'related',
     key: 'reply_received_by_sms',
-    many: false
+    many: false,
   },
   {
     key: 'status',
@@ -660,10 +660,10 @@ const form = [
       options: [
         { value: 0, label: 'Undefined' },
         { value: 1, label: 'Accepted' },
-        { value: 2, label: 'Cancelled' }
-      ]
+        { value: 2, label: 'Cancelled' },
+      ],
     },
-    read_only: false
+    read_only: false,
   },
   {
     key: 'scheduled_sms_datetime',
@@ -671,16 +671,16 @@ const form = [
     templateOptions: {
       required: false,
       label: 'Scheduled date',
-      type: 'datetime'
+      type: 'datetime',
     },
-    read_only: false
+    read_only: false,
   },
   {
     key: 'offer_sent_by_sms.id',
     type: 'input',
     hide: true,
     templateOptions: { required: false, label: 'Id', type: 'text' },
-    read_only: false
+    read_only: false,
   },
   {
     list: false,
@@ -692,19 +692,19 @@ const form = [
       delete: false,
       values: ['__str__'],
       type: 'related',
-      edit: true
+      edit: true,
     },
     collapsed: false,
     type: 'related',
     key: 'offer_sent_by_sms',
-    many: false
+    many: false,
   },
   {
     key: 'reply_received_by_sms.id',
     type: 'input',
     hide: true,
     templateOptions: { required: false, label: 'Id', type: 'text' },
-    read_only: false
+    read_only: false,
   },
   {
     list: false,
@@ -716,31 +716,31 @@ const form = [
       delete: false,
       values: ['__str__'],
       type: 'related',
-      edit: true
+      edit: true,
     },
     collapsed: false,
     type: 'related',
     key: 'reply_received_by_sms',
-    many: false
+    many: false,
   },
   {
     key: 'shift.id',
     type: 'input',
     hide: true,
     templateOptions: { required: false, label: 'Id', type: 'text' },
-    read_only: false
+    read_only: false,
   },
   {
     key: 'shift.time',
     type: 'datepicker',
     templateOptions: { required: true, label: 'Time', type: 'time' },
-    read_only: false
+    read_only: false,
   },
   {
     key: 'shift.date.shift_date',
     type: 'datepicker',
     templateOptions: { required: true, label: 'Shift date', type: 'date' },
-    read_only: false
+    read_only: false,
   },
   {
     list: false,
@@ -752,12 +752,12 @@ const form = [
       delete: false,
       values: ['__str__'],
       type: 'related',
-      edit: true
+      edit: true,
     },
     collapsed: false,
     type: 'related',
     key: 'shift.date',
-    many: false
+    many: false,
   },
   {
     list: false,
@@ -769,12 +769,12 @@ const form = [
       delete: false,
       values: ['__str__'],
       type: 'related',
-      edit: true
+      edit: true,
     },
     collapsed: false,
     type: 'related',
     key: 'shift',
-    many: false
+    many: false,
   },
   {
     key: 'candidate_rate',
@@ -782,21 +782,21 @@ const form = [
     templateOptions: {
       required: false,
       label: 'Candidate rate',
-      type: 'static'
+      type: 'static',
     },
-    read_only: true
+    read_only: true,
   },
   {
     key: 'client_rate',
     type: 'static',
     templateOptions: { required: false, label: 'Client rate', type: 'static' },
-    read_only: true
+    read_only: true,
   },
   {
     key: 'timesheets',
     type: 'static',
     templateOptions: { required: false, label: 'Timesheets', type: 'static' },
-    read_only: true
+    read_only: true,
   },
   {
     key: 'has_accept_action',
@@ -804,9 +804,9 @@ const form = [
     templateOptions: {
       required: false,
       label: 'Has accept action',
-      type: 'static'
+      type: 'static',
     },
-    read_only: true
+    read_only: true,
   },
   {
     key: 'has_cancel_action',
@@ -814,9 +814,9 @@ const form = [
     templateOptions: {
       required: false,
       label: 'Has cancel action',
-      type: 'static'
+      type: 'static',
     },
-    read_only: true
+    read_only: true,
   },
   {
     key: 'has_resend_action',
@@ -824,9 +824,9 @@ const form = [
     templateOptions: {
       required: false,
       label: 'Has resend action',
-      type: 'static'
+      type: 'static',
     },
-    read_only: true
+    read_only: true,
   },
   {
     key: 'has_send_action',
@@ -834,10 +834,10 @@ const form = [
     templateOptions: {
       required: false,
       label: 'Has send action',
-      type: 'static'
+      type: 'static',
     },
-    read_only: true
-  }
+    read_only: true,
+  },
 ];
 
 const formadd = [
@@ -851,24 +851,24 @@ const formadd = [
       edit: true,
       values: ['__str__'],
       label: 'Job',
-      type: 'related'
+      type: 'related',
     },
     read_only: true,
-    type: 'related'
+    type: 'related',
   },
   {
     endpoint: '/hr/shifts/',
     templateOptions: {
       label: 'Shift',
       values: ['__str__', 'time', 'date', 'workers'],
-      type: 'related'
+      type: 'related',
     },
     query: {
       job: '{job.id}',
-      ordering: '-date.shift_date,-time'
+      ordering: '-date.shift_date,-time',
     },
     type: 'related',
-    key: 'shift'
+    key: 'shift',
   },
   {
     key: 'workers',
@@ -879,8 +879,8 @@ const formadd = [
     default: '{shift.workers}',
     templateOptions: {
       label: 'Workers',
-      type: 'number'
-    }
+      type: 'number',
+    },
   },
   {
     type: 'related',
@@ -890,18 +890,20 @@ const formadd = [
       label: 'Select worker',
       info: {
         score: '{candidate_scores.average_score}',
-        distance: '{distance}'
+        distance: '{distance}',
       },
-      values: ['__str__', 'distance', 'candidate_scores']
+      values: ['__str__', 'distance', 'candidate_scores'],
     },
     many: true,
     separate: true,
     unique: true,
     showIf: ['shift.id'],
     query: {
-      shift: `{shift.date.shift_date}T{shift.time}%2B${getTimeZoneOffset()}`
-    }
-  }
+      shift: `{shift.date.shift_date}T{shift.time}%2B${Time.now()
+        .format('Z')
+        .slice(1)}`,
+    },
+  },
 ];
 
 const extend = {
@@ -918,10 +920,10 @@ const extend = {
         edit: true,
         values: ['__str__'],
         label: 'Candidate',
-        type: 'related'
+        type: 'related',
       },
       read_only: true,
-      type: 'related'
+      type: 'related',
     },
     {
       key: 'shift.time',
@@ -929,21 +931,25 @@ const extend = {
       templateOptions: {
         required: true,
         label: 'Shift start time',
-        type: 'time'
+        type: 'time',
       },
-      type: 'datepicker'
-    }
+      type: 'datepicker',
+    },
   ],
   list: {
     columns: [
       {
         name: 'shift_start_time',
         content: [
-          { label: 'Shift start time', type: 'datepicker', field: 'shift.time' }
+          {
+            label: 'Shift start time',
+            type: 'datepicker',
+            field: 'shift.time',
+          },
         ],
         label: 'Shift start time',
         title: null,
-        delim: null
+        delim: null,
       },
       {
         name: 'candidate',
@@ -952,20 +958,20 @@ const extend = {
             endpoint: '/candidate/candidatecontacts/',
             label: 'Candidate',
             type: 'related',
-            field: 'candidate_contact'
-          }
+            field: 'candidate_contact',
+          },
         ],
         label: 'Candidate',
         title: null,
-        delim: null
-      }
+        delim: null,
+      },
     ],
     list: 'joboffer',
     editDisable: false,
     label: 'Job Offer',
     pagination_label: 'Job Offer',
-    search_enabled: false
-  }
+    search_enabled: false,
+  },
 };
 
 export const joboffers = {
@@ -973,5 +979,5 @@ export const joboffers = {
   form,
   formset,
   formadd,
-  extend
+  extend,
 };

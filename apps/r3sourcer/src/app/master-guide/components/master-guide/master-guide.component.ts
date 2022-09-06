@@ -10,22 +10,21 @@ import {
   EventService,
   EventType
 } from '@webui/core';
-import { Page } from '@webui/data';
 
 @Component({
-  selector: 'app-master-guide',
+  selector: 'webui-master-guide',
   templateUrl: './master-guide.component.html',
   styleUrls: ['./master-guide.component.scss']
 })
 export class MasterGuideComponent implements OnInit, OnDestroy {
-  guide: GuideItem[];
+  guide!: GuideItem[];
 
-  showPlaceholder: boolean;
-  showContent: boolean;
-  inactiveIcon: boolean;
-  skiped: boolean;
+  showPlaceholder!: boolean;
+  showContent!: boolean;
+  inactiveIcon!: boolean;
+  skiped!: boolean;
 
-  private sub: Subscription;
+  private sub!: Subscription;
 
   constructor(
     private masterGuideService: MasterGuideService,
@@ -48,17 +47,17 @@ export class MasterGuideComponent implements OnInit, OnDestroy {
     this.showPlaceholder = !this.showPlaceholder;
   }
 
-  onShowContent(event: Event) {
+  onShowContent() {
     this.showContent = true;
     this.showPlaceholder = false;
     this.inactiveIcon = true;
   }
 
-  skipGuide(event: Event) {
+  skipGuide() {
     this.skiped = true;
   }
 
-  minimize(event: Event) {
+  minimize() {
     this.showContent = false;
     this.inactiveIcon = false;
     this.showPlaceholder = true;
@@ -70,11 +69,11 @@ export class MasterGuideComponent implements OnInit, OnDestroy {
     );
   }
 
-  update({ value, item, type }) {
+  update({ value, item, type }: any) {
     if (type === 'purpose') {
       const id = this.siteSettings.companyId;
 
-      this.masterGuideService.changePurpose(id, value).subscribe((res) => {
+      this.masterGuideService.changePurpose(id as string, value).subscribe(() => {
         item.value = value;
         this.eventService.emit(EventType.PurposeChanged);
       });

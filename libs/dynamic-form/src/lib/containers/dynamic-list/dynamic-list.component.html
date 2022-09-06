@@ -4,24 +4,24 @@
   [class.on-list]="!inForm"
   class="mw-100 datatable"
 >
-  <!-- <div appMove [parent]="datatable" *ngIf="poped" class="card-header bg-primary text-white" (active)="activeTable($event)">
+  <!-- <div webuiMove [parent]="datatable" *ngIf="poped" class="card-header bg-primary text-white" (active)="activeTable($event)">
     <h5 class="d-flex justify-content-between align-items-center mb-0 lead" *ngIf="config.list">
-      <span [ngClass]="{'mr-5': poped}">{{config.list.label}}</span>
+      <span [ngClass]="{'me-5': poped}">{{config.list.label}}</span>
       <div class="d-flex fustify-content-center align-items-center">
         <fa-icon
-          class="ml-2 icon"
+          class="ms-2 icon"
           [icon]="['fas', 'window-minimize']"
           (click)="minimizeTable()"
           aria-hidden="true">
         </fa-icon>
         <fa-icon
-          class="ml-2 icon"
+          class="ms-2 icon"
           [icon]="['fas', 'window-maximize']"
           (click)="unpopedTable()"
           aria-hidden="true">
         </fa-icon>
         <fa-icon
-          class="ml-2 icon"
+          class="ms-2 icon"
           [icon]="['fas', 'times']"
           (click)="closeTable()"
           aria-hidden="true">
@@ -38,19 +38,19 @@
     }"
   >
     <div
-      appScroll
+      webuiScroll
       [enable]="!inForm"
       class="filter-wrapper"
       *ngIf="(first || poped) && showFilters && !inlineFilters"
       [class.open]="!filtersHidden"
       [class.in-form]="inForm"
     >
-      <app-filter-block
+      <webui-filter-block
         [key]="config.list.list"
         [config]="filtersOfList"
         (event)="filterHandler($event)"
       >
-      </app-filter-block>
+      </webui-filter-block>
     </div>
     <div class="background" (click)="toggleFilterBlock()"></div>
     <div
@@ -77,7 +77,7 @@
           (!inForm && !poped)
         "
       >
-        <span *ngIf="!inForm && !description" class="mr-auto my-1">
+        <span *ngIf="!inForm && !description" class="me-auto my-1">
           {{
             getListLabelKey()
               | translate: { Default: label || config.list.label }
@@ -87,7 +87,7 @@
           <span>{{ label || config.list.label }}</span> <br />
           <span class="description">{{ description }}</span>
         </p>
-        <app-list-buttons
+        <webui-list-buttons
           [buttons]="config.list.buttons"
           [first]="first"
           [inForm]="inForm"
@@ -97,7 +97,7 @@
           [endpoint]="endpoint"
           (event)="buttonAction($event)"
         >
-        </app-list-buttons>
+        </webui-list-buttons>
       </h2>
       <div
         *ngIf="(showFilters && !(identifyDevice() || isMobileDevice)) || config.list.search_enabled"
@@ -111,10 +111,10 @@
           (click)="toggleFilterBlock()"
           *ngIf="showFilters && !(identifyDevice() || isMobileDevice)"
         >
-          <app-icon icon="filter"></app-icon>
+          <webui-svg-icon icon="filter"></webui-svg-icon>
           {{ 'filters' | translate: { Default: 'Filters' } }}
         </button>
-        <app-list-search-bar
+        <webui-list-search-bar
           class="datatable-search"
           *ngIf="data && config.list.search_enabled"
           [param]="config.list.searchParameter"
@@ -123,34 +123,34 @@
           [list]="config.list.list"
           (event)="filterHandler($event)"
         >
-        </app-list-search-bar>
+        </webui-list-search-bar>
       </div>
 
       <div
         class="filter-wrapper inline"
         *ngIf="(first || poped) && showFilters && inlineFilters"
-        appScroll
+        webuiScroll
         [enable]="!inForm"
         [ngClass]="{ open: !filtersHidden, 'in-form': inForm }"
       >
-        <app-filter-block
+        <webui-filter-block
           [key]="config.list.list"
           [inline]="true"
           [config]="filtersOfList"
           (event)="filterHandler($event)"
-        ></app-filter-block>
+        ></webui-filter-block>
       </div>
 
       <div class="background" (click)="toggleFilterBlock()"></div>
 
-      <app-action-element
+      <webui-action-element
         *ngIf="config.list.actions"
         [actionProcess]="actionProcess"
         [count]="selectedCount"
         [config]="config.list.actions"
         (event)="actionHandler($event)"
       >
-      </app-action-element>
+      </webui-action-element>
 
       <div
         class="d-flex align-items-center justify-content-between"
@@ -170,7 +170,7 @@
           *ngIf="showFilters"
           style="font-size: 14px"
         >
-          <svg class="mr-1" width="16" height="12" viewBox="0 0 20 15">
+          <svg class="me-1" width="16" height="12" viewBox="0 0 20 15">
             <path
               fill-rule="evenodd"
               clip-rule="evenodd"
@@ -183,13 +183,7 @@
 
       <ng-container *ngIf="identifyDevice()">
         <div class="mobile-item" *ngFor="let row of body">
-          <ng-container
-            *ngTemplateOutlet="
-              getView();
-              context: { data: row, status: getElement('status', row.content) }
-            "
-          >
-          </ng-container>
+          <ng-container *ngTemplateOutlet="getView(); context: { data: row, status: getElement('status', row.content) }"></ng-container>
         </div>
       </ng-container>
 
@@ -208,7 +202,7 @@
                     id="all-checkbox"
                     type="checkbox"
                     hidden
-                    appSubscriptionRequired
+                    webuiSubscriptionRequired
                     *ngIf="config.list.actions || actions"
                     [ngModel]="selectedAll"
                     (ngModelChange)="selectAll($event)"
@@ -222,10 +216,10 @@
                     [class.text-center]="field.center"
                     *ngIf="!(field.tab && field.tab.is_collapsed)"
                   >
-                    <app-list-column-header
+                    <webui-list-column-header
                       [config]="field"
                       (sortChange)="onSortChange()"
-                    ></app-list-column-header>
+                    ></webui-list-column-header>
                   </th>
                 </ng-container>
               </ng-container>
@@ -234,7 +228,7 @@
                 <span (click)="openAllTabs()" class="more__header">
                   {{ 'more' | translate }}
                   <fa-icon
-                    class="ml-2 sort-icon"
+                    class="ms-2 sort-icon"
                     [icon]="['fas', collapsed ? 'chevron-down' : 'chevron-up']"
                   ></fa-icon>
                 </span>
@@ -264,12 +258,12 @@
                       class="form-check-input"
                       [checked]="select[row.id]"
                       hidden
-                      appSubscriptionRequired
+                      webuiSubscriptionRequired
                     />
-                    <app-checkbox
+                    <webui-checkbox
                       [checked]="select[row.id]"
                       (click)="toggleCheckbox($event, row)"
-                    ></app-checkbox>
+                    ></webui-checkbox>
                   </label>
 
                   <a
@@ -315,19 +309,19 @@
 
                     <ng-container
                       *ngIf="cell.name !== 'actions'"
-                      appListElement
+                      webuiListElement
                       [config]="cell.content"
                       (event)="eventHandler($event)"
                       (buttonAction)="buttonHandler($event)"
                     >
                     </ng-container>
-
+                    <!-- (cell.pop = pop) -->
                     <ng-template #actionsTemplate>
                       <ng-container
-                        appListElement
+                        webuiListElement
                         [config]="cell.content"
                         (event)="eventHandler($event)"
-                        (buttonAction)="buttonHandler($event, (cell.pop = pop))"
+                        (buttonAction)="buttonHandler($event)"
                       >
                       </ng-container>
                     </ng-template>
@@ -356,10 +350,10 @@
                         innerTables[row.id][cell.name]
                       "
                     >
-                      <app-list-table
+                      <webui-list-table
                         *ngIf="innerTables[row.id][cell.name].body"
                         [config]="innerTables[row.id][cell.name]"
-                      ></app-list-table>
+                      ></webui-list-table>
                     </div>
 
                     <!-- <ng-container *ngIf="first && config.list.innerEdit">
@@ -383,7 +377,7 @@
                     (click)="toggleTab($event, row)"
                   >
                     <fa-icon
-                      class="more__icon mr-0"
+                      class="more__icon me-0"
                       [icon]="row.collapsed ? 'chevron-down' : 'chevron-up'"
                     >
                     </fa-icon>
@@ -436,7 +430,7 @@
                             <span class="additional-data-content">
                               <ng-container
                                 *ngFor="let innerField of field.content"
-                                appListElement
+                                webuiListElement
                                 [config]="innerField"
                                 (event)="eventHandler($event)"
                                 (buttonAction)="buttonHandler($event)"
@@ -469,7 +463,7 @@
                         <span class="additional-data-content">
                           <ng-container
                             *ngFor="let innerField of field.content"
-                            appListElement
+                            webuiListElement
                             [config]="innerField"
                             (event)="eventHandler($event)"
                             (buttonAction)="buttonHandler($event)"
@@ -504,7 +498,7 @@
           (pageChange)="pageChange()"
         >
         </ngb-pagination>
-        <div class="ml-2">
+        <div class="ms-2">
           {{ data.count }}
           <!-- {{ config.list.pagination_label || config.list.label }} -->
           {{
@@ -523,14 +517,14 @@
       <div class="modal-header">
         <h5 class="modal-title">{{ modalInfo.label }}</h5>
         &nbsp;
-        <app-close-button
-          class="close-button ml-auto align-self-center"
+        <webui-close-button
+          class="close-button ms-auto align-self-center"
           (click)="modal.dismiss()"
-        ></app-close-button>
+        ></webui-close-button>
       </div>
     </div>
     <div class="modal-body" [ngSwitch]="modalInfo.type">
-      <app-generic-form
+      <webui-generic-form
         *ngSwitchCase="'form'"
         [endpoint]="modalInfo.endpoint"
         [metadataQuery]="
@@ -544,7 +538,7 @@
         [data]="modalInfo.data"
         [edit]="modalInfo.edit"
         (event)="formEvent($event, modal.close)"
-        (errorForm)="formError($event)"
+        (errorForm)="formError()"
       >
         <button
           type="submit"
@@ -552,10 +546,19 @@
           [disabled]="saveProcess || modalInfo.form.disableSaveButton"
         >
           {{ 'save' | translate: { Default: 'Save' } }}
-          <app-spinner *ngIf="saveProcess"></app-spinner>
+          <webui-spinner *ngIf="saveProcess"></webui-spinner>
         </button>
-      </app-generic-form>
-      <agm-map
+      </webui-generic-form>
+      <google-map
+        *ngSwitchCase="'map'"
+        [zoom]="13"
+      >
+        <!-- <agm-marker
+          [latitude]="modalInfo.latitude"
+          [longitude]="modalInfo.longitude"
+        ></agm-marker> -->
+      </google-map>
+      <!-- <agm-map
         *ngSwitchCase="'map'"
         [latitude]="modalInfo.latitude"
         [longitude]="modalInfo.longitude"
@@ -566,7 +569,7 @@
           [latitude]="modalInfo.latitude"
           [longitude]="modalInfo.longitude"
         ></agm-marker>
-      </agm-map>
+      </agm-map> -->
     </div>
   </div>
 </ng-template>
@@ -574,13 +577,13 @@
 <ng-template #messageDetail let-modal>
   <div class="message-detail-header">
     <h5 class="message-label">{{ modalInfo.label }}</h5>
-    <app-close-button
-      class="close-button ml-auto"
+    <webui-close-button
+      class="close-button ms-auto"
       (click)="modal.dismiss()"
-    ></app-close-button>
+    ></webui-close-button>
   </div>
 
-  <app-generic-form
+  <webui-generic-form
     [endpoint]="modalInfo.endpoint"
     [metadataQuery]="modalInfo.metadataQuery"
     [id]="modalInfo.id"
@@ -588,18 +591,18 @@
     [data]="modalInfo.data"
     [edit]="modalInfo.edit"
     (event)="formEvent($event, modal.close)"
-    (errorForm)="formError($event)"
+    (errorForm)="formError()"
   >
-  </app-generic-form>
+  </webui-generic-form>
 </ng-template>
 
 <ng-template #confirmModal let-modal>
   <div class="modal-header">
     <p>{{ modalInfo.message }}</p>
-    <app-close-button
-      class="close-button ml-auto"
+    <webui-close-button
+      class="close-button ms-auto"
       (click)="modal.close()"
-    ></app-close-button>
+    ></webui-close-button>
   </div>
   <div class="modal-footer">
     <button
@@ -623,10 +626,10 @@
   <div class="modal-content-wrapper">
     <div class="modal-header-wrapper">
       <div class="modal-header">
-        <app-close-button
-          class="close-button ml-auto"
+        <webui-close-button
+          class="close-button ms-auto"
           (click)="modal.dismiss()"
-        ></app-close-button>
+        ></webui-close-button>
       </div>
     </div>
     <div class="modal-body">
@@ -645,7 +648,7 @@
         (click)="confirmCandidateBuy()"
       >
         Confirm
-        <app-spinner *ngIf="saveProcess"></app-spinner>
+        <webui-spinner *ngIf="saveProcess"></webui-spinner>
       </button>
     </div>
   </div>
@@ -656,10 +659,10 @@
     <div class="modal-header-wrapper">
       <div class="modal-header">
         <h5 class="modal-title">Send message</h5>
-        <app-close-button
-          class="close-button ml-auto"
+        <webui-close-button
+          class="close-button ms-auto"
           (click)="modal.dismiss()"
-        ></app-close-button>
+        ></webui-close-button>
       </div>
     </div>
     <div class="modal-body p-0">
@@ -675,10 +678,10 @@
 </ng-template>
 
 <ng-template #pdfDocumentModal let-modal>
-  <app-close-button
-    class="close-button ml-auto mt-3 mr-3"
+  <webui-close-button
+    class="close-button ms-auto mt-3 me-3"
     (click)="modal.close()"
-  ></app-close-button>
+  ></webui-close-button>
   <div class="modal-body">
     <object
       type="application/pdf"
@@ -689,11 +692,11 @@
 </ng-template>
 
 <ng-template #fillInMap let-modal>
-  <app-close-button
+  <webui-close-button
     class="close-button"
     (click)="modal.close()"
-  ></app-close-button>
-  <agm-map
+  ></webui-close-button>
+  <!-- <agm-map
     [latitude]="modalInfo.latitude"
     [longitude]="modalInfo.longitude"
     [zoom]="13"
@@ -720,16 +723,41 @@
         </button>
       </agm-info-window>
     </agm-marker>
-  </agm-map>
+  </agm-map> -->
+
+  <google-map
+    [zoom]="13"
+    [center]="modalInfo.center"
+    style="margin-top: 36px"
+  >
+    <map-marker
+      *ngFor="let marker of modalInfo.markers"
+      [position]="marker.position"
+    >
+      <map-info-window>
+        <strong>{{ marker.name }}</strong>
+        <br />
+        <p>{{ marker.description }}</p>
+        <button
+          *ngIf="!marker.label"
+          type="button"
+          class="btn btn-sm btn-success"
+          (click)="markerClick(marker)"
+          style="font-size: 10px"
+        >
+          {{ marker.selected ? 'Selected' : 'Select' }}
+        </button>
+      </map-info-window>
+    </map-marker>
+  </google-map>
 </ng-template>
 
 <ng-template #mapModal let-modal>
-  <app-close-button
+  <webui-close-button
     class="close-button"
     (click)="modal.close()"
-  ></app-close-button>
-  <agm-map
-    [disableDefaultUI]="true"
+  ></webui-close-button>
+  <!-- <google-map
     [latitude]="modalInfo.latitude"
     [longitude]="modalInfo.longitude"
     [zoom]="13"
@@ -739,7 +767,14 @@
       [latitude]="modalInfo.latitude"
       [longitude]="modalInfo.longitude"
     ></agm-marker>
-  </agm-map>
+  </google-map> -->
+  <google-map
+    [zoom]="13"
+    [center]="modalInfo"
+    style="margin-top: 36px"
+  >
+    <map-marker [position]="modalInfo"></map-marker>
+  </google-map>
 </ng-template>
 
 <ng-template #history let-data="data" let-status="status">
@@ -747,7 +782,7 @@
     <div class="d-flex justify-content-center flex-column">
       <ng-container
         *ngFor="let field of getElement('position', data.content).content"
-        appListElement
+        webuiListElement
         [config]="field"
         [length]="getElement('position', data.content).content.length"
         (event)="eventHandler($event)"
@@ -763,7 +798,7 @@
             data.content
           ).content
         "
-        appListElement
+        webuiListElement
         [config]="field"
         (event)="eventHandler($event)"
         (buttonAction)="buttonHandler($event)"
@@ -774,7 +809,7 @@
   <div class="body">
     <ng-container
       *ngFor="let field of getElement('times', data.content).content"
-      appListElement
+      webuiListElement
       [length]="getElement('times', data.content).content.length"
       [config]="field"
       (event)="eventHandler($event)"
@@ -783,7 +818,7 @@
     </ng-container>
     <div class="mb-3 total-time-wrapper">
       <!-- <span
-        class="text-success mr-1"
+        class="text-success me-1"
         style="display: inline-block; font-size: 15px; width: 50%"
         >{{
           'total_time.label' | translate: { Default: 'Total time' }
@@ -791,7 +826,7 @@
       > -->
       <!-- <ng-container
         *ngFor="let field of getElement('totalTime', data.content).content"
-        appListElement
+        webuiListElement
         [length]="getElement('totalTime', data.content).content.length"
         [config]="field"
         (event)="eventHandler($event)"
@@ -802,7 +837,7 @@
     <div class="d-flex align-items-center mb-2">
       <ng-container
         *ngFor="let field of getElement('tracking', data.content).content"
-        appListElement
+        webuiListElement
         [config]="inverseButton(field)"
         (event)="eventHandler($event)"
         (buttonAction)="buttonHandler($event)"
@@ -815,7 +850,7 @@
     <div class="d-inline-block">
       <ng-container
         *ngFor="let field of getElement('evaluate', data.content).content"
-        appListElement
+        webuiListElement
         [config]="field"
         (event)="eventHandler($event)"
         (buttonAction)="buttonHandler($event)"
@@ -840,7 +875,7 @@
       >
         <ng-container
           *ngIf="!isInteger(field.value)"
-          appListElement
+          webuiListElement
           [last]="last"
           [config]="field"
           (event)="eventHandler($event)"
@@ -853,7 +888,7 @@
     <div class="button-wrapper" *ngIf="status && status.content[0].value === 5">
       <ng-container
         *ngFor="let field of getElement('approve', data.content).content"
-        appListElement
+        webuiListElement
         [config]="inverseButton(field)"
         (event)="eventHandler($event)"
         (buttonAction)="buttonHandler($event)"
@@ -863,7 +898,7 @@
     <div class="button-wrapper" *ngIf="status && status.content[0].value === 5">
       <ng-container
         *ngFor="let field of getElement('change', data.content).content"
-        appListElement
+        webuiListElement
         [config]="inverseButton(field)"
         (event)="eventHandler($event)"
         (buttonAction)="buttonHandler($event)"
@@ -878,7 +913,7 @@
     <div class="d-flex justify-content-center flex-column">
       <ng-container
         *ngFor="let field of getElement('jobsite', data.content).content"
-        appListElement
+        webuiListElement
         [config]="field"
         [length]="getElement('jobsite', data.content).content.length"
         (event)="eventHandler($event)"
@@ -890,7 +925,7 @@
   <div class="body">
     <ng-container
       *ngFor="let field of getElement('mobileTimes', data.content).content"
-      appListElement
+      webuiListElement
       [length]="getElement('mobileTimes', data.content).content.length"
       [config]="field"
       (event)="eventHandler($event)"
@@ -899,7 +934,7 @@
     </ng-container>
     <div class="mb-3">
       <!-- <span
-        class="text-success mr-1"
+        class="text-success me-1"
         style="display: inline-block; font-size: 15px; width: 50%"
         >{{
           'totalTime.label' | translate: { Default: 'Total time' }
@@ -907,7 +942,7 @@
       > -->
       <!-- <ng-container
         *ngFor="let field of getElement('totalTime', data.content).content"
-        appListElement
+        webuiListElement
         [length]="getElement('totalTime', data.content).content.length"
         [config]="field"
         (event)="eventHandler($event)"
@@ -918,7 +953,7 @@
     <div class="d-flex align-items-center mb-2">
       <ng-container
         *ngFor="let field of getElement('tracking', data.content).content"
-        appListElement
+        webuiListElement
         [config]="inverseButton(field)"
         (event)="eventHandler($event)"
         (buttonAction)="buttonHandler($event)"
@@ -947,7 +982,7 @@
         "
       >
         <ng-container
-          appListElement
+          webuiListElement
           [last]="last"
           [config]="field"
           (event)="eventHandler($event)"
@@ -964,7 +999,7 @@
     <div class="d-flex justify-content-center flex-column">
       <ng-container
         *ngFor="let field of getElement('position', data.content).content"
-        appListElement
+        webuiListElement
         [config]="field"
         [length]="getElement('position', data.content).content.length"
         (event)="eventHandler($event)"
@@ -980,7 +1015,7 @@
             data.content
           ).content
         "
-        appListElement
+        webuiListElement
         [config]="field"
         (event)="eventHandler($event)"
         (buttonAction)="buttonHandler($event)"
@@ -992,7 +1027,7 @@
     <label>Times</label>
     <ng-container
       *ngFor="let field of getElement('times', data.content).content"
-      appListElement
+      webuiListElement
       [length]="getElement('times', data.content).content.length"
       [config]="field"
       (event)="eventHandler($event)"
@@ -1001,13 +1036,13 @@
     </ng-container>
     <div class="mb-3 total-time-wrapper">
       <!-- <span
-        class="text-success mr-1"
+        class="text-success me-1"
         style="display: inline-block; font-size: 15px; width: 50%"
         >Total time:&nbsp;</span
       > -->
       <!-- <ng-container
         *ngFor="let field of getElement('hours', data.content).content"
-        appListElement
+        webuiListElement
         [length]="getElement('hours', data.content).content.length"
         [config]="field"
         (event)="eventHandler($event)"
@@ -1018,7 +1053,7 @@
     <div class="d-flex align-items-center mb-2">
       <ng-container
         *ngFor="let field of getElement('tracking', data.content).content"
-        appListElement
+        webuiListElement
         [config]="inverseButton(field)"
         (event)="eventHandler($event)"
         (buttonAction)="buttonHandler($event)"
@@ -1029,7 +1064,7 @@
     <div class="d-inline-block">
       <ng-container
         *ngFor="let field of getElement('evaluate', data.content).content"
-        appListElement
+        webuiListElement
         [config]="field"
         (event)="eventHandler($event)"
         (buttonAction)="buttonHandler($event)"
@@ -1043,7 +1078,7 @@
         *ngFor="
           let field of getElement('approve', data.content).content.slice(0, 1)
         "
-        appListElement
+        webuiListElement
         [config]="inverseButton(field)"
         (event)="eventHandler($event)"
         (buttonAction)="buttonHandler($event)"
@@ -1053,7 +1088,7 @@
     <div class="button-wrapper">
       <ng-container
         *ngFor="let field of getElement('approve', data.content).content.slice(1, 2)"
-        appListElement
+        webuiListElement
         [config]="inverseButton(field)"
         (event)="eventHandler($event)"
         (buttonAction)="buttonHandler($event)"

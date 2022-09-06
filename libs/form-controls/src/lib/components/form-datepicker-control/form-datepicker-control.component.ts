@@ -8,22 +8,21 @@ import {
   OnInit,
   TemplateRef,
   ViewChild,
-  ViewContainerRef
+  ViewContainerRef,
 } from '@angular/core';
 import { Icon, IconSize } from '@webui/icon';
 import { DatepickerType } from '../../enums/datepicker.enum';
-import { DateService } from '@webui/core';
-import { DateFormat } from '@webui/data';
 import {
   ControlValueAccessor,
   FormControl,
-  NG_VALUE_ACCESSOR
+  NG_VALUE_ACCESSOR,
 } from '@angular/forms';
 import { merge, Observable, Subject } from 'rxjs';
 import { Platform } from '@angular/cdk/platform';
 import { CdkOverlayOrigin, Overlay } from '@angular/cdk/overlay';
 import { Dropdown } from '../../helpers';
 import { takeUntil } from 'rxjs/operators';
+import { API_DATE_FORMAT, Time, TIME_FORMAT } from '@webui/time';
 
 @Component({
   selector: 'webui-form-datepicker-control',
@@ -34,9 +33,9 @@ import { takeUntil } from 'rxjs/operators';
     {
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => FormDatepickerControlComponent),
-      multi: true
-    }
-  ]
+      multi: true,
+    },
+  ],
 })
 export class FormDatepickerControlComponent
   implements OnInit, ControlValueAccessor, AfterViewInit, OnDestroy
@@ -46,13 +45,13 @@ export class FormDatepickerControlComponent
   private timerDropdown!: Dropdown;
   private destroy: Subject<void> = new Subject<void>();
 
-  @Input() label?: string;
+  @Input() label!: string;
   @Input() type?: DatepickerType;
-  @Input() initialValue?: string;
+  @Input() initialValue?: string | null;
   @Input() timezone?: string;
 
-  @Input() timerFrom?: string;
-  @Input() timerTo?: string;
+  @Input() timerFrom?: string | null;
+  @Input() timerTo?: string | null;
 
   @ViewChild(CdkOverlayOrigin) overlayOrigin?: CdkOverlayOrigin;
   @ViewChild('content') content?: TemplateRef<unknown>;
@@ -89,7 +88,6 @@ export class FormDatepickerControlComponent
   }
 
   constructor(
-    private dateService: DateService,
     private platform: Platform,
     private overlay: Overlay,
     private viewContainerRef: ViewContainerRef
@@ -107,6 +105,18 @@ export class FormDatepickerControlComponent
 
   public registerOnTouched(fn: () => void): void {
     this.onTouched = fn;
+  }
+
+  public setDisabledState(isDisabled: boolean): void {
+    if (isDisabled) {
+      this.dateControl.disable();
+      this.timeControl.disable();
+      this.durationControl.disable();
+    } else {
+      this.dateControl.enable();
+      this.timeControl.enable();
+      this.durationControl.enable();
+    }
   }
 
   ngOnInit(): void {
@@ -156,13 +166,15 @@ export class FormDatepickerControlComponent
       return;
     }
 
-    const date = this.dateService.parse(this.initialValue, this.timezone);
-
-    this.dateControl.patchValue(date.format('YYYY-MM-DD'), {
-      emitEvent: false
+    const date = Time.parse(this.initialValue, {
+      timezone: this.timezone,
     });
-    this.timeControl.patchValue(date.format(DateFormat.Time), {
-      emitEvent: false
+
+    this.dateControl.patchValue(date.format(API_DATE_FORMAT), {
+      emitEvent: false,
+    });
+    this.timeControl.patchValue(date.format(TIME_FORMAT), {
+      emitEvent: false,
     });
   }
 
@@ -171,8 +183,12 @@ export class FormDatepickerControlComponent
       return;
     }
 
-    const from = this.dateService.parse(this.timerFrom, this.timezone);
-    const to = this.dateService.parse(this.timerTo, this.timezone);
+    const from = Time.parse(this.timerFrom, {
+      timezone: this.timezone,
+    });
+    const to = Time.parse(this.timerTo, {
+      timezone: this.timezone,
+    });
     const hours = to.diff(from, 'hours');
     const minutes = to.clone().add(-hours, 'hours').diff(from, 'minutes');
 
@@ -200,6 +216,10 @@ export class FormDatepickerControlComponent
     const date = this.dateControl.value;
     const time = this.timeControl.value;
 
+    if (!this.onChange) {
+      return;
+    }
+
     if (this.isDate) {
       this.onChange(date);
     } else if (this.isTime) {
@@ -207,7 +227,9 @@ export class FormDatepickerControlComponent
     } else if (this.isDateTime) {
       const datetime =
         date && time
-          ? this.dateService.parse(`${date}T${time}`, this.timezone)
+          ? Time.parse(`${date}T${time}`, {
+              timezone: this.timezone,
+            })
           : undefined;
 
       this.onChange(datetime ? datetime.utc().format() : undefined);

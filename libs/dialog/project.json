@@ -1,0 +1,26 @@
+{
+  "projectType": "library",
+  "root": "libs/dialog",
+  "sourceRoot": "libs/dialog/src",
+  "prefix": "webui",
+  "targets": {
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/dialog"],
+      "options": {
+        "jestConfig": "libs/dialog/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/dialog/src/**/*.ts",
+          "libs/dialog/src/**/*.html"
+        ]
+      }
+    }
+  },
+  "tags": []
+}

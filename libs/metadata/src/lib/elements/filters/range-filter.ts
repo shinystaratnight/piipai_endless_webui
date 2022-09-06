@@ -18,8 +18,8 @@ export class RangeFilter implements FilterModel {
   public default: any;
   public key: string;
   public label: string;
-  public min: number;
-  public max: number;
+  public min: number | null;
+  public max: number | null;
   public input: { label: string; query: string; key: string }[];
 
   constructor(options: RangeFilterOptions) {

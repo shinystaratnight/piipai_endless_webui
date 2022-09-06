@@ -1,13 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { FormatterService } from '@webui/core';
 import { Timesheet, TimesheetModel } from '@webui/data';
 import { isMobile } from '@webui/utilities';
 import { Modal, Status } from '../modal/modal.component';
 
 export type ApproveTimesheetModalConfig = {
-  evaluateEvent(e: any, closeModal: Function);
-  sendSignature(submitButton?: any);
+  evaluateEvent(e: any, closeModal: () => any): any;
+  sendSignature(submitButton?: any): any;
 
   endpoint: string;
   evaluateEndpoint: string;
@@ -28,31 +27,31 @@ export type ApproveTimesheetModalConfig = {
     value: string;
   };
   label: {
-    avatar: { origin: string, thumb: string };
+    avatar: { origin: string; thumb: string };
     fullName: string;
   };
   data: {
-    evaluation_score: number;
+    evaluation_score: string;
   };
   signatureStep: boolean;
   approve: boolean;
 };
 
 @Component({
-  selector: 'app-approve-timesheet-modal',
+  selector: 'webui-approve-timesheet-modal',
   templateUrl: './approve-timesheet-modal.component.html',
-  styleUrls: ['./approve-timesheet-modal.component.scss']
+  styleUrls: ['./approve-timesheet-modal.component.scss'],
 })
 export class ApproveTimesheetModalComponent extends Modal implements OnInit {
-  config: ApproveTimesheetModalConfig;
-  saveProcess: boolean;
+  config!: ApproveTimesheetModalConfig;
+  saveProcess?: boolean;
 
-  timesheet: Timesheet;
-  model: TimesheetModel;
+  timesheet!: Timesheet;
+  model!: TimesheetModel;
 
   isMobile = isMobile;
 
-  constructor(modal: NgbActiveModal, private formatter: FormatterService) {
+  constructor(modal: NgbActiveModal) {
     super(modal);
   }
 
@@ -60,7 +59,7 @@ export class ApproveTimesheetModalComponent extends Modal implements OnInit {
     this.model = new TimesheetModel(this.timesheet);
   }
 
-  public formEvent(e) {
+  public formEvent(e: any) {
     if (e.type === 'saveStart') {
       this.saveProcess = true;
     }

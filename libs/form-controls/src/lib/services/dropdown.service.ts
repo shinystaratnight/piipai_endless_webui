@@ -2,11 +2,11 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, of, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
-import { DropdownOption } from '../models/dropdown.model';
+import { DropdownOption, IRelatedObject } from '../models/dropdown.model';
 
 interface FetchResponse {
   count: number;
-  results: any[];
+  results: IRelatedObject[];
   message: string;
 }
 
@@ -24,7 +24,7 @@ export class DropdownService {
 
   public fetchOptions(
     url: string,
-    params: { [key: string]: any } = {}
+    params: { [key: string]: unknown } = {}
   ): Observable<DropdownOption[] | undefined> {
     if (typeof this.count === 'number') {
       this.offset += this.limit;

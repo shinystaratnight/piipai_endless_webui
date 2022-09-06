@@ -3,12 +3,12 @@ import { EventEmitter } from '@angular/core';
 
 export class BasicElementComponent {
 
-  public group: FormGroup;
+  public group!: FormGroup;
   public key: any;
   public config: any;
   public event = new EventEmitter();
 
-  public addControl(config, fb: FormBuilder, ...validators) {
+  public addControl(config: any, fb: FormBuilder, ...validators: any[]) {
     if (config.key) {
       const keys = config.key.split('.');
       if (keys.length > 1) {
@@ -25,14 +25,14 @@ export class BasicElementComponent {
     }
   }
 
-  public addFlags(element, config) {
+  public addFlags(element: any, config: any) {
     const { nativeElement } = element;
     const { type, required, max, min, cols, rows, pattern, disabled, step } = config.templateOptions;
 
     nativeElement.required = config.type !== 'datepicker' && required;
 
     if (type === 'number') {
-      nativeElement.step = 1;
+      nativeElement.step = step ? step + '' : 1;
     }
     if (max && type !== 'number') {
       nativeElement.maxLength = max;
@@ -55,9 +55,6 @@ export class BasicElementComponent {
     if (rows) {
       nativeElement.rows = rows;
     }
-    if (step) {
-      nativeElement.step = step;
-    }
   }
 
   public createEvent() {
@@ -65,21 +62,21 @@ export class BasicElementComponent {
       type: 'create',
       el: this.config,
       value: this.config.key === 'id'
-        ? { id: this.group.get(this.key).value }
-        : this.group.get(this.key).value
+        ? { id: this.group.get(this.key)?.value }
+        : this.group.get(this.key)?.value
     });
   }
 
-  private addElement(group, el, fb, validators) {
+  private addElement(group: FormGroup, el: string, fb: FormBuilder, validators: any[]) {
     group.addControl(el, fb.control('', this.getValidators(validators)));
   }
 
-  private addGroup(group, el, fb) {
+  private addGroup(group: FormGroup, el: string, fb: FormBuilder) {
     group.addControl(el, fb.group({}));
   }
 
-  private addControls(group, keys: string[], fb, validators) {
-    const el = keys.shift();
+  private addControls(group: FormGroup, keys: string[], fb: FormBuilder, validators: any[]) {
+    const el: string = keys.shift() as string;
     if (keys.length === 0) {
       if (!group.get(el)) {
         this.addElement(group, el, fb, validators);
@@ -88,13 +85,13 @@ export class BasicElementComponent {
       this.group = group;
     } else if (!group.get(el)) {
       this.addGroup(group, el, fb);
-      this.addControls(group.get(el), keys, fb, validators);
+      this.addControls(group.get(el) as FormGroup, keys, fb, validators);
     } else {
-      this.addControls(group.get(el), keys, fb, validators);
+      this.addControls(group.get(el) as FormGroup, keys, fb, validators);
     }
   }
 
-  private getValidators(options): ValidatorFn[] {
+  private getValidators(options: any[]): ValidatorFn[] {
     const [
       required,
       min,

@@ -9,14 +9,14 @@ import {
   ElementRef,
   ChangeDetectorRef,
   forwardRef,
-  OnDestroy
+  OnDestroy,
 } from '@angular/core';
 import { Icon, IconSize } from '@webui/icon';
 import {
   CdkOverlayOrigin,
   Overlay,
   OverlayConfig,
-  OverlayRef
+  OverlayRef,
 } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
 import { DropdownService } from '../../services/dropdown.service';
@@ -24,7 +24,7 @@ import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import {
   ControlValueAccessor,
   FormControl,
-  NG_VALUE_ACCESSOR
+  NG_VALUE_ACCESSOR,
 } from '@angular/forms';
 import {
   debounceTime,
@@ -34,12 +34,13 @@ import {
   map,
   pairwise,
   takeUntil,
-  throttleTime
+  throttleTime,
 } from 'rxjs/operators';
 import { DropdownOption, DropdownPayload } from '../../models/dropdown.model';
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 
 type OptionFilter = (option: DropdownOption) => boolean;
+type ContentPayload = { payload: BehaviorSubject<DropdownPayload> };
 
 @Component({
   selector: 'webui-form-dropdown-control',
@@ -51,9 +52,9 @@ type OptionFilter = (option: DropdownOption) => boolean;
     {
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => FormDropdownControlComponent),
-      multi: true
-    }
-  ]
+      multi: true,
+    },
+  ],
 })
 export class FormDropdownControlComponent
   implements OnInit, ControlValueAccessor, OnDestroy
@@ -64,18 +65,18 @@ export class FormDropdownControlComponent
   private onChange?: (val: DropdownOption) => void;
   private onTouched?: () => void;
 
-  @Input() label?: string;
+  @Input() label!: string;
   @Input() placeholder?: string;
   @Input() url?: string;
   @Input() params?: { [key: string]: unknown } = {};
   @Input() optionFilter?: OptionFilter;
 
   @ViewChild(CdkOverlayOrigin) overlayOrigin?: CdkOverlayOrigin;
-  @ViewChild('content') content?: TemplateRef<unknown>;
+  @ViewChild('content') content?: TemplateRef<ContentPayload>;
   @ViewChild('input') input?: ElementRef<HTMLInputElement>;
   @ViewChild('scroller') scroller?: CdkVirtualScrollViewport;
 
-  public control?: FormControl;
+  public control!: FormControl;
   public Icon = Icon;
   public IconSize = IconSize;
   public options$: BehaviorSubject<DropdownPayload> = new BehaviorSubject(
@@ -119,7 +120,7 @@ export class FormDropdownControlComponent
 
     if (this.value) {
       this.control?.patchValue((this.value as DropdownOption).label, {
-        emitEvent: false
+        emitEvent: false,
       });
     }
 
@@ -218,7 +219,7 @@ export class FormDropdownControlComponent
         .width,
       maxHeight: '10rem',
       backdropClass: 'form-dropdown-control-backdrop',
-      hasBackdrop: true
+      hasBackdrop: true,
     });
 
     config.positionStrategy = this.overlay
@@ -231,18 +232,18 @@ export class FormDropdownControlComponent
           originX: 'start',
           originY: 'bottom',
           overlayX: 'start',
-          overlayY: 'top'
-        }
+          overlayY: 'top',
+        },
       ]);
 
     this.control?.patchValue('', { emitEvent: false });
 
     this.overlayRef = this.overlay.create(config);
-    const dropdownContent = new TemplatePortal(
+    const dropdownContent = new TemplatePortal<ContentPayload>(
       this.content,
       this.viewContainerRef,
       {
-        payload: this.options$
+        payload: this.options$,
       }
     );
     this.overlayRef
@@ -269,5 +270,17 @@ export class FormDropdownControlComponent
       this.value = obj;
       this.control?.patchValue(obj.__str__, { emitEvent: false });
     }
+  }
+
+  public setDisabledState(isDisabled: boolean): void {
+    if (isDisabled) {
+      this.control?.disable();
+    } else {
+      this.control?.enable();
+    }
+  }
+
+  public toPayload(item: unknown): BehaviorSubject<DropdownPayload> {
+    return item as BehaviorSubject<DropdownPayload>;
   }
 }

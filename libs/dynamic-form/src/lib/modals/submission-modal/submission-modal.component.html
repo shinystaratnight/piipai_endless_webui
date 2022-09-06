@@ -1,8 +1,8 @@
-<webui-dialog [title]="'worksheet_submission' | translate">
+<webui-dialog [title]="title | translate">
   <div class="content" dialog-content>
-    <app-timesheet-details-preview
+    <webui-timesheet-details-preview
       [timeSheet]="timeSheet"
-    ></app-timesheet-details-preview>
+    ></webui-timesheet-details-preview>
 
     <form *ngIf="formGroup" [formGroup]="formGroup" class="form" (ngSubmit)="submitForm()">
       <section class="times">
@@ -50,6 +50,7 @@
           <button
             type="button"
             class="plus-button"
+            *ngIf="timeSheet.status !== 7"
             [disabled]="!hasActivities"
             (click)="addActivityControl()"
           >
@@ -68,7 +69,7 @@
                 [optionFilter]="activityOptionFilter"
               ></webui-form-dropdown-control>
 
-              <button type="button" class="delete-button" (click)="removeActivity(activity, index)">
+              <button *ngIf="timeSheet.status !== 7" type="button" class="delete-button" (click)="removeActivity(activity, index)">
                 <webui-icon [icon]="Icon.Delete"></webui-icon>
               </button>
             </div>
@@ -86,11 +87,11 @@
         </ng-container>
 
         <div *ngIf="!hasActivities" class="activities-empty">
-          <app-loader class="loader"></app-loader>
+          <webui-loader class="loader"></webui-loader>
         </div>
       </section>
 
-      <footer class="footer">
+      <footer class="footer" *ngIf="timeSheet.status !== 7">
         <button
           class="btn submit-btn"
           [disabled]="formInvalid || (processing$ | async)"
@@ -98,7 +99,7 @@
         >
           {{ 'submit' | translate }}
 
-          <app-spinner *ngIf="processing$ | async"></app-spinner>
+          <webui-spinner *ngIf="processing$ | async"></webui-spinner>
         </button>
       </footer>
     </form>

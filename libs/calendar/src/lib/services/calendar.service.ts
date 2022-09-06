@@ -1,32 +1,10 @@
 import { Injectable } from '@angular/core';
 
-import { Moment } from 'moment-timezone';
-
-import {
-  DateRange,
-  rangeFormats,
-  weekEnd,
-  weekStart,
-  getToday,
-  getTimeInstance
-} from '@webui/utilities';
+import { DateRange, rangeFormats, weekEnd, weekStart } from '@webui/utilities';
 import { DatepickerService } from './datepicker.service';
 import { TranslateHelperService } from '@webui/core';
-
-export enum Status {
-  Unfilled,
-  Fullfilled,
-  Pending,
-  Open,
-  Filled,
-  Approved
-}
-
-export interface CalendarData {
-  header: string[];
-  body: any;
-  date?: string;
-}
+import { Moment, Time } from '@webui/time';
+import { ICalendarLine, Status, Tooltip, IDateRange } from '../models';
 
 @Injectable()
 export class CalendarService {
@@ -55,7 +33,7 @@ export class CalendarService {
     '21:00',
     '22:00',
     '23:00',
-    '23:59 PM'
+    '23:59 PM',
   ];
 
   private calendarHeight = 370;
@@ -84,17 +62,16 @@ export class CalendarService {
     return date.format(rangeFormats[type]);
   }
 
-  public generateMonth(from: Moment, data: any): CalendarData {
+  public generateMonth(from: Moment, data: any[]) {
     return this.datepickerService.generateMonth(from, (body) => {
       return body.map((row) => {
         return row.map((day) => {
           const newData = data.filter((el) => el.date === day.date);
-          const holidayData = data.find(
-            (el) => el.holiday_date === day.date
-          );
+          const holidayData = data.find((el) => el.holiday_date === day.date);
           const availabilityData = data.find(
             (el) => el.target_date === day.date
           );
+
           return {
             ...day,
             data: newData,
@@ -105,29 +82,27 @@ export class CalendarService {
               : undefined,
             availableId: availabilityData ? availabilityData.id : undefined,
             tooltip: this.generateTooltipForMonth(newData),
-            isOpen: false
+            isOpen: false,
+            loading: true
           };
         });
       });
     });
   }
 
-  public generateWeek(
-    from: Moment,
-    data: any,
-    range?: { start: Moment; end: Moment }
-  ) {
+  public generateWeek( from: Moment, data: any[], range?: IDateRange) {
     return this.datepickerService.generateWeek(
       from,
       (body) => {
         return body.map((day) => {
-          const newData = data.filter((el) => el.date === day.date);
+          const newData = data.filter((el: { date: string }) => el.date === day.date);
+
           return {
             ...day,
             data: newData,
             tooltip: this.generateTooltipForMonth(newData),
             isOpen: false,
-            lines: this.calculateLines()
+            lines: this.calculateLines(),
           };
         });
       },
@@ -135,15 +110,17 @@ export class CalendarService {
     );
   }
 
-  public generateDay(from: Moment, data: any) {
-    return this.datepickerService.generateDay(from, (body) => {
+  public generateDay(date: Moment, data: any[]) {
+    const config = this.datepickerService.generateDay(date, (body) => {
       return {
         ...body,
         data: data.filter((el) => el.date === body.date),
         isOpen: false,
-        lines: this.calculateLines()
+        lines: this.calculateLines(),
       };
     });
+
+    return config;
   }
 
   getRangeDates(date: Moment, type: DateRange): { start: Moment; end: Moment } {
@@ -151,27 +128,27 @@ export class CalendarService {
   }
 
   getToday() {
-    return getToday();
+    return Time.now();
   }
 
   calculateShiftSize(start: string) {
     const timesheetTime = 8.5;
-    const startMoment = getTimeInstance()(start, 'hh:mm:ss');
+    const startMoment = Time.parse(start, { format: 'hh:mm:ss' });
 
     const time = {
       hours: startMoment.hour(),
-      minute: startMoment.minute()
+      minute: startMoment.minute(),
     };
 
     return {
       top: Math.round((this.calendarHeight / 24) * time.hours) + 'px',
-      height: Math.round((this.calendarHeight / 24) * timesheetTime) + 'px'
+      height: Math.round((this.calendarHeight / 24) * timesheetTime) + 'px',
     };
   }
 
   calculateTimes() {
     return this.calendarTimes.map((time, i, arr) => {
-      const result = {};
+      const result: Record<string, number | string> = {};
       if (i === 0) {
         result['top'] = 0;
         result['bottom'] = 'auto';
@@ -185,23 +162,23 @@ export class CalendarService {
       return {
         time,
         top: (this.calendarHeight / (this.calendarTimes.length - 1)) * i - 6,
-        ...result
+        ...result,
       };
     });
   }
 
-  calculateLines() {
+  calculateLines(): ICalendarLine[] {
     return this.calendarTimes.map((time, i) => {
       return {
         top: (this.calendarHeight / (this.calendarTimes.length - 1)) * i,
-        class: i % 4 !== 0 ? 'dotted' : ''
+        class: i % 4 !== 0 ? 'dotted' : '',
       };
     });
   }
 
-  private generateTooltipForMonth(data: any[]) {
+  private generateTooltipForMonth(data: any[]): Tooltip | undefined {
     if (data.length) {
-      const result = {
+      const result: Tooltip = {
         [Status.Unfilled]: [],
         [Status.Fullfilled]: [],
         [Status.Pending]: [],
@@ -214,8 +191,8 @@ export class CalendarService {
           [Status.Pending]: 0,
           [Status.Open]: 0,
           [Status.Filled]: 0,
-          [Status.Approved]: 0
-        }
+          [Status.Approved]: 0,
+        },
       };
 
       data.forEach((shift) => {
@@ -234,6 +211,8 @@ export class CalendarService {
       });
 
       return result;
+    } else {
+      return;
     }
   }
 }

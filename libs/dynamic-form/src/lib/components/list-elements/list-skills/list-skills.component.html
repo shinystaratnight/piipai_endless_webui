@@ -10,7 +10,7 @@
 </ng-container>
 
 <ng-container *ngIf="config.stars && !list">
-  <ngb-rating [rate]="getScore(config.value)" max="5" [readonly]="true">
+  <ngb-rating [rate]="getScore(config.value)" [max]="5" [readonly]="true">
     <ng-template let-fill="fill" let-index="index">
       <span *ngIf="fill === 100" class="star full">&#9733;</span>
       <span *ngIf="fill === 0" class="star">&#9733;</span>

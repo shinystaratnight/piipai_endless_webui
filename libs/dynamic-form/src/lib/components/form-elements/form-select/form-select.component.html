@@ -13,13 +13,13 @@
     >
       {{ getTranslationKey(translateKey, 'label') | translate: { Default: config.templateOptions.label } }}
     </label>
-    <app-info
+    <webui-info
       *ngIf="config.templateOptions.description"
       [description]="getTranslationKey(translateKey, 'description') | translate: { Default: config.templateOptions.description || '' }"
-    ></app-info>
+    ></webui-info>
     <div class="form-element-content edit">
       <select
-        class="form-control custom-select"
+        class="form-control form-select"
         #select
         (change)="eventHandler($event)"
         [formControlName]="key"
@@ -71,7 +71,7 @@
     class="text-danger"
     *ngIf="
       config.templateOptions.errorDescription &&
-      config.templateOptions.errorDescription.value === group.get(key).value
+      config.templateOptions.errorDescription.value === group.get(key)?.value
     "
   >
     {{ config.templateOptions.errorDescription.error }}

@@ -11,21 +11,21 @@ import {
 } from '@angular/core';
 
 @Directive({
-  selector: '[appCalendarTooltip]'
+  selector: '[webuiCalendarTooltip]'
 })
 export class CalendarTooltipDirective implements OnChanges {
-  private initialTop: string;
+  private initialTop!: string;
 
   @Input()
-  active: boolean;
+  active!: boolean;
 
   @Output()
-  show: EventEmitter<void> = new EventEmitter();
+  showed: EventEmitter<void> = new EventEmitter();
 
   constructor(private el: ElementRef, public renderer: Renderer2) {}
 
   ngOnChanges(changes: SimpleChanges) {
-    const active = changes.active;
+    const active = changes['active'];
     if (!active.isFirstChange() && !active.currentValue) {
       this.hideTooltip();
     }
@@ -66,12 +66,12 @@ export class CalendarTooltipDirective implements OnChanges {
     this.renderer.setStyle(el, 'width', sizes.width + 'px');
     this.renderer.setStyle(el, 'z-index', 2);
 
-    if (sizes.containerHeight - sizes.top < sizes.height) {
+    if (sizes?.containerHeight - sizes.top < sizes.height) {
       this.renderer.setStyle(el, 'top', 'auto');
       this.renderer.setStyle(el, 'bottom', '0');
     }
 
-    if (sizes.containerWidth - sizes.left < sizes.width) {
+    if (sizes?.containerWidth - sizes.left < sizes.width) {
       this.renderer.addClass(el, 'left');
       this.renderer.setStyle(
         el,
@@ -80,16 +80,16 @@ export class CalendarTooltipDirective implements OnChanges {
       );
     }
 
-    this.show.emit();
+    this.showed.emit();
   }
 
-  private getSizes(el) {
+  private getSizes(el: HTMLElement) {
     return {
-      containerHeight: el.parentElement.offsetHeight,
-      containerWidth: el.parentElement.parentElement.offsetWidth,
+      containerHeight: el.parentElement?.offsetHeight || 0,
+      containerWidth: el.parentElement?.parentElement?.offsetWidth || 0,
       height: el.offsetHeight,
       top: el.offsetTop,
-      left: el.parentElement.offsetLeft,
+      left: el.parentElement?.offsetLeft || 0,
       collapseLeft: el.offsetLeft,
       width: 250
     };

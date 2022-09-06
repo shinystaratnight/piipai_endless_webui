@@ -16,7 +16,7 @@ jobs:
           - v1-dependencies-{{ checksum "package.json" }}
           - v1-dependencies-
 
-      - run: yarn install --frozen-lockfile
+      - run: npm install
       - save_cache:
           paths:
             - node_modules
@@ -35,7 +35,7 @@ jobs:
       - attach_workspace:
           at: /home/circleci
 
-      - run: CI=false yarn stage
+      - run: CI=false npm run stage
 
       - persist_to_workspace:
           root: /home/circleci
@@ -50,7 +50,7 @@ jobs:
       - attach_workspace:
           at: /home/circleci
 
-      - run: CI=false yarn prod
+      - run: CI=false npm run prod
 
       - persist_to_workspace:
           root: /home/circleci
@@ -68,13 +68,13 @@ jobs:
             - "b3:8e:62:fe:51:a3:ff:30:2b:5a:09:0e:06:b6:1d:e8"
       - run:
           name: fix host authenticity for production server
-          command: ssh-keyscan ec2-54-66-252-95.ap-southeast-2.compute.amazonaws.com >> ~/.ssh/known_hosts
+          command: cp /home/circleci/endless_webui/.circleci/ssh.dev.config ~/.ssh/config
       - run:
           name: Deploy Staging Over SSH
           command: |
             ls /home/circleci/endless_webui/dist
             ssh ubuntu@ec2-54-66-252-95.ap-southeast-2.compute.amazonaws.com "cd endless_project/webui-app/ && rm -rf dist/*"
-            scp -r /home/circleci/endless_webui/dist/* ubuntu@ec2-54-66-252-95.ap-southeast-2.compute.amazonaws.com:endless_project/webui-app/dist
+            scp -r /home/circleci/endless_webui/dist/apps/r3sourcer/* ubuntu@ec2-54-66-252-95.ap-southeast-2.compute.amazonaws.com:endless_project/webui-app/dist
             ssh ubuntu@ec2-54-66-252-95.ap-southeast-2.compute.amazonaws.com "docker restart endlessproject_nginx_1"
 
   deploy-prod:
@@ -88,13 +88,13 @@ jobs:
             - "b3:8e:62:fe:51:a3:ff:30:2b:5a:09:0e:06:b6:1d:e8"
       - run:
           name: fix host authenticity for production server
-          command: ssh-keyscan ec2-13-237-8-87.ap-southeast-2.compute.amazonaws.com >> ~/.ssh/known_hosts
+          command: cp /home/circleci/endless_webui/.circleci/ssh.prod.config ~/.ssh/config
       - run:
           name: Deploy Production Over SSH
           command: |
             ls /home/circleci/endless_webui/dist
             ssh ubuntu@ec2-13-237-8-87.ap-southeast-2.compute.amazonaws.com "cd endless_project/webui-app/ && rm -rf dist/*"
-            scp -r /home/circleci/endless_webui/dist/* ubuntu@ec2-13-237-8-87.ap-southeast-2.compute.amazonaws.com:endless_project/webui-app/dist
+            scp -r /home/circleci/endless_webui/dist/apps/r3sourcer/* ubuntu@ec2-13-237-8-87.ap-southeast-2.compute.amazonaws.com:endless_project/webui-app/dist
             ssh ubuntu@ec2-13-237-8-87.ap-southeast-2.compute.amazonaws.com "docker restart endlessproject_nginx_1"
 
 workflows:

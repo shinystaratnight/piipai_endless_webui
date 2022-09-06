@@ -8,18 +8,18 @@ import { Form } from '../../models';
 import { FormService } from '../../services';
 
 @Component({
-  selector: 'app-form-collapse',
+  selector: 'webui-form-collapse',
   templateUrl: './form-collapse.component.html',
   styleUrls: ['./form-collapse.component.scss']
 })
 export class FormCollapseComponent implements OnInit {
-  public config: CollapseElement & IFormElement;
-  public group: FormGroup;
+  public config!: CollapseElement & IFormElement;
+  public group!: FormGroup;
   public errors: any;
   public message: any;
 
-  isCollapsed: boolean;
-  translationKey: string;
+  isCollapsed!: boolean;
+  translationKey!: string;
 
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
@@ -46,11 +46,11 @@ export class FormCollapseComponent implements OnInit {
     this.updateAdditionalData();
   }
 
-  public eventHandler(e) {
+  public eventHandler(e: any) {
     this.event.emit(e);
   }
 
-  public buttonActionHandler(e) {
+  public buttonActionHandler(e: any) {
     this.buttonAction.emit(e);
   }
 

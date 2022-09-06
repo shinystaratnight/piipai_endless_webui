@@ -6,32 +6,32 @@ import {
   OnDestroy
 } from '@angular/core';
 import { UserService } from '@webui/core';
-import { GenericFormService } from '../../../services';
-import { getBankAccountLayoutEndpoint, Endpoints } from '@webui/data';
+import { FormMode, GenericFormService } from '../../../services';
 import { Form, InputType } from '@webui/metadata';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { getPropValue } from '@webui/utilities';
 import { BehaviorSubject, Subscription } from 'rxjs';
+import { getBankAccountLayoutEndpoint } from '@webui/models';
 
 @Component({
-  selector: 'app-form-bank-account',
+  selector: 'webui-form-bank-account',
   templateUrl: './form-bank-account.component.html',
   styleUrls: ['./form-bank-account.component.scss']
 })
 export class FormBankAccountComponent implements OnInit, OnDestroy {
   layout: any;
-  metadata: any[];
-  accounts: any[];
-  contactId: boolean;
+  metadata!: any[];
+  accounts!: any[];
+  contactId?: string;
 
   account: any;
 
   config: any;
   viewMode: any;
 
-  saveProcess: boolean;
+  saveProcess!: boolean;
 
-  modalData: {
+  modalData!: {
     view?: boolean;
     title: string;
     metadata: any;
@@ -40,14 +40,14 @@ export class FormBankAccountComponent implements OnInit, OnDestroy {
   };
 
   public hiddenFields = {
-    elements: [],
-    keys: [],
-    observers: []
+    elements: <any[]>[],
+    keys: <any[]>[],
+    observers: <any[]>[]
   };
 
-  modalRef: NgbModalRef;
+  modalRef?: NgbModalRef;
 
-  @ViewChild('modal', { static: true }) modalEl: ElementRef;
+  @ViewChild('modal', { static: true }) modalEl!: ElementRef;
 
   private subscriptions: Subscription[] = [];
 
@@ -58,11 +58,8 @@ export class FormBankAccountComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    const countryCode = this.userService.user.data.country_code;
-    this.contactId = getPropValue(
-      this.config.formData.value.data,
-      'contact.id'
-    );
+    const countryCode = this.userService.user?.data.country_code;
+    this.contactId = getPropValue(this.config.formData.value.data, 'contact.id') as string;
 
     this.checkModeProperty();
 
@@ -80,7 +77,7 @@ export class FormBankAccountComponent implements OnInit, OnDestroy {
 
   public checkModeProperty() {
     if (this.config && this.config.mode) {
-      const subscription = this.config.mode.subscribe(mode => {
+      const subscription = this.config.mode.subscribe((mode: FormMode) => {
         if (mode === 'view') {
           this.viewMode = true;
         } else {
@@ -92,14 +89,14 @@ export class FormBankAccountComponent implements OnInit, OnDestroy {
     }
   }
 
-  viewAccount(account, e) {
+  viewAccount(account: any, e: MouseEvent) {
     if (e) {
       e.preventDefault();
     }
 
     const metadata = this.generateMetadata(true);
-    const data = {};
-    account.fields.forEach(({ field_id, value }) => {
+    const data: Record<string, any> = {};
+    account.fields.forEach(({ field_id, value }: { field_id: any, value: any }) => {
       data[field_id] = value;
     });
 
@@ -152,7 +149,7 @@ export class FormBankAccountComponent implements OnInit, OnDestroy {
       .subscribe(
         () => {
           this.saveProcess = false;
-          this.modalRef.close();
+          this.modalRef?.close();
           this.modalRef = undefined;
           this.getContactBankAccounts();
         },
@@ -160,7 +157,7 @@ export class FormBankAccountComponent implements OnInit, OnDestroy {
       );
   }
 
-  deleteAccount(account) {
+  deleteAccount(account: any) {
     this.gfs
       .delete(`/contacts/${this.contactId}/bank_accounts/`, account.id)
       .subscribe(() => {
@@ -204,7 +201,7 @@ export class FormBankAccountComponent implements OnInit, OnDestroy {
     return fields;
   }
 
-  private fillingForm(metadata, data) {
+  private fillingForm(metadata: any[], data: any) {
     metadata.forEach(el => {
       if (el.key) {
         this.getValueOfData(data, el.key, el);
@@ -214,9 +211,9 @@ export class FormBankAccountComponent implements OnInit, OnDestroy {
     });
   }
 
-  private getValueOfData(data, key, obj) {
+  private getValueOfData(data: any, key: string, obj: any) {
     const keys = key.split('.');
-    const prop = keys.shift();
+    const prop: string = keys.shift() as string;
     if (keys.length === 0) {
       if (data) {
         obj['value'] = data[key];
@@ -248,7 +245,7 @@ export class FormBankAccountComponent implements OnInit, OnDestroy {
     });
   }
 
-  private observeFields(fields: any[], observers) {
+  private observeFields(fields: any[], observers: any[]) {
     fields.forEach((field: any) => {
       if (field instanceof Object) {
         const keys = Object.keys(field);

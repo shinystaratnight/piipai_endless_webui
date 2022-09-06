@@ -1,7 +1,8 @@
-@import '../../../../../../../styles/variables';
+@use 'variables' as *;
 
 .badge {
   line-height: 1.2;
+  text-align: left;
 }
 
 .state-info {
@@ -181,7 +182,7 @@
 .save {
   background: rgba($gray, 0.2);
 
-  app-spinner {
+  webui-spinner {
     position: relative;
     top: -1px;
   }

@@ -8,7 +8,7 @@ import {
   EventEmitter,
   Output,
   ViewEncapsulation,
-  OnDestroy
+  OnDestroy,
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
@@ -21,22 +21,22 @@ import {
   NavigationService,
   TranslateHelperService,
   UserService,
-  DateService,
 } from '@webui/core';
-import { User, Page, Role, Language } from '@webui/data';
+import { Page } from '@webui/data';
 import {
   getContactAvatar,
   isClient,
   isCandidate,
   isManager,
-  getTimeInstance
 } from '@webui/utilities';
+import { Time } from '@webui/time';
+import { Language, Role, User } from '@webui/models';
 
 @Component({
-  selector: 'app-navigation',
+  selector: 'webui-navigation',
   templateUrl: './navigation.component.html',
   styleUrls: ['./navigation.component.scss'],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
 })
 export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('header') public header: any;
@@ -47,58 +47,60 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('modal') public modal: any;
   @ViewChild('roles') public rolesTemplate: any;
 
-  @Input() public user: User;
+  @Input() public user?: User | null;
   @Input() public logo = '/assets/img/new-software.svg';
 
-  // @Output() public update: EventEmitter<Role> = new EventEmitter();
   @Output()
   public changePasswordEmitter: EventEmitter<any> = new EventEmitter();
 
-  public headerHeight: number;
+  public headerHeight!: number;
   public error: any;
   public isCollapsed = false;
   public hideUserMenu = true;
-  public greeting: string;
-  public userPicture: string;
-  public candidate: boolean;
-  public currentRole: string;
-  public company: string;
-  public picture: string;
-  public contactAvatar: string;
+  public greeting!: string;
+  public userPicture!: string;
+  public candidate!: boolean;
+  public currentRole!: string;
+  public company!: string;
+  public picture!: string;
+  public contactAvatar!: string;
   public urlPrefix = isClient()
     ? '/cl'
     : isCandidate()
     ? '/cd'
-    : isManager
+    : isManager()
     ? '/mn'
     : '';
-  public initTime: boolean;
+  public initTime!: boolean;
   isManager = isManager;
 
   language = new FormControl(Language.English);
   Language = Language;
 
-  private modalRef: NgbModalRef;
+  private modalRef!: NgbModalRef;
 
   get pages(): Page[] {
-    const menu = this.navigationService.navigationList[this.currentRole];
-
-    return menu;
+    return this.navigationService.navigationList[this.currentRole];
   }
 
   get fullName(): string {
-    if (this.user.currentRole.name === 'candidate') {
+    if (this.user?.currentRole.name === 'candidate') {
       return this.user.data.contact.name;
     }
 
-    return this.user.currentRole.__str__.split(':').map(el => el.trim()).slice(0, 2).join(' - ');
+    return (this.user?.currentRole.__str__ as string)
+      .split(':')
+      .map((el) => el.trim())
+      .slice(0, 2)
+      .join(' - ');
   }
 
   get trialMessage() {
-    const date = this.dateService.instance;
-    const expires = date(this.user.data.end_trial_date, 'YYYY-MM-DD hh:mm:ss');
+    const expires = Time.parse(this.user?.data.end_trial_date, {
+      format: 'YYYY-MM-DD hh:mm:ss',
+    });
 
-    if (expires.isAfter(date())) {
+    if (expires.isAfter(Time.now())) {
       return `Trail version expires ${expires.format()}`;
     } else {
       return null;
@@ -106,18 +108,19 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   get roleList() {
-    return this.user.data.roles.filter((el) => el.id !== this.user.currentRole.id)
+    return this.user?.data.roles.filter(
+      (el) => el.id !== this.user?.currentRole.id
+    );
   }
 
-  public resizeSubscription: Subscription;
-  public languageSubscription: Subscription;
+  public resizeSubscription!: Subscription;
+  public languageSubscription!: Subscription;
 
   constructor(
     private authService: AuthService,
     private navigationService: NavigationService,
     private userService: UserService,
     private translate: TranslateHelperService,
-    private dateService: DateService,
     private modalService: NgbModal
   ) {}
 
@@ -174,22 +177,18 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  public formatDate(date) {
-    return getTimeInstance()(date, 'YYYY-MM-DD hh:mm:ss').format('YYYY/MM/DD');
-  }
-
-  public checkCandidateRole(role) {
+  public checkCandidateRole(role: Role) {
     this.candidate = role.__str__.includes('candidate');
   }
 
-  public hideUserBlock(e) {
+  public hideUserBlock(e: any) {
     e.preventDefault();
     e.stopPropagation();
     this.isCollapsed = false;
     this.hideUserMenu = !this.hideUserMenu;
   }
 
-  public showNavigation(e) {
+  public showNavigation(e: any) {
     e.preventDefault();
     e.stopPropagation();
     this.hideUserMenu = true;
@@ -200,7 +199,7 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
     this.authService.logout();
   }
 
-  public changeRole(role: Role, event?) {
+  public changeRole(role: Role, event?: any) {
     if (role.domain === location.hostname && event) {
       event.preventDefault();
       event.stopPropagation();
@@ -217,7 +216,7 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
     this.modalRef.close();
   }
 
-  public clickAction(e, p) {
+  public clickAction(e: MouseEvent, p: any) {
     e.stopPropagation();
     e.preventDefault();
 
@@ -230,7 +229,7 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
     return false;
   }
 
-  public checkUrlPrefix(url) {
+  public checkUrlPrefix(url: string) {
     if (url.includes('settings') || url.includes('billing')) {
       return false;
     }
@@ -249,7 +248,7 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
     return `You do not have permission to access ${menu}. Please contact your administrator.`;
   }
 
-  public chooseRole(event) {
+  public chooseRole(event: any) {
     event.preventDefault();
     event.stopPropagation();
 
@@ -258,7 +257,7 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
 
   @HostListener('document:click', ['$event'])
   @HostListener('document:touchstart', ['$event'])
-  public handleClick(event) {
+  public handleClick(event: MouseEvent) {
     let clickedComponent = event.target;
     let inside = false;
     do {
@@ -268,7 +267,7 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
       ) {
         inside = true;
       }
-      clickedComponent = clickedComponent.parentNode;
+      clickedComponent = (clickedComponent as HTMLElement).parentNode;
     } while (clickedComponent);
     if (!inside) {
       if (this.isCollapsed) {

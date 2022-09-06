@@ -1,5 +1,5 @@
 import { createFilter, Type } from '@webui/metadata';
-import { Endpoints } from '@webui/data';
+import { Endpoints } from '@webui/models';
 
 const filters = {
   avarageScore: createFilter(Type.Range, {

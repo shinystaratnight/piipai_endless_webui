@@ -1,5 +1,5 @@
-import { List, Form, InputType, CheckboxType } from '@webui/metadata';
-import { Endpoints } from '@webui/data';
+import { List, Form, CheckboxType } from '@webui/metadata';
+import { Endpoints } from '@webui/models';
 
 const formadd = function() {
   return [

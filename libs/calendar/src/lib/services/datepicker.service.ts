@@ -1,27 +1,50 @@
 import { Injectable } from '@angular/core';
-import { Moment } from 'moment-timezone';
 
-import { DateRange, filterDateFormat, weekStart, weekEnd, getToday } from '@webui/utilities';
+import {
+  DateRange,
+  filterDateFormat,
+  weekStart,
+  weekEnd,
+} from '@webui/utilities';
+import { Moment, Time } from '@webui/time';
+import { IDateRange } from '../models';
 
-export interface DatepickerData {
-  header: string[];
-  body: any;
+export interface IYearPickerCell {
+  label: string;
+  date: Moment;
+  month: number;
+}
+
+export interface IMonthPickerCell {
+  date: string;
+  month: number;
+  dateMoment: Moment;
+  label: string;
+  today: boolean;
+}
+
+export interface IWeekPickerCell {
+  date: string;
+}
+
+export interface IDayPickerCell {
+  date: string;
 }
 
 @Injectable()
 export class DatepickerService {
-
-  private headerFormat = {
+  private headerFormat: Record<DateRange, string> = {
     month: 'ddd',
     week: 'ddd / D MMM',
     day: 'D MMMM YYYY / dddd',
+    year: ''
   };
 
-  public generateYear(from: Moment, updateBody?: Function) {
+  public generateYear<T>(from: Moment, updateBody?: (target: IYearPickerCell[][]) => (T | IYearPickerCell)[][]) {
     const range = this.getRangeDates(from, DateRange.Year);
 
-    let body = [];
-    let row;
+    const body: IYearPickerCell[][] = [];
+    let row: IYearPickerCell[] = [];
 
     const currentMonth = range.start.clone();
     while (currentMonth.isBefore(range.end)) {
@@ -33,26 +56,26 @@ export class DatepickerService {
       row.push({
         label: currentMonth.format('MMMM'),
         date: currentMonth.clone(),
-        month: currentMonth.month()
+        month: currentMonth.month(),
       });
 
       currentMonth.add(1, DateRange.Month);
     }
 
     if (updateBody) {
-      body = updateBody(body);
+      return updateBody(body);
     }
 
     return body;
   }
 
-  public generateMonth(from: Moment, updateBody?: Function): DatepickerData {
+  public generateMonth<T>(from: Moment, updateBody?: (target: IMonthPickerCell[][]) => (T | IMonthPickerCell)[][] ) {
     const range = this.getRangeDates(from, DateRange.Month);
     const firstDay = range.start;
     const lastDay = range.end;
 
-    let body = [];
-    let row;
+    const body: IMonthPickerCell[][] = [];
+    let row: IMonthPickerCell[] = [];
 
     const currentDay = firstDay.clone();
     while (currentDay.isBefore(lastDay)) {
@@ -68,29 +91,28 @@ export class DatepickerService {
         month: currentDay.month(),
         dateMoment: currentDay.clone(),
         label: currentDay.format('D'),
-        today: date === getToday().format(filterDateFormat)
+        today: date === Time.now().format(filterDateFormat),
       });
 
       currentDay.add(1, 'day');
     }
 
-    if (updateBody) {
-      body = updateBody(body);
-    }
-
     return {
       header: this.getHeader(DateRange.Month, from),
-      body,
+      body: updateBody ? updateBody(body) : body,
     };
   }
 
-  public generateWeek(from: Moment, updateBody?: Function, range?: { start: Moment, end: Moment }): DatepickerData {
+  public generateWeek<T>(
+    from: Moment,
+    updateBody?: (target: IWeekPickerCell[]) => (IWeekPickerCell | T)[],
+    range?: IDateRange
+  ) {
     range = range || this.getRangeDates(from, DateRange.Week);
-    let body = [];
+    const body = [];
 
     const currentDay = range.start.clone();
     while (currentDay.isBefore(range.end)) {
-
       const date = currentDay.format(filterDateFormat);
 
       body.push({
@@ -100,51 +122,51 @@ export class DatepickerService {
       currentDay.add(1, 'day');
     }
 
-    if (updateBody) {
-      body = updateBody(body);
-    }
-
     return {
       header: this.getHeader(DateRange.Week, from, range),
-      body,
+      body: updateBody ? updateBody(body) : body,
     };
   }
 
-  public generateDay(from: Moment, updateBody?: Function): DatepickerData {
-    const date = from.format(filterDateFormat);
-    let body = { date };
-
-    if (updateBody) {
-      body = updateBody(body);
-    }
+  public generateDay<T>(date: Moment, updateBody?: (target: IDayPickerCell) => T & IDayPickerCell) {
+    const body: IDayPickerCell = {
+      date: date.format(filterDateFormat)
+    };
 
     return {
-      header: this.getHeader(DateRange.Day, from),
-      body,
+      header: this.getHeader(DateRange.Day, date),
+      body: updateBody ? updateBody(body) : body,
     };
   }
 
-  public getRangeDates(date: Moment, type: DateRange): { start: Moment, end: Moment } {
+  public getRangeDates(
+    date: Moment,
+    type: DateRange
+  ): IDateRange {
     const start = date.clone().startOf(type);
     const end = date.clone().endOf(type);
 
     if (type === DateRange.Month) {
       return {
         start: start.weekday(weekStart),
-        end: end.weekday(weekEnd)
-      }
+        end: end.weekday(weekEnd),
+      };
     }
 
     return {
       start,
-      end
+      end,
     };
   }
 
-  private getHeader(type: DateRange, from: Moment, range?: { start: Moment, end: Moment }): string[] {
+  private getHeader(
+    type: DateRange,
+    from: Moment,
+    range?: { start: Moment; end: Moment }
+  ): string[] {
     const result = [];
 
-    let start = range && range.start.clone() || from;
+    let start = (range && range.start.clone()) || from;
 
     if (type !== DateRange.Day) {
       if (!range) {
@@ -154,7 +176,9 @@ export class DatepickerService {
       }
 
       for (let day = 0; day < 7; day++) {
-        result.push(start.clone().add(day, DateRange.Day).format(this.headerFormat[type]));
+        result.push(
+          start.clone().add(day, DateRange.Day).format(this.headerFormat[type])
+        );
       }
     } else {
       result.push(start.format(this.headerFormat[type]));

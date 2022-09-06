@@ -7,7 +7,7 @@
       </a>
       <button type="button" class="btn btn-outline-primary"
         *ngIf="phone"
-        appSubscriptionRequired
+        webuiSubscriptionRequired
         [attr.title]="smsDisabledTitle"
         [class.disabled]="smsDisabled"
         (click)="sendSms($event)"
@@ -15,7 +15,7 @@
           SMS
       </button>
       <button type="button" class="btn btn-outline-primary"
-        appSubscriptionRequired
+        webuiSubscriptionRequired
         *ngIf="phone"
         (click)="linkView.nativeElement.click()">
           Call
@@ -26,7 +26,7 @@
         <span *ngIf="config.fields">
           <ng-container
             *ngFor="let field of config.fields"
-            appListElement
+            webuiListElement
             [config]="field">
           </ng-container>
         </span>
@@ -44,7 +44,7 @@
         <span *ngIf="config.fields">
           <ng-container
             *ngFor="let field of config.fields"
-            appListElement
+            webuiListElement
             [config]="field"
             (event)="eventHandler($event)"
             (buttonAction)="buttonHandler($event)"></ng-container>
@@ -55,7 +55,7 @@
       <br *ngIf="!config.delim && !config.fields">
     </span>
 
-    <span class="d-flex flex-column" *ngIf="arrayValue">
+    <span class="d-flex flex-column" *ngIf="arrayValue && isArray(value)">
       <span *ngFor="let item of value; let l = last; let i = index">
         <a
           *ngIf="item && !link"
@@ -76,7 +76,7 @@
           {{item.__str__}}
 
           <span *ngIf="config.fields">
-            <ng-container *ngFor="let field of config.fields" appListElement [config]="field"></ng-container>
+            <ng-container *ngFor="let field of config.fields" webuiListElement [config]="field"></ng-container>
           </span>
         </a>
 

@@ -2,18 +2,18 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
-import { Language } from '@webui/data';
+import { Language } from '@webui/models';
 import { TranslateHelperService } from '@webui/core';
 
 @Component({
-  selector: 'app-language-selector',
+  selector: 'webui-language-selector',
   templateUrl: './language-selector.component.html',
   styleUrls: ['./language-selector.component.scss']
 })
 export class LanguageSelectorComponent implements OnInit, OnDestroy {
 
   control: FormControl = new FormControl();
-  controlSubscription: Subscription;
+  controlSubscription!: Subscription;
   Language = Language;
 
   constructor(private translateHelperService: TranslateHelperService) {}

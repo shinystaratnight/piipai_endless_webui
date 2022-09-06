@@ -8,7 +8,7 @@ import { of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-verify-email',
+  selector: 'webui-verify-email',
   template: '',
 })
 export class VerifyEmailComponent implements OnInit {
@@ -25,7 +25,7 @@ export class VerifyEmailComponent implements OnInit {
 
   public ngOnInit() {
     this.route.queryParams.subscribe((params: Params) => {
-      this.vs.verifyEmail(this.verifyEndpoint + `?token=${params.token}`)
+      this.vs.verifyEmail(this.verifyEndpoint + `?token=${params['token']}`)
         .pipe(
           catchError((err) => {
             return of(err);

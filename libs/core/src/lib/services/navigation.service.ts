@@ -4,13 +4,14 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { of } from 'rxjs';
 import { map, mergeMap, catchError } from 'rxjs/operators';
 
-import { Endpoints, Role, Purpose } from '@webui/data';
+import { Purpose } from '@webui/data';
 
 import { CompanyPurposeService } from './company-purpose.service';
 import { ErrorsService } from './errors.service';
 import { EventService, EventType } from './event.service';
 import { UserService } from './user.service';
 import { isManager, getCurrentRole, isClient } from '@webui/utilities';
+import { Endpoints, Role, User } from '@webui/models';
 
 export interface Page {
   name: string;
@@ -20,7 +21,7 @@ export interface Page {
   translateKey: string;
   disabled?: boolean;
   active?: boolean;
-  childrens: Page[];
+  children: Page[];
 }
 
 type NavigationResponse = {
@@ -35,11 +36,11 @@ const jobEndpoints = [Endpoints.ClientJobs, Endpoints.JobsiteClient];
   providedIn: 'root'
 })
 export class NavigationService {
-  public currentRole: Role;
-  public error;
-  public parsedByPermissions: boolean;
+  public currentRole?: Role;
+  public error?: Record<string, any>;
+  public parsedByPermissions?: boolean;
 
-  public navigationList: any = {};
+  public navigationList: Record<string, any> = {};
   public linksList: Page[] = [];
 
   constructor(
@@ -61,10 +62,10 @@ export class NavigationService {
     });
   }
 
-  public getPages(role: Role, update?: boolean) {
+  public getPages(role?: Role, update?: boolean) {
     if (role) {
       const { id } = role;
-      const { country_code, allow_job_creation } = this.userService.user.data;
+      const { country_code, allow_job_creation } = (this.userService.user as User).data;
 
       if (!this.navigationList[id] || update) {
         const params = new HttpParams({
@@ -77,13 +78,24 @@ export class NavigationService {
         return this.http
           .get<NavigationResponse>(Endpoints.ExtranetNavigation, { params })
           .pipe(
+            map((response) => {
+              response.results = this.renameField(response.results, 'childrens', 'children');
+
+              return response;
+            }),
             mergeMap(({ results: list }) => {
               if (isManager()) {
                 const companyId = this.userService.companyId;
 
                 return this.purposeService
                   .getPurpose(companyId)
-                  .pipe(map((purpose: Purpose) => ({ purpose, list })));
+                  .pipe(
+                    map((purpose) => {
+                      return {
+                        purpose,
+                        list
+                      };
+                    }));
               } else {
                 return of({ list, purpose: null });
               }
@@ -118,12 +130,17 @@ export class NavigationService {
                 return this.navigationList[id];
               }
             }),
-            catchError((errors) => this.errorService.handleError(errors))
+            catchError((errors) => {
+              this.errorService.handleError(errors);
+              return of([]);
+            })
           );
       } else {
         return of(this.navigationList[id]);
       }
     }
+
+    return of([]);
   }
 
   public updateNavigation() {
@@ -134,19 +151,19 @@ export class NavigationService {
     return this.getPages(this.currentRole);
   }
 
-  public setCurrentRole(role: Role) {
+  public setCurrentRole(role?: Role) {
     this.currentRole = role;
-    if (this.navigationList[role.id]) {
+    if (role?.id && this.navigationList[role.id]) {
       this.linksList.length = 0;
       this.generateLinks(this.navigationList[role.id], this.linksList);
     }
   }
 
-  public generateLinks(links, target) {
+  public generateLinks(links: any[], target: any[]) {
     links.forEach((el) => {
       target.push(el);
-      if (el.childrens) {
-        this.generateLinks(el.childrens, target);
+      if (el.children) {
+        this.generateLinks(el.children, target);
       }
     });
   }
@@ -157,8 +174,8 @@ export class NavigationService {
         page.url = page.url.replace(prefix, '/');
       });
 
-      if (page.childrens && page.childrens.length) {
-        this.removePrefix(page.childrens);
+      if (page.children && page.children.length) {
+        this.removePrefix(page.children);
       }
     });
   }
@@ -167,8 +184,8 @@ export class NavigationService {
     pages.forEach((page) => {
       page.translateKey = page.url === '/' ? page.name.toLowerCase() : page.url;
 
-      if (page.childrens) {
-        this.generateTranslateKeys(page.childrens);
+      if (page.children) {
+        this.generateTranslateKeys(page.children);
       }
     });
   }
@@ -179,8 +196,8 @@ export class NavigationService {
         list.splice(index, 1);
       }
 
-      if (page.childrens) {
-        this.hideCandidateConsentUrl(page.childrens);
+      if (page.children) {
+        this.hideCandidateConsentUrl(page.children);
       }
     });
   }
@@ -195,9 +212,24 @@ export class NavigationService {
         pages.splice(index, 1);
       }
 
-      if (el.childrens) {
-        this.removeMYOBLink(el.childrens, countryCode);
+      if (el.children) {
+        this.removeMYOBLink(el.children, countryCode);
       }
+    });
+  }
+
+  private renameField<T>(target: Array<T & Record<string, any>>, from: string, to: string): Array<T & { [key: string]: any }> {
+    return target.map((el) => {
+      const result = {
+        ...el,
+        [to]: el[from]
+      };
+
+      if (Array.isArray(result[to])) {
+        Object.assign(result, { [to]: this.renameField<T>(result[to], from, to) });
+      }
+
+      return result;
     });
   }
 }

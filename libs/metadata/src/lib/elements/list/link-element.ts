@@ -5,7 +5,7 @@ export const Link = 'link';
 export class LinkElement extends BasicListElement {
 
   action?: string;
-  endpoint: string;
+  endpoint?: string;
 
   constructor(field: string, action?: string) {
     super(field, Link);
