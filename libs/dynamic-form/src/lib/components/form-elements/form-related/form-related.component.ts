@@ -1027,35 +1027,33 @@ export class FormRelatedComponent
   }
 
   public updateValue(e?: any): void {
-    if (e && e.type !== 'create' && e.type !== 'updateValue') {
-      const value = this.dataOfList
-        .filter((el: any) => el.data.valid)
-        .map((el: any) => {
-          const object = el.data.value;
+    const value = this.dataOfList
+      .filter((el: any) => el.data.valid)
+      .map((el: any) => {
+        const object = el.data.value;
 
-          if (el.id) {
-            object.id = el.id;
-          }
-          return object;
-        });
-      if (this.config.delayData) {
-        this.config.data.sendData = value.filter((el: any) => !el.id);
-      }
-
-      const newValue = value.filter((el: any) => {
-        if (el.language) {
-          if (el.language.id) {
-            return true;
-          } else {
-            return false;
-          }
-        } else {
-          return true;
+        if (el.id) {
+          object.id = el.id;
         }
+        return object;
       });
-
-      this.group.get(this.key)?.patchValue(newValue);
+    if (this.config.delayData) {
+      this.config.data.sendData = value.filter((el: any) => !el.id);
     }
+
+    const newValue = value.filter((el: any) => {
+      if (el.language) {
+        if (el.language.id) {
+          return true;
+        } else {
+          return false;
+        }
+      } else {
+        return true;
+      }
+    });
+
+    this.group.get(this.key)?.patchValue(newValue);
   }
 
   public fillingForm(metadata: Field[], data :any): void {

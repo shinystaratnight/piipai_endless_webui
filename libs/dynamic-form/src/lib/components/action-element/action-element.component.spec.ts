@@ -27,7 +27,7 @@ describe('ActionElementComponent', () => {
       {
         confirm: false,
         endpoint: '/core/companyaddresses/sendsms/',
-        label: 'Send sms',
+        label: 'Send',
         message: 'Are you sure?'
       }
     ]

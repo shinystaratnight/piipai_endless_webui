@@ -69,7 +69,7 @@ const list = {
         ],
         name: 'primary_contact',
         context_menu: [
-          { endpoint: '/', label: 'Send SMS' },
+          { endpoint: '/', label: 'Send' },
           { endpoint: '/', label: 'Add New Company Contact' },
           { endpoint: '/', label: 'Manage Branch Contacts' },
           { endpoint: '/', label: 'Add Note' },
@@ -215,7 +215,7 @@ const list = {
         },
         {
           endpoint: '/core/companyaddresses/sendsms/',
-          label: 'Send sms',
+          label: 'Send',
           confirm: false,
           message: 'Are you sure?'
         }
@@ -444,7 +444,7 @@ const formset = {
         {
           message: 'Are you sure?',
           endpoint: '/core/companyaddresses/sendsms/',
-          label: 'Send sms',
+          label: 'Send',
           confirm: false
         }
       ],
@@ -479,7 +479,7 @@ const formset = {
         sort_field: 'primary_contact',
         title: null,
         context_menu: [
-          { endpoint: '/', label: 'Send SMS' },
+          { endpoint: '/', label: 'Send' },
           { endpoint: '/', label: 'Add New Company Contact' },
           { endpoint: '/', label: 'Manage Branch Contacts' },
           { endpoint: '/', label: 'Add Note' },
