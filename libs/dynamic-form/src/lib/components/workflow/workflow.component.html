@@ -112,7 +112,8 @@
     </div>
     <div class="modal-body">
       <webui-dynamic-form
-        [config]="addConfig"
+        [config]="addConfig.config"
+        [hiddenFields]="addConfig.hiddenFields"
         (submitForm)="addStateToCompany($event, modal.close)">
           <button webuiSubscriptionRequired type="submit" class="btn btn-secondary bg-primary text-white button-save"
             [disabled]="saveProcess">
@@ -135,7 +136,8 @@
     </div>
     <div class="modal-body">
       <webui-dynamic-form
-        [config]="addConfig"
+        [config]="addConfig.config"
+        [hiddenFields]="addConfig.hiddenFields"
         (submitForm)="addAcceptenceTest($event, modal.close)">
           <button webuiSubscriptionRequired type="submit" class="btn btn-secondary bg-primary text-white button-save"
             [disabled]="saveProcess">

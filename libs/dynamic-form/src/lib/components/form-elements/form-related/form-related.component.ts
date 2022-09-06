@@ -408,6 +408,11 @@ export class FormRelatedComponent
           this.displayValue = null;
           this.group.get(this.key)?.patchValue('');
           this.setInitValue();
+          this.eventHandler(
+            { type: 'reset' },
+            this.group.get(this.key)?.value,
+            this.resetAdditionalData()
+          );
         }
         this.config.hide = hide;
 
@@ -1666,15 +1671,21 @@ export class FormRelatedComponent
     let query = '&';
     if (queries) {
       const keys = Object.keys(queries);
-      keys.forEach((el) => {
-        query +=
-          typeof queries[el] === 'string'
-            ? queries[el] === 'currentCompany'
-              ? `${el}=${this.settingsService.settings.company}&`
-              : `${el}=${format.format(queries[el], this.formData)}&`
-            : `${el}=${this.parseQueryValue(queries[el])}&`;
+      const parsedKeys: Map<string, any> = new Map();
+
+      keys.forEach((key) => {
+        const value = typeof queries[key] === 'string'
+          ? queries[key] === 'currentCompany'
+            ? this.settingsService.settings.company
+            : format.format(queries[key], this.formData)
+          : this.parseQueryValue(queries[key]);
+
+        if (!['', undefined, null].includes(value)) {
+          parsedKeys.set(key, value);
+        }
       });
-      query = query.slice(0, query.length - 1);
+
+      query += Array.from(parsedKeys.entries()).map(([key, value]) => `${key}=${value}`).join('&');
     }
     return query.length > 1 ? query : '';
   }
