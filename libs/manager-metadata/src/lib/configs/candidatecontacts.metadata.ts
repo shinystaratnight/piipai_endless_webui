@@ -373,7 +373,7 @@ const list = {
       options: [
         {
           endpoint: `${Endpoints.CandidateContact}sendsms/`,
-          label: 'Send sms',
+          label: 'Send',
           confirm: false,
           message: 'Are you sure?'
         }
