@@ -408,6 +408,11 @@ export class FormRelatedComponent
           this.displayValue = null;
           this.group.get(this.key)?.patchValue('');
           this.setInitValue();
+          this.eventHandler(
+            { type: 'reset' },
+            this.group.get(this.key)?.value,
+            this.resetAdditionalData()
+          );
         }
         this.config.hide = hide;
 
@@ -1027,35 +1032,33 @@ export class FormRelatedComponent
   }
 
   public updateValue(e?: any): void {
-    if (e && e.type !== 'create' && e.type !== 'updateValue') {
-      const value = this.dataOfList
-        .filter((el: any) => el.data.valid)
-        .map((el: any) => {
-          const object = el.data.value;
+    const value = this.dataOfList
+      .filter((el: any) => el.data.valid)
+      .map((el: any) => {
+        const object = el.data.value;
 
-          if (el.id) {
-            object.id = el.id;
-          }
-          return object;
-        });
-      if (this.config.delayData) {
-        this.config.data.sendData = value.filter((el: any) => !el.id);
-      }
-
-      const newValue = value.filter((el: any) => {
-        if (el.language) {
-          if (el.language.id) {
-            return true;
-          } else {
-            return false;
-          }
-        } else {
-          return true;
+        if (el.id) {
+          object.id = el.id;
         }
+        return object;
       });
-
-      this.group.get(this.key)?.patchValue(newValue);
+    if (this.config.delayData) {
+      this.config.data.sendData = value.filter((el: any) => !el.id);
     }
+
+    const newValue = value.filter((el: any) => {
+      if (el.language) {
+        if (el.language.id) {
+          return true;
+        } else {
+          return false;
+        }
+      } else {
+        return true;
+      }
+    });
+
+    this.group.get(this.key)?.patchValue(newValue);
   }
 
   public fillingForm(metadata: Field[], data :any): void {
@@ -1668,15 +1671,21 @@ export class FormRelatedComponent
     let query = '&';
     if (queries) {
       const keys = Object.keys(queries);
-      keys.forEach((el) => {
-        query +=
-          typeof queries[el] === 'string'
-            ? queries[el] === 'currentCompany'
-              ? `${el}=${this.settingsService.settings.company}&`
-              : `${el}=${format.format(queries[el], this.formData)}&`
-            : `${el}=${this.parseQueryValue(queries[el])}&`;
+      const parsedKeys: Map<string, any> = new Map();
+
+      keys.forEach((key) => {
+        const value = typeof queries[key] === 'string'
+          ? queries[key] === 'currentCompany'
+            ? this.settingsService.settings.company
+            : format.format(queries[key], this.formData)
+          : this.parseQueryValue(queries[key]);
+
+        if (!['', undefined, null].includes(value)) {
+          parsedKeys.set(key, value);
+        }
       });
-      query = query.slice(0, query.length - 1);
+
+      query += Array.from(parsedKeys.entries()).map(([key, value]) => `${key}=${value}`).join('&');
     }
     return query.length > 1 ? query : '';
   }

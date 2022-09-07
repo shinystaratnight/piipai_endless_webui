@@ -76,7 +76,7 @@ const list = {
       options: [
         {
           endpoint: '/core/companycontacts/sendsms/',
-          label: 'Send sms',
+          label: 'Send',
           confirm: false,
           message: 'Are you sure?'
         }
