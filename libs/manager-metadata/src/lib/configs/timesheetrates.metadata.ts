@@ -39,6 +39,7 @@ const formadd = () => [
   new SkillModel().formElement().updateValues(['name']),
   new Form.input.element('rate', 'Rate', InputType.Number)
     .setDefaultValue('{worktype.skill_rate_ranges.default_rate}')
+    .setIcon('{currency}')
     .setNumberOptions(0.01),
   new Form.input.element('value', 'Value', InputType.Number)
     .setIcon('{worktype.uom.short_name}')

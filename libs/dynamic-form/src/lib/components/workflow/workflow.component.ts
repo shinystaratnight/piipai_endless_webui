@@ -7,6 +7,8 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { WorkflowService } from '../../services';
 import { config, workflowEl } from './workflow.config';
 import { getElementFromMetadata } from '../../helpers';
+import { Field, Form } from '@webui/metadata';
+import { Endpoints } from '@webui/models';
 
 @Component({
   selector: 'webui-workflow',
@@ -29,7 +31,7 @@ export class WorkflowComponent implements OnInit, OnDestroy {
   public subStates: any;
   public acceptanceTests: any;
 
-  public addConfig!: any[];
+  public addConfig!: any;
   public config!: any[];
 
   public form: FormGroup = new FormGroup({});
@@ -327,9 +329,9 @@ export class WorkflowComponent implements OnInit, OnDestroy {
     };
   }
 
-  public getAddConfig(company: string, workflow: string): any[] {
-    return [
-      {
+  public getAddConfig(company: string, workflow: string): any {
+    return {
+      config: [{
         type: 'related',
         key: 'workflow_node',
         endpoint: this.workflowService.workflowNodeEndpoint,
@@ -348,8 +350,8 @@ export class WorkflowComponent implements OnInit, OnDestroy {
           workflow,
           system: 2,
         },
-      },
-    ];
+      }]
+    };
   }
 
   public getSubStatesConfig(company: string, workflow: string, parent: string): any[] {
@@ -379,66 +381,110 @@ export class WorkflowComponent implements OnInit, OnDestroy {
   }
 
   public getAcceptenceTestsConfig(node: any) {
+    const hiddenFields = {
+      elements: <Field[]>[],
+      keys: <string[]>[],
+      observers: <any[]>[],
+    };
+
+    return {
+      config: this.parseMetadata([
+        new Form.select.element('test_type', 'Test type')
+          .doNotSend()
+          .addOptions({
+            '': 'All',
+            'skill': 'Skill',
+            'tag': 'Tag',
+            'industry': 'Industry'
+          }),
+
+        new Form.related.element('industry', 'Industry', Endpoints.Industry)
+          .setShowIfRule([{
+            test_type: 'industry'
+          }])
+          .doNotSend()
+          .updateValues(['translations']),
+
+        new Form.related.element('skill', 'Skill', Endpoints.Skill)
+          .updateValues(['tranlsations', 'name'])
+          .setShowIfRule([{
+            test_type: 'skill'
+          }])
+          .doNotSend()
+          .setQuery({
+            company: 'currentCompany'
+          }),
+
+        new Form.related.element('tag', 'Tag', Endpoints.Tag)
+          .setShowIfRule([{
+            test_type: 'tag'
+          }])
+          .doNotSend()
+          .updateValues(['owner', 'translation']),
+
+        new Form.related.element('acceptance_test', 'Acceptance Test', Endpoints.AcceptanceTest)
+          .setQuery({
+            type: '{test_type}',
+            industry: '{industry.id}',
+            skill: '{skill.id}',
+            tag: '{tag.id}',
+          }),
+
+        {
+          endpoint: '/core/companyworkflownodes/',
+          read_only: false,
+          hide: true,
+          templateOptions: {
+            label: 'Acceptance Test',
+            values: ['__str__'],
+            type: 'related',
+          },
+          value: node.id,
+          type: 'related',
+          key: 'company_workflow_node',
+        },
+      ], hiddenFields),
+      hiddenFields
+    };
+  }
+
+  private parseMetadata(metadata: Field[], hiddenFields: any ): Field[] {
     const formData = new BehaviorSubject({ data: {} });
 
-    return [
-      {
-        type: 'select',
-        send: false,
-        key: 'test_type',
-        formData,
-        templateOptions: {
-          required: false,
-          label: 'Test type',
-          options: [
-            {
-              value: '',
-              label: 'All',
-            },
-            {
-              value: 'skill',
-              label: 'Skill',
-            },
-            {
-              value: 'tag',
-              label: 'Tag',
-            },
-            {
-              value: 'industry',
-              label: 'Industry',
-            },
-          ],
-        },
-      },
-      {
-        endpoint: '/acceptance-tests/acceptancetests/',
-        read_only: false,
-        formData,
-        templateOptions: {
-          label: 'Acceptance Test',
-          add: true,
-          values: ['__str__'],
-          type: 'related',
-        },
-        query: {
-          type: '{test_type}',
-        },
-        type: 'related',
-        key: 'acceptance_test',
-      },
-      {
-        endpoint: '/core/companyworkflownodes/',
-        read_only: false,
-        hide: true,
-        templateOptions: {
-          label: 'Acceptance Test',
-          values: ['__str__'],
-          type: 'related',
-        },
-        value: node.id,
-        type: 'related',
-        key: 'company_workflow_node',
-      },
-    ];
+    metadata.forEach((el) => {
+      if (el.showIf && el.showIf.length) {
+        if (hiddenFields.keys.indexOf(el.key as string) === -1) {
+          hiddenFields.keys.push(el.key as string);
+          hiddenFields.elements.push(el);
+          hiddenFields.observers = this.observeFields(
+            el.showIf,
+            hiddenFields.observers
+          );
+          el.hidden = new BehaviorSubject<boolean>(true);
+        }
+      }
+
+      el.formData = formData;
+    })
+
+    return metadata;
+  }
+
+  private observeFields(fields: any[], observers: any[]) {
+    fields.forEach((field: any) => {
+      if (field instanceof Object) {
+        const keys = Object.keys(field);
+        keys.forEach((key) => {
+          if (observers.indexOf(key) === -1) {
+            observers.push(key);
+          }
+        });
+      } else {
+        if (observers.indexOf(field) === -1) {
+          observers.push(field);
+        }
+      }
+    });
+    return observers;
   }
 }

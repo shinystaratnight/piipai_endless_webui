@@ -169,7 +169,7 @@ describe('DynamicListComponent', () => {
           ],
           context_menu: [
             {
-              label: 'send SMS',
+              label: 'send',
               endpoint: 'endpoint'
             }
           ]
@@ -846,7 +846,7 @@ describe('DynamicListComponent', () => {
               ],
               contextMenu: [
                 {
-                  label: 'send SMS',
+                  label: 'send',
                   endpoint: 'endpoint'
                 }
               ],

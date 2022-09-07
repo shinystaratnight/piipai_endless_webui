@@ -1,5 +1,6 @@
 import { FormGroup, FormBuilder, Validators, ValidatorFn } from '@angular/forms';
 import { EventEmitter } from '@angular/core';
+import { ITemplateOptions } from '@webui/metadata';
 
 export class BasicElementComponent {
 
@@ -7,6 +8,10 @@ export class BasicElementComponent {
   public key: any;
   public config: any;
   public event = new EventEmitter();
+
+  get templateOptions(): ITemplateOptions | undefined {
+    return this.config.templateOptions;
+  }
 
   public addControl(config: any, fb: FormBuilder, ...validators: any[]) {
     if (config.key) {

@@ -20,6 +20,8 @@ interface Rule {
 
 type RuleType = 'app' | 'model' | 'function' | 'options';
 
+type RuleArray = 'appsArray' | 'modelsArray' | 'functionsArray' | 'statesArray';
+
 @Component({
   selector: 'webui-form-rule',
   templateUrl: './form-rule.component.html',
@@ -179,7 +181,7 @@ export class FormRuleComponent extends BasicElementComponent implements OnInit, 
   }
 
   public generateArray(type: RuleType) {
-    const props: Record<RuleType, keyof FormRuleComponent> = {
+    const props: Record<RuleType, RuleArray> = {
       app: 'appsArray',
       model: 'modelsArray',
       function: 'functionsArray',
