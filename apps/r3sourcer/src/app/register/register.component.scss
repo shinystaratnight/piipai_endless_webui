@@ -1,4 +1,5 @@
-@use 'variables' as *;
+@import '../../../../../styles/variables';
+@import '../../../../../styles/mixins';
 
 $content-width: 729px;
 
@@ -69,5 +70,5 @@ select,
 textarea {
   border-radius: 3px !important;
 
-
+ 
 }
