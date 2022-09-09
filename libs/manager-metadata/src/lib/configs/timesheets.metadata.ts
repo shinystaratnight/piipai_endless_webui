@@ -199,7 +199,7 @@ const list = {
             ],
             action: 'emptyPost',
             type: 'button',
-            text: 'Send TS SMS'
+            text: 'Send'
           },
           {
             endpoint: '/hr/timesheets/{id}/resend_supervisor_sms',
@@ -211,7 +211,7 @@ const list = {
             ],
             action: 'emptyPost',
             type: 'button',
-            text: 'Send Supervisor SMS'
+            text: 'Send Supervisor'
           },
           {
             endpoint: '/hr/timesheets/{id}/candidate_fill',
@@ -506,7 +506,7 @@ const list = {
         action: 'emptyPost',
         label: '',
         type: 'button',
-        text: 'Send TS SMS'
+        text: 'Send'
       },
       showIf: [
         {
@@ -543,7 +543,7 @@ const list = {
         action: 'emptyPost',
         label: '',
         type: 'button',
-        text: 'Send Supervisor SMS'
+        text: 'Send Supervisor'
       },
       showIf: [
         {
@@ -1773,7 +1773,7 @@ const formset = {
             icon: 'fa-external-link-alt',
             action: 'emptyPost',
             type: 'button',
-            title: 'Send TS SMS'
+            title: 'Send'
           },
           {
             endpoint: '/hr/timesheets/{id}/resend_supervisor_sms',
@@ -1786,7 +1786,7 @@ const formset = {
             icon: 'fa-external-link-alt',
             action: 'emptyPost',
             type: 'button',
-            title: 'Send Supervisor SMS'
+            title: 'Send Supervisor'
           },
           {
             endpoint: '/hr/timesheets/{id}/candidate_fill',
@@ -1903,7 +1903,7 @@ const formset = {
         action: 'emptyPost',
         label: '',
         type: 'button',
-        text: 'Send TS SMS'
+        text: 'Send'
       },
       showIf: [
         {
@@ -1940,7 +1940,7 @@ const formset = {
         action: 'emptyPost',
         label: '',
         type: 'button',
-        text: 'Send Supervisor SMS'
+        text: 'Send Supervisor'
       },
       showIf: [
         {
