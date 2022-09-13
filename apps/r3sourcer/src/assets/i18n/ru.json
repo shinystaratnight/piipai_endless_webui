@@ -280,6 +280,18 @@
   "registration.of": "из",
   "registration.register": "Отправить",
   "registration.step": "шаг",
+  
+  "next_step": "Следующий",
+  
+  "registration.title": "Контактная информация",
+  "registration.registration": "Регистрация",
+  "registration.general_info": "Контактная информация",
+  "registration.additional_info": "Дополнительная информация",
+  "registration.financial_info": "Финансовая информация",
+  "registration.industry_info": "Промышленность и навыки",
+  "registration.already_account": "Уже есть аккаунт",
+  "registration.login_here": "Войдите здесь!",
+
   "regular_company.label": "Клиент",
   "reset": "Сбросить",
   "reset_all": "Сбросить все",

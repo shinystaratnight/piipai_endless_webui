@@ -15,6 +15,9 @@ body {
     font-weight: 400;
     font-size: 16px;
 }
+.user-registration .picture-container{
+    width: 400px;
+}
 .user-registration .row{
     display: flex;
     flex-wrap: wrap;
@@ -340,6 +343,9 @@ sup {
     .user-registration {
         background-color: fff;
     }
+    .user-registration .picture-container {
+        width: 328px;
+    }
     .user-registration .form-group {
         width: 100%;
         margin-top: 0px;
@@ -363,7 +369,7 @@ sup {
     display: block;
     }
     .user-registration .justify-content-center {
-        padding-left: 15px;
+        padding-left: 0px;
     }
     .user-registration .input_type_title {
         width: 321px;
@@ -449,7 +455,12 @@ sup {
     }
 
     .user-registration .btn-primary.btn-lg.rounded-pill {
-        width: 135px;
+        width: 180px;
+    }
+    .btn-lg, .btn-group-lg > .btn {
+        padding: 0.5rem 1rem;
+        font-size: 1rem;
+        border-radius: 0.3rem;
     }
 
     .user-registration .form-group.input_type_weight {
@@ -460,9 +471,11 @@ sup {
         width: 150px;
     }
     .user-registration .form-group.input_type_height {
-        width: 50%;
+        width: 46%;
         margin-top: -68px;
-        left: 194px;
+        left: 189px;
+        /* margin-left: 18px; */
+        position: relative !important;
     }
     .user-registration .form-group.input_type_height input {
         width: 150px !important;
@@ -544,7 +557,7 @@ sup {
         width: 100% !important;
     }
     .user-registration .form-element input {
-        width: 100% !important;
+        width: 320px  !important;
     }
     .user-registration .input_type_birthday .form-element-content {
         width: 100% !important;

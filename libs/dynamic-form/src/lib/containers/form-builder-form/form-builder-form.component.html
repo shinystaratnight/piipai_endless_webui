@@ -9,7 +9,7 @@
         <div class="col-12 text-center form-name" *ngIf="step.position === 1" >{{ 'registration.general_info' | translate }}</div>
         <div class="col-12 text-center form-name" *ngIf="step.position === 2" >{{ 'registration.additional_info' | translate }}</div>
         <div class="col-12 text-center form-name" *ngIf="step.position === 3" >{{ 'registration.financial_info' | translate }}</div>
-        <div class="col-12 text-center form-name" *ngIf="step.position === 4" >{{ 'registration.industry_info' | translate }}</div>
+        <div class="col-12 text-center form-name" *ngIf="step.position === 4" >{{ 'registration.industry_info' | translate }}12</div>
       </div>
       <div class="row" *ngIf="steps.length > 1">
         <div class="step-container col text-center" >
@@ -30,7 +30,7 @@
             </li>
             <li [ngClass]="{'active': step.position >= 4}" >
               <span class="marker-number">{{step.position > 4 ? '&#10004;' : '4'}}</span>
-              <span class="marker-text">{{ 'Industry and skills' | translate }}</span>
+              <span class="marker-text">{{ 'registration.industry_info' | translate }}</span>
             </li>
           </ul>
         </div>
