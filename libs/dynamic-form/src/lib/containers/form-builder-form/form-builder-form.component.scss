@@ -148,7 +148,8 @@
     top: 1.5rem;
     left: 50%;
     transform: translateX(-50%);
-    white-space: nowrap;
+    white-space: break-spaces;
+    width: 102px;
   }
 
 
@@ -220,8 +221,15 @@
 }
 /* Responsive */
 @media only screen and (max-width: 600px) {
+  .dropzone{
+    width: 60px;
+    height: 60px;
+  }
+  .dropzone .fa-user{
+    font-size: 2rem;
+  }
   .step-container .step-list > li{
-    margin: 0 1.5em;
+    margin: 0 1.7em;
   }
   .progresbar-steps{
     width: 75%;
@@ -230,7 +238,7 @@
 }
 .form .step-list{
   width: 320px;
-  left: -32px;
+  left: 0px;
   top: -14px;
 }
   .step-container ul:before {
@@ -244,9 +252,11 @@
    .form .progresbar-steps{
     width: 72%;
     right: 52px;
+    top: -15px;
+    left: 59px;
     }
     .form .step-container span.marker-text{
-      margin-left: -30px;
+      margin-left: 0px;
   }
 }
 /* Target Portrait and Landscape */

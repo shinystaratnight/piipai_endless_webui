@@ -16,7 +16,10 @@
       [class.required]="config.templateOptions?.required"
       [attr.for]="key"
     >
-      {{ getTranslationKey('label') | translate: { Default: config.templateOptions?.label } }}:
+      {{ getTranslationKey('label') | translate: { Default: templateOptions?.label } }}
+      <b class="text-secondary" *ngIf="templateOptions?.icon && templateOptions?.iconParsed">
+        &nbsp;({{ templateOptions?.iconParsed }})
+      </b>:
     </label>
     <webui-info
       *ngIf="config.templateOptions?.description"
@@ -37,10 +40,6 @@
       [class.full]="addonIcon"
       [class.flex-column]="(!viewMode && isPhoneField) || config.templateOptions?.type === 'email'"
     >
-      <span class="input-icon" *ngIf="config.templateOptions?.icon">
-        {{ config.templateOptions?.iconParsed }}
-      </span>
-
       <ng-container *ngIf="!viewMode && isPhoneField">
         <ng-container *ngTemplateOutlet="phoneField"></ng-container>
       </ng-container>

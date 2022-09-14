@@ -15,6 +15,20 @@ body {
     font-weight: 400;
     font-size: 16px;
 }
+.user-registration .picture-container{
+    width: 400px;
+}
+.user-registration .row{
+    display: flex;
+    flex-wrap: wrap;
+    margin-right: -15px;
+    margin-left: -15px;
+    --bs-gutter-x: 0rem; 
+    position: unset;
+}
+.user-registration .dynamic-form {
+    margin: 0 20px;
+  }
 .user-registration .form-name {
     padding-top: 22px !important;
     padding-bottom: 0px !important;
@@ -34,7 +48,7 @@ body {
     color: #7a7a7a;
 }
 .user-registration .form-element .form-element-label {
-    padding-bottom: 5px;
+    padding-bottom: 0px;
 }
 .user-registration .dynamic-form:not(.view-form-mode) .form-element .form-element-label.required::before {
     content: "";
@@ -123,16 +137,17 @@ sup {
 .user-registration .btn-primary.btn-lg.rounded-pill {
     width: 210px;
 }
+.theme-green .bs-datepicker-head{background-color: #28a3fc !important;}
 .user-registration .input_type_gender {
     float: right;
-    margin-top: -88px;
+    margin-top: -77px;
 }
 .user-registration .input_type_postal_code {
     /* float:right;
     margin-top: -79px;   */
     position: relative;
     left: 574px;
-    top: -87px;
+    top: -83px;
 }
 .user-registration .input_type_postal_code input {
     width: 84px !important;
@@ -141,7 +156,7 @@ sup {
 .user-registration .input_type_country {
     display: inline-block;
     position: absolute;
-    margin-top: -60px;
+    margin-top: -74px;
 }
 .user-registration .input_type_first_name {
     float: left;
@@ -213,10 +228,10 @@ sup {
 }
 .user-registration .input_type_city {
     float: left;
-    margin-top: 20px;
+    margin-top: 10px;
 }
 .user-registration .input_type_state {
-    margin-top: 20px;
+    margin-top: 10px;
     margin-left: 44px;
 }
 .user-registration .input_type_state .autocomplete-value {
@@ -234,7 +249,7 @@ sup {
 }
 .user-registration .input_type_residency {
     float: right;
-    margin-top: -79px;
+    margin-top: -83px;
 }
 .user-registration .input_type_residency .form-element select.form-control:not([size]):not([form-element-label]) {
     height: 36px;
@@ -280,15 +295,16 @@ sup {
 }
 .user-registration .input_type_id {
     display: inline-block;
-    margin-top: 20px;
+    margin-top: 10px;
 }
+
 .user-registration .input_type_skill {
     float: right;
-    margin-top: -79px;
+    margin-top: -84px;
 }
 .border-line {
     border: 1px solid #d3deea;
-    margin-top: 20px;
+    margin-top: 20px !important;
     /* width: 108%; */
     /* width: 730px; */
     /* margin-left: -4%; */
@@ -296,12 +312,15 @@ sup {
     right: 0;
 }
 .border-line_2 {
-    margin-top: -84px;
-    position: absolute;
+    margin-top: -92px !important;
+    position: absolute !important;
+    width: 730px;
+    margin-left: 30.8% !important;
 }
 .border-line_3,
 .border-line_4 {
-    display: none;
+    display: none !important;
+    width: 100%;
 }
 .register-button {
     display: flex;
@@ -324,6 +343,9 @@ sup {
     .user-registration {
         background-color: fff;
     }
+    .user-registration .picture-container {
+        width: 328px;
+    }
     .user-registration .form-group {
         width: 100%;
         margin-top: 0px;
@@ -331,11 +353,23 @@ sup {
     .user-registration .dropzone-wrapper {
         margin-right: 6px !important;
     }
+    .user-registration .dropzone{
+        width: 60px !important;
+        height: 60px !important;
+      }
+      .user-registration .dropzone .fa-user{
+        font-size: 2rem;
+      }
     .dynamic-form {
         margin: 0px !important;
+        padding-top: 10px;
+    }
+    .border-line_1{
+        margin-top: 85px !important;
+    display: block;
     }
     .user-registration .justify-content-center {
-        padding-left: 15px;
+        padding-left: 0px;
     }
     .user-registration .input_type_title {
         width: 321px;
@@ -393,13 +427,16 @@ sup {
         margin-top: 0px;
     }
     .input_type_state {
-        margin-top: 0px;
-        margin-left: 0px;
+        margin-top: 0px !important;
+    margin-left: 0px !important;
     }
     .user-registration .input_type_postal_code {
         position: relative;
-        left: 233px;
-        top: -88px;
+        left: 232px;
+    top: -88px;
+    
+    display: block;
+    width: 28%;
     }
     .input_type_transportation_to_work {
         margin-bottom: 0px !important;
@@ -418,7 +455,12 @@ sup {
     }
 
     .user-registration .btn-primary.btn-lg.rounded-pill {
-        width: 135px;
+        width: 180px;
+    }
+    .btn-lg, .btn-group-lg > .btn {
+        padding: 0.5rem 1rem;
+        font-size: 1rem;
+        border-radius: 0.3rem;
     }
 
     .user-registration .form-group.input_type_weight {
@@ -429,9 +471,11 @@ sup {
         width: 150px;
     }
     .user-registration .form-group.input_type_height {
-        width: 50%;
+        width: 46%;
         margin-top: -68px;
-        left: 194px;
+        left: 189px;
+        /* margin-left: 18px; */
+        position: relative !important;
     }
     .user-registration .form-group.input_type_height input {
         width: 150px !important;
@@ -444,8 +488,10 @@ sup {
         background-color: green;
     }
     .border-line_2 {
-        margin-top: -95px !important;
-        position: absolute;
+        margin-top: -150px !important;
+        position: absolute !important;
+    width: 100%;
+    margin-left: 0px !important;
     }
     .user-registration .form-group {
         margin-bottom: 1.5rem;
@@ -511,7 +557,7 @@ sup {
         width: 100% !important;
     }
     .user-registration .form-element input {
-        width: 100% !important;
+        width: 320px  !important;
     }
     .user-registration .input_type_birthday .form-element-content {
         width: 100% !important;

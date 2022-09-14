@@ -9,11 +9,12 @@
         <div class="col-12 text-center form-name" *ngIf="step.position === 1" >{{ 'registration.general_info' | translate }}</div>
         <div class="col-12 text-center form-name" *ngIf="step.position === 2" >{{ 'registration.additional_info' | translate }}</div>
         <div class="col-12 text-center form-name" *ngIf="step.position === 3" >{{ 'registration.financial_info' | translate }}</div>
-        <div class="col-12 text-center form-name" *ngIf="step.position === 4" >{{ 'registration.industry_info' | translate }}</div>
+        <div class="col-12 text-center form-name" *ngIf="step.position === 4" >{{ 'registration.industry_info' | translate }}12</div>
       </div>
       <div class="row" *ngIf="steps.length > 1">
-        <div class="step-container col" >
+        <div class="step-container col text-center" >
           <span class="progresbar-steps" [style.background]="'linear-gradient(90deg, #2196F3 '+ barWidth+'%, rgba(35, 154, 246, 0.706568) 30.25%, rgba(37, 157, 248, 0.3) 51.84%, rgba(40, 163, 252, 0.03) 100%)'" ></span>
+          
           <ul class="step-list">
             <li [ngClass]="{'active': step.position >= 1}" >
               <span class="marker-number">{{step.position > 1 ? '&#10004;' : '1'}}</span>
@@ -29,7 +30,7 @@
             </li>
             <li [ngClass]="{'active': step.position >= 4}" >
               <span class="marker-number">{{step.position > 4 ? '&#10004;' : '4'}}</span>
-              <span class="marker-text">{{ 'Industry and skills' | translate }}</span>
+              <span class="marker-text">{{ 'registration.industry_info' | translate }}</span>
             </li>
           </ul>
         </div>
