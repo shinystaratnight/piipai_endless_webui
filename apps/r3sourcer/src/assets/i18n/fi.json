@@ -756,5 +756,14 @@
   "rate_coefficient_modifier.placeholder": "Valitse",
   "rate_coefficient_modifier.label": "Korkokertoimen muokkaaja",
   "confirm_delete_instance": "Are you sure you would like to DELETE {{name}}?",
-  "do_not_delete": "Do not delete!"
+  "do_not_delete": "Do not delete!",
+
+  "registration.registration": "Rekisteröidy",
+  "registration.general_info": "Yhteystiedot",
+  "registration.additional_info": "Lisätietoja",
+  "registration.financial_info": "Taloustiedot",
+  "registration.industry_info": "Teollisuus ja taidot",
+  "registration.already_account": "Onko sinulla jo tili",
+  "registration.login_here": "Kirjaudu sisään tästä!",
+  "next_step": "Seuraava"
 }
