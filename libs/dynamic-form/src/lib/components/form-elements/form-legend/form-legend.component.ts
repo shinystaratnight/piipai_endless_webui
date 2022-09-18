@@ -38,5 +38,4 @@ export class FormLegendComponent {
   getDescription(key: string): string {
     return this._legend[key];
   }
-
 }

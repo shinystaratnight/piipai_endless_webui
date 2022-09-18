@@ -46,6 +46,7 @@ import { StepperModule } from '@webui/stepper';
 import { CdkStepperModule } from '@angular/cdk/stepper';
 import { RatingModule } from '@webui/rating';
 import { GoogleMapsModule } from '@angular/google-maps';
+import { EmailPreviewComponent } from './modals/email-preview/email-preview.component';
 
 @NgModule({
   imports: [
@@ -111,6 +112,7 @@ import { GoogleMapsModule } from '@angular/google-maps';
     ...fromContainers.components,
     ...modals,
     ...modalComponents,
+    EmailPreviewComponent,
   ],
   providers: [...services],
   entryComponents: [
