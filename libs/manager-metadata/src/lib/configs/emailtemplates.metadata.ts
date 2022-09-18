@@ -207,6 +207,18 @@ const form = [
           {
             key: 'legend',
             type: 'legend'
+          },
+          {
+            type: 'button',
+            color: 'primary',
+            templateOptions: {
+              action: 'showEmailPreview',
+              text: 'Preview',
+              type: 'button',
+              small: true,
+              icon: 'envelope',
+              p: true,
+            },
           }
         ])
     ])

@@ -359,7 +359,7 @@ export class DynamicFormComponent implements OnInit {
           }
         }
       } else if (el.children) {
-        this.filterSendData(el.children, data);
+        this.replaceByData(el.children, data);
       }
     });
   }
