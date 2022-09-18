@@ -1,3 +1,4 @@
+import { Form } from "@webui/metadata";
 import { Endpoints } from "@webui/models";
 
 const list = {
@@ -59,142 +60,156 @@ const list = {
 };
 
 const form = [
-  {
-    key: 'id',
-    type: 'input',
-    hide: true,
-    templateOptions: {
-      required: false,
-      label: 'Id',
-      type: 'text'
-    },
-    read_only: false
-  },
-  {
-    key: 'updated_at',
-    type: 'datepicker',
-    templateOptions: {
-      required: false,
-      label: 'Updated at',
-      type: 'datetime'
-    },
-    send: false,
-    read_only: true
-  },
-  {
-    key: 'created_at',
-    type: 'datepicker',
-    templateOptions: {
-      required: false,
-      label: 'Created at',
-      type: 'datetime'
-    },
-    send: false,
-    read_only: true
-  },
-  {
-    key: 'name',
-    default: '',
-    type: 'input',
-    templateOptions: {
-      required: false,
-      label: 'Name',
-      max: 256,
-      type: 'text'
-    },
-    read_only: false
-  },
-  {
-    key: 'slug',
-    type: 'input',
-    templateOptions: {
-      required: true,
-      label: 'Slug',
-      max: 50,
-      type: 'text'
-    },
-    read_only: true
-  },
-  {
-    key: 'message_text_template',
-    default: '',
-    type: 'textarea',
-    templateOptions: {
-      required: false,
-      label: 'Text template',
-      rows: 7
-    },
-    read_only: false
-  },
-  {
-    key: 'message_html_template',
-    default: '',
-    type: 'textarea',
-    templateOptions: {
-      required: false,
-      label: 'HTML template',
-      type: 'text'
-    },
-  },
-  {
-    key: 'reply_timeout',
-    default: 10,
-    type: 'input',
-    templateOptions: {
-      required: false,
-      label: 'Reply timeout',
-      type: 'number',
-      min: -2147483648,
-      description: 'Minutes',
-      max: 2147483647
-    },
-    read_only: false
-  },
-  {
-    key: 'delivery_timeout',
-    default: 10,
-    type: 'input',
-    templateOptions: {
-      required: false,
-      label: 'Delivery timeout',
-      type: 'number',
-      min: -2147483648,
-      description: 'Minutes',
-      max: 2147483647
-    },
-    read_only: false
-  },
-  {
-    key: 'type',
-    type: 'select',
-    hide: true,
-    default: 'email',
-    require: true,
-    templateOptions: {
-      label: 'Type',
-      type: 'select',
-      options: [
-        {
-          value: 'email',
-          label: 'Email'
-        }
-      ]
-    },
-    read_only: false
-  },
-  {
-    key: 'language',
-    type: 'related',
-    read_only: true,
-    send: false,
-    replaceByData: true,
-    endpoint: '/companies/{company_id}/languages/',
-    templateOptions: {
-      label: 'Language',
-      display: '{name}',
-      param: 'alpha_2'
-    }
-  }
+  new Form.row.element()
+    .setChildren([
+      new Form.group.element()
+        .setChildren([
+          {
+            key: 'id',
+            type: 'input',
+            hide: true,
+            templateOptions: {
+              required: false,
+              label: 'Id',
+              type: 'text'
+            },
+            read_only: false
+          },
+          {
+            key: 'updated_at',
+            type: 'datepicker',
+            templateOptions: {
+              required: false,
+              label: 'Updated at',
+              type: 'datetime'
+            },
+            send: false,
+            read_only: true
+          },
+          {
+            key: 'created_at',
+            type: 'datepicker',
+            templateOptions: {
+              required: false,
+              label: 'Created at',
+              type: 'datetime'
+            },
+            send: false,
+            read_only: true
+          },
+          {
+            key: 'name',
+            default: '',
+            type: 'input',
+            templateOptions: {
+              required: false,
+              label: 'Name',
+              max: 256,
+              type: 'text'
+            },
+            read_only: false
+          },
+          {
+            key: 'slug',
+            type: 'input',
+            templateOptions: {
+              required: true,
+              label: 'Slug',
+              max: 50,
+              type: 'text'
+            },
+            read_only: true
+          },
+          {
+            key: 'message_text_template',
+            default: '',
+            type: 'textarea',
+            templateOptions: {
+              required: false,
+              label: 'Text template',
+              rows: 7
+            },
+            read_only: false
+          },
+          {
+            key: 'message_html_template',
+            default: '',
+            type: 'textarea',
+            templateOptions: {
+              required: false,
+              label: 'HTML template',
+              type: 'text'
+            },
+          },
+          {
+            key: 'reply_timeout',
+            default: 10,
+            type: 'input',
+            templateOptions: {
+              required: false,
+              label: 'Reply timeout',
+              type: 'number',
+              min: -2147483648,
+              description: 'Minutes',
+              max: 2147483647
+            },
+            read_only: false
+          },
+          {
+            key: 'delivery_timeout',
+            default: 10,
+            type: 'input',
+            templateOptions: {
+              required: false,
+              label: 'Delivery timeout',
+              type: 'number',
+              min: -2147483648,
+              description: 'Minutes',
+              max: 2147483647
+            },
+            read_only: false
+          },
+          {
+            key: 'type',
+            type: 'select',
+            hide: true,
+            default: 'email',
+            require: true,
+            templateOptions: {
+              label: 'Type',
+              type: 'select',
+              options: [
+                {
+                  value: 'email',
+                  label: 'Email'
+                }
+              ]
+            },
+            read_only: false
+          },
+          {
+            key: 'language',
+            type: 'related',
+            read_only: true,
+            send: false,
+            replaceByData: true,
+            endpoint: '/companies/{company_id}/languages/',
+            templateOptions: {
+              label: 'Language',
+              display: '{name}',
+              param: 'alpha_2'
+            }
+          }
+        ]),
+
+      new Form.group.element()
+        .setChildren([
+          {
+            key: 'legend',
+            type: 'legend'
+          }
+        ])
+    ])
 ];
 
 const formadd = [

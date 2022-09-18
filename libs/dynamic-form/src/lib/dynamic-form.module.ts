@@ -3,7 +3,16 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
-import { NgbAccordionModule, NgbCollapseModule, NgbDatepickerModule, NgbNavModule, NgbPaginationModule, NgbPopoverModule, NgbRatingModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
+import {
+  NgbAccordionModule,
+  NgbCollapseModule,
+  NgbDatepickerModule,
+  NgbNavModule,
+  NgbPaginationModule,
+  NgbPopoverModule,
+  NgbRatingModule,
+  NgbTooltipModule,
+} from '@ng-bootstrap/ng-bootstrap';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 // import { AgmCoreModule } from '@agm/core';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
@@ -32,7 +41,7 @@ import { SharedModule } from '@webui/shared';
 import { TranslateModule } from '@ngx-translate/core';
 import { IconModule } from '@webui/icon';
 import { DialogModule } from '@webui/dialog';
-import { FormControlsModule } from "@webui/form-controls";
+import { FormControlsModule } from '@webui/form-controls';
 import { StepperModule } from '@webui/stepper';
 import { CdkStepperModule } from '@angular/cdk/stepper';
 import { RatingModule } from '@webui/rating';
@@ -80,7 +89,7 @@ import { GoogleMapsModule } from '@angular/google-maps';
     NgbCollapseModule,
     NgbAccordionModule,
     NgbTooltipModule,
-    NgbDatepickerModule
+    NgbDatepickerModule,
   ],
   exports: [
     fromComponents.GenericFormComponent,
@@ -92,7 +101,7 @@ import { GoogleMapsModule } from '@angular/google-maps';
     fromComponents.TestGeneratorComponent,
     fromContainers.FormBuilderFormComponent,
     fromComponents.FilterRelatedComponent,
-    fromComponents.ImageUploaderComponent
+    fromComponents.ImageUploaderComponent,
   ],
   declarations: [
     // fromComponents.WebcamComponent,
@@ -108,8 +117,8 @@ import { GoogleMapsModule } from '@angular/google-maps';
     ...fromComponents.entryComponents,
     ...fromContainers.entryComponents,
     ...modals,
-    ...modalComponents
-  ]
+    ...modalComponents,
+  ],
 })
 export class DynamicFormModule {
   static forRoot(data: {
@@ -117,7 +126,7 @@ export class DynamicFormModule {
   }): ModuleWithProviders<DynamicFormModule> {
     return {
       ngModule: DynamicFormModule,
-      providers: [{ provide: METADATA, useClass: data.metadata }]
+      providers: [{ provide: METADATA, useClass: data.metadata }],
     };
   }
 
@@ -126,7 +135,7 @@ export class DynamicFormModule {
   }): ModuleWithProviders<DynamicFormModule> {
     return {
       ngModule: DynamicFormModule,
-      providers: [{ provide: METADATA, useClass: data.metadata }]
+      providers: [{ provide: METADATA, useClass: data.metadata }],
     };
   }
 }

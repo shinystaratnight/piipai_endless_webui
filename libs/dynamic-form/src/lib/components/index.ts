@@ -51,7 +51,8 @@ import {
   FormElementViewComponent,
   DropdownComponent,
   FormBankAccountComponent,
-  FormImageListComponent
+  FormImageListComponent,
+  FormLegendComponent
 } from './form-elements';
 
 // import { ExtendComponent } from './extend/extend.component';
@@ -124,6 +125,7 @@ export const entryComponents = [
   FormListDropdownComponent,
   FormBankAccountComponent,
   FormImageListComponent,
+  FormLegendComponent,
 
   ListCheckboxComponent,
   ListImageComponent,
