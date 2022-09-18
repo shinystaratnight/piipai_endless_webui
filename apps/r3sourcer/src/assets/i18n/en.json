@@ -917,7 +917,7 @@
   "filter.shift_dates__shift_date.from": "From",
   "filter.shift_dates__shift_date.to": "To",
   "filter.shift_dates__shift_date.label": "Shift start date",
-  "filter.position.label": "Skill",
+  "filter.position.label": "Position",
   "filter.provider_representative.label": "Provider representative",
   "jobrates.label": "Job Rates",
   "tabs.shifts.name": "Shift Dates",
