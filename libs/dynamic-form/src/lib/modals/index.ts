@@ -12,6 +12,7 @@ import { EvaluateCandidateModalComponent } from './evaluate-candidate-modal/eval
 import { TimesheetDetailsPreviewComponent } from './timesheet-details-preview/timesheet-details-preview.component';
 import { ApproveWorksheetModalComponent } from './approve-worksheet-modal/approve-worksheet-modal.component';
 import { EntityListComponent } from './approve-worksheet-modal/entity-list/entity-list.component';
+import { EmailPreviewComponent } from './email-preview/email-preview.component';
 
 export * from './base-modal/base-modal.component';
 export * from './pass-test-modal/pass-test-modal.component';
@@ -24,8 +25,9 @@ export * from './approve-timesheet-modal/approve-timesheet-modal.component';
 export * from './submission-modal/submission-modal.component';
 export * from './signature-modal/signature-modal.component';
 export * from './evaluate-candidate-modal/evaluate-candidate-modal.component';
-export * from './timesheet-details-preview/timesheet-details-preview.component'
+export * from './timesheet-details-preview/timesheet-details-preview.component';
 export * from './approve-worksheet-modal/approve-worksheet-modal.component';
+export * from './email-preview/email-preview.component';
 
 export const modals = [
   BaseModalComponent,
@@ -42,7 +44,8 @@ export const modals = [
   ApproveWorksheetModalComponent,
   TimesheetDetailsPreviewComponent,
   ApproveWorksheetModalComponent,
-  EntityListComponent
+  EntityListComponent,
+  EmailPreviewComponent
 ];
 
 export const components = [EvaluateFieldComponent];

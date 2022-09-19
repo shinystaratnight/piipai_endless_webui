@@ -20,6 +20,11 @@ const filters = {
     label: 'Candidate Contact',
     endpoint: Endpoints.CandidateContact
   }),
+  position: createFilter(Type.Relared, {
+    key: 'position',
+    label: 'Position',
+    endpoint: Endpoints.Skill
+  }),
   client: createFilter(Type.Relared, {
     key: 'company',
     label: 'Client',
@@ -414,6 +419,7 @@ const list = {
       filters.shift_started_at,
       filters.supervisor,
       filters.candidate,
+      filters.position,
       filters.client,
       filters.jobsite
     ],

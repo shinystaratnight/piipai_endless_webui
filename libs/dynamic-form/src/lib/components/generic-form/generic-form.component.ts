@@ -43,7 +43,7 @@ import { Form, IFormErrors } from '../../models';
 import { Time } from '@webui/time';
 import { Field } from '@webui/metadata';
 import { Endpoints } from '@webui/models';
-import { stringify } from '@angular/compiler/src/util';
+import { EmailPreviewComponent } from '../../modals';
 
 export interface HiddenFields {
   elements: Field[];
@@ -1766,9 +1766,22 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
       case 'resendSms':
         this.resendContactCheck(e, 'smses');
         break;
+
+      case 'showEmailPreview':
+        this.showEmailPreview(e);
     }
 
     this.buttonAction.emit(e);
+  }
+
+  showEmailPreview(e: any): void {
+    const { message_html_template, message_text_template } = e.data;
+    const template = message_html_template || message_text_template;
+
+    if (template) {
+      const modalRef = this.modal.open(EmailPreviewComponent);
+      modalRef.componentInstance.template = template;
+    }
   }
 
   resendContactCheck(e: any, type: 'emails' | 'smses') {

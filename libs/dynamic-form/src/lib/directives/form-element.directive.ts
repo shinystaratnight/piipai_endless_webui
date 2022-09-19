@@ -7,8 +7,7 @@ import {
   ComponentRef,
   OnChanges,
   Output,
-  EventEmitter,
-  SimpleChanges
+  EventEmitter
 } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 
@@ -36,7 +35,8 @@ import {
   FormTrackingComponent,
   FormListDropdownComponent,
   FormBankAccountComponent,
-  FormImageListComponent
+  FormImageListComponent,
+  FormLegendComponent
 } from '../components/form-elements';
 
 import { TestListComponent } from '../components/test-list/test-list.component';
@@ -82,7 +82,8 @@ const components: Record<string, any> = {
   tracking: FormTrackingComponent,
   listdropdown: FormListDropdownComponent,
   bank_account: FormBankAccountComponent,
-  image_list: FormImageListComponent
+  image_list: FormImageListComponent,
+  legend: FormLegendComponent
 };
 
 @Directive({

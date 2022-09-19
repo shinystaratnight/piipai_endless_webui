@@ -910,7 +910,7 @@
     "filter.shift_dates__shift_date.from": "Kellet",
     "filter.shift_dates__shift_date.to": "Saaja",
     "filter.shift_dates__shift_date.label": "Vahetuse algusaeg",
-    "filter.position.label": "Oskused",
+    "filter.position.label": "Amet",
     "filter.provider_representative.label": "Teenusepakkuja esindaja",
     "jobrates.label": "Töötasud",
     "tabs.shifts.name": "Vahetuse kuupäevad",
