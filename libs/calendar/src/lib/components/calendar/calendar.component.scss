@@ -423,13 +423,13 @@ webui-datepicker {
 
     & > fa-icon {
       width: 15px;
-      margin-top: 5px;
+      margin-top: 1px;
       font-size: 6px;
     }
 
     .btn {
       font-size: 12px;
-      line-height: 1;
+      // line-height: 1.2;
     }
 
     font-size: 12px;
@@ -679,4 +679,8 @@ webui-datepicker {
 
 .not-active-date {
   visibility: hidden;
+}
+
+.shift-tooltip:empty {
+  display: none;
 }
