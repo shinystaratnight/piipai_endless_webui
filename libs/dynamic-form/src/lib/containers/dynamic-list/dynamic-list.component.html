@@ -65,7 +65,7 @@
     >
       <ng-content></ng-content>
 
-      <h2
+      <!-- <h2
         class="datatable-label mb-0"
         [class.has-description]="description"
         *ngIf="
@@ -98,8 +98,8 @@
           (event)="buttonAction($event)"
         >
         </webui-list-buttons>
-      </h2>
-      <div
+      </h2> -->
+      <!-- <div
         *ngIf="(showFilters && !(identifyDevice() || isMobileDevice)) || config.list.search_enabled"
         class="datatable-header"
         [class.open-filters]="!filtersHidden && showFilters"
@@ -124,7 +124,7 @@
           (event)="filterHandler($event)"
         >
         </webui-list-search-bar>
-      </div>
+      </div> -->
 
       <div
         class="filter-wrapper inline"
@@ -294,10 +294,8 @@
                   <td
                     *ngIf="!cell.hide"
                     [class.text-center]="cell.center"
-                    [ngStyle]="{
-                      'width.px': cell.width,
-                      'maxWidth.px': cell.width
-                    }"
+                    [ngStyle]="{'text-align': (cell.label === 'Number of segments' || cell.label === 'Status') ? 'center' : 'left'}"
+
                     [attr.data-label]="cell.label"
                     [hidden]="cell.tab && cell.tab.is_collapsed"
                     [class.action-cell]="cell.name === 'actions'"
@@ -485,8 +483,17 @@
 
       <div
         *ngIf="pageSize && inForm"
-        class="d-flex flex-wrap align-items-center py-3"
+        class="pagination d-flex flex-wrap align-items-center justify-content-between x-20s y-3"
       >
+
+        <div class="ml-2 logs" >
+          {{ data.count }}
+          <!-- {{ config.list.pagination_label || config.list.label }} -->
+          {{
+            getListLabelKey()
+              | translate: { Default: label || config.list.label }
+          }}
+        </div>
         <ngb-pagination
           [collectionSize]="pageSize"
           [(page)]="page"
@@ -498,14 +505,7 @@
           (pageChange)="pageChange()"
         >
         </ngb-pagination>
-        <div class="ms-2">
-          {{ data.count }}
-          <!-- {{ config.list.pagination_label || config.list.label }} -->
-          {{
-            getListLabelKey()
-              | translate: { Default: label || config.list.label }
-          }}
-        </div>
+
       </div>
     </div>
   </div>

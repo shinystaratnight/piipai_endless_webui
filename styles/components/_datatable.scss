@@ -102,8 +102,6 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, 0.3);
   }
 
   table {
-    border-collapse: separate;
-    border-spacing: 0 6px;
 
     font-size: 0.875rem;
 
@@ -113,9 +111,7 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, 0.3);
       min-width: 989px;
     }
 
-    @include media-breakpoint-up('sm') {
-      padding: 4px;
-    }
+
 
     td {
       border-top: none;
@@ -125,11 +121,18 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, 0.3);
       padding-top: 16px;
       padding-bottom: 16px;
 
+      max-width: 140px;
+      min-width: 104px;
+      vertical-align: middle;
       background-color: white;
 
       &:first-child {
-        padding-left: 16px;
-        padding-right: 9px;
+        padding-left: 35px;
+        padding-right: 10px;
+      }
+      &:last-child {
+        padding-left: 35px;
+        padding-right: 10px;
       }
     }
 
@@ -138,10 +141,7 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, 0.3);
     }
 
     tbody tr {
-      border-radius: 4px;
-
-      box-shadow: $nested-shadow;
-
+      border-bottom: 1px solid #D3DEEA;
       &.main {
         border-radius: 4px 4px 0 0;
 
@@ -156,9 +156,6 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, 0.3);
         }
       }
 
-      &:hover {
-        box-shadow: $nested-shadow-hover;
-      }
 
       &:hover.main + tr {
         box-shadow: 0 -5px white, $nested-shadow-hover;
@@ -202,15 +199,22 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, 0.3);
     font-size: 14px;
     line-height: 16px;
     font-weight: 600;
-
+    vertical-align: middle;
+    white-space: nowrap;
     border-top: none;
     border-bottom: none;
-
+    padding: 19px 10px;
     color: black;
     text-transform: uppercase;
-
     background-color: transparent;
-
+    &:first-child {
+      padding-left: 35px;
+      padding-right: 10px;
+    }
+    &:last-child {
+      padding-left: 35px;
+      padding-right: 10px;
+    }
     span,
     label {
       opacity: 0.15;

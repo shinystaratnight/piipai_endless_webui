@@ -1,19 +1,9 @@
-<div class="d-flex align-items-center mb-2">
+<div class="subcription-details ">
   <h5 class="mb-0 me-1">Subscription details</h5>
 
-  <ng-container *ngIf="currentPlan">
-
-    <button type="button" class="btn" title="Change"
-      *ngIf="currentPlan"
-      (click)="changePlan()">
-        <fa-icon [icon]="['fas', 'pencil-alt']" class="text-warning"></fa-icon>
-    </button>
-
-    <button type="button" class="btn" title="Unsubscribe"
-      (click)="cancelPlan()">
-        <fa-icon [icon]="['fas', 'trash']" class="text-danger"></fa-icon>
-    </button>
-  </ng-container>
+  <button type="button"
+  class="btn btn-sm btn-primary action-button"
+  [disabled]="!cardExist">Save Card</button>
 </div>
 
 <button type="button" class="btn btn-primary subscribe-button"
