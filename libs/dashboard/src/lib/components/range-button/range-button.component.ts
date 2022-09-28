@@ -1,5 +1,4 @@
 import { Component, Input } from '@angular/core';
-import { DateRange } from '@webui/core';
 
 @Component({
   selector: 'webui-range-button',
@@ -7,7 +6,7 @@ import { DateRange } from '@webui/core';
   styleUrls: ['./range-button.component.scss']
 })
 export class RangeButtonComponent {
-  @Input() dateRange!: DateRange;
+  @Input() dateRange!: string;
   @Input() active!: boolean;
   @Input() key!: string;
   @Input() label!: string;

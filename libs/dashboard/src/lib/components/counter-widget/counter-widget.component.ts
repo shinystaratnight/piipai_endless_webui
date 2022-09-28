@@ -16,7 +16,7 @@ import {
 import { checkAndReturnTranslation } from '@webui/utilities';
 import { LocalStorageService } from 'ngx-webstorage';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
-import { debounceTime, switchMap, tap, map } from 'rxjs/operators';
+import { switchMap, tap, map, distinctUntilChanged } from 'rxjs/operators';
 import { WidgetService } from '../../services';
 
 type DateParams = {
@@ -32,10 +32,8 @@ type DateParams = {
 })
 export class CounterWidgetComponent implements OnInit, OnDestroy {
   data$!: Observable<any>;
-  dateParams$: BehaviorSubject<DateParams> = new BehaviorSubject(
-    {} as DateParams
-  );
-  dateRangeTypeControl: FormControl = new FormControl(DateRange.ThisMonth);
+  dateParams$: BehaviorSubject<DateParams> = new BehaviorSubject({} as DateParams);
+  dateRangeTypeControl: FormControl = new FormControl(DateRange.ThisMonth.toString());
   dateRange = DateRange;
   dateRangeList = [
     DateRange.LastMonth,
@@ -44,19 +42,18 @@ export class CounterWidgetComponent implements OnInit, OnDestroy {
     DateRange.ThisYear,
     DateRange.Today,
     DateRange.Custom
-  ];
+  ].map((el) => el.toString());
   widgetLabel: Label = {
     key: 'counter',
     value: 'Counter'
   };
   rangeForm!: FormGroup;
   hasForm$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  get loading$() {
-    return this.loading.asObservable();
-  }
 
   private loading: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
   private controlSubscription!: Subscription;
+
+  loading$ = this.loading.asObservable();
 
   constructor(
     private widgetService: WidgetService,
@@ -93,10 +90,10 @@ export class CounterWidgetComponent implements OnInit, OnDestroy {
     );
 
     this.rangeForm = this.fb.group(
-      this.dateRangeService.getFormDatesByRange(DateRange.ThisMonth)
+      this.dateRangeService.getFormDatesByRange(DateRange.ThisMonth.toString())
     );
     this.controlSubscription = this.dateRangeTypeControl.valueChanges
-      .pipe(debounceTime(400))
+      .pipe(distinctUntilChanged())
       .subscribe((value) => {
         this.changeDateRange(value);
       });
@@ -106,8 +103,8 @@ export class CounterWidgetComponent implements OnInit, OnDestroy {
     this.controlSubscription.unsubscribe();
   }
 
-  changeDateRange(type: DateRange) {
-    if (type === DateRange.Custom) {
+  changeDateRange(type: string) {
+    if (type === DateRange.Custom.toString()) {
       this.hasForm$.next(true);
       return;
     }
@@ -125,7 +122,7 @@ export class CounterWidgetComponent implements OnInit, OnDestroy {
     this.dateRangeTypeControl.value === type;
   }
 
-  getLabel(type: DateRange): Label {
+  getLabel(type: string): Label {
     return dateRangeLabel[type];
   }
 
