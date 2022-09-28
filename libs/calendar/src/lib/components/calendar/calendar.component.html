@@ -4,12 +4,15 @@
     <h3 class="widget-name">{{ 'calendar' | translate: {"Default": "Calendar"} }}</h3>
 
     <div *ngIf="calendarType !== 2" class="btn-group range-buttons" btnRadioGroup [formControl]="currentRange">
-      <label [btnRadio]="range.Month" role="button" [class.active]="isMonthRange">{{ 'month' | translate: {"Default":
-        "Month"} }}</label>
-      <label [btnRadio]="range.Week" role="button" [class.active]="isWeekRange">{{ 'week' | translate: {"Default":
-        "Week"} }}</label>
-      <label [btnRadio]="range.Day" role="button" [class.active]="isDayRange">{{ 'day' | translate: {"Default": "Day"}
-        }}</label>
+      <label [btnRadio]="range.Month" role="button" [class.active]="isMonthRange">
+        {{ 'month' | translate: {"Default": "Month"} }}
+      </label>
+      <label [btnRadio]="range.Week" role="button" [class.active]="isWeekRange">
+        {{ 'week' | translate: {"Default": "Week"} }}
+      </label>
+      <label [btnRadio]="range.Day" role="button" [class.active]="isDayRange">
+        {{ 'day' | translate: {"Default": "Day"} }}
+      </label>
     </div>
 
     <div class="range-title-wrapper">
@@ -151,7 +154,7 @@
         [attr.title]="day.holiday"
         [ngbTooltip]="availabilityTooltip"
         [placement]="getPlacement(i, week.length)" *ngIf="!day.tooltip && calendarType === 2">
-        <span class="date" [class.current-date]="day.today">{{day.label}}</span>
+        <span class="date" [class.current-date]="day.today" [class.not-active-date]="!day.currentMonth">{{day.label}}</span>
 
         <ng-template #availabilityTooltip>
           <div class="shift-tooltip">
