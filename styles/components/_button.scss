@@ -210,6 +210,13 @@ $shadow: 0px 4px 6px 0;
   &:hover {
     color: $white;
   }
+
+  @each $item in $themes {
+    .#{$item}-theme & {
+      border-color: map-get($theme-colors, $item);
+      background: map-get($theme-colors, $item);
+    }
+  }
 }
 
 .btn-link {
