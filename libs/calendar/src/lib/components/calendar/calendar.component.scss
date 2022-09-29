@@ -679,6 +679,7 @@ webui-datepicker {
 
 .not-active-date {
   visibility: hidden;
+  pointer-events: none;
 }
 
 .shift-tooltip:empty {
