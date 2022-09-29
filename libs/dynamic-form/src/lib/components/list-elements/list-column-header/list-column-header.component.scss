@@ -5,7 +5,7 @@
   font-size: 14px;
   line-height: 16px;
   text-transform: uppercase;
-  display: flex;
+  display: inline-flex;
   color: #B2C2D3;
   &:not(.disabled):hover,
   &:not(.disabled):focus {
