@@ -2,8 +2,6 @@
 
 :host {
   display: block;
-
-  margin-top: 20px;
 }
 
 h5 {
@@ -11,7 +9,6 @@ h5 {
 }
 
 .form-tabs {
-  margin: 0 -40px;
 
   @include media-breakpoint-down('md') {
     margin: 0 -20px;

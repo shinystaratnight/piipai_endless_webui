@@ -1,54 +1,98 @@
 @use 'variables' as *;
+.separetor{
+  padding-top: 20px;
+  h5{
+    margin: 0 20px;
+  }
+  .current-balance{
 
-.field {
+    justify-content: space-between;
+    background-color: #EEF6FF;
+  }
+  .field {
   display: flex;
   align-items: center;
 
-  margin-bottom: 5px;
-
+  padding: 20px 20px;
   font-size: 14px;
   line-height: 20px;
 
   .value {
     width: 50px;
-  }
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 130%;
+    text-transform: uppercase;
+    color: #2F363D;
 
-  .active {
+}
+
+.active {
     text-transform: uppercase;
 
     opacity: 1;
 
     &.on {
-      color: $success;
+        color: $success;
     }
 
     &.off {
-      color: $danger;
+        color: $danger;
     }
-  }
+}
 
-  span {
-    opacity: 0.5;
-  }
+// span {
+//     opacity: 0.5;
+// }
 
-  & > span:first-child {
+& > span:first-child {
     width: 150px;
 
     font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 400;
     font-size: 12px;
     line-height: 14px;
+    text-transform: uppercase;
+    color: #7A7A7A;
 
     opacity: 0.3;
-  }
+}
 }
 
-p {
-  margin-top: 15px;
 
-  font-size: 14px;
-  line-height: 16px;
+
+p {
+margin-top: 15px;
+
+font-size: 14px;
+line-height: 16px;
 }
 
 .action-button {
+
+  padding: 12px 35px;
+  box-sizing: border-box;
+  border: 1px solid #B8DFFF;
+  border-radius: 30px;
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 14px;
+  text-transform: uppercase;
+  color: #FFFFFF;
+
+}
+
+.action-button-link {
   width: 170px;
+  text-decoration: underline;
+  text-transform: uppercase;
+  color: #2196F3;
+}
+
+
 }
