@@ -189,8 +189,11 @@ iframe.send-sms {
   position: relative;
   width: 100%;
 
-
+  padding: 32px 40px;
   border-radius: 5px;
+
+  background-color: #fff;
+  box-shadow: 0 0 8px rgba($gray, 0.1);
 
   .mobile-device & {
     padding: 10px 0;

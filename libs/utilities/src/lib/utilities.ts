@@ -232,7 +232,7 @@ export class FormatString {
 }
 
 export function getTranslationKey(key: string, type: string) {
-  return `${key}.${key}.${type}s`;
+  return `${key}.${type}`;
 }
 
 export function checkAndReturnTranslation(
