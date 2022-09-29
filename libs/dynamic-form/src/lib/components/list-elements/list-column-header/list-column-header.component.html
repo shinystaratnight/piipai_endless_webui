@@ -1,7 +1,7 @@
 <ng-container *ngIf="hasMultipleNames">
   <ng-container *ngFor="let item of multipleNamesData; let last = last">
     <a href="#" class="label" [class.disabled]="!item.sort" (click)="onSort($event, item.name)">
-      {{config.label}}
+      {{item.label}}
       <ng-container *ngIf="item.icon$ | async as icon">
         <fa-icon *ngIf="item.sort" class="icon" [icon]="icon"></fa-icon>
       </ng-container>
@@ -11,12 +11,11 @@
 </ng-container>
 
 <ng-container *ngIf="!hasMultipleNames">
-  <a href="#" class="label" [class.disabled]="!config.sort" (click)="onSort($event)"
-  [ngStyle]="{'justify-content': (config.label === 'Status' || config.label === 'Number of segments') ? 'center' : 'start'}">
-  <div *ngIf="config.label === 'Number of segments'">segments</div>
-  <div *ngIf="config.label === 'From number'">To</div>
-  <div *ngIf="config.label === 'To number'">From</div>
-  <div *ngIf="config.label !== 'Number of segments' && config.label !== 'To number' && config.label !== 'From number'">{{ config.label}}</div>
+  <a href="#" class="label" [class.disabled]="!config.sort" (click)="onSort($event)">
+    <div *ngIf="config.label === 'Number of segments'">segments</div>
+    <div *ngIf="config.label === 'From number'">To</div>
+    <div *ngIf="config.label === 'To number'">From</div>
+    <div *ngIf="config.label !== 'Number of segments' && config.label !== 'To number' && config.label !== 'From number'">{{ config.label}}</div>
 
   <!-- {{ translationKey | translate: {"Default": config.label || ' '} }} -->
     <ng-container *ngIf="icon$ | async as icon">

@@ -65,7 +65,7 @@
     >
       <ng-content></ng-content>
 
-      <!-- <h2
+      <h2
         class="datatable-label mb-0"
         [class.has-description]="description"
         *ngIf="
@@ -98,8 +98,8 @@
           (event)="buttonAction($event)"
         >
         </webui-list-buttons>
-      </h2> -->
-      <!-- <div
+      </h2>
+      <div
         *ngIf="(showFilters && !(identifyDevice() || isMobileDevice)) || config.list.search_enabled"
         class="datatable-header"
         [class.open-filters]="!filtersHidden && showFilters"
@@ -124,7 +124,7 @@
           (event)="filterHandler($event)"
         >
         </webui-list-search-bar>
-      </div> -->
+      </div>
 
       <div
         class="filter-wrapper inline"
@@ -226,7 +226,7 @@
 
               <th *ngIf="config.list.tabs" class="last-cell">
                 <span (click)="openAllTabs()" class="more__header">
-                  {{ 'more' | translate }}
+                  <b>{{ 'more' | translate }}</b>
                   <fa-icon
                     class="ms-2 sort-icon"
                     [icon]="['fas', collapsed ? 'chevron-down' : 'chevron-up']"
@@ -294,8 +294,10 @@
                   <td
                     *ngIf="!cell.hide"
                     [class.text-center]="cell.center"
-                    [ngStyle]="{'text-align': (cell.label === 'Number of segments' || cell.label === 'Status') ? 'center' : 'left'}"
-
+                    [ngStyle]="{
+                      'width.px': cell.width,
+                      'maxWidth.px': cell.width
+                    }"
                     [attr.data-label]="cell.label"
                     [hidden]="cell.tab && cell.tab.is_collapsed"
                     [class.action-cell]="cell.name === 'actions'"
