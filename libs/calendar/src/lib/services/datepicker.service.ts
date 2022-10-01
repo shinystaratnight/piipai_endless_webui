@@ -21,6 +21,7 @@ export interface IMonthPickerCell {
   dateMoment: Moment;
   label: string;
   today: boolean;
+  currentMonth: boolean;
 }
 
 export interface IWeekPickerCell {
@@ -92,6 +93,7 @@ export class DatepickerService {
         dateMoment: currentDay.clone(),
         label: currentDay.format('D'),
         today: date === Time.now().format(filterDateFormat),
+        currentMonth: currentDay.month() === from.month()
       });
 
       currentDay.add(1, 'day');

@@ -156,7 +156,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
     {
       type: Status.Open,
       count: 0,
-      cssClass: 'text-info',
+      cssClass: 'text-primary',
       text: 'Open',
     },
     {
@@ -865,7 +865,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
         job: shift.job.id,
         job_link: `/hr/jobs/${shift.job.id}/change`,
         jobsite_link: `/hr/jobsites/${shift.job.jobsite.id}/change`,
-        jobsite: shift.job.jobsite.short_name,
+        jobsite: shift.job.jobsite.short_name || shift.job.jobsite.__str__,
         position: this.getPositionTranslation(shift.job.position.name),
         candidates: shift.workers_details,
       };
@@ -909,7 +909,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
             showButtons: jobOffer.hide_buttons === false,
             date: jobOffer.shift.date.shift_date,
             time: jobOffer.shift.time,
-            jobsite: jobOffer.shift.date.job.jobsite.short_name,
+            jobsite: jobOffer.shift.date.job.jobsite.short_name || jobOffer.shift.date.job.jobsite.__str__,
             position: this.getPositionTranslation(
               jobOffer.shift.date.job.position.name
             ),

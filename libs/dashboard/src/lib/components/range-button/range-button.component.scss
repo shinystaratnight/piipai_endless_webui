@@ -1,18 +1,22 @@
 @use 'variables' as *;
+$border-radius: 0.25rem;
 
 :host {
-  border: 1px solid #bdbdbd;
   display: inline-flex;
   flex: 1;
 
-  &:first-child {
+  &:first-child label {
     border-top-left-radius: $border-radius;
     border-bottom-left-radius: $border-radius;
   }
 
-  &:last-child {
+  &:last-child label {
     border-top-right-radius: $border-radius;
     border-bottom-right-radius: $border-radius;
+  }
+
+  &:not(:first-child):not(:last-child) label {
+    border-right: none;
   }
 }
 
@@ -21,22 +25,16 @@ label {
   margin-bottom: 0;
   font-size: 16px;
   line-height: 1.2;
-  opacity: 0.8;
   width: 100%;
   text-align: center;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  border: 1px solid #bdbdbd;
 
   @include media-breakpoint-down('sm') {
     font-size: 14px;
     padding: 3px 9px;
-  }
-
-  &.active {
-    background-color: $primary;
-    border-color: $primary;
-    color: white;
   }
 
   &.disabled {

@@ -71,6 +71,12 @@ export class CalendarService {
           const availabilityData = data.find(
             (el) => el.target_date === day.date
           );
+          const tooltip = this.generateTooltipForMonth(newData);
+          let loading = false;
+
+          if (tooltip) {
+            loading = !!tooltip[0].length || !!tooltip.count[1] || !!tooltip.count[2];
+          }
 
           return {
             ...day,
@@ -81,9 +87,9 @@ export class CalendarService {
               ? availabilityData.confirmed_available
               : undefined,
             availableId: availabilityData ? availabilityData.id : undefined,
-            tooltip: this.generateTooltipForMonth(newData),
+            tooltip,
             isOpen: false,
-            loading: true
+            loading
           };
         });
       });

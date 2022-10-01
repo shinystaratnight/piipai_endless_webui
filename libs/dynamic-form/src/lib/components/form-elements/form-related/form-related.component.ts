@@ -47,7 +47,6 @@ import { BasicElementComponent } from '../basic-element/basic-element.component'
 import { LocalStorageService } from 'ngx-webstorage';
 import { Field, ITemplateOptions } from '@webui/metadata';
 import { CountryCodeLanguage, Endpoints } from '@webui/models';
-import { stringify } from '@angular/compiler/src/util';
 import { IconName } from '@fortawesome/fontawesome-svg-core';
 
 export interface RelatedObject {

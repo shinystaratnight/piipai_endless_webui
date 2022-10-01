@@ -1,5 +1,8 @@
 @use 'variables' as *;
 
+.thead-default{
+  background-color: #F5FAFF;
+}
 .avatar {
   width: 40px;
   height: 40px;
@@ -39,6 +42,9 @@
   &__header {
     white-space: nowrap;
     cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    opacity: 1;
   }
 
   &__icon {
@@ -55,10 +61,35 @@
   }
 }
 
-.all-label {
-  &:hover {
-    color: $primary;
-    opacity: 1;
-    cursor: pointer;
+.pagination{
+  margin-top: 50px;
+  padding: 0px 35px;
+
+}
+
+.logs{
+
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 14px;
+  color: #2F363D;
+
+}
+
+::ng-deep .page-item{
+
+  .page-link{
+    border: none !important;
+    color: #909295;
+    font-size: 14px;
   }
+}
+::ng-deep .page-item.active .page-link {
+    background-color: transparent !important;
+    border: none !important;
+    color: #2F363D !important;
+    font-size: 14px;
+
 }

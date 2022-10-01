@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, ViewEncapsulation } from '@angular/core';
 
 @Component({
   selector: 'webui-loader',
@@ -11,6 +11,7 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
     </div>
   `,
   styleUrls: ['./loader.component.scss'],
+  encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LoaderComponent {}

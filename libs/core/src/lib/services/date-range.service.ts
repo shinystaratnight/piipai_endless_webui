@@ -27,9 +27,7 @@ export type Label = {
   value: string;
 };
 
-type LabelMap = {
-  [key in DateRange]: Label;
-};
+type LabelMap = Record<string, Label>;
 
 export const dateRangeLabel: LabelMap = {
   [DateRange.Today]: { key: 'today', value: 'Today' },
@@ -40,7 +38,7 @@ export const dateRangeLabel: LabelMap = {
   [DateRange.LastMonth]: { key: 'last_month', value: 'Last Month' },
 };
 
-const mapRangeDateToMoment: Partial<Record<DateRange, DateRangeMoment>> = {
+const mapRangeDateToMoment: Partial<Record<string, DateRangeMoment>> = {
   [DateRange.Today]: DateRangeMoment.Day,
   [DateRange.ThisWeek]: DateRangeMoment.Week,
   [DateRange.ThisMonth]: DateRangeMoment.Month,
@@ -48,7 +46,7 @@ const mapRangeDateToMoment: Partial<Record<DateRange, DateRangeMoment>> = {
   [DateRange.LastMonth]: DateRangeMoment.Month,
 };
 
-const mapRangeDateOffset: Partial<Record<DateRange, number>> = {
+const mapRangeDateOffset: Partial<Record<string, number>> = {
   [DateRange.LastMonth]: -1,
 };
 
@@ -76,7 +74,7 @@ export class DateRangeService {
     };
   }
 
-  getDatesByRange(type: DateRange): Range {
+  getDatesByRange(type: string): Range {
     const rangeInstance = DateRangeService.getRangeInstance(
       mapRangeDateToMoment[type],
       mapRangeDateOffset[type]
@@ -94,7 +92,7 @@ export class DateRangeService {
     return DateRangeService.formatDates(rangeInstance, API_DATE_FORMAT);
   }
 
-  getFormDatesByRange(type: DateRange): { from: Date; to: Date } {
+  getFormDatesByRange(type: string): { from: Date; to: Date } {
     const rangeInstance = DateRangeService.getRangeInstance(
       mapRangeDateToMoment[type],
       mapRangeDateOffset[type]

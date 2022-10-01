@@ -18,7 +18,7 @@
 .label {
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: calc(100% - 2.5rem);
+  max-width: 100px;
   white-space: nowrap;
   color: $secondary;
 }

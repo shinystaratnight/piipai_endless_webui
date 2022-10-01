@@ -1,5 +1,5 @@
 @use 'variables' as *;
-$border-radius: 0.2rem;
+$border-radius: 0.25rem;
 $block-padding: 10px 32px;
 
 .widget {
@@ -423,13 +423,13 @@ webui-datepicker {
 
     & > fa-icon {
       width: 15px;
-      margin-top: 5px;
+      margin-top: 1px;
       font-size: 6px;
     }
 
     .btn {
       font-size: 12px;
-      line-height: 1;
+      // line-height: 1.2;
     }
 
     font-size: 12px;
@@ -675,4 +675,13 @@ webui-datepicker {
   top: 2px;
   width: 12px;
   height: 12px;
+}
+
+.not-active-date {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.shift-tooltip:empty {
+  display: none;
 }

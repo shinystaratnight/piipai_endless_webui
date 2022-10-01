@@ -226,7 +226,7 @@
 
               <th *ngIf="config.list.tabs" class="last-cell">
                 <span (click)="openAllTabs()" class="more__header">
-                  {{ 'more' | translate }}
+                  <b>{{ 'more' | translate }}</b>
                   <fa-icon
                     class="ms-2 sort-icon"
                     [icon]="['fas', collapsed ? 'chevron-down' : 'chevron-up']"
@@ -485,8 +485,17 @@
 
       <div
         *ngIf="pageSize && inForm"
-        class="d-flex flex-wrap align-items-center py-3"
+        class="pagination d-flex flex-wrap align-items-center justify-content-between x-20s y-3"
       >
+
+        <div class="ml-2 logs" >
+          {{ data.count }}
+          <!-- {{ config.list.pagination_label || config.list.label }} -->
+          {{
+            getListLabelKey()
+              | translate: { Default: label || config.list.label }
+          }}
+        </div>
         <ngb-pagination
           [collectionSize]="pageSize"
           [(page)]="page"
@@ -498,14 +507,7 @@
           (pageChange)="pageChange()"
         >
         </ngb-pagination>
-        <div class="ms-2">
-          {{ data.count }}
-          <!-- {{ config.list.pagination_label || config.list.label }} -->
-          {{
-            getListLabelKey()
-              | translate: { Default: label || config.list.label }
-          }}
-        </div>
+
       </div>
     </div>
   </div>

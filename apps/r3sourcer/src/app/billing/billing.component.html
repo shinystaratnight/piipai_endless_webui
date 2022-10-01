@@ -3,34 +3,43 @@
 <div class="site-page pt-5 billing-page">
   <div class="form-page">
     <div class="form-content">
-      <webui-check-card [cardExist]="checkInformation" (cardChange)="onCardChange()"></webui-check-card>
-
       <div class="row">
-        <div class="col">
-          <webui-billing-plan
-            [plans]="plans"
-            [saveProcess]="saveProcess"
-            [currentPlan]="currentPlan"
-            [workerCount]="(currentPlan && currentPlan.worker_count) || 1"
-            [currency]="currency"
-            [cardExist]="checkInformation"
-            (selectedPlan)="selectPlan($event)"
-            (cancelingPlan)="cancelPlan()"
-          ></webui-billing-plan>
+        <div class="col-8">
+          <div class="billing-list">
 
-          <webui-billing-info
-            [plans]="plans"
-            [currency]="currency"
-            [currentPlan]="currentPlan"
-          ></webui-billing-info>
-        </div>
+            <webui-billing-lists></webui-billing-lists></div>
+          </div>
+        <div class="col-4">
+          <div class="payment-box">
+            <webui-check-card [cardExist]="checkInformation" (cardChange)="onCardChange()"></webui-check-card>
 
-        <div class="col">
-            <webui-billing-sms [currency]="currency" [cardExist]="checkInformation"></webui-billing-sms>
+          <div class="row">
+            <div class="col">
+              <div class="payment-box-separetor">
+                <webui-billing-plan
+                [plans]="plans"
+                [saveProcess]="saveProcess"
+                [currentPlan]="currentPlan"
+                [workerCount]="(currentPlan && currentPlan.worker_count) || 1"
+                [currency]="currency"
+                [cardExist]="checkInformation"
+                (selectedPlan)="selectPlan($event)"
+                (cancelingPlan)="cancelPlan()"
+              ></webui-billing-plan>
+                </div>
+            </div>
+
+            <div class="col">
+
+                <webui-billing-sms [currency]="currency" [cardExist]="checkInformation"></webui-billing-sms>
+
+            </div>
+          </div>
+          </div>
         </div>
       </div>
 
-      <webui-billing-lists></webui-billing-lists>
+
     </div>
   </div>
 </div>

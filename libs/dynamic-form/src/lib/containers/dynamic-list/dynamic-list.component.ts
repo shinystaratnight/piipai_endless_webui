@@ -73,7 +73,6 @@ import { formatCurrency, getCurrencySymbol } from '@angular/common';
 import { DialogService } from '@webui/dialog';
 import { DATE_FORMAT, DATE_TIME_FORMAT, Time, TIME_FORMAT } from '@webui/time';
 import { CountryCodeLanguage, Endpoints } from '@webui/models';
-import { stringify } from '@angular/compiler/src/util';
 import { empty } from 'ramda';
 
 const translationMap = CountryCodeLanguage;

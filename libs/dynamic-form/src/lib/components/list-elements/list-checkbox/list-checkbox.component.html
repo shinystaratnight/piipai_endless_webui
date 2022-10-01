@@ -2,7 +2,7 @@
   *ngIf="!config.values"
   [class.text-danger]="config.value === false"
   [class.text-success]="config.value === true"
-  [class.text-muted]="config.value == null"
+  [class.text-muted]="config.value === null"
   [icon]="[
     'fas',
     config.value
@@ -15,8 +15,13 @@
 </fa-icon>
 
 <span
-  class="mb-1 d-inline-block"
-  [ngClass]="[iconClass]"
+  class="d-inline-block"
+  [ngClass]="{
+  'undelivered':  (getTranslationKey(config.value) | translate: { Default: value })   === 'Undelivered',
+  'received':  (getTranslationKey(config.value) | translate: { Default: value })   === 'Received',
+  'delivered':  (getTranslationKey(config.value) | translate: { Default: value })   === 'Delivered',
+  'sent': (getTranslationKey(config.value) | translate: { Default: value })   === 'Sent'  }"
+
   *ngIf="config.values && !config.content && value"
 >
   {{ getTranslationKey(config.value) | translate: { Default: value } }}

@@ -1,24 +1,42 @@
 .billing-page {
-
-  .form-content {
-    padding-top: 40px;
-    padding-left: 40px;
-    padding-right: 40px;
+  background-color: #fff;
+  .form-page{
+    max-width: 1448px;
   }
+
 
   h5 {
     margin-bottom: 1rem;
-
-    font-size: 14px;
-    line-height: 18px;
-    font-weight: 600;
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 21px;
     text-transform: uppercase;
-
-    opacity: .3;
+    color: #7A7A7A;
   }
 
   .filters-label h5 {
     text-transform: none;
     opacity: 1;
   }
+}
+.billing-list{
+  background: #FFFFFF;
+  border: 1px solid #D3DEEA;
+  box-shadow: 0px 4px 23px rgba(211, 222, 234, 0.25);
+  border-radius: 5px;
+  padding-bottom: 50px;
+}
+
+.payment-box{
+  box-sizing: border-box;
+  background: #FFFFFF;
+  border: 1px solid #D3DEEA;
+  box-shadow: 0px 4px 23px rgba(211, 222, 234, 0.25);
+  border-radius: 5px;
+}
+
+.payment-box-separetor{
+  padding: 20px;
 }

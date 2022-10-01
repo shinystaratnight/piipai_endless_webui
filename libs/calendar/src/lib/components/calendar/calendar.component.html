@@ -4,12 +4,15 @@
     <h3 class="widget-name">{{ 'calendar' | translate: {"Default": "Calendar"} }}</h3>
 
     <div *ngIf="calendarType !== 2" class="btn-group range-buttons" btnRadioGroup [formControl]="currentRange">
-      <label [btnRadio]="range.Month" role="button" [class.active]="isMonthRange">{{ 'month' | translate: {"Default":
-        "Month"} }}</label>
-      <label [btnRadio]="range.Week" role="button" [class.active]="isWeekRange">{{ 'week' | translate: {"Default":
-        "Week"} }}</label>
-      <label [btnRadio]="range.Day" role="button" [class.active]="isDayRange">{{ 'day' | translate: {"Default": "Day"}
-        }}</label>
+      <label [btnRadio]="range.Month" role="button" [class.active]="isMonthRange">
+        {{ 'month' | translate: {"Default": "Month"} }}
+      </label>
+      <label [btnRadio]="range.Week" role="button" [class.active]="isWeekRange">
+        {{ 'week' | translate: {"Default": "Week"} }}
+      </label>
+      <label [btnRadio]="range.Day" role="button" [class.active]="isDayRange">
+        {{ 'day' | translate: {"Default": "Day"} }}
+      </label>
     </div>
 
     <div class="range-title-wrapper">
@@ -133,6 +136,7 @@
     <ng-container *ngFor="let day of week; let i = index">
       <span
         class="grid-item month-day"
+        [class.not-active-date]="!day.currentMonth"
         [class.date-selected]="isSelected(day.date)"
         *ngIf="!day.tooltip && calendarType !== 2"
         webuiSelectDate
@@ -147,17 +151,19 @@
         [class.holiday]="day.holiday"
         [class.available]="day.available === true"
         [class.unavailable]="day.available === false"
+        [class.not-active-date]="!day.currentMonth"
         triggers="click:click"
         [attr.title]="day.holiday"
         [ngbTooltip]="availabilityTooltip"
-        [placement]="getPlacement(i, week.length)" *ngIf="!day.tooltip && calendarType === 2">
+        [placement]="getPlacement(i, week.length)"
+        *ngIf="!day.tooltip && calendarType === 2"
+      >
         <span class="date" [class.current-date]="day.today">{{day.label}}</span>
 
         <ng-template #availabilityTooltip>
           <div class="shift-tooltip">
             <h5 class="text-center">
-              {{ day.availableId ? ('update' | translate: {"Default": "Update"}) : ('confirm' | translate: {"Default":
-              "Confirm"}) }}
+              {{ day.availableId ? ('update' | translate: {"Default": "Update"}) : ('confirm' | translate: {"Default": "Confirm"}) }}
             </h5>
             <div class="d-flex align-items-center justify-content-between">
               <button type="button" class="btn btn-sm btn-primary me-3" (click)="setAvailability($event, day, true)">
@@ -175,6 +181,7 @@
         class="grid-item month-day"
         [class.holiday]="day.holiday"
         [class.date-selected]="isSelected(day.date)"
+        [class.not-active-date]="!day.currentMonth"
         webuiSelectDate
         [date]="day.date"
         [disable]="!(isManager() || canClientCreateJob())"
@@ -203,8 +210,7 @@
             <fa-icon [icon]="['fas', 'file']" class="text-success"></fa-icon>
           </div>
 
-          <fa-icon [icon]="['fas', 'envelope']" class="text-secondary" *ngIf="day.jobOffers && day.jobOffers.length">
-          </fa-icon>
+          <fa-icon [icon]="['fas', 'envelope']" class="text-secondary" *ngIf="day.jobOffers && day.jobOffers.length"></fa-icon>
         </div>
 
         <ng-template #monthTooltip>
@@ -231,24 +237,23 @@
             </ng-container>
           </div>
 
-          <div *ngIf="day.jobOffers && day.jobOffers.length">
+          <div class="shift-tooltip" *ngIf="day.jobOffers && day.jobOffers.length">
             <ng-container *ngFor="let jobOffer of day.jobOffers">
-              <div class="shift-name flex-column align-items-start text-left">
-                <span class="p-1 mb-2 rounded bg-secondary">{{ 'start' | translate: { "Default": "Start" } }} -
-                  {{jobOffer.time}}</span>
+              <div class="shift-name flex-column align-items-start">
+                <span class="p-1 mb-2 rounded bg-secondary text-white">
+                  {{ 'start' | translate: { "Default": "Start" } }} - {{jobOffer.time}}
+                </span>
 
                 <ng-container *ngTemplateOutlet="shiftItem; context: { shift: jobOffer }"></ng-container>
-                <div class="d-flex align-items-center mt-1 mb-2">
-                  <button type="button" class="d-flex align-items-center btn btn-success btn-sm px-2 me-2 text-white"
-                    (click)="acceptJobOffer(jobOffer.jobOffer.id)">
-                    <fa-icon [icon]="['fas', 'check-circle']" class="me-1 p-0"></fa-icon>
-                    {{ 'accept' | translate: {"Default": "Accept"} }}
+                <div class="d-flex align-items-center mt-2 gap-2">
+                  <button type="button" class="btn btn-success btn-sm" (click)="acceptJobOffer(jobOffer.jobOffer.id)">
+                    <fa-icon [icon]="['fas', 'check-circle']"></fa-icon>
+                    <span>{{ 'accept' | translate: {"Default": "Accept"} }}</span>
                   </button>
 
-                  <button type="button" class="d-flex align-items-center btn btn-danger btn-sm px-2 text-white"
-                    (click)="declineJobOffer(jobOffer.jobOffer.id)">
-                    <fa-icon [icon]="['fas', 'times-circle']" class="me-1 p-0"></fa-icon>
-                    {{ 'decline' | translate: {"Default": "Decline"} }}
+                  <button type="button" class="btn btn-danger btn-sm" (click)="declineJobOffer(jobOffer.jobOffer.id)">
+                    <fa-icon [icon]="['fas', 'times-circle']"></fa-icon>
+                    <span>{{ 'decline' | translate: {"Default": "Decline"} }}</span>
                   </button>
                 </div>
               </div>
@@ -358,19 +363,19 @@
 </ng-template>
 
 <ng-template #shiftGroup let-shifts="shifts" let-className="className" let-name="name" let-status="status">
-  <div class="mb-3" *ngIf="shifts.length">
+  <div *ngIf="shifts.length">
     <p *ngIf="status" class="shift-tooltip-title">
       <span class="me-1" [ngClass]="'badge badge-' + className">{{status === 'cancelled' ? shifts.length :
         getShiftCount(shifts, status)}}</span>
       {{name | translate}}
     </p>
 
-    <div class="shift-name" [class.flex-column]="!status" [class.align-items-start]="!status"
-      *ngFor="let shift of shifts">
+    <div class="shift-name" [class.flex-column]="!status" [class.align-items-start]="!status" *ngFor="let shift of shifts">
       <fa-icon *ngIf="status" [icon]="['fas', 'circle']" [ngClass]="'text-' + className"></fa-icon>
 
-      <span class="p-1 mb-2 rounded" [ngClass]="[getColor(shift.timesheetStatus)]" *ngIf="!status">{{ 'start' |
-        translate: { "Default": "Start" } }} - {{shift.time}}</span>
+      <span class="p-1 mb-2 rounded text-white" [ngClass]="[getColor(shift.timesheetStatus)]" *ngIf="!status">
+        {{ 'start' | translate: { "Default": "Start" } }} - {{shift.time}}
+      </span>
 
       <ng-container *ngTemplateOutlet="shiftItem; context: { shift: shift, status: status }"></ng-container>
     </div>
@@ -432,6 +437,7 @@
       </div>
     </div>
   </div>
+
   <div *ngIf="hasActions" class="shift-action-wrapper">
     <button webuiSubscriptionRequired class="shift-action" type="button" (click)="extendJob(shift)">Extend</button>
     <button webuiSubscriptionRequired class="shift-action" *ngIf="fillinAccess(shift)" type="button" (click)="fillInJob(shift)">Fill in</button>
