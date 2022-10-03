@@ -75,7 +75,7 @@ fa-icon {
   border-color: $primary;
   background-color: $primary;
   z-index: 1;
-  color: #fff !important;
+  color: #fff ;
 }
 
 @each $item in $themes {
@@ -190,7 +190,6 @@ iframe.send-sms {
   width: 100%;
 
   padding: 32px 40px;
-
   border-radius: 5px;
 
   background-color: #fff;

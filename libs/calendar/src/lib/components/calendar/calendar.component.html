@@ -136,6 +136,7 @@
     <ng-container *ngFor="let day of week; let i = index">
       <span
         class="grid-item month-day"
+        [class.not-active-date]="!day.currentMonth"
         [class.date-selected]="isSelected(day.date)"
         *ngIf="!day.tooltip && calendarType !== 2"
         webuiSelectDate
@@ -150,13 +151,14 @@
         [class.holiday]="day.holiday"
         [class.available]="day.available === true"
         [class.unavailable]="day.available === false"
+        [class.not-active-date]="!day.currentMonth"
         triggers="click:click"
         [attr.title]="day.holiday"
         [ngbTooltip]="availabilityTooltip"
         [placement]="getPlacement(i, week.length)"
         *ngIf="!day.tooltip && calendarType === 2"
       >
-        <span class="date" [class.current-date]="day.today" [class.not-active-date]="!day.currentMonth">{{day.label}}</span>
+        <span class="date" [class.current-date]="day.today">{{day.label}}</span>
 
         <ng-template #availabilityTooltip>
           <div class="shift-tooltip">
@@ -179,6 +181,7 @@
         class="grid-item month-day"
         [class.holiday]="day.holiday"
         [class.date-selected]="isSelected(day.date)"
+        [class.not-active-date]="!day.currentMonth"
         webuiSelectDate
         [date]="day.date"
         [disable]="!(isManager() || canClientCreateJob())"

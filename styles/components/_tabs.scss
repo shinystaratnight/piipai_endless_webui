@@ -59,18 +59,20 @@
     padding: 0 20px;
   }
 
+
   .nav-link {
-    padding: 6px 10px;
-    padding-bottom: 8px;
-    font-size: 14px;
-    line-height: 14px;
+    padding: 15px 10px;
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 21px;
 
     border: none;
 
     color: rgba(black, 0.43);
 
     &.active {
-      padding-bottom: 6px;
 
       background-color: transparent;
       border-color: none;
@@ -83,7 +85,6 @@
 }
 
 .tab-pane {
-  padding-top: 32px;
 
   .dynamic-form {
     margin: 0;
