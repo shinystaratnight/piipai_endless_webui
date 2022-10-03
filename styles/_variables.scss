@@ -1,10 +1,8 @@
-@import '~bootstrap/scss/functions';
+@import "~bootstrap/scss/functions";
 @import '~bootstrap/scss/variables';
 @import '~bootstrap/scss/mixins';
-@import '~bootstrap/scss/utilities';
 
 @import './mixins';
-
 // Font
 $font-family-base: "Source Sans Pro", sans-serif;
 
@@ -15,6 +13,10 @@ $danger: #fa5c46;
 $info: #28a3fc;
 $gray: #333;
 $white: #fdfdfd;
+$warning: #f58926;
+$indigo: #3f51b5;
+$teal: #009688;
+$brown: #795548;
 
 // Theme color
 $themes: ('default', 'labour', 'indigo', 'teal', 'brown');
@@ -24,11 +26,11 @@ $theme-colors: (
   'danger': $danger,
   'info': $info,
   'default': $primary,
-  'warning': #f58926,
-  'labour': #f58926,
-  'indigo': #3f51b5,
-  'teal': #009688,
-  'brown': #795548,
+  'warning': $warning,
+  'labour': $warning,
+  'indigo': $indigo,
+  'teal': $teal,
+  'brown': $brown,
   'seconary': $gray
 );
 
@@ -90,3 +92,5 @@ $border-color: #D3DEEA;
 $secondary-color: #7A7A7A;
 $content-color: #2F363D;
 $brand-danger: #DF4242;
+
+@import '~bootstrap/scss/utilities';

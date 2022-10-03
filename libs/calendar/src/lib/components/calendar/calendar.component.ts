@@ -12,7 +12,7 @@ import {
 import { FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { combineLatest, forkJoin, Subscription } from 'rxjs';
+import { BehaviorSubject, combineLatest, forkJoin, Observable, Subscription } from 'rxjs';
 import { uniq } from 'ramda';
 
 import {
@@ -60,6 +60,7 @@ type StatusFilter = {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CalendarComponent implements OnInit, OnDestroy {
+  private _loading: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   public range = DateRange;
   public currentRange!: FormControl;
   public rangeTitle!: string;
@@ -84,7 +85,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
       { type: Status.Pending, color: 'warning', label: 'Pending' },
     ],
     timesheets: [
-      { type: Status.Open, color: 'info', label: 'Open' },
+      { type: Status.Open, color: 'primary', label: 'Open' },
       { type: Status.Filled, color: 'warning', label: 'Filled' },
       { type: Status.Approved, color: 'success', label: 'Approved' },
     ],
@@ -174,6 +175,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
   ];
   isManager = isManager;
   isClient = isClient;
+  loading$: Observable<boolean> = this._loading.asObservable();
 
   private modalRef!: NgbModalRef;
   private lastData: any;
@@ -714,6 +716,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
     rangeType: DateRange,
     range: { start: Moment; end: Moment }
   ) {
+    this._loading.next(true);
     const requests = [
       this.getCandidateAvailability(
         this.generateCandidateQuery(range.start, range.end)
@@ -728,27 +731,32 @@ export class CalendarComponent implements OnInit, OnDestroy {
       ),
     ];
 
-    combineLatest(requests).subscribe((data) => {
-      const [availability, timesheets, jobOffers, holidays] = data;
+    combineLatest(requests)
+      .pipe(finalize(() => {
+        this._loading.next(false);
+      }))
+      .subscribe((data) => {
+        const [availability, timesheets, jobOffers, holidays] = data;
 
-      this.prepareTimesheetsData(
-        (jobOffers as any).results,
-        (timesheets as any).results
-      );
+        this.prepareTimesheetsData(
+          (jobOffers as any).results,
+          (timesheets as any).results
+        );
 
-      this.availability = (availability as any).results;
+        this.availability = (availability as any).results;
 
-      this.shifts.push(...this.availability);
-      this.shifts.push(
-        ...(holidays as Array<{ name: string; holiday_date: string }>)
-      );
+        this.shifts.push(...this.availability);
+        this.shifts.push(
+          ...(holidays as Array<{ name: string; holiday_date: string }>)
+        );
 
-      this.updateCalendar(this.currentDate, rangeType);
-      this.cd.detectChanges();
-    });
+        this.updateCalendar(this.currentDate, rangeType);
+        this.cd.detectChanges();
+      });
   }
 
   private getData(rangeType: DateRange, range: { start: Moment; end: Moment }) {
+    this._loading.next(true);
     const requests = [
       this.getShifts(
         this.generateQuery(range.start, range.end, this.client, this.candidate)
@@ -759,13 +767,17 @@ export class CalendarComponent implements OnInit, OnDestroy {
       ),
     ];
 
-    forkJoin(requests).subscribe((data) => {
-      const [shifts, holidays] = data;
+    forkJoin(requests)
+      .pipe(finalize(() => {
+        this._loading.next(false);
+      }))
+      .subscribe((data) => {
+        const [shifts, holidays] = data;
 
-      this.prepareShiftsData(shifts, holidays);
-      this.updateCalendar(this.currentDate, rangeType);
-      this.cd.detectChanges();
-    });
+        this.prepareShiftsData(shifts, holidays);
+        this.updateCalendar(this.currentDate, rangeType);
+        this.cd.detectChanges();
+      });
   }
 
   private generateQuery(from: Moment, to: Moment, client?: string, candidate?: string) {
