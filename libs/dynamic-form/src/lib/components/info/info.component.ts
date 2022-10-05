@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, TemplateRef } from '@angular/core';
+import { Component, Input, OnInit, TemplateRef, ViewEncapsulation } from '@angular/core';
 
 @Component({
   selector: 'webui-info',
@@ -12,7 +12,8 @@ import { Component, Input, OnInit, TemplateRef } from '@angular/core';
         {{text || 'i'}}
     </i>
   `,
-  styleUrls: ['./info.component.scss']
+  styleUrls: ['./info.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class InfoComponent implements OnInit {
   @Input() public description!: string | TemplateRef<any>;

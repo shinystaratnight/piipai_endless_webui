@@ -1463,6 +1463,26 @@ const formadd = [
     ]
   },
   {
+    endpoint: Endpoints.JobRates,
+    type: 'related',
+    key: 'jobrates',
+    templateOptions: {
+      label: 'Job Rate',
+      type: 'list',
+      text: 'Job Rate',
+      add_label: 'Add'
+    },
+    translateKey: 'jobrates',
+    prefilled: {
+      job: '{id}',
+      skill: '{position.id}',
+      company: '{customer_company.id}'
+    },
+    delay: true,
+    list: true,
+    showIf: ['position.id', 'customer_company.id'],
+  },
+  {
     key: 'shifts',
     type: 'jobdates',
     removeDate: null,

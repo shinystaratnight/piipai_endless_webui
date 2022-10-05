@@ -188,10 +188,16 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
   public relatedObjects: any[] = [];
   public formGroup!: FormGroup;
   public formName!: string;
+
+  // For job page
   public selectedDates!: string[];
 
   public activeTabId!: string;
   public canEdit = true;
+
+  get isJobEndpoint(): boolean {
+    return [Endpoints.Job, Endpoints.ClientJobs].includes(this.endpoint as Endpoints);
+  }
 
   private subscriptions: Subscription[] = [];
 
@@ -1260,11 +1266,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
       }
     }
 
-    if (
-      (this.endpoint === Endpoints.Job ||
-        this.endpoint === Endpoints.ClientJobs) &&
-      !this.id
-    ) {
+    if (this.isJobEndpoint && !this.id) {
       data['work_start_date'] = this.getJobStartDate(data.shifts);
       this.selectedDates = data.shifts;
     }
@@ -1461,6 +1463,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
   }
 
   public confirmJob(id: string, response: any) {
+    const result = new Subject();
     const query = {
       model: 'hr.job',
       object_id: id,
@@ -1474,13 +1477,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
           this.timelineService
             .activateState(id, confirmState.id, true)
             .pipe(
-              finalize(() => {
-                this.event.emit({
-                  type: 'sendForm',
-                  data: { ...response, ...this.formData.value.data },
-                  status: 'success',
-                });
-              })
+              finalize(() => result.next(true))
             )
             .subscribe(() => {
               const shifts = this.generateDataForJobCreation(response);
@@ -1491,28 +1488,26 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
             });
         }
       },
-      () => {
-        this.event.emit({
-          type: 'sendForm',
-          data: { ...response, ...this.formData.value.data },
-          status: 'success',
-        });
-      }
+      () => result.next(true)
     );
+
+    return result.asObservable();
   }
 
   public responseHandler(response: any, sendData: any) {
     this.formService.getForm(this.formId).setSaveProcess(false);
     this.parseResponse(response);
 
-    if (
-      (this.endpoint === Endpoints.Job &&
-        !this.id &&
-        this.selectedDates &&
-        this.selectedDates.length) ||
-      sendData.client_contact_page
-    ) {
-      this.confirmJob(response.id, response);
+    if ((this.isJobEndpoint && !this.id && this.selectedDates && this.selectedDates.length) || sendData.client_contact_page) {
+      this.confirmJob(response.id, response)
+        .subscribe(() => {
+          this.event.emit({
+            type: 'sendForm',
+            data: { ...response, ...this.formData.value.data },
+            status: 'success',
+          });
+        });
+
       return;
     }
 
@@ -2028,7 +2023,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
   public getData(metadata: any[], key?: string, query: string | null = null) {
     metadata.forEach((el) => {
       if (el.type === 'related') {
-        if (el.key === key && el.endpoint) {
+        if (el.key && el.key === key && el.endpoint) {
           this.getRalatedData(
             metadata,
             key,

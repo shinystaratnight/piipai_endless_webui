@@ -953,7 +953,11 @@ export class FormRelatedComponent
       if (el.query) {
         const newQuery: Record<string, any> = {};
         Object.keys(el.query).forEach((query) => {
-          newQuery[query] = format.format(el.query[query], this.formData);
+          if (typeof el.query[query] == 'string') {
+            newQuery[query] = format.format(el.query[query], this.formData);
+          } else {
+            newQuery[query] = el.query[query];
+          }
         });
 
         element.query = newQuery;
@@ -1041,6 +1045,7 @@ export class FormRelatedComponent
         }
         return object;
       });
+
     if (this.config.delayData) {
       this.config.data.sendData = value.filter((el: any) => !el.id);
     }
