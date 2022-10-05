@@ -124,12 +124,6 @@ h2 {
       border-top-right-radius: $border-radius;
       border-bottom-right-radius: $border-radius;
     }
-
-    &.active {
-      background-color: $primary;
-      border-color: $primary;
-      color: white;
-    }
   }
 }
 
@@ -654,8 +648,6 @@ webui-datepicker {
   padding: 9px 20px;
   font-size: 16px;
   line-height: 18px;
-  color: #fdfdfd;
-  background-color: $primary;
   box-shadow: 0 1px 3px 0 rgba(43, 46, 51, 0.24);
 
   @include media-breakpoint-down('sm') {
