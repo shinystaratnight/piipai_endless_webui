@@ -875,7 +875,6 @@ const form = [
         name: 'Job info',
         translateKey: 'job_info',
         type: 'group',
-        label: 'Job information',
         children: [
           {
             type: 'row',
@@ -1070,10 +1069,10 @@ const form = [
         edit_endpoint: '/hr/shiftdates/{date.id}',
         translateKey: 'shifts',
         templateOptions: {
-          label: 'Shift Dates',
+          // label: 'Shift Dates',
           type: 'list',
           add_label: '+ Add',
-          text: 'Shift Dates'
+          // text: 'Shift Dates'
         },
         query: {
           job: '{id}'
@@ -1093,10 +1092,10 @@ const form = [
       {
         endpoint: '/hr/joboffers/',
         templateOptions: {
-          label: 'Job Offers',
+          // label: 'Job Offers',
           type: 'list',
           add_label: '+ Add job offer',
-          text: 'Job Offers'
+          // text: 'Job Offers'
         },
         visibleMode: true,
         translateKey: 'job_offers',
@@ -1134,10 +1133,10 @@ const form = [
           {
             endpoint: '/core/workflowobjects/',
             templateOptions: {
-              label: 'States history',
+              // label: 'States history',
               type: 'list',
               add_label: '+ Add',
-              text: 'States history'
+              // text: 'States history'
             },
             collapsed: false,
             prefilled: {
@@ -1159,10 +1158,10 @@ const form = [
           editable_type: 'job'
         },
         templateOptions: {
-          label: 'Favourite List',
+          // label: 'Favourite List',
           type: 'list',
           add_label: '+ Add',
-          text: 'Favourite List'
+          // text: 'Favourite List'
         },
         collapsed: false,
         translateKey: 'favorite_list',

@@ -4,9 +4,8 @@
     <h4 *ngIf="title" class="title">{{title | translate: {"Default": title} }}</h4>
     <h4 *ngIf="formName" class="form-name">{{formName}}</h4>
 
-    <div *ngIf="!showForm" class="spinner">
-      <div class="double-bounce1"></div>
-      <div class="double-bounce2"></div>
+    <div class="d-flex justify-content-center" *ngIf="!showForm">
+      <webui-loader></webui-loader>
     </div>
     <webui-dynamic-form
       *ngIf="showForm"
