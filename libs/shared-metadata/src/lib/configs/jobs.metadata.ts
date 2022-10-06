@@ -863,7 +863,6 @@ const form = [
       },
       job: 'position.__str__',
       jobsite: 'jobsite',
-      tags: 'tags'
     },
     type: 'info',
     key: 'id'
