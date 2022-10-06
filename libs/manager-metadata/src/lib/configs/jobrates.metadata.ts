@@ -19,7 +19,7 @@ const formset = {
       skill: '{position.id}',
       company: '{customer_company.id}',
       priced: true
-    }),
+    }).updateValues(['translations']),
     new Form.input.element('rate', 'Rate', InputType.Number).setNumberOptions(
       0.01,
       0
@@ -60,7 +60,7 @@ const formadd = () => [
     skill: '{skill.id}',
     company: '{company.id}',
     priced: true
-  }),
+  }).updateValues(['translations']),
   new Form.input.element('rate', 'Rate', InputType.Number).setNumberOptions(
     0.01,
     0
