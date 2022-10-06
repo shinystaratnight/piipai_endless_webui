@@ -53,10 +53,6 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, 0.3);
     @include media-breakpoint-down('sm') {
       padding-top: 21px;
     }
-
-    .spinner {
-      margin: 0 auto 20px;
-    }
   }
 
   .table-wrapper {

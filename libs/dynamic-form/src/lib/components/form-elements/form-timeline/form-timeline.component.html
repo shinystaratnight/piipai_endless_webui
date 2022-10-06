@@ -16,9 +16,8 @@
   </ng-container>
 </div>
 
-<div *ngIf="loading && !this.dropdown" class="spinner">
-  <div class="double-bounce1"></div>
-  <div class="double-bounce2"></div>
+<div class="d-flex justify-content-center" *ngIf="loading && !this.dropdown">
+  <webui-loader></webui-loader>
 </div>
 
 <div
