@@ -65,7 +65,7 @@ export class SubmissionModalComponent
   }
 
   public get title(): string {
-    return this.timeSheet.status === 7 ? 'worksheet' : 'worksheet_submission';
+    return this.timeSheet.status === 7 ? 'edit_worksheet' : 'worksheet_submission';
   }
 
   private destroy$: Subject<void> = new Subject<void>();
