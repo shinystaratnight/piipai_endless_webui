@@ -31,6 +31,7 @@
 .nav:not(.nav-pills) {
   align-items: flex-end;
   flex-wrap: wrap;
+  gap: 0.5rem 2rem;
 
   padding: 0 40px;
 
@@ -61,25 +62,23 @@
 
 
   .nav-link {
-    padding: 15px 10px;
-    font-family: 'Roboto';
-    font-style: normal;
-    font-weight: 500;
-    font-size: 18px;
-    line-height: 21px;
-
-    border: none;
+    padding: 4px 5px;
+    font-size: 14px;
+    line-height: 16px;
+    border-bottom: 2px solid transparent;
 
     color: rgba(black, 0.43);
 
     &.active {
-
       background-color: transparent;
       border-color: none;
-
       color: inherit;
 
-      border-bottom: 2px solid $primary;
+      @each $item in $themes {
+        .#{$item}-theme & {
+          border-bottom-color: map-get($theme-colors, $item);
+        }
+      }
     }
   }
 }
@@ -92,11 +91,5 @@
 
   @include media-breakpoint-down('md') {
     padding: 20px;
-  }
-}
-
-@each $item in $themes {
-  .#{$item}-theme .nav-link.active {
-    border-color: map-get($theme-colors, $item);
   }
 }
