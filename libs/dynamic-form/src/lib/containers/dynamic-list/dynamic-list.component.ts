@@ -1073,6 +1073,7 @@ export class DynamicListComponent
         obj.companyPicture = this.endpoint === Endpoints.Company;
       } else {
         props = element.field.split('.');
+        obj.initValue = el;
         this.setValue(el, props, obj);
       }
     }
