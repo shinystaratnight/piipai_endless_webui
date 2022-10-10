@@ -211,6 +211,7 @@ const form = [
           {
             type: 'button',
             color: 'primary',
+            showIf: ['message_html_template'],
             templateOptions: {
               action: 'showEmailPreview',
               text: 'Preview',
