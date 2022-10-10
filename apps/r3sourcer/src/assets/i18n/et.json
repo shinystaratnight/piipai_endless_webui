@@ -657,9 +657,6 @@
     "job_offer.candidate_contact.label": "Kandidaat",
     "myob_status.label": "Raamatupidamise integreerimine",
     "worktype.label": "Oskustegevus",
-    "status": [
-        "Staatus"
-    ],
     "going_to_work_confirmation.text": "Vahetuseelne kontroll",
     "going_to_work_sent_sms.label": "Vahetuseelne kontroll saatis sms",
     "going_to_work_reply_sms.label": "Vahetuseelse kontrolli vastus-sms",

@@ -1133,15 +1133,16 @@ const form = [
           {
             endpoint: '/core/workflowobjects/',
             templateOptions: {
-              // label: 'States history',
+              label: 'States history',
               type: 'list',
               add_label: '+ Add',
-              // text: 'States history'
+              text: 'States history'
             },
             collapsed: false,
             prefilled: {
               object_id: '{id}'
             },
+            translateKey: 'workflowobjects',
             type: 'list',
             query: {
               model: 'hr.job',
