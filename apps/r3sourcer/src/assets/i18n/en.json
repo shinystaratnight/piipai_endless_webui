@@ -465,7 +465,7 @@
   "/settings/company/": "General",
   "settings": "Settings",
   "accounts": "Accounts",
-  "h.r.": "H.R.",
+  "hr": "H.R.",
   "allocations": "Allocations",
   "status.status.0.0": "Undefined",
   "status.status.0.1": "Accepted",
@@ -657,16 +657,6 @@
   "job_offer.candidate_contact.label": "Candidate",
   "myob_status.label": "Accounting Integration",
   "worktype.label": "Skill Activity",
-  "status": [
-      "New",
-      "Pre-Shift check pending",
-      "Pre-Shift check confirmed",
-      "Pre-Shift check failed",
-      "Submit pending",
-      "Approval pending",
-      "Supervisor modified",
-      "Approved"
-  ],
   "going_to_work_confirmation.text": "Pre-shift check",
   "going_to_work_sent_sms.label": "Pre-shift check sent sms",
   "going_to_work_reply_sms.label": "Pre-shift check reply sms",
@@ -991,9 +981,6 @@
   "wage_type.0": "",
   "wage_type.1": "",
   "wage_type.label": "",
-  "Tila": [
-      ""
-  ],
   "ehdokas_submission_at.label": "",
   "candidcontact.label": "",
   "previous_experience.2592000": "",
@@ -1005,5 +992,7 @@
   "previous_experience.15552000": "",
   "previous_experience.0": "",
   "confirm_delete_instance": "Are you sure you would like to DELETE {{name}}?",
-  "do_not_delete": "Do not delete!"
+  "do_not_delete": "Do not delete!",
+  "tabs.workflowobjects.label": "States history",
+  "tabs.workflowobjects.help": "Here you can see changes job states"
 }
