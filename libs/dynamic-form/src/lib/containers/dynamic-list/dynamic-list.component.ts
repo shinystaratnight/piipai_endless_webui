@@ -116,6 +116,7 @@ export class DynamicListComponent
   @Input() inlineFilters?: boolean;
   @Input() actionProcess!: boolean;
   @Input() uploadAll!: boolean;
+  @Input() hasButtonInAction?: boolean;
 
   @Output() event: EventEmitter<any> = new EventEmitter();
   @Output() list: EventEmitter<any> = new EventEmitter();
@@ -1237,6 +1238,10 @@ export class DynamicListComponent
     return;
   }
 
+  public onCreateNewItem(): void {
+    this.event.emit(this.createEvent('createObject'));
+  }
+
   public selectAll(selected: any) {
     if (!this.uploadAll) {
       this.event.emit(this.createEvent('uploadAll'));
@@ -1855,93 +1860,6 @@ export class DynamicListComponent
         this.refreshList();
       }
     });
-
-    // const data = this.getRowData(e);
-    // const signature =
-    //   data.company.supervisor_approved_scheme.includes('SIGNATURE');
-
-    // if (data) {
-    //   const contact = data.job_offer.candidate_contact.contact;
-    //   const score = this.getPropValue(data, 'evaluation.evaluation_score');
-
-    //   this.modalInfo = {
-    //     changeEndpoint: e.el.endpoint,
-    //     evaluateEndpoint: `${Endpoints.Timesheet}${data.id}/evaluate/`,
-    //     edit: true,
-    //     evaluated: data.evaluated,
-    //     total: this.getTotalTime(data),
-    //     metadataQuery:
-    //       isMobile() && getOrientation() !== 90 ? 'type=mobile' : '',
-    //     signatureStep: false,
-    //     form: {},
-    //     supervisor_signature: data.supervisor_signature.origin,
-    //     label: {
-    //       avatar: contact.picture,
-    //       fullName: contact.__str__,
-    //     },
-    //     extendData: data,
-    //     timesheetData: {
-    //       shift_started_at: createAddAction({
-    //         value: data.shift_started_at
-    //       }),
-    //       break_started_at: createAddAction({
-    //         value: data.break_started_at
-    //       }),
-    //       break_ended_at: createAddAction({
-    //         value: data.break_ended_at
-    //       }),
-    //       shift_ended_at: createAddAction({
-    //         value: data.shift_ended_at
-    //       }),
-    //       noBreak: createAddAction({
-    //         value: !data.break_started_at && !data.break_ended_at
-    //       }),
-    //       company: createAddAction({
-    //         value: this.format('{company.id}', data)
-    //       }),
-    //       time_zone: data.time_zone
-    //     },
-    //     changeMetadata: new Subject(),
-    //     data: {
-    //       evaluation_score: score
-    //     },
-    //     evaluateEvent: this.evaluateEvent.bind(this),
-    //     sendSignature: this.sendSignature.bind(this)
-    //   };
-
-    //   let windowClass = 'approve-modal';
-
-    //   if (signature) {
-    //     this.modalInfo.signature = {
-    //       endpoint: `${Endpoints.Timesheet}${data.id}/approve_by_signature/`,
-    //       value: ''
-    //     };
-
-    //     windowClass = 'approve-modal change';
-    //   }
-
-    //   window.addEventListener('orientationchange', () => {
-    //     if (this.modalInfo.changeMetadata) {
-    //       const orientation = getOrientation();
-
-    //       this.modalInfo.metadataQuery =
-    //         isMobile() && orientation === 90 ? '' : 'type=mobile';
-
-    //       setTimeout(() => {
-    //         this.modalInfo.changeMetadata.next(true);
-    //       }, 100);
-    //     }
-    //   });
-
-    //   this.modalRef = this.modalService.open(ChangeTimesheetModalComponent, {
-    //     backdrop: 'static',
-    //     size: 'lg',
-    //     windowClass
-    //   });
-    //   this.modalRef.componentInstance.config = this.modalInfo;
-    //   this.modalRef.componentInstance.timesheet = data;
-    //   this.handleFormClose(this.modalRef.result);
-    // }
   }
 
   // TODO: implement approve timesheet

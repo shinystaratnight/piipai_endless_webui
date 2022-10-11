@@ -1092,10 +1092,9 @@ const form = [
       {
         endpoint: '/hr/joboffers/',
         templateOptions: {
-          // label: 'Job Offers',
           type: 'list',
           add_label: '+ Add job offer',
-          // text: 'Job Offers'
+          hasButtonInAction: true
         },
         visibleMode: true,
         translateKey: 'job_offers',

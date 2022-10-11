@@ -150,6 +150,9 @@
         [config]="config.list.actions"
         (event)="actionHandler($event)"
       >
+        <button *ngIf="hasButtonInAction" webuiSubscriptionRequired type="button" class="btn btn-primary mb-0" (click)="onCreateNewItem()">
+          {{'+ Add' | translate}}
+        </button>
       </webui-action-element>
 
       <div
