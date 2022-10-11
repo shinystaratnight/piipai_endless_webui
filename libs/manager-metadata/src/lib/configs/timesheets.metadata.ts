@@ -93,7 +93,7 @@ const list = {
             type: 'link'
           }
         ],
-        width: 230,
+        width: 270,
         name: 'position_/_candidate',
         title: null,
         label: 'Position / Candidate / Job',
