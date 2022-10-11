@@ -54,11 +54,11 @@
 
 .timeline {
   padding-bottom: 25px;
+  display: flex;
+  gap: 4px 8px;
+  margin-top: 1rem;
 
   &-select {
-    margin-left: 11px;
-    padding-right: 30px;
-
     background: #fff url(/assets/img/down-arrow.svg) no-repeat;
     background-position: right 0.75rem center;
     background-size: 8px 8px;
@@ -76,24 +76,27 @@
     &-wrapper {
       display: flex;
       align-items: center;
-      margin-top: 1rem;
-
-      & .timeline-element {
-        margin-bottom: 0;
-      }
     }
   }
 
   &-element {
-    display: inline-block;
-    margin: 0 4px 8px;
+    display: inline-flex;
+    flex-shrink: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    height: 30px;
 
     transition: 0.3s;
 
     cursor: default;
 
     &-wrapper {
-      display: inline-block;
+      display: inline-flex;
+      align-items: center;
+
+      &:not(:last-of-type) .timeline-element {
+        margin-right: 8px;
+      }
 
       &.dropdown-wrapper {
         display: none;
@@ -189,7 +192,8 @@
 }
 
 .btn-refresh {
-  padding: 5px;
+  width: 30px;
+  height: 30px;
 
   fa-icon {
     font-size: 10px;
@@ -198,6 +202,10 @@
       animation: loading-rotate 1.5s infinite linear;
     }
   }
+}
+
+.btn-outline-info:hover {
+  color: $white;
 }
 
 @keyframes loading-rotate {

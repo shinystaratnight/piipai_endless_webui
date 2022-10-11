@@ -333,52 +333,66 @@
   </div>
 </div>
 
-<div class="form-group form-element" [ngClass]="{ indent: config.templateOptions?.indent }"
-  [class.custom]="customTemplate" *ngIf="
-    viewMode &&
-    !config.list &&
-    !config.hide &&
-    !(!this.displayValue && !results.length && config.hideIfNull)
-  ">
-  <label class="form-element-label" *ngIf="
-      label && config.templateOptions?.label && !config.templateOptions?.hideLabel
-    ">
-    {{ getTranslationKey(config.key, 'label') | translate: {"Default": config.templateOptions?.label} }}<span
-      *ngIf="!customTemplate">:</span>
+<div
+  class="form-group form-element"
+  [ngClass]="{ indent: config.templateOptions?.indent }"
+  [class.custom]="customTemplate"
+  *ngIf="viewMode && !config.list && !config.hide && !(!this.displayValue && !results.length && config.hideIfNull)"
+>
+  <label
+    class="form-element-label"
+    *ngIf="label && config.templateOptions?.label && !config.templateOptions?.hideLabel"
+  >
+    {{ getTranslationKey(config.key, 'label') | translate: {"Default": config.templateOptions?.label} }}
+    <span *ngIf="!customTemplate">:</span>
   </label>
   <div class="form-element-content" [class.many]="config.many && results">
-    <span *ngIf="
-        !displayValue &&
-        !(customTemplate && customTemplate.length) &&
-        (!results || results.length === 0)
-      ">-</span>
-    <a [class.readonly-value]="editMode" [class.readonly]="!config.templateOptions?.edit" *ngIf="
-        !config.many &&
-        displayValue &&
-        this.linkPath &&
-        !(customTemplate && customTemplate.length)
-      " href="{{ hideDetail || isClient() ? '' : this.linkPath }}" (click)="open('update', undefined, $event)">{{
-      displayValue }}</a>
-    <div [ngClass]="{ 'd-flex align-items-top flex-wrap': config.key === 'tags' }"
-      *ngIf="config.many && results && !config.templateOptions?.deleteList">
-      <span [ngClass]="{
+    <span *ngIf="!displayValue && !(customTemplate && customTemplate.length) && (!results || results.length === 0)">
+      -
+    </span>
+    <a
+      [class.readonly-value]="editMode"
+      [class.readonly]="!config.templateOptions?.edit"
+      *ngIf="!config.many && displayValue && this.linkPath && !(customTemplate && customTemplate.length)"
+      href="{{ hideDetail || isClient() ? '' : this.linkPath }}"
+      (click)="open('update', undefined, $event)"
+    >
+      {{ displayValue }}
+    </a>
+    <div
+      [ngClass]="{ 'd-flex align-items-top flex-wrap': config.key === 'tags' }"
+      *ngIf="config.many && results && !config.templateOptions?.deleteList"
+    >
+      <span
+        [ngClass]="{
           'badge badge-outline mb-2 me-1': config.key === 'tags',
           'd-block': config.column
-        }" *ngFor="let item of results; let l = last">
-        <a *ngIf="config.key !== 'tags'" [class.readonly-value]="editMode" href="/" (click)="open('update', item)">{{
-          item.__str__ }};</a>&nbsp;
-        <span *ngIf="config.key === 'tags'" [class.readonly-value]="editMode">{{
-          item.__str__
-          }}</span>
+        }"
+        *ngFor="let item of results; let l = last"
+      >
+        <a *ngIf="config.key !== 'tags'" [class.readonly-value]="editMode" href="/" (click)="open('update', item)">
+          {{ item.__str__ }};
+        </a>&nbsp;
+        <span *ngIf="config.key === 'tags'" [class.readonly-value]="editMode">
+          {{ item.__str__ }}
+        </span>
       </span>
     </div>
-    <div *ngIf="config.many && results && config.templateOptions?.deleteList"
-      class="d-flex flex-wrap align-items-center mt-2">
-      <span class="badge badge-outline mt-2 me-1" style="white-space: normal"
-        *ngFor="let item of results; let i = index">
+    <div
+      *ngIf="config.many && results && config.templateOptions?.deleteList"
+      class="d-flex flex-wrap align-items-center mt-2"
+    >
+      <span
+        class="badge badge-outline mt-2 me-1"
+        style="white-space: normal"
+        *ngFor="let item of results; let i = index"
+      >
         {{ item.__str__ }}
-        <fa-icon class="text-danger" [icon]="['fas', 'times']"
-          (click)="deleteItem(i, item, config.templateOptions?.deleteList)"></fa-icon>
+        <fa-icon
+          class="text-danger"
+          [icon]="['fas', 'times']"
+          (click)="deleteItem(i, item, config.templateOptions?.deleteList)"
+        ></fa-icon>
       </span>
     </div>
   </div>

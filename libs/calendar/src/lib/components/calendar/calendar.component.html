@@ -4,13 +4,13 @@
     <h3 class="widget-name">{{ 'calendar' | translate: {"Default": "Calendar"} }}</h3>
 
     <div *ngIf="calendarType !== 2" class="btn-group range-buttons" btnRadioGroup [formControl]="currentRange">
-      <label [btnRadio]="range.Month" role="button" [class.active]="isMonthRange">
+      <label [btnRadio]="range.Month" role="button">
         {{ 'month' | translate: {"Default": "Month"} }}
       </label>
-      <label [btnRadio]="range.Week" role="button" [class.active]="isWeekRange">
+      <label [btnRadio]="range.Week" role="button">
         {{ 'week' | translate: {"Default": "Week"} }}
       </label>
-      <label [btnRadio]="range.Day" role="button" [class.active]="isDayRange">
+      <label [btnRadio]="range.Day" role="button">
         {{ 'day' | translate: {"Default": "Day"} }}
       </label>
     </div>
@@ -109,7 +109,7 @@
             {{'reset_dates' | translate: {"Default": "Reset selected dates"} }}
           </span>
 
-          <button webuiSubscriptionRequired type="button" class="btn job-btn ms-3" (click)="addJob()">
+          <button webuiSubscriptionRequired type="button" class="btn btn-primary job-btn ms-3" (click)="addJob()">
             {{'create_job' | translate: {"Default": "Create Job"} }}
           </button>
         </ng-container>
@@ -456,12 +456,22 @@
       </div>
     </div>
     <div class="modal-body">
-      <webui-generic-form [endpoint]="modalInfo.endpoint" [data]="modalInfo.data" [mode]="modalInfo.mode"
-        [edit]="modalInfo.edit" (event)="formEvent($event, modal.close)" (errorForm)="formError()">
+      <webui-generic-form
+        [endpoint]="modalInfo.endpoint"
+        [data]="modalInfo.data"
+        [mode]="modalInfo.mode"
+        [edit]="modalInfo.edit"
+        (event)="formEvent($event, modal.close)"
+        (errorForm)="formError()"
+      >
         <div class="text-center">
-          <button webuiSubscriptionRequired type="submit" class="btn big-btn btn-shadow btn-primary text-white button-save mt-3 mb-4"
-            [disabled]="saveProcess || extendFormInvalid">
-            Save
+          <button
+            webuiSubscriptionRequired
+            type="submit"
+            class="btn big-btn btn-shadow btn-primary text-white button-save mt-3 mb-4"
+            [disabled]="saveProcess || extendFormInvalid"
+          >
+            <span>{{'save' | translate}}</span>
             <webui-spinner *ngIf="saveProcess"></webui-spinner>
           </button>
         </div>

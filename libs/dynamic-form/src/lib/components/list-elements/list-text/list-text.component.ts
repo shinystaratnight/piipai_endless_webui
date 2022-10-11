@@ -1,9 +1,12 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, OnDestroy, ChangeDetectorRef } from '@angular/core';
 
-import { isMobile, getTranslationKey } from '@webui/utilities';
+import { isMobile, getTranslationKey, checkAndReturnTranslation, getPropValue } from '@webui/utilities';
 import { getValueOfData, generateCssStyles } from '../../../helpers';
 import { DATE_FORMAT, DATE_TIME_FORMAT, Time } from '@webui/time';
 import { IconName } from '@fortawesome/fontawesome-svg-core';
+import { TranslateService } from '@ngx-translate/core';
+import { Subject } from 'rxjs';
+import { ITranslationPayload, Language } from '@webui/models';
 
 @Component({
   selector: 'webui-list-text',
@@ -11,7 +14,8 @@ import { IconName } from '@fortawesome/fontawesome-svg-core';
   styleUrls: ['./list-text.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ListTextComponent implements OnInit {
+export class ListTextComponent implements OnInit, OnDestroy {
+  private _destroy: Subject<void> = new Subject();
   private stylePrefix = 'list-text';
 
   public config: any;
@@ -36,6 +40,11 @@ export class ListTextComponent implements OnInit {
 
   public isMobile = isMobile;
   translationKey = '';
+
+  constructor(
+    private translateService: TranslateService,
+    private cd: ChangeDetectorRef
+  ) {}
 
   public ngOnInit() {
     if (this.config.value || this.config.value === 0) {
@@ -77,6 +86,23 @@ export class ListTextComponent implements OnInit {
         ? 'date'
         : 'label'
     );
+
+    this.translateService.onLangChange.subscribe(({ lang }) => {
+      const value = getPropValue(this.config.initValue, this.config.name);
+      if (value) {
+        const tranlsation = checkAndReturnTranslation(value as ITranslationPayload, 'EE', lang as Language)
+
+        if (tranlsation) {
+          this.value = tranlsation;
+          this.cd.detectChanges();
+        }
+      }
+    });
+  }
+
+  ngOnDestroy(): void {
+    this._destroy.next();
+    this._destroy.complete();
   }
 
   public get iconName(): IconName | undefined {

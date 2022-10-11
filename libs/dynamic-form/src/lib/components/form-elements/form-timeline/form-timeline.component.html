@@ -1,31 +1,28 @@
 <div *ngIf="!this.config.hide && !this.dropdown && !loading" class="timeline">
-  <div class="text-end">
-    <button
-      type="button"
-      class="btn btn-outline-info btn-refresh mb-2"
-      (click)="onRefresh()"
-    >
-      <fa-icon class="me-0" icon="redo"></fa-icon>
-    </button>
-  </div>
-
   <ng-container *ngFor="let state of config.options; let last = last">
     <ng-container
       *ngTemplateOutlet="stateElement; context: { state: state, last: last }"
     ></ng-container>
   </ng-container>
+
+  <button
+    type="button"
+    class="btn btn-outline-info btn-refresh"
+    (click)="onRefresh()"
+  >
+    <fa-icon class="me-0" icon="redo"></fa-icon>
+  </button>
 </div>
 
-<div *ngIf="loading && !this.dropdown" class="spinner">
-  <div class="double-bounce1"></div>
-  <div class="double-bounce2"></div>
+<div class="d-flex justify-content-center" *ngIf="loading && !this.dropdown">
+  <webui-loader></webui-loader>
 </div>
 
 <div
   *ngIf="selectArray && currentState.value && this.dropdown"
   class="timeline timeline-select-wrapper"
 >
-  Status:
+  {{'filter.status' | translate}}:
 
   <select
     class="timeline-element badge badge-outline timeline-select"
@@ -70,7 +67,7 @@
 
   <button
     type="button"
-    class="btn btn-outline-info btn-refresh ms-1"
+    class="btn btn-outline-info btn-refresh"
     (click)="onRefresh()"
   >
     <fa-icon class="me-0" [class.loading]="loading" icon="redo"></fa-icon>
@@ -165,7 +162,7 @@
           (errorForm)="formError()"
         >
           <button type="submit" class="btn btn-primary">
-            Save
+            {{'save' | translate}}
             <webui-spinner *ngIf="saveProcess"></webui-spinner>
           </button>
         </webui-generic-form>

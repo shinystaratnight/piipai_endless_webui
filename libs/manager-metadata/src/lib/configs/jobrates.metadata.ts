@@ -2,7 +2,30 @@ import { Form, InputType, List } from '@webui/metadata';
 import { Endpoints } from '@webui/models';
 
 const formset = {
-  fields: [],
+  fields: [
+    new Form.related.element('company', 'Company', Endpoints.Company)
+      .setDefaultValue('{customer_company.id}')
+      .hideField(),
+    new Form.related.element('skill', 'Skill', Endpoints.Skill)
+      .setDefaultValue('{position.id}')
+      .updateValues(['name'])
+      .hideField()
+      .doNotSend(),
+    new Form.related.element(
+      'worktype',
+      'Work Type',
+      Endpoints.SkillWorkTypes
+    ).setQuery({
+      skill: '{position.id}',
+      company: '{customer_company.id}',
+      priced: true
+    }).updateValues(['translations']),
+    new Form.input.element('rate', 'Rate', InputType.Number).setNumberOptions(
+      0.01,
+      0
+    ),
+    new Form.related.element('job', 'Job', Endpoints.Job).hideField()
+  ],
   list: new List.main.element('jobrates', 'Job Rates')
     .disableSearch()
     .setColumns([
@@ -37,7 +60,7 @@ const formadd = () => [
     skill: '{skill.id}',
     company: '{company.id}',
     priced: true
-  }),
+  }).updateValues(['translations']),
   new Form.input.element('rate', 'Rate', InputType.Number).setNumberOptions(
     0.01,
     0

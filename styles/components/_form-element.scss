@@ -384,8 +384,9 @@
 
     .dynamic-form:not(.view-form-mode) &.required::after {
       content: '*';
-
       color: $danger;
+      margin-left: 0.25rem;
+      font-size: 12px;
     }
   }
 }

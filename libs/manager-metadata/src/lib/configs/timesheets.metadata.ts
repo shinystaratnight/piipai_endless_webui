@@ -55,7 +55,7 @@ const list = {
             type: 'text'
           }
         ],
-        width: 250,
+        width: 270,
         name: 'client_/_jobsite_/_supervisor',
         title: null,
         sort: true,
@@ -93,7 +93,7 @@ const list = {
             type: 'link'
           }
         ],
-        width: 200,
+        width: 230,
         name: 'position_/_candidate',
         title: null,
         label: 'Position / Candidate / Job',

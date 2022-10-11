@@ -657,16 +657,6 @@
     "job_offer.candidate_contact.label": "Ehdokas",
     "myob_status.label": "Kirjanpidon integrointi",
     "worktype.label": "Taitotoiminta",
-    "status": [
-        "Uusi",
-        "Pre-Shift-tarkastus odottaa",
-        "Vaihtoa edeltävä tarkistus vahvistettu",
-        "Vaihtoa edeltävä tarkistus epäonnistui",
-        "Lähetys odottaa",
-        "Hyväksyntä odottaa",
-        "Valvojaa muutettu",
-        "Hyväksytty"
-    ],
     "going_to_work_confirmation.text": "Tarkistus ennen vuoroa",
     "going_to_work_sent_sms.label": "Ennen vuoroa oleva tarkistus lähetti tekstiviestit",
     "going_to_work_reply_sms.label": "Ennen vuoroa tarkistettavan vastauksen sms",

@@ -46,9 +46,8 @@
               <fa-icon icon="chevron-down" class="text-white"></fa-icon>
           </button>
         </div>
-        <div class="spinner" *ngIf="!tables[0].data || isLoading">
-          <div class="double-bounce1"></div>
-          <div class="double-bounce2"></div>
+        <div class="d-flex justify-content-center">
+          <webui-loader *ngIf="!tables[0].data || isLoading"></webui-loader>
         </div>
       </div>
   </webui-dynamic-list>

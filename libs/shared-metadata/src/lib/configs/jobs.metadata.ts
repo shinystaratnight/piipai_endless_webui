@@ -863,7 +863,6 @@ const form = [
       },
       job: 'position.__str__',
       jobsite: 'jobsite',
-      tags: 'tags'
     },
     type: 'info',
     key: 'id'
@@ -876,7 +875,6 @@ const form = [
         name: 'Job info',
         translateKey: 'job_info',
         type: 'group',
-        label: 'Job information',
         children: [
           {
             type: 'row',
@@ -1071,10 +1069,10 @@ const form = [
         edit_endpoint: '/hr/shiftdates/{date.id}',
         translateKey: 'shifts',
         templateOptions: {
-          label: 'Shift Dates',
+          // label: 'Shift Dates',
           type: 'list',
           add_label: '+ Add',
-          text: 'Shift Dates'
+          // text: 'Shift Dates'
         },
         query: {
           job: '{id}'
@@ -1094,10 +1092,10 @@ const form = [
       {
         endpoint: '/hr/joboffers/',
         templateOptions: {
-          label: 'Job Offers',
+          // label: 'Job Offers',
           type: 'list',
           add_label: '+ Add job offer',
-          text: 'Job Offers'
+          // text: 'Job Offers'
         },
         visibleMode: true,
         translateKey: 'job_offers',
@@ -1144,6 +1142,7 @@ const form = [
             prefilled: {
               object_id: '{id}'
             },
+            translateKey: 'workflowobjects',
             type: 'list',
             query: {
               model: 'hr.job',
@@ -1160,10 +1159,10 @@ const form = [
           editable_type: 'job'
         },
         templateOptions: {
-          label: 'Favourite List',
+          // label: 'Favourite List',
           type: 'list',
           add_label: '+ Add',
-          text: 'Favourite List'
+          // text: 'Favourite List'
         },
         collapsed: false,
         translateKey: 'favorite_list',
@@ -1461,6 +1460,26 @@ const formadd = [
         ]
       }
     ]
+  },
+  {
+    endpoint: Endpoints.JobRates,
+    type: 'related',
+    key: 'jobrates',
+    templateOptions: {
+      label: 'Job Rate',
+      type: 'list',
+      text: 'Job Rate',
+      add_label: 'Add'
+    },
+    translateKey: 'jobrates',
+    prefilled: {
+      job: '{id}',
+      skill: '{position.id}',
+      company: '{customer_company.id}'
+    },
+    delay: true,
+    list: true,
+    showIf: ['position.id', 'customer_company.id'],
   },
   {
     key: 'shifts',

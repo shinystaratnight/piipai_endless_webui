@@ -8,6 +8,7 @@ $shadow: 0px 4px 6px 0;
   @each $item in $themes {
     .#{$item}-theme & {
       background-color: rgba(map-get($theme-colors, $item), 0.2);
+      border-color: rgba(map-get($theme-colors, $item), 0.2);
     }
   }
 

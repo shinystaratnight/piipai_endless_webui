@@ -560,11 +560,13 @@ export class FormInputComponent
   }
 
   public eventHandler(e: any) {
-    this.event.emit({
-      type: e.type,
-      el: this.config,
-      value: this.group.get(this.key)?.value,
-    });
+    setTimeout(() => {
+      this.event.emit({
+        type: e.type,
+        el: this.config,
+        value: this.group.get(this.key)?.value,
+      });
+    }, 100);
   }
 
   // Autocomplete
