@@ -20,6 +20,10 @@
     {{ label }}
     <webui-spinner *ngIf="actionProcess"></webui-spinner>
   </button>
+
+  <div class="ms-auto">
+    <ng-content></ng-content>
+  </div>
 </div>
 
 <ng-template #content let-modal>

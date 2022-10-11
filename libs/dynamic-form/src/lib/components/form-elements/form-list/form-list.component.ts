@@ -283,6 +283,10 @@ export class FormListComponent implements OnInit, OnDestroy {
   }
 
   public eventHandler(e: any) {
+    if (e && e.type === 'createObject') {
+      this.addObject();
+    }
+
     if (e && this.config.templateOptions) {
       this.config.templateOptions.label = e.__str__;
     }

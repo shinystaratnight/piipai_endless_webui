@@ -1,10 +1,10 @@
 <ng-container *ngIf="!this.config.hide">
   <header class="header">
     <div class="header__content">
-      <h4 class="headline-4 title">
+      <h4 class="headline-4 title mb-0">
         {{ labelTranslateKey | translate: { Default: config.templateOptions?.label } }}
       </h4>
-      <p class="description" *ngIf="config.help">
+      <p class="description mb-0" *ngIf="config.help">
         {{ helpTranslateKey | translate: { Default: config.help } }}
       </p>
     </div>
@@ -12,8 +12,8 @@
     <button
       type="button"
       webuiSubscriptionRequired
-      class="btn btn-primary btn-shadow"
-      *ngIf="hasAddButton"
+      class="btn btn-primary"
+      *ngIf="hasAddButton && !config.templateOptions?.hasButtonInAction"
       (click)="addObject()"
     >
       {{ (config.templateOptions?.add_label || '') | translate: { Default: '+ Add' } || 'Add' }}
@@ -63,6 +63,7 @@
       [metadataQuery]="config.metadata_query"
       [addMetadataQuery]="config.add_metadata_query"
       [disableActions]="config.disableActions"
+      [hasButtonInAction]="hasAddButton && config.templateOptions?.hasButtonInAction"
       (dataLength)="checkCount($event)"
       (checkedObjects)="checkedHandler($event)"
       (event)="eventHandler($event)"
