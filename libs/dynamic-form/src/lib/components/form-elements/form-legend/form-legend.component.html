@@ -4,7 +4,7 @@
   <div class="form-element-content">
     <ul class="list">
       <li *ngFor="let prop of list">
-        <b>[[{{prop}}]]</b> - <i>{{getDescription(prop)}}</i>
+        <a class="variable" (click)="onClick(prop, $event)">[[{{prop}}]]</a> - <i>{{getDescription(prop)}}</i>
       </li>
     </ul>
   </div>

@@ -1,4 +1,5 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { InputService } from '../../../services/input.service';
 
 @Component({
   selector: 'webui-form-legend',
@@ -15,9 +16,9 @@ export class FormLegendComponent {
     candidate_consent_url: `The same value similar to "auth_url"`,
     contact: `Combination of designation and full name of the contact.`,
     contact__first_name: `First name of contact`,
-    contact__email: `contact’s email`,
+    contact__email: `contact's email`,
     email_verification_link: ``,
-    manager: `Manager’s full name`,
+    manager: `Manager's full name`,
     master_company: `Master company name`,
     master_company_contact: `Contact for master company`,
     master_company_url: `URL of master company`,
@@ -35,7 +36,15 @@ export class FormLegendComponent {
 
   list: string[] = Object.keys(this._legend);
 
+  constructor(private inputService: InputService) {}
+
   getDescription(key: string): string {
     return this._legend[key];
+  }
+
+  onClick(prop: string, event: MouseEvent): void {
+    event.preventDefault();
+
+    this.inputService.push(`[[${prop}]]`)
   }
 }

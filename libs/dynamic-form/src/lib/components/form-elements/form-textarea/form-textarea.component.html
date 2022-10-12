@@ -20,9 +20,7 @@
         class="form-control"
         #textarea
         [formControlName]="key"
-        [attr.type]="
-          config.templateOptions.type ? config.templateOptions.type : 'text'
-        "
+        [attr.type]="config.templateOptions.type ? config.templateOptions.type : 'text'"
         [attr.id]="key"
         [attr.name]="key"
         [attr.placeholder]="
@@ -30,6 +28,7 @@
             ? config.templateOptions.placeholder
             : ''
         "
+        (focus)="onFocus()"
       ></textarea>
       <span
         [ngClass]="[className]"
