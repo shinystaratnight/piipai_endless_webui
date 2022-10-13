@@ -120,6 +120,7 @@ export class SubmissionModalComponent
       fields: ['__str__', 'id', 'translations', 'uom', 'skill_rate_ranges'],
       skill: this.timeSheet.position.id,
       company: this.timeSheet.company.id,
+      candidate_contact: this.timeSheet.contact_id,
       priced: true,
     };
   }
