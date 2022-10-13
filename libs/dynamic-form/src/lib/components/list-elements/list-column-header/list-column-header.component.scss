@@ -6,6 +6,8 @@
   line-height: 16px;
   text-transform: uppercase;
   display: inline-flex;
+  align-items: center;
+  text-align: center;
   color: #B2C2D3;
   &:not(.disabled):hover,
   &:not(.disabled):focus {

@@ -41,6 +41,7 @@ const formset = {
             type: 'textarea'
           }
         ],
+        width: 140,
         name: 'sid',
         sort_field: 'sid',
         label: 'SID',
@@ -69,7 +70,7 @@ const formset = {
             type: 'input'
           }
         ],
-        width: 100,
+        width: 120,
         name: 'from_number',
         sort_field: 'from_number',
         label: 'From number',
@@ -82,7 +83,7 @@ const formset = {
             type: 'input'
           }
         ],
-        width: 100,
+        width: 120,
         name: 'to_number',
         sort_field: 'to_number',
         label: 'To number',
@@ -133,33 +134,34 @@ const formset = {
         ],
         width: 60,
         name: 'cost',
-        label: 'Cost'
+        label: 'Cost',
+        sort: true
       }
     ],
     pagination_label: 'SMS message',
-    search_enabled: true,
+    search_enabled: false,
     editDisable: true,
     buttons: [],
-    filters: [
-      createFilter(Type.Date, {
-        key: 'created_at',
-        label: 'Created at',
-        yesterday: true,
-        today: true,
-        week: true,
-        month: true
-      }),
-      createFilter(Type.Select, {
-        key: 'status',
-        label: 'Status',
-        values: generateOptions(statuses)
-      }),
-      createFilter(Type.Checkbox, {
-        key: 'type',
-        label: 'Type',
-        values: generateOptions(smsTypes)
-      })
-    ]
+    // filters: [
+    //   createFilter(Type.Date, {
+    //     key: 'created_at',
+    //     label: 'Created at',
+    //     yesterday: true,
+    //     today: true,
+    //     week: true,
+    //     month: true
+    //   }),
+    //   createFilter(Type.Select, {
+    //     key: 'status',
+    //     label: 'Status',
+    //     values: generateOptions(statuses)
+    //   }),
+    //   createFilter(Type.Checkbox, {
+    //     key: 'type',
+    //     label: 'Type',
+    //     values: generateOptions(smsTypes)
+    //   })
+    // ]
   },
   fields: [
     {
