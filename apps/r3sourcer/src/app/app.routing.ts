@@ -48,7 +48,7 @@ export const routes: Routes = [
     path: 'registration',
     loadChildren: () =>
       import('./register/register.module').then((m) => m.RegisterModule),
-    canActivate: [NotAuthorizedGuard, SubdomainGuard],
+    // canActivate: [NotAuthorizedGuard, SubdomainGuard],
   },
   {
     path: 'billing',

@@ -65,6 +65,7 @@ const list = {
             label: 'Login as',
             text: 'Login',
             redirect: '/',
+            translationKey: 'login.login'
           },
         ],
         name: 'login_as',
@@ -269,6 +270,7 @@ const form = [
       type: 'list',
       text: 'Global Permissions',
     },
+    translateKey: 'permissions',
     collapsed: false,
     prefilled: {
       user: '{id}',

@@ -38,7 +38,7 @@
   (event)="eventHandler($event)">
   <div class="d-flex">
     <button webuiSubscriptionRequired type="submit" class="btn btn-primary ms-auto" [disabled]="saveProcess || form.disableSaveButton">
-      Save
+      {{'save' | translate}}
       <webui-spinner *ngIf="saveProcess"></webui-spinner>
     </button>
   </div>

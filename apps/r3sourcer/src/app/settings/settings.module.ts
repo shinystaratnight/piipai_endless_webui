@@ -24,6 +24,7 @@ import { SharedModule as Shared } from '../shared/shared.module';
 import { DynamicFormModule } from '@webui/dynamic-form';
 import { Metadata } from './metadata.config';
 import { UiModule } from '@webui/ui';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
   imports: [
@@ -39,7 +40,8 @@ import { UiModule } from '@webui/ui';
     Shared,
     DynamicFormModule.forChild({ metadata: Metadata }),
     UiModule,
-    NgbCollapseModule
+    NgbCollapseModule,
+    TranslateModule
   ],
   declarations: [
     PermissionsComponent,
