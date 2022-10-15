@@ -85,6 +85,8 @@ export class FormButtonComponent implements OnInit, OnDestroy {
       this.config.styles,
       this.stylePrefix
     )[0];
+
+    console.log(this);
   }
 
   public ngOnDestroy() {

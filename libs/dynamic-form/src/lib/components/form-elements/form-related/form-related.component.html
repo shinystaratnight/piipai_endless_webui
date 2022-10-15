@@ -234,7 +234,9 @@
                 [class.required]="col.templateOptions?.required"
                 [style.width.px]="col?.width"
               >
-                <span class="opacity-15">{{ col.templateOptions?.label }}</span>
+                <span class="opacity-15">
+                  {{ (col.key + '.label') | translate : {'Default': col.templateOptions?.label} }}
+                </span>
               </th>
             </ng-container>
 

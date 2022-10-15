@@ -250,13 +250,11 @@ const form = [
           {
             type: 'button',
             color: 'primary',
+            translationKey: 'send',
             templateOptions: {
               action: 'autoGenerate',
               text: 'Send',
               type: 'button',
-              small: true,
-              icon: 'envelope',
-              p: true,
             },
           },
         ],

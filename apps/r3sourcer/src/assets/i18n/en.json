@@ -998,5 +998,6 @@
 	"tabs.groups": "Groups",
 	"tabs.users": "Users",
 	"remove_all": "Remove All",
-	"tabs.permissions.label": "Permissions"
+	"tabs.permissions.label": "Permissions",
+	"send": "Send"
 }
