@@ -1,5 +1,8 @@
 <ng-container *ngIf="!loader">
-  <webui-navigation [user]="user" (changePasswordEmitter)="openChangePassword()">
+  <webui-navigation
+    [user]="user"
+    (changePasswordEmitter)="openChangePassword()"
+  >
   </webui-navigation>
 
   <ng-container *ngIf="!identifyDevice()">
@@ -52,9 +55,7 @@
               pageData.pathData.postfix === 'submit'
             "
             [title]="
-              pageData.pathData.postfix === 'submit'
-                ? 'submit_timesheet'
-                : ''
+              pageData.pathData.postfix === 'submit' ? 'submit_timesheet' : ''
             "
             [endpoint]="pageData.endpoint"
             [id]="pageData.pathData.id"
@@ -89,7 +90,7 @@
                 *ngIf="formMode === FormMode.Edit"
                 (click)="changeMode(FormMode.View)"
               >
-                Close without save
+                {{ 'close_without_save' | translate }}
               </button>
 
               <button
@@ -100,7 +101,7 @@
                 (click)="changeMode(FormMode.Edit)"
               >
                 <fa-icon [icon]="['fas', 'pencil-alt']"></fa-icon>
-                Edit mode
+                {{ 'edit_mode' | translate }}
               </button>
 
               <button
@@ -115,7 +116,7 @@
                 "
                 [disabled]="saveProcess"
               >
-                Save
+                {{ 'save' | translate }}
                 <webui-spinner *ngIf="saveProcess"></webui-spinner>
               </button>
 
@@ -131,7 +132,7 @@
                 "
                 (click)="approveFormStorage(pageData)"
               >
-                Approve
+                {{ 'approve' | translate }}
               </button>
             </div>
           </webui-generic-form>
@@ -150,8 +151,8 @@
           class="form-content"
           *ngIf="
             !reload &&
-            (pageData.endpoint === '/acceptance-tests/acceptancetests/' &&
-              pageData.pathData.id)
+            pageData.endpoint === '/acceptance-tests/acceptancetests/' &&
+            pageData.pathData.id
           "
         >
           <webui-test-builder [testData]="acceptenceTestData">
@@ -183,7 +184,7 @@
                   *ngIf="formMode === FormMode.Edit"
                   (click)="changeMode(FormMode.View)"
                 >
-                  Close without save
+                  {{ 'close_without_save' | translate }}
                 </button>
 
                 <button
@@ -196,7 +197,7 @@
                   (click)="changeMode(FormMode.Edit)"
                 >
                   <fa-icon [icon]="['fas', 'pencil-alt']"></fa-icon>
-                  Edit mode
+                  {{ 'edit_mode' | translate }}
                 </button>
 
                 <button
@@ -210,7 +211,7 @@
                   "
                   [disabled]="saveProcess"
                 >
-                  Save
+                  {{ 'save' | translate }}
                   <webui-spinner *ngIf="saveProcess"></webui-spinner>
                 </button>
               </div>
@@ -261,7 +262,7 @@
           </webui-generic-list>
           <div class="buttons mb-5">
             <button type="button" class="btn btn-secondary" (click)="back()">
-              Cancel
+              {{ 'cancel' | translate }}
             </button>
             <button
               type="button"
@@ -270,7 +271,7 @@
               [disabled]="!data || fillInDataSending"
               (click)="sendData()"
             >
-              Fill in
+              {{ 'fill_in.label' | translate }}
               <webui-spinner *ngIf="fillInDataSending"></webui-spinner>
             </button>
           </div>
@@ -294,7 +295,7 @@
     <div class="modal-content-wrapper">
       <div class="modal-header-wrapper">
         <div class="modal-header">
-          <h5 class="modal-title">Change Password</h5>
+          <h5 class="modal-title">{{ 'change_password' | translate }}</h5>
 
           <webui-close-button
             class="ms-auto"
@@ -309,11 +310,17 @@
           [needData]="false"
           (event)="resetEvent($event)"
         >
-          <a class="forgot" href="" (click)="openResetForm()"
-            >Forgot Password?</a
-          >
+          <a class="forgot" href="" (click)="openResetForm()">
+            {{ 'forgot_password' | translate }}
+          </a>
           <div class="d-flex align-items-center">
-            <button webuiSubscriptionRequired type="submit" class="btn btn-primary ms-auto">Save</button>
+            <button
+              webuiSubscriptionRequired
+              type="submit"
+              class="btn btn-primary ms-auto"
+            >
+              {{ 'save' | translate }}
+            </button>
           </div>
         </webui-generic-form>
       </div>
@@ -324,7 +331,7 @@
     <div class="modal-content-wrapper">
       <div class="modal-header-wrapper">
         <div class="modal-header">
-          <h5 class="modal-title">Password Reset</h5>
+          <h5 class="modal-title">{{ 'password_reset' | translate }}</h5>
 
           <webui-close-button
             class="ms-auto"
@@ -339,7 +346,13 @@
           (event)="resetEvent($event)"
         >
           <div class="d-flex align-items-center">
-            <button webuiSubscriptionRequired type="submit" class="btn btn-primary ms-auto">Reset</button>
+            <button
+              webuiSubscriptionRequired
+              type="submit"
+              class="btn btn-primary ms-auto"
+            >
+              {{ 'reset' | translate }}
+            </button>
           </div>
         </webui-generic-form>
       </div>

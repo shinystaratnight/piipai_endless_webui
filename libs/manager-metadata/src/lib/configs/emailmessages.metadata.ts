@@ -1,4 +1,4 @@
-import { Filter, List } from '@webui/metadata';
+import { Filter, Form, List } from '@webui/metadata';
 import { Endpoints } from "@webui/models";
 
 const list = () => {
@@ -93,11 +93,8 @@ const sent = [
     type: 'row',
     className: 'col row',
     children: [
-      {
-        type: 'group',
-        label: 'From',
-        normal: true,
-        children: [
+      new Form.group.element('From', 'email_from')
+        .setChildren([
           {
             key: 'from_email',
             read_only: true,
@@ -106,13 +103,10 @@ const sent = [
               // bottom: true
             },
           }
-        ]
-      },
-      {
-        type: 'group',
-        label: 'To',
-        normal: true,
-        children: [
+        ]),
+
+      new Form.group.element('To', 'email_to')
+        .setChildren([
           {
             key: 'to_addresses',
             read_only: true,
@@ -121,8 +115,7 @@ const sent = [
               // bottom: true
             },
           }
-        ]
-      }
+        ])
     ]
   },
   {

@@ -1,66 +1,113 @@
 <div class="form-group">
   <div class="form-group search">
-    <input type="text" class="form-control w-100" [(ngModel)]="search" (keyup)="filter(search)" placeholder="Search">
-    <fa-icon [icon]="['fas', 'search']" class="text-muted search-icon" ></fa-icon>
+    <input
+      type="text"
+      class="form-control w-100 rounded p-2"
+      [(ngModel)]="search"
+      (keyup)="filter(search)"
+      placeholder="Search"
+    />
+    <fa-icon
+      [icon]="['fas', 'search']"
+      class="text-muted search-icon"
+    ></fa-icon>
   </div>
   <!--<button *ngIf="activeFields && activeFields.length" type="button" class="btn btn-primary my-2" (click)="openActiveFields()">Edit positions</button>-->
-  <ng-container *ngTemplateOutlet="list; context: {list: groups, disabled: false}"></ng-container>
+  <ng-container
+    *ngTemplateOutlet="list; context: { list: groups, disabled: false }"
+  ></ng-container>
 </div>
-
 
 <ng-template #list let-l="list" let-d="disabled">
   <div *ngFor="let item of l">
-    <div *ngIf="item.model_fields && !item.hidden" class="d-flex justify-content-center flex-column">
+    <div
+      *ngIf="item.model_fields && !item.hidden"
+      class="d-flex justify-content-center flex-column"
+    >
       <div class="d-flex align-items-center p-2 group">
-        <b class="field-name text-muted">{{item.label}}</b>
+        <b class="field-name text-muted">{{ item.label }}</b>
         <div class="ms-auto d-flex align-items-center flex-wrap gap-3">
-          <button type="button" class="btn btn-sm"
-                  [class.btn-success]="item.id || isActive(item) || disableContactButton(item)"
-                  [disabled]="disableContactButton(item)"
-                  (click)="toggleActiveState(item)">
-            Active
+          <button
+            type="button"
+            class="btn btn-sm"
+            [class.btn-success]="
+              item.id || isActive(item) || disableContactButton(item)
+            "
+            [disabled]="disableContactButton(item)"
+            (click)="toggleActiveState(item)"
+          >
+            {{ 'active.label' | translate }}
           </button>
-          <button type="button" class="btn btn-sm"
-                  [class.btn-success]="item.required || isRequired(item) || disableContactButton(field)"
-                  [disabled]="disableRequired(item) || disableContactButton(item)"
-                  (click)="toggleRequireProperty(item)">
-            Required
+          <button
+            type="button"
+            class="btn btn-sm"
+            [class.btn-success]="
+              item.required || isRequired(item) || disableContactButton(field)
+            "
+            [disabled]="disableRequired(item) || disableContactButton(item)"
+            (click)="toggleRequireProperty(item)"
+          >
+            {{ 'required.label' | translate }}
           </button>
 
-          <button class="btn btn-collapse" type="button" (click)="item.isCollapsed = !item.isCollapsed">
+          <button
+            class="btn btn-collapse"
+            type="button"
+            (click)="item.isCollapsed = !item.isCollapsed"
+          >
             <fa-icon
-              [icon]="['fas', item.isCollapsed ? 'plus-square' : 'minus-square']"
+              [icon]="[
+                'fas',
+                item.isCollapsed ? 'plus-square' : 'minus-square'
+              ]"
               class="icon text-primary"
               [class.text-primary]="item.isCollapsed"
-              [class.text-muted]="!item.isCollapsed">
+              [class.text-muted]="!item.isCollapsed"
+            >
             </fa-icon>
           </button>
         </div>
       </div>
       <div class="pl-4" [ngbCollapse]="item.isCollapsed">
-        <ng-container *ngTemplateOutlet="list; context: {list: item.model_fields, disabled: disableSubfields(item)}"></ng-container>
+        <ng-container
+          *ngTemplateOutlet="
+            list;
+            context: {
+              list: item.model_fields,
+              disabled: disableSubfields(item)
+            }
+          "
+        ></ng-container>
       </div>
     </div>
     <div *ngIf="item.name && !item.model_fields && !item.hidden">
-      <ng-container *ngTemplateOutlet="field; context: {field: item, disabled: d}"></ng-container>
+      <ng-container
+        *ngTemplateOutlet="field; context: { field: item, disabled: d }"
+      ></ng-container>
     </div>
   </div>
 </ng-template>
 
 <ng-template #field let-i="field" let-d="disabled">
   <div class="d-flex align-items-center p-2 field">
-    <span class="field-name">{{i.label}}</span>
-    <button type="button" class="btn btn-sm ms-auto"
-            [class.btn-success]="i.id"
-            [disabled]="d || i.disabled"
-            (click)="toggleActiveState(i)">
-      Active
+    <span class="field-name">{{ i.label }}</span>
+    <button
+      type="button"
+      class="btn btn-sm ms-auto"
+      [class.btn-success]="i.id"
+      [disabled]="d || i.disabled"
+      (click)="toggleActiveState(i)"
+    >
+      {{ 'active.label' | translate }}
     </button>
-    <button type="button" class="btn btn-sm ms-2"
-            [class.btn-success]="i.required"
-            [disabled]="d || i.disabled"
-            (click)="toggleRequireProperty(i)">
-      Required
+    <button
+      type="button"
+      class="btn btn-sm ms-2"
+      [class.btn-success]="i.required"
+      [disabled]="d || i.disabled"
+      (click)="toggleRequireProperty(i)"
+    >
+      {{ 'required.label' | translate }}
     </button>
   </div>
 </ng-template>
@@ -69,29 +116,47 @@
   <div class="modal-content-wrapper">
     <div class="modal-header-wrapper">
       <div class="modal-header bg-primary text-white">
-        <h5 class="modal-title">{{(choosenType && fields[choosenType].label) || modalData.title}}</h5>
+        <h5 class="modal-title">
+          {{ (choosenType && fields[choosenType].label) || modalData.title }}
+        </h5>
 
         <webui-close-button class="ms-auto" (click)="c()"></webui-close-button>
       </div>
     </div>
 
     <div class="modal-body">
-      <div class="d-flex flex-column" *ngIf="modalData.type === 'field' && !modalData.id && !choosenType">
+      <div
+        class="d-flex flex-column"
+        *ngIf="modalData.type === 'field' && !modalData.id && !choosenType"
+      >
         <span
-          [ngClass]="{'badge badge-default my-1 py-2': i !== 1}"
+          [ngClass]="{ 'badge badge-default my-1 py-2': i !== 1 }"
           [class.mb-4]="f"
           style="cursor: pointer"
           *ngFor="let type of types; let f = first; let i = index"
-          (click)="setType(type)">
-            {{fields[type].label}}
+          (click)="setType(type)"
+        >
+          {{ fields[type].label }}
         </span>
       </div>
       <webui-generic-form
-        *ngIf="(modalData.type === 'field' && choosenType) || modalData.type === 'group'"
+        *ngIf="
+          (modalData.type === 'field' && choosenType) ||
+          modalData.type === 'group'
+        "
         [data]="modalData.data"
         [endpoint]="modalData.endpoint"
         [id]="modalData.id"
-        (event)="formEvent($event, c, modalData.container, modalData.edit, modalData.type)">
+        (event)="
+          formEvent(
+            $event,
+            c,
+            modalData.container,
+            modalData.edit,
+            modalData.type
+          )
+        "
+      >
       </webui-generic-form>
     </div>
   </div>
@@ -100,11 +165,27 @@
 <ng-template #modalActiveFields let-c="close" let-d="dismiss">
   <div class="modal-content-wrapper">
     <div class="modal-body">
-      <div class="d-flex flex-column" *ngFor="let item of activeFields; let l = last; let f = first">
-        <h4 class="badge badge-primary d-flex align-items-center p-2" [class.mb-0]="l">
-          <span class="me-auto">{{item.label}}</span>
-          <fa-icon *ngIf="!f" [icon]="['fas', 'chevron-up']" class="icon text-white m-1" (click)="changePosition(item, 'up')"></fa-icon>
-          <fa-icon *ngIf="!l" [icon]="['fas', 'chevron-down']" class="icon text-white m-1 ms-3" (click)="changePosition(item, 'down')"></fa-icon>
+      <div
+        class="d-flex flex-column"
+        *ngFor="let item of activeFields; let l = last; let f = first"
+      >
+        <h4
+          class="badge badge-primary d-flex align-items-center p-2"
+          [class.mb-0]="l"
+        >
+          <span class="me-auto">{{ item.label }}</span>
+          <fa-icon
+            *ngIf="!f"
+            [icon]="['fas', 'chevron-up']"
+            class="icon text-white m-1"
+            (click)="changePosition(item, 'up')"
+          ></fa-icon>
+          <fa-icon
+            *ngIf="!l"
+            [icon]="['fas', 'chevron-down']"
+            class="icon text-white m-1 ms-3"
+            (click)="changePosition(item, 'down')"
+          ></fa-icon>
         </h4>
       </div>
     </div>

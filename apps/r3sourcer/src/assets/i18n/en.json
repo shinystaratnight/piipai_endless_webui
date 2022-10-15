@@ -999,5 +999,14 @@
 	"tabs.users": "Users",
 	"remove_all": "Remove All",
 	"tabs.permissions.label": "Permissions",
-	"send": "Send"
+	"send": "Send",
+	"title.label": "Title",
+	"short_description.label": "Short description",
+	"button_text.label": "Button text",
+	"result_messages.label": "Result message",
+	"required.label": "Required",
+	"preview.label": "Preview",
+	"create_new.label": "Create new",
+	"group.email_from": "From",
+	"group.email_to": "To"
 }
