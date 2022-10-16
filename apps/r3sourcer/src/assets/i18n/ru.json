@@ -1018,5 +1018,15 @@
     "postal_code.label": "",
     "latitude.label": "",
     "longitude.label": "",
-    "select_or_add_new": ""
+    "select_or_add_new": "",
+    "add_skill_rating": "",
+    "error.invalid_phone": "",
+    "error.invalid_email": "",
+    "error.invalid": "",
+    "not_verify": "",
+    "download": "",
+    "contact.gender.female": "",
+    "buy_profile.label": "",
+    "buy_profile.message": "",
+    "send_message": ""
 }

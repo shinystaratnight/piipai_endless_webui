@@ -816,7 +816,7 @@ const form = [
                       required: false,
                       label: 'Reliability',
                       type: 'score',
-                      danger: 'No rating'
+                      danger: 'no_rating'
                     },
                     read_only: true
                   },
@@ -828,7 +828,7 @@ const form = [
                       required: false,
                       label: 'Loyalty',
                       type: 'score',
-                      danger: 'No rating'
+                      danger: 'no_rating'
                     },
                     read_only: true
                   }
@@ -848,7 +848,7 @@ const form = [
                       required: false,
                       label: 'Average test',
                       type: 'score',
-                      danger: 'No rating'
+                      danger: 'no_rating'
                     },
                     read_only: true
                   },
@@ -860,7 +860,7 @@ const form = [
                       required: false,
                       label: 'Client feedback',
                       type: 'score',
-                      danger: 'No rating'
+                      danger: 'no_rating'
                     },
                     read_only: true
                   },
@@ -872,7 +872,7 @@ const form = [
                       required: false,
                       label: 'Average skill',
                       type: 'score',
-                      danger: 'No rating'
+                      danger: 'no_rating'
                     },
                     read_only: true
                   }
@@ -1839,7 +1839,7 @@ const profile = [
                       required: false,
                       label: 'Reliability',
                       type: 'score',
-                      danger: 'No rating'
+                      danger: 'no_rating'
                     },
                     read_only: true
                   },
@@ -1851,7 +1851,7 @@ const profile = [
                       required: false,
                       label: 'Loyalty',
                       type: 'score',
-                      danger: 'No rating'
+                      danger: 'no_rating'
                     },
                     read_only: true
                   }
@@ -1870,7 +1870,7 @@ const profile = [
                       required: false,
                       label: 'Average test',
                       type: 'score',
-                      danger: 'No rating'
+                      danger: 'no_rating'
                     },
                     read_only: true
                   },
@@ -1882,7 +1882,7 @@ const profile = [
                       required: false,
                       label: 'Client feedback',
                       type: 'score',
-                      danger: 'No rating'
+                      danger: 'no_rating'
                     },
                     read_only: true
                   },
@@ -1894,7 +1894,7 @@ const profile = [
                       required: false,
                       label: 'Average skill',
                       type: 'score',
-                      danger: 'No rating'
+                      danger: 'no_rating'
                     },
                     read_only: true
                   }

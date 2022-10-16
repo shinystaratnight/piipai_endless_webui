@@ -1018,5 +1018,15 @@
     "postal_code.label": "Postal Code",
     "latitude.label": "Latitude",
     "longitude.label": "Longitude",
-    "select_or_add_new": "Select or add new"
+    "select_or_add_new": "Select or add new",
+    "add_skill_rating": "Please add skill rating",
+    "error.invalid_phone": "Invalid phone number",
+    "error.invalid_email": "Invalid e-mail address",
+    "error.invalid": "Invalid",
+    "not_verify": "Not verify",
+    "download": "Download",
+    "contact.gender.female": "Female",
+    "buy_profile.label": "Buy profile",
+    "buy_profile.message": "Your will buy profile of this candidate on your own risk! R3sourcer will not take any responsibility on accuracy of this profile and actual availability of this candidate! Your saved CC will be charged {{amount}}. Please confirm you understand this!",
+    "send_message": "Send message"
 }

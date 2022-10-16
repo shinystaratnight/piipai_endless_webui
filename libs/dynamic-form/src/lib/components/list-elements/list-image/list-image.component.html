@@ -23,8 +23,8 @@
   </span>
 </ng-container>
 
-<span class="description" *ngIf="config.emptyValue && (!src && !file)">
-  {{ config.emptyValue }}
+<span class="description" *ngIf="config.emptyValue && !src && !file">
+  {{ config.emptyValue | translate }}
 </span>
 
 <img
@@ -46,16 +46,16 @@
   <a #filelink [href]="file" target="_blank">
     <fa-icon #emmi [icon]="['fas', 'file']" class="file-icon"></fa-icon>
     <fa-icon [icon]="['fas', 'download']" class="download-icon"></fa-icon>
-    <span *ngIf="config.display">{{ config.display }}</span>
+    <span *ngIf="config.display">{{ config.display | translate }}</span>
     <span *ngIf="!config.display">
-      {{ getExtension(file) | uppercase }} File
+      {{ getExtension(file) | uppercase }} {{ 'file' | translate }}
     </span>
   </a>
   <fa-icon
     *ngIf="file"
     class="upload-button"
     (click)="downloadFile()"
-    [icon]="['fas', 'download']"
+    icon="download"
   ></fa-icon>
 </div>
 

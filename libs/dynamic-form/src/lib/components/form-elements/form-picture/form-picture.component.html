@@ -1,27 +1,46 @@
 <div class="form-group" *ngIf="!config.hide">
   <div class="form-element" [class.custom]="config.custom">
-    <label class="form-element-label" [class.required]="config.templateOptions.required" [hidden]="config.custom" *ngIf="
+    <label
+      class="form-element-label"
+      [class.required]="config.templateOptions.required"
+      [hidden]="config.custom"
+      *ngIf="
         label &&
         config.templateOptions.label &&
         config.key !== 'contact.picture'
-      ">
-      {{ getTranslationKey('label') | translate: {"Default": config.templateOptions.label} }}:
+      "
+    >
+      {{
+        getTranslationKey('label')
+          | translate: { Default: config.templateOptions.label }
+      }}:
     </label>
-    <br>
-    <webui-info *ngIf="config.templateOptions.description" [description]="getTranslationKey('description') | translate: {'Default': config.templateOptions.description || ''}"></webui-info>
+    <br />
+    <webui-info
+      *ngIf="config.templateOptions.description"
+      [description]="
+        getTranslationKey('description')
+          | translate: { Default: config.templateOptions.description || '' }
+      "
+    ></webui-info>
     <input
       #picture
       accept="image/*,application/pdf"
       [attr.type]="'file'"
       [hidden]="true"
       [attr.id]="key"
-      (change)="fileChangeEvent($event)" [attr.name]="key"
+      (change)="fileChangeEvent($event)"
+      [attr.name]="key"
     />
-    <ng-container *ngIf="config.key === 'contact.picture' && !config.candidateForm">
+    <ng-container
+      *ngIf="config.key === 'contact.picture' && !config.candidateForm"
+    >
       <ng-container *ngTemplateOutlet="pictureView"></ng-container>
     </ng-container>
 
-    <ng-container *ngIf="config.key !== 'contact.picture' || config.candidateForm">
+    <ng-container
+      *ngIf="config.key !== 'contact.picture' || config.candidateForm"
+    >
       <div class="form-element-picture">
         <img
           *ngIf="value && config.templateOptions.file === false"
@@ -41,50 +60,100 @@
           width="200"
           height="200"
         />
-        <div *ngIf="contactAvatar && !fileName && !value" class="contact-avatar">
+        <div
+          *ngIf="contactAvatar && !fileName && !value"
+          class="contact-avatar"
+        >
           {{ contactAvatar }}
         </div>
 
-        <ng-container *ngIf="(link || value) && config.templateOptions?.file === undefined">
+        <ng-container
+          *ngIf="(link || value) && config.templateOptions?.file === undefined"
+        >
           <a class="document" [href]="link || value" target="_blank">
             <fa-icon [icon]="['fas', 'file']" class="file-icon"></fa-icon>
-            <fa-icon [icon]="['fas', 'download']" class="download-icon"></fa-icon>
-            View document
+            <fa-icon
+              [icon]="['fas', 'download']"
+              class="download-icon"
+            ></fa-icon>
+            {{ 'download' | translate }}
           </a>
-          <a *ngIf="!viewMode" class="link" href="" (click)="upload($event)">{{'upload_file' | translate}}</a>
+          <a *ngIf="!viewMode" class="link" href="" (click)="upload($event)">
+            {{ 'upload_file' | translate }}
+          </a>
         </ng-container>
 
         <span *ngIf="!value && !contactAvatar && !link && viewMode">-</span>
-        <span *ngIf="!link && !value && !viewMode && !config.read_only && config.templateOptions?.file === undefined" class="link ms-0 me-auto" (click)="upload()"
+        <span
+          *ngIf="
+            !link &&
+            !value &&
+            !viewMode &&
+            !config.read_only &&
+            config.templateOptions?.file === undefined
+          "
+          class="link ms-0 me-auto"
+          (click)="upload()"
         >
-            {{'upload_file' | translate: {"Default": 'Upload new file'} }}
+          {{ 'upload_file' | translate: { Default: 'Upload new file' } }}
         </span>
-        <div *ngIf="
+        <div
+          *ngIf="
             !viewMode &&
             !config.read_only &&
             config.templateOptions.file === false
-          " class="d-flex align-items-center flex-wrap mt-1">
+          "
+          class="d-flex align-items-center flex-wrap mt-1"
+        >
           <div class="btn-group flex-wrap">
-            <button type="button" class="btn btn-default" (click)="upload()" title="Choose a file">
+            <button
+              type="button"
+              class="btn btn-default"
+              (click)="upload()"
+              title="Choose a file"
+            >
               <fa-icon icon="upload"></fa-icon>
             </button>
-            <button type="button" class="btn btn-default" (click)="open()" title="Take a photo">
+            <button
+              type="button"
+              class="btn btn-default"
+              (click)="open()"
+              title="Take a photo"
+            >
               <fa-icon icon="camera"></fa-icon>
             </button>
-            <button *ngIf="value" type="button" class="btn btn-default" (click)="removeImage()" title="Remove">
+            <button
+              *ngIf="value"
+              type="button"
+              class="btn btn-default"
+              (click)="removeImage()"
+              title="Remove"
+            >
               <fa-icon icon="trash"></fa-icon>
             </button>
-            <button *ngIf="(fileName || isRemoved) && config.candidateForm && !sizeError" type="button"
-              class="btn btn-default" (click)="patchPicture()" title="Update">
+            <button
+              *ngIf="
+                (fileName || isRemoved) && config.candidateForm && !sizeError
+              "
+              type="button"
+              class="btn btn-default"
+              (click)="patchPicture()"
+              title="Update"
+            >
               <fa-icon icon="check"></fa-icon>
             </button>
           </div>
-
         </div>
 
-        <div class="mt-1" style="overflow: hidden; text-overflow: ellipsis; max-width: 180px"
-          *ngIf="fileName && !config.read_only && !config.view">
-          <i class="text-muted">{{'file' | translate: {"Default": 'File'} }}:</i> {{ fileName }}
+        <div
+          class="mt-1"
+          style="overflow: hidden; text-overflow: ellipsis; max-width: 180px"
+          *ngIf="fileName && !config.read_only && !config.view"
+        >
+          <i class="text-muted"
+            >{{ 'file' | translate: { Default: 'File' } }}:</i
+          >
+          {{ fileName }}
         </div>
       </div>
     </ng-container>
@@ -93,8 +162,10 @@
     <div class="text-danger mt-3" *ngIf="errors[key]">{{ errors[key] }}</div>
   </div>
   <div class="text-danger mt-3 text-left" *ngIf="sizeError">
-    {{'file_size' | translate: {"Default": 'File size is too large!'} }} <br>
-    {{'max_size' | translate: {"Default": 'Maximum allowed file size is 10 Mb.'} }}
+    {{ 'file_size' | translate: { Default: 'File size is too large!' } }} <br />
+    {{
+      'max_size' | translate: { Default: 'Maximum allowed file size is 10 Mb.' }
+    }}
   </div>
   <div *ngIf="message">
     <div *ngIf="message[key]" class="text-success mt-1">{{ message[key] }}</div>
@@ -103,43 +174,60 @@
 
 <ng-template #modal let-c="close">
   <div class="modal-header">
-    <h5 class="modal-title">{{ getTranslationKey('label_photo') | translate: {"Default": config.templateOptions.label_photo} }}</h5>
+    <h5 class="modal-title">
+      {{
+        getTranslationKey('label_photo')
+          | translate: { Default: config.templateOptions.label_photo }
+      }}
+    </h5>
 
     <webui-close-button class="ms-auto" (click)="c()"></webui-close-button>
   </div>
 
-  <div class="modal-body picture d-flex justify-content-around flex-wrap" style="overflow: auto">
+  <div
+    class="modal-body picture d-flex justify-content-around flex-wrap"
+    style="overflow: auto"
+  >
     <webcam
       [width]="300"
       [height]="200"
       class="d-flex align-items-center"
       [captureImageData]="true"
       [trigger]="capture$"
-      (imageCapture)="onImageCapture($event)">
+      (imageCapture)="onImageCapture($event)"
+    >
     </webcam>
 
-    <div class="photo d-flex justify-content-center align-items-center mt-3 mt-sm-0">
+    <div
+      class="photo d-flex justify-content-center align-items-center mt-3 mt-sm-0"
+    >
       <span *ngIf="!photoExist" class="text-white">
-        {{'photo' | translate: {"Default": 'Photo'} }}
+        {{ 'photo' | translate: { Default: 'Photo' } }}
       </span>
-      <img *ngIf="photoExist" [src]="this.base64" alt="">
-      <!-- <canvas [hidden]="!photoExist"></canvas> -->
+      <img *ngIf="photoExist" [src]="this.base64" alt="" />
     </div>
   </div>
 
   <div class="modal-footer justify-content-start">
-    <button *ngIf="photoExist" type="button" class="btn btn-success" (click)="save(c)">
-      {{'save' | translate: {"Default": 'Save'} }}
+    <button
+      *ngIf="photoExist"
+      type="button"
+      class="btn btn-success"
+      (click)="save(c)"
+    >
+      {{ 'save' | translate: { Default: 'Save' } }}
     </button>
     <button type="button" class="btn btn-primary" (click)="getPhoto()">
       {{
         photoExist
-          ? ('try_again' | translate: {"Default": 'Try again'})
-          : (getTranslationKey('label_photo') | translate: {"Default": config.templateOptions.label_photo}) || ('take_a_photo' | translate: {"Default": 'Take a photo'})
+          ? ('try_again' | translate: { Default: 'Try again' })
+          : (getTranslationKey('label_photo')
+              | translate: { Default: config.templateOptions.label_photo }) ||
+            ('take_a_photo' | translate: { Default: 'Take a photo' })
       }}
     </button>
     <button type="button" class="btn btn-secondary" (click)="c()">
-      {{'cancel' | translate: {"Default": 'Cancel'} }}
+      {{ 'cancel' | translate: { Default: 'Cancel' } }}
     </button>
   </div>
 </ng-template>
@@ -147,8 +235,12 @@
 <ng-template #pictureView>
   <div class="d-flex flex-wrap picture-container">
     <div class="text-center dropzone-wrapper">
-      <label class="dropzone-name" [hidden]="true" [class.required]="config.templateOptions.required">
-        {{'add_photo' | translate: {"Default": 'Add photo'} }}
+      <label
+        class="dropzone-name"
+        [hidden]="true"
+        [class.required]="config.templateOptions.required"
+      >
+        {{ 'add_photo' | translate: { Default: 'Add photo' } }}
       </label>
       <div class="dropzone" #dropzone>
         <fa-icon class="fa fa-user" [icon]="['fas', 'user']"></fa-icon>
@@ -156,10 +248,16 @@
       </div>
     </div>
     <div class="d-flex flex-column justify-content-center">
-      <span class="description" [hidden]="true" >{{'drag_and_drop' | translate}}</span>
+      <span class="description" [hidden]="true">
+        {{ 'drag_and_drop' | translate }}
+      </span>
       <div class="d-flex align-items-center buttons-wrapper">
-        <button class="btn action me-2" (click)="upload()">{{'add_photo' | translate: {"Default": 'Add photo'} }}</button>
-        <button class="btn action" (click)="open()">{{'use_camera' | translate: {"Default": 'Use camera'} }}</button>
+        <button class="btn action me-2" (click)="upload()">
+          {{ 'add_photo' | translate: { Default: 'Add photo' } }}
+        </button>
+        <button class="btn action" (click)="open()">
+          {{ 'use_camera' | translate: { Default: 'Use camera' } }}
+        </button>
       </div>
     </div>
   </div>

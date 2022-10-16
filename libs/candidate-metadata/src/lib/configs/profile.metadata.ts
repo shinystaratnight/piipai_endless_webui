@@ -119,13 +119,13 @@ const profile = function () {
                   'candidate_scores.reliability',
                   'Reliability',
                   StaticType.Score
-                ).setDanger('No rating'),
+                ).setDanger('no_rating'),
 
                 new Form.static.element(
                   'candidate_scores.loyalty',
                   'Loyalty',
                   StaticType.Score
-                ).setDanger('No rating')
+                ).setDanger('no_rating')
               ]),
 
             new Form.group.element('Rating', 'rating')
@@ -135,19 +135,19 @@ const profile = function () {
                   'candidate_scores.recruitment_score',
                   'Average test',
                   StaticType.Score
-                ).setDanger('No rating'),
+                ).setDanger('no_rating'),
 
                 new Form.static.element(
                   'candidate_scores.client_feedback',
                   'Client feedback',
                   StaticType.Score
-                ).setDanger('No rating'),
+                ).setDanger('no_rating'),
 
                 new Form.static.element(
                   'candidate_scores.skill_score',
                   'Average skill',
                   StaticType.Score
-                ).setDanger('No rating')
+                ).setDanger('no_rating')
               ])
           ]),
 

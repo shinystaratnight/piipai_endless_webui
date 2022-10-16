@@ -652,11 +652,7 @@
     </div>
     <div class="modal-body">
       <p style="text-indent: 12px">
-        Your will buy profile of this candidate on your own risk! R3sourcer will
-        not take any responsibility on accuracy of this profile and actual
-        availability of this candidate! Your saved CC will be charged
-        <strong>{{ modalInfo.amount }}</strong
-        >. Please confirm you understand this!
+        {{'buy_profile.message' | translate: { amount: modalInfo.amount } }}
       </p>
     </div>
     <div class="modal-footer justify-content-center py-2">
@@ -665,7 +661,7 @@
         class="btn big-btn btn-shadow btn-primary button-save"
         (click)="confirmCandidateBuy()"
       >
-        Confirm
+        {{'accept' | translate}}
         <webui-spinner *ngIf="saveProcess"></webui-spinner>
       </button>
     </div>
@@ -676,7 +672,7 @@
   <div class="modal-content-wrapper">
     <div class="modal-header-wrapper">
       <div class="modal-header">
-        <h5 class="modal-title">Send message</h5>
+        <h5 class="modal-title">{{'send_message'|translate}}</h5>
         <webui-close-button
           class="close-button ms-auto"
           (click)="modal.dismiss()"

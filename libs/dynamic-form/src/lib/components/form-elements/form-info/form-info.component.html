@@ -189,9 +189,9 @@
     </h5>
 
     <h5 class="form-info-title" *ngIf="config && viewMode && !skill_title">
-      <span style="font-size: 14px; font-weight: 400" *ngIf="config.hideTitle"
-        >Average score</span
-      >
+      <span style="font-size: 14px; font-weight: 400" *ngIf="config.hideTitle">
+        {{'average_score.label'|translate}}
+      </span>
 
       <span *ngIf="!averageScore && averageScore !== 0">
         <span class="view-mode" *ngIf="titlePath">
@@ -246,7 +246,7 @@
         [style.borderColor]="colors[1]"
         *ngIf="!getScore(averageScore) && isCandidatePage()"
       >
-        &nbsp;No rating
+        &nbsp;{{'no_rating'|translate}}
       </span>
     </h5>
     <p>

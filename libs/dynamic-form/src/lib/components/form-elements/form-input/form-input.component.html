@@ -4,26 +4,37 @@
   [class.mb-0]="config.templateOptions?.bottom"
   [formGroup]="group"
   style="position: relative"
-  [ngClass]="['input_type_'+key]"
+  [ngClass]="['input_type_' + key]"
 >
   <div class="form-element" [class.inline]="config.templateOptions?.inline">
     <label
       class="form-element-label"
       *ngIf="label && config.templateOptions?.label"
       [class.inline]="config.templateOptions?.inline"
-      [ngClass]="[config.templateOptions?.inline ? config.templateOptions?.color : '']"
+      [ngClass]="[
+        config.templateOptions?.inline ? config.templateOptions?.color : ''
+      ]"
       [class.bold]="config.templateOptions?.bold"
       [class.required]="config.templateOptions?.required"
       [attr.for]="key"
     >
-      {{ getTranslationKey('label') | translate: { Default: templateOptions?.label } }}
-      <b class="text-secondary" *ngIf="templateOptions?.icon && templateOptions?.iconParsed">
-        &nbsp;({{ templateOptions?.iconParsed }})
-      </b>:
+      {{
+        getTranslationKey('label')
+          | translate: { Default: templateOptions?.label }
+      }}
+      <b
+        class="text-secondary"
+        *ngIf="templateOptions?.icon && templateOptions?.iconParsed"
+      >
+        &nbsp;({{ templateOptions?.iconParsed }}) </b
+      >:
     </label>
     <webui-info
       *ngIf="config.templateOptions?.description"
-      [description]="getTranslationKey('description') | translate: { Default: config.templateOptions?.description || '' }"
+      [description]="
+        getTranslationKey('description')
+          | translate: { Default: config.templateOptions?.description || '' }
+      "
     ></webui-info>
     <i
       class="data-list-trigger info-icon"
@@ -38,14 +49,18 @@
       class="form-element-content edit"
       [class.showAll]="viewMode || config.type === 'static'"
       [class.full]="addonIcon"
-      [class.flex-column]="(!viewMode && isPhoneField) || config.templateOptions?.type === 'email'"
+      [class.flex-column]="
+        (!viewMode && isPhoneField) || config.templateOptions?.type === 'email'
+      "
     >
       <ng-container *ngIf="!viewMode && isPhoneField">
         <ng-container *ngTemplateOutlet="phoneField"></ng-container>
       </ng-container>
 
       <ng-container
-        *ngIf="(this.config.type !== 'static' || (this.config.type === 'static' && !this.config.read_only)) &&
+        *ngIf="
+          (this.config.type !== 'static' ||
+            (this.config.type === 'static' && !this.config.read_only)) &&
           !viewMode &&
           !config.read_only &&
           !isAddressField &&
@@ -56,7 +71,9 @@
         <ng-container *ngTemplateOutlet="inputField"></ng-container>
       </ng-container>
 
-      <ng-container *ngIf="config.type !== 'static' && !viewMode && isAddressField">
+      <ng-container
+        *ngIf="config.type !== 'static' && !viewMode && isAddressField"
+      >
         <ng-container *ngTemplateOutlet="addressField"></ng-container>
       </ng-container>
 
@@ -128,7 +145,9 @@
 
       <span
         class="readonly"
-        *ngIf="config.type === 'static' && config.templateOptions?.type !== 'score'"
+        *ngIf="
+          config.type === 'static' && config.templateOptions?.type !== 'score'
+        "
         [ngClass]="config.templateOptions?.color"
         [ngStyle]="{
           fontWeight: config.templateOptions?.bold ? 'bold' : 'normal'
@@ -165,7 +184,7 @@
           config.templateOptions?.danger
         "
       >
-        {{ config.templateOptions?.danger }}
+        {{ config.templateOptions?.danger || '' | translate }}
       </div>
     </div>
   </div>
@@ -217,7 +236,15 @@
     (keyup)="filter(key)"
   />
 
-  <div *ngIf="config.templateOptions?.type === 'email' && (!errors || !errors[config.key || ''])" class="error-message">Invalid e-mail address</div>
+  <div
+    *ngIf="
+      config.templateOptions?.type === 'email' &&
+      (!errors || !errors[config.key || ''])
+    "
+    class="error-message"
+  >
+    Invalid e-mail address
+  </div>
 </ng-template>
 
 <ng-template #addressField>
@@ -278,12 +305,14 @@
 
   <span
     class="score"
-    *ngIf="!viewMode && !config.read_only && config.templateOptions?.type === 'score'"
+    *ngIf="
+      !viewMode && !config.read_only && config.templateOptions?.type === 'score'
+    "
     [style.borderColor]="colors[hovered || formControl.value]"
     [style.color]="colors[hovered || formControl.value]"
   >
     <span *ngIf="!hovered && !formControl.value" class="text-danger">
-      {{ config.templateOptions?.noneValue }}
+      {{ config.templateOptions?.noneValue || '' | translate }}
     </span>
     <span
       class="d-flex align-items-center"
@@ -319,7 +348,9 @@
   >
   </ngx-intl-tel-input>
 
-  <div *ngIf="!errors || !errors[config.key || '']" class="error-message">Invalid phone number</div>
+  <div *ngIf="!errors || !errors[config.key || '']" class="error-message">
+    {{'error.invalid_phone' | translate}}
+  </div>
 </ng-template>
 
 <ng-template #dataListTemplate>
