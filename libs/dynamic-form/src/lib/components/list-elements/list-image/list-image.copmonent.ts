@@ -19,6 +19,8 @@ export class ListImageComponent implements OnInit {
 
   public isMobileDevice = isMobile() && isCandidate();
 
+  label = '';
+
   @ViewChild('filelink')
   public link!: ElementRef<HTMLAnchorElement>;
 
@@ -43,6 +45,8 @@ export class ListImageComponent implements OnInit {
     if (!this.src && this.config.contactName && !this.config.signature) {
       this.contactAvatar = getContactAvatar(this.config.contactName);
     }
+
+    this.label = this.config.translateKey ? this.config.translateKey : this.config.label;
   }
 
   public getColor(value: string) {

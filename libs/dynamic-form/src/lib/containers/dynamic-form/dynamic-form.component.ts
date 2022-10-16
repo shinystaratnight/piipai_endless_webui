@@ -272,7 +272,7 @@ export class DynamicFormComponent implements OnInit {
           value = parseFloat(value);
         }
 
-        if (targetValue[0] === '^') {
+        if (typeof targetValue === 'string' && targetValue[0] === '^') {
           if (value && value.includes(targetValue.slice(1))) {
             approvedRules += 1;
           }

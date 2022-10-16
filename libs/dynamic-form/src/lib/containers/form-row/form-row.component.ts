@@ -20,6 +20,7 @@ export class FormRowComponent implements OnInit {
 
   public isMobileDevice = isMobile() && isCandidate();
   public isHidden = false;
+  label = '';
 
   private subscriptions: Subscription[] = [];
 
@@ -43,6 +44,7 @@ export class FormRowComponent implements OnInit {
 
     this.checkChildrenOnReadOnlyProperty();
     this.checkFormData();
+    this.label = this.config.translateKey ? `group.${this.config.translateKey}` : this.config.label;
   }
 
   public eventHandler(e: any) {

@@ -868,6 +868,7 @@ export class DynamicListComponent
       required: element.required,
       currency: element.currency,
       translationKey: element.translationKey,
+      translateKey: element.translateKey,
       boldClass:
         (el.endpoint === Endpoints.Tag || this.endpoint === Endpoints.Tag) &&
         (el.owner === 'system' || (el.tag && el.tag.system === 'owner')),

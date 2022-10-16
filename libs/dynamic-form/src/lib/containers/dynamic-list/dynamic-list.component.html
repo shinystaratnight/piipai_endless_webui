@@ -206,9 +206,9 @@
                 style="width: 2rem"
               >
                 <div class="text-center" *ngIf="config.list.actions || actions">
-                  <label class="all-label" for="all-checkbox">{{
-                    'all' | translate
-                  }}</label>
+                  <label class="all-label" for="all-checkbox">
+                    {{ 'all' | translate }}
+                  </label>
                   <input
                     id="all-checkbox"
                     type="checkbox"
@@ -330,13 +330,15 @@
                     </ng-container>
                     <!-- (cell.pop = pop) -->
                     <ng-template #actionsTemplate>
-                      <ng-container
-                        webuiListElement
-                        [config]="cell.content"
-                        (event)="eventHandler($event)"
-                        (buttonAction)="buttonHandler($event)"
-                      >
-                      </ng-container>
+                      <div class="d-flex flex-column">
+                        <ng-container
+                          webuiListElement
+                          [config]="cell.content"
+                          (event)="eventHandler($event)"
+                          (buttonAction)="buttonHandler($event)"
+                        >
+                        </ng-container>
+                      </div>
                     </ng-template>
 
                     <ng-container

@@ -2,7 +2,7 @@
   [class.has-tabs]="hasTabs"
   [class.edit-form]="this.edit || this.editForm || this.id">
     <h4 *ngIf="title" class="title">{{title | translate: {"Default": title} }}</h4>
-    <h4 *ngIf="formName" class="form-name">{{formName}}</h4>
+    <h4 *ngIf="formName" class="form-name">{{formName | translate}}</h4>
 
     <div class="d-flex justify-content-center" *ngIf="!showForm">
       <webui-loader></webui-loader>
