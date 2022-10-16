@@ -502,7 +502,7 @@
     "invoice_rule.period_zero_reference_date.label": "Laskun luomisaika",
     "invoice_rule.separation_rule.label": "Erotussääntö",
     "invoice_rule.show_candidate_name.text": "Näytä ehdokkaan nimi",
-    "invoice_rule.period_zero_reference_weekly.label": "Laskun luomisaika",
+    "period_zero_reference_weekly.label": "Laskun luomisaika",
     "workflow.label": "Työnkulku",
     "advance_state_saving.text": "Edistynyt tilasäästö",
     "group.workflow_settings": "Työnkulun asetukset",

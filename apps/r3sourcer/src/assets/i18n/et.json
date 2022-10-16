@@ -502,7 +502,7 @@
     "invoice_rule.period_zero_reference_date.label": "Arve genereerimise aeg",
     "invoice_rule.separation_rule.label": "Eraldusreegel",
     "invoice_rule.show_candidate_name.text": "Kuva kandidaadi nimi",
-    "invoice_rule.period_zero_reference_weekly.label": "Arvete koostamise aeg",
+    "period_zero_reference_weekly.label": "Arvete koostamise aeg",
     "workflow.label": "Töövoog",
     "advance_state_saving.text": "Laiendatud töövood",
     "group.workflow_settings": "Töövoo seaded",

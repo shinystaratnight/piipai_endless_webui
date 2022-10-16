@@ -502,7 +502,7 @@
     "invoice_rule.period_zero_reference_date.label": "Время формирования счета",
     "invoice_rule.separation_rule.label": "Правило разделения",
     "invoice_rule.show_candidate_name.text": "Показать имя кандидата",
-    "invoice_rule.period_zero_reference_weekly.label": "Время формирования счета",
+    "period_zero_reference_weekly.label": "Время формирования счета",
     "workflow.label": "Рабочий процесс",
     "advance_state_saving.text": "Расширенное сохранение состояния",
     "group.workflow_settings": "Настройки рабочего процесса",

@@ -502,7 +502,7 @@
     "invoice_rule.period_zero_reference_date.label": "Invoice generation time",
     "invoice_rule.separation_rule.label": "Separation rule",
     "invoice_rule.show_candidate_name.text": "Show candidate name",
-    "invoice_rule.period_zero_reference_weekly.label": "Invoice generation time",
+    "period_zero_reference_weekly.label": "Invoice generation time",
     "workflow.label": "Workflow",
     "advance_state_saving.text": "Advanced state saving",
     "group.workflow_settings": "Workflow settings",
