@@ -329,11 +329,13 @@ const list = {
     tabs: [
       {
         label: 'Additional Info',
+        name: 'additional_information',
         is_collapsed: true,
         fields: ['nationality', 'contact.gender', 'transportation_to_work']
       },
       {
         label: 'Physical Parameters',
+        name: 'group.physical_parameters',
         is_collapsed: true,
         fields: ['height', 'weight', 'bmi']
       },
@@ -341,6 +343,7 @@ const list = {
         label: 'Scores',
         is_collapsed: true,
         hideLabel: true,
+        name: 'scores',
         width: 180,
         fields: [
           'candidate_scores.recruitment_score',
@@ -352,6 +355,7 @@ const list = {
       },
       {
         label: 'Tags',
+        name: 'tabs.tags.label',
         is_collapsed: true,
         fields: ['tag_list']
       }
@@ -374,14 +378,13 @@ const list = {
         {
           endpoint: `${Endpoints.CandidateContact}sendsms/`,
           label: 'Send',
-          confirm: false,
-          message: 'Are you sure?'
+          translateKey: 'send',
         }
       ],
       label: 'Actions',
-      agree_label: 'Agree',
-      button_label: 'Go',
-      decline_label: 'Decline'
+      agree_label: 'agree',
+      button_label: 'go',
+      decline_label: 'decline'
     }
   },
   fields: []
@@ -596,6 +599,7 @@ const form = [
                     setData: {
                       default: true
                     },
+                    translateKey: 'language_default',
                     field: 'default',
                     templateOptions: {
                       label: 'Default notification language',

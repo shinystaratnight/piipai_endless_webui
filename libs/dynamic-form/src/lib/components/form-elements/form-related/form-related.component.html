@@ -18,7 +18,7 @@
         <div class="form-control autocomplete-value" [class.placeholder]="placeholder && !displayValue"
           (click)="openAutocomplete()">
           <div style="overflow: hidden; white-space: nowrap">
-            {{ displayValue || (getTranslationKey(config.key, 'placeholder') | translate: {'Default': placeholder} ) }}
+            {{ displayValue || (this.placeholder | translate) }}
           </div>
         </div>
 

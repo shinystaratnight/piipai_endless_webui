@@ -33,9 +33,9 @@
         ></webui-info>
       </span>
 
-      <span style="font-size: 14px" *ngIf="config.hideTitle"
-        >Average score</span
-      >
+      <span style="font-size: 14px" *ngIf="config.hideTitle">
+        {{ 'average_score.label' | translate }}
+      </span>
       <span class="title" *ngIf="getScore(averageScore)">
         <ng-container *ngIf="!config.hideTitle">{{ title }}</ng-container>
         <span
@@ -54,7 +54,7 @@
         *ngIf="!getScore(averageScore) && isCandidatePage()"
         [style.borderColor]="colors[1]"
       >
-        No rating
+        {{ 'no_rating' | translate }}
       </span>
     </h5>
     <p *ngIf="position" class="position">{{ position }}</p>
@@ -62,17 +62,18 @@
     <p class="description">{{ address }}</p>
 
     <div *ngIf="status && status.length" class="list-info-status">
-      <span class="title">Status:</span>
+      <span class="title">{{ 'status.label' | translate }}</span>
       <div class="list-info-status-wrapper">
         <span
           class="badge badge-outline"
           [ngClass]="[checkClass(stat)]"
           *ngFor="let stat of statusList"
-          >{{ stat.__str__ }}</span
         >
-        <a class="more" href *ngIf="more" (click)="showMore($event)"
-          >{{ status.length - 4 }} more</a
-        >
+          {{ stat.__str__ }}
+        </span>
+        <a class="more" href *ngIf="more" (click)="showMore($event)">
+          {{ status.length - 4 }} {{ 'more' | translate }}
+        </a>
       </div>
     </div>
   </div>
@@ -81,7 +82,9 @@
 <ng-template #avarage>
   <div *ngIf="config.value" class="info-block p-1">
     <ng-container *ngIf="averageScoreDescription.includes.length">
-      <h6 class="info-block__title">Average includes</h6>
+      <h6 class="info-block__title">
+        {{'average_includes' | translate}}
+      </h6>
       <ul class="info-block__list">
         <li
           class="info-block__item"
@@ -98,7 +101,9 @@
     </ng-container>
 
     <ng-container *ngIf="averageScoreDescription.excludes.length">
-      <h6 class="info-block__title">Excludes</h6>
+      <h6 class="info-block__title">
+        {{'excludes' | translate}}
+      </h6>
       <ul class="info-block__list">
         <li
           class="info-block__item"
@@ -129,7 +134,7 @@
       <fa-icon icon="star"></fa-icon>
     </span>
   </ng-container>
-  <span *ngIf="!getScore(score)" class="info-block__score text-danger"
-    >No rating</span
-  >
+  <span *ngIf="!getScore(score)" class="info-block__score text-danger">
+    {{'no_rating' | translate}}
+  </span>
 </ng-template>

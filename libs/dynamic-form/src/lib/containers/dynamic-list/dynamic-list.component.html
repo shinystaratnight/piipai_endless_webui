@@ -419,10 +419,11 @@
                     <thead>
                       <tr>
                         <th *ngFor="let acell of row.additionalBody.content">
-                          <span>{{
-                            acell.name + '.label'
-                              | translate: { Default: acell.label }
-                          }}</span>
+                          <span>
+                            {{
+                              acell.name | translate: { Default: acell.label }
+                            }}
+                          </span>
                           <!-- <span>{{ acell.label }}</span> -->
                         </th>
                       </tr>
@@ -444,8 +445,11 @@
                                 !acell.hideLabel
                               "
                               class="description"
-                              >{{ field.label }}</span
                             >
+                              {{
+                                field.name + '.label' | translate: { Default: field.label }
+                              }}
+                            </span>
                             <span class="additional-data-content">
                               <ng-container
                                 *ngFor="let innerField of field.content"
@@ -467,14 +471,12 @@
                       class="additional-data-wrapper"
                       *ngFor="let acell of row.additionalBody.content"
                     >
-                      <!-- {{acell|json}} -->
-                      <span class="additional-data-label">{{
-                        acell.label + '.label'
-                          | translate: { Default: acell.label }
-                      }}</span>
-                      <!-- <span >{{
-                        acell.label
-                      }}</span> -->
+                      <span class="additional-data-label">
+                        {{
+                          acell.label + '.label'
+                            | translate: { Default: acell.label }
+                        }}
+                      </span>
                       <div
                         class="additional-data inline"
                         *ngFor="let field of acell.content"

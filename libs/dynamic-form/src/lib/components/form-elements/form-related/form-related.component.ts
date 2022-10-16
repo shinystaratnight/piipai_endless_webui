@@ -248,7 +248,7 @@ export class FormRelatedComponent
 
     this.placeholder =
       this.config.templateOptions?.placeholder ||
-      (this.config.templateOptions?.edit ? 'Select or add new' : 'Select');
+      (this.config.templateOptions?.edit ? 'select_or_add_new' : 'select');
 
     if (this.timelineService) {
       this.subscriptions.push(

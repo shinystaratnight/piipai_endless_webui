@@ -273,6 +273,7 @@ const formset = {
             endpoint: '/hr/jobsites/{id}',
             icon: 'fa-pencil-alt',
             title: 'Edit',
+            translationKey: 'edit',
             text_color: '#f0ad4e',
             type: 'button',
             field: 'id',

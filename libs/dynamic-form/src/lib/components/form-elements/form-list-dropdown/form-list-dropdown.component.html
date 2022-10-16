@@ -1,4 +1,8 @@
-<webui-form-element-view [label]="config.templateOptions.label">
+<webui-form-element-view
+  [label]="
+    config.translateKey | translate: { Default: config.templateOptions.label }
+  "
+>
   <span *ngIf="isViewMode">{{ displayValue }}</span>
 
   <ng-container *ngIf="isEditMode">

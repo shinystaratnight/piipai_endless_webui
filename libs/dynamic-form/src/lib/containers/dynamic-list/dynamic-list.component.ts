@@ -797,6 +797,7 @@ export class DynamicListComponent
           tab: this.getTabOfColumn(col.name),
           timezone: col.timezone,
         };
+        // console.log(cell);
         col.content.forEach((element: any) => {
           const obj = this.generateContentElement(element, col, cell, el);
 
