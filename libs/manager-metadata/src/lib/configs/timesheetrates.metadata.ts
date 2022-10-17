@@ -37,7 +37,6 @@ const formadd = () => [
       skill: '{skill.id}',
       company: '{company}',
       candidate_contact: '{candidate_contact}',
-      priced: true,
     }),
   new SkillModel().formElement().updateValues(['name']),
   new Form.input.element('rate', 'Rate', InputType.Number)
