@@ -22,6 +22,7 @@ const form = () => [
 const formadd = () => [
   new Form.input.element('timesheet', 'Timesheet', InputType.Text).hideField(),
   new Form.input.element('company', 'Company', InputType.Text).hideField(),
+  new Form.input.element('candidate_contact', 'Candidate Contact', InputType.Text).hideField(),
   new SkillWorkTypeModel()
     .formElement()
     .required()
@@ -34,7 +35,9 @@ const formadd = () => [
     .updateValues(['translations', 'uom', 'skill_rate_ranges'])
     .setQuery({
       skill: '{skill.id}',
-      company: '{company}'
+      company: '{company}',
+      candidate_contact: '{candidate_contact}',
+      priced: true,
     }),
   new SkillModel().formElement().updateValues(['name']),
   new Form.input.element('rate', 'Rate', InputType.Number)
