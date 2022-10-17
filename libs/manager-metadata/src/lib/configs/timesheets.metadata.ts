@@ -1132,7 +1132,8 @@ const form = [
             .setPrefilledFields({
               [Models.Skill]: '{position.id}',
               [Models.Timesheet]: '{id}',
-              company: '{company.id}'
+              company: '{company.id}',
+              candidate_contact: '{job_offer.candidate_contact.id}'
             })
         ]
       },
