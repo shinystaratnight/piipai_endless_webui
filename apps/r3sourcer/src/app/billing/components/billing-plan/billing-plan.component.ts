@@ -89,4 +89,8 @@ export class BillingPlanComponent implements OnChanges, OnDestroy {
   public openModal() {
     this.modalRef = this.modalService.open(this.modal, { backdrop: 'static' });
   }
+
+  editSubscription() { }
+
+  deleteSubscription() { }
 }
