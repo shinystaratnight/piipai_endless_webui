@@ -706,6 +706,7 @@ const form = [
                     key: 'invoice_rule.separation_rule',
                     default: 'one_invoce',
                     type: 'select',
+                    translateKey: 'separation_rule',
                     templateOptions: {
                       required: false,
                       label: 'Separation rule',
@@ -731,6 +732,7 @@ const form = [
                     key: 'invoice_rule.period',
                     default: 'weekly',
                     type: 'select',
+                    translateKey: 'period',
                     templateOptions: {
                       required: false,
                       label: 'Invoice Frequency',
@@ -886,6 +888,7 @@ const form = [
                     'invoice_rule.period_zero_reference_weekly',
                     'Invoice generation time'
                   )
+                    .setTranslateKey('period_zero_reference_weekly')
                     .addOptions(weekOptions)
                     .setShowIfRule([{ 'invoice_rule.period': 'weekly' }]),
 
@@ -893,12 +896,14 @@ const form = [
                     'invoice_rule.period_zero_reference_fortnightly',
                     'Invoice generation time'
                   )
+                    .setTranslateKey('period_zero_reference_fortnightly')
                     .addOptions(weekOptions)
                     .setShowIfRule([{ 'invoice_rule.period': 'fortnightly' }]),
 
                   {
                     type: 'datepicker',
                     key: 'invoice_rule.period_zero_reference_date',
+                    translateKey: 'period_zero_reference_date',
                     customDatepicker: {
                       dateFormat: 'DD',
                       datepickerFormat: '%d',

@@ -13,7 +13,7 @@
     class="btn btn-primary upload button-save mt-3"
     *ngIf="source && source.length < this.count"
   >
-    {{ loading ? 'Uploading' : 'Upload Images' }}
+    {{ loading ? 'uploading' : 'upload_images' | translate }}
 
     <webui-spinner *ngIf="loading"></webui-spinner>
 

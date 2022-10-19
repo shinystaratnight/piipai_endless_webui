@@ -3,7 +3,7 @@
     <div class="form-element" *ngIf="!config.many">
       <label class="form-element-label" [attr.for]="key" [class.required]="config.templateOptions?.required"
         *ngIf="label && config.templateOptions?.label">
-        {{ getTranslationKey(config.key, 'label') | translate: {"Default": config.templateOptions?.label} }}:
+        {{ getTranslationKey(config.translateKey || config.key, 'label') | translate: {"Default": config.templateOptions?.label} }}:
       </label>
 
       <webui-info *ngIf="config.templateOptions?.description"
@@ -345,7 +345,7 @@
     class="form-element-label"
     *ngIf="label && config.templateOptions?.label && !config.templateOptions?.hideLabel"
   >
-    {{ getTranslationKey(config.key, 'label') | translate: {"Default": config.templateOptions?.label} }}
+    {{ getTranslationKey(config.translateKey || config.key, 'label') | translate: {"Default": config.templateOptions?.label} }}
     <span *ngIf="!customTemplate">:</span>
   </label>
   <div class="form-element-content" [class.many]="config.many && results">

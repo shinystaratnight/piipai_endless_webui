@@ -1044,7 +1044,7 @@ const form = [
               label: 'Job Rate',
               type: 'list',
               text: 'Job Rate',
-              add_label: 'Add'
+              add_label: 'add'
             },
             translateKey: 'jobrates',
             collapsed: false,

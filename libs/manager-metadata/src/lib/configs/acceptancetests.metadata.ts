@@ -11,7 +11,7 @@ import { Endpoints } from '@webui/models';
 
 const list = function () {
   return {
-    list: new List.main.element('acceptancetest', 'Acceptance Test')
+    list: new List.main.element('acceptancetest', 'Acceptance Tests')
       .disableSearch()
       .setFilters([
         new Filter.select.element({
@@ -25,7 +25,7 @@ const list = function () {
         })
       ])
       .setColumns([
-        new List.column.element('__str__', 'Acceptance Test').setContent([
+        new List.column.element('__str__', 'Acceptance Tests').setContent([
           new List.static.element('__str__')
         ]),
 
@@ -67,7 +67,7 @@ const list = function () {
 const form = function () {
   return [
     new Form.row.element().setChildren([
-      new Form.group.element('General').setChildren([
+      new Form.group.element('General', 'general').setChildren([
         new Form.input.element('test_name', 'Test Name', InputType.Text)
           .required()
           .updateTemplate({ max: 255 }),
@@ -89,7 +89,7 @@ const form = function () {
         )
       ]),
 
-      new Form.group.element('Relationships').setChildren([
+      new Form.group.element('Relationships', 'relationships').setChildren([
         new Form.related.element(
           'acceptance_tests_industries',
           'Industries',
