@@ -4,7 +4,7 @@ const formFields = {
     read_only: false,
     templateOptions: {
       required: false,
-      listLabel: 'Start',
+      listLabel: 'start',
       inlineLabel: true,
       label: 'Evaluated at',
       type: 'datetime'
@@ -16,7 +16,7 @@ const formFields = {
     read_only: false,
     templateOptions: {
       required: false,
-      listLabel: 'End',
+      listLabel: 'end',
       inlineLabel: true,
       label: 'Evaluated at',
       type: 'datetime'
@@ -317,12 +317,12 @@ const formset = {
           },
           {
             type: 'datepicker',
-            listLabel: 'Start',
+            listLabel: 'start',
             field: 'reference_timesheet.shift_started_at'
           },
           {
             type: 'datepicker',
-            listLabel: 'End',
+            listLabel: 'end',
             field: 'reference_timesheet.shift_ended_at'
           },
         ],
@@ -491,12 +491,12 @@ const profile = {
           // },
           {
             type: 'datepicker',
-            listLabel: 'Start',
+            listLabel: 'start',
             field: 'reference_timesheet.shift_started_at'
           },
           {
             type: 'datepicker',
-            listLabel: 'End',
+            listLabel: 'end',
             field: 'reference_timesheet.shift_ended_at'
           },
         ],

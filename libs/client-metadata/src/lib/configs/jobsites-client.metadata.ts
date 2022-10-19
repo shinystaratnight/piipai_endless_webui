@@ -489,7 +489,7 @@ const form = [
           label: 'Jobs',
           type: 'list',
           text: 'Jobs',
-          add_label: 'Add +',
+          add_label: 'add',
         },
         prefilled: {
           customer_representative: '{primary_contact.id}',

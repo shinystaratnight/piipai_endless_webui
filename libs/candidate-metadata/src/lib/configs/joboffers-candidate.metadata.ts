@@ -97,7 +97,8 @@ const list = function () {
               })
               .setShowIfRule(['hide_buttons']),
 
-            new List.text.element('status.0')
+            new List.text.element('status')
+              .setArrayKey(0)
               .hasTranslate()
               .setInline()
               .setShowIfRule(['hide_buttons'])

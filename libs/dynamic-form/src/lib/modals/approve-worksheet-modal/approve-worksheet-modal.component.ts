@@ -362,9 +362,11 @@ export class ApproveWorksheetModalComponent extends Modal implements OnInit, OnD
     form.get('worktype')?.valueChanges
       .pipe(takeUntil(this.destroy$))
       .subscribe((worktype: DropdownOption) => {
-        const rate = worktype.getField('skill_rate_ranges')[0]?.default_rate;
+        if (worktype instanceof DropdownOption) {
+          const rate = worktype?.getField('skill_rate_ranges')[0]?.default_rate;
 
-        form.get('rate')?.patchValue(rate, { emitEvent: false });
+          form.get('rate')?.patchValue(rate, { emitEvent: false });
+        }
       });
 
     return form;

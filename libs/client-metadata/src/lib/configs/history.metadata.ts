@@ -74,7 +74,7 @@ const list = function () {
             new List.static.element('status').setHideValue(true),
 
             new List.static.element('supervisor_approved')
-              .setDisplay('Approved')
+              .setDisplay('approved')
               .changeColor('success', 'supervisor_approved')
               .setShowIfRule([{ status: 7 }]),
 
@@ -96,12 +96,12 @@ const list = function () {
               .setShowIfRule([{ status: 7 }, 'supervisor_signature.origin']),
 
             new List.static.element('status')
-              .setDisplay('Waiting submission')
+              .setDisplay('waiting_submission')
               .changeColor('danger', 'status')
               .setShowIfRule([{ status: 4 }]),
 
             new List.static.element('status')
-              .setDisplay('Adjustment in progress')
+              .setDisplay('adjustment_in_progress')
               .changeColor('primary', 'status')
               .setInfoText(
                 'Timesheet will be automatically approved in 4 hours'

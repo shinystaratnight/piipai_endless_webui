@@ -525,11 +525,11 @@ const job = {
               null: 'default'
             },
             label: {
-              0: 'Unfulfilled',
-              1: 'Fulfilled',
-              2: 'Pending',
-              3: 'Unfulfilled',
-              null: 'Unfulfilled'
+              0: 'unfulfilled',
+              1: 'fulfilled.label',
+              2: 'pending',
+              3: 'unfulfilled',
+              null: 'unfulfilled'
             },
             setColorForLabel: true,
             type: 'icon',

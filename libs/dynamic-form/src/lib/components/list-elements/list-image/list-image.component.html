@@ -16,10 +16,10 @@
 </ng-container>
 <ng-container *ngIf="config.label && !config.label.slice">
   <span *ngIf="!config.setColorForLabel">
-    {{ config.label[config.value] }}&nbsp; 2
+    {{ config.label[config.value] }}&nbsp;
   </span>
   <span *ngIf="config.setColorForLabel" [ngClass]="[iconClass]">
-    {{ config.label[config.value] }}&nbsp; 3
+    {{ config.label[config.value] | translate }}&nbsp;
   </span>
 </ng-container>
 

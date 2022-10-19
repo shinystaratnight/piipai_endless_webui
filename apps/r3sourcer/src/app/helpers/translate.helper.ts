@@ -9,7 +9,7 @@ export class MissingTranslationHelper implements MissingTranslationHandler {
   handle(params: MissingTranslationHandlerParams) {
     const { key, interpolateParams = {} as any } = params;
 
-    console.log(`"${key}": "${interpolateParams[this.defaultKey]}"`);
+    // console.log(`"${key}": "${interpolateParams[this.defaultKey]}"`);
 
     if (interpolateParams && this.defaultKey in interpolateParams) {
       return (interpolateParams as any)[this.defaultKey];

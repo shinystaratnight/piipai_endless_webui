@@ -7,6 +7,7 @@ export class BasicListElement {
   showIf?: Array<string | { [key: string]: any }>;
   inline?: boolean;
   values?: any;
+  translateKey?: string;
 
   constructor(field: string, type: string) {
     this.field = field;

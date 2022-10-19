@@ -22,4 +22,10 @@ export class SelectElement extends BasicListElement {
     return this;
   }
 
+  setTranslateKey(key: string) {
+    this.translateKey = key;
+
+    return this;
+  }
+
 }

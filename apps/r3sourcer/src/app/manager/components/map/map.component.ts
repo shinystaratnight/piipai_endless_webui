@@ -2,7 +2,7 @@ import { Component, OnInit, HostListener, ElementRef, ViewChild, OnDestroy } fro
 import { MapService, Marker } from './map.service';
 
 import { FilterEvent, FilterService } from '@webui/dynamic-form';
-import { MapInfoWindow, MapMarker } from '@angular/google-maps';
+import { MapInfoWindow } from '@angular/google-maps';
 
 @Component({
   selector: 'webui-map',
@@ -48,26 +48,31 @@ export class MapComponent implements OnInit, OnDestroy {
       current: {
         exist: false,
         name: 'Your current position',
+        translateKey: 'current_position',
         path: '/assets/img/location-yellow.svg',
       },
       client: {
         exist: false,
         name: 'Clients',
+        translateKey: 'client.label',
         path: '/assets/img/location-orange.svg',
       },
       jobsite: {
         exist: false,
         name: 'Jobsites',
+        translateKey: 'jobsite.label',
         path: '/assets/img/location-blue.svg',
       },
       client_hq: {
         exist: false,
         name: 'Primary Client addresses',
+        translateKey: 'primary_client.label',
         path: '/assets/img/location-red.svg',
       },
       jobsite_open: {
         exist: false,
         name: 'Jobsites with Booking on "Open" state',
+        translateKey: '',
         path: '/assets/img/location-bluesky.svg',
       },
     };

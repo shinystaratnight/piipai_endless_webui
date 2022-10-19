@@ -134,6 +134,7 @@ const list = function () {
 
         new List.column.element('status', 'Status').setContent([
           new List.select.element('status')
+            .setTranslateKey('timesheet_status')
             .setValues({
               0: 'New',
               1: 'Pre-Shift check pending',

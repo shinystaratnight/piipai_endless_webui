@@ -30,7 +30,7 @@ export class ListCheckboxComponent implements OnInit {
   }
 
   getTranslationKey(value: any) {
-    return `${this.config.key}.${value}`;
+    return `${this.config.translateKey || this.config.key}.${value}`;
   }
 
 };

@@ -48,7 +48,7 @@ const list = function () {
           {
             endpoint: `${Endpoints.Timesheet}{id}/approve/`,
             signature_endpoint: `${Endpoints.Timesheet}{id}/approve_by_signature/`,
-            label: 'Approve',
+            label: 'approve',
             selectionError: 'Please select at least one timesheet!',
             confirm: false,
             property: 'id',
@@ -69,10 +69,10 @@ const list = function () {
             }
           }
         ],
-        label: 'Actions',
-        agree_label: 'Agree',
-        button_label: 'Go',
-        decline_label: 'Decline'
+        label: 'actions',
+        agree_label: 'agree',
+        button_label: 'go',
+        decline_label: 'decline'
       })
       .setColumns([
         getPictureColumn(),
