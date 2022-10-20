@@ -1,7 +1,7 @@
 <ng-container *ngIf="hasMultipleNames">
   <ng-container *ngFor="let item of multipleNamesData; let last = last">
     <a href="#" class="label" [class.disabled]="!item.sort" (click)="onSort($event, item.name)">
-      {{item.label}}
+      {{item.label + '.label' | translate}}
       <ng-container *ngIf="item.icon$ | async as icon">
         <fa-icon *ngIf="item.sort" class="icon" [icon]="icon"></fa-icon>
       </ng-container>

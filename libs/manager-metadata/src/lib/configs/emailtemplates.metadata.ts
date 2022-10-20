@@ -33,7 +33,8 @@ const list = {
             action: 'createEmailTemplate',
             text: 'Create New',
             type: 'button',
-            field: 'id'
+            field: 'id',
+            translationKey: 'create_new.label'
           }
         ],
         name: 'actions',
@@ -212,6 +213,7 @@ const form = [
             type: 'button',
             color: 'primary',
             showIf: ['message_html_template'],
+            translationKey: 'preview.label',
             templateOptions: {
               action: 'showEmailPreview',
               text: 'Preview',

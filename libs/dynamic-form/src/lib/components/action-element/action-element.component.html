@@ -4,10 +4,10 @@
     [class.default]="!action.endpoint"
     [(ngModel)]="action"
   >
-    <option [value]="{}" disabled>Action</option>
-    <option *ngFor="let option of config.options" [ngValue]="option">{{
-      option.label
-    }}</option>
+    <option [value]="{}" disabled>{{ 'actions.label' | translate }}</option>
+    <option *ngFor="let option of config.options" [ngValue]="option">
+      {{ (option.translateKey || option.label) | translate }}
+    </option>
   </select>
   <button
     class="btn btn-primary mb-0"
@@ -17,7 +17,7 @@
     [attr.title]="getSmsTitle(action.endpoint)"
     [disabled]="isDisableSmsButton(action.endpoint)"
   >
-    {{ label }}
+    {{ label | translate }}
     <webui-spinner *ngIf="actionProcess"></webui-spinner>
   </button>
 
@@ -28,7 +28,7 @@
 
 <ng-template #content let-modal>
   <div class="modal-header">
-    <p>{{ action.message }}</p>
+    <p>{{ action.message | translate }}</p>
 
     <webui-close-button
       class="ms-auto"
@@ -37,14 +37,14 @@
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-secondary" (click)="modal.close(true)">
-      {{ config.agree_label }}
+      {{ config.agree_label | translate }}
     </button>
     <button
       type="button"
       class="btn btn-secondary"
       (click)="modal.close(false)"
     >
-      {{ config.decline_label }}
+      {{ config.decline_label | translate }}
     </button>
   </div>
 </ng-template>

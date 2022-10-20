@@ -232,7 +232,8 @@ const formset = {
             endpoint: '/hr/timesheets/{timesheet.id}',
             label: 'Timesheets',
             type: 'link',
-            field: 'timesheet'
+            field: 'timesheet',
+            translateKey: 'timesheet'
           }
         ],
         label: 'Timesheets',
@@ -247,6 +248,7 @@ const formset = {
             endpoint: '/core/invoicelines/{id}',
             icon: 'fa-pencil-alt',
             title: 'Edit',
+            translationKey: 'edit',
             text_color: '#f0ad4e',
             type: 'button',
             field: 'id'
@@ -256,13 +258,14 @@ const formset = {
             icon: 'fa-times-circle',
             title: 'Delete',
             text_color: '#f32700',
+            translationKey: 'delete',
             type: 'button',
             field: 'id'
           }
         ],
         label: 'Actions',
         title: null,
-        delim: ' '
+        delim: null
       }
     ],
     list: 'invoiceline',

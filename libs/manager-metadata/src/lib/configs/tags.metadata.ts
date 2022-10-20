@@ -107,7 +107,7 @@ const form = [
     send: false,
     visibleMode: true,
     prefilled: {
-      tag: '{id}'
+      tag: '{id.id}'
     },
     templateOptions: {
       values: ['__str__', 'name'],

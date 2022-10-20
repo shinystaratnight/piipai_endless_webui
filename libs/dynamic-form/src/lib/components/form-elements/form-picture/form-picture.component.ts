@@ -70,7 +70,6 @@ export class FormPictureComponent extends BasicElementComponent
   constructor(
     private fb: FormBuilder,
     public modalService: NgbModal,
-    private element: ElementRef,
     private cd: ChangeDetectorRef,
     private formService: FormService
   ) {

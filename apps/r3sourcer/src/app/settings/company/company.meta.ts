@@ -192,6 +192,7 @@ export const meta = [
         translateKey: 'invoice_rule',
         children: [
           new Form.select.element('invoice_rule.period', 'Period')
+            .setTranslateKey('period')
             .addOptions(periodOptions)
             .updateModel({ formData })
             .updateTemplate({ required: true }),
@@ -200,6 +201,7 @@ export const meta = [
             'invoice_rule.period_zero_reference_weekly',
             'Invoice generation time'
           )
+            .setTranslateKey('period_zero_reference_weekly')
             .addOptions(weekOptions)
             .updateModel({
               formData,
@@ -215,6 +217,7 @@ export const meta = [
             'invoice_rule.period_zero_reference_fortnightly',
             'Invoice generation time'
           )
+            .setTranslateKey('period_zero_reference_weekly')
             .addOptions(weekOptions)
             .updateModel({
               formData,
@@ -252,6 +255,7 @@ export const meta = [
             'invoice_rule.separation_rule',
             'Separation rule'
           )
+            .setTranslateKey('separation_rule')
             .addOptions(invoiceRuleOptions)
             .updateTemplate({ required: true }),
 

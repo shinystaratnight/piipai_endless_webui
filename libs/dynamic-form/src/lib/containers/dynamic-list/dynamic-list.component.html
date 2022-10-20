@@ -100,7 +100,10 @@
         </webui-list-buttons>
       </h2>
       <div
-        *ngIf="(showFilters && !(identifyDevice() || isMobileDevice)) || config.list.search_enabled"
+        *ngIf="
+          (showFilters && !(identifyDevice() || isMobileDevice)) ||
+          config.list.search_enabled
+        "
         class="datatable-header"
         [class.open-filters]="!filtersHidden && showFilters"
         [class.in-form]="inForm"
@@ -150,8 +153,14 @@
         [config]="config.list.actions"
         (event)="actionHandler($event)"
       >
-        <button *ngIf="hasButtonInAction" webuiSubscriptionRequired type="button" class="btn btn-primary mb-0" (click)="onCreateNewItem()">
-          {{'+ Add' | translate}}
+        <button
+          *ngIf="hasButtonInAction"
+          webuiSubscriptionRequired
+          type="button"
+          class="btn btn-primary mb-0"
+          (click)="onCreateNewItem()"
+        >
+          {{ '+ Add' | translate }}
         </button>
       </webui-action-element>
 
@@ -160,15 +169,7 @@
         *ngIf="identifyDevice() || isMobileDevice"
       >
         <button
-          class="
-            btn btn-link
-            text-secondary
-            d-flex
-            align-items-center
-            text-uppercase
-            fw-600
-            mb-0
-          "
+          class="btn btn-link text-secondary d-flex align-items-center text-uppercase fw-600 mb-0"
           (click)="toggleFilterBlock()"
           *ngIf="showFilters"
           style="font-size: 14px"
@@ -186,7 +187,12 @@
 
       <ng-container *ngIf="identifyDevice()">
         <div class="mobile-item" *ngFor="let row of body">
-          <ng-container *ngTemplateOutlet="getView(); context: { data: row, status: getElement('status', row.content) }"></ng-container>
+          <ng-container
+            *ngTemplateOutlet="
+              getView();
+              context: { data: row, status: getElement('status', row.content) }
+            "
+          ></ng-container>
         </div>
       </ng-container>
 
@@ -200,7 +206,9 @@
                 style="width: 2rem"
               >
                 <div class="text-center" *ngIf="config.list.actions || actions">
-                  <label class="all-label" for="all-checkbox">{{ 'all' | translate }}</label>
+                  <label class="all-label" for="all-checkbox">
+                    {{ 'all' | translate }}
+                  </label>
                   <input
                     id="all-checkbox"
                     type="checkbox"
@@ -275,7 +283,9 @@
                     *ngIf="hasEditLink"
                   >
                     <fa-icon icon="pencil-alt" class="icon"></fa-icon>
-                    Edit
+                    <span class="d-inline-block ms-1">
+                      {{ 'edit' | translate }}
+                    </span>
                   </a>
 
                   <fa-icon
@@ -320,17 +330,23 @@
                     </ng-container>
                     <!-- (cell.pop = pop) -->
                     <ng-template #actionsTemplate>
-                      <ng-container
-                        webuiListElement
-                        [config]="cell.content"
-                        (event)="eventHandler($event)"
-                        (buttonAction)="buttonHandler($event)"
-                      >
-                      </ng-container>
+                      <div class="d-flex flex-column">
+                        <ng-container
+                          webuiListElement
+                          [config]="cell.content"
+                          (event)="eventHandler($event)"
+                          (buttonAction)="buttonHandler($event)"
+                        >
+                        </ng-container>
+                      </div>
                     </ng-template>
 
-                    <ng-container *ngIf="cell.name === 'actions' && isMobileDevice">
-                      <ng-container *ngTemplateOutlet="actionsTemplate"></ng-container>
+                    <ng-container
+                      *ngIf="cell.name === 'actions' && isMobileDevice"
+                    >
+                      <ng-container
+                        *ngTemplateOutlet="actionsTemplate"
+                      ></ng-container>
                     </ng-container>
 
                     <button
@@ -403,10 +419,11 @@
                     <thead>
                       <tr>
                         <th *ngFor="let acell of row.additionalBody.content">
-                          <span>{{
-                            acell.name + '.label'
-                              | translate: { Default: acell.label }
-                          }}</span>
+                          <span>
+                            {{
+                              acell.name | translate: { Default: acell.label }
+                            }}
+                          </span>
                           <!-- <span>{{ acell.label }}</span> -->
                         </th>
                       </tr>
@@ -428,8 +445,11 @@
                                 !acell.hideLabel
                               "
                               class="description"
-                              >{{ field.label }}</span
                             >
+                              {{
+                                field.name + '.label' | translate: { Default: field.label }
+                              }}
+                            </span>
                             <span class="additional-data-content">
                               <ng-container
                                 *ngFor="let innerField of field.content"
@@ -451,14 +471,12 @@
                       class="additional-data-wrapper"
                       *ngFor="let acell of row.additionalBody.content"
                     >
-                      <!-- {{acell|json}} -->
-                      <span class="additional-data-label">{{
-                        acell.label + '.label'
-                          | translate: { Default: acell.label }
-                      }}</span>
-                      <!-- <span >{{
-                        acell.label
-                      }}</span> -->
+                      <span class="additional-data-label">
+                        {{
+                          acell.label + '.label'
+                            | translate: { Default: acell.label }
+                        }}
+                      </span>
                       <div
                         class="additional-data inline"
                         *ngFor="let field of acell.content"
@@ -490,8 +508,7 @@
         *ngIf="pageSize && inForm"
         class="pagination d-flex flex-wrap align-items-center justify-content-between"
       >
-
-        <div class="ml-2 logs" >
+        <div class="ml-2 logs">
           {{ data.count }}
           <!-- {{ config.list.pagination_label || config.list.label }} -->
           {{
@@ -510,7 +527,6 @@
           (pageChange)="pageChange()"
         >
         </ngb-pagination>
-
       </div>
     </div>
   </div>
@@ -554,10 +570,7 @@
           <webui-spinner *ngIf="saveProcess"></webui-spinner>
         </button>
       </webui-generic-form>
-      <google-map
-        *ngSwitchCase="'map'"
-        [zoom]="13"
-      >
+      <google-map *ngSwitchCase="'map'" [zoom]="13">
         <!-- <agm-marker
           [latitude]="modalInfo.latitude"
           [longitude]="modalInfo.longitude"
@@ -639,11 +652,7 @@
     </div>
     <div class="modal-body">
       <p style="text-indent: 12px">
-        Your will buy profile of this candidate on your own risk! R3sourcer will
-        not take any responsibility on accuracy of this profile and actual
-        availability of this candidate! Your saved CC will be charged
-        <strong>{{ modalInfo.amount }}</strong
-        >. Please confirm you understand this!
+        {{'buy_profile.message' | translate: { amount: modalInfo.amount } }}
       </p>
     </div>
     <div class="modal-footer justify-content-center py-2">
@@ -652,7 +661,7 @@
         class="btn big-btn btn-shadow btn-primary button-save"
         (click)="confirmCandidateBuy()"
       >
-        Confirm
+        {{'accept' | translate}}
         <webui-spinner *ngIf="saveProcess"></webui-spinner>
       </button>
     </div>
@@ -663,7 +672,7 @@
   <div class="modal-content-wrapper">
     <div class="modal-header-wrapper">
       <div class="modal-header">
-        <h5 class="modal-title">Send message</h5>
+        <h5 class="modal-title">{{'send_message'|translate}}</h5>
         <webui-close-button
           class="close-button ms-auto"
           (click)="modal.dismiss()"
@@ -730,11 +739,7 @@
     </agm-marker>
   </agm-map> -->
 
-  <google-map
-    [zoom]="13"
-    [center]="modalInfo.center"
-    style="margin-top: 36px"
-  >
+  <google-map [zoom]="13" [center]="modalInfo.center" style="margin-top: 36px">
     <map-marker
       *ngFor="let marker of modalInfo.markers"
       [position]="marker.position"
@@ -773,11 +778,7 @@
       [longitude]="modalInfo.longitude"
     ></agm-marker>
   </google-map> -->
-  <google-map
-    [zoom]="13"
-    [center]="modalInfo"
-    style="margin-top: 36px"
-  >
+  <google-map [zoom]="13" [center]="modalInfo" style="margin-top: 36px">
     <map-marker [position]="modalInfo"></map-marker>
   </google-map>
 </ng-template>
@@ -1092,7 +1093,9 @@
     </div>
     <div class="button-wrapper">
       <ng-container
-        *ngFor="let field of getElement('approve', data.content).content.slice(1, 2)"
+        *ngFor="
+          let field of getElement('approve', data.content).content.slice(1, 2)
+        "
         webuiListElement
         [config]="inverseButton(field)"
         (event)="eventHandler($event)"

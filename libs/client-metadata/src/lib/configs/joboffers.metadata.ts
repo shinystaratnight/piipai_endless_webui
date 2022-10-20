@@ -165,7 +165,7 @@ const formset = {
         required: false,
         label: 'Will send',
         type: 'datetime',
-        listLabel: 'Will send',
+        listLabel: 'will_send',
       },
       type: 'datepicker',
     },
@@ -173,7 +173,7 @@ const formset = {
       key: 'credit_approved',
       type: 'datepicker',
       templateOptions: {
-        listLabel: 'Was sent',
+        listLabel: 'was_sent',
         type: 'datetime',
       },
     },

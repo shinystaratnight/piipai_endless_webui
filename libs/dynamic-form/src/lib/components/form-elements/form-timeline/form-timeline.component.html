@@ -22,7 +22,7 @@
   *ngIf="selectArray && currentState.value && this.dropdown"
   class="timeline timeline-select-wrapper"
 >
-  {{'filter.status' | translate}}:
+  {{ 'filter.status' | translate }}:
 
   <select
     class="timeline-element badge badge-outline timeline-select"
@@ -123,8 +123,9 @@
                     (click)="
                       fillinTest($event, test.acceptance_test.id, modal.close)
                     "
-                    >Fill in</a
                   >
+                    Fill in
+                  </a>
                 </td>
               </tr>
             </table>
@@ -142,9 +143,9 @@
             Update
           </button>
 
-          <span *ngIf="modalData.state.total_score"
-            >Total Score: {{ modalData.state.total_score }}</span
-          >
+          <span *ngIf="modalData.state.total_score">
+            Total Score: {{ modalData.state.total_score }}
+          </span>
         </div>
       </ng-container>
 
@@ -162,7 +163,7 @@
           (errorForm)="formError()"
         >
           <button type="submit" class="btn btn-primary">
-            {{'save' | translate}}
+            {{ 'save' | translate }}
             <webui-spinner *ngIf="saveProcess"></webui-spinner>
           </button>
         </webui-generic-form>
@@ -225,7 +226,9 @@
       {{ state.name_before_activation }}
     </span>
 
-    <span class="state-progress">{{ calculateProgress(state) }}</span>
+    <span *ngIf="calculateProgress(state)" class="state-progress">
+      {{ calculateProgress(state) }}
+    </span>
 
     <webui-spinner *ngIf="state.saveProcess" [sm]="true"></webui-spinner>
   </div>
@@ -262,8 +265,9 @@
           class="text-primary"
           href="#"
           (click)="editContact($event)"
-          >Edit contact</a
         >
+          Edit contact
+        </a>
       </li>
     </ul>
   </div>

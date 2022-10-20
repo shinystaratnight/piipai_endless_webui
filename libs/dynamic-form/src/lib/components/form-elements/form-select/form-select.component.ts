@@ -64,7 +64,7 @@ export class FormSelectComponent
 
   public ngOnInit() {
     this.addControl(this.config, this.fb, this.config.templateOptions.required);
-    this.translateKey = this.config.translateKey || this.key;
+    this.translateKey = this.config.translateKey || this.config.key;
     this.options = this.config.templateOptions.options.slice();
 
     this.checkModeProperty();

@@ -60,6 +60,7 @@ const formset = {
             endpoint: `${Endpoints.ContactAddresses}{id}`,
             icon: 'fa-pencil-alt',
             title: 'Edit',
+            translationKey: 'edit',
             text_color: '#f0ad4e',
             type: 'button',
             field: 'id'
@@ -68,6 +69,7 @@ const formset = {
             action: 'delete',
             icon: 'fa-times-circle',
             title: 'Delete',
+            translationKey: 'delete',
             text_color: '#f32700',
             type: 'button',
             field: 'id'

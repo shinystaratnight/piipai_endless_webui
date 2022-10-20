@@ -75,6 +75,7 @@ const list = {
             text: 'Buy Profile',
             type: 'button',
             color: 'success',
+            translationKey: 'buy_profile.label',
             label: 'Approve',
             endpoint: `${Endpoints.CandidateContact}{id}/buy/`,
             field: 'id',
@@ -263,11 +264,13 @@ const list = {
     tabs: [
       {
         label: 'Additional Info',
+        name: 'additional_information',
         is_collapsed: true,
         fields: ['nationality', 'contact.gender', 'transportation_to_work']
       },
       {
         label: 'Physical Parameters',
+        name: 'group.physical_parameters',
         is_collapsed: true,
         fields: ['height', 'weight', 'bmi']
       },
@@ -275,6 +278,7 @@ const list = {
         label: 'Scores',
         is_collapsed: true,
         hideLabel: true,
+        name: 'scores',
         width: 180,
         fields: [
           'candidate_scores.recruitment_score',
@@ -286,6 +290,7 @@ const list = {
       },
       {
         label: 'Tags',
+        name: 'tabs.tags.label',
         is_collapsed: true,
         fields: ['tag_list']
       }
@@ -444,6 +449,7 @@ const form = [
                     templateOptions: {
                       action: 'buyProfile',
                       text: 'Buy Profile',
+                      translationKey: 'buy_profile.label',
                       type: 'button',
                       small: true,
                       p: true
@@ -515,7 +521,7 @@ const form = [
                       required: false,
                       label: 'Reliability',
                       type: 'score',
-                      danger: 'No rating'
+                      danger: 'no_rating'
                     },
                     read_only: true
                   },
@@ -527,7 +533,7 @@ const form = [
                       required: false,
                       label: 'Loyalty',
                       type: 'score',
-                      danger: 'No rating'
+                      danger: 'no_rating'
                     },
                     read_only: true
                   }
@@ -547,7 +553,7 @@ const form = [
                       required: false,
                       label: 'Average test',
                       type: 'score',
-                      danger: 'No rating'
+                      danger: 'no_rating'
                     },
                     read_only: true
                   },
@@ -559,7 +565,7 @@ const form = [
                       required: false,
                       label: 'Client feedback',
                       type: 'score',
-                      danger: 'No rating'
+                      danger: 'no_rating'
                     },
                     read_only: true
                   },
@@ -571,7 +577,7 @@ const form = [
                       required: false,
                       label: 'Average skill',
                       type: 'score',
-                      danger: 'No rating'
+                      danger: 'no_rating'
                     },
                     read_only: true
                   }

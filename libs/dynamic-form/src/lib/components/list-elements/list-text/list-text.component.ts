@@ -53,15 +53,19 @@ export class ListTextComponent implements OnInit, OnDestroy {
       } else {
         this.value = this.config.value;
         if (Array.isArray(this.value)) {
-          this.arrayValue = true;
+          if (typeof this.config.arrayKey === 'number') {
+            this.value = this.value[this.config.arrayKey];
+          } else {
+            this.arrayValue = true;
 
-          if (this.config.param) {
-            this.value.forEach((el) => {
-              const obj = { value: '' };
-              getValueOfData(el, this.config.param, obj);
+            if (this.config.param) {
+              this.value.forEach((el) => {
+                const obj = { value: '' };
+                getValueOfData(el, this.config.param, obj);
 
-              el.__str__ = obj.value || el.__str__;
-            });
+                el.__str__ = obj.value || el.__str__;
+              });
+            }
           }
         }
       }
@@ -79,7 +83,7 @@ export class ListTextComponent implements OnInit, OnDestroy {
     this.customizeStatic(this.config.value);
     this.cssClasses = generateCssStyles(this.config.styles, this.stylePrefix);
     this.translationKey = getTranslationKey(
-      `${this.config.key}.${this.config.name}`,
+      `${this.config.key}`,
       typeof this.value === 'number'
         ? this.value.toString()
         : this.config.label === 'Date'

@@ -162,6 +162,10 @@ export class FormInfoComponent implements OnInit, OnDestroy {
     this.subscriptions.forEach((s) => s && s.unsubscribe());
   }
 
+  public availabelLabel(): string {
+    return this.available ? 'available.label' : 'unavailable.label';
+  }
+
   public isCandidatePage(): boolean {
     if (this.config.value && this.config.value instanceof Object) {
       return 'average_score' in this.config.value;

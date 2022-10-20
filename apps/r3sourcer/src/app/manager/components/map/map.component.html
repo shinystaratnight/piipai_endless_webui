@@ -37,7 +37,7 @@
   <ng-container *ngFor="let type of types; trackBy: trackByFn">
     <div *ngIf="icons[type].exist" class="item">
       <img [src]="icons[type].path" />
-      {{ icons[type].name }}
+      {{ icons[type].translateKey | translate }}
     </div>
   </ng-container>
 </div>

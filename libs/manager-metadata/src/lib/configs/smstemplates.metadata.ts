@@ -48,6 +48,7 @@ const list = {
             action: 'createSmsTemplate',
             text: 'Create New',
             type: 'button',
+            translationKey: 'create_new.label',
             field: 'id'
           }
         ],

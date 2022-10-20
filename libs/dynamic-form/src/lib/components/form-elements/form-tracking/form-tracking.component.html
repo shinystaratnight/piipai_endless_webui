@@ -1,7 +1,7 @@
 <div class="form-group">
   <div class="form-element">
     <label class="form-element-label">
-      {{ config.templateOptions.label }}
+      {{ label | translate }}
     </label>
     <div class="d-flex flex-column align-items-start">
       <div class="map-preview"></div>
@@ -11,7 +11,7 @@
         class="btn btn-primary mt-3"
         (click)="showTracking()"
       >
-        Show tracking
+        {{ buttonLabel | translate }}
       </button>
     </div>
   </div>

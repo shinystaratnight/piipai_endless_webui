@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 import { GenericFormService } from '../../../services';
@@ -10,14 +10,25 @@ import { TrackingModalComponent } from '../../../modals';
   templateUrl: './form-tracking.component.html',
   styleUrls: ['./form-tracking.component.scss'],
 })
-export class FormTrackingComponent implements OnDestroy {
+export class FormTrackingComponent implements OnInit, OnDestroy {
   public config: any;
   public modalRef!: NgbModalRef;
+  label = '';
+  buttonLabel = '';
 
   constructor(
     private genericFormService: GenericFormService,
     private modalService: NgbModal
   ) {}
+
+  ngOnInit(): void {
+    const { translateKey } = this.config;
+    const label = this.config.templateOptions.label;
+
+
+    this.label = translateKey ? translateKey + '.label' : label;
+    this.buttonLabel = translateKey + '.show';
+  }
 
   public ngOnDestroy() {
     if (this.modalRef) {

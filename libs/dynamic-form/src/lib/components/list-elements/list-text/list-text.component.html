@@ -6,7 +6,7 @@
     config.listLabel
   "
 >
-  {{ config.listLabel || config.templateOptions.listLabel }}:
+  {{ (config.listLabel || config.templateOptions.listLabel) | translate }}:
 </label>
 
 <ng-container *ngIf="!arrayValue && !config.hideValue && !config.score">
@@ -23,7 +23,7 @@
     [class.text-description]="config.muted"
   >
     <span [ngClass]="{ 'label me-1': length > 1 }" *ngIf="config.label">
-      {{ translationKey | translate: { Default: config.label } }}:
+      {{ config.label | translate }}:
     </span>
     <span
       class="content"
@@ -53,7 +53,7 @@
       {{ value }}
     </span>
     <span [ngClass]="[iconClass]" *ngIf="!iconView && iconClass">
-      {{ value }}
+      {{ value.toString() | translate }}
     </span>
     <fa-icon
       *ngIf="iconView && iconName"
@@ -87,7 +87,7 @@
     [class.description]="config.help"
     *ngIf="(value || value === 0) && config.help"
   >
-    {{ config.help }}
+    {{ config.help | translate }}
   </span>
 </ng-container>
 

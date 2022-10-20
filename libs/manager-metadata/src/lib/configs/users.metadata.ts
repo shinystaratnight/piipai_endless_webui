@@ -65,6 +65,7 @@ const list = {
             label: 'Login as',
             text: 'Login',
             redirect: '/',
+            translationKey: 'login.login'
           },
         ],
         name: 'login_as',
@@ -249,13 +250,11 @@ const form = [
           {
             type: 'button',
             color: 'primary',
+            translationKey: 'send',
             templateOptions: {
               action: 'autoGenerate',
               text: 'Send',
               type: 'button',
-              small: true,
-              icon: 'envelope',
-              p: true,
             },
           },
         ],
@@ -269,6 +268,7 @@ const form = [
       type: 'list',
       text: 'Global Permissions',
     },
+    translateKey: 'permissions',
     collapsed: false,
     prefilled: {
       user: '{id}',

@@ -114,7 +114,7 @@ const formadd = () => [
           all: true
         })
     ]),
-    new Form.group.element('Skill Rate').setChildren([
+    new Form.group.element('Skill Rate', 'skill_rate').setChildren([
       new Form.input.element(
         'lower_rate_limit',
         'Lower Rate Limit',
@@ -133,7 +133,7 @@ const formadd = () => [
         .setNumberOptions(0.01, 0)
         .setFormatOfValue('{currency}{field}')
     ]),
-    new Form.group.element('Price List Rate').setChildren([
+    new Form.group.element('Price List Rate', 'price_list_rate').setChildren([
       new Form.input.element(
         'price_list_lower_rate_limit',
         'Lower Rate Limit',

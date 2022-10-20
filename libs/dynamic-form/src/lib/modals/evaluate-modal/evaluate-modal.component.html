@@ -15,9 +15,9 @@
           [src]="config.label.picture"
         />
 
-        <span *ngIf="!config.label.picture" class="contact-avatar avatar">{{
-          config.label.contactAvatar
-        }}</span>
+        <span *ngIf="!config.label.picture" class="contact-avatar avatar">
+          {{ config.label.contactAvatar }}
+        </span>
 
         {{ config.label.name }}
       </ng-container>
@@ -61,7 +61,7 @@
       </ng-container>
 
       <p class="evaluate-label">{{ config.label.name }}</p>
-      <hr width="100" />
+      <hr class="ms-auto me-auto" width="100" />
 
       <ngb-rating [max]="5" min="1" [(ngModel)]="config.data['evaluation_score']">
         <ng-template let-fill="fill" let-index="index">
