@@ -58,15 +58,15 @@ export function getTimesColumn() {
     .setSort(true, 'shift_started_at')
     .setContent([
       new List.static.element('shift.date')
-        .setLabel('Shift date')
+        .setLabel('shift_date.label')
         .setDisplay('{shift.date.__str__}'),
 
       new List.static.element('shift_started_at')
-        .setLabel('Shift start/end')
+        .setLabel('shift_start_end')
         .setDisplay('{shift_started_at__time} - {shift_ended_at__time}'),
 
       new List.static.element('break_started_at')
-        .setLabel('Break start/end')
+        .setLabel('mobileTimes.break_started_at.label')
         .setDisplay('{break_started_at__time} - {break_ended_at__time}')
     ]);
 }

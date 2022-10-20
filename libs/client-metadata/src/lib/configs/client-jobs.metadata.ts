@@ -101,6 +101,7 @@ const list = {
             icon: 'fa-times',
             action: 'editForm',
             type: 'button',
+            translationKey: 'cancel_shift_dates',
             text: 'Cancel Shift Dates'
           },
           {
@@ -109,6 +110,7 @@ const list = {
             icon: 'fa-sign-in-alt',
             action: 'fillin',
             type: 'button',
+            translationKey: 'fill_in',
             text: 'Fill-in'
           },
           {
@@ -122,6 +124,7 @@ const list = {
             icon: 'fa-sign-in-alt',
             action: 'editForm',
             type: 'button',
+            translationKey: 'extend',
             text: 'Extend'
           }
         ],
@@ -740,6 +743,7 @@ const jobsite_client = {
             icon: 'fa-sign-in-alt',
             text: 'Fill in',
             type: 'button',
+            translationKey: 'fill_in.label',
             field: 'id'
           },
           {
@@ -753,6 +757,7 @@ const jobsite_client = {
             icon: 'fa-sign-in-alt',
             action: 'editForm',
             type: 'button',
+            translationKey: 'extend',
             text: 'Extend'
           }
         ],

@@ -23,7 +23,7 @@
     [class.text-description]="config.muted"
   >
     <span [ngClass]="{ 'label me-1': length > 1 }" *ngIf="config.label">
-      {{ translationKey | translate: { Default: config.label } }}:
+      {{ config.label | translate }}:
     </span>
     <span
       class="content"

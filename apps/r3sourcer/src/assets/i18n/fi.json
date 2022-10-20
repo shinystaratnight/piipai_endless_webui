@@ -1072,5 +1072,6 @@
     "adjustment_in_progress": "",
     "candidate": "",
     "will_send": "",
-    "was_sent": ""
+    "was_sent": "",
+    "cancel_shift_dates": ""
 }

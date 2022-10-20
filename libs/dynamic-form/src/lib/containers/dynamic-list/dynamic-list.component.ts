@@ -1755,7 +1755,7 @@ export class DynamicListComponent
       if (result.status === Status.Success) {
         this.refreshList();
       }
-    });
+    }).catch(() => {});
   }
 
   public evaluate(e: any, data?: any, refresh = true) {
