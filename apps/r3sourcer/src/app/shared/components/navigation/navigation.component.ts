@@ -31,6 +31,7 @@ import {
 } from '@webui/utilities';
 import { Time } from '@webui/time';
 import { Language, Role, User } from '@webui/models';
+import { Icon, IconSize } from '@webui/icon';
 
 @Component({
   selector: 'webui-navigation',
@@ -76,6 +77,8 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
 
   language = new FormControl(Language.English);
   Language = Language;
+  Icon = Icon;
+  IconSize = IconSize;
 
   private modalRef!: NgbModalRef;
 
@@ -84,15 +87,7 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   get fullName(): string {
-    if (this.user?.currentRole.name === 'candidate') {
-      return this.user.data.contact.name;
-    }
-
-    return (this.user?.currentRole.__str__ as string)
-      .split(':')
-      .map((el) => el.trim())
-      .slice(0, 2)
-      .join(' - ');
+    return this.user?.data.contact.name || '';
   }
 
   get trialMessage() {
@@ -107,10 +102,12 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  get roleList() {
-    return this.user?.data.roles.filter(
-      (el) => el.id !== this.user?.currentRole.id
-    );
+  get roles() {
+    return this.user?.data.roles;
+  }
+
+  get currentRoleObject() {
+    return this.user?.currentRole;
   }
 
   public resizeSubscription!: Subscription;
@@ -125,6 +122,7 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
   ) {}
 
   public ngOnInit() {
+    console.log(this);
     this.getUserInformation();
 
     this.languageSubscription = this.language.valueChanges.subscribe((v) => {
@@ -181,7 +179,7 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
     this.candidate = role.__str__.includes('candidate');
   }
 
-  public hideUserBlock(e: any) {
+  public toggleUserBlock(e: any) {
     e.preventDefault();
     e.stopPropagation();
     this.isCollapsed = false;
@@ -253,6 +251,16 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
     event.stopPropagation();
 
     this.modalRef = this.modalService.open(this.rolesTemplate);
+  }
+
+  getRolePosition(role?: Role): string {
+    if (!this.user || !role) {
+      return '';
+    }
+
+    const position = role.company_contact_rel.company_contact.name.replace(this.user.data.contact.name, '');
+
+    return `${position.trim()}, ${this.user.data.contact.name}`
   }
 
   @HostListener('document:click', ['$event'])

@@ -7,6 +7,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 import { NavigationComponent } from './components/navigation/navigation.component';
 import { UiModule } from '@webui/ui';
+import { IconModule } from '@webui/icon';
 
 @NgModule({
   declarations: [NavigationComponent],
@@ -17,7 +18,8 @@ import { UiModule } from '@webui/ui';
     TranslateModule,
     FormsModule,
     FontAwesomeModule,
-    UiModule
+    UiModule,
+    IconModule
   ],
   exports: [NavigationComponent]
 })
