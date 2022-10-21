@@ -150,8 +150,10 @@ export class DatepickerService {
 
     if (type === DateRange.Month) {
       return {
-        start: start.weekday(weekStart),
-        end: end.weekday(weekEnd),
+        start: start.clone().weekday(weekStart),
+        end: end.clone().weekday(weekEnd),
+        monthEnd: end,
+        monthStart: start
       };
     }
 
