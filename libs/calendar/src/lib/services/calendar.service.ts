@@ -129,7 +129,7 @@ export class CalendarService {
     return config;
   }
 
-  getRangeDates(date: Moment, type: DateRange): { start: Moment; end: Moment } {
+  getRangeDates(date: Moment, type: DateRange): IDateRange {
     return this.datepickerService.getRangeDates(date, type);
   }
 

@@ -714,20 +714,29 @@ export class CalendarComponent implements OnInit, OnDestroy {
 
   private getDataForCandidate(
     rangeType: DateRange,
-    range: { start: Moment; end: Moment }
+    range: IDateRange
   ) {
     this._loading.next(true);
+    const { start, end, monthStart, monthEnd } = range;
+    let startPeriod = start;
+    let endPeriod = end;
+
+    if (rangeType === DateRange.Month) {
+      startPeriod = monthStart as Moment;
+      endPeriod = monthEnd as Moment;
+    }
+
     const requests = [
       this.getCandidateAvailability(
-        this.generateCandidateQuery(range.start, range.end)
+        this.generateCandidateQuery(startPeriod, endPeriod)
       ),
       this.getCandidateTimesheets(
-        this.generateCandidateTimesheetQuery(range.start, range.end)
+        this.generateCandidateTimesheetQuery(startPeriod, endPeriod)
       ),
-      this.getJobOffers(this.generateJobOffersQuery(range.start, range.end)),
+      this.getJobOffers(this.generateJobOffersQuery(startPeriod, endPeriod)),
       this.data.getHolidaysForPeriod(
-        range.start.format(filterDateFormat),
-        range.end.format(filterDateFormat)
+        startPeriod.format(filterDateFormat),
+        endPeriod.format(filterDateFormat)
       ),
     ];
 
@@ -755,15 +764,24 @@ export class CalendarComponent implements OnInit, OnDestroy {
       });
   }
 
-  private getData(rangeType: DateRange, range: { start: Moment; end: Moment }) {
+  private getData(rangeType: DateRange, range: IDateRange) {
     this._loading.next(true);
+    const { start, end, monthStart, monthEnd } = range;
+    let startPeriod = start;
+    let endPeriod = end;
+
+    if (rangeType === DateRange.Month) {
+      startPeriod = monthStart as Moment;
+      endPeriod = monthEnd as Moment;
+    }
+
     const requests = [
       this.getShifts(
-        this.generateQuery(range.start, range.end, this.client, this.candidate)
+        this.generateQuery(startPeriod, endPeriod, this.client, this.candidate)
       ),
       this.data.getHolidaysForPeriod(
-        range.start.format(filterDateFormat),
-        range.end.format(filterDateFormat)
+        startPeriod.format(filterDateFormat),
+        endPeriod.format(filterDateFormat)
       ),
     ];
 
@@ -856,9 +874,11 @@ export class CalendarComponent implements OnInit, OnDestroy {
 
       this.shifts.forEach((shift: any) => {
         this.timesheetCounter.forEach((counter) => {
-          counter.count += shift.candidates[this.shiftStatus[counter.type].key];
-          if (shift.is_fulfilled === 0) {
-            counter.count += 1;
+          if (counter.type !== 0) {
+            counter.count += shift.candidates[this.shiftStatus[counter.type].key];
+          }
+          if (shift.is_fulfilled === 0 && counter.type === 0) {
+            counter.count += (shift.shift.workers - shift.candidates[this.shiftStatus[Status.Fullfilled].key] - shift.candidates[this.shiftStatus[Status.Pending].key]);
           }
         });
       });
