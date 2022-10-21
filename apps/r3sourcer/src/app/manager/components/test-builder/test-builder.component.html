@@ -12,13 +12,22 @@
       >
         <div class="test__question">
           <div class="test__actions">
-            <button type="button" class="btn hov-opacity" (click)="deleteQuestion(question.id, questions, index)">
+            <button
+              type="button"
+              class="btn hov-opacity"
+              (click)="deleteQuestion(question.id, questions, index)"
+            >
               <fa-icon icon="trash" class="text-danger"></fa-icon>
-              Delete
+              {{ 'delete' | translate }}
             </button>
-            <button *ngIf="question.id" type="button" class="btn hov-opacity" (click)="editQuestion(question.config)">
+            <button
+              *ngIf="question.id"
+              type="button"
+              class="btn hov-opacity"
+              (click)="editQuestion(question.config)"
+            >
               <fa-icon icon="pencil-alt" class="text-warning"></fa-icon>
-              Edit
+              {{ 'edit' | translate }}
             </button>
           </div>
 
@@ -48,7 +57,13 @@
               *ngFor="let answer of answers[question.id]; let index = index"
             >
               <div class="test__actions flex gap-2">
-                <button type="button" class="btn" (click)="deleteAnswer(getId(answer), answers[question.id], index)">
+                <button
+                  type="button"
+                  class="btn"
+                  (click)="
+                    deleteAnswer(getId(answer), answers[question.id], index)
+                  "
+                >
                   <fa-icon
                     icon="trash"
                     class="text-danger hov-opacity"
@@ -66,17 +81,27 @@
 
               <webui-dynamic-form
                 [config]="answer"
-                (submitForm)="saveAnswer($event, index, question.id, !!getId(answer))"
+                (submitForm)="
+                  saveAnswer($event, index, question.id, !!getId(answer))
+                "
               ></webui-dynamic-form>
             </div>
 
             <button
               class="btn btn-secondary align-self-center my-2"
-              *ngIf="testData && checkCount(getType(question.config), answers[question.id].length)"
+              *ngIf="
+                testData &&
+                checkCount(
+                  getType(question.config),
+                  answers[question.id].length
+                )
+              "
               type="button"
-              (click)="addAnswer(true, answers[question.id], null, question.config)"
+              (click)="
+                addAnswer(true, answers[question.id], null, question.config)
+              "
             >
-              <fa-icon icon="plus"></fa-icon> Answer
+              <fa-icon icon="plus"></fa-icon> {{ 'answer.label' | translate }}
             </button>
           </div>
         </div>
@@ -89,7 +114,7 @@
       type="button"
       (click)="addQuestion(true)"
     >
-      <fa-icon icon="plus"></fa-icon> Question
+      <fa-icon icon="plus"></fa-icon> {{ 'question.label' | translate }}
     </button>
 
     <button
@@ -98,7 +123,7 @@
       *ngIf="testData"
       (click)="showPreview()"
     >
-      View
+      {{ 'preview.label' | translate }}
     </button>
   </div>
 </div>

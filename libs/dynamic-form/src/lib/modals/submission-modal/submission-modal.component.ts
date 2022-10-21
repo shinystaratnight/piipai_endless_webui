@@ -120,6 +120,7 @@ export class SubmissionModalComponent
       fields: ['__str__', 'id', 'translations', 'uom', 'skill_rate_ranges'],
       skill: this.timeSheet.position.id,
       company: this.timeSheet.company.id,
+      candidate_contact: this.timeSheet.contact_id,
       priced: true,
     };
   }
@@ -244,9 +245,11 @@ export class SubmissionModalComponent
     form.get('worktype')?.valueChanges
       .pipe(takeUntil(this.destroy$))
       .subscribe((worktype: DropdownOption) => {
-        const rate = worktype.getField('skill_rate_ranges')[0]?.default_rate;
+        if (worktype instanceof DropdownOption) {
+          const rate = worktype?.getField('skill_rate_ranges')[0]?.default_rate;
 
-        form.get('rate')?.patchValue(rate, { emitEvent: false });
+          form.get('rate')?.patchValue(rate, { emitEvent: false });
+        }
       });
 
     if (this.timeSheet.status === 7) {

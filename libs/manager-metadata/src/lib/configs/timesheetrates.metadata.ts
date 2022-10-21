@@ -22,6 +22,7 @@ const form = () => [
 const formadd = () => [
   new Form.input.element('timesheet', 'Timesheet', InputType.Text).hideField(),
   new Form.input.element('company', 'Company', InputType.Text).hideField(),
+  new Form.input.element('candidate_contact', 'Candidate Contact', InputType.Text).hideField(),
   new SkillWorkTypeModel()
     .formElement()
     .required()
@@ -34,7 +35,8 @@ const formadd = () => [
     .updateValues(['translations', 'uom', 'skill_rate_ranges'])
     .setQuery({
       skill: '{skill.id}',
-      company: '{company}'
+      company: '{company}',
+      candidate_contact: '{candidate_contact}',
     }),
   new SkillModel().formElement().updateValues(['name']),
   new Form.input.element('rate', 'Rate', InputType.Number)
@@ -63,9 +65,11 @@ const formset = () => ({
       new List.column.element('actions', 'Actions').setContent([
         new List.button.element('id', 'editForm', 'Edit')
           .setIcon('pencil-alt')
+          .setTranslationKey('edit')
           .setTextColor('#f0ad4e'),
         new List.button.element('id', 'delete', 'Delete')
           .setIcon('trash')
+          .setTranslationKey('delete')
           .setTextColor('#fa5c46')
       ])
     ])

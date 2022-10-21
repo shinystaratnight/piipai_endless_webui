@@ -13,7 +13,7 @@ export class ListLinkComponent implements OnInit {
   public config!: any;
   public href!: string | string[];
   public link!: boolean;
-  public value!: string | any[];
+  public value!: string;
   public last!: boolean;
   public arrayValue!: boolean;
   public smsDisabled!: boolean;
@@ -37,9 +37,9 @@ export class ListLinkComponent implements OnInit {
   public ngOnInit() {
     if (this.config.value && this.config.value instanceof Object && !Array.isArray(this.config.value)) {
       //tslint:disable-line
-      this.value = this.config.value && (this.config.text || this.config.value.__str__);
+      this.value = this.config.value && (this.config.translateKey || this.config.text || this.config.value.__str__);
     } else {
-      this.value = this.config.value && (this.config.text || this.config.value);
+      this.value = this.config.value && (this.config.translateKey || this.config.text || this.config.value);
       if (Array.isArray(this.config.value)) {
         this.arrayValue = true;
       }

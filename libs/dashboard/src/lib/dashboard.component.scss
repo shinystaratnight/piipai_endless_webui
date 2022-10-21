@@ -22,7 +22,7 @@
   flex-basis: 0;
 
   &:hover .widget-edit-btn {
-    display: flex;
+    visibility: visible;
   }
 
   &.move {
@@ -68,33 +68,25 @@
 }
 
 .widget-edit-btn {
+  display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  display: none;
   position: absolute;
   top: -7px;
   right: -7px;
-  padding: 5px;
+  width: 1.5rem;
+  height: 1.5rem;
   background-color: #fff;
   box-shadow: 0 0 2px rgba($gray, 0.2);
-  cursor: pointer;
-
-  &.active {
-    display: flex;
-  }
+  visibility: hidden;
+  color: rgba($gray, 0.2);
 
   &:hover,
   &.active {
+    cursor: pointer;
     box-shadow: 0 0 2px rgba($gray, 0.7);
-
-    fa-icon {
-      color: $gray;
-    }
-  }
-
-  fa-icon {
-    color: rgba($gray, 0.2);
+    color: $gray;
   }
 }
 

@@ -21,7 +21,7 @@ export interface Marker {
 
 const filters = [
   {
-    key: 'filterby',
+    key: 'filter_by',
     label: 'By Type',
     options: [
       {

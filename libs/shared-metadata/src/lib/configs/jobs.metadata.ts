@@ -140,6 +140,7 @@ const list = {
             icon: 'fa-times',
             action: 'editForm',
             type: 'button',
+            translationKey: 'cancel_shift_dates',
             text: 'Cancel Shift Dates'
           },
           {
@@ -148,6 +149,7 @@ const list = {
             icon: 'fa-sign-in-alt',
             action: 'fillin',
             type: 'button',
+            translationKey: 'fill_in',
             text: 'Fill-in'
           },
           {
@@ -161,6 +163,7 @@ const list = {
             icon: 'fa-sign-in-alt',
             action: 'editForm',
             type: 'button',
+            translationKey: 'extend',
             text: 'Extend'
           }
         ],
@@ -786,6 +789,7 @@ const jobsite_client = {
             icon: 'fa-sign-in-alt',
             text: 'Fill in',
             type: 'button',
+            translationKey: 'fill_in',
             field: 'id'
           },
           {
@@ -799,6 +803,7 @@ const jobsite_client = {
             icon: 'fa-sign-in-alt',
             action: 'editForm',
             type: 'button',
+            translationKey: 'extend',
             text: 'Extend'
           }
         ],
@@ -1044,7 +1049,7 @@ const form = [
               label: 'Job Rate',
               type: 'list',
               text: 'Job Rate',
-              add_label: 'Add'
+              add_label: 'add'
             },
             translateKey: 'jobrates',
             collapsed: false,
@@ -1092,10 +1097,9 @@ const form = [
       {
         endpoint: '/hr/joboffers/',
         templateOptions: {
-          // label: 'Job Offers',
           type: 'list',
           add_label: '+ Add job offer',
-          // text: 'Job Offers'
+          hasButtonInAction: true
         },
         visibleMode: true,
         translateKey: 'job_offers',

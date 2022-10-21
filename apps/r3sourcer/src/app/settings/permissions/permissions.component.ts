@@ -119,23 +119,23 @@ export class PermissionsComponent implements OnInit, OnDestroy {
       if (type === 'user') {
         this.service
           .revokePermissionsOfTheUser(this.targetId as string, [permission.id])
-          .subscribe((res: any) => (permission.active = false));
+          .subscribe(() => (permission.active = false));
       }
       if (type === 'group') {
         this.service
           .revokePermissionsOfTheGroup(this.targetId as string, [permission.id])
-          .subscribe((res: any) => (permission.active = false));
+          .subscribe(() => (permission.active = false));
       }
     } else {
       if (type === 'user') {
         this.service
           .addPermissionsOnTheUser(this.targetId as string, [permission.id])
-          .subscribe((res: any) => (permission.active = true));
+          .subscribe(() => (permission.active = true));
       }
       if (type === 'group') {
         this.service
           .addPermissionsOnTheGroup(this.targetId as string, [permission.id])
-          .subscribe((res: any) => (permission.active = true));
+          .subscribe(() => (permission.active = true));
       }
     }
   }
@@ -144,20 +144,20 @@ export class PermissionsComponent implements OnInit, OnDestroy {
     if (!group.active) {
       this.service
         .addUserOnTheGroup(group.id, this.targetId as string)
-        .subscribe((res: any) => {
+        .subscribe(() => {
           group.active = true;
         });
     } else if (group.active) {
       this.service
         .removeUserOnTheGroup(group.id, this.targetId as string)
-        .subscribe((res: any) => {
+        .subscribe(() => {
           group.active = false;
         });
     }
   }
 
   public addGroup(name: string): void {
-    this.service.createGroup(name).subscribe((res: any) => {
+    this.service.createGroup(name).subscribe(() => {
       this.name = '';
       this.getGroups();
     });
@@ -166,7 +166,7 @@ export class PermissionsComponent implements OnInit, OnDestroy {
   public removeGroup(group: Group, e: any): void {
     e.preventDefault();
     e.stopPropagation();
-    this.service.deleteGroup(group.id).subscribe((res: any) => {
+    this.service.deleteGroup(group.id).subscribe(() => {
       this.cashGroups.splice(this.groups.indexOf(group), 1);
       this.groups.splice(this.groups.indexOf(group), 1);
       if (this.targetId === group.id) {
@@ -267,7 +267,7 @@ export class PermissionsComponent implements OnInit, OnDestroy {
           this.targetId as string,
           this.permissionsList.map((el) => el.id)
         )
-        .subscribe((res: any) =>
+        .subscribe(() =>
           this.permissionsList.forEach((el) => (el.active = true))
         );
     }
@@ -277,7 +277,7 @@ export class PermissionsComponent implements OnInit, OnDestroy {
           this.targetId as string,
           this.permissionsList.map((el) => el.id)
         )
-        .subscribe((res: any) =>
+        .subscribe(() =>
           this.permissionsList.forEach((el) => (el.active = true))
         );
     }
@@ -290,7 +290,7 @@ export class PermissionsComponent implements OnInit, OnDestroy {
           this.targetId as string,
           this.permissionsList.map((el) => el.id)
         )
-        .subscribe((res: any) =>
+        .subscribe(() =>
           this.permissionsList.forEach((el) => (el.active = false))
         );
     }
@@ -300,7 +300,7 @@ export class PermissionsComponent implements OnInit, OnDestroy {
           this.targetId as string,
           this.permissionsList.map((el) => el.id)
         )
-        .subscribe((res: any) =>
+        .subscribe(() =>
           this.permissionsList.forEach((el) => (el.active = false))
         );
     }

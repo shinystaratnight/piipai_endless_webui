@@ -181,6 +181,7 @@ $image-size: 54px;
 
 .more {
   color: $primary;
+  text-transform: lowercase;
 
   @each $item in $themes {
     .#{$item}-theme & {

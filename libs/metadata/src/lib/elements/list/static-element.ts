@@ -10,6 +10,7 @@ export class StaticElement extends BasicListElement {
   info?: string;
   description?: string;
   translationKey?: string;
+  translated?: boolean;
 
   constructor(field: string) {
     super(field, Static);
@@ -48,6 +49,18 @@ export class StaticElement extends BasicListElement {
 
   setTranslationKey(key: string): StaticElement {
     this.translationKey = key;
+
+    return this;
+  }
+
+  setTranslateKey(key: string): StaticElement {
+    this.translateKey = key;
+
+    return this;
+  }
+
+  hasTranslate() {
+    this.translated = true;
 
     return this;
   }

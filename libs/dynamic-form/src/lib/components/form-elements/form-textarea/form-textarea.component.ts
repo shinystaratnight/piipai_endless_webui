@@ -16,6 +16,7 @@ import { Subscription } from 'rxjs';
 import { BasicElementComponent } from './../basic-element/basic-element.component';
 import { FormatString, getTranslationKey } from '@webui/utilities';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { InputService } from '../../../services/input.service';
 
 @Component({
   selector: 'webui-dynamic-form-textarea',
@@ -44,7 +45,7 @@ export class FormTextareaComponent extends BasicElementComponent implements OnIn
 
   private subscriptions: Subscription[];
 
-  constructor(private fb: FormBuilder, private cd: ChangeDetectorRef) {
+  constructor(private fb: FormBuilder, private cd: ChangeDetectorRef, private inputService: InputService) {
     super();
     this.subscriptions = [];
     this.editMode = true;
@@ -181,6 +182,10 @@ export class FormTextareaComponent extends BasicElementComponent implements OnIn
         }
       }
     }
+  }
+
+  onFocus(): void {
+    this.inputService.setInput(this.textarea.nativeElement);
   }
 
   public eventHandler(e: any) {

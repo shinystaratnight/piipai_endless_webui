@@ -55,6 +55,7 @@ export interface ITemplateOptions {
   iconParsed?: string;
   deleteList?: boolean;
   indent?: boolean;
+  hasButtonInAction?: boolean;
 }
 
 export interface Field {

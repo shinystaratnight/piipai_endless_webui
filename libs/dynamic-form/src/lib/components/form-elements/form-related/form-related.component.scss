@@ -132,3 +132,10 @@ input::placeholder {
   -moz-appearance: none;
   appearance: none;
 }
+
+.one-line {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  display: inline-block;
+  overflow: hidden;
+}

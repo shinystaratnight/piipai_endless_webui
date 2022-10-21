@@ -5,15 +5,7 @@
 .dropdown {
   display: inline-flex;
   gap: 0.5rem;
-
-  .value {
-    width: 100%;
-    max-width: 100px;
-  }
-
-  .icon {
-    margin-top: 5px;
-  }
+  align-items: center;
 }
 .delivered{
   width: 100%;

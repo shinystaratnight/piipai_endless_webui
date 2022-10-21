@@ -1,7 +1,9 @@
 <div class="form-group" [formGroup]="group">
   <div class="form-element">
     <label class="form-element-label mb-2" *ngIf="label" [attr.for]="key">
-      {{ getTranslationKey(config.key, 'label') | translate: { Default: label } }}:
+      {{
+        getTranslationKey(config.key, 'label') | translate: { Default: label }
+      }}:
     </label>
 
     <ng-container *ngIf="images.length">
@@ -12,8 +14,14 @@
       </ul>
     </ng-container>
 
-    <ngx-dropzone class="dropzone" (change)="onSelect($event)" accept="image/jpeg,image/jpg,image/png">
-      <ngx-dropzone-label>Drop images</ngx-dropzone-label>
+    <ngx-dropzone
+      class="dropzone"
+      (change)="onSelect($event)"
+      accept="image/jpeg,image/jpg,image/png"
+    >
+      <ngx-dropzone-label>
+        {{ 'drop_images' | translate }}
+      </ngx-dropzone-label>
 
       <ngx-dropzone-image-preview
         [file]="f"

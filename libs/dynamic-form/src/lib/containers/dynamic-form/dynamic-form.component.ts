@@ -13,10 +13,12 @@ import { SiteSettingsService } from '@webui/core';
 import { FormMode, FormService } from '../../services';
 import { convertPhoneNumber } from '../../helpers';
 import { Field } from '@webui/metadata';
+import { InputService } from '../../services/input.service';
 
 @Component({
   selector: 'webui-dynamic-form',
-  templateUrl: 'dynamic-form.component.html'
+  templateUrl: 'dynamic-form.component.html',
+  providers: [InputService]
 })
 export class DynamicFormComponent implements OnInit {
   @Input()
@@ -270,7 +272,7 @@ export class DynamicFormComponent implements OnInit {
           value = parseFloat(value);
         }
 
-        if (targetValue[0] === '^') {
+        if (typeof targetValue === 'string' && targetValue[0] === '^') {
           if (value && value.includes(targetValue.slice(1))) {
             approvedRules += 1;
           }

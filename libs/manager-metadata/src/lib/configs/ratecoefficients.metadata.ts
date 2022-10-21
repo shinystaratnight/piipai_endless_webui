@@ -226,6 +226,7 @@ const form = [
   {
     label: 'Overtime',
     type: 'row',
+    translateKey: 'overtime',
     children: [
       {
         type: 'column',
@@ -280,6 +281,7 @@ const form = [
   {
     label: 'Weekdays',
     type: 'row',
+    translateKey: 'weekends',
     children: [
       {
         type: 'column',
@@ -390,6 +392,7 @@ const form = [
   {
     label: 'Time',
     type: 'row',
+    translateKey: 'time',
     children: [
       {
         type: 'column',
@@ -444,6 +447,7 @@ const form = [
   {
     label: 'Manual',
     type: 'row',
+    translateKey: 'manual',
     children: [
       {
         type: 'column',
@@ -488,11 +492,12 @@ const form = [
   {
     endpoint: '/pricing/ratecoefficientmodifiers/',
     type: 'list',
+    translateKey: 'rate_coefficient_for_candidates',
     templateOptions: {
       label: 'Rate Coefficients for Candidates',
       type: 'list',
       text: 'Rate Coefficients for Candidates',
-      add_label: 'Add'
+      add_label: 'add'
     },
     collapsed: false,
     prefilled: {
@@ -508,11 +513,12 @@ const form = [
   {
     endpoint: '/pricing/ratecoefficientmodifiers/',
     type: 'list',
+    translateKey: 'rate_coefficient_for_companies',
     templateOptions: {
       label: 'Rate Coefficients for Companies',
       type: 'list',
       text: 'Rate Coefficients for Companies',
-      add_label: 'Add'
+      add_label: 'add'
     },
     collapsed: false,
     prefilled: {

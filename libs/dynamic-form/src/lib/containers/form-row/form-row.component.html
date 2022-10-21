@@ -1,6 +1,6 @@
 <ng-container *ngIf="config.showOnMobile ? isMobileDevice : true">
   <h6 *ngIf="config.label" class="card bg-primary p-2 text-white">
-    {{ config.label }}
+    {{ label | translate }}
   </h6>
   <div
     [ngClass]="[className]"

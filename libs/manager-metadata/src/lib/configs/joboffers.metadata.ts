@@ -425,6 +425,7 @@ const formset = {
                 endpoint: '/hr/joboffers/{id}/accept/',
                 icon: 'fa-check',
                 title: 'Accept',
+                translationKey: 'accept',
                 text_color: '#5cb85c',
                 type: 'button',
                 list: true,
@@ -438,6 +439,7 @@ const formset = {
                 endpoint: '/hr/joboffers/{id}/cancel/',
                 icon: 'fa-times',
                 title: 'Cancel',
+                translationKey: 'cancel',
                 text_color: '#f32700',
                 type: 'button',
                 list: true,
@@ -479,7 +481,7 @@ const formset = {
       options: [
         {
           endpoint: '/hr/joboffers/{id}/accept/',
-          label: 'Accept',
+          label: 'accept',
           selectionError: 'Please select at least one job offer!',
           required: true,
           multiple: true,
@@ -487,7 +489,7 @@ const formset = {
         },
         {
           endpoint: '/hr/joboffers/{id}/cancel/',
-          label: 'Cancel',
+          label: 'cancel',
           selectionError: 'Please select at least one job offer!',
           required: true,
           multiple: true,
@@ -495,7 +497,7 @@ const formset = {
         },
         {
           endpoint: '/hr/joboffers/',
-          label: 'Delete',
+          label: 'delete',
           method: ApiMethod.DELETE,
           selectionError: 'Please select at least one job offer!',
           required: true,

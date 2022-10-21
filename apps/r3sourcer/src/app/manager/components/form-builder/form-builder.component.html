@@ -5,15 +5,25 @@
     [id]="id"
     [showResponse]="false"
     (str)="eventForm($event)"
-    (event)="eventHandler($event)">
-    <button *ngIf="!id" type="submit" class="btn btn-primary">Save</button>
+    (event)="eventHandler($event)"
+  >
+    <button *ngIf="!id" type="submit" class="btn btn-primary">
+      {{ 'save' | translate }}
+    </button>
 
     <div class="mb-3">
-      Form link: <b>{{formLink}}</b>
+      <a target="_blank" [href]="formLink">{{ formLink }}</a>
     </div>
-    <div *ngIf="id" class="d-flex justify-content-between align-items-center mt-2">
-      <button type="button" class="btn btn-primary" (click)="showPreview()">Preview</button>
-      <button type="submit" class="btn btn-primary">Save</button>
+    <div
+      *ngIf="id"
+      class="d-flex justify-content-between align-items-center mt-2"
+    >
+      <button type="button" class="btn btn-primary" (click)="showPreview()">
+        {{ 'preview.label' | translate }}
+      </button>
+      <button type="submit" class="btn btn-primary">
+        {{ 'save' | translate }}
+      </button>
     </div>
   </webui-generic-form>
 </div>
@@ -22,15 +32,13 @@
   <div class="modal-content-wrapper">
     <div class="modal-header-wrapper">
       <div class="modal-header">
-        <h5 *ngIf="config" class="modal-title">{{config.title}}</h5>
+        <h5 *ngIf="config" class="modal-title">{{ config.title }}</h5>
 
         <webui-close-button class="ms-auto" (click)="d()"></webui-close-button>
       </div>
     </div>
     <div class="modal-body">
-      <webui-form-builder-form
-        [id]="id"
-        (formConfig)="setFormConfig($event)">
+      <webui-form-builder-form [id]="id" (formConfig)="setFormConfig($event)">
       </webui-form-builder-form>
     </div>
   </div>

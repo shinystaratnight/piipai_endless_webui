@@ -226,7 +226,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
 
   public ngOnInit() {
     if (this.endpoint === Endpoints.Timesheet) {
-      this.formName = 'Timesheets';
+      this.formName = 'timesheets.label';
     }
 
     if (this.changeMetadata) {

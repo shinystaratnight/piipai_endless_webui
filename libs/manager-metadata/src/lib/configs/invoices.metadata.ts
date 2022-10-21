@@ -115,7 +115,13 @@ const list = {
         content: [
           {
             field: 'period',
-            type: 'input'
+            type: 'select',
+            values: {
+              weekly: 'weekly',
+              fortnightly: 'fortnightly',
+              monthly: 'monthly',
+              daily: 'daily',
+            }
           }
         ],
         name: 'period',
@@ -127,7 +133,12 @@ const list = {
         content: [
           {
             field: 'separation_rule',
-            type: 'input'
+            type: 'select',
+            values: {
+              one_invoce: 'One invoce',
+              per_jobsite: 'Per jobsite',
+              per_candidate: 'Per candidate'
+            }
           }
         ],
         name: 'separation_rule',
@@ -159,7 +170,8 @@ const list = {
             icon: 'fa-eye',
             action: 'printInvoice',
             type: 'button',
-            text: 'Preview'
+            text: 'Preview',
+            translationKey: 'preview.label'
           }
         ],
         name: 'id',
@@ -179,6 +191,7 @@ const list = {
             action: 'emptyPost',
             type: 'button',
             text: 'Approve',
+            translationKey: 'approve',
             hidden: 'approved'
           },
           {
@@ -526,23 +539,55 @@ const form = [
           },
           {
             key: 'period',
-            type: 'input',
+            type: 'select',
             templateOptions: {
               required: false,
               label: 'Period',
               max: 255,
-              type: 'text'
+              type: 'text',
+              options: [
+                {
+                  value: 'weekly',
+                  label: 'Weekly'
+                },
+                {
+                  value: 'fortnightly',
+                  label: 'Fortnightly'
+                },
+                {
+                  value: 'monthly',
+                  label: 'Monthly'
+                },
+                {
+                  value: 'daily',
+                  label: 'Daily'
+                }
+              ]
             },
             read_only: false
           },
           {
             key: 'separation_rule',
-            type: 'input',
+            type: 'select',
             templateOptions: {
               required: false,
               label: 'Separation rule',
               max: 255,
-              type: 'text'
+              type: 'text',
+              options: [
+                {
+                  value: 'one_invoce',
+                  label: 'One invoce'
+                },
+                {
+                  value: 'per_jobsite',
+                  label: 'Per jobsite'
+                },
+                {
+                  value: 'per_candidate',
+                  label: 'Per candidate'
+                }
+              ]
             },
             read_only: false
           },
@@ -553,6 +598,7 @@ const form = [
   },
   {
     endpoint: Endpoints.InvoiceRule,
+    translateKey: 'invoiceline',
     templateOptions: {
       label: 'Invoice Lines',
       type: 'list',

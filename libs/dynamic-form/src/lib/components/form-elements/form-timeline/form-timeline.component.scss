@@ -55,40 +55,19 @@
 .timeline {
   padding-bottom: 25px;
   display: flex;
+  flex-wrap: wrap;
   gap: 4px 8px;
   margin-top: 1rem;
 
-  &-select {
-    background: #fff url(/assets/img/down-arrow.svg) no-repeat;
-    background-position: right 0.75rem center;
-    background-size: 8px 8px;
-
-    -ms-progress-appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    outline: none;
-
-    option {
-      background-color: #fff;
-    }
-
-    &-wrapper {
-      display: flex;
-      align-items: center;
-    }
-  }
-
   &-element {
     display: inline-flex;
-    flex-shrink: 0;
-    padding-top: 0;
-    padding-bottom: 0;
-    height: 30px;
+    align-items: center;
+    padding: 0 0.75rem 2px;
+    font-size: 12px;
+    line-height: 12px;
+    height: 24px;
 
     transition: 0.3s;
-
-    cursor: default;
 
     &-wrapper {
       display: inline-flex;
@@ -122,12 +101,13 @@
 
   option {
     color: rgba($gray, 0.8);
+    background-color: $white;
   }
 
   .active {
     border-color: $success;
     background-color: $success;
-    color: darken($success, 25%);
+    color: $white;
   }
 
   .allowed {

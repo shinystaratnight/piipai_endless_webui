@@ -9,6 +9,7 @@ export class TextElement extends BasicListElement {
   display?: string;
   translated?: boolean;
   currency?: boolean;
+  arrayKey?: number;
 
   constructor(field: string, label?: string) {
     super(field, Text);
@@ -30,6 +31,12 @@ export class TextElement extends BasicListElement {
 
   setFormatValue(format: string) {
     this.display = format;
+
+    return this;
+  }
+
+  setArrayKey(key: number) {
+    this.arrayKey = key;
 
     return this;
   }

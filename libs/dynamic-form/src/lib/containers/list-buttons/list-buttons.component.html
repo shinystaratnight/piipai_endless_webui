@@ -43,7 +43,7 @@
       <span class="button-icon"></span>
       <span>
         {{ 'add_new' | translate: {'Default': 'Add new'} }}
-        <span class="text-lowercase">{{ getTranslationKey(label.toLowerCase(), 'label') | translate: {'Default': label} }}</span>
+        <span class="text-lowercase">{{ getTranslationKey(label.toLowerCase().replace(' ', '_'), 'label') | translate: {'Default': label} }}</span>
       </span>
     </a>
     <button
@@ -54,7 +54,7 @@
       <span class="button-icon"></span>
       <span>
         {{ 'add_new' | translate: {'Default': 'Add new'} }}
-        <span class="text-lowercase">{{ getTranslationKey(label.toLowerCase(), 'label') | translate: {'Default': label} }}</span>
+        <span class="text-lowercase">{{ getTranslationKey(label.toLowerCase().replace(' ', '_'), 'label') | translate: {'Default': label} }}</span>
       </span>
     </button>
   </div>

@@ -273,6 +273,7 @@ const formset = {
             endpoint: '/hr/jobsites/{id}',
             icon: 'fa-pencil-alt',
             title: 'Edit',
+            translationKey: 'edit',
             text_color: '#f0ad4e',
             type: 'button',
             field: 'id',
@@ -488,7 +489,7 @@ const form = [
           label: 'Jobs',
           type: 'list',
           text: 'Jobs',
-          add_label: 'Add +',
+          add_label: 'add',
         },
         prefilled: {
           customer_representative: '{primary_contact.id}',

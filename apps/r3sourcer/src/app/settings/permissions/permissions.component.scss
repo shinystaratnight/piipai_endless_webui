@@ -21,11 +21,6 @@
       flex-grow: 1;
     }
 
-    &-title {
-      display: block;
-      margin: 0.5rem;
-    }
-
     &-add {
       margin: 0.5rem;
     }
@@ -36,36 +31,12 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border: 1px solid silver;
     border-radius: 0.2rem;
     padding: 0.5rem;
     margin-bottom: 0.5rem;
-    box-shadow: 2px 2px 0 0 rgba(black, 0.3);
     transition: all 0.5s;
     transition-delay: 0s;
     cursor: pointer;
-
-    &.selected {
-      box-shadow: none;
-      background-color: rgba($primary, 0.5);
-
-      @each $item in $themes {
-        .#{$item}-theme & {
-          background-color: rgba(map-get($theme-colors, $item), 0.5);
-        }
-      }
-    }
-
-    &.active {
-      box-shadow: none;
-      &::after {
-        position: absolute;
-        content: 'Active';
-        top: 0.5rem;
-        right: 0.5rem;
-        color: $success;
-      }
-    }
 
     &:last-child {
       margin-bottom: 0;
@@ -87,13 +58,10 @@
   }
 
   &-search {
+    display: flex;
+    align-items: center;
     position: relative;
     margin: 0.5rem;
-
-    &-icon {
-      position: absolute;
-      top: 0.6rem;
-      right: 0.5rem;
-    }
+    border-radius: 0.2rem;
   }
 }

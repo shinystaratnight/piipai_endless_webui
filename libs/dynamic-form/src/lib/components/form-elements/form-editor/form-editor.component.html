@@ -6,7 +6,7 @@
       [class.required]="config.templateOptions?.required"
       [attr.for]="key"
     >
-      {{ config.templateOptions?.label }}:
+      {{ config.key || '' | translate : { Default: config.templateOptions?.label } }}:
     </label>
 
     <quill-editor

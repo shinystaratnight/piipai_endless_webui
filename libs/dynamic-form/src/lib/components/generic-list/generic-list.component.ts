@@ -56,6 +56,7 @@ export class GenericListComponent implements OnInit, OnDestroy {
   @Input() listNameCache?: Record<string, any>;
   @Input() disableActions?: boolean;
   @Input() inlineFilters?: boolean;
+  @Input() hasButtonInAction?: boolean;
 
   @Output() checkedObjects: EventEmitter<any> = new EventEmitter();
   @Output() event: EventEmitter<any> = new EventEmitter();
@@ -470,6 +471,8 @@ export class GenericListComponent implements OnInit, OnDestroy {
       table.refresh = true;
       this.uploadAll();
     }
+
+    this.event.emit(e);
   }
 
   public action(type: string, table: any) {

@@ -149,6 +149,7 @@ class ApiModel {
 
 export class TimeSheet extends ApiModel {
   candidate: Contact;
+  contact_id: string;
   startedAt: string | null;
   endedAt: string | null;
   breakStartedAt: string | null;
@@ -169,6 +170,7 @@ export class TimeSheet extends ApiModel {
     super(data.endpoint || Endpoints.TimesheetCandidate, data.id);
 
     this.candidate = new Contact(data.job_offer.candidate_contact.contact);
+    this.contact_id = data.job_offer.candidate_contact.id;
     this.startedAt = data.shift_started_at;
     this.endedAt = data.shift_ended_at;
     this.breakEndedAt = data.break_ended_at;

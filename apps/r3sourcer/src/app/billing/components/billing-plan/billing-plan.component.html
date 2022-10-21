@@ -1,9 +1,23 @@
-<div class="subcription-details ">
-  <h5 class="mb-0 me-1">Subscription details</h5>
+<div class="subcription-details">
+  <div class="row">
+    <div class="col-7"><h5 class="me-1">Subscription details</h5></div>
+    <div class="col-1">
+      <button type="button" class="btn hov-opacity" (click)="editSubscription()">
+        <fa-icon icon="pencil-alt" class="text-success icon-16"></fa-icon>
+      </button>
+    </div>
+    <div class="col-1">
+      <button type="button" class="btn hov-opacity" (click)="deleteSubscription()">
+        <fa-icon icon="trash" class="text-danger icon-16"></fa-icon>
+      </button>
+    </div>
+  </div>
 
-  <button type="button"
+  <webui-billing-info [currentPlan]="currentPlan" [plans]="plans" [currency]="currency"></webui-billing-info>
+
+  <!-- <button type="button"
   class="btn btn-sm btn-primary action-button"
-  [disabled]="!cardExist">Save Card</button>
+  [disabled]="!cardExist">Save Card</button> -->
 </div>
 
 <button type="button" class="btn btn-primary subscribe-button"

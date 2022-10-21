@@ -7,8 +7,8 @@ const listColumns = {
     content: [
       {
         type: 'picture',
-        display: 'View document',
-        emptyValue: 'Not verify',
+        display: 'download',
+        emptyValue: 'not_verify',
         field: 'verification_evidence'
       }
     ],

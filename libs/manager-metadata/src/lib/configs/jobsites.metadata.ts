@@ -362,6 +362,7 @@ const form = [
               {
                 label: 'Primary Contact',
                 type: 'group',
+                translateKey: 'primary_contact',
                 children: [
                   {
                     list: false,
@@ -427,6 +428,7 @@ const form = [
               },
               {
                 label: 'Additional Info',
+                translateKey: 'additional_info',
                 type: 'group',
                 children: [
                   {
@@ -468,6 +470,7 @@ const form = [
               },
               {
                 label: 'Portfolio Manager',
+                translateKey: 'portfolio_manager',
                 type: 'group',
                 children: [
                   {

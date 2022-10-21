@@ -1,30 +1,95 @@
 <div class="permissions">
-  <ul ngbNav #nav="ngbNav" class="nav-pills" [(activeId)]="activeTab">
+  <ul ngbNav #nav="ngbNav" class="nav-pills ps-2 pe-2" [(activeId)]="activeTab">
     <li ngbNavItem="group">
-      <a ngbNavLink>Groups</a>
+      <a ngbNavLink>{{ 'tabs.groups' | translate }}</a>
       <ng-template ngbNavContent>
         <div class="permission-block-add row">
-          <input type="text" class="col-auto permission-input form-control me-2" [(ngModel)]="name">
+          <input
+            type="text"
+            class="col-auto permission-input form-control me-2 rounded"
+            [(ngModel)]="name"
+          />
           <div class="col">
-            <button type="button" class="btn bg-light" (click)="addGroup(name)">Add</button>
+            <button
+              type="button"
+              class="btn btn-primary"
+              (click)="addGroup(name)"
+            >
+              {{ 'add' | translate }}
+            </button>
           </div>
         </div>
         <div class="permission-wrapper">
-          <ng-container *ngTemplateOutlet="list; context: {title: 'Groups', list: groups, param: 'name', element: 'group', type: 'list'}"></ng-container>
+          <ng-container
+            *ngTemplateOutlet="
+              list;
+              context: {
+                title: 'tabs.groups' | translate,
+                list: groups,
+                param: 'name',
+                element: 'group',
+                type: 'list'
+              }
+            "
+          ></ng-container>
           <ng-container *ngIf="targetId">
-              <ng-container *ngTemplateOutlet="list; context: {title: 'Permissions', list: permissionsList, param: 'name', element: 'group', type: 'permission'}"></ng-container>
+            <ng-container
+              *ngTemplateOutlet="
+                list;
+                context: {
+                  title: 'tabs.permissions.label' | translate,
+                  list: permissionsList,
+                  param: 'name',
+                  element: 'group',
+                  type: 'permission'
+                }
+              "
+            ></ng-container>
           </ng-container>
         </div>
       </ng-template>
     </li>
     <li ngbNavItem="user">
-      <a ngbNavLink>Users</a>
+      <a ngbNavLink>{{ 'tabs.users' | translate }}</a>
       <ng-template ngbNavContent>
         <div class="permission-wrapper">
-          <ng-container *ngTemplateOutlet="list; context: {title: 'Users', list: users, param: 'name', element: 'user', type: 'list'}"></ng-container>
+          <ng-container
+            *ngTemplateOutlet="
+              list;
+              context: {
+                title: 'tabs.users' | translate,
+                list: users,
+                param: 'name',
+                element: 'user',
+                type: 'list'
+              }
+            "
+          ></ng-container>
           <ng-container *ngIf="targetId">
-            <ng-container *ngTemplateOutlet="list; context: {title: 'Permissions', list: permissionsList, param: 'name', element: 'user', type: 'permission'}"></ng-container>
-            <ng-container *ngTemplateOutlet="list; context: {title: 'Groups', list: userGroups, param: 'name', element: 'user', type: 'group'}"></ng-container>
+            <ng-container
+              *ngTemplateOutlet="
+                list;
+                context: {
+                  title: 'tabs.permissions.label' | translate,
+                  list: permissionsList,
+                  param: 'name',
+                  element: 'user',
+                  type: 'permission'
+                }
+              "
+            ></ng-container>
+            <ng-container
+              *ngTemplateOutlet="
+                list;
+                context: {
+                  title: 'tabs.groups' | translate,
+                  list: userGroups,
+                  param: 'name',
+                  element: 'user',
+                  type: 'group'
+                }
+              "
+            ></ng-container>
           </ng-container>
         </div>
       </ng-template>
@@ -34,34 +99,63 @@
 
 <div [ngbNavOutlet]="nav"></div>
 
-<ng-template #list let-t="title" let-l="list" let-p="param" let-a="actions" let-type="type" let-e="element">
+<ng-template
+  #list
+  let-t="title"
+  let-l="list"
+  let-p="param"
+  let-a="actions"
+  let-type="type"
+  let-e="element"
+>
   <div class="permission-block-wrapper">
-    <b class="permission-block-title">{{t}}:</b>
+    <h6 class="ms-2">{{ t }}:</h6>
     <div class="permission-search">
-      <input type="text"
+      <input
+        type="text"
         [(ngModel)]="search[type]"
-        class="form-control w-100 mb-2"
-        (keyup)="filter(search[type], type, l, e)">
-      <fa-icon [icon]="['fas', 'search']" class="permission-search-icon text-muted"></fa-icon>
+        class="form-control w-100 rounded p-2 pe-5"
+        (keyup)="filter(search[type], type, l, e)"
+      />
+      <fa-icon
+        [icon]="['fas', 'search']"
+        class="position-absolute end-0 me-3"
+      ></fa-icon>
     </div>
     <div class="permission-block">
-      <div class="permission-item"
-        [class.active]="item.active"
-        [class.selected]="item.id === targetId && type === 'list'"
+      <div
+        class="permission-item shadow-sm"
+        [class.shadow-none]="item.active"
+        [class.text-white]="item.id === targetId && type === 'list'"
+        [class.bg-primary]="item.id === targetId && type === 'list'"
+        [class.shadow-none]="item.id === targetId && type === 'list'"
         *ngFor="let item of l"
-        (click)="toggle(type, e, item)">
-          {{item[p]}}
-          <fa-icon
-            class="permission-icon text-danger"
-            *ngIf="e === 'group' && type === 'list'"
-            [icon]="['fas', 'trash']"
-            (click)="removeGroup(item, $event)">
-          </fa-icon>
-        </div>
+        (click)="toggle(type, e, item)"
+      >
+        {{ item[p] }}
+
+        <fa-icon
+          class="text-success position-absolute end-0 me-3"
+          [class.d-none]="!item.active"
+          icon="check"
+        ></fa-icon>
+
+        <fa-icon
+          class="permission-icon text-danger"
+          *ngIf="e === 'group' && type === 'list'"
+          [icon]="['fas', 'trash']"
+          (click)="removeGroup(item, $event)"
+        >
+        </fa-icon>
+      </div>
     </div>
     <div *ngIf="type === 'permission'" class="d-flex m-2 align-items-center">
-      <button class="btn btn-success me-2" (click)="selectAll(e)">Select All</button>
-      <button class="btn btn-danger" (click)="removeAll(e)">Remove All</button>
+      <button class="btn btn-success me-2" (click)="selectAll(e)">
+        {{ 'select_all' | translate }}
+      </button>
+      <button class="btn btn-danger" (click)="removeAll(e)">
+        {{ 'remove_all' | translate }}
+      </button>
     </div>
   </div>
 </ng-template>

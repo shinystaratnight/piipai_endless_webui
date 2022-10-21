@@ -69,7 +69,7 @@ const list = {
             param: 'job_offer__shift__date__job__jobsite__short_name'
           }
         ],
-        label: 'Client / Jobsite / Supervisor',
+        label: 'client / jobsite / supervisor',
         delim: null
       },
       {
@@ -90,10 +90,11 @@ const list = {
             field: 'job.id',
             color: 'primary',
             text: 'Job information',
-            type: 'link'
+            type: 'link',
+            translateKey: 'tabs.job_info.label'
           }
         ],
-        width: 230,
+        width: 270,
         name: 'position_/_candidate',
         title: null,
         label: 'Position / Candidate / Job',
@@ -149,6 +150,7 @@ const list = {
               null: 'minus-circle'
             },
             field: 'going_to_work_confirmation',
+            translateKey: 'pre_shift_check',
             type: 'icon',
             label: 'Pre-shift check'
           },
@@ -161,6 +163,7 @@ const list = {
             field: 'candidate_filled',
             type: 'icon',
             label: 'Candidate filled',
+            translateKey: 'candidate_filled',
             showIf: [
               {
                 candidate_filled: true
@@ -176,6 +179,7 @@ const list = {
             field: 'supervisor_approved',
             type: 'icon',
             label: 'Supervisor approved',
+            translateKey: 'supervisor_approved',
             showIf: [
               {
                 supervisor_approved: true
@@ -187,6 +191,7 @@ const list = {
             action: 'emptyPost',
             text: 'Confirm Check',
             type: 'button',
+            translationKey: 'confirm_check',
             field: 'id',
             showIf: [
               {
@@ -202,6 +207,7 @@ const list = {
                 resend_sms_candidate: true
               }
             ],
+            translationKey: 'send',
             action: 'emptyPost',
             type: 'button',
             text: 'Send'
@@ -216,6 +222,7 @@ const list = {
             ],
             action: 'emptyPost',
             type: 'button',
+            translationKey: 'send_supervisor',
             text: 'Send Supervisor'
           },
           {
@@ -228,6 +235,7 @@ const list = {
             ],
             action: 'editForm',
             type: 'button',
+            translationKey: 'fill',
             text: 'Fill'
           },
           {
@@ -240,6 +248,7 @@ const list = {
             ],
             action: 'editForm',
             type: 'button',
+            translationKey: 'approve',
             text: 'Approve'
           }
         ],
@@ -850,6 +859,7 @@ const form = [
         main: true,
         name: 'Main information',
         label: 'Main information',
+        translateKey: 'main_information',
         type: 'group',
         children: [
           {
@@ -969,6 +979,7 @@ const form = [
                     type: 'select',
                     key: 'status',
                     read_only: true,
+                    translateKey: 'timesheet_status',
                     templateOptions: {
                       label: 'Status',
                       options: [
@@ -1117,6 +1128,7 @@ const form = [
                 children: [
                   {
                     type: 'tracking',
+                    translateKey: 'tracking',
                     templateOptions: {
                       label: 'Tracking'
                     }
@@ -1125,19 +1137,21 @@ const form = [
               }
             ]
           },
-          new Form.list.element('Skill Activities', Endpoints.TimesheetRates)
+          new Form.list.element('Skill Activities', Endpoints.TimesheetRates, 'timesheetrates')
             .setQuery({
               timesheet: '{id}'
             })
             .setPrefilledFields({
               [Models.Skill]: '{position.id}',
               [Models.Timesheet]: '{id}',
-              company: '{company.id}'
+              company: '{company.id}',
+              candidate_contact: '{job_offer.candidate_contact.id}'
             })
         ]
       },
       {
         name: 'Additional information',
+        translateKey: 'additional_information',
         type: 'group',
         children: [
           {
