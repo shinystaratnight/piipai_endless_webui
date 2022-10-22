@@ -77,6 +77,7 @@ import { SettingsModule } from './settings/settings.module';
 import { MasterGuideModule } from './master-guide/master-guide.module';
 import { HttpLoaderFactory } from './translate.loader';
 import { MissingTranslationHelper } from './helpers/translate.helper';
+import { IconModule } from '@webui/icon';
 // import { GoogleMapsModule } from '@angular/google-maps';
 
 @NgModule({

@@ -13,6 +13,7 @@ export interface Role {
     },
     company_contact: {
       id: string;
+      name: string;
     }
   };
   name: RoleType;
