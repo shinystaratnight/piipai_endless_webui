@@ -8,14 +8,10 @@ $border-color: #d3deea;
 .header {
   position: fixed;
   top: 0;
-
   width: 100%;
   height: 72px;
-
   border-bottom: 1px solid #d3deea;
-
   background-color: $header-bg;
-
   z-index: 3;
 
   @include media-breakpoint-down('lg') {
@@ -34,13 +30,9 @@ $border-color: #d3deea;
   nav a {
     display: flex;
     align-items: center;
-
     width: 187px;
-
     padding: 5px 24px;
-
     white-space: nowrap;
-
     color: inherit;
     text-decoration: none;
 
@@ -68,7 +60,6 @@ $border-color: #d3deea;
 
     &-link {
       display: inline;
-
       padding: 0;
     }
 
@@ -77,242 +68,99 @@ $border-color: #d3deea;
     }
   }
 
-  .navigation {
+  .nav {
     display: flex;
     align-items: center;
 
-    &-list {
+    &__list {
       display: flex;
 
-      .icon-link {
-        display: none;
-      }
-
-      &-parent {
+      &--main {
         max-height: calc(100vh - 72px);
-
-        & > li > .icon {
-          display: none !important;
-        }
-
-        & > li > .navigation-link {
-          padding: 26px 25px;
-        }
-
-        & > li:not(:hover) > .navigation-link.active {
-          box-shadow: inset 0 -2px 0px 0px $primary;
-
-          @each $item in $themes {
-            .#{$item}-theme & {
-              box-shadow: inset 0 -2px 0px 0px map-get($theme-colors, $item);
-            }
-          }
-        }
 
         &.show {
           display: block;
-
           position: absolute;
           left: 0;
-
           max-width: 70vw;
           max-height: calc(100vh - 72px);
           overflow: auto;
-
-          background-color: $header-bg;
+          border-radius: 5px;
+          border: 1px solid $border-color;
+          background-color: $white;
           box-shadow: $nested-shadow;
-          z-index: 200;
+          z-index: 10;
+          box-sizing: content-box;
 
-          .extend {
-            display: block;
-
-            position: absolute;
-            top: calc(50% - 10px);
-            right: 9px;
-
-            font-size: 0.6rem;
-
-            color: $primary;
-
-            @each $item in $themes {
-              .#{$item}-theme & {
-                color: map-get($theme-colors, $item);
-              }
-            }
-          }
-
-          & > li {
-            & > .navigation-link {
-              padding: 10px 25px;
-            }
-          }
-
-          .navigation-item:hover > .navigation-list-nested {
+          .nav__item:hover > .nav__list--nested {
             display: none;
           }
 
-          .navigation-item.opened {
-            color: $primary;
-
-            @each $item in $themes {
-              .#{$item}-theme & {
-                color: map-get($theme-colors, $item);
-              }
-            }
-
-            fa-icon {
-              top: 1rem;
-            }
-
-            .navigation-list-nested fa-icon {
-              top: 11px;
-
-              @include media-breakpoint-down('md') {
-                top: 6px;
-              }
-            }
-          }
-
-          .navigation-item.opened > .navigation-list-nested {
+          .nav__item.opened > .nav__list--nested {
             position: relative;
             display: flex;
-
-            box-shadow: inset 0 0 4px 2px rgba($gray, 0.2);
-
-            z-index: 2;
+            box-shadow: none;
+            border: none;
+            border-top: 1px solid $border-color;
+            border-bottom: 1px solid $border-color;
+            border-radius: 0;
           }
 
-          & .navigation-list-nested {
+          & .nav__list--nested {
             position: relative;
-            left: 0;
-
             height: auto;
-
-            z-index: -1;
           }
         }
       }
 
-      &-nested {
+      &--nested {
         display: none;
         flex-direction: column;
-
         position: absolute;
         left: 0;
-
         width: $nested-width;
         max-width: 70vw;
-
         font-size: 14px;
-
-        border-radius: 0 0 3px 3px;
-
-        background-color: $header-bg;
+        border-radius: 5px;
+        border: 1px solid $border-color;
+        background-color: $white;
         box-shadow: $nested-shadow;
-        z-index: 1000;
-
-        & .navigation-list-nested {
-          border-radius: 0 3px 3px 0;
-
-          top: 0;
-          left: $nested-width;
-
-          box-shadow: 12px 12px 20px 0px rgba($gray, 0.3);
-        }
+        z-index: 10;
       }
 
       @include media-breakpoint-down('xl') {
         display: none;
-
         width: $nested-width;
         max-width: 70vw;
       }
     }
 
-    &-item {
+    &__item {
       position: relative;
-
       width: 100%;
 
-      color: rgba(#333, 0.85);
-
-      & > .navigation-link {
+      .link {
         width: 100%;
-
-        padding: 5px 24px;
+        padding: 0.5rem 1.5rem;
       }
 
-      &:hover > a {
-        color: $primary;
-        cursor: pointer;
-
-        @each $item in $themes {
-          .#{$item}-theme & {
-            color: map-get($theme-colors, $item);
-          }
-        }
-      }
-
-      .icon {
-        display: none;
-
-        position: absolute;
-        top: calc(50% - 10px);
-        left: 9px;
-
-        font-size: 6px !important;
-
-        color: $primary;
-
-        @each $item in $themes {
-          .#{$item}-theme & {
-            color: map-get($theme-colors, $item);
-          }
-        }
-
-        &.active {
-          display: inline;
-        }
-      }
-
-      &:hover > .navigation-list-nested {
+      & > span {
         display: flex;
+        align-items: center;
+        height: 100%;
+      }
 
+      &:hover > .nav__list--nested {
+        display: flex;
         height: auto;
-      }
-
-      &:hover > .icon {
-        display: inline;
-      }
-
-      &.disabled:hover {
-        cursor: default;
-      }
-    }
-
-    &-link {
-      display: flex;
-      align-items: center;
-      color: $content-color;
-
-      &.disabled {
-        color: #aaa;
       }
     }
   }
+}
 
-  .time {
-    position: absolute;
-    right: 50px;
-    bottom: -28px;
-    padding: 4px 36px;
-    border-radius: 0 0 0.25rem 0.25rem;
-    box-shadow: 0 3px 2px rgba(black, 0.04);
-    z-index: 1;
-
-    @include media-breakpoint-down('sm') {
-      display: none;
-    }
+.nav__list--main > .nav__item {
+  @include media-breakpoint-up('xl') {
+    height: 72px;
   }
 }
 
@@ -324,6 +172,20 @@ $border-color: #d3deea;
   max-width: 1440px;
   padding: 0 15px;
   position: relative;
+}
+
+.clock {
+  position: absolute;
+  right: 50px;
+  bottom: -28px;
+  padding: 4px 36px;
+  border-radius: 0 0 0.25rem 0.25rem;
+  box-shadow: 0 3px 2px rgba(black, 0.04);
+  z-index: 1;
+
+  @include media-breakpoint-down('sm') {
+    display: none;
+  }
 }
 
 .hamburger {
@@ -506,5 +368,99 @@ $border-color: #d3deea;
         color: map-get($theme-colors, $item);
       }
     }
+  }
+}
+
+.circle-indicator {
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 14px;
+  height: 14px;
+  border-radius: 100%;
+  display: none;
+
+  &:before {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 100%;
+    content: '';
+
+    @each $item in $themes {
+      .#{$item}-theme & {
+        background-color: map-get($theme-colors, $item);
+      }
+    }
+  }
+}
+
+.arrow-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  right: 0.8rem;
+
+  @include media-breakpoint-up('xl') {
+    display: none;
+  }
+
+  &.rotate {
+    transform: rotate(180deg);
+  }
+}
+
+.link {
+  display: inline-flex;
+  align-items: center;
+  color: $content-color;
+  height: 100%;
+
+  &:hover:not(.disabled),
+  &.active:not(.disabled) {
+    cursor: pointer;
+    color: $primary;
+
+    .circle-indicator {
+      display: inline-flex;
+      position: absolute;
+      left: 0.25rem;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    @each $item in $themes {
+      .#{$item}-theme & {
+        color: map-get($theme-colors, $item);
+      }
+    }
+  }
+
+  @include media-breakpoint-up('xl') {
+    &.active:not(.disabled) {
+      &.main::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-color: $primary;
+        display: inline-block;
+        height: 2px;
+
+        @each $item in $themes {
+          .#{$item}-theme & {
+            background-color: map-get($theme-colors, $item);
+          }
+        }
+      }
+    }
+  }
+
+  &__wrapper {
+    display: flex;
+    align-items: center;
+    height: 100%;
   }
 }
