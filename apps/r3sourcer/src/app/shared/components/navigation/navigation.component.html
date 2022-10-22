@@ -18,12 +18,12 @@
 
     <nav
       #nav
-      class="navigation order-0"
+      class="nav order-0"
       [ngClass]="{ 'flex-first': pages }"
       *ngIf="pages && pages.length"
     >
       <ul
-        class="navigation-list navigation-list-parent"
+        class="nav__list nav__list--main"
         [ngClass]="{ show: isCollapsed }"
         [ngStyle]="{ 'top.px': isCollapsed ? headerHeight : 0 }"
       >
@@ -40,7 +40,7 @@
 
     <webui-time
       *ngIf="user"
-      class="time"
+      class="clock"
       translateKey="local_time"
       description="Local time"
       [hidden]="!initTime"
@@ -135,14 +135,14 @@
 </header>
 
 <ng-template #list let-p="pages" let-h="height">
-  <ul *ngIf="!isCollapsed && p.length" class="navigation-list-nested">
+  <ul *ngIf="!isCollapsed && p.length" class="nav__list--nested">
     <ng-container *ngFor="let page of p">
       <ng-container
         *ngTemplateOutlet="item; context: { page: page }"
       ></ng-container>
     </ng-container>
   </ul>
-  <ul *ngIf="isCollapsed && p.length" class="navigation-list-nested">
+  <ul *ngIf="isCollapsed && p.length" class="nav__list--nested">
     <ng-container *ngFor="let page of p">
       <ng-container
         *ngTemplateOutlet="item; context: { page: page }"
@@ -152,44 +152,45 @@
 </ng-template>
 
 <ng-template #item let-p="page" let-f="first" let-h="height">
-  <li
-    class="navigation-item"
-    [class.disabled]="p.disabled"
-    [class.opened]="p.opened"
-  >
-    <a
-      *ngIf="!p.disabled"
-      [routerLink]="
-        p.url !== '/'
-          ? [checkUrlPrefix(p.url) ? urlPrefix + p.url : p.url]
-          : null
-      "
-      class="navigation-link"
-      [class.active]="p.active"
-      (click)="clickAction($event, p)"
-    >
-      {{ p.translateKey | translate: { Default: p.name } }}
-    </a>
-    <span
-      class="navigation-link disabled"
-      *ngIf="p.disabled"
-      (click)="isCollapsed = false"
-      [attr.title]="getDisableTitle(p.name)"
-    >
-      {{ p.translateKey | translate: { Default: p.name } }}
-    </span>
-    <fa-icon
-      class="icon"
-      [class.active]="p.active"
-      [icon]="['fas', 'circle']"
-    ></fa-icon>
+  <li class="nav__item" [class.disabled]="p.disabled" [class.opened]="p.opened">
+    <span class="link__wrapper">
+      <a
+        *ngIf="!p.disabled"
+        [routerLink]="
+          p.url !== '/'
+            ? [checkUrlPrefix(p.url) ? urlPrefix + p.url : p.url]
+            : null
+        "
+        class="link"
+        [class.main]="f"
+        [class.active]="p.active"
+        (click)="clickAction($event, p)"
+      >
+        <span *ngIf="!f" class="circle-indicator"></span>
 
-    <fa-icon
-      class="icon-link"
-      [class.extend]="p.children && p.children.length"
-      [icon]="['fas', p.opened ? 'minus' : 'plus']"
-    >
-    </fa-icon>
+        {{ p.translateKey | translate: { Default: p.name } }}
+      </a>
+
+      <span
+        class="link disabled"
+        *ngIf="p.disabled"
+        (click)="isCollapsed = false"
+        [attr.title]="getDisableTitle(p.name)"
+      >
+        {{ p.translateKey | translate: { Default: p.name } }}
+      </span>
+
+      <span
+        class="arrow-icon text-primary"
+        *ngIf="p.children.length"
+        [class.rotate]="p.opened"
+      >
+        <webui-icon
+          [icon]="Icon.ArrowDown"
+          [size]="IconSize.Medium"
+        ></webui-icon>
+      </span>
+    </span>
 
     <ng-container *ngIf="p.children && f">
       <ng-container
