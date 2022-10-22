@@ -5,7 +5,7 @@ $nested-shadow: -4px 10px 37px rgba(211, 222, 234, 0.81);
 $header-bg: #eef6ff;
 $border-color: #d3deea;
 
-.header {
+.site-header {
   position: fixed;
   top: 0;
   width: 100%;
@@ -13,6 +13,16 @@ $border-color: #d3deea;
   border-bottom: 1px solid #d3deea;
   background-color: $header-bg;
   z-index: 3;
+
+  &__content {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    margin: 0 auto;
+    max-width: 1440px;
+    padding: 0 15px;
+    position: relative;
+  }
 
   @include media-breakpoint-down('lg') {
     padding: 0;
@@ -162,16 +172,6 @@ $border-color: #d3deea;
   @include media-breakpoint-up('xl') {
     height: 72px;
   }
-}
-
-.header__content {
-  display: flex;
-  align-items: center;
-  width: 100%;
-  margin: 0 auto;
-  max-width: 1440px;
-  padding: 0 15px;
-  position: relative;
 }
 
 .clock {

@@ -5,6 +5,21 @@
 
   ::ng-deep .table-wrapper {
     margin-top: 0;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+
+    tr:last-child {
+      border-bottom: 1px solid $border-color;
+    }
+  }
+
+  ::ng-deep .datatable thead th {
+    text-align: center;
+  }
+
+  ::ng-deep .datatable table td {
+    text-align: center;
   }
 }
 
@@ -12,16 +27,8 @@ h5 {
   margin-left: 20px;
 }
 
-::ng-deep .datatable thead th {
-  text-align: center;
-}
-
-::ng-deep .datatable table td {
-  text-align: center;
-}
-
 .form-tabs {
-  height: 50px;
+  height: 62px;
 
   @include media-breakpoint-down('md') {
     margin: 0 -20px;
@@ -35,12 +42,18 @@ h5 {
 }
 
 .form-tabs .nav:not(.nav-pills) .nav-item {
-  width: 100px;
+  // width: 100px;
   text-align: center;
 }
 
 .nav:not(.nav-pills) .nav-link {
-  padding: 10px 5px;
+  padding: 10px 34px 15px;
   font-size: 18px;
+  line-height: 18px;
   font-weight: 600;
+  color: $border-color;
+
+  &.active {
+    color: $content-color;
+  }
 }
