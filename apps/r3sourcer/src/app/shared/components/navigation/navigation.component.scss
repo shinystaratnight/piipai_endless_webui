@@ -2,21 +2,17 @@
 $nested-width: 230px;
 $header-shadow: 0 8px 12px rgba(black, 0.04);
 $nested-shadow: -4px 10px 37px rgba(211, 222, 234, 0.81);
-$header-bg: #EEF6FF;
-$border-color: #D3DEEA;
+$header-bg: #eef6ff;
+$border-color: #d3deea;
 
-.page-header {
+.header {
   position: fixed;
   top: 0;
-
-  display: flex;
-  align-items: center;
 
   width: 100%;
   height: 72px;
 
-  padding: 0 50px;
-  border-bottom: 1px solid #D3DEEA;
+  border-bottom: 1px solid #d3deea;
 
   background-color: $header-bg;
 
@@ -24,15 +20,6 @@ $border-color: #D3DEEA;
 
   @include media-breakpoint-down('lg') {
     padding: 0;
-  }
-
-  .hamburger {
-    height: 100%;
-    padding: 26px 20px 27px;
-
-    opacity: 0.6;
-
-    border-right: 1px solid rgba($gray, 0.4);
   }
 
   ul {
@@ -329,14 +316,43 @@ $border-color: #D3DEEA;
   }
 }
 
+.header__content {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin: 0 auto;
+  max-width: 1440px;
+  padding: 0 15px;
+  position: relative;
+}
+
+.hamburger {
+  display: inline-flex;
+  padding: 0 20px;
+  opacity: 0.6;
+  border-right: 1px solid rgba($gray, 0.4);
+
+  @include media-breakpoint-up('xl') {
+    display: none;
+  }
+}
+
 .language-selector {
   display: inline-block;
   margin-left: auto;
+
+  @include media-breakpoint-down('sm') {
+    display: none;
+  }
 }
 
 .user {
   position: relative;
   margin-left: 50px;
+
+  @include media-breakpoint-down('sm') {
+    margin-left: auto;
+  }
 
   &:hover {
     cursor: pointer;
@@ -362,6 +378,12 @@ $border-color: #D3DEEA;
   gap: 30px;
   align-items: center;
   text-align: left;
+
+  @include media-breakpoint-down('md') {
+    .user-block & {
+      display: none;
+    }
+  }
 }
 
 .user-role-information {
@@ -462,8 +484,7 @@ $border-color: #D3DEEA;
     flex-direction: column;
     align-items: center;
     gap: 20px;
-    padding-top: 20px;
-    padding-bottom: 25px;
+    padding: 20px 2rem 25px;
     border-top: 1px solid $border-color;
   }
 

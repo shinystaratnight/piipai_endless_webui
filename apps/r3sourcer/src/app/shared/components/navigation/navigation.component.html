@@ -1,93 +1,58 @@
-<header #header class="page-header">
-  <button
-    class="d-flex align-items-center hamburger hamburger--spring d-xl-none"
-    type="button"
-    *ngIf="pages && pages.length"
-    [ngClass]="{ 'is-active': isCollapsed }"
-    (click)="showNavigation($event)"
-  >
-    <span class="hamburger-box">
-      <span class="hamburger-inner"></span>
-    </span>
-  </button>
-
-  <a class="logo" routerLink="/">
-    <img class="logo-img" *ngIf="logo" [src]="logo" />
-  </a>
-
-  <nav
-    #nav
-    class="navigation order-0"
-    [ngClass]="{ 'flex-first': pages }"
-    *ngIf="pages && pages.length"
-  >
-    <ul
-      class="navigation-list navigation-list-parent"
-      [ngClass]="{ show: isCollapsed }"
-      [ngStyle]="{ 'top.px': isCollapsed ? headerHeight : 0 }"
+<header #header class="header">
+  <div class="header__content">
+    <button
+      class="hamburger hamburger--spring d-xl-none"
+      type="button"
+      *ngIf="pages && pages.length"
+      [ngClass]="{ 'is-active': isCollapsed }"
+      (click)="showNavigation($event)"
     >
-      <ng-container *ngFor="let page of pages">
-        <ng-container
-          *ngTemplateOutlet="
-            item;
-            context: { page: page, first: true, height: headerHeight }
-          "
-        ></ng-container>
-      </ng-container>
-    </ul>
-  </nav>
+      <span class="hamburger-box">
+        <span class="hamburger-inner"></span>
+      </span>
+    </button>
 
-  <webui-time
-    *ngIf="user"
-    class="time"
-    translateKey="local_time"
-    description="Local time"
-    [hidden]="!initTime"
-    (init)="initTime = true"
-  ></webui-time>
+    <a class="logo" routerLink="/">
+      <img class="logo-img" *ngIf="logo" [src]="logo" />
+    </a>
 
-  <webui-language-selector class="language-selector"></webui-language-selector>
-
-  <div #userBlock class="user" *ngIf="user" (click)="toggleUserBlock($event)">
-    <div class="user-block">
-      <img
-        class="user-avatar"
-        *ngIf="picture"
-        [src]="picture"
-        width="50px"
-        height="50px"
-      />
-      <div *ngIf="contactAvatar" class="user-avatar">
-        {{ contactAvatar }}
-      </div>
-
-      <div class="user-preview">
-        <div class="user-role-information">
-          <h4 class="user-name text-primary">{{ fullName }}</h4>
-          <p class="user-position">
-            {{ getRolePosition(currentRoleObject) }}
-          </p>
-        </div>
-
-        <span class="text-primary dropdown-icon">
-          <webui-icon
-            [icon]="Icon.ArrowDown"
-            [size]="IconSize.Medium"
-          ></webui-icon>
-        </span>
-      </div>
-    </div>
-
-    <div *ngIf="!hideUserMenu" class="user-menu">
-      <a
-        *ngFor="let role of roles"
-        href="https://{{ role.domain }}"
-        class="user-menu__role"
-        [class.active]="role.id === currentRole"
-        (click)="changeRole(role, $event)"
+    <nav
+      #nav
+      class="navigation order-0"
+      [ngClass]="{ 'flex-first': pages }"
+      *ngIf="pages && pages.length"
+    >
+      <ul
+        class="navigation-list navigation-list-parent"
+        [ngClass]="{ show: isCollapsed }"
+        [ngStyle]="{ 'top.px': isCollapsed ? headerHeight : 0 }"
       >
-        <span class="user-menu__role-indicator"></span>
+        <ng-container *ngFor="let page of pages">
+          <ng-container
+            *ngTemplateOutlet="
+              item;
+              context: { page: page, first: true, height: headerHeight }
+            "
+          ></ng-container>
+        </ng-container>
+      </ul>
+    </nav>
 
+    <webui-time
+      *ngIf="user"
+      class="time"
+      translateKey="local_time"
+      description="Local time"
+      [hidden]="!initTime"
+      (init)="initTime = true"
+    ></webui-time>
+
+    <webui-language-selector
+      class="language-selector"
+    ></webui-language-selector>
+
+    <div #userBlock class="user" *ngIf="user" (click)="toggleUserBlock($event)">
+      <div class="user-block">
         <img
           class="user-avatar"
           *ngIf="picture"
@@ -103,24 +68,67 @@
           <div class="user-role-information">
             <h4 class="user-name text-primary">{{ fullName }}</h4>
             <p class="user-position">
-              {{ getRolePosition(role) }}
+              {{ getRolePosition(currentRoleObject) }}
             </p>
           </div>
+
+          <span class="text-primary dropdown-icon">
+            <webui-icon
+              [icon]="Icon.ArrowDown"
+              [size]="IconSize.Medium"
+            ></webui-icon>
+          </span>
         </div>
-      </a>
+      </div>
 
-      <div class="user-menu__section">
-        <a class="link" routerLink="/cd/profile" *ngIf="candidate">
-          {{ 'profile' | translate: { Default: 'Profile' } }}
+      <div *ngIf="!hideUserMenu" class="user-menu">
+        <a
+          *ngFor="let role of roles"
+          href="https://{{ role.domain }}"
+          class="user-menu__role"
+          [class.active]="role.id === currentRole"
+          (click)="changeRole(role, $event)"
+        >
+          <span class="user-menu__role-indicator"></span>
+
+          <img
+            class="user-avatar"
+            *ngIf="picture"
+            [src]="picture"
+            width="50px"
+            height="50px"
+          />
+          <div *ngIf="contactAvatar" class="user-avatar">
+            {{ contactAvatar }}
+          </div>
+
+          <div class="user-preview">
+            <div class="user-role-information">
+              <h4 class="user-name text-primary">{{ fullName }}</h4>
+              <p class="user-position">
+                {{ getRolePosition(role) }}
+              </p>
+            </div>
+          </div>
         </a>
 
-        <a class="link" href="" (click)="changePassword()">
-          {{ 'change_password' | translate: { Default: 'Change password' } }}
-        </a>
+        <div class="user-menu__section">
+          <a class="link" routerLink="/cd/profile" *ngIf="candidate">
+            {{ 'profile' | translate: { Default: 'Profile' } }}
+          </a>
 
-        <button type="button" class="button button--primary" (click)="logOut()">
-          {{ 'log_out' | translate: { Default: 'Log out' } }}
-        </button>
+          <a class="link" href="" (click)="changePassword()">
+            {{ 'change_password' | translate: { Default: 'Change password' } }}
+          </a>
+
+          <button
+            type="button"
+            class="button button--primary"
+            (click)="logOut()"
+          >
+            {{ 'log_out' | translate: { Default: 'Log out' } }}
+          </button>
+        </div>
       </div>
     </div>
   </div>
