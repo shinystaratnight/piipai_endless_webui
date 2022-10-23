@@ -20,7 +20,7 @@ import {
 } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
 import { DropdownService } from '../../services/dropdown.service';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { BehaviorSubject, fromEvent, Observable, Subject } from 'rxjs';
 import {
   ControlValueAccessor,
   FormControl,
@@ -28,7 +28,6 @@ import {
 } from '@angular/forms';
 import {
   debounceTime,
-  delay,
   distinctUntilChanged,
   filter,
   map,
@@ -61,6 +60,7 @@ export class FormDropdownControlComponent
 {
   private value: unknown;
   private destroy: Subject<void> = new Subject<void>();
+  private dropdownClosed = new Subject<void>();
   private overlayRef?: OverlayRef | null;
   private onChange?: (val: DropdownOption) => void;
   private onTouched?: () => void;
@@ -115,8 +115,10 @@ export class FormDropdownControlComponent
 
     this.overlayRef.dispose();
     this.overlayRef.detach();
+    this.overlayRef.detachBackdrop();
     this.dropdownService.clearPagination();
     this.options$.next(DropdownPayload.initialState());
+    this.dropdownClosed.next();
 
     if (this.value) {
       this.control?.patchValue((this.value as DropdownOption).label, {
@@ -124,7 +126,7 @@ export class FormDropdownControlComponent
       });
     }
 
-    this.cd.detectChanges();
+    this.overlayRef = null;
   }
 
   public setValue(option: DropdownOption): void {
@@ -187,6 +189,7 @@ export class FormDropdownControlComponent
 
     this.dropdownService
       .fetchOptions(this.url, { search, ...this.params })
+      .pipe(takeUntil(this.dropdownClosed))
       .subscribe(
         (value: DropdownOption[] | undefined) => {
           let options: DropdownOption[] = [];
@@ -246,15 +249,22 @@ export class FormDropdownControlComponent
         payload: this.options$,
       }
     );
-    this.overlayRef
-      .attachments()
-      .pipe(delay(200))
-      .subscribe(() => {
-        this.fetchOptions();
-        this.subscribeOnScroll();
-      });
+    this.overlayRef.attachments().subscribe(() => {
+      this.fetchOptions();
+      this.subscribeOnScroll();
+    });
     this.overlayRef.attach(dropdownContent);
-    this.overlayRef.backdropClick().subscribe(() => this.closeDropdown());
+    this.overlayRef
+      .backdropClick()
+      .pipe(takeUntil(this.dropdownClosed))
+      .subscribe(() => this.closeDropdown());
+    fromEvent(window, 'blur')
+      .pipe(takeUntil(this.dropdownClosed))
+      .subscribe(() => {
+        (document.activeElement as any)?.blur();
+
+        this.closeDropdown();
+      });
   }
 
   public registerOnChange(fn: (val: DropdownOption) => void): void {

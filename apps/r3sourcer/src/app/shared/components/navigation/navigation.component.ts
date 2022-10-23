@@ -258,6 +258,10 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
       return '';
     }
 
+    if (role.name === 'candidate') {
+      return role.name;
+    }
+
     const position = role.company_contact_rel.company_contact.name.replace(this.user.data.contact.name, '');
 
     return `${position.trim()}, ${this.user.data.contact.name}`

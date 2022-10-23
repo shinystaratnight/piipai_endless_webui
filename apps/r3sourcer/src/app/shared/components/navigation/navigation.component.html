@@ -68,7 +68,7 @@
           <div class="user-role-information">
             <h4 class="user-name text-primary">{{ fullName }}</h4>
             <p class="user-position">
-              {{ getRolePosition(currentRoleObject) }}
+              {{ getRolePosition(currentRoleObject) | translate }}
             </p>
           </div>
 
@@ -106,7 +106,7 @@
             <div class="user-role-information">
               <h4 class="user-name text-primary">{{ fullName }}</h4>
               <p class="user-position">
-                {{ getRolePosition(role) }}
+                {{ getRolePosition(role) | translate }}
               </p>
             </div>
           </div>
