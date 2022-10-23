@@ -122,7 +122,6 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
   ) {}
 
   public ngOnInit() {
-    console.log(this);
     this.getUserInformation();
 
     this.languageSubscription = this.language.valueChanges.subscribe((v) => {
