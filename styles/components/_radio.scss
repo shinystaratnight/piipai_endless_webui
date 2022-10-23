@@ -5,6 +5,12 @@ $diameter: 14px;
 input:checked ~ .radio-circle {
   border-color: $primary;
 
+  @each $item in $themes {
+    .#{$item}-theme & {
+      border-color: map-get($theme-colors, $item);
+    }
+  }
+
   .inner {
     visibility: visible;
   }
@@ -41,5 +47,11 @@ input:checked ~ .radio-circle {
     border-radius: 50%;
 
     background-color: $primary;
+
+    @each $item in $themes {
+      .#{$item}-theme & {
+        background-color: map-get($theme-colors, $item);
+      }
+    }
   }
 }
