@@ -27,6 +27,10 @@ export class SubscriptionService {
   ) {}
 
   public update() {
+    if (this._subscription.value) {
+      return;
+    }
+
     this.getActiveSubscription()
       .subscribe((subscription) => {
         this._subscription.next(subscription);

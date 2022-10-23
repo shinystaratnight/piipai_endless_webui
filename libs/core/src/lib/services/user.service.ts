@@ -44,7 +44,7 @@ export class UserService {
   ) {}
 
   public getUserData() {
-    if (!this.user) {
+    if (!this.user && this.storage.retrieve('user')) {
       return this.http.get<User>(this.authEndpoint).pipe(
         map((user) => {
           this.user = user;

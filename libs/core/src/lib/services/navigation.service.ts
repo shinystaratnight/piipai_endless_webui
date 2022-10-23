@@ -1,10 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 
-import { of } from 'rxjs';
-import { map, mergeMap, catchError } from 'rxjs/operators';
-
-import { Purpose } from '@webui/data';
+import { combineLatest, of } from 'rxjs';
+import { map, catchError } from 'rxjs/operators';
 
 import { CompanyPurposeService } from './company-purpose.service';
 import { ErrorsService } from './errors.service';
@@ -33,7 +31,7 @@ type NavigationResponse = {
 const jobEndpoints = [Endpoints.ClientJobs, Endpoints.JobsiteClient];
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class NavigationService {
   public currentRole?: Role;
@@ -65,76 +63,65 @@ export class NavigationService {
   public getPages(role?: Role, update?: boolean) {
     if (role) {
       const { id } = role;
-      const { country_code, allow_job_creation } = (this.userService.user as User).data;
+      const { country_code, allow_job_creation } = (
+        this.userService.user as User
+      ).data;
 
       if (!this.navigationList[id] || update) {
         const params = new HttpParams({
           fromObject: {
             limit: '-1',
-            role: id
-          }
+            role: id,
+          },
         });
 
-        return this.http
+        const purposeRequest = isManager()
+          ? this.purposeService.getPurpose(this.userService.companyId)
+          : of(null);
+        const navigationRequest = this.http
           .get<NavigationResponse>(Endpoints.ExtranetNavigation, { params })
           .pipe(
-            map((response) => {
-              response.results = this.renameField(response.results, 'childrens', 'children');
-
-              return response;
-            }),
-            mergeMap(({ results: list }) => {
-              if (isManager()) {
-                const companyId = this.userService.companyId;
-
-                return this.purposeService
-                  .getPurpose(companyId)
-                  .pipe(
-                    map((purpose) => {
-                      return {
-                        purpose,
-                        list
-                      };
-                    }));
-              } else {
-                return of({ list, purpose: null });
-              }
-            }),
-            map(({ purpose, list }) => {
-              this.removePrefix(list);
-              this.removeMYOBLink(list, country_code);
-              this.hideCandidateConsentUrl(list);
-
-              if (list) {
-                let result = list;
-
-                if (purpose) {
-                  result = this.purposeService.filterNavigationByPurpose(
-                    purpose,
-                    list
-                  );
-                }
-
-                if (isClient() && !allow_job_creation) {
-                  result = result.filter(
-                    (el) => !jobEndpoints.includes(el.endpoint as Endpoints)
-                  );
-                }
-
-                this.currentRole = role;
-                this.generateTranslateKeys(result);
-                this.navigationList[id] = result;
-                this.linksList.length = 0;
-                this.generateLinks(this.navigationList[id], this.linksList);
-
-                return this.navigationList[id];
-              }
-            }),
-            catchError((errors) => {
-              this.errorService.handleError(errors);
-              return of([]);
-            })
+            map((response) =>
+              this.renameField(response.results, 'childrens', 'children')
+            )
           );
+
+        return combineLatest([navigationRequest, purposeRequest]).pipe(
+          map(([list, purpose]) => {
+            this.removePrefix(list);
+            this.removeMYOBLink(list, country_code);
+            this.hideCandidateConsentUrl(list);
+
+            if (list) {
+              let result = list;
+
+              if (purpose) {
+                result = this.purposeService.filterNavigationByPurpose(
+                  purpose,
+                  list
+                );
+              }
+
+              if (isClient() && !allow_job_creation) {
+                result = result.filter(
+                  (el) => !jobEndpoints.includes(el.endpoint as Endpoints)
+                );
+              }
+
+              this.currentRole = role;
+              this.generateTranslateKeys(result);
+              this.navigationList[id] = result;
+              this.linksList.length = 0;
+              this.generateLinks(this.navigationList[id], this.linksList);
+
+              return this.navigationList[id];
+            }
+          }),
+          catchError((errors) => {
+            this.errorService.handleError(errors);
+            return of([]);
+          })
+        );
       } else {
         return of(this.navigationList[id]);
       }
@@ -218,15 +205,21 @@ export class NavigationService {
     });
   }
 
-  private renameField<T>(target: Array<T & Record<string, any>>, from: string, to: string): Array<T & { [key: string]: any }> {
+  private renameField<T>(
+    target: Array<T & Record<string, any>>,
+    from: string,
+    to: string
+  ): Array<T & { [key: string]: any }> {
     return target.map((el) => {
       const result = {
         ...el,
-        [to]: el[from]
+        [to]: el[from],
       };
 
       if (Array.isArray(result[to])) {
-        Object.assign(result, { [to]: this.renameField<T>(result[to], from, to) });
+        Object.assign(result, {
+          [to]: this.renameField<T>(result[to], from, to),
+        });
       }
 
       return result;
