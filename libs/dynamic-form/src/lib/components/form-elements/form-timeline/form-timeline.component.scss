@@ -136,6 +136,13 @@
   .next {
     margin: 0 6px;
   }
+
+  &-select-wrapper {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0;
+  }
 }
 
 .close-button {
@@ -184,7 +191,8 @@
   }
 }
 
-.btn-outline-info:hover {
+.btn-outline-info:hover,
+.btn-outline-success:hover {
   color: $white;
 }
 
