@@ -32,15 +32,16 @@ const formadd = () => [
     .setPrefilledFields({
       [Models.Skill]: `{${Models.Skill}.id}`
     })
-    .updateValues(['translations', 'uom', 'skill_rate_ranges'])
+    .updateValues(['translations', 'uom', 'skill_rate'])
     .setQuery({
       skill: '{skill.id}',
       company: '{company}',
       candidate_contact: '{candidate_contact}',
+      timesheet: '{timesheet}'
     }),
   new SkillModel().formElement().updateValues(['name']),
   new Form.input.element('rate', 'Rate', InputType.Number)
-    .setDefaultValue('{worktype.skill_rate_ranges.default_rate}')
+    .setDefaultValue('{worktype.skill_rate}')
     .setIcon('{currency}')
     .setNumberOptions(0.01),
   new Form.input.element('value', 'Value', InputType.Number)

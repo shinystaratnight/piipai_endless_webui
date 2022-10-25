@@ -59,6 +59,9 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, 0.3);
     max-width: 100%;
     overflow-x: auto !important;
     margin-top: 1rem;
+    border: 1px solid $border-color;
+    border-radius: 5px;
+    box-shadow: 0px 4px 23px rgba(211, 222, 234, 0.25);
   }
 }
 
@@ -100,7 +103,7 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, 0.3);
 
   table {
     font-size: 0.875rem;
-
+    margin-bottom: 0;
     color: $gray;
 
     @include media-breakpoint-down('md') {
@@ -143,12 +146,12 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, 0.3);
       }
 
       &.main {
-        border-bottom: 1px solid #D3DEEA;
+        border-bottom: 1px solid #d3deea;
       }
     }
 
-    tbody > tr {
-      border-bottom: 1px solid #D3DEEA;
+    tbody > tr:not(:last-child) {
+      border-bottom: 1px solid #d3deea;
     }
 
     table {
@@ -188,7 +191,7 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, 0.3);
     line-height: 16px;
     font-weight: 600;
     padding: 19px 10px;
-    color: #B2C2D3;
+    color: #b2c2d3;
     text-transform: uppercase;
     background-color: #eaf3fb;
     &:first-child {
@@ -399,6 +402,7 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, 0.3);
 
   &-body {
     width: 100%;
+    padding: 0 15px;
 
     &.in-form {
       margin: 0 -6px;
@@ -479,7 +483,7 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, 0.3);
     }
 
     &:not(.in-form) .datatable-header {
-      background-color: #f5f5f5;
+      background-color: $white;
       position: sticky;
       z-index: 2;
       padding-left: 10px;
@@ -528,56 +532,29 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, 0.3);
   }
 
   .filter-wrapper {
-    display: none;
     width: 265px;
-
     margin-right: 0 5px;
-
-    align-self: stretch;
-
-    margin-top: -31px;
-    padding-top: 34px;
-
-    background-color: white;
-
-    &.open {
-      display: block;
-    }
+    background-color: $white;
+    transition: transform 0.3s ease;
 
     &:not(.in-form) {
       position: fixed;
       top: 72px;
       left: 0;
-
+      transform: translateX(-100%);
       height: calc(100vh - 41px);
+      z-index: 20;
 
-      overflow: auto;
-      z-index: 2;
+      &.open {
+        transform: translateX(0);
+      }
 
       @include media-breakpoint-down('lg') {
-        display: block;
-        position: fixed;
         top: 0;
-        left: -265px;
-
-        margin-top: 0;
-        padding-top: 0;
-
-        background-color: white;
-        transition: left 0.5s ease;
-
         z-index: 20;
 
-        &.open {
-          left: 0;
-
-          min-height: 100vh;
-
-          overflow: auto;
-
-          & ~ .background {
-            display: block;
-          }
+        &.open ~ .background {
+          display: block;
         }
       }
     }

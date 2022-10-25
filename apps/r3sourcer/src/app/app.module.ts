@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppComponent } from './app.component';
@@ -50,7 +50,7 @@ import {
   faSortUp,
   faSortDown,
   faDotCircle,
-  faUser
+  faUser,
 } from '@fortawesome/free-solid-svg-icons';
 import { NgxWebstorageModule } from 'ngx-webstorage';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
@@ -69,15 +69,14 @@ import {
 
 import { routes } from './app.routing';
 
-import { CoreModule } from '@webui/core';
+import { CoreModule, SiteSettingsService, UserService } from '@webui/core';
 import { environment } from '../environments/environment';
-// import { AgmCoreModule } from '@agm/core';
 import { SettingsModule } from './settings/settings.module';
 
 import { MasterGuideModule } from './master-guide/master-guide.module';
 import { HttpLoaderFactory } from './translate.loader';
 import { MissingTranslationHelper } from './helpers/translate.helper';
-// import { GoogleMapsModule } from '@angular/google-maps';
+import { combineLatest } from 'rxjs';
 
 @NgModule({
   declarations: [
@@ -97,11 +96,6 @@ import { MissingTranslationHelper } from './helpers/translate.helper';
     HttpClientModule,
     FontAwesomeModule,
     NgxWebstorageModule.forRoot({ prefix: 'web', separator: '.' }),
-    // AgmCoreModule.forRoot({
-    //   apiKey: environment.GOOGLE_GEO_CODING_API_KEY,
-    //   libraries: ['places'],
-    // }),
-    // GoogleMapsModule,
     TranslateModule.forRoot({
       defaultLanguage: 'en',
       missingTranslationHandler: {
@@ -118,6 +112,16 @@ import { MissingTranslationHelper } from './helpers/translate.helper';
     CoreModule.forRoot(environment),
     MasterGuideModule,
     SettingsModule,
+  ],
+  providers: [
+    {
+      provide: APP_INITIALIZER,
+      useFactory:
+        (userSerice: UserService, siteSettings: SiteSettingsService) => () =>
+          combineLatest([userSerice.getUserData(), siteSettings.resolve()]),
+      deps: [UserService, SiteSettingsService],
+      multi: true,
+    },
   ],
   bootstrap: [AppComponent],
 })
@@ -164,7 +168,7 @@ export class AppModule {
       faSortDown,
       faDotCircle,
       faCalendar,
-      faUser
+      faUser,
     ];
 
     library.addIcons(...icons);

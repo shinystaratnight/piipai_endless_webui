@@ -1,17 +1,17 @@
-@import "~bootstrap/scss/functions";
+@import '~bootstrap/scss/functions';
 @import '~bootstrap/scss/variables';
 @import '~bootstrap/scss/mixins';
 
 @import './mixins';
 // Font
-$font-family-base: "Source Sans Pro", sans-serif;
+$font-family-base: 'Source Sans Pro', sans-serif;
 
 // Color variables
 $primary: #28a3fc;
 $success: #32ba5e;
 $danger: #fa5c46;
 $info: #28a3fc;
-$gray: #333;
+$gray: #2f363d;
 $white: #fdfdfd;
 $warning: #f58926;
 $indigo: #3f51b5;
@@ -75,7 +75,7 @@ $popover-body-padding-x: 0.25rem;
 $list-group-border-radius: 0;
 
 $headline-color: #4f4f4f;
-$outline-color: rgba($gray, .1);
+$outline-color: rgba($gray, 0.1);
 
 // Button
 $btn-disabled-opacity: 0.5;
@@ -86,12 +86,12 @@ $table-border-width: 0;
 
 // Redesign
 
-$brand-color: #51A1F5;
-$brand-light-color: #EEF6FF;
-$brand-dark-color: #0762C0;
-$border-color: #D3DEEA;
-$secondary-color: #7A7A7A;
-$content-color: #2F363D;
-$brand-danger: #DF4242;
+$brand-color: #51a1f5;
+$brand-light-color: #eef6ff;
+$brand-dark-color: #0762c0;
+$border-color: #d3deea;
+$secondary-color: #7a7a7a;
+$content-color: #2f363d;
+$brand-danger: #df4242;
 
 @import '~bootstrap/scss/utilities';

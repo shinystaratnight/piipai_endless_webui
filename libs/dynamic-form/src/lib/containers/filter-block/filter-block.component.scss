@@ -5,7 +5,8 @@
     height: calc(100vh - 76px);
 
     padding: 0 10px 50px;
-
+    border-right: 1px solid $border-color;
+    box-shadow: -4px 10px 37px rgba(211, 222, 234, 0.81);
     overflow: auto;
 
     &.in-container {

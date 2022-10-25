@@ -28,4 +28,6 @@ export interface IHoliday {
 export interface IDateRange {
   start: Moment;
   end: Moment;
+  monthStart?: Moment;
+  monthEnd?: Moment;
 }

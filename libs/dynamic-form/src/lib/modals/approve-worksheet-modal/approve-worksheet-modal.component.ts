@@ -324,9 +324,11 @@ export class ApproveWorksheetModalComponent extends Modal implements OnInit, OnD
 
   private getActivityParams(): { [key: string]: any } {
     return {
-      fields: ['__str__', 'id', 'translations', 'uom', 'skill_rate_ranges'],
+      fields: ['__str__', 'id', 'translations', 'uom', 'skill_rate'],
+      timesheet: this.timeSheet.id,
       skill: this.timeSheet.position.id,
       company: this.timeSheet.company.id,
+      candidate_contact: this.timeSheet.contact_id,
       priced: true
     };
   }
@@ -363,7 +365,7 @@ export class ApproveWorksheetModalComponent extends Modal implements OnInit, OnD
       .pipe(takeUntil(this.destroy$))
       .subscribe((worktype: DropdownOption) => {
         if (worktype instanceof DropdownOption) {
-          const rate = worktype?.getField('skill_rate_ranges')[0]?.default_rate;
+          const rate = worktype?.getField('skill_rate');
 
           form.get('rate')?.patchValue(rate, { emitEvent: false });
         }
