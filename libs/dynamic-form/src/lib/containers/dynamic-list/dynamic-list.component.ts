@@ -1736,7 +1736,9 @@ export class DynamicListComponent
   }
 
   public submitTimesheet(e: any) {
-    const dialogRef = this.dialog.open(SubmissionModalComponent);
+    const dialogRef = this.dialog.open(SubmissionModalComponent, {
+      size: 'md'
+    });
     dialogRef.componentInstance.data = this.getRowData(e);
     dialogRef.result
       .then((result: any) => {

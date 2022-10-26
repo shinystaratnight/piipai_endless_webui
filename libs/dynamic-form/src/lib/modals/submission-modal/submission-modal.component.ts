@@ -11,10 +11,12 @@ import { DatepickerType, DropdownOption } from '@webui/form-controls';
 import { Icon, IconSize } from '@webui/icon';
 import { GenericFormService } from '../../services';
 import { BehaviorSubject, forkJoin, Subject } from 'rxjs';
-import { finalize, takeUntil, tap } from 'rxjs/operators';
+import { finalize, switchMap, takeUntil } from 'rxjs/operators';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Modal, Status } from '../modal/modal.component';
 import { Endpoints } from '@webui/models';
+
+type ViewType = 'time' | 'activity' | undefined;
 
 const isHourlyWork = (name: string): boolean => {
   return name.toLocaleLowerCase().replace(/ /g, '_').includes('hourly_work');
@@ -30,6 +32,9 @@ export class SubmissionModalComponent
   extends Modal
   implements OnInit, OnDestroy
 {
+
+  private _type = new BehaviorSubject<ViewType>(undefined);
+
   public data: any;
   public activityEndpoint = Endpoints.SkillWorkTypes;
   public timeSheet!: TimeSheet;
@@ -40,6 +45,8 @@ export class SubmissionModalComponent
   public formGroup!: FormGroup;
 
   public activityParams?: { [key: string]: any };
+
+  viewType$ = this._type.asObservable();
 
   public get activitiesForm(): FormGroup[] {
     return (this.formGroup.get('activities') as FormArray)
@@ -81,6 +88,14 @@ export class SubmissionModalComponent
 
   public ngOnInit() {
     this.timeSheet = new TimeSheet(this.data);
+
+    if (this.timeSheet.status !== 4) {
+      if (this.timeSheet.endedAt) {
+        this._type.next('time')
+      } else {
+        this._type.next('activity')
+      }
+    }
 
     this.formGroup = new FormGroup({
       shiftStartedAt: new FormControl(this.timeSheet.startedAt),
@@ -164,12 +179,13 @@ export class SubmissionModalComponent
       this.timeSheet.getRequestBody(creationRequests.length > 0)
     );
 
-    creationRequests.push(submitRequest);
-
     this.processing$.next(true);
 
     forkJoin(creationRequests)
-      .pipe(finalize(() => this.processing$.next(false)))
+      .pipe(
+        switchMap(() => submitRequest),
+        finalize(() => this.processing$.next(false))
+      )
       .subscribe(() => {
         this.close(Status.Success);
       });
@@ -195,6 +211,14 @@ export class SubmissionModalComponent
 
   public activityOptionFilter(option: DropdownOption) {
     return !isHourlyWork(option.label);
+  }
+
+  setActivity() {
+    this._type.next('activity');
+  }
+
+  setTime() {
+    this._type.next('time');
   }
 
   private updateTimeSheet(value: any) {
