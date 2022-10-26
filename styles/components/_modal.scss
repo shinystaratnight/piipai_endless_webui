@@ -709,6 +709,12 @@ $width: 510px;
   }
 }
 
+.modal-md {
+  @include media-breakpoint-up('xl') {
+    max-width: 729px;
+  }
+}
+
 .modal-header {
   background-color: #fff;
 
