@@ -4,8 +4,17 @@
       [timeSheet]="timeSheet"
     ></webui-timesheet-details-preview>
 
+    <div class="options" *ngIf="(viewType$ | async) === undefined">
+      <button type="button" class="btn submit-btn" (click)="setTime()">
+        {{ 'time' | translate }}
+      </button>
+      <button type="button" class="btn submit-btn" (click)="setActivity()">
+        {{ 'activity' | translate }}
+      </button>
+    </div>
+
     <form *ngIf="formGroup" [formGroup]="formGroup" class="form" (ngSubmit)="submitForm()">
-      <section class="times">
+      <section *ngIf="(viewType$ | async) === 'time'" class="times">
         <header class="times__header">
           <h4 class="section-title">{{ 'time' | translate }}</h4>
 
@@ -44,7 +53,7 @@
         </div>
       </section>
 
-      <section class="activities">
+      <section *ngIf="(viewType$ | async) === 'activity'" class="activities">
         <h4 class="section-title">
           {{ 'activity' | translate }}
           <button
@@ -91,7 +100,7 @@
         </div>
       </section>
 
-      <footer class="footer" *ngIf="timeSheet.status !== 7">
+      <footer class="footer" *ngIf="timeSheet.status !== 7 && (viewType$ | async)">
         <button
           class="btn submit-btn"
           [disabled]="formInvalid || (processing$ | async)"

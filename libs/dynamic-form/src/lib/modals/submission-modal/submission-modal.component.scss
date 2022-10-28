@@ -5,6 +5,14 @@
   margin: -1rem;
 }
 
+.options {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
+  padding-top: 54px;
+}
+
 .section-title {
   font-size: 16px;
   line-height: 19px;

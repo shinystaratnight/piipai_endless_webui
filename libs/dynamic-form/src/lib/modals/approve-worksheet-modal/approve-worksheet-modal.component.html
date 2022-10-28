@@ -23,9 +23,9 @@
 
           <h4 class="section-title">{{ 'time' | translate }}</h4>
 
-          <span *ngIf="timeViewType$ | async" class="total-time">{{
-            timeSheet.totalTime
-          }}</span>
+          <span *ngIf="timeViewType$ | async" class="total-time">
+            {{ timeSheet.totalTime }}
+          </span>
         </header>
 
         <ng-container *ngIf="timeViewType$ | async as type">

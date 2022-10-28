@@ -3,6 +3,10 @@
 :host {
   display: flex;
 
+  @include media-breakpoint-up('sm') {
+    gap: 10px;
+  }
+
   @include media-breakpoint-down('sm') {
     & {
       flex-direction: column;
@@ -11,13 +15,7 @@
 }
 
 .wrapper {
-  flex: 1;
-
-  @include media-breakpoint-up('sm') {
-    &:not(:last-child) {
-      margin-right: 10px;
-    }
-  }
+  width: calc((100% - 10px) / 2);
 
   &--half {
     max-width: calc(50% - 5px);

@@ -543,7 +543,7 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, 0.3);
       left: 0;
       transform: translateX(-100%);
       height: calc(100vh - 41px);
-      z-index: 20;
+      z-index: 3;
 
       &.open {
         transform: translateX(0);

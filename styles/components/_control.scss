@@ -49,16 +49,11 @@
   line-height: 16px;
   font-family: inherit;
   color: $content-color;
-  padding: 8px 48px 8px 12px;
+  padding: 8px 28px 8px 12px;
   max-height: 38px;
 
   &:last-child {
     padding-right: 12px;
-  }
-
-  @include media-breakpoint-up('lg') {
-    font-size: 16px;
-    line-height: 19px;
   }
 
   & + .control__input-icon {
