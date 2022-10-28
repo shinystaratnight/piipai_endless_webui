@@ -1,3 +1,4 @@
+import { Form } from "@webui/metadata";
 import { Endpoints } from "@webui/models";
 
 const list = {
@@ -427,6 +428,7 @@ const form = [
     },
     collapsed: false,
     visibleMode: true,
+    translateKey: 'skillratecoefficientrels',
     prefilled: {
       skill_rel: '{id}'
     },
@@ -443,6 +445,7 @@ const form = [
       text: 'Skill Rate',
       add_label: 'Add'
     },
+    translateKey: 'skillrates',
     collapsed: false,
     visibleMode: true,
     prefilled: {
@@ -527,7 +530,19 @@ const formadd = [
       ]
     },
     read_only: false
-  }
+  },
+  new Form.related.element('skillrates', 'Skill Rate', Endpoints.SkillRate)
+    .setPrefilledFields({
+      skill_rel: '{id}',
+      skill: '{skill.id}'
+    })
+    .setQuery({
+      skill_rel: '{id}'
+    })
+    .setTranslateKey('skillrates')
+    .setDelay()
+    .setList()
+    .setShowIfRule(['skill.id'])
 ];
 
 const profile = {

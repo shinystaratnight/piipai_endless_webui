@@ -1212,6 +1212,7 @@ const form = [
           candidate_contact: '{id}'
         },
         type: 'list',
+        visibleMode: true,
         query: {
           candidate_contact: '{id}'
         },

@@ -230,10 +230,6 @@ export class FormListComponent implements OnInit, OnDestroy {
       windowClass += ' small-modal';
     }
 
-    if (endpoint.includes(Endpoints.CandidateSkill)) {
-      size = undefined;
-    }
-
     this.modalRef = this.modal.open(this.modalTemplate, {
       size: size as any,
       windowClass,
