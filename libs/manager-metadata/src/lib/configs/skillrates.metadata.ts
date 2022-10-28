@@ -35,7 +35,9 @@ const formadd = () => [
   ).setQuery({
     skill: '{skill.id}',
     limited: true
-  }),
+  }).updateValues([
+    'translations'
+  ]),
   new Form.input.element('rate', 'Rate', InputType.Number).setNumberOptions(
     0.01,
     0
@@ -50,7 +52,10 @@ const form = () => [
     'worktype',
     'Work Type',
     Endpoints.SkillWorkTypes
-  ).readOnly(),
+  ).readOnly()
+  .updateValues([
+    'translations'
+  ]),
   new Form.input.element('rate', 'Rate', InputType.Number).setNumberOptions(
     0.01,
     0
