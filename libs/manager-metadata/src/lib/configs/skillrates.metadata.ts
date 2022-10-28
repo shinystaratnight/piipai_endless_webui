@@ -10,7 +10,7 @@ const formset = {
         new List.text.element('rate').setFormatValue('{currency}{field}')
       ]),
       new List.column.element('worktype', 'work type').setContent([
-        new List.text.element('worktype.name')
+        new List.text.element('worktype')
       ]),
       new List.column.element('actions', 'Actions').setContent([
         new List.button.element('id', 'editForm', 'Edit')
