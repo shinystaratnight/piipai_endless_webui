@@ -10,6 +10,7 @@ export interface Role {
   company_contact_rel: {
     company: {
       id: string;
+      name: string;
     },
     company_contact: {
       id: string;

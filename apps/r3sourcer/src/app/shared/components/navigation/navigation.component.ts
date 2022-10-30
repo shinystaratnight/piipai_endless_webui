@@ -262,8 +262,9 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     const position = role.company_contact_rel.company_contact.name.replace(this.user.data.contact.name, '');
+    const company = role.company_contact_rel.company.name
 
-    return `${position.trim()}, ${this.user.data.contact.name}`
+    return `${position.trim()}, ${company}`
   }
 
   @HostListener('document:click', ['$event'])
