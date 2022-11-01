@@ -181,14 +181,22 @@ export class SubmissionModalComponent
 
     this.processing$.next(true);
 
-    forkJoin(creationRequests)
-      .pipe(
-        switchMap(() => submitRequest),
-        finalize(() => this.processing$.next(false))
-      )
-      .subscribe(() => {
-        this.close(Status.Success);
-      });
+    if (creationRequests.length) {
+      forkJoin(creationRequests)
+        .pipe(
+          switchMap(() => submitRequest),
+          finalize(() => this.processing$.next(false))
+        )
+        .subscribe(() => {
+          this.close(Status.Success);
+        });
+    } else {
+      submitRequest
+        .pipe(finalize(() => this.processing$.next(false)))
+        .subscribe(() => {
+          this.close(Status.Success);
+        });
+    }
   }
 
   public addActivityControl(): void {
