@@ -15,7 +15,7 @@ export enum LanguageFullName {
 export enum CountryCodeLanguage {
   GB = Language.English,
   EE = Language.Estonian,
-  FI = Language.Finnish
+  FI = Language.Finnish,
 }
 
 type er = keyof typeof CountryCodeLanguage;
