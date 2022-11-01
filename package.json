@@ -36,6 +36,7 @@
     "@sentry/tracing": "^7.10.0",
     "angular2-signaturepad": "^4.0.2",
     "bootstrap": "5.0.X",
+    "flag-icons": "^6.6.6",
     "google-libphonenumber": "^3.2.30",
     "hamburgers": "^1.2.1",
     "intl-tel-input": "^17.0.3",

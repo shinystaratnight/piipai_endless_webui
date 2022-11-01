@@ -18,6 +18,9 @@ import {
   ConfirmDeleteModalComponent,
   IconComponent,
 } from './components';
+import { IconModule } from '@webui/icon';
+import { ScrollingModule } from '@angular/cdk/scrolling';
+import { OverlayModule } from '@angular/cdk/overlay';
 
 @NgModule({
   declarations: [
@@ -39,6 +42,9 @@ import {
     FontAwesomeModule,
     ReactiveFormsModule,
     DialogModule,
+    IconModule,
+    ScrollingModule,
+    OverlayModule
   ],
   exports: [
     CloseButtonComponent,
