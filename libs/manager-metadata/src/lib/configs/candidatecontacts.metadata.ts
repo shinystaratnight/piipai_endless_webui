@@ -11,8 +11,9 @@ const filters = {
   skill: createFilter(Type.Relared, {
     key: 'skill',
     label: 'Skills',
-    endpoint: Endpoints.Skill,
-    multiple: true
+    endpoint: Endpoints.SkillName,
+    multiple: true,
+    parameter: 'skill_id'
   }),
   tag: createFilter(Type.Relared, {
     key: 'tag',
