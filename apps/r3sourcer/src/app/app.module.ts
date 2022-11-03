@@ -76,7 +76,7 @@ import { SettingsModule } from './settings/settings.module';
 import { MasterGuideModule } from './master-guide/master-guide.module';
 import { HttpLoaderFactory } from './translate.loader';
 import { MissingTranslationHelper } from './helpers/translate.helper';
-import { combineLatest } from 'rxjs';
+import { catchError, forkJoin, of } from 'rxjs';
 
 @NgModule({
   declarations: [
@@ -118,7 +118,14 @@ import { combineLatest } from 'rxjs';
       provide: APP_INITIALIZER,
       useFactory:
         (userSerice: UserService, siteSettings: SiteSettingsService) => () =>
-          combineLatest([userSerice.getUserData(), siteSettings.resolve()]),
+          forkJoin({
+            user: userSerice.getUserData(),
+            settings: siteSettings.resolve(),
+          }).pipe(
+            catchError(() => {
+              return of(false);
+            })
+          ),
       deps: [UserService, SiteSettingsService],
       multi: true,
     },
