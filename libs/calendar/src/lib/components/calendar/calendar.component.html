@@ -66,9 +66,9 @@
       </webui-filter-related>
 
       <div class="filter-element" #filter>
-        <label class="filter-label related">{{
-          'info_layers' | translate: { Default: 'Info layers' }
-        }}</label>
+        <label class="filter-label related">
+          {{ 'info_layers' | translate: { Default: 'Info layers' } }}
+        </label>
 
         <div class="filter-related">
           <div
@@ -221,8 +221,9 @@
     <span
       class="grid-item header-item"
       *ngFor="let day of calendarData?.header"
-      >{{ day }}</span
     >
+      {{ day }}
+    </span>
   </div>
   <div class="grid-row" *ngFor="let week of calendarData?.body">
     <ng-container *ngFor="let day of week; let i = index">
@@ -237,9 +238,9 @@
         [disable]="!(isManager() || canClientCreateJob())"
         [date]="day.date"
       >
-        <span class="date" [class.current-date]="day.today">{{
-          day.label
-        }}</span>
+        <span class="date" [class.current-date]="day.today">
+          {{ day.label }}
+        </span>
       </span>
 
       <span
@@ -254,9 +255,9 @@
         [placement]="getPlacement(i, week.length)"
         *ngIf="!day.tooltip && calendarType === 2"
       >
-        <span class="date" [class.current-date]="day.today">{{
-          day.label
-        }}</span>
+        <span class="date" [class.current-date]="day.today">
+          {{ day.label }}
+        </span>
 
         <ng-template #availabilityTooltip>
           <div class="shift-tooltip">
@@ -306,9 +307,9 @@
         (shown)="getShiftData(day)"
         (hidden)="day.isOpen = false"
       >
-        <span class="date" [class.current-date]="day.today">{{
-          day.label
-        }}</span>
+        <span class="date" [class.current-date]="day.today">
+          {{ day.label }}
+        </span>
 
         <div class="shift-groups">
           <div *ngIf="day.tooltip.count[1]" class="badge badge-success">
@@ -439,9 +440,9 @@
                     (click)="acceptJobOffer(jobOffer.jobOffer.id)"
                   >
                     <fa-icon [icon]="['fas', 'check-circle']"></fa-icon>
-                    <span>{{
-                      'accept' | translate: { Default: 'Accept' }
-                    }}</span>
+                    <span>
+                      {{ 'accept' | translate: { Default: 'Accept' } }}
+                    </span>
                   </button>
 
                   <button
@@ -450,9 +451,9 @@
                     (click)="declineJobOffer(jobOffer.jobOffer.id)"
                   >
                     <fa-icon [icon]="['fas', 'times-circle']"></fa-icon>
-                    <span>{{
-                      'decline' | translate: { Default: 'Decline' }
-                    }}</span>
+                    <span>
+                      {{ 'decline' | translate: { Default: 'Decline' } }}
+                    </span>
                   </button>
                 </div>
               </div>
@@ -470,8 +471,9 @@
     <span
       class="grid-item header-item"
       *ngFor="let day of calendarData?.header"
-      >{{ day }}</span
     >
+      {{ day }}
+    </span>
   </div>
   <div class="grid-row grid-body">
     <div
@@ -509,9 +511,10 @@
 
           <div *ngIf="!shift.loading" class="content">
             <div class="d-flex justify-content-between me-2">
-              <span [ngClass]="['badge', getColor(shift.is_fulfilled)]"
-                >Start - {{ shift.time }}</span
-              >
+              <span [ngClass]="['badge', getColor(shift.is_fulfilled)]">
+                {{ 'start' | translate: { Default: 'Start' } }} -
+                {{ shift.time }}
+              </span>
 
               <!-- <span class="badge badge-success" *ngIf="activeShift === shift.shift.id">Fillin</span> -->
             </div>
@@ -545,8 +548,9 @@
     [style.bottom.px]="time.bottom"
     *ngFor="let time of calendarTimes"
     (click)="selectTime(time.time)"
-    >{{ time.time }}</span
   >
+    {{ time.time }}
+  </span>
 </ng-template>
 
 <ng-template #dayCalendar>
@@ -555,8 +559,9 @@
     <span
       class="grid-item header-item"
       *ngFor="let day of calendarData?.header"
-      >{{ day }}</span
     >
+      {{ day }}
+    </span>
   </div>
   <div class="grid-row grid-body">
     <div
@@ -595,9 +600,10 @@
 
           <div class="content" *ngIf="!shift.loading">
             <div class="d-flex justify-content-between me-2">
-              <span [ngClass]="['badge', getColor(shift.is_fulfilled)]"
-                >Start - {{ shift.time }}</span
-              >
+              <span [ngClass]="['badge', getColor(shift.is_fulfilled)]">
+                {{ 'start' | translate: { Default: 'Start' } }} -
+                {{ shift.time }}
+              </span>
 
               <!-- <span class="badge badge-success" *ngIf="activeShift === shift.shift.id">Fillin</span> -->
             </div>
@@ -640,9 +646,11 @@
 >
   <div *ngIf="shifts.length">
     <p *ngIf="status" class="shift-tooltip-title">
-      <span class="me-1" [ngClass]="'badge badge-' + className">{{
-        status === 'cancelled' ? shifts.length : getShiftCount(shifts, status)
-      }}</span>
+      <span class="me-1" [ngClass]="'badge badge-' + className">
+        {{
+          status === 'cancelled' ? shifts.length : getShiftCount(shifts, status)
+        }}
+      </span>
       {{ name | translate }}
     </p>
 
@@ -676,9 +684,9 @@
 <ng-template #shiftItem let-shift="shift" let-status="status">
   <div>
     <ng-container *ngIf="calendarType === 0">
-      <a *ngIf="isManager()" [routerLink]="'/mn' + shift.job_link">{{
-        shift.position
-      }}</a>
+      <a *ngIf="isManager()" [routerLink]="'/mn' + shift.job_link">
+        {{ shift.position }}
+      </a>
       <span *ngIf="!isManager()">{{ shift.position }}</span>
     </ng-container>
     <ng-container *ngIf="calendarType !== 0">
@@ -689,11 +697,15 @@
       *ngIf="isManager()"
       [routerLink]="'/mn' + shift.jobsite_link"
       class="shift-jobsite"
-      >{{ shift.jobsite }}</a
     >
+      {{ shift.jobsite }}
+    </a>
     <span *ngIf="!isManager()" class="shift-jobsite">{{ shift.jobsite }}</span>
     <br />
-    <span *ngIf="shift.shift">Workers: {{ shift.shift.workers }}</span>
+    <span *ngIf="shift.shift">
+      {{ 'workers.label' | translate: { Default: 'Workers' } }}:
+      {{ shift.shift.workers }}
+    </span>
     <div
       *ngIf="
         status &&
@@ -702,12 +714,12 @@
       "
       class="shift-candidates"
     >
-      <span class="me-1"
-        >Candidate&nbsp;({{
+      <span class="me-1">
+        {{ 'candidate' | translate: { Default: 'Candidate' } }}&nbsp;({{
           shift.candidates[status].length ||
             shift.candidates[getStatus(1)].length
-        }}):</span
-      >
+        }}):
+      </span>
       <div>
         <div *ngFor="let candidate of shift.candidates[status]">
           <fa-icon
@@ -732,8 +744,9 @@
             class="ms-1"
             *ngIf="isManager()"
             [routerLink]="getCandidateLink(candidate.id)"
-            >{{ candidate.name }}</a
           >
+            {{ candidate.name }}
+          </a>
           <span class="ms-1" *ngIf="!isManager()">{{ candidate.name }}</span>
         </div>
 
@@ -751,8 +764,9 @@
               class="ms-1"
               *ngIf="isManager()"
               [routerLink]="getCandidateLink(candidate.id)"
-              >{{ candidate.name }}</a
             >
+              {{ candidate.name }}
+            </a>
             <span class="ms-1" *ngIf="!isManager()">{{ candidate.name }}</span>
           </div>
         </ng-container>
@@ -771,8 +785,9 @@
               class="ms-1"
               *ngIf="isManager()"
               [routerLink]="getCandidateLink(candidate.id)"
-              >{{ candidate.name }}</a
             >
+              {{ candidate.name }}
+            </a>
             <span class="ms-1" *ngIf="!isManager()">{{ candidate.name }}</span>
           </div>
         </ng-container>
@@ -791,8 +806,9 @@
               class="ms-1"
               *ngIf="isManager()"
               [routerLink]="getCandidateLink(candidate.id)"
-              >{{ candidate.name }}</a
             >
+              {{ candidate.name }}
+            </a>
             <span class="ms-1" *ngIf="!isManager()">{{ candidate.name }}</span>
           </div>
         </ng-container>
@@ -807,7 +823,7 @@
       type="button"
       (click)="extendJob(shift)"
     >
-      Extend
+      {{ 'extend' | translate: { Default: 'Extend' } }}
     </button>
     <button
       webuiSubscriptionRequired
@@ -816,7 +832,7 @@
       type="button"
       (click)="fillInJob(shift)"
     >
-      Fill in
+      {{ 'fill_in.label' | translate: { Default: 'Fill in' } }}
     </button>
     <button
       webuiSubscriptionRequired
@@ -826,7 +842,7 @@
       type="button"
       (click)="selectJob($event, shift)"
     >
-      Fill
+      {{ 'fill' | translate: { Default: 'Fill' } }}
     </button>
   </div>
 </ng-template>
