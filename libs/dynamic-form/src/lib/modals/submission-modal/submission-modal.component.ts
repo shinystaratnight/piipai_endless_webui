@@ -16,8 +16,6 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Modal, Status } from '../modal/modal.component';
 import { Endpoints } from '@webui/models';
 
-type ViewType = 'time' | 'activity' | undefined;
-
 const isHourlyWork = (name: string): boolean => {
   return name.toLocaleLowerCase().replace(/ /g, '_').includes('hourly_work');
 };
@@ -32,8 +30,6 @@ export class SubmissionModalComponent
   extends Modal
   implements OnInit, OnDestroy
 {
-  private _type = new BehaviorSubject<ViewType>(undefined);
-
   public data: any;
   public activityEndpoint = Endpoints.SkillWorkTypes;
   public timeSheet!: TimeSheet;
@@ -44,10 +40,12 @@ export class SubmissionModalComponent
     false
   );
   public formGroup!: FormGroup;
-
+  public activeTab?: string;
   public activityParams?: { [key: string]: any };
-
-  viewType$ = this._type.asObservable();
+  public tabs = {
+    time: 'tab-time',
+    activity: 'tab-activity',
+  };
 
   public get activitiesForm(): FormGroup[] {
     return (this.formGroup.get('activities') as FormArray)
@@ -91,12 +89,11 @@ export class SubmissionModalComponent
 
   public ngOnInit() {
     this.timeSheet = new TimeSheet(this.data);
-
     if (this.timeSheet.status !== 4) {
       if (this.timeSheet.endedAt) {
-        this._type.next('time');
+        this.activeTab = this.tabs.time;
       } else {
-        this._type.next('activity');
+        this.activeTab = this.tabs.activity;
       }
     }
 
@@ -230,14 +227,6 @@ export class SubmissionModalComponent
 
     return !selectedOptions.includes(option.id);
   };
-
-  setActivity() {
-    this._type.next('activity');
-  }
-
-  setTime() {
-    this._type.next('time');
-  }
 
   private updateTimeSheet(value: any) {
     if ('shiftStartedAt' in value) {
