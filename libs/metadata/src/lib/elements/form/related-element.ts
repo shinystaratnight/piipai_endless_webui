@@ -28,6 +28,8 @@ export class RelatedElement extends BasicFormElement {
   override send?: boolean;
   withoutIdField?: boolean;
   addEndpoint?: string;
+  delay?: boolean;
+  list?: boolean;
 
   relatedObjects?: {
     field: string;
@@ -78,6 +80,24 @@ export class RelatedElement extends BasicFormElement {
 
   setQuery(query: { [key: string]: any }) {
     this.query = { ...query };
+
+    return this;
+  }
+
+  setDelay() {
+    this.delay = true;
+
+    return this;
+  }
+
+  setList() {
+    this.list = true;
+
+    return this;
+  }
+
+  setVisibleMode() {
+    this.visibleMode = true;
 
     return this;
   }

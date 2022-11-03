@@ -252,7 +252,7 @@ export class WidgetService {
             label: 'Hourly work',
             translations: [],
             uom: '',
-            amount: `${data.hourly_work.total_hours}h ${data.hourly_work.total_minutes}m`,
+            amount: `${data.hourly_work.total_hours}h`,
             earned: data.hourly_work.total_earned
           });
 

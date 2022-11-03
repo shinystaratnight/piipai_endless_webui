@@ -9,10 +9,11 @@ import {
   AfterViewChecked,
   ElementRef,
   HostListener,
-  Optional
+  Optional,
 } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { CustomEvent } from '../../../models/custom-event.model';
 
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
@@ -26,7 +27,7 @@ import {
   SiteSettingsService,
   CheckPermissionService,
   ToastService,
-  MessageType
+  MessageType,
 } from '@webui/core';
 import {
   FormatString,
@@ -35,13 +36,13 @@ import {
   isCandidate,
   getTranslationKey,
   checkAndReturnTranslation,
-  setPropValue
+  setPropValue,
 } from '@webui/utilities';
 
 import {
   GenericFormService,
   TimelineService,
-  TimelineAction
+  TimelineAction,
 } from '../../../services';
 import { BasicElementComponent } from '../basic-element/basic-element.component';
 import { LocalStorageService } from 'ngx-webstorage';
@@ -70,7 +71,7 @@ const translationMap = CountryCodeLanguage;
 @Component({
   selector: 'webui-form-related',
   templateUrl: './form-related.component.html',
-  styleUrls: ['./form-related.component.scss']
+  styleUrls: ['./form-related.component.scss'],
 })
 export class FormRelatedComponent
   extends BasicElementComponent
@@ -153,7 +154,7 @@ export class FormRelatedComponent
     2: '#fc9183',
     3: '#FFA236',
     4: '#ffbf00',
-    5: '#FFD042'
+    5: '#FFD042',
   };
 
   isClient = isClient;
@@ -213,7 +214,11 @@ export class FormRelatedComponent
       this.config.key = this.config.replaceKey;
     }
 
-    this.addControl(this.config, this.fb, this.config.templateOptions?.required);
+    this.addControl(
+      this.config,
+      this.fb,
+      this.config.templateOptions?.required
+    );
 
     this.skillEndpoint =
       this.config.endpoint === '/skills/skillbaserates/' ||
@@ -281,7 +286,10 @@ export class FormRelatedComponent
   }
 
   public checkMetadataQuery() {
-    const properties: (keyof Field)[] = ['metadata_query', 'add_metadata_query'];
+    const properties: (keyof Field)[] = [
+      'metadata_query',
+      'add_metadata_query',
+    ];
 
     properties.forEach((prop) => {
       this.config[prop] =
@@ -292,7 +300,7 @@ export class FormRelatedComponent
   public checkDelayData() {
     if (this.config.delay) {
       this.config.data = {
-        sendData: []
+        sendData: [],
       };
       this.config.delayData[this.config.endpoint as string] = this.config;
     }
@@ -628,7 +636,10 @@ export class FormRelatedComponent
   public checkAutocomplete() {
     if (this.config.autocompleteData) {
       const subscription = this.config.autocompleteData.subscribe((data) => {
-        const key = this.propertyMatches(Object.keys(data), this.config.key as string);
+        const key = this.propertyMatches(
+          Object.keys(data),
+          this.config.key as string
+        );
         if (key) {
           this.hideDetail = true;
           this.viewMode = true;
@@ -926,7 +937,11 @@ export class FormRelatedComponent
 
           for (const prop in el.attributes) {
             if (el.templateOptions) {
-              el.templateOptions[prop as keyof ITemplateOptions] = formatString.format(el.attributes[prop as keyof ITemplateOptions], this.formData);
+              el.templateOptions[prop as keyof ITemplateOptions] =
+                formatString.format(
+                  el.attributes[prop as keyof ITemplateOptions],
+                  this.formData
+                );
             }
           }
         }
@@ -939,52 +954,55 @@ export class FormRelatedComponent
       id: undefined,
       allData: undefined,
       data: this.fb.group({}),
-      metadata: <Field[]>[]
+      metadata: <Field[]>[],
     };
     const format = new FormatString();
-    object.metadata = metadata ? metadata.map((el) => {
-      const element = { ...el };
-      element.mode = el.mode;
+    const formData = new BehaviorSubject({ data: {} });
+    object.metadata = metadata
+      ? metadata.map((el) => {
+          const element = { ...el, formData };
+          element.mode = el.mode;
 
-      if (el.endpoint) {
-        el.endpoint = format.format(el.endpoint, this.formData);
-      }
-
-      if (el.query) {
-        const newQuery: Record<string, any> = {};
-        Object.keys(el.query).forEach((query) => {
-          if (typeof el.query[query] == 'string') {
-            newQuery[query] = format.format(el.query[query], this.formData);
-          } else {
-            newQuery[query] = el.query[query];
+          if (el.endpoint) {
+            el.endpoint = format.format(el.endpoint, this.formData);
           }
-        });
 
-        element.query = newQuery;
-      }
+          if (el.query) {
+            const newQuery: Record<string, any> = {};
+            Object.keys(el.query).forEach((query) => {
+              if (typeof el.query[query] == 'string') {
+                newQuery[query] = format.format(el.query[query], this.formData);
+              } else {
+                newQuery[query] = el.query[query];
+              }
+            });
 
-      if (el.prefilled) {
-        const newPrefilled: Record<string, any> = {};
-        Object.keys(el.prefilled).forEach((field) => {
-          newPrefilled[field] = format.format(
-            el.prefilled[field],
-            this.formData
-          );
-        });
+            element.query = newQuery;
+          }
 
-        element.prefilled = newPrefilled;
-      }
+          if (el.prefilled) {
+            const newPrefilled: Record<string, any> = {};
+            Object.keys(el.prefilled).forEach((field) => {
+              newPrefilled[field] = format.format(
+                el.prefilled[field],
+                this.formData
+              );
+            });
 
-      if (
-        !el.value &&
-        typeof el.default === 'string' &&
-        this.dataOfList.length === 0
-      ) {
-        element.value = format.format(el.default, this.formData);
-      }
+            element.prefilled = newPrefilled;
+          }
 
-      return element;
-    }) : [];
+          if (
+            !el.value &&
+            typeof el.default === 'string' &&
+            this.dataOfList.length === 0
+          ) {
+            element.value = format.format(el.default, this.formData);
+          }
+
+          return element;
+        })
+      : [];
 
     return object;
   }
@@ -1001,15 +1019,17 @@ export class FormRelatedComponent
     e.stopPropagation();
     e.preventDefault();
     if (object.id) {
-      this.genericFormService.delete(this.config.endpoint as string, object.id).subscribe(
-        () => {
-          this.dataOfList.splice(this.dataOfList.indexOf(object), 1);
-          this.updateValue();
-        },
-        (error) => {
-          this.toastr.sendMessage(error.errors.join(' '), MessageType.Error);
-        }
-      );
+      this.genericFormService
+        .delete(this.config.endpoint as string, object.id)
+        .subscribe(
+          () => {
+            this.dataOfList.splice(this.dataOfList.indexOf(object), 1);
+            this.updateValue();
+          },
+          (error) => {
+            this.toastr.sendMessage(error.errors.join(' '), MessageType.Error);
+          }
+        );
     }
   }
 
@@ -1026,7 +1046,7 @@ export class FormRelatedComponent
       const endpoint = `${this.config.endpoint}${object.id}/`;
       const body = {
         default_rate: true,
-        skill: object.allData.skill.id
+        skill: object.allData.skill.id,
       };
       this.genericFormService
         .editForm(endpoint, body)
@@ -1035,6 +1055,26 @@ export class FormRelatedComponent
   }
 
   public updateValue(e?: any): void {
+    const { el, type } = e;
+    const eventTypes = ['change', 'create', 'blur'];
+
+    if (el?.formData) {
+      if (
+        eventTypes.includes(type) &&
+        el.key &&
+        (el.key !== 'address' || el.updateFormData)
+      ) {
+        el.formData.next({
+          key: el.key,
+          data: this.generateData(el.key, el.formData.getValue().data, e),
+          reset: e.manual && el.reset,
+          manual: e.manual,
+        });
+      }
+
+      this.cd.markForCheck();
+    }
+
     const value = this.dataOfList
       .filter((el: any) => el.data.valid)
       .map((el: any) => {
@@ -1065,7 +1105,43 @@ export class FormRelatedComponent
     this.group.get(this.key)?.patchValue(newValue);
   }
 
-  public fillingForm(metadata: Field[], data :any): void {
+  public generateData(
+    key: string,
+    data: Record<string, any> = {},
+    event: CustomEvent
+  ): any {
+    const keys = key.split('.');
+    const firstKey: string = keys.shift() as string;
+
+    if (keys.length === 0) {
+      if (event.el.type === 'related' && firstKey !== 'id') {
+        if (data[firstKey]) {
+          data[firstKey] = {
+            ...data[firstKey],
+            ...event.additionalData,
+          };
+        } else {
+          data[firstKey] = {
+            id: event.value,
+            ...event.additionalData,
+          };
+        }
+      } else {
+        data[firstKey] = event.value;
+      }
+    } else {
+      if (data[firstKey]) {
+        this.generateData(keys.join('.'), data[firstKey], event);
+      } else {
+        data[firstKey] = {};
+        this.generateData(keys.join('.'), data[firstKey], event);
+      }
+    }
+
+    return data;
+  }
+
+  public fillingForm(metadata: Field[], data: any): void {
     metadata.forEach((el) => {
       if (el.key) {
         this.getValueOfData(data, el.key, el);
@@ -1113,7 +1189,7 @@ export class FormRelatedComponent
       type: 'delete',
       endpoint: this.modalData.endpoint,
       id: this.modalData.id,
-      el: this.config
+      el: this.config,
     });
     this.group.get(this.key)?.patchValue('');
     delete this.config.value;
@@ -1218,8 +1294,8 @@ export class FormRelatedComponent
               : format.format(this.config.prefilled[el], this.formData),
             read_only: true,
             isPrefilled: true,
-            editForm: true
-          }
+            editForm: true,
+          },
         };
       });
     }
@@ -1232,7 +1308,7 @@ export class FormRelatedComponent
           : 'Received message',
         mode: 'view',
         edit: true,
-        metadataQuery: messageType.toLowerCase()
+        metadataQuery: messageType.toLowerCase(),
       });
 
       if (this.config.strField) {
@@ -1241,7 +1317,7 @@ export class FormRelatedComponent
 
       this.modalRef = this.modalService.open(this.messageDetail, {
         windowClass: 'message-detail',
-        backdrop: 'static'
+        backdrop: 'static',
       });
 
       return false;
@@ -1256,7 +1332,7 @@ export class FormRelatedComponent
     this.modalRef = this.modalService.open(this.modal, {
       size: 'lg',
       windowClass,
-      backdrop: 'static'
+      backdrop: 'static',
     });
 
     return false;
@@ -1356,7 +1432,9 @@ export class FormRelatedComponent
     let updated = false;
 
     if (this.config.relatedData) {
-      const data = this.config.relatedData.find((el: any) => !!el[item[this.param]]);
+      const data = this.config.relatedData.find(
+        (el: any) => !!el[item[this.param]]
+      );
       const mapedData: Record<string, any> = {};
 
       if (data) {
@@ -1453,7 +1531,7 @@ export class FormRelatedComponent
     if (this.config.tests) {
       const testsMap: Record<string, any> = {
         skill: 'acceptance_tests_skills',
-        tag: 'acceptance_tests_tags'
+        tag: 'acceptance_tests_tags',
       };
 
       return this.config.tests.filter((test) => {
@@ -1463,7 +1541,9 @@ export class FormRelatedComponent
           return false;
         }
 
-        return list.some((el: any) => el[this.config.key as string].id === item.id);
+        return list.some(
+          (el: any) => el[this.config.key as string].id === item.id
+        );
       });
     }
 
@@ -1476,7 +1556,7 @@ export class FormRelatedComponent
 
     this.event.emit({
       type: 'test',
-      item
+      item,
     });
   }
 
@@ -1522,13 +1602,18 @@ export class FormRelatedComponent
     this.updateData();
   }
 
-  public eventHandler(e: any, value: any, additionalData?: any, manual?: boolean) {
+  public eventHandler(
+    e: any,
+    value: any,
+    additionalData?: any,
+    manual?: boolean
+  ) {
     this.event.emit({
       type: e.type,
       el: this.config,
       value,
       additionalData,
-      manual
+      manual,
     });
   }
 
@@ -1536,7 +1621,7 @@ export class FormRelatedComponent
     this.event.emit({
       list: this.results,
       el: this.config,
-      type: 'chenge'
+      type: 'chenge',
     });
   }
 
@@ -1548,7 +1633,7 @@ export class FormRelatedComponent
         this.config.sendData.forEach((key) => (result[key] = el[key]));
         return {
           [this.param]: el[this.param],
-          ...result
+          ...result,
         };
       }
       return el[this.param];
@@ -1587,7 +1672,8 @@ export class FormRelatedComponent
       }
 
       if (this.modalData.endpoint !== this.config.addEndpoint) {
-        this.group.get(this.key)
+        this.group
+          .get(this.key)
           ?.patchValue(
             this.config.useValue
               ? this.config.value[this.param]
@@ -1646,7 +1732,7 @@ export class FormRelatedComponent
 
     this.event.emit({
       type: 'updateData',
-      el: this.config
+      el: this.config,
     });
   }
 
@@ -1678,18 +1764,21 @@ export class FormRelatedComponent
       const parsedKeys: Map<string, any> = new Map();
 
       keys.forEach((key) => {
-        const value = typeof queries[key] === 'string'
-          ? queries[key] === 'currentCompany'
-            ? this.settingsService.settings.company
-            : format.format(queries[key], this.formData)
-          : this.parseQueryValue(queries[key]);
+        const value =
+          typeof queries[key] === 'string'
+            ? queries[key] === 'currentCompany'
+              ? this.settingsService.settings.company
+              : format.format(queries[key], this.formData)
+            : this.parseQueryValue(queries[key]);
 
         if (!['', undefined, null].includes(value)) {
           parsedKeys.set(key, value);
         }
       });
 
-      query += Array.from(parsedKeys.entries()).map(([key, value]) => `${key}=${value}`).join('&');
+      query += Array.from(parsedKeys.entries())
+        .map(([key, value]) => `${key}=${value}`)
+        .join('&');
     }
     return query.length > 1 ? query : '';
   }
@@ -1722,7 +1811,10 @@ export class FormRelatedComponent
   ) {
     const format = new FormatString();
 
-    const endpoint = format.format(this.config.endpoint as string, this.formData);
+    const endpoint = format.format(
+      this.config.endpoint as string,
+      this.formData
+    );
     if (endpoint) {
       let query = '';
       if (value) {
@@ -1764,7 +1856,8 @@ export class FormRelatedComponent
 
                 results.forEach((el) => {
                   const { templateOptions } = this.config;
-                  const { listParam, listDisplay, info } = templateOptions as ITemplateOptions;
+                  const { listParam, listDisplay, info } =
+                    templateOptions as ITemplateOptions;
                   const display = listDisplay || this.display;
 
                   el.__str__ =
@@ -1795,7 +1888,7 @@ export class FormRelatedComponent
                         !this.config.options?.find(
                           (option) => option.id === element.id
                         )
-                    )
+                    ),
                   ];
                 } else {
                   this.config.options = [...results];
@@ -1851,7 +1944,9 @@ export class FormRelatedComponent
                   const item = target || res.results[0];
 
                   if (item) {
-                    const path = this.getLinkPath(this.config.endpoint as string);
+                    const path = this.getLinkPath(
+                      this.config.endpoint as string
+                    );
                     if (path) {
                       this.linkPath =
                         location.origin + path + item[this.param] + '/change';
@@ -2004,7 +2099,7 @@ export class FormRelatedComponent
 
   public isDisabled(data: any) {
     const config = this.config.disabled;
-    const messages:  string[] = [];
+    const messages: string[] = [];
     let disable = false;
 
     if (config) {
@@ -2018,7 +2113,7 @@ export class FormRelatedComponent
 
     return {
       disable,
-      messages
+      messages,
     };
   }
 

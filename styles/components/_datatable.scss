@@ -402,11 +402,11 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, 0.3);
 
   &-body {
     width: 100%;
-    padding: 0 15px;
+    // padding: 0 15px;
 
-    &.in-form {
-      margin: 0 -6px;
-    }
+    // &.in-form {
+    //   margin: 0 -6px;
+    // }
 
     &.in-form.open-filters {
       width: calc(100% - 285px);
