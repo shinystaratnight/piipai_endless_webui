@@ -271,7 +271,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
         this.currentRangeType = value;
         this.currentDate = this.calendar.getToday();
         this.selectedTime = '07:00';
-
+        this.selectDateService.clear();
         this.changeCalendar(value);
       }
     );
@@ -302,7 +302,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
     this.customRange = undefined;
     const rangeType = this.currentRange.value;
     this.currentDate = this.updateDate(this.currentDate, rangeType, increment);
-
+    this.selectDateService.clear();
     this.changeCalendar(rangeType);
 
     if (this.activeShift) {
