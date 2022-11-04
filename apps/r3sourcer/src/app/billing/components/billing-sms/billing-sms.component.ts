@@ -66,7 +66,10 @@ export class BillingSmsComponent implements OnInit, OnDestroy {
     });
   }
 
-  public autoCharge() {
+  public autoCharge(event: MouseEvent) {
+    event.stopPropagation();
+    event.preventDefault();
+
     this.group = new FormGroup({});
     this.modalConfig.forEach((el) => {
       el.value = this.smsBalance[el.key];

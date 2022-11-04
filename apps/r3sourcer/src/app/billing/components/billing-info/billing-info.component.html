@@ -1,8 +1,0 @@
-<ng-container *ngIf="currentPlan">
-  <p><span>Price:</span><span>{{currentPlan.price | currency: currency}}</span></p>
-  <p><span>Worker count:</span><span>{{currentPlan.worker_count}}</span></p>
-  <p><span>Type:</span><span style="text-transform: capitalize;">{{types[currentPlan.subscription_type]}}</span></p>
-  <p><span>Status:</span><span>{{currentPlan.active && 'Active'}}</span></p>
-  <p><span>Curent period start:</span><span>{{currentPlan.current_period_start | dateFormat:'datetime'}}</span></p>
-  <p><span>Curent period end:</span><span>{{currentPlan.current_period_end | dateFormat:'datetime'}}</span></p>
-</ng-container>
