@@ -186,7 +186,7 @@ const list = {
         label: 'Template',
         type: 'related',
         data: {
-          value: 'name',
+          value: '{name} ({language.name})',
           endpoint: '/sms-interface/smstemplates/',
           key: 'id',
         },
