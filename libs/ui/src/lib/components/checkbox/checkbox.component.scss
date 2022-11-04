@@ -1,5 +1,9 @@
 @use 'variables' as *;
 
+webui-checkbox {
+  display: inline-flex;
+}
+
 .checkbox {
   display: inline-flex;
   justify-content: center;
