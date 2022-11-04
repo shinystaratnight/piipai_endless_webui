@@ -23,7 +23,7 @@ const list = () => {
           key: 'template',
           label: 'Template',
           endpoint: Endpoints.EmailTemplate,
-          display: 'name',
+          display: '{name} ({language.name})',
         }),
 
         new Filter.date.element({
