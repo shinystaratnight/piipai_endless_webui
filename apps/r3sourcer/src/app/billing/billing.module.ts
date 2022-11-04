@@ -19,6 +19,7 @@ import { routes } from './billing.routing';
 import { Metadata } from './metadata.config';
 import { SharedModule } from '../shared/shared.module';
 import { UiModule } from '@webui/ui';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
   imports: [
@@ -34,7 +35,8 @@ import { UiModule } from '@webui/ui';
     DynamicFormModule.forChild({ metadata: Metadata }),
     MasterGuideModule,
     SharedModule,
-    UiModule
+    UiModule,
+    TranslateModule
   ],
   declarations: [
     BillingComponent,

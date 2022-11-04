@@ -1,24 +1,31 @@
-<div class="credit-card-wrapper">
-  <h5>Enter your payment information</h5>
+<div class="group">
+  <div class="group__content">
+    <h5 class="group__label mt-4">Enter your payment information</h5>
 
-  <div *ngIf="cardExist && !newCard" class="d-flex align-items-center">
-    <span *ngIf="cardExist" class="credit-card-alert bg-success">
-      <fa-icon [icon]="['fas', 'credit-card']"></fa-icon>
-      Credit Card Saved!
-    </span>
-
-    <button class="btn btn-primary" (click)="showCardForm()">Add new CC</button>
-  </div>
-
-  <form (submit)="checkCard($event)" class="me-3" [hidden]="cardExist && !newCard">
-    <div class="form-row flex-grow-1 me-3" [class.submited]="saving">
-      <div id="card-element"></div>
-      <div id="card-errors" role="alert">{{error}}</div>
+    <div *ngIf="cardExist && !newCard" class="d-flex align-items-center">
+      <button class="btn btn-primary" (click)="showCardForm()">
+        Add new CC
+      </button>
     </div>
 
-    <button class="btn btn-primary align-self-start mt-2">Save card</button>
-    <button *ngIf="cardExist" class="btn btn-default align-self-start mt-1 ms-2" (click)="newCard = false">Cancel</button>
-  </form>
+    <form
+      (submit)="checkCard($event)"
+      class="me-3"
+      [hidden]="cardExist && !newCard"
+    >
+      <div class="form-row flex-grow-1 me-3" [class.submited]="saving">
+        <div id="card-element"></div>
+        <div id="card-errors" role="alert">{{ error }}</div>
+      </div>
 
+      <button class="btn btn-primary align-self-start mt-2">Save card</button>
+      <button
+        *ngIf="cardExist"
+        class="btn btn-default align-self-start mt-1 ms-2"
+        (click)="newCard = false"
+      >
+        Cancel
+      </button>
+    </form>
+  </div>
 </div>
-

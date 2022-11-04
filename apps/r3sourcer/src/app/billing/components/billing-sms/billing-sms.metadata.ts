@@ -18,7 +18,6 @@ export const autoChargeMetadata = [
     templateOptions: {
       label: 'If the balance falls below',
       type: 'number',
-      bold: true
     },
     read_only: false
   },
@@ -30,7 +29,6 @@ export const autoChargeMetadata = [
     templateOptions: {
       label: 'Charge the balance by',
       type: 'number',
-      bold: true
     },
     read_only: false
   },

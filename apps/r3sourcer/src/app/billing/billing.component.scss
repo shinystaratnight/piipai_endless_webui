@@ -1,43 +1,79 @@
-.billing-page {
-  background-color: #fff;
-  .form-page{
+@use 'variables' as *;
+
+.billing {
+  &__page {
+    padding-top: 3rem;
     max-width: 1448px;
+    display: grid;
+    gap: 20px;
+
+    @include media-breakpoint-up('lg') {
+      grid-template-columns: 1fr 470px;
+    }
   }
 
+  &__section {
+    background: $white;
+    border: 1px solid $border-color;
+    box-shadow: 0px 4px 23px rgba(211, 222, 234, 0.25);
+    border-radius: 5px;
+  }
+}
 
-  h5 {
-    margin-bottom: 1rem;
+.divider {
+  color: $border-color;
+  margin: 1.5rem 0;
+}
+
+.group {
+  &__label {
     font-family: 'Roboto';
-    font-style: normal;
-    font-weight: 500;
     font-size: 18px;
-    line-height: 21px;
+    font-weight: 500;
     text-transform: uppercase;
-    color: #7A7A7A;
+    color: $secondary-color;
+    margin-bottom: 0.5rem;
   }
 
-  .filters-label h5 {
-    text-transform: none;
-    opacity: 1;
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding-left: 35px;
+    padding-right: 35px;
+  }
+
+  &__footer {
+    margin-top: 1rem;
+    padding: 20px 35px;
+    background-color: $brand-light-color;
+    align-items: center;
   }
 }
 
-.billing-list{
-  background: #FFFFFF;
-  border: 1px solid #D3DEEA;
-  box-shadow: 0px 4px 23px rgba(211, 222, 234, 0.25);
-  border-radius: 5px;
-  padding-bottom: 20px;
-}
+.field {
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 14px;
+  line-height: 1.2;
+  color: $content-color;
+  font-weight: 600;
 
-.payment-box{
-  box-sizing: border-box;
-  background: #FFFFFF;
-  border: 1px solid #D3DEEA;
-  box-shadow: 0px 4px 23px rgba(211, 222, 234, 0.25);
-  border-radius: 5px;
-}
+  &__label {
+    font-family: 'Roboto';
+    font-size: 12px;
+    line-height: 16px;
+    text-transform: uppercase;
+    font-weight: normal;
+    color: $secondary-color;
+    margin-bottom: 0;
+    min-width: 210px;
+  }
 
-.payment-box-separetor{
-  padding: 20px;
+  a {
+    display: inline-block;
+    margin-top: 0.5rem;
+    text-transform: uppercase;
+    text-decoration: underline;
+  }
 }

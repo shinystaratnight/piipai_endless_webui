@@ -1,30 +1,64 @@
-<div class="subcription-details">
-  <div class="row">
-    <div class="col-7"><h5 class="me-1">Subscription details</h5></div>
-    <div class="col-1">
-      <button type="button" class="btn hov-opacity" (click)="editSubscription()">
-        <fa-icon icon="pencil-alt" class="text-success icon-16"></fa-icon>
+<div class="group">
+  <div class="group__content">
+    <h5 class="header group__label">
+      <span>Subscription details</span>
+
+      <button type="button" class="btn hov-opacity" (click)="changePlan()">
+        <fa-icon icon="pencil-alt" class="text-success"></fa-icon>
       </button>
-    </div>
-    <div class="col-1">
-      <button type="button" class="btn hov-opacity" (click)="deleteSubscription()">
-        <fa-icon icon="trash" class="text-danger icon-16"></fa-icon>
+
+      <button type="button" class="btn hov-opacity" (click)="cancelPlan()">
+        <fa-icon icon="trash" class="text-danger"></fa-icon>
       </button>
-    </div>
+    </h5>
+
+    <ng-container *ngIf="currentPlan">
+      <div class="field">
+        <label class="field__label">Price:</label>
+        <span>{{ currentPlan.price | currency: currency }}</span>
+      </div>
+      <div class="field">
+        <label class="field__label">Worker count:</label>
+        <span>{{ currentPlan.worker_count }}</span>
+      </div>
+      <div class="field">
+        <label class="field__label">Type:</label>
+        <span style="text-transform: capitalize">
+          {{ types[currentPlan.subscription_type] }}
+        </span>
+      </div>
+      <div class="field">
+        <label class="field__label">Status:</label>
+        <span>{{ currentPlan.active && 'Active' }}</span>
+      </div>
+      <div class="field">
+        <label class="field__label">Curent period start:</label>
+        <span>
+          {{ currentPlan.current_period_start | dateFormat: 'datetime' }}
+        </span>
+      </div>
+      <div class="field">
+        <label class="field__label">Curent period end:</label>
+        <span>
+          {{ currentPlan.current_period_end | dateFormat: 'datetime' }}
+        </span>
+      </div>
+    </ng-container>
   </div>
-
-  <webui-billing-info [currentPlan]="currentPlan" [plans]="plans" [currency]="currency"></webui-billing-info>
-
-  <!-- <button type="button"
-  class="btn btn-sm btn-primary action-button"
-  [disabled]="!cardExist">Save Card</button> -->
 </div>
 
-<button type="button" class="btn btn-primary subscribe-button"
+<!-- <button type="button"
+  class="btn btn-sm btn-primary action-button"
+  [disabled]="!cardExist">Save Card</button> -->
+
+<button
+  type="button"
+  class="btn btn-primary"
   *ngIf="!currentPlan"
   [disabled]="!cardExist"
-  (click)="setPlan()">
-    Subscribe
+  (click)="setPlan()"
+>
+  Subscribe
 </button>
 
 <ng-template #subscription let-c="close" let-d="dismiss">
@@ -39,45 +73,70 @@
   <div class="modal-body">
     <form>
       <div class="form-element">
-        <label for="employees">
-          Employees count:
-        </label>
-        <input class="form-control form-element-content" size="5" type="number" name="employees" id="employees" min="1" max="1005"
+        <label for="employees"> Employees count: </label>
+        <input
+          class="form-control form-element-content"
+          size="5"
+          type="number"
+          name="employees"
+          id="employees"
+          min="1"
+          max="1005"
           [ngModel]="workerCount"
-          (ngModelChange)="workerCount = $event > 1006 ? 1005 : $event < 1 ? 1 : $event">
+          (ngModelChange)="
+            workerCount = $event > 1006 ? 1005 : $event < 1 ? 1 : $event
+          "
+        />
       </div>
     </form>
 
     <div class="plan-info">
-      <div *ngFor="let plan of plans" [class.active]="checkActivePlan(plan)" class="plan-item" (click)="selectPlan(plan)">
+      <div
+        *ngFor="let plan of plans"
+        [class.active]="checkActivePlan(plan)"
+        class="plan-item"
+        (click)="selectPlan(plan)"
+      >
         <div class="plan-name">
-          <h4 class="mb-2 pt-3">{{plan.heading}}
+          <h4 class="mb-2 pt-3">
+            {{ plan.heading }}
             <small *ngIf="plan.discount_comment">
-              {{plan.discount_comment}}
-              {{plan.percentage_discount ? plan.percentage_discount + '%' : ''}}
+              {{ plan.discount_comment }}
+              {{
+                plan.percentage_discount ? plan.percentage_discount + '%' : ''
+              }}
             </small>
           </h4>
-          <p>{{plan.heading_tag_line}}</p>
+          <p>{{ plan.heading_tag_line }}</p>
         </div>
         <div class="plan-detail">
-          <h4 class="mb-1">{{planPay(plan) | currency : currency}}</h4>
-          <p class="mb-2">{{plan.amount_tag_line}}</p>
-          <p class="annually"><small>({{planPayYear(plan) | currency : currency}} annually)</small></p>
+          <h4 class="mb-1">{{ planPay(plan) | currency: currency }}</h4>
+          <p class="mb-2">{{ plan.amount_tag_line }}</p>
+          <p class="annually">
+            <small>
+              ({{ planPayYear(plan) | currency: currency }} annually)
+            </small>
+          </p>
           <ul class="features" *ngIf="plan.table">
             <ng-container *ngFor="let item of plan.table">
               <li class="features__item" *ngIf="item">
                 <fa-icon icon="check" class="features__icon"></fa-icon>
-                {{item}}
+                {{ item }}
               </li>
             </ng-container>
           </ul>
 
-          <p *ngIf="plan.amount_comment" class="pay mt-auto">{{plan.amount_comment}}</p>
+          <p *ngIf="plan.amount_comment" class="pay mt-auto">
+            {{ plan.amount_comment }}
+          </p>
         </div>
       </div>
     </div>
 
-    <p *ngIf="workerCount > 1000" class="message">Please contact our sales staff for customized offer: <a href="mailto:sales@r3sourcer.com">sales@r3sourcer.com</a></p>
+    <p *ngIf="workerCount > 1000" class="message">
+      Please contact our sales staff for customized offer:
+      <a href="mailto:sales@r3sourcer.com">sales@r3sourcer.com</a>
+    </p>
 
     <div class="spinner-wrapper" *ngIf="saveProcess">
       Saving... <webui-spinner></webui-spinner>
