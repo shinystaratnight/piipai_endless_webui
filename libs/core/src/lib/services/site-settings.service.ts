@@ -82,12 +82,11 @@ export class SiteSettingsService {
           return of({} as CompanySettings);
         })
       );
-    } else if (this.settings) {
+    } else {
       return of(this.settings).pipe(
         tap((settings) => this.updateLanguage(settings))
       );
     }
-    return;
   }
 
   private updateBrowserStyles(settings: CompanySettings): void {

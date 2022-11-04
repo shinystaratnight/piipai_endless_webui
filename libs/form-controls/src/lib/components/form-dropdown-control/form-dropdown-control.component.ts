@@ -92,7 +92,7 @@ export class FormDropdownControlComponent
   ) {}
 
   public get isOpen(): boolean {
-    return !!this.overlayRef?.hasAttached();
+    return !!this.overlayRef;
   }
 
   public ngOnInit(): void {
@@ -127,6 +127,7 @@ export class FormDropdownControlComponent
     }
 
     this.overlayRef = null;
+    this.cd.markForCheck();
   }
 
   public setValue(option: DropdownOption): void {
@@ -169,7 +170,7 @@ export class FormDropdownControlComponent
         this.options$.next(DropdownPayload.initialState());
         this.dropdownService.clearPagination();
         this.fetchOptions(value);
-        this.cd.detectChanges();
+        this.cd.markForCheck();
       });
   }
 
@@ -278,7 +279,7 @@ export class FormDropdownControlComponent
   public writeValue(obj: any): void {
     if (obj) {
       this.value = obj;
-      this.control?.patchValue(obj.__str__, { emitEvent: false });
+      this.control?.patchValue(obj.label || obj.__str__, { emitEvent: false });
     }
   }
 

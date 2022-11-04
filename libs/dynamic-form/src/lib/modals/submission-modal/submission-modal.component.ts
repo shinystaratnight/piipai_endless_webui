@@ -16,8 +16,6 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Modal, Status } from '../modal/modal.component';
 import { Endpoints } from '@webui/models';
 
-type ViewType = 'time' | 'activity' | undefined;
-
 const isHourlyWork = (name: string): boolean => {
   return name.toLocaleLowerCase().replace(/ /g, '_').includes('hourly_work');
 };
@@ -32,21 +30,22 @@ export class SubmissionModalComponent
   extends Modal
   implements OnInit, OnDestroy
 {
-
-  private _type = new BehaviorSubject<ViewType>(undefined);
-
   public data: any;
   public activityEndpoint = Endpoints.SkillWorkTypes;
   public timeSheet!: TimeSheet;
   public Icon = Icon;
   public IconSize = IconSize;
   public DatepickerType = DatepickerType;
-  public processing$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  public processing$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
+    false
+  );
   public formGroup!: FormGroup;
-
+  public activeTab?: string;
   public activityParams?: { [key: string]: any };
-
-  viewType$ = this._type.asObservable();
+  public tabs = {
+    time: 'tab-time',
+    activity: 'tab-activity',
+  };
 
   public get activitiesForm(): FormGroup[] {
     return (this.formGroup.get('activities') as FormArray)
@@ -72,7 +71,9 @@ export class SubmissionModalComponent
   }
 
   public get title(): string {
-    return this.timeSheet.status === 7 ? 'edit_worksheet' : 'worksheet_submission';
+    return this.timeSheet.status === 7
+      ? 'edit_worksheet'
+      : 'worksheet_submission';
   }
 
   private destroy$: Subject<void> = new Subject<void>();
@@ -88,12 +89,11 @@ export class SubmissionModalComponent
 
   public ngOnInit() {
     this.timeSheet = new TimeSheet(this.data);
-
     if (this.timeSheet.status !== 4) {
       if (this.timeSheet.endedAt) {
-        this._type.next('time')
+        this.activeTab = this.tabs.time;
       } else {
-        this._type.next('activity')
+        this.activeTab = this.tabs.activity;
       }
     }
 
@@ -109,8 +109,9 @@ export class SubmissionModalComponent
     );
     this.activityParams = this.getActivityParams();
 
-    this.formGroup.get('activity')?.valueChanges
-      .subscribe((option: DropdownOption) => {
+    this.formGroup
+      .get('activity')
+      ?.valueChanges.subscribe((option: DropdownOption) => {
         if (option && !this.formGroup.get('amount')) {
           this.formGroup.addControl('amount', new FormControl(0));
         } else if (!option) {
@@ -154,19 +155,21 @@ export class SubmissionModalComponent
   }
 
   public submitForm(): void {
-    const creationRequests = this.formGroup.value.activities.map((activity: any) => {
-      const timesheetRate = new TimesheetRate(activity);
+    const creationRequests = this.formGroup.value.activities.map(
+      (activity: any) => {
+        const timesheetRate = new TimesheetRate(activity);
 
-      return timesheetRate.id
-        ? this.apiService.updateForm(
-            timesheetRate.editApiEndpoint,
-            timesheetRate.requestBody
-          )
-        : this.apiService.submitForm(
-            timesheetRate.apiEndpoint,
-            timesheetRate.requestBody
-          );
-    });
+        return timesheetRate.id
+          ? this.apiService.updateForm(
+              timesheetRate.editApiEndpoint,
+              timesheetRate.requestBody
+            )
+          : this.apiService.submitForm(
+              timesheetRate.apiEndpoint,
+              timesheetRate.requestBody
+            );
+      }
+    );
 
     creationRequests.push(
       ...this.removedActivities.map((activity) =>
@@ -217,17 +220,13 @@ export class SubmissionModalComponent
     this.removedActivities.push(timesheetRate);
   }
 
-  public activityOptionFilter(option: DropdownOption) {
-    return !isHourlyWork(option.label);
-  }
+  public activityOptionFilter = (option: DropdownOption) => {
+    const selectedOptions = (this.formGroup.get('activities')?.value as any[])
+      .filter((el) => el.worktype?.id)
+      .map((el) => el.worktype.id);
 
-  setActivity() {
-    this._type.next('activity');
-  }
-
-  setTime() {
-    this._type.next('time');
-  }
+    return !selectedOptions.includes(option.id);
+  };
 
   private updateTimeSheet(value: any) {
     if ('shiftStartedAt' in value) {
@@ -275,8 +274,9 @@ export class SubmissionModalComponent
       worktype: new FormControl(activity?.worktype, Validators.required),
     });
 
-    form.get('worktype')?.valueChanges
-      .pipe(takeUntil(this.destroy$))
+    form
+      .get('worktype')
+      ?.valueChanges.pipe(takeUntil(this.destroy$))
       .subscribe((worktype: DropdownOption) => {
         if (worktype instanceof DropdownOption) {
           const rate = worktype.getField('skill_rate');
