@@ -23,7 +23,7 @@ body {
     flex-wrap: wrap;
     margin-right: -15px;
     margin-left: -15px;
-    --bs-gutter-x: 0rem; 
+    --bs-gutter-x: 0rem;
     position: unset;
 }
 .user-registration .dynamic-form {
@@ -330,11 +330,6 @@ sup {
 .user-registration .info {
     display: none !important;
 }
-.login_here_4 {
-    left: 0px;
-}
-.login_here_4 .register-link {
-}
 /* Responsive */
 @media only screen and (max-width: 600px) {
     #piiprent {
@@ -434,7 +429,7 @@ sup {
         position: relative;
         left: 232px;
     top: -88px;
-    
+
     display: block;
     width: 28%;
     }
@@ -504,9 +499,6 @@ sup {
         display: flex;
         margin-left: 0px !important;
         margin-top: -37px !important;
-    }
-    .login_here_4 {
-        left: 0px !important;
     }
     .button-container {
         margin-left: -15px;

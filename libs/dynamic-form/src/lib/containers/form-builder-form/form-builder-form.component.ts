@@ -5,7 +5,7 @@ import {
   Output,
   EventEmitter,
   OnDestroy,
-  ChangeDetectorRef
+  ChangeDetectorRef,
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormGroup } from '@angular/forms';
@@ -30,7 +30,7 @@ type Step = {
   selector: 'webui-form-builder-form',
   templateUrl: './form-builder-form.component.html',
   styleUrls: ['./form-builder-form.component.scss'],
-  providers: [FormService]
+  providers: [FormService],
 })
 export class FormBuilderFormComponent implements OnInit, OnDestroy {
   @Input() public id?: string;
@@ -46,7 +46,7 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
   public hiddenFields: HiddenFields = {
     elements: [],
     keys: [],
-    observers: []
+    observers: [],
   };
   public formChangeSubscription!: Subscription;
 
@@ -54,8 +54,12 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
 
   private industryField = industryField;
   public steps = steps;
-  private invalid: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  private saving: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  private invalid: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
+    false
+  );
+  private saving: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
+    false
+  );
   private _step: BehaviorSubject<Step> = new BehaviorSubject({} as Step);
   barWidth: any = 0;
   constructor(
@@ -79,6 +83,18 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
     return this.invalid.asObservable();
   }
 
+  public isLastStep(step: Step) {
+    return this.steps.length - 1 === step.position;
+  }
+
+  public isComplete(index: number) {
+    return index < this._step.value.position;
+  }
+
+  public isActive(index: number) {
+    return index === this._step.value.position;
+  }
+
   public ngOnInit() {
     this.form = new FormGroup({});
 
@@ -87,7 +103,7 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
     });
 
     this.industryField.query = {
-      company: this.companyId
+      company: this.companyId,
     };
 
     this.getRenderData();
@@ -160,7 +176,7 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
           const newValue = value.map((item) => {
             if (typeof item === 'string') {
               return {
-                id: item
+                id: item,
               };
             }
 
@@ -253,14 +269,17 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
 
             step.metadata.push({
               type: 'row',
-              children: metadata
+              children: metadata,
             });
           }
         } else {
           const field = getElementFromMetadata(this.config.ui_config, key);
 
           if (field) {
-            if (field.templateOptions && key === 'superannuation_membership_number') {
+            if (
+              field.templateOptions &&
+              key === 'superannuation_membership_number'
+            ) {
               field.templateOptions.label = 'Superannuation membership number';
             }
 
@@ -315,6 +334,8 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
 
         this.generateSteps();
         this.changeStep(0);
+        this.cd.markForCheck();
+        console.log(this);
       });
     }
   }
@@ -481,7 +502,7 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
       ...field,
       query: {
         industry: '{industry.id}',
-        company: 'currentCompany'
+        company: 'currentCompany',
       },
       formData,
       many: true,
@@ -490,8 +511,8 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
       showIf: ['industry.id'],
       templateOptions: {
         ...field.templateOptions,
-        values: ['__str__', 'id', 'translations', 'name']
-      }
+        values: ['__str__', 'id', 'translations', 'name'],
+      },
     };
   }
 
@@ -502,7 +523,7 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
       many: true,
       unique: true,
       // tests,
-      formData
+      formData,
     };
   }
 
@@ -510,7 +531,7 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
     const step: Step = {
       ...this.steps[nextStep],
       key: nextStep,
-      position: nextStep + 1
+      position: nextStep,
     };
 
     this._step.next(step);
@@ -562,7 +583,9 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
       const industries = test.acceptance_tests_industries.map(
         (test: any) => test.industry.id
       );
-      const skills = test.acceptance_tests_skills.map((test: any) => test.skill.id);
+      const skills = test.acceptance_tests_skills.map(
+        (test: any) => test.skill.id
+      );
       const tags = test.acceptance_tests_tags.map((test: any) => test.tag.id);
 
       if (!industries.length && !skills.length && !tags.length) {
@@ -601,13 +624,13 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
       currentTest.subscribe((index) => {
         const test = testsForPassing[index];
         this.modalRef = this.modalService.open(PassTestModalComponent, {
-          backdrop: 'static'
+          backdrop: 'static',
         });
         this.modalRef.componentInstance.config = {
           test,
           description: test.description,
           send: false,
-          skipScoreForTest: true
+          skipScoreForTest: true,
         } as PassTestModalConfig;
 
         this.modalRef.result

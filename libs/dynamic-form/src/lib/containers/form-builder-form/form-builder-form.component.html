@@ -1,79 +1,98 @@
-<div *ngIf="config">
-  <section class="form ">
-    <div class="p-3  form-hidden align-items-center justify-content-end">
-      <webui-language-selector></webui-language-selector>
-    </div>
+<ng-container *ngIf="config; else loader">
+  <section class="form">
+    <header class="form__header">
+      <h1 *ngIf="config.title" class="form__title">{{ config.title }}</h1>
+
+      <p *ngIf="config.short_description">
+        {{ config.short_description }}
+      </p>
+    </header>
+
+    <ng-container *ngTemplateOutlet="stepper"></ng-container>
 
     <ng-container *ngIf="step$ | async as step">
-      <div class="row">
-        <div class="col-12 text-center form-name" *ngIf="step.position === 1" >{{ 'registration.general_info' | translate }}</div>
-        <div class="col-12 text-center form-name" *ngIf="step.position === 2" >{{ 'registration.additional_info' | translate }}</div>
-        <div class="col-12 text-center form-name" *ngIf="step.position === 3" >{{ 'registration.financial_info' | translate }}</div>
-        <div class="col-12 text-center form-name" *ngIf="step.position === 4" >{{ 'registration.industry_info' | translate }}12</div>
+      <webui-dynamic-form
+        [formBuilder]="true"
+        [config]="step.metadata"
+        [form]="form"
+        [errors]="error"
+        [formId]="formId"
+        [hiddenFields]="hiddenFields"
+      >
+      </webui-dynamic-form>
+
+      <div class="form__footer">
+        <div class="form__footer-buttons">
+          <button
+            *ngIf="step.position !== 1"
+            type="button"
+            class="button-secondary button-secondary--without-shadow"
+            (click)="back()"
+          >
+            {{ 'back' | translate }}
+          </button>
+
+          <button
+            class="button-primary"
+            [disabled]="invalid$ | async"
+            (click)="next()"
+          >
+            {{ 'next_step' | translate }}
+          </button>
+
+          <button
+            *ngIf="isLastStep(step)"
+            type="submit"
+            class="button-primary"
+            [disabled]="form.invalid || (saving$ | async)"
+            (click)="submitForm()"
+          >
+            {{ 'registration.register' | translate }}
+
+            <webui-spinner *ngIf="saving$ | async"></webui-spinner>
+          </button>
+        </div>
+
+        <p>
+          {{ 'registration.already_account' | translate }}
+
+          <a routerLink="/login" class="link">
+            {{ 'registration.login_here' | translate }}
+          </a>
+        </p>
       </div>
-      <div class="row" *ngIf="steps.length > 1">
-        <div class="step-container col text-center" >
-          <span class="progresbar-steps" [style.background]="'linear-gradient(90deg, #2196F3 '+ barWidth+'%, rgba(35, 154, 246, 0.706568) 30.25%, rgba(37, 157, 248, 0.3) 51.84%, rgba(40, 163, 252, 0.03) 100%)'" ></span>
-          
-          <ul class="step-list">
-            <li [ngClass]="{'active': step.position >= 1}" >
-              <span class="marker-number">{{step.position > 1 ? '&#10004;' : '1'}}</span>
-              <span class="marker-text">{{ 'registration.general_info' | translate }}</span>
-            </li>
-            <li [ngClass]="{'active': step.position >= 2}" >
-              <span class="marker-number">{{step.position > 2 ? '&#10004;' : '2'}}</span>
-              <span class="marker-text">{{ 'registration.additional_info' | translate }}</span>
-            </li>
-            <li [ngClass]="{'active': step.position >= 3}" >
-              <span class="marker-number">{{step.position > 3 ? '&#10004;' : '3'}}</span>
-              <span class="marker-text">{{ 'registration.financial_info' | translate }}</span>
-            </li>
-            <li [ngClass]="{'active': step.position >= 4}" >
-              <span class="marker-number">{{step.position > 4 ? '&#10004;' : '4'}}</span>
-              <span class="marker-text">{{ 'registration.industry_info' | translate }}</span>
-            </li>
-          </ul>
-        </div>
-
-        <span class="form__steps form-hidden">
-          {{ 'registration.step' | translate }} {{ step.position }}
-          {{ 'registration.of' | translate }} {{ steps.length }}
-        </span>
-
-        <h3 class="form__name  form-hidden" >{{ step.title | translate }}</h3>
-      </div>
-
-      <section>
-
-        <webui-dynamic-form
-          [formBuilder]="true"
-          [config]="step.metadata"
-          [form]="form"
-          [errors]="error"
-          [formId]="formId"
-          [hiddenFields]="hiddenFields"
-        >
-        </webui-dynamic-form>
-        <div class="row border-line " [ngClass]="['border-line_'+step.position]">
-
-        </div>
-        <div class="button-container">
-          <div class="col-12 text-center pt-4 pb-4" style="color: #7A7A7A;" *ngIf="step.position !== steps.length">
-            <button *ngIf="step.position !== 1" type="button" class="form__button btn btn-default btn-outline rounded-pill btn-back" (click)="back()" >{{ 'back' | translate }}</button>
-            <button class="btn btn-primary btn-lg rounded-pill" [disabled]="invalid$ | async" (click)="next()" >{{ 'next_step' | translate }}</button>
-          </div>
-          <div class="col-12 text-center pt-4 pb-4 register-button" *ngIf="step.position === steps.length">
-            <button *ngIf="step.position !== 1" type="button" class="form__button btn btn-default btn-outline rounded-pill btn-back" (click)="back()" >{{ 'back' | translate }}</button>
-
-            <button type="submit" class="btn btn-primary btn-lg rounded-pill" [disabled]="form.invalid || (saving$ | async)" (click)="submitForm()"  >
-              {{ 'registration.register' | translate }}
-              <webui-spinner *ngIf="saving$ | async"></webui-spinner>
-            </button>
-
-          </div>
-          <div class="col-12 text-center pb-4" style="color: #7A7A7A;" [ngClass]="['login_here_'+step.position]"><span class="register-link" >{{ 'registration.already_account' | translate }}, <a href="javascript:void(0);" (click)="back()" >{{ 'registration.login_here' | translate }}</a></span></div>
-        </div>
-      </section>
     </ng-container>
   </section>
-</div>
+</ng-container>
+
+<ng-template #loader>
+  <div class="form__loader">
+    <webui-loader></webui-loader>
+  </div>
+</ng-template>
+
+<ng-template #stepper>
+  <div *ngIf="step$ | async as currentStep" class="form__stepper-wrapper">
+    <ul class="form__stepper">
+      <li
+        class="form__step"
+        [class.form__step--active]="isActive(index)"
+        [class.form__step--complete]="isComplete(index)"
+        *ngFor="let step of steps; let index = index"
+      >
+        <span class="form__step-index">
+          <ng-container *ngIf="!isComplete(index)">
+            {{ index + 1 }}
+          </ng-container>
+
+          <fa-icon *ngIf="isComplete(index)" icon="check"></fa-icon>
+        </span>
+        <span class="form__step-title">
+          {{ step.title | translate }}
+        </span>
+      </li>
+    </ul>
+
+    <div class="form__stepper-progress"></div>
+  </div>
+</ng-template>
