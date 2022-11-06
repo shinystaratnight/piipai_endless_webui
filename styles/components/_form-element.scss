@@ -18,6 +18,10 @@
       color: $primary;
       z-index: 9;
     }
+
+    .form-check-label {
+      margin-bottom: 0;
+    }
   }
 
   input,
@@ -265,6 +269,11 @@
     &.edit {
       max-width: 300px;
 
+      .redesign & {
+        max-width: none;
+        width: 100%;
+      }
+
       @include media-breakpoint-down('sm') {
         max-width: unset;
       }
@@ -310,6 +319,10 @@
 
       .input-group {
         max-width: 300px;
+
+        .redesign & {
+          max-width: none;
+        }
       }
     }
 
@@ -358,6 +371,8 @@
     gap: 0.5rem;
 
     .redesign & {
+      margin-bottom: 0;
+
       .radio-circle {
         display: none;
       }

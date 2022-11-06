@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter, OnInit, Input } from '@angular/core';
+import { Component, Output, EventEmitter, OnInit, Input, ViewEncapsulation } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 
 import { isMobile, isCandidate } from '@webui/utilities';
@@ -7,7 +7,8 @@ import { BehaviorSubject, Subscription } from 'rxjs';
 @Component({
   selector: 'webui-form-row',
   templateUrl: 'form-row.component.html',
-  styleUrls: ['./form-row.component.scss']
+  styleUrls: ['./form-row.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class FormRowComponent implements OnInit {
   public config: any;
@@ -40,7 +41,7 @@ export class FormRowComponent implements OnInit {
         : this.config.label;
     }
 
-    this.className = this.config.className || 'items';
+    this.className = this.config.className || 'form-row-items';
 
     this.checkChildrenOnReadOnlyProperty();
     this.checkFormData();

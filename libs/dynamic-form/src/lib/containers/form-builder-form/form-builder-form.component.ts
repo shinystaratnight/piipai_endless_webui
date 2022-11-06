@@ -259,13 +259,13 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
           });
 
           if (metadata.length) {
-            metadata.forEach((field, i) => {
-              if (i === 0 && metadata.length > 1) {
-                field.className = 'me-3';
-              } else if (i > 0 && metadata.length !== i + 1) {
-                field.className = 'me-3';
-              }
-            });
+            // metadata.forEach((field, i) => {
+            //   if (i === 0 && metadata.length > 1) {
+            //     field.className = 'me-3';
+            //   } else if (i > 0 && metadata.length !== i + 1) {
+            //     field.className = 'me-3';
+            //   }
+            // });
 
             step.metadata.push({
               type: 'row',
@@ -302,7 +302,7 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
         if (Array.isArray(field)) {
           field.forEach((item) => {
             if (errors[item]) {
-              step = i + 1 < step ? i + 1 : step;
+              step = i < step ? i : step;
             }
           });
         } else if (errors[field]) {

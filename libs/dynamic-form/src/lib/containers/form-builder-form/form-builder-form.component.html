@@ -25,7 +25,7 @@
         <div class="form__footer">
           <div class="form__footer-buttons">
             <button
-              *ngIf="step.position !== 1"
+              *ngIf="step.position !== 0"
               type="button"
               class="button-secondary button-secondary--without-shadow"
               (click)="back()"
@@ -34,6 +34,7 @@
             </button>
 
             <button
+              *ngIf="!isLastStep(step)"
               class="button-primary"
               [disabled]="invalid$ | async"
               (click)="next()"
