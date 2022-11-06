@@ -345,6 +345,10 @@ webui-form-button:not(:first-child) {
   &:hover:not(:disabled) {
     background-color: $brand-light-color;
   }
+
+  &--without-shadow {
+    box-shadow: none;
+  }
 }
 
 @include media-breakpoint-up('md') {

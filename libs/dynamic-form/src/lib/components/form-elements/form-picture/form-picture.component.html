@@ -233,32 +233,25 @@
 </ng-template>
 
 <ng-template #pictureView>
-  <div class="d-flex flex-wrap picture-container">
-    <div class="text-center dropzone-wrapper">
-      <label
-        class="dropzone-name"
-        [hidden]="true"
-        [class.required]="config.templateOptions.required"
-      >
-        {{ 'add_photo' | translate: { Default: 'Add photo' } }}
-      </label>
-      <div class="dropzone" #dropzone>
-        <fa-icon class="fa fa-user" [icon]="['fas', 'user']"></fa-icon>
-        <img *ngIf="value" [src]="value" alt="" width="100" height="100" />
-      </div>
+  <div class="picture">
+    <div class="image" #dropzone>
+      <fa-icon *ngIf="!value" icon="user"></fa-icon>
+      <img *ngIf="value" [src]="value" alt=""/>
     </div>
-    <div class="d-flex flex-column justify-content-center">
-      <span class="description" [hidden]="true">
-        {{ 'drag_and_drop' | translate }}
-      </span>
-      <div class="d-flex align-items-center buttons-wrapper">
-        <button class="btn action me-2" (click)="upload()">
-          {{ 'add_photo' | translate: { Default: 'Add photo' } }}
-        </button>
-        <button class="btn action" (click)="open()">
-          {{ 'use_camera' | translate: { Default: 'Use camera' } }}
-        </button>
-      </div>
-    </div>
+
+    <button
+      class="button-secondary button-secondary--without-shadow"
+      type="button"
+      (click)="upload()"
+    >
+      {{ 'add_photo' | translate: { Default: 'Add photo' } }}
+    </button>
+    <button
+      class="button-secondary button-secondary--without-shadow"
+      type="button"
+      (click)="open()"
+    >
+      {{ 'use_camera' | translate: { Default: 'Use camera' } }}
+    </button>
   </div>
 </ng-template>

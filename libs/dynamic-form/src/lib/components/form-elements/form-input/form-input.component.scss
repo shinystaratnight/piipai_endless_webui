@@ -95,6 +95,13 @@ button.password {
   font-size: 12px;
 
   opacity: 0.54;
+
+  .redesign & {
+    font-size: 16px;
+    line-height: 1.2;
+    color: $secondary-color;
+    opacity: 1;
+  }
 }
 
 .rating {

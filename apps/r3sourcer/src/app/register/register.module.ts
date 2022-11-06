@@ -6,9 +6,16 @@ import { DynamicFormModule } from '@webui/dynamic-form';
 import { routes } from './register.routing';
 import { RegisterComponent } from './register.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { UiModule } from '@webui/ui';
 
 @NgModule({
   declarations: [RegisterComponent],
-  imports: [CommonModule, DynamicFormModule, RouterModule.forChild(routes), FontAwesomeModule]
+  imports: [
+    CommonModule,
+    DynamicFormModule,
+    RouterModule.forChild(routes),
+    FontAwesomeModule,
+    UiModule,
+  ],
 })
 export class RegisterModule {}

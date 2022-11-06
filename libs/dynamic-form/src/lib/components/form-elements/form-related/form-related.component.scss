@@ -122,16 +122,16 @@ input::placeholder {
   font-weight: bold;
 }
 
-.form-control.autocomplete-value {
-  background: #fff url("/assets/img/down-arrow.svg") no-repeat;
-  background-position: right 0.75rem center;
-  background-size: 8px 8px;
-  padding-right: 1.5rem;
+// .form-control.autocomplete-value {
+//   background: #fff url("/assets/img/down-arrow.svg") no-repeat;
+//   background-position: right 0.75rem center;
+//   background-size: 8px 8px;
+//   padding-right: 1.5rem;
 
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-}
+//   -webkit-appearance: none;
+//   -moz-appearance: none;
+//   appearance: none;
+// }
 
 .one-line {
   white-space: nowrap;
