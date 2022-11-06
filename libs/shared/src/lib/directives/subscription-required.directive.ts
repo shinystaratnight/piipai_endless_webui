@@ -48,7 +48,7 @@ export class SubscriptionRequiredDirective implements OnDestroy, AfterViewInit {
 
   private subscribe(): void  {
     this.subscriptionService.activePlan$.subscribe((subscription) => {
-      if (!subscription) {
+      if (!subscription || !subscription.active) {
         this.disabled = true;
         this.renderer.setAttribute(this.el.nativeElement, 'disabled', 'disabled');
         this.renderer.addClass(this.el.nativeElement, 'disabled');
