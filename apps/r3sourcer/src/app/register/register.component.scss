@@ -30,4 +30,18 @@ $content-width: 748px;
     top: 1rem;
     right: 1rem;
   }
+
+  .link {
+    color: $primary;
+
+    &:hover {
+      text-decoration: underline;
+    }
+
+    @each $item in $themes {
+      .#{$item}-theme & {
+        color: map-get($theme-colors, $item);
+      }
+    }
+  }
 }
