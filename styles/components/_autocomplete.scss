@@ -39,9 +39,27 @@
 
     min-height: 22px;
 
+    .redesign & {
+      font-size: 16px;
+      line-height: 1.2;
+      height: auto;
+      min-height: auto;
+      border: 1px solid $border-color;
+      border-radius: 0.25rem;
+      background-color: $brand-light-color;
+      padding-top: 0.5rem;
+      padding-bottom: 0.5rem;
+      padding-left: 0.75rem;
+    }
+
     &.placeholder {
       font-size: 12px;
-      opacity: .7;
+
+      .redesign & {
+        font-size: 16px;
+        line-height: 1.2;
+        color: $secondary-color;
+      }
     }
 
     .filter-related & {
@@ -69,9 +87,9 @@
       border-color: $gray;
     }
 
-    .form-element &.form-control {
-      padding: 0;
-    }
+    // .form-element &.form-control {
+    //   padding: 0;
+    // }
   }
 
   &-list {

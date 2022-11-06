@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 import { CompanySettings, SiteSettingsService } from '@webui/core';
 
@@ -7,6 +7,7 @@ import { CompanySettings, SiteSettingsService } from '@webui/core';
   templateUrl: 'register.component.html',
   styleUrls: ['./register.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None
 })
 export class RegisterComponent implements OnInit {
   public settings!: CompanySettings;

@@ -14,7 +14,7 @@
     </label>
     <div class="edit inline" [class.column]="config.templateOptions.column">
       <ng-container *ngFor="let radio of config.templateOptions.options">
-        <div class="form-element-checkbox me-4" *ngIf="radio.value">
+        <div class="form-element-checkbox" *ngIf="radio.value">
           <label
             [attr.for]="radio.value"
             class="form-check-label d-flex align-items-center"

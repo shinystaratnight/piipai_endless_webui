@@ -8,7 +8,7 @@
   [hidden]="config.hide || viewMode || config.read_only"
   (mouseover)="currentField = true"
   (mouseleave)="currentField = false"
-  [ngClass]="['input_type_'+key]"
+  [ngClass]="['input_type_' + key]"
 >
   <div class="form-element">
     <label
@@ -47,7 +47,7 @@
           [maxDate]="maxDate"
           [attr.id]="key"
           [attr.name]="key"
-          date-role='datebox'
+          date-role="datebox"
           [bsConfig]="{
             dateInputFormat: formats.date,
             showClearButton: true
@@ -55,7 +55,10 @@
         />
 
         <div class="input-group-addon">
-          <fa-icon [icon]="['fas', 'calendar']"></fa-icon>
+          <webui-icon
+            [icon]="Icon.Calendar"
+            [size]="IconSize.Medium"
+          ></webui-icon>
         </div>
       </div>
 

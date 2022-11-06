@@ -8,60 +8,62 @@
       </p>
     </header>
 
-    <ng-container *ngTemplateOutlet="stepper"></ng-container>
+    <div class="form__content">
+      <ng-container *ngTemplateOutlet="stepper"></ng-container>
 
-    <ng-container *ngIf="step$ | async as step">
-      <webui-dynamic-form
-        [formBuilder]="true"
-        [config]="step.metadata"
-        [form]="form"
-        [errors]="error"
-        [formId]="formId"
-        [hiddenFields]="hiddenFields"
-      >
-      </webui-dynamic-form>
+      <ng-container *ngIf="step$ | async as step">
+        <webui-dynamic-form
+          [formBuilder]="true"
+          [config]="step.metadata"
+          [form]="form"
+          [errors]="error"
+          [formId]="formId"
+          [hiddenFields]="hiddenFields"
+        >
+        </webui-dynamic-form>
 
-      <div class="form__footer">
-        <div class="form__footer-buttons">
-          <button
-            *ngIf="step.position !== 1"
-            type="button"
-            class="button-secondary button-secondary--without-shadow"
-            (click)="back()"
-          >
-            {{ 'back' | translate }}
-          </button>
+        <div class="form__footer">
+          <div class="form__footer-buttons">
+            <button
+              *ngIf="step.position !== 1"
+              type="button"
+              class="button-secondary button-secondary--without-shadow"
+              (click)="back()"
+            >
+              {{ 'back' | translate }}
+            </button>
 
-          <button
-            class="button-primary"
-            [disabled]="invalid$ | async"
-            (click)="next()"
-          >
-            {{ 'next_step' | translate }}
-          </button>
+            <button
+              class="button-primary"
+              [disabled]="invalid$ | async"
+              (click)="next()"
+            >
+              {{ 'next_step' | translate }}
+            </button>
 
-          <button
-            *ngIf="isLastStep(step)"
-            type="submit"
-            class="button-primary"
-            [disabled]="form.invalid || (saving$ | async)"
-            (click)="submitForm()"
-          >
-            {{ 'registration.register' | translate }}
+            <button
+              *ngIf="isLastStep(step)"
+              type="submit"
+              class="button-primary"
+              [disabled]="form.invalid || (saving$ | async)"
+              (click)="submitForm()"
+            >
+              {{ 'registration.register' | translate }}
 
-            <webui-spinner *ngIf="saving$ | async"></webui-spinner>
-          </button>
+              <webui-spinner *ngIf="saving$ | async"></webui-spinner>
+            </button>
+          </div>
+
+          <p>
+            {{ 'registration.already_account' | translate }}
+
+            <a routerLink="/login" class="link">
+              {{ 'registration.login_here' | translate }}
+            </a>
+          </p>
         </div>
-
-        <p>
-          {{ 'registration.already_account' | translate }}
-
-          <a routerLink="/login" class="link">
-            {{ 'registration.login_here' | translate }}
-          </a>
-        </p>
-      </div>
-    </ng-container>
+      </ng-container>
+    </div>
   </section>
 </ng-container>
 

@@ -53,7 +53,7 @@ img.signature {
 .contact-avatar {
   width: $height;
   height: $height;
-  margin-bottom: .5rem;
+  margin-bottom: 0.5rem;
 }
 
 .link {
@@ -89,79 +89,80 @@ img.signature {
   @include image;
 }
 
-.dropzone {
-  width: 80px;
-  height: 80px;
-  background: #EEF6FF;
-  border: 1px dashed #ccc;
-  border-radius: 50%;
+// .dropzone {
+//   width: 80px;
+//   height: 80px;
+//   background: #eef6ff;
+//   border: 1px dashed #ccc;
+//   border-radius: 50%;
 
+//   overflow: hidden;
 
-  overflow: hidden;
-  .fa-user{
-    color: #2196F3;
-    font-size: 3rem;
-    margin-top: 0.75rem;
-  }
-  &-wrapper {
-    margin-right: 15px;
-  }
+//   .fa-user {
+//     color: #2196f3;
+//     font-size: 3rem;
+//     margin-top: 0.75rem;
+//   }
 
-  &-name {
-    display: inline-block;
+//   &-wrapper {
+//     margin-right: 15px;
+//   }
 
-    margin-bottom: 12px;
+//   &-name {
+//     display: inline-block;
 
-    font-size: 11px;
-    font-family: 'Roboto';
-    line-height: 13px;
-    text-transform: uppercase;
+//     margin-bottom: 12px;
 
-    opacity: 0.8;
+//     font-size: 11px;
+//     font-family: 'Roboto';
+//     line-height: 13px;
+//     text-transform: uppercase;
 
-    &.required::after {
-      content: '*';
+//     opacity: 0.8;
 
-      color: $danger;
-    }
-  }
+//     &.required::after {
+//       content: '*';
 
-  img {
-    object-fit: cover;
-    object-position: center;
-    margin-top: -76px;
-  }
-}
+//       color: $danger;
+//     }
+//   }
 
-.description {
-  width: 160px;
+//   img {
+//     object-fit: cover;
+//     object-position: center;
+//     margin-top: -76px;
+//   }
+// }
 
-  margin-bottom: 8px;
+// .description {
+//   width: 160px;
 
-  font-size: 14px;
-  line-height: 18px;
-}
+//   margin-bottom: 8px;
 
-.buttons-wrapper {
-  .action {
-    border: 1px solid $primary;
+//   font-size: 14px;
+//   line-height: 18px;
+// }
 
-    color: $primary;
-    background-color: transparent;
+// .buttons-wrapper {
+//   .action {
+//     border: 1px solid $primary;
 
-    &:hover {
-      background-color: $primary;
-      color: white;
-    }
-  }
-}
+//     color: $primary;
+//     background-color: transparent;
+
+//     &:hover {
+//       background-color: $primary;
+//       color: white;
+//     }
+//   }
+// }
 
 .btn-group .btn {
-  border-radius: .25rem;
-  padding: .375rem;
+  border-radius: 0.25rem;
+  padding: 0.375rem;
 
   &:not(:last-child) {
-    margin-right: .2rem;
+    margin-right: 0.2rem;
   }
 
   fa-icon {
@@ -210,5 +211,40 @@ a:hover {
 
   .download-icon {
     display: inline-block;
+  }
+}
+
+.picture {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+
+  .image {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    width: 80px;
+    height: 80px;
+    color: $primary;
+    background-color: $brand-light-color;
+    overflow: hidden;
+
+    fa-icon {
+      font-size: 2.5rem;
+    }
+
+    img {
+      width: 80px;
+      height: 80px;
+      object-fit: cover;
+    }
+  }
+
+  .button-secondary {
+    font-size: 14px;
+    line-height: 1rem;
+    text-transform: unset;
+    padding: 0.5rem 1.5rem;
   }
 }
