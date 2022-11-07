@@ -45,6 +45,10 @@ export class SubscriptionService {
     this._subscription.next({} as BillingSubscription);
   }
 
+  public clean() {
+    this._subscription.next(null);
+  }
+
   private getActiveSubscription(): Observable<BillingSubscription | null> {
     return this.http
       .get<Payload>(this._endpoint)

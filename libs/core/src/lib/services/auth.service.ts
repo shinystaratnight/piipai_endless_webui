@@ -10,6 +10,7 @@ import { ENV } from './env.service';
 import { isClient, isCandidate, isManager } from '@webui/utilities';
 import { EventService, EventType } from './event.service';
 import { Endpoints, Role, User } from '@webui/models';
+import { SubscriptionService } from './subscription.service';
 
 interface AuthResponse {
   access_token: string;
@@ -29,6 +30,7 @@ export class AuthService {
     private error: ErrorsService,
     private router: Router,
     private eventService: EventService,
+    private subscriptionService: SubscriptionService,
     @Optional() @Inject(ENV) private env: any
   ) {}
 
@@ -117,6 +119,7 @@ export class AuthService {
     this.eventService.emit(EventType.Logout);
     this.storage.clear('role');
     this.storage.clear('user');
+    this.subscriptionService.clean();
     this.router.navigateByUrl('/login');
   }
 }
