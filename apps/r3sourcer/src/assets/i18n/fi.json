@@ -1066,5 +1066,6 @@
     "candidate": "Ehdokas",
     "will_send": "Lähetetään",
     "was_sent": "Lähetettiin",
-    "cancel_shift_dates": "Peruuta vuoron päivämäärät"
+    "cancel_shift_dates": "Peruuta vuoron päivämäärät",
+    "message.credit_card_updated": ""
 }

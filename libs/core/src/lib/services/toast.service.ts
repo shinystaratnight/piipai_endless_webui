@@ -11,23 +11,21 @@ export interface Message {
 export enum MessageType {
   Success = 'success',
   Error = 'error',
-  Info = 'info'
+  Info = 'info',
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ToastService {
-  private _messages: BehaviorSubject<Message> = new BehaviorSubject(
-    {} as Message
-  );
+  private _messages = new BehaviorSubject<Message>({} as Message);
 
   get message$(): Observable<Message> {
     return this._messages.asObservable().pipe(skip(1));
   }
 
   public sendMessage(text: string, type: MessageType) {
-    const data: Message = { text, type };
+    const data = { text, type };
 
     this._messages.next(data);
   }

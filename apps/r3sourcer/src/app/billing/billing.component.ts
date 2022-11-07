@@ -34,7 +34,8 @@ export class BillingComponent implements OnInit, OnDestroy {
     private router: Router,
     private toastr: ToastService,
     private eventService: EventService,
-    private siteSettings: SiteSettingsService
+    private siteSettings: SiteSettingsService,
+    private toastrService: ToastService,
   ) {
     this.checkInformation = true;
   }
@@ -157,6 +158,7 @@ export class BillingComponent implements OnInit, OnDestroy {
   }
 
   onCardChange() {
+    this.toastrService.sendMessage('message.credit_card_updated', MessageType.Success);
     this.checkPaymentInformation();
   }
 }

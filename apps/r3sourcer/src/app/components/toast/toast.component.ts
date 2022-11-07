@@ -4,17 +4,19 @@ import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 
 import { ToastService, Message } from '@webui/core';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'webui-toast',
-  template: ''
+  template: '',
 })
 export class ToastComponent implements OnInit, OnDestroy {
   private subscription!: Subscription;
 
   constructor(
     private toastr: ToastrService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private translateService: TranslateService
   ) {}
 
   public ngOnInit() {
@@ -26,8 +28,8 @@ export class ToastComponent implements OnInit, OnDestroy {
           return;
         }
 
-        this.toastr[type](text, '', {
-          timeOut: 10000
+        this.toastr[type](this.translateService.instant(text), '', {
+          timeOut: 10000,
         });
       }
     );
