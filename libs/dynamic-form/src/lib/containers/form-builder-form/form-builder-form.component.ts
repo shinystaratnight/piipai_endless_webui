@@ -335,7 +335,6 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
         this.generateSteps();
         this.changeStep(0);
         this.cd.markForCheck();
-        console.log(this);
       });
     }
   }

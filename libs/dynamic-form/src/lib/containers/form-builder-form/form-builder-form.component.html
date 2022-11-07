@@ -25,12 +25,11 @@
         <div class="form__footer">
           <div class="form__footer-buttons">
             <button
-              *ngIf="step.position !== 0"
               type="button"
               class="button-secondary button-secondary--without-shadow"
               (click)="back()"
             >
-              {{ 'back' | translate }}
+              {{ step.position === 0 ? 'close' : 'back' | translate }}
             </button>
 
             <button
