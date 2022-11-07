@@ -1059,5 +1059,6 @@
     "candidate": "kandidaat",
     "will_send": "Saadab",
     "was_sent": "Saadeti",
-    "cancel_shift_dates": "Tühista vahetuskuupäevad"
+    "cancel_shift_dates": "Tühista vahetuskuupäevad",
+    "message.credit_card_updated": ""
 }

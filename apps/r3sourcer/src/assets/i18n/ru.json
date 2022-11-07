@@ -1059,5 +1059,6 @@
     "candidate": "Кандидат",
     "will_send": "Отправит",
     "was_sent": "Был отправлен",
-    "cancel_shift_dates": "Отмена Даты смены"
+    "cancel_shift_dates": "Отмена Даты смены",
+    "message.credit_card_updated": ""
 }

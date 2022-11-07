@@ -1059,5 +1059,6 @@
     "candidate": "Candidate",
     "will_send": "Will send",
     "was_sent": "Was sent",
-    "cancel_shift_dates": "Cancel Shift Dates"
+    "cancel_shift_dates": "Cancel Shift Dates",
+    "message.credit_card_updated": "Credit card information updated"
 }
