@@ -18,7 +18,7 @@
   }
 
   &-title {
-    padding: 28px 0 24px;
+    padding: 1rem 0;
 
     border-bottom: 1px solid rgba(#333, 0.1);
 
@@ -30,16 +30,7 @@
 
     img {
       max-height: 80px;
-      max-width: 50%;
-
-      border-radius: .5rem;
-      border: 1px solid rgba(#333, 0.15);
-      background-color: #e7e7e7;
-
-      @include media-breakpoint-down('sm') {
-        width: 60px;
-        height: 60px;
-      }
+      height: auto;
     }
 
     p {
