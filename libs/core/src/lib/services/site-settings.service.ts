@@ -8,21 +8,29 @@ import { LocalStorageService } from 'ngx-webstorage';
 import { isManager } from '@webui/utilities';
 import { CountryCodeLanguage, Endpoints, Language } from '@webui/models';
 
-interface CompanySettings {
-  sms_enabled: boolean;
-  company_name: string;
-  company: string;
+export interface CompanySettings {
+  id: string;
+  logo: string;
   color_scheme: string;
-  advance_state_saving: boolean;
   font: string;
+  forwarding_number: string;
+  company: string;
+  billing_email: string;
+  register_form_id: string;
+  company_name: string;
+  sms_enabled: boolean;
+  pre_shift_sms_enabled: boolean;
+  pre_shift_sms_delta: number;
+  invoice_template: string;
+  advance_state_saving: boolean;
   country_code: keyof typeof CountryCodeLanguage;
   currency: string;
-  redirect_to: string;
-  [key: string]: any;
+
+  redirect_to?: string;
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class SiteSettingsService {
   settings!: CompanySettings;
@@ -37,7 +45,7 @@ export class SiteSettingsService {
   constructor(
     private http: HttpClient,
     private translate: TranslateHelperService,
-    private storage: LocalStorageService,
+    private storage: LocalStorageService
   ) {}
 
   resolve() {
@@ -100,7 +108,8 @@ export class SiteSettingsService {
   }
 
   private updateLanguage(settings: CompanySettings): void {
-    const companyLang: string = CountryCodeLanguage[settings.country_code].toString();
+    const companyLang: string =
+      CountryCodeLanguage[settings.country_code].toString();
     const defaultLanguage = this.storage.retrieve('lang');
     const { currentLang } = this.translate;
 
@@ -113,7 +122,7 @@ export class SiteSettingsService {
 
     if (isManager()) {
       lang = Language.English;
-    } else if (companyLang && currentLang !== companyLang as string) {
+    } else if (companyLang && currentLang !== (companyLang as string)) {
       lang = companyLang;
     }
 

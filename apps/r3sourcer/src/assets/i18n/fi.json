@@ -963,12 +963,6 @@
     "confirm_delete_instance": "",
     "do_not_delete": "",
     "next_step": "",
-    "registration.title": "",
-    "registration.registration": "",
-    "registration.general_info": "",
-    "registration.additional_info": "",
-    "registration.financial_info": "",
-    "registration.industry_info": "",
     "registration.already_account": "",
     "registration.login_here": "",
     "tabs.workflowobjects.label": "Valtioiden historia",
@@ -1072,5 +1066,6 @@
     "candidate": "Ehdokas",
     "will_send": "Lähetetään",
     "was_sent": "Lähetettiin",
-    "cancel_shift_dates": "Peruuta vuoron päivämäärät"
+    "cancel_shift_dates": "Peruuta vuoron päivämäärät",
+    "message.credit_card_updated": ""
 }

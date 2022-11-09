@@ -209,7 +209,7 @@ export class SiteComponent implements OnInit, OnDestroy {
               action: 'add',
               data: {
                 value: {
-                  id: this.siteSettingsService.settings['company_settings'].company
+                  id: this.siteSettingsService.settings.company
                 }
               }
             }

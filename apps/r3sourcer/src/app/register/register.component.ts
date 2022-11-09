@@ -1,37 +1,31 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Router } from '@angular/router';
+import { CompanySettings, SiteSettingsService } from '@webui/core';
 
 @Component({
   selector: 'webui-register',
   templateUrl: 'register.component.html',
   styleUrls: ['./register.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None
 })
 export class RegisterComponent implements OnInit {
-  public settings!: {
-    company_name: string;
-    register_form_id: string;
-    company: string;
-    logo: string;
-  };
-  public config: any;
-
-  get title(): string {
-    return this.config ? this.config.title : '';
-  }
+  public settings!: CompanySettings;
 
   get logo(): string {
-    //return this.settings.logo || '/assets/img/logo.svg';
-    return '/assets/img/piiprent_logo.png';
+    return this.settings['logo'] || '/assets/img/logo.svg';
   }
 
-  constructor(private route: ActivatedRoute) {}
+  constructor(
+    private router: Router,
+    private siteSettingsService: SiteSettingsService
+  ) {}
 
   public ngOnInit(): void {
-    this.settings = this.route.snapshot.data['settings'];
+    this.settings = this.siteSettingsService.settings;
   }
 
-  public setFormConfig(config: any): void {
-    this.config = config;
+  onClose() {
+    this.router.navigateByUrl('/login');
   }
 }

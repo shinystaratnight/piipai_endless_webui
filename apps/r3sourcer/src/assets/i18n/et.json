@@ -956,12 +956,6 @@
     "confirm_delete_instance": "Are you sure you would like to DELETE {{name}}?",
     "do_not_delete": "Do not delete!",
     "next_step": "Järgmine samm",
-    "registration.title": "Контактная информация",
-    "registration.registration": "Registreerimine",
-    "registration.general_info": "Kontaktinfo",
-    "registration.additional_info": "Lisainfo",
-    "registration.financial_info": "Finantsinfo",
-    "registration.industry_info": "Ala ja oskused",
     "registration.already_account": "On juba konto",
     "registration.login_here": "Logi sisse siit!",
     "tabs.workflowobjects.label": "Osariikide ajalugu",
@@ -1065,5 +1059,6 @@
     "candidate": "kandidaat",
     "will_send": "Saadab",
     "was_sent": "Saadeti",
-    "cancel_shift_dates": "Tühista vahetuskuupäevad"
+    "cancel_shift_dates": "Tühista vahetuskuupäevad",
+    "message.credit_card_updated": ""
 }

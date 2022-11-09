@@ -29,14 +29,10 @@ export const steps: FormStep[] = [
     empty: false,
     content: [
       'contact.picture',
-      'contact.first_name',
-      'contact.last_name',
-      'contact.title',
-      'contact.gender',
+      ['contact.first_name', 'contact.last_name'],
+      ['contact.title', 'contact.gender'],
       'contact.birthday',
-      'contact.email',
-      'contact.phone_mobile'
-
+      ['contact.email', 'contact.phone_mobile']
     ]
   },
   {
@@ -45,12 +41,11 @@ export const steps: FormStep[] = [
     empty: false,
     content: [
       'contact.address.street_address',
-      "contact.address.city",
-      "contact.address.state",
-      "contact.address.postal_code",
-      "contact.address.country",
-      'nationality',
-      'residency',
+      // "contact.address.city",
+      // "contact.address.state",
+      // "contact.address.postal_code",
+      // "contact.address.country",
+      ['nationality', 'residency'],
       'tax_file_number',
       'transportation_to_work',
       ['weight', 'height']
@@ -64,12 +59,10 @@ export const steps: FormStep[] = [
       'contact.bank_accounts.bank_account_number',
       'contact.bank_accounts.bank_account_name',
       'contact.bank_accounts.bsb_number',
-      'contact.bank_accounts.AccountholdersName',
-      'contact.bank_accounts.bank_name',
-      'contact.bank_accounts.IBAN',
+      ['contact.bank_accounts.AccountholdersName', 'contact.bank_accounts.bank_name'],
+      ['contact.bank_accounts.IBAN', 'formalities.personal_id'],
       'contact.bank_accounts.TestBankAccountField',
       'formalities.tax_number',
-      'formalities.personal_id',
       'superannuation_fund',
       'superannuation_membership_number'
     ]
@@ -78,6 +71,9 @@ export const steps: FormStep[] = [
     title: 'industry_and_skills',
     empty: false,
     metadata: [],
-    content: ['industry', 'skill', 'tag']
+    content: [
+      ['industry', 'skill'],
+      'tag'
+    ]
   }
 ];

@@ -1,38 +1,52 @@
+<div class="group">
+  <div class="group__content">
+    <h5 class="group__label">Sms credit details</h5>
 
-<div class="separetor">
+    <ng-container *ngIf="smsBalance">
+      <div class="field">
+        <label class="field__label">Charge rate for SMS:</label>
+        <span>
+          {{ smsBalance.segment_cost | currency: currency }} per segment (160
+          signs)
+        </span>
+      </div>
 
-  <h5>Sms credit details</h5>
+      <div class="field">
+        <label class="field__label">Auto top-up:</label>
+        <div>
+          <div class="switch">
+            <span class="on" [class.active]="smsBalance.auto_charge">on</span>
+            /
+            <span class="off" [class.active]="!smsBalance.auto_charge">
+              off
+            </span>
+          </div>
+          <a href="#" (click)="autoCharge($event)">Configure Auto-charge</a>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+
   <ng-container *ngIf="smsBalance">
-    <div class="field">
-      <span>Charge rate for SMS:</span>
-      <span style="opacity: 1; font-weight: 600;">{{smsBalance.segment_cost | currency: currency}} per segment (160 signs)</span>
+    <div class="field group__footer">
+      <label class="field__label">Current balance:</label>
+      <div
+        class="d-flex align-items-center justify-content-between flex-grow-1"
+      >
+        <span class="balance">
+          {{ smsBalance.balance | currency: currency }}
+        </span>
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="showAddFundsForm()"
+          [disabled]="!cardExist"
+        >
+          Add Funds
+        </button>
+      </div>
     </div>
-
-    <div class="field pt-1 pb-2">
-      <span class="text-uppercase">Auto top-up:</span>
-      <div class="d-block">
-        <div class="value">
-          <span class="on"
-                [class.active]="smsBalance.auto_charge">on</span>/<span class="off"
-                [class.active]="!smsBalance.auto_charge">off</span>
-      </div>
-      <a type="button"
-              class="action-button-link "
-              (click)="autoCharge()">Configure Auto-charge</a>
-      </div>
-  </div>
-
-  <div class="field current-balance">
-      <span class="text-uppercase">Current balance:</span>
-      <span class="value active">{{smsBalance.balance | currency: currency}}</span>
-      <button type="button"
-              class="btn btn-sm btn-primary ml-3 action-button"
-              (click)="showAddFundsForm()"
-              [disabled]="!cardExist">Add Funds</button>
-  </div>
-
   </ng-container>
-
 
   <ng-template #charge let-c="close" let-d="dismiss">
     <div class="modal-header-wrapper">
@@ -44,12 +58,14 @@
     </div>
 
     <div class="modal-body">
-      <webui-dynamic-form
-        [config]="modalConfig"
-        [form]="group">
+      <webui-dynamic-form [config]="modalConfig" [form]="group">
         <div class="text-center">
-          <button type="submit" class="btn big-btn btn-shadow bg-primary text-white button-save mt-3" (click)="saveAutoCharge()">
-            Save
+          <button
+            type="submit"
+            class="btn big-btn btn-shadow bg-primary text-white button-save mt-3"
+            (click)="saveAutoCharge()"
+          >
+            {{ 'save' | translate: { Default: 'Save' } }}
           </button>
         </div>
       </webui-dynamic-form>
@@ -70,18 +86,30 @@
 
       <div class="d-flex align-items-center justify-content-center">
         <div class="form-element">
-          <input class="form-control form-element-content" type="number" name="employees" min="20" style="width: 70px"
-            [(ngModel)]="amount">
+          <input
+            class="form-control form-element-content"
+            type="number"
+            name="employees"
+            [formControl]="amountControl"
+            min="20"
+            style="width: 70px"
+          />
         </div>
-        <small class="description">(minimum {{20 | currency: currency}})</small>
+        <small class="description">
+          (minimum {{ minChargeAmount | currency: currency }})
+        </small>
       </div>
 
       <h6 class="mt-2">so we could use SMS service!</h6>
 
-      <button type="submit" class="btn big-btn btn-shadow bg-primary text-white button-save mt-3" (click)="addFunds()">
+      <button
+        type="submit"
+        class="btn big-btn btn-shadow bg-primary text-white button-save mt-3"
+        [disabled]="amountControl.invalid"
+        (click)="addFunds()"
+      >
         Approve
       </button>
     </div>
   </ng-template>
-
 </div>

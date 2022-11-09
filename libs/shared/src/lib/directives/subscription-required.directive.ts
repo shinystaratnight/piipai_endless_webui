@@ -1,14 +1,20 @@
-import { AfterViewInit, Directive, ElementRef, OnDestroy, Optional, Renderer2 } from '@angular/core';
+import {
+  AfterViewInit,
+  Directive,
+  ElementRef,
+  OnDestroy,
+  Optional,
+  Renderer2,
+} from '@angular/core';
 import { SubscriptionService } from '@webui/core';
 import { TranslateService } from '@ngx-translate/core';
-import { Subject } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { RouterLink, RouterLinkWithHref } from '@angular/router';
 
 @Directive({
-  selector: '[webuiSubscriptionRequired]'
+  selector: '[webuiSubscriptionRequired]',
 })
 export class SubscriptionRequiredDirective implements OnDestroy, AfterViewInit {
-
   private _destroy: Subject<void> = new Subject();
   private disabled!: boolean;
 
@@ -20,7 +26,7 @@ export class SubscriptionRequiredDirective implements OnDestroy, AfterViewInit {
     @Optional() routerLink: RouterLink,
     @Optional() routerLinkWithHref: RouterLinkWithHref
   ) {
-    const link =  routerLink || routerLinkWithHref;
+    const link = routerLink || routerLinkWithHref;
 
     if (link) {
       // Save original method
@@ -29,9 +35,9 @@ export class SubscriptionRequiredDirective implements OnDestroy, AfterViewInit {
       // Replace method
       link.onClick = (...args) => {
         if (this.disabled) {
-            return routerLinkWithHref ? false : true;
+          return routerLinkWithHref ? false : true;
         } else {
-            return onClick.apply(link, args);
+          return onClick.apply(link, args);
         }
       };
     }
@@ -46,22 +52,28 @@ export class SubscriptionRequiredDirective implements OnDestroy, AfterViewInit {
     this._destroy.complete();
   }
 
-  private subscribe(): void  {
-    this.subscriptionService.activePlan$.subscribe((subscription) => {
-      if (!subscription) {
-        this.disabled = true;
-        this.renderer.setAttribute(this.el.nativeElement, 'disabled', 'disabled');
-        this.renderer.addClass(this.el.nativeElement, 'disabled');
-        this.renderer.setAttribute(
-          this.el.nativeElement,
-          'title',
-          this.translateService.instant('should_have_subscription')
-        );
+  private subscribe(): void {
+    this.subscriptionService.activePlan$
+      .pipe(takeUntil(this._destroy))
+      .subscribe((subscription) => {
+        if (!subscription) {
+          this.disabled = true;
+          this.renderer.setAttribute(
+            this.el.nativeElement,
+            'disabled',
+            'disabled'
+          );
+          this.renderer.addClass(this.el.nativeElement, 'disabled');
+          this.renderer.setAttribute(
+            this.el.nativeElement,
+            'title',
+            this.translateService.instant('should_have_subscription')
+          );
 
-        if (this.el.nativeElement instanceof HTMLAnchorElement) {
-          this.renderer.setAttribute(this.el.nativeElement, 'href', '#');
+          if (this.el.nativeElement instanceof HTMLAnchorElement) {
+            this.renderer.setAttribute(this.el.nativeElement, 'href', '#');
+          }
         }
-      }
-    });
+      });
   }
 }

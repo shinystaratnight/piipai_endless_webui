@@ -31,7 +31,7 @@ h5 {
   height: 62px;
 
   @include media-breakpoint-down('md') {
-    margin: 0 -20px;
+    margin: 0;
   }
 }
 

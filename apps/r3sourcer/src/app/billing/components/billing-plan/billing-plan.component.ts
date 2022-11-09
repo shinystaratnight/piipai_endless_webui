@@ -11,6 +11,7 @@ import { BillingService } from '../../services/billing-service';
 })
 export class BillingPlanComponent implements OnChanges, OnDestroy {
   public modalRef!: NgbModalRef;
+  types!: Record<string, string>;
 
   @Input() public saveProcess!: boolean;
   @Input() public currentPlan?: BillingSubscription;
@@ -30,6 +31,16 @@ export class BillingPlanComponent implements OnChanges, OnDestroy {
     if (changes['saveProcess']) {
       if (!changes['saveProcess'].currentValue && this.modalRef) {
         this.modalRef.close();
+      }
+    }
+
+    this.types = {};
+
+    if (this.plans) {
+      for (const plan of this.plans) {
+        const key = plan.id as number;
+
+        this.types[key] = plan.type as string;
       }
     }
   }
@@ -89,8 +100,4 @@ export class BillingPlanComponent implements OnChanges, OnDestroy {
   public openModal() {
     this.modalRef = this.modalService.open(this.modal, { backdrop: 'static' });
   }
-
-  editSubscription() { }
-
-  deleteSubscription() { }
 }

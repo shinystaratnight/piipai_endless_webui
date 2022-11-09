@@ -30,6 +30,7 @@ import {
 } from '@webui/time';
 import { Moment } from '@webui/time';
 import { FormMode } from '../../../services';
+import { Icon, IconSize } from '@webui/icon';
 
 enum DateType {
   Date = 'date',
@@ -56,6 +57,8 @@ export class FormDatepickerComponent
   public errors: any;
   public message: any;
   public override key: any;
+  public Icon = Icon;
+  public IconSize = IconSize;
 
   public model: Record<'date' | 'time', string> = {
     date:  '',

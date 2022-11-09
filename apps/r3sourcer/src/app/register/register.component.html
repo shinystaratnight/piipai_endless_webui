@@ -1,27 +1,18 @@
-<section id="piiprent" class="user-registration container-fluid col-xl-6 col-lg-8 col-md-10 col-sm-12 col-12" *ngIf="settings">
-  <header>
-      <div class="row p-2 border-bottom">
-          <div class="col-12 text-end">
-            <a routerLink="/">
-              <fa-icon [icon]="['fas', 'times']"></fa-icon>
-            </a>
-          </div>
-          <div class="col-12 text-center">
-              <img class="logo" [src]="logo">
-          </div>
-      </div>
+<section class="register">
+  <header class="register__header">
+    <img [src]="logo" alt="Comapny logo" height="62px" />
+
+    <div class="register__header-actions">
+      <webui-language-selector></webui-language-selector>
+      <webui-close-button (click)="onClose()"></webui-close-button>
+    </div>
   </header>
-  <section>
 
-
-    <section>
-      <!-- <div class="form-name">{{ title }}</div> -->
-      <webui-form-builder-form
-        [id]="settings.register_form_id"
-        [companyId]="settings.company"
-        (formConfig)="setFormConfig($event)"
-      >
-      </webui-form-builder-form>
-    </section>
-  </section>
+  <main class="redesign">
+    <webui-form-builder-form
+      [id]="settings.register_form_id"
+      [companyId]="settings.company"
+    >
+    </webui-form-builder-form>
+  </main>
 </section>

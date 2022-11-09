@@ -1,37 +1,29 @@
+import { CheckboxType, Field, Form, InputType } from '@webui/metadata';
+
+export interface ISmsBalance {
+  id: number;
+  company: string;
+  company_name: string;
+  balance: string;
+  top_up_amount: number;
+  top_up_limit: number;
+  last_payment: number;
+  segment_cost: number;
+  auto_charge: boolean;
+}
+
 export const autoChargeMetadata = [
-  {
-    key: 'auto_charge',
-    type: 'checkbox',
-    value: undefined,
-    templateOptions: {
-      required: true,
-      label: 'Enable',
-      type: 'checkbox'
-    },
-    read_only: false
-  },
-  {
-    key: 'top_up_limit',
-    type: 'input',
-    default: 10,
-    value: undefined,
-    templateOptions: {
-      label: 'If the balance falls below',
-      type: 'number',
-      bold: true
-    },
-    read_only: false
-  },
-  {
-    key: 'top_up_amount',
-    type: 'input',
-    default: 20,
-    value: undefined,
-    templateOptions: {
-      label: 'Charge the balance by',
-      type: 'number',
-      bold: true
-    },
-    read_only: false
-  },
-];
+  new Form.checkbox.element('auto_charge', 'Enable', CheckboxType.Checkbox),
+
+  new Form.input.element(
+    'top_up_limit',
+    'If the balance falls below',
+    InputType.Number
+  ).setDefaultValue(10),
+
+  new Form.input.element(
+    'top_up_amount',
+    'Charge the balance by',
+    InputType.Number
+  ).setDefaultValue(20),
+] as Field[];

@@ -73,7 +73,7 @@ export class ListService {
 
       Object.keys(create.fields).forEach((key: string) => {
         if (create.fields[key] === 'currentCompany') {
-          body[key] = this.settingsService.settings['company_settings'].company;
+          body[key] = this.settingsService.settings.company;
         } else if (typeof create.fields[key] === 'string') {
           body[key] = getPropValue(data, create.fields[key]);
         } else {

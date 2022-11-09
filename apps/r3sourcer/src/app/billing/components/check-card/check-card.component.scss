@@ -23,12 +23,7 @@
 }
 
 .form-row.submited {
-  opacity: .5;
-}
-
-.credit-card-wrapper {
-  max-width: 500px;
-  padding: 25px;
+  opacity: 0.5;
 }
 
 .credit-card-alert {
@@ -43,7 +38,7 @@
   color: white;
 
   fa-icon {
-    margin-right: .5rem;
+    margin-right: 0.5rem;
   }
 }
 
@@ -53,8 +48,6 @@
   &:hover,
   &:active,
   &:focus {
-    background-color: rgba(#333, .2);
+    background-color: rgba(#333, 0.2);
   }
 }
-
-
