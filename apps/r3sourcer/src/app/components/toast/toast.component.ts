@@ -29,7 +29,7 @@ export class ToastComponent implements OnInit, OnDestroy {
         }
 
         this.toastr[type](this.translateService.instant(text), '', {
-          timeOut: 10000,
+          timeOut: 2000,
         });
       }
     );

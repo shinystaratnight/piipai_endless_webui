@@ -254,6 +254,10 @@
         z-index: 1;
       }
     }
+
+    .autocomplete-value {
+      border: 1px solid $input-border-color;
+    }
   }
 
   &-date {
