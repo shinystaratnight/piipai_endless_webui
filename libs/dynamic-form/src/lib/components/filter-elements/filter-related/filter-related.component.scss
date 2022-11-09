@@ -1,16 +1,18 @@
 @use 'variables' as *;
 
-.autocomplete-list {
-  &::-webkit-scrollbar {
-    width: 4px;
+:host {
+  .autocomplete-list {
+    &::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      border-radius: 2px;
+      background-color: #e0e0e0;
+    }
   }
 
-  &::-webkit-scrollbar-thumb {
-    border-radius: 2px;
-    background-color: #e0e0e0;
+  .autocomplete-value {
+    border: 1px solid rgba($gray, 0.2);
   }
-}
-
-.autocomplete-value {
-  border: 1px solid rgba($gray, .1);
 }
