@@ -1279,9 +1279,9 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
       return;
     }
 
-    if (!this.checkDelayData()) {
-      return;
-    }
+    // if (!this.checkDelayData()) {
+    //   return;
+    // }
 
     const newData = this.form ? { ...data, ...this.form } : data || {};
 
