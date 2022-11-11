@@ -12,7 +12,7 @@ const profile = function () {
       })
       .hideOnMobileDevice(),
 
-    new Form.tabs.element(true).setChildren([
+    new Form.tabs.element(false).setChildren([
       new Form.group.element('Personal information', 'personal')
         .mainTab('Personal Info')
         .setChildren([
@@ -34,25 +34,41 @@ const profile = function () {
                   'Birthday',
                   DatepickerType.Date
                 )
-                  .readOnly()
-                  .hideField()
-                  .setInline(),
+                .readOnly()
+                .hideField()
+                .setInline(),
 
                 new Form.related.element(
                   'contact',
                   'Contact',
                   Endpoints.Contact
                 )
-                  .readOnly()
-                  .hideField(),
+                .readOnly()
+                .hideField(),
 
                 new Form.related.element(
                   'contact.address',
                   'Address',
                   Endpoints.Address
                 )
-                  .readOnly()
-                  .hideField(),
+                .readOnly()
+                .hideField(),
+
+                new Form.input.element(
+                  'contact.first_name',
+                  'First Name',
+                  InputType.Text
+                )
+                .readOnly()
+                .hideField(),
+
+                new Form.input.element(
+                  'contact.last_name',
+                  'Last Name',
+                  InputType.Text
+                )
+                .readOnly()
+                .hideField(),
 
                 new Form.input.element(
                   'contact.email',
@@ -65,6 +81,7 @@ const profile = function () {
                   'Phone number',
                   InputType.Text
                 )
+                .setIntl()
               ]),
 
             new Form.group.element('Emergency contact', 'emergency_contact')
@@ -74,13 +91,15 @@ const profile = function () {
                   'emergency_contact_name',
                   'Name',
                   InputType.Text
-                ),
+                )
+                .readOnly(),
 
                 new Form.input.element(
                   'emergency_contact_phone',
                   'Phone Number',
                   InputType.Text
                 )
+                .readOnly()
               ])
           ]),
 
@@ -88,28 +107,32 @@ const profile = function () {
             new Form.group.element('Additional info', 'additional_info')
               .setWidth(0.25)
               .setChildren([
-                new Form.select.element('contact.gender', 'Gender').addOptions({
+                new Form.select.element('contact.gender', 'Gender')
+                .addOptions({
                   male: 'Male',
                   female: 'Female'
-                }),
+                })
+                .readOnly(),
 
                 new Form.select.element(
                   'transportation_to_work',
                   'Transportation'
-                ).addOptions({
+                )
+                .addOptions({
                   1: 'Own Car',
                   2: 'Public Transportation'
                 })
+                .readOnly()
               ]),
 
             new Form.group.element('Physical parameters', 'phisical_parameters')
               .setWidth(0.25)
               .setChildren([
-                new Form.input.element('height', 'Height, cm', InputType.Text),
+                new Form.input.element('height', 'Height, cm', InputType.Text).readOnly(),
 
-                new Form.input.element('weight', 'Weight, kg', InputType.Text),
+                new Form.input.element('weight', 'Weight, kg', InputType.Text).readOnly(),
 
-                new Form.static.element('bmi', 'Bmi')
+                new Form.static.element('bmi', 'Bmi').readOnly()
               ]),
 
             new Form.group.element('Scores', 'scores')
@@ -119,13 +142,17 @@ const profile = function () {
                   'candidate_scores.reliability',
                   'Reliability',
                   StaticType.Score
-                ).setDanger('no_rating'),
+                )
+                .setDanger('no_rating')
+                .readOnly(),
 
                 new Form.static.element(
                   'candidate_scores.loyalty',
                   'Loyalty',
                   StaticType.Score
-                ).setDanger('no_rating')
+                )
+                .setDanger('no_rating')
+                .readOnly()
               ]),
 
             new Form.group.element('Rating', 'rating')
@@ -135,19 +162,25 @@ const profile = function () {
                   'candidate_scores.recruitment_score',
                   'Average test',
                   StaticType.Score
-                ).setDanger('no_rating'),
+                )
+                .setDanger('no_rating')
+                .readOnly(),
 
                 new Form.static.element(
                   'candidate_scores.client_feedback',
                   'Client feedback',
                   StaticType.Score
-                ).setDanger('no_rating'),
+                )
+                .setDanger('no_rating')
+                .readOnly(),
 
                 new Form.static.element(
                   'candidate_scores.skill_score',
                   'Average skill',
                   StaticType.Score
-                ).setDanger('no_rating')
+                )
+                .setDanger('no_rating')
+                .readOnly()
               ])
           ]),
 
@@ -162,6 +195,7 @@ const profile = function () {
                 2: 'Permanent Resident',
                 3: 'Temporary Resident'
               })
+              .readOnly()
             ]),
 
             new Form.group.element(' ')
@@ -172,7 +206,9 @@ const profile = function () {
                   'Nationality',
                   Endpoints.Country
                 )
+                .readOnly()
               ])
+
           ])
         ]),
 

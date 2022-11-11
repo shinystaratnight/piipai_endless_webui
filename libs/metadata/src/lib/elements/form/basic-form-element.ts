@@ -27,6 +27,7 @@ export class BasicFormElement {
   saveField?: boolean;
   updateFromForm?: boolean;
   translateKey?: string;
+  intl?: boolean;
 
   templateOptions: BasicElementTemplateOptions;
 
@@ -113,6 +114,12 @@ export class BasicFormElement {
 
   setTranslateKey(key: string) {
     this.translateKey = key;
+
+    return this;
+  }
+
+  setIntl() {
+    this.intl = true;
 
     return this;
   }
