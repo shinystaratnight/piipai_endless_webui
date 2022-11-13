@@ -1,10 +1,15 @@
 <section class="details">
   <div class="details__person">
     <img
-      class="avatar"
-      [src]="timeSheet.candidate.avatar.origin"
-      [alt]="timeSheet.candidate.fullName"
+      *ngIf="avatar.src"
+      class="avatar contact-avatar"
+      [src]="avatar.src"
+      alt="Avatar"
     />
+
+    <div *ngIf="!avatar.src" class="avatar contact-avatar">
+      {{ avatar.preview }}
+    </div>
 
     <div>
       <h5 class="title">{{ timeSheet.candidate.fullName }}</h5>

@@ -6,6 +6,11 @@
 // Font
 $font-family-base: 'Source Sans Pro', sans-serif;
 
+:root {
+  --main-font-family: 'Source Sans Pro', sans-serif;
+  --primary-color: #28a3fc;
+}
+
 // Color variables
 $primary: #28a3fc;
 $success: #32ba5e;
