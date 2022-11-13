@@ -99,12 +99,16 @@ export class SiteSettingsService {
 
   private updateBrowserStyles(settings: CompanySettings): void {
     const { body } = document;
+    const root = document.documentElement;
+    const { color_scheme, font } = settings;
+
     const themeClass = `${settings.color_scheme}-theme`;
-    const fontFamily = `${settings.font || 'Source Sans Pro'}, sans-serif`;
+    const fontFamily = `${font || 'Source Sans Pro'}, sans-serif`;
 
     // TODO: refactor it
     body.parentElement?.classList.add(themeClass);
-    body.style.fontFamily = fontFamily;
+    root.style.setProperty('--main-font-family', fontFamily);
+    root.style.setProperty('--primary-color', this.getPrimaryColor(color_scheme))
   }
 
   private updateLanguage(settings: CompanySettings): void {
@@ -131,5 +135,17 @@ export class SiteSettingsService {
     } else if (lang) {
       this.translate.setLang(lang as Language);
     }
+  }
+
+  private getPrimaryColor(theme: string): string {
+    const themeMap: Record<string, string> = {
+      warning: '#f58926',
+      indigo: '#3f51b5',
+      teal: '#009688',
+      brown: '#795548',
+      default: '#28a3fc'
+    }
+
+    return themeMap[theme] || themeMap['default'];
   }
 }
