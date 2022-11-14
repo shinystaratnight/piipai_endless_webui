@@ -68,6 +68,22 @@ const profile = function() {
                 .hideField(),
 
                 new Form.input.element(
+                  'contact.first_name',
+                  'First Name',
+                  InputType.Text
+                )
+                .readOnly()
+                .hideField(),
+
+                new Form.input.element(
+                  'contact.last_name',
+                  'Last Name',
+                  InputType.Text
+                )
+                .readOnly()
+                .hideField(),
+
+                new Form.input.element(
                   'contact.email',
                   'E-mail',
                   InputType.Text
