@@ -201,6 +201,7 @@ export class SiteComponent implements OnInit, OnDestroy {
 
         if (this.isProfilePage(pageData)) {
           pageData.pathData.id = this.user?.data.contact.contact_id;
+          pageData.pathData.postfix = 'change_username';
           pageData.endpoint = '/core/companycontacts/';
           this.formMode = FormMode.View;
           this.pageData = pageData;

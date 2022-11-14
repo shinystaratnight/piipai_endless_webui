@@ -37,7 +37,8 @@
               (!reload &&
                 pageData.endpoint !== '/core/forms/' &&
                 !pageData.pathData.postfix) ||
-              pageData.pathData.postfix === 'submit' && formMode
+              pageData.pathData.postfix === 'submit' ||
+              pageData.pathData.postfix === 'change_username' && formMode
             "
             [title]="
               pageData.pathData.postfix === 'submit'
@@ -47,6 +48,7 @@
             [endpoint]="pageData.endpoint"
             [id]="pageData.pathData.id"
             [edit]="!!pageData.pathData.postfix"
+            [postfix]="pageData.pathData.postfix"
             [mode]="formMode"
             [errors]="errors"
             [data]="additionalData"
