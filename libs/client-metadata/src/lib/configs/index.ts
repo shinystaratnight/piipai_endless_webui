@@ -8,3 +8,4 @@ export * from './client-jobs.metadata';
 export * from './joboffers.metadata';
 export * from './shifts.metadata';
 export * from './timesheetrates-client.metadata';
+export * from './profile.metadata';

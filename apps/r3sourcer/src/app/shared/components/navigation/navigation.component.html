@@ -114,7 +114,11 @@
         </a>
 
         <div class="user-menu__section">
-          <a class="link" routerLink="/cd/profile" *ngIf="candidate">
+          <a
+            class="link"
+            [routerLink]="this.urlPrefix + '/profile'"
+            *ngIf="userType ==='client' || userType === 'candidate'"
+          >
             {{ 'profile' | translate: { Default: 'Profile' } }}
           </a>
 
