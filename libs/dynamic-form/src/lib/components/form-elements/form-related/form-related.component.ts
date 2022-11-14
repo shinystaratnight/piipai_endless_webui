@@ -18,7 +18,7 @@ import { CustomEvent } from '../../../models/custom-event.model';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { Subscription, BehaviorSubject, Subject } from 'rxjs';
-import { debounceTime, skip, filter } from 'rxjs/operators';
+import { debounceTime, skip, filter, takeUntil } from 'rxjs/operators';
 
 import {
   NavigationService,
@@ -77,6 +77,8 @@ export class FormRelatedComponent
   extends BasicElementComponent
   implements OnInit, OnDestroy, AfterViewChecked
 {
+  private _destroy = new Subject<void>();
+
   @ViewChild('search') search!: FormControl;
   @ViewChild('searchElement') searchElement!: ElementRef;
   @ViewChild('modal') modal!: ElementRef;
@@ -108,7 +110,7 @@ export class FormRelatedComponent
   public displayValue: any;
 
   public lastElement = 0;
-  public limit = 10;
+  public limit = 4;
   public count!: number | null;
   public searchValue: any;
   public fields!: string[];
@@ -145,7 +147,6 @@ export class FormRelatedComponent
   public placeholder!: string;
   public loading!: boolean;
 
-  private searchSubscription!: Subscription;
   private subscriptions: Subscription[] = [];
 
   public colors: Record<number, string> = {
@@ -273,11 +274,12 @@ export class FormRelatedComponent
   public ngAfterViewChecked() {
     if (this.search && !this.autocompleteDisplay) {
       this.autocompleteDisplay = true;
-      this.searchSubscription = this.search.valueChanges
+      this.search.valueChanges
         .pipe(
           skip(2),
           filter((value) => value !== null),
-          debounceTime(400)
+          debounceTime(400),
+          takeUntil(this._destroy)
         )
         .subscribe(() => {
           this.filter(this.searchValue);
@@ -443,9 +445,6 @@ export class FormRelatedComponent
           this.displayValue = undefined;
 
           this.autocompleteDisplay = false;
-          if (this.searchSubscription) {
-            this.searchSubscription.unsubscribe();
-          }
           this.setInitValue();
           this.eventHandler(
             { type: 'change' },
@@ -881,6 +880,9 @@ export class FormRelatedComponent
     if (this.modalRef) {
       this.modalRef.close();
     }
+
+    this._destroy.next();
+    this._destroy.complete();
 
     this.subscriptions.forEach((s) => s && s.unsubscribe());
   }
@@ -1840,6 +1842,7 @@ export class FormRelatedComponent
         if (!id) {
           this.genericFormService
             .getByQuery(endpoint, query)
+            .pipe(takeUntil(this.search.valueChanges.pipe(skip(1))))
             .subscribe((res: any) => {
               this.loading = false;
               this.skipScroll = false;
