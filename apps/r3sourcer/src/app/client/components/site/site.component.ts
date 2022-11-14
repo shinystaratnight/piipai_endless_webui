@@ -9,7 +9,8 @@ import {
   AuthService,
   NavigationService,
   EventService,
-  EventType
+  EventType,
+  CheckPermissionService
 } from '@webui/core';
 import { PageData } from '@webui/data';
 import { GenericFormService, FormMode } from '@webui/dynamic-form';
@@ -115,6 +116,7 @@ export class SiteComponent implements OnInit, OnDestroy {
     private navigationService: NavigationService,
     private userService: UserService,
     private authService: AuthService,
+    private permission: CheckPermissionService,
     private ts: ToastService,
     private modalService: NgbModal,
     private eventService: EventService,
@@ -197,7 +199,16 @@ export class SiteComponent implements OnInit, OnDestroy {
       .subscribe((pageData: PageData) => {
         this.loader = false;
 
-        if (pageData.endpoint === '/' && pageData.pathData.path !== '/') {
+        if (this.isProfilePage(pageData)) {
+          pageData.pathData.id = this.user?.data.contact.contact_id;
+          pageData.endpoint = '/core/companycontacts/';
+          this.formMode = FormMode.View;
+          this.pageData = pageData;
+          this.permissionMethods = this.permission.getAllowMethods(
+            undefined,
+            pageData.endpoint
+          );
+        } else if (pageData.endpoint === '/' && pageData.pathData.path !== '/') {
           setTimeout(() => {
             this.ts.sendMessage('Page not found!', MessageType.Error);
           }, 2000);
@@ -484,5 +495,9 @@ export class SiteComponent implements OnInit, OnDestroy {
 
   public showDeleteButton() {
     return this.pageData?.pathData.id && this.checkPermission('delete');
+  }
+
+  public isProfilePage(page: PageData) {
+    return page.pathData.path === '/profile/';
   }
 }
