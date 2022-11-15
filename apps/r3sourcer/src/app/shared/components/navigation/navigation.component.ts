@@ -60,7 +60,7 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
   public hideUserMenu = true;
   public greeting!: string;
   public userPicture!: string;
-  public candidate!: boolean;
+  public userType!: string;
   public currentRole!: string;
   public company!: string;
   public picture!: string;
@@ -161,7 +161,7 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.user && this.user.data.contact) {
       this.currentRole = this.user.currentRole.id;
       this.greeting = `Welcome, ${this.user.data.contact.__str__}`;
-      this.checkCandidateRole(this.user.currentRole);
+      this.checkUserType();
       this.company = this.user.data.contact.company;
       this.picture =
         this.user.data.contact.picture && this.user.data.contact.picture.origin;
@@ -174,8 +174,8 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  public checkCandidateRole(role: Role) {
-    this.candidate = role.__str__.includes('candidate');
+  public checkUserType() {
+    this.userType = isClient() ? 'client' : isCandidate() ? 'candidate' : '';
   }
 
   public toggleUserBlock(e: any) {
@@ -204,9 +204,8 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
       return;
     }
 
-    this.checkCandidateRole(role);
-
     this.currentRole = role.id;
+    this.checkUserType();
 
     // this.update.emit(role);
     this.userService.currentRole(role);

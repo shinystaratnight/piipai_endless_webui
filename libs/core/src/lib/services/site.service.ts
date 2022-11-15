@@ -30,7 +30,7 @@ export class SiteService {
       endpoint: element ? element.endpoint : '/',
       pathData
     };
-    if (pathData.postfix) {
+    if (pathData.postfix && pathData.postfix !== 'change_username') {
       data.endpoint = data.endpoint + pathData.id + `/${pathData.postfix}/`;
       pathData.id = undefined;
     }

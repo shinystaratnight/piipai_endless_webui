@@ -1,6 +1,7 @@
 import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
 import { TimeSheet } from '@webui/data';
 import { Icon } from '@webui/icon';
+import { getContactAvatar } from '@webui/utilities';
 
 @Component({
   selector: 'webui-timesheet-details-preview',
@@ -10,6 +11,15 @@ import { Icon } from '@webui/icon';
 })
 export class TimesheetDetailsPreviewComponent {
   @Input() timeSheet!: TimeSheet;
+
+  get avatar(): { src: string, preview: string } {
+    const contact = this.timeSheet.candidate;
+
+    return {
+      src: contact.avatar.origin || '',
+      preview: getContactAvatar(contact.__str__)
+    }
+  }
 
   public get info() {
     return [

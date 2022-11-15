@@ -9,6 +9,7 @@ import {
   shifts,
   joboffers,
   timesheetratesclient,
+  metadataProfile,
 } from '@webui/client-metadata';
 import { Endpoints } from '@webui/models';
 
@@ -32,6 +33,7 @@ export class Metadata {
   [Endpoints.Job] = jobs;
   [Endpoints.Note] = notes;
   [Endpoints.Address] = address;
+  [Endpoints.CompanyContact] = metadataProfile;
   'extend' = extend;
   'fillin' = fillin;
   [Endpoints.Shift] = shifts;

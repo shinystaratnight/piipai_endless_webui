@@ -83,6 +83,8 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
   @Input()
   public edit?: boolean;
   @Input()
+  public postfix?: string | null;
+  @Input()
   public mode!: FormMode | null;
   @Input()
   public delay!: boolean;
@@ -1279,9 +1281,9 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
       return;
     }
 
-    if (!this.checkDelayData()) {
-      return;
-    }
+    // if (!this.checkDelayData()) {
+    //   return;
+    // }
 
     const newData = this.form ? { ...data, ...this.form } : data || {};
 
@@ -1422,7 +1424,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
 
     if (this.editForm || this.edit) {
       const endpoint = this.editForm
-        ? `${this.endpoint}${this.id ? this.id + '/' : ''}`
+        ? `${this.endpoint}${this.id ? this.id + '/' : ''}${this.postfix ? this.postfix + '/' : ''}`
         : this.endpoint;
 
       this.saveForm(endpoint, data, true);

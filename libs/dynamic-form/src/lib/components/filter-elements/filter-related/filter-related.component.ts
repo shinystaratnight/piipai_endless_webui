@@ -9,7 +9,7 @@ import {
   OnDestroy,
   HostListener,
   ElementRef,
-  ChangeDetectorRef
+  ChangeDetectorRef,
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
@@ -17,18 +17,20 @@ import { GenericFormService, FilterService } from '../../../services';
 import { SiteSettingsService, UserService } from '@webui/core';
 import { FormatString } from '@webui/utilities';
 
-import { Subscription } from 'rxjs';
-import { debounceTime, skip, filter } from 'rxjs/operators';
+import { Subject } from 'rxjs';
+import { debounceTime, filter, takeUntil } from 'rxjs/operators';
 import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'webui-filter-related',
   templateUrl: 'filter-related.component.html',
-  styleUrls: ['./filter-related.component.scss']
+  styleUrls: ['./filter-related.component.scss'],
 })
 export class FilterRelatedComponent
   implements OnInit, AfterViewInit, OnDestroy
 {
+  private _destroy = new Subject<void>();
+
   @Input() public config: any;
   public data: any;
   public item: any;
@@ -57,9 +59,6 @@ export class FilterRelatedComponent
   public chashValues!: any[];
 
   public cashResults!: any[];
-  public subscription!: Subscription;
-  public filterSubscription!: Subscription;
-  public querySubscription!: Subscription;
 
   @ViewChild('search')
   public search!: FormControl;
@@ -82,44 +81,39 @@ export class FilterRelatedComponent
     if (this.multiple) {
       this.limit = -1;
     }
-    this.querySubscription = this.route.queryParams.subscribe(() => {
+    this.route.queryParams.pipe(takeUntil(this._destroy)).subscribe(() => {
       setTimeout(() => {
         if (!(this.cd as any).destroyed) {
           this.updateFilter();
         }
       }, 200);
     });
-    this.filterSubscription = this.fs.reset.subscribe(() =>
-      this.updateFilter()
-    );
+    this.fs.reset
+      .pipe(takeUntil(this._destroy))
+      .subscribe(() => this.updateFilter());
     this.defaultValue = {
       [this.config.data.key]: '',
       [this.config.data.value]: this.multiple
         ? `Select ${this.config.label}`
-        : 'All'
+        : 'All',
     };
   }
 
   public ngAfterViewInit() {
-    if (this.search) {
-      this.subscription = this.search?.valueChanges
-        .pipe(
-          skip(2),
-          filter((value) => value !== null),
-          debounceTime(400)
-        )
-        .subscribe(() => {
-          this.filter();
-        });
-    }
+    this.search?.valueChanges
+      .pipe(
+        filter((value) => value !== null),
+        debounceTime(400),
+        takeUntil(this._destroy)
+      )
+      .subscribe(() => {
+        this.filter();
+      });
   }
 
   public ngOnDestroy() {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
-    this.querySubscription.unsubscribe();
-    this.filterSubscription.unsubscribe();
+    this._destroy.next();
+    this._destroy.complete();
   }
 
   public generateList(concat = false): void {
@@ -249,7 +243,7 @@ export class FilterRelatedComponent
     const element = {
       data,
       lastElement: 0,
-      hideAutocomplete: true
+      hideAutocomplete: true,
     };
     return element;
   }
@@ -281,7 +275,7 @@ export class FilterRelatedComponent
     this.event.emit({
       list: this.config.listName,
       key: this.config.query,
-      value: this.item
+      value: this.item,
     });
   }
 
@@ -369,7 +363,7 @@ export class FilterRelatedComponent
       const data = {
         ...this.siteSettingsService.settings,
         filter_value: value,
-        session: this.userService.user
+        session: this.userService.user,
       };
       endpoint = formatString.format(this.config.data.endpoint, data);
       this.genericFormService.getAll(endpoint).subscribe((res: any) => {
@@ -404,7 +398,7 @@ export class FilterRelatedComponent
     const endpoint = this.config.data.endpoint.includes('{')
       ? formatString.format(this.config.data.endpoint, {
           ...this.siteSettingsService.settings,
-          session: this.userService.user
+          session: this.userService.user,
         })
       : this.config.data.endpoint;
     const offset = this.item.lastElement;
@@ -424,6 +418,7 @@ export class FilterRelatedComponent
       this.item.lastElement += this.limit;
       this.genericFormService
         .getByQuery(endpoint, query)
+        .pipe(takeUntil(this.search.valueChanges))
         .subscribe((res: any) => {
           this.skipScroll = false;
           this.item.count = res.count;

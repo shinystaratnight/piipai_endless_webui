@@ -68,6 +68,10 @@ $border-color: #d3deea;
     height: 72px;
     margin-right: 60px;
 
+    @include media-breakpoint-down('lg') {
+      margin-right: 0;
+    }
+
     &-link {
       display: inline;
       padding: 0;
