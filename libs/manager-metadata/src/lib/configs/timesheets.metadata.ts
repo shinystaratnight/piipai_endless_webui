@@ -1,4 +1,4 @@
-import { Color, Models, NoteModel, OverrideConfig } from '@webui/data';
+import { Color, Models, NoteModel } from '@webui/data';
 import { createFilter, Type, Form, List } from '@webui/metadata';
 import { Endpoints } from '@webui/models';
 
