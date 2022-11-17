@@ -89,7 +89,7 @@ const list = function () {
 
         new List.column.element('approve', 'Approve/Change').setContent([
           getApproveButton()
-            .setShowIfRule([{ supervisor_approved_at: null }])
+            .setShowIfRule([{ resend_sms_supervisor: true }])
             .addReplaceBy('supervisor'),
 
           changeButton()
