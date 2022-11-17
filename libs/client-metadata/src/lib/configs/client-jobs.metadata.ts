@@ -1043,7 +1043,8 @@ const form = [
         templateOptions: {
           label: 'Job Offers',
           type: 'list',
-          text: 'Job Offers'
+          text: 'Job Offers',
+          add_label: 'add'
         },
         visibleMode: true,
         type: 'list',
