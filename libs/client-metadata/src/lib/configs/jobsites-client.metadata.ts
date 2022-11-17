@@ -688,6 +688,13 @@ const formadd = [
               type: 'related',
               required: true,
             },
+            checkObject: {
+              endpoint: '/hr/jobsites/',
+              error: 'Job site with this name already exists, please alter it!',
+              query: {
+                short_name: '{short_name}',
+              },
+            },
             collapsed: false,
             default: '{regular_company.industry.id}',
             showIf: ['primary_contact.id', 'address'],
@@ -696,13 +703,6 @@ const formadd = [
             many: false,
           },
           {
-            checkObject: {
-              endpoint: '/hr/jobsites/',
-              error: 'Job site with this name already exists, please alter it!',
-              query: {
-                short_name: '{regular_company.short_name} - {address.vicinity}',
-              },
-            },
             key: 'short_name',
             read_only: false,
             templateOptions: {

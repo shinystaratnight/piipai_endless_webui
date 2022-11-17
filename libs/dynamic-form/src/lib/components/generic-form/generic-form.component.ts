@@ -593,6 +593,9 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
       Endpoints.CompanyContact,
       Endpoints.CandidateContact,
       Endpoints.Job,
+      Endpoints.ClientJobs,
+      Endpoints.Jobsite,
+      Endpoints.JobsiteClient
     ];
 
     if (endpoints.includes(this.endpoint as Endpoints)) {
@@ -663,6 +666,33 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
                         obj,
                         error,
                         '/mn/hr/jobs/',
+                        true
+                      ),
+                    };
+                  } else if (this.endpoint === Endpoints.ClientJobs) {
+                    errors = {
+                      non_field_errors: this.generateCustomError(
+                        obj,
+                        error,
+                        '/cl/hr/jobs/client_contact_job/',
+                        true
+                      ),
+                    };
+                  } else if (this.endpoint === Endpoints.JobsiteClient) {
+                    errors = {
+                      non_field_errors: this.generateCustomError(
+                        obj,
+                        error,
+                        '/cl/hr/jobsites/client_contact_jobsite/',
+                        true
+                      ),
+                    };
+                  } else if (this.endpoint === Endpoints.Jobsite) {
+                    errors = {
+                      non_field_errors: this.generateCustomError(
+                        obj,
+                        error,
+                        '/mn/hr/jobsites/',
                         true
                       ),
                     };
