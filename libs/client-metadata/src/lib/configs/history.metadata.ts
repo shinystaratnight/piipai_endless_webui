@@ -54,7 +54,6 @@ const list = function () {
 
         getTimesColumn(),
         getTotalTimeColumn(),
-        getEvaluateColumn(),
 
         new List.column.element('approve', 'Approve')
           .setHide()
