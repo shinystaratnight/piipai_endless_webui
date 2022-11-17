@@ -1249,8 +1249,6 @@ const formadd = [
             key: 'position',
             templateOptions: {
               label: 'Position',
-              add: false,
-              delete: false,
               values: [
                 '__str__',
                 'upper_rate_limit',
@@ -1260,7 +1258,6 @@ const formadd = [
                 'name'
               ],
               type: 'related',
-              edit: true,
               required: true,
               placeholder: 'Please select role/trade'
             },
