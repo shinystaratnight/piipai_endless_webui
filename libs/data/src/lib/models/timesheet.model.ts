@@ -276,25 +276,14 @@ export class TimeSheet extends ApiModel {
     }
 
     const [hours, minutes] = duration;
-
-    if (this.breakStartedAt) {
-      this.breakEndedAt = Time.parse(this.breakStartedAt, {
-        timezone: this.timezone,
-      })
-        .add(hours, 'hours')
-        .add(minutes, 'minutes')
-        .utc()
-        .format();
-    } else {
-      this.breakStartedAt = this.startedAt;
-      this.breakEndedAt = Time.parse(this.breakStartedAt, {
-        timezone: this.timezone,
-      })
-        .add(hours, 'hours')
-        .add(minutes, 'minutes')
-        .utc()
-        .format();
-    }
+    this.breakStartedAt = this.startedAt;
+    this.breakEndedAt = Time.parse(this.breakStartedAt, {
+      timezone: this.timezone,
+    })
+      .add(hours, 'hours')
+      .add(minutes, 'minutes')
+      .utc()
+      .format();
   }
 
   public getRequestBody(hasActivity: boolean) {

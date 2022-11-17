@@ -110,7 +110,7 @@ export class FormRelatedComponent
   public displayValue: any;
 
   public lastElement = 0;
-  public limit = 4;
+  public limit = 10;
   public count!: number | null;
   public searchValue: any;
   public fields!: string[];
