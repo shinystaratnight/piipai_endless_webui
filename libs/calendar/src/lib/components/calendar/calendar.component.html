@@ -683,24 +683,13 @@
 
 <ng-template #shiftItem let-shift="shift" let-status="status">
   <div>
-    <ng-container *ngIf="calendarType === 0">
-      <a *ngIf="isManager()" [routerLink]="'/mn' + shift.job_link">
-        {{ shift.position }}
-      </a>
-      <span *ngIf="!isManager()">{{ shift.position }}</span>
-    </ng-container>
-    <ng-container *ngIf="calendarType !== 0">
+    <a [routerLink]="shift.job_link && shift.job_link(role)">
       {{ shift.position }}
-    </ng-container>
+    </a>
     <br />
-    <a
-      *ngIf="isManager()"
-      [routerLink]="'/mn' + shift.jobsite_link"
-      class="shift-jobsite"
-    >
+    <a [routerLink]="shift.job_link && shift.jobsite_link(role)" class="shift-jobsite">
       {{ shift.jobsite }}
     </a>
-    <span *ngIf="!isManager()" class="shift-jobsite">{{ shift.jobsite }}</span>
     <br />
     <span *ngIf="shift.shift">
       {{ 'workers.label' | translate: { Default: 'Workers' } }}:
