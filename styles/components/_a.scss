@@ -7,10 +7,16 @@ a {
     opacity: 1;
     text-decoration: none;
 
-    @each $item in $themes {
-      .#{$item}-theme &:not(.disabled) {
-        color: map-get($theme-colors, $item);
+    &[href] {
+      @each $item in $themes {
+        .#{$item}-theme &:not(.disabled) {
+          color: map-get($theme-colors, $item);
+        }
       }
+    }
+
+    &:not([href]) {
+      color: inherit;
     }
   }
 
