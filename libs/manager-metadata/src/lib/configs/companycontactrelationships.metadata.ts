@@ -7,12 +7,12 @@ const list = {
       {
         content: [{ field: '__str__', type: 'static' }],
         name: '__str__',
-        label: 'Company Contact Relationship'
-      }
+        label: 'Company Contact Relationship',
+      },
     ],
     pagination_label: 'Client Contacts',
     search_enabled: false,
-    editDisable: false
+    editDisable: false,
   },
   fields: [
     {
@@ -21,11 +21,11 @@ const list = {
       templateOptions: {
         required: false,
         label: 'Company Contact Relationship',
-        type: 'static'
+        type: 'static',
       },
-      read_only: true
-    }
-  ]
+      read_only: true,
+    },
+  ],
 };
 
 const formset = {
@@ -37,9 +37,9 @@ const formset = {
         required: false,
         label: 'Job title',
         max: 31,
-        type: 'text'
+        type: 'text',
       },
-      type: 'input'
+      type: 'input',
     },
     {
       default: true,
@@ -48,9 +48,9 @@ const formset = {
       templateOptions: {
         required: false,
         label: 'Receive Job confirmation sms',
-        type: 'checkbox'
+        type: 'checkbox',
       },
-      type: 'checkbox'
+      type: 'checkbox',
     },
     {
       key: 'company_contact.contact.last_name',
@@ -59,9 +59,9 @@ const formset = {
         required: true,
         label: 'Last Name',
         max: 255,
-        type: 'text'
+        type: 'text',
       },
-      type: 'input'
+      type: 'input',
     },
     {
       key: 'id',
@@ -69,9 +69,9 @@ const formset = {
         action: 'editForm',
         label: '',
         type: 'button',
-        text: ''
+        text: '',
       },
-      type: 'button'
+      type: 'button',
     },
     {
       key: 'company_contact.contact.email',
@@ -80,9 +80,9 @@ const formset = {
         required: true,
         label: 'E-mail',
         max: 255,
-        type: 'email'
+        type: 'email',
       },
-      type: 'input'
+      type: 'input',
     },
     {
       key: 'company_contact.contact.first_name',
@@ -91,59 +91,74 @@ const formset = {
         required: true,
         label: 'First Name',
         max: 255,
-        type: 'text'
+        type: 'text',
       },
-      type: 'input'
+      type: 'input',
     },
     {
       key: 'company_contact.contact.phone_mobile',
       read_only: false,
       templateOptions: { required: true, label: 'Mobile Phone', type: 'text' },
-      type: 'input'
-    }
+      type: 'input',
+    },
   ],
   list: {
     columns: [
       {
-        name: 'company_contact.job_title',
+        name: 'jobTitle_/_firstName_/_lastName',
         sort: true,
-        sort_field: 'company_contact.job_title',
-        content: [{ type: 'input', field: 'company_contact.job_title' }],
-        label: 'Job title'
-      },
-      {
-        name: 'company_contact.contact.first_name',
-        sort: true,
-        sort_field: 'company_contact.contact.first_name',
         content: [
-          { type: 'input', field: 'company_contact.contact.first_name' }
+          {
+            type: 'link',
+            field: 'company_contact',
+            endpoint: '/core/companycontacts/{company_contact.id}',
+          },
         ],
-        label: 'First Name'
+        label:
+          'company_contact.job_title / company_contact.contact.first_name / company_contact.contact.last_name',
+        sortMap: [
+          {
+            name: 'jobTitle',
+            param: 'company_contact.job_title',
+          },
+          {
+            name: 'firstName',
+            param: 'company_contact.contact.first_name',
+          },
+          {
+            name: 'lastName',
+            param: 'company_contact.contact.last_name',
+          },
+        ],
+        delim: null,
       },
       {
-        name: 'company_contact.contact.last_name',
+        name: 'email_/_phone',
         sort: true,
-        sort_field: 'company_contact.contact.last_name',
         content: [
-          { type: 'input', field: 'company_contact.contact.last_name' }
+          {
+            field: 'company_contact.contact.email',
+            type: 'link',
+            link: 'mailto:{contact.email}',
+          },
+          {
+            type: 'link',
+            field: 'company_contact.contact.phone_mobile',
+            link: 'tel:{contact.phone_mobile}',
+          },
         ],
-        label: 'Last Name'
-      },
-      {
-        name: 'company_contact.contact.phone_mobile',
-        sort: true,
-        sort_field: 'company_contact.contact.phone_mobile',
-        content: [
-          { type: 'input', field: 'company_contact.contact.phone_mobile' }
+        label:
+          'company_contact.contact.email / company_contact.contact.phone_mobile',
+        sortMap: [
+          {
+            name: 'email',
+            param: 'company_contact.contact.email',
+          },
+          {
+            name: 'phone',
+            param: 'company_contact.contact.phone_mobile',
+          },
         ],
-        label: 'Mobile Phone'
-      },
-      {
-        name: 'company_contact.contact.email',
-        sort: true,
-        sort_field: 'company_contact.contact.email',
-        content: [{ type: 'input', field: 'company_contact.contact.email' }],
-        label: 'E-mail'
       },
       {
         name: 'company_contact.receive_job_confirmation_sms',
@@ -152,10 +167,10 @@ const formset = {
         content: [
           {
             type: 'checkbox',
-            field: 'company_contact.receive_job_confirmation_sms'
-          }
+            field: 'company_contact.receive_job_confirmation_sms',
+          },
         ],
-        label: 'Receive Job confirmation sms'
+        label: 'Receive Job confirmation sms',
       },
       {
         name: 'actions',
@@ -167,7 +182,7 @@ const formset = {
             title: 'Edit',
             text_color: '#f0ad4e',
             type: 'button',
-            field: 'id'
+            field: 'id',
           },
           {
             action: 'delete',
@@ -175,20 +190,20 @@ const formset = {
             title: 'Delete',
             text_color: '#f32700',
             type: 'button',
-            field: 'id'
-          }
+            field: 'id',
+          },
         ],
         label: 'Actions',
         title: null,
-        delim: null
-      }
+        delim: null,
+      },
     ],
     list: 'companycontactrelationship',
     editDisable: false,
     label: 'Client Contact Relations',
     pagination_label: 'Client Contacts',
-    search_enabled: false
-  }
+    search_enabled: false,
+  },
 };
 
 const form = [
@@ -197,7 +212,7 @@ const form = [
     type: 'input',
     hide: true,
     templateOptions: { required: false, label: 'Company', type: 'text' },
-    read_only: true
+    read_only: true,
   },
   {
     list: false,
@@ -209,19 +224,19 @@ const form = [
       delete: false,
       values: ['__str__'],
       type: 'related',
-      edit: true
+      edit: true,
     },
     visibleMode: true,
     type: 'related',
     key: 'company_contact',
-    many: false
+    many: false,
   },
   {
     key: 'active',
     default: true,
     type: 'checkbox',
     templateOptions: { required: false, label: 'Active', type: 'checkbox' },
-    read_only: false
+    read_only: false,
   },
   {
     key: 'termination_date',
@@ -229,10 +244,10 @@ const form = [
     templateOptions: {
       required: false,
       label: 'Termination date',
-      type: 'date'
+      type: 'date',
     },
-    read_only: false
-  }
+    read_only: false,
+  },
 ];
 
 const formadd = [
@@ -241,7 +256,7 @@ const formadd = [
     type: 'input',
     hide: true,
     templateOptions: { required: false, label: 'Company', type: 'text' },
-    read_only: true
+    read_only: true,
   },
   {
     list: false,
@@ -253,19 +268,19 @@ const formadd = [
       delete: false,
       values: ['__str__'],
       type: 'related',
-      edit: true
+      edit: true,
     },
     visibleMode: true,
     type: 'related',
     key: 'company_contact',
-    many: false
+    many: false,
   },
   {
     key: 'active',
     default: true,
     type: 'checkbox',
     templateOptions: { required: false, label: 'Active', type: 'checkbox' },
-    read_only: false
+    read_only: false,
   },
   {
     key: 'termination_date',
@@ -273,15 +288,15 @@ const formadd = [
     templateOptions: {
       required: false,
       label: 'Termination date',
-      type: 'date'
+      type: 'date',
     },
-    read_only: false
-  }
+    read_only: false,
+  },
 ];
 
 export const companycontactrelationships = {
   list,
   formset,
   form,
-  formadd
+  formadd,
 };
