@@ -2,7 +2,7 @@ import { createFilter, Type, currency } from '@webui/metadata';
 import { Endpoints } from '@webui/models';
 
 const filters = {
-  recruitmentAgent: createFilter(Type.Relared, {
+  recruitmentAgent: createFilter(Type.Related, {
     key: 'customer_company',
     label: 'Client company',
     endpoint: Endpoints.Company

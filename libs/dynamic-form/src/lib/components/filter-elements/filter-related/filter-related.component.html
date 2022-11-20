@@ -126,7 +126,7 @@
                   class="form-check-input"
                   [(ngModel)]="option.checked"
                   name="checked"
-                  (ngModelChange)="setValue(option, chashValues)"
+                  (ngModelChange)="setValue(option, cacheValue)"
                   hidden
                 />
                 <webui-checkbox
@@ -139,7 +139,7 @@
           </ul>
           <div
             class="d-flex align-items-center justify-content-center"
-            *ngIf="skipScroll"
+            *ngIf="skipScroll && !previewList?.length"
           >
             <webui-loader></webui-loader>
           </div>

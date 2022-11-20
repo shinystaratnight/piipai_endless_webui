@@ -1,27 +1,27 @@
 import { createFilter, Type } from '@webui/metadata';
 
 const filters = {
-  companyContact: createFilter(Type.Relared, {
+  companyContact: createFilter(Type.Related, {
     key: 'company_contact',
     label: 'Recruitment Agent',
     endpoint: '/core/companycontacts/?master_company=current',
   }),
-  candidateContact: createFilter(Type.Relared, {
+  candidateContact: createFilter(Type.Related, {
     key: 'candidate_contact',
     label: 'Candidate contact',
     endpoint: '/candidate/candidatecontacts/',
   }),
-  company: createFilter(Type.Relared, {
+  company: createFilter(Type.Related, {
     key: 'company',
     label: 'Client',
     endpoint: '/core/companies/',
   }),
-  client_contact: createFilter(Type.Relared, {
+  client_contact: createFilter(Type.Related, {
     key: 'client_contact',
     label: 'Client Contact',
     endpoint: '/core/companycontacts/',
   }),
-  jobsite: createFilter(Type.Relared, {
+  jobsite: createFilter(Type.Related, {
     key: 'jobsite',
     label: 'Jobsite',
     endpoint: '/hr/jobsites/',

@@ -28,7 +28,7 @@ const yesNoOptions = [
 ];
 
 const filters = {
-  state: createFilter(Type.Relared, {
+  state: createFilter(Type.Related, {
     key: 'state',
     label: 'State',
     endpoint: `${Endpoints.Region}?country=AU`,

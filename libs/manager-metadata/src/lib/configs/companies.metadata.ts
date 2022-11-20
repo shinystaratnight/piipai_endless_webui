@@ -12,7 +12,7 @@ const weekOptions = [
 ];
 
 const filters = {
-  status: createFilter(Type.Relared, {
+  status: createFilter(Type.Related, {
     key: 'status',
     label: 'Status',
     endpoint:
@@ -20,12 +20,12 @@ const filters = {
     display: ['name_after_activation', 'name_before_activation'],
     parameter: 'number'
   }),
-  manager: createFilter(Type.Relared, {
+  manager: createFilter(Type.Related, {
     key: 'portfolio_manager',
     label: 'Portfolio Manager',
     endpoint: '/core/companycontacts/?master_company=current'
   }),
-  state: createFilter(Type.Relared, {
+  state: createFilter(Type.Related, {
     key: 'state',
     label: 'State',
     endpoint: '/core/regions/?country=AU',

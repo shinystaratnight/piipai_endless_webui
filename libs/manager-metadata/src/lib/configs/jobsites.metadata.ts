@@ -3,22 +3,22 @@ import { Endpoints } from '@webui/models';
 import { Time } from '@webui/time';
 
 const filters = {
-  industry: createFilter(Type.Relared, {
+  industry: createFilter(Type.Related, {
     key: 'industry',
     label: 'Industry',
     endpoint: Endpoints.Industry,
   }),
-  state: createFilter(Type.Relared, {
+  state: createFilter(Type.Related, {
     key: 'state',
     label: 'State',
     endpoint: Endpoints.Region + '?country=AU',
   }),
-  regular_company: createFilter(Type.Relared, {
+  regular_company: createFilter(Type.Related, {
     key: 'regular_company',
     label: 'Client',
     endpoint: Endpoints.Company,
   }),
-  portfolio_manager: createFilter(Type.Relared, {
+  portfolio_manager: createFilter(Type.Related, {
     key: 'portfolio_manager',
     label: 'Portfolio manager',
     endpoint: Endpoints.CompanyContact + '?master_company=current',

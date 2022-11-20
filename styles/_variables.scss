@@ -9,6 +9,8 @@ $font-family-base: 'Source Sans Pro', sans-serif;
 :root {
   --main-font-family: 'Source Sans Pro', sans-serif;
   --primary-color: #28a3fc;
+  --bs-primary: #28a3fc;
+  --bs-green: #32ba5e;
 }
 
 // Color variables
@@ -36,7 +38,7 @@ $theme-colors: (
   'indigo': $indigo,
   'teal': $teal,
   'brown': $brown,
-  'seconary': $gray,
+  'secondary': $gray,
   'light': $light,
 );
 

@@ -28,7 +28,7 @@ export type Filter =
 
 export enum Type {
   Range,
-  Relared,
+  Related,
   Date,
   Checkbox,
   Select,
@@ -50,7 +50,7 @@ export function createFilter(type: Type, options: FilterOptions): Filter | undef
     case Type.Range:
       return new RangeFilter(options as RangeFilterOptions);
 
-    case Type.Relared:
+    case Type.Related:
       return new RelatedFilter(options as RelatedFilterOptions);
 
     case Type.Date:
