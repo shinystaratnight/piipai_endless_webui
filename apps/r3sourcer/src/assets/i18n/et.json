@@ -1014,6 +1014,8 @@
     "error.invalid_phone": "Kehtetu telefoninumber",
     "error.invalid_email": "Vale emaili aadress",
     "error.invalid": "Kehtetu",
+    "error.invalid_shift_started_at_12": "<Vahetuse algusaeg> ei saa olla hiljem kui 12 tundi.",
+    "error.invalid_total_24": "Kogu töötundide arv ei saa olla rohkem kui 24 tundi.",
     "not_verify": "Ei kinnita",
     "download": "Lae alla",
     "contact.gender.female": "Naine",

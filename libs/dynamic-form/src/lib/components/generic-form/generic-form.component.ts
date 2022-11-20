@@ -17,6 +17,7 @@ import isObject from 'isobject';
 
 import { BehaviorSubject, Subject, Subscription, forkJoin, of, Observable } from 'rxjs';
 import { finalize, skip, catchError } from 'rxjs/operators';
+import { TranslateService } from '@ngx-translate/core';
 
 import {
   UserService,
@@ -214,7 +215,8 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
     private modal: NgbModal,
     private purposeService: CompanyPurposeService,
     private timelineService: TimelineService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private translateService: TranslateService
   ) {
     this.updateDataAfterSendForm = {
       config: [],
@@ -2197,6 +2199,8 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
       const keyss = Object.keys(errors);
       keyss.forEach((el) => {
         if (errors[el].length) {
+          this.i18nize(errors[el]);
+
           if (field) {
             error[`${field}.${el}`] = errors[el];
             delete response[`${field}.${el}`];
@@ -2207,6 +2211,14 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
         } else {
           this.updateErrors(error, errors[el], response, el);
         }
+      });
+    }
+  }
+
+  public i18nize(errors: any) {
+    if (Array.isArray(errors)) {
+      errors.forEach((err, i) => {
+        errors[i] = this.translateService.instant(err);
       });
     }
   }
