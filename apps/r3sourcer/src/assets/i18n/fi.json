@@ -1021,6 +1021,8 @@
     "error.invalid_phone": "Virheellinen puhelinnumero",
     "error.invalid_email": "Virheellinen sähköpostiosoite",
     "error.invalid": "Virheellinen",
+    "error.invalid_shift_started_at_12": "<Vuoron alkamisajankohta> ei voi olla yli 12 tuntia myöhemmin.",
+    "error.invalid_total_24": "Kokonaistyöaika voi olla enintään 24 tuntia.",
     "not_verify": "Ei varmistettu",
     "download": "Lataa",
     "contact.gender.female": "Nainen",
