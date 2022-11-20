@@ -19,7 +19,7 @@ import { Subscription } from 'rxjs';
       (deactivate)="loader = true"
     ></router-outlet>
     <webui-toast></webui-toast>
-  `
+  `,
 })
 export class AppComponent implements OnInit, OnDestroy {
   loader = true;
@@ -31,9 +31,9 @@ export class AppComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.langSubscription = this.translateHelper.langChange$.subscribe((v) => {
-      this.translate.use(v);
-    });
+    this.langSubscription = this.translateHelper.langChange$.subscribe((v) =>
+      this.translate.use(v)
+    );
   }
 
   ngOnDestroy() {
