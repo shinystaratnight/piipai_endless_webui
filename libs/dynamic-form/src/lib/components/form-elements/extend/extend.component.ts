@@ -559,8 +559,14 @@ export class ExtendComponent
       } else if (prevCandidateScore === nextCandidateScore) {
         if (prevCandidate.distance > nextCandidate.distance) {
           return 1;
+        } else if (prevCandidate.distance === nextCandidate.distance) {
+            if (prevCandidate.latest_activity_at > nextCandidate.latest_activity_at) {
+              return 1;
+            }
+            return -1;
+        } else {
+          return -1;
         }
-        return -1;
       } else {
         return -1;
       }
