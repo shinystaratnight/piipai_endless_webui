@@ -28,12 +28,12 @@ const list = function () {
           yesterday: true,
           today: true
         }),
-        createFilter(Type.Relared, {
+        createFilter(Type.Related, {
           key: 'candidate',
           label: 'Candidate Contact',
           endpoint: `${Endpoints.CandidateSupervisor}?supervisor={session.data.contact.contact_id}`
         }),
-        createFilter(Type.Relared, {
+        createFilter(Type.Related, {
           key: 'position',
           label: 'Position',
           endpoint: Endpoints.Skill,
@@ -89,7 +89,7 @@ const list = function () {
 
         new List.column.element('approve', 'Approve/Change').setContent([
           getApproveButton()
-            .setShowIfRule([{ supervisor_approved_at: null }])
+            .setShowIfRule([{ resend_sms_supervisor: true }])
             .addReplaceBy('supervisor'),
 
           changeButton()

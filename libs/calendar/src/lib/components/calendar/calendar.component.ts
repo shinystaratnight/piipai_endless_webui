@@ -12,7 +12,13 @@ import {
 import { FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { BehaviorSubject, combineLatest, forkJoin, Observable, Subscription } from 'rxjs';
+import {
+  BehaviorSubject,
+  combineLatest,
+  forkJoin,
+  Observable,
+  Subscription,
+} from 'rxjs';
 import { uniq } from 'ramda';
 
 import {
@@ -48,10 +54,10 @@ import { Moment, Time } from '@webui/time';
 import { IDateRange, Status } from '../../models';
 
 type StatusFilter = {
-  type: Status,
-  color: string,
-  label: string
-}
+  type: Status;
+  color: string;
+  label: string;
+};
 
 @Component({
   selector: 'webui-calendar',
@@ -60,16 +66,18 @@ type StatusFilter = {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CalendarComponent implements OnInit, OnDestroy {
-  private _loading: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  private _loading: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
+    false
+  );
   public range = DateRange;
   public currentRange!: FormControl;
   public rangeTitle!: string;
-  public calendarData?: { header: string[], body: any[] | any, date: string };
+  public calendarData?: { header: string[]; body: any[] | any; date: string };
   public shifts: any;
   public filters = filters;
   public topHeight: any;
   public calendarTimes!: any[];
-  public shiftStatus: Record<Status, { color: string, key: string }> = {
+  public shiftStatus: Record<Status, { color: string; key: string }> = {
     [Status.Unfilled]: { color: 'bg-danger', key: 'cancelled' },
     [Status.Fullfilled]: { color: 'bg-success', key: 'accepted' },
     [Status.Pending]: { color: 'bg-warning', key: 'undefined' },
@@ -124,7 +132,8 @@ export class CalendarComponent implements OnInit, OnDestroy {
   public status = {
     hideAutocomplete: true,
     displayValue(data: Record<number, boolean>): number {
-      return Object.keys(data).filter((key: string) => data[parseInt(key)]).length;
+      return Object.keys(data).filter((key: string) => data[parseInt(key)])
+        .length;
     },
     data: {} as Record<number, boolean>,
   };
@@ -229,6 +238,10 @@ export class CalendarComponent implements OnInit, OnDestroy {
     );
   }
 
+  get role(): string {
+    return this.userService.user?.currentRole.name || '';
+  }
+
   ngOnInit() {
     this.currentDate = this.calendar.getToday();
     this.currentRange = new FormControl('');
@@ -324,7 +337,10 @@ export class CalendarComponent implements OnInit, OnDestroy {
     this.changeCalendar(this.currentRange.value);
   }
 
-  changeQuery(event?: { key: 'candidate' | 'client', value: { data: string } }) {
+  changeQuery(event?: {
+    key: 'candidate' | 'client';
+    value: { data: string };
+  }) {
     if (event) {
       this[event.key] = event.value.data;
     }
@@ -415,7 +431,10 @@ export class CalendarComponent implements OnInit, OnDestroy {
     );
   }
 
-  public formEvent(e: { type: string, status: 'success', form: any }, closeModal: () => void) {
+  public formEvent(
+    e: { type: string; status: 'success'; form: any },
+    closeModal: () => void
+  ) {
     if (e.type === 'saveStart') {
       this.saveProcess = true;
     }
@@ -441,7 +460,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
     this.saveProcess = false;
   }
 
-  public fillinAccess(shift: { date: string, is_fulfilled: Status }) {
+  public fillinAccess(shift: { date: string; is_fulfilled: Status }) {
     const statusSuccess =
       this.getStatus(shift.is_fulfilled) !== this.getStatus(1);
     const dateSuccess = this.calendar
@@ -484,7 +503,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
     });
   }
 
-  public canClientCreateJob(): boolean| undefined {
+  public canClientCreateJob(): boolean | undefined {
     return isClient() && this.userService.user?.data.allow_job_creation;
   }
 
@@ -513,7 +532,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
       };
     }
 
-    this.modalService.open(this.modal, { size: 'lg', backdrop: 'static' });
+    this.modalRef = this.modalService.open(this.modal, { size: 'lg', backdrop: 'static' });
   }
 
   isSelected(date?: string): boolean {
@@ -553,7 +572,11 @@ export class CalendarComponent implements OnInit, OnDestroy {
     return count;
   }
 
-  getShiftDataWeekCalendar(tooltip: { loaded: boolean, loading: boolean, shift: any }) {
+  getShiftDataWeekCalendar(tooltip: {
+    loaded: boolean;
+    loading: boolean;
+    shift: any;
+  }) {
     if (tooltip.loaded) {
       return;
     }
@@ -587,7 +610,13 @@ export class CalendarComponent implements OnInit, OnDestroy {
       });
   }
 
-  getShiftData(day: { loaded: boolean, data: any[], loading: boolean, tooltip: any, isOpen: boolean }) {
+  getShiftData(day: {
+    loaded: boolean;
+    data: any[];
+    loading: boolean;
+    tooltip: any;
+    isOpen: boolean;
+  }) {
     if (day.loaded) {
       return;
     }
@@ -712,10 +741,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
     return this.data.getJobOffers(query);
   }
 
-  private getDataForCandidate(
-    rangeType: DateRange,
-    range: IDateRange
-  ) {
+  private getDataForCandidate(rangeType: DateRange, range: IDateRange) {
     this._loading.next(true);
     const { start, end, monthStart, monthEnd } = range;
     let startPeriod = start;
@@ -741,9 +767,11 @@ export class CalendarComponent implements OnInit, OnDestroy {
     ];
 
     combineLatest(requests)
-      .pipe(finalize(() => {
-        this._loading.next(false);
-      }))
+      .pipe(
+        finalize(() => {
+          this._loading.next(false);
+        })
+      )
       .subscribe((data) => {
         const [availability, timesheets, jobOffers, holidays] = data;
 
@@ -786,9 +814,11 @@ export class CalendarComponent implements OnInit, OnDestroy {
     ];
 
     forkJoin(requests)
-      .pipe(finalize(() => {
-        this._loading.next(false);
-      }))
+      .pipe(
+        finalize(() => {
+          this._loading.next(false);
+        })
+      )
       .subscribe((data) => {
         const [shifts, holidays] = data;
 
@@ -798,7 +828,12 @@ export class CalendarComponent implements OnInit, OnDestroy {
       });
   }
 
-  private generateQuery(from: Moment, to: Moment, client?: string, candidate?: string) {
+  private generateQuery(
+    from: Moment,
+    to: Moment,
+    client?: string,
+    candidate?: string
+  ) {
     const filterList: Record<string, any> = {
       ['date__shift_date_0']: from.format(filterDateFormat),
       ['date__shift_date_1']: to.format(filterDateFormat),
@@ -875,10 +910,14 @@ export class CalendarComponent implements OnInit, OnDestroy {
       this.shifts.forEach((shift: any) => {
         this.timesheetCounter.forEach((counter) => {
           if (counter.type !== 0) {
-            counter.count += shift.candidates[this.shiftStatus[counter.type].key];
+            counter.count +=
+              shift.candidates[this.shiftStatus[counter.type].key];
           }
           if (shift.is_fulfilled === 0 && counter.type === 0) {
-            counter.count += (shift.shift.workers - shift.candidates[this.shiftStatus[Status.Fullfilled].key] - shift.candidates[this.shiftStatus[Status.Pending].key]);
+            counter.count +=
+              shift.shift.workers -
+              shift.candidates[this.shiftStatus[Status.Fullfilled].key] -
+              shift.candidates[this.shiftStatus[Status.Pending].key];
           }
         });
       });
@@ -891,14 +930,19 @@ export class CalendarComponent implements OnInit, OnDestroy {
 
   private parseData(shift: any, fullData?: boolean) {
     if (fullData) {
+      const job = shift.job;
+      const jobsite = shift.job.jobsite;
+
       return {
         shift,
         shift_date_id: shift.id,
-        job: shift.job.id,
-        job_link: `/hr/jobs/${shift.job.id}/change`,
-        jobsite_link: `/hr/jobsites/${shift.job.jobsite.id}/change`,
-        jobsite: shift.job.jobsite.short_name || shift.job.jobsite.__str__,
-        position: this.getPositionTranslation(shift.job.position.name),
+        job: job.id,
+        job_link: (role: 'manager' | 'client') =>
+          `${this.getLink('job', role)}${job.id}/change`,
+        jobsite_link: (role: 'manager' | 'client') =>
+          `${this.getLink('jobsite', role)}${jobsite.id}/change`,
+        jobsite: jobsite.short_name || jobsite.__str__,
+        position: this.getPositionTranslation(job.position.name),
         candidates: shift.workers_details,
       };
     } else {
@@ -941,7 +985,9 @@ export class CalendarComponent implements OnInit, OnDestroy {
             showButtons: jobOffer.hide_buttons === false,
             date: jobOffer.shift.date.shift_date,
             time: jobOffer.shift.time,
-            jobsite: jobOffer.shift.date.job.jobsite.short_name || jobOffer.shift.date.job.jobsite.__str__,
+            jobsite:
+              jobOffer.shift.date.job.jobsite.short_name ||
+              jobOffer.shift.date.job.jobsite.__str__,
             position: this.getPositionTranslation(
               jobOffer.shift.date.job.position.name
             ),
@@ -951,7 +997,8 @@ export class CalendarComponent implements OnInit, OnDestroy {
         })
         .filter(
           (jobOffer) =>
-            this.status.data[jobOffer.timesheetStatus as number] || jobOffer.showButtons
+            this.status.data[jobOffer.timesheetStatus as number] ||
+            jobOffer.showButtons
         );
 
       this.shifts.forEach((shift: any) => {
@@ -1024,6 +1071,27 @@ export class CalendarComponent implements OnInit, OnDestroy {
     return increment ? date.add(1, type) : date.add(-1, type);
   }
 
+  private getLink(endpoint: 'job' | 'jobsite', role: 'manager' | 'client') {
+    const links = new Map([
+      ['manager', { job: '/mn/hr/jobs/', jobsite: '/mn/hr/jobsites/' }],
+      [
+        'client',
+        {
+          job: '/cl/hr/jobs/client_contact_job/',
+          jobsite: '/cl/hr/jobsites/client_contact_jobsite/',
+        },
+      ],
+    ]);
+
+    const roleLinks = links.get(role);
+
+    if (!roleLinks) {
+      return '';
+    }
+
+    return roleLinks[endpoint];
+  }
+
   @HostListener('document:click', ['$event'])
   @HostListener('document:touch', ['$event'])
   public handleClick(event: MouseEvent) {
@@ -1036,7 +1104,8 @@ export class CalendarComponent implements OnInit, OnDestroy {
       ) {
         inside = true;
       }
-      clickedComponent = (clickedComponent as unknown as HTMLElement).parentNode;
+      clickedComponent = (clickedComponent as unknown as HTMLElement)
+        .parentNode;
     } while (clickedComponent);
     if (!inside) {
       if (!this.status.hideAutocomplete) {

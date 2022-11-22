@@ -1,4 +1,4 @@
-import { Color, Models, NoteModel, OverrideConfig } from '@webui/data';
+import { Color, Models, NoteModel } from '@webui/data';
 import { createFilter, Type, Form, List } from '@webui/metadata';
 import { Endpoints } from '@webui/models';
 
@@ -10,27 +10,27 @@ const filters = {
     today: true,
     tomorrow: true
   }),
-  supervisor: createFilter(Type.Relared, {
+  supervisor: createFilter(Type.Related, {
     key: 'supervisor',
     label: 'Supervisor',
     endpoint: Endpoints.CompanyContact
   }),
-  candidate: createFilter(Type.Relared, {
+  candidate: createFilter(Type.Related, {
     key: 'candidate',
     label: 'Candidate Contact',
     endpoint: Endpoints.CandidateContact
   }),
-  position: createFilter(Type.Relared, {
+  position: createFilter(Type.Related, {
     key: 'position',
     label: 'Position',
     endpoint: Endpoints.Skill
   }),
-  client: createFilter(Type.Relared, {
+  client: createFilter(Type.Related, {
     key: 'company',
     label: 'Client',
     endpoint: Endpoints.Company
   }),
-  jobsite: createFilter(Type.Relared, {
+  jobsite: createFilter(Type.Related, {
     key: 'jobsite',
     label: 'Jobsite',
     endpoint: Endpoints.Jobsite

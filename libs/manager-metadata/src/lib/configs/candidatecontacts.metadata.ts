@@ -8,20 +8,20 @@ const filters = {
     label: 'Average score',
     max: 5
   }),
-  skill: createFilter(Type.Relared, {
+  skill: createFilter(Type.Related, {
     key: 'skill',
     label: 'Skills',
     endpoint: Endpoints.SkillName,
     multiple: true,
     parameter: 'skill_id'
   }),
-  tag: createFilter(Type.Relared, {
+  tag: createFilter(Type.Related, {
     key: 'tag',
     label: 'Tags',
     endpoint: Endpoints.Tag,
     multiple: true
   }),
-  activeState: createFilter(Type.Relared, {
+  activeState: createFilter(Type.Related, {
     key: 'active_states',
     label: 'Status',
     endpoint: `${Endpoints.WorkflowNode}?company={company_settings.company}&content_type=candidate.candidatecontact&number={filter_value}`,
@@ -45,7 +45,7 @@ const filters = {
       }
     ]
   }),
-  recruitmentAgent: createFilter(Type.Relared, {
+  recruitmentAgent: createFilter(Type.Related, {
     key: 'recruitment_agent',
     label: 'Recruitment agent',
     endpoint: `${Endpoints.CompanyContact}?master_company=current`

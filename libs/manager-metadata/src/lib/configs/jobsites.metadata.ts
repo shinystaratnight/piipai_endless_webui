@@ -3,22 +3,22 @@ import { Endpoints } from '@webui/models';
 import { Time } from '@webui/time';
 
 const filters = {
-  industry: createFilter(Type.Relared, {
+  industry: createFilter(Type.Related, {
     key: 'industry',
     label: 'Industry',
     endpoint: Endpoints.Industry,
   }),
-  state: createFilter(Type.Relared, {
+  state: createFilter(Type.Related, {
     key: 'state',
     label: 'State',
     endpoint: Endpoints.Region + '?country=AU',
   }),
-  regular_company: createFilter(Type.Relared, {
+  regular_company: createFilter(Type.Related, {
     key: 'regular_company',
     label: 'Client',
     endpoint: Endpoints.Company,
   }),
-  portfolio_manager: createFilter(Type.Relared, {
+  portfolio_manager: createFilter(Type.Related, {
     key: 'portfolio_manager',
     label: 'Portfolio manager',
     endpoint: Endpoints.CompanyContact + '?master_company=current',
@@ -756,6 +756,13 @@ const formadd = [
               type: 'related',
               required: true,
             },
+            checkObject: {
+              endpoint: '/hr/jobsites/',
+              error: 'Job site with this name already exists, please alter it!',
+              query: {
+                short_name: '{short_name}',
+              },
+            },
             default: 'industry.default',
             showIf: ['primary_contact.id', 'address'],
             query: {
@@ -765,13 +772,6 @@ const formadd = [
             key: 'industry',
           },
           {
-            checkObject: {
-              endpoint: '/hr/jobsites/',
-              error: 'Job site with this name already exists, please alter it!',
-              query: {
-                short_name: '{regular_company.short_name} - {address.vicinity}',
-              },
-            },
             key: 'short_name',
             read_only: false,
             templateOptions: {

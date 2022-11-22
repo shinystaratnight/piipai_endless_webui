@@ -20,6 +20,7 @@ import { FormatString } from '@webui/utilities';
 import { Subject } from 'rxjs';
 import { debounceTime, filter, takeUntil } from 'rxjs/operators';
 import { FormControl } from '@angular/forms';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'webui-filter-related',
@@ -56,7 +57,7 @@ export class FilterRelatedComponent
   public selected: any[] = [];
   public selectedValues!: any[];
 
-  public chashValues!: any[];
+  public cacheValue!: any[];
 
   public cashResults!: any[];
 
@@ -73,10 +74,12 @@ export class FilterRelatedComponent
     private elementRef: ElementRef,
     private siteSettingsService: SiteSettingsService,
     private userService: UserService,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    private translateService: TranslateService
   ) {}
 
   public ngOnInit() {
+    console.log(this.config);
     this.multiple = this.config.multiple;
     if (this.multiple) {
       this.limit = -1;
@@ -118,7 +121,7 @@ export class FilterRelatedComponent
 
   public generateList(concat = false): void {
     if (this.multiple) {
-      if (!this.chashValues) {
+      if (!this.cacheValue) {
         this.skipScroll = true;
         this.cd.detectChanges();
         this.getOptions(this.searchValue, concat);
@@ -156,8 +159,8 @@ export class FilterRelatedComponent
     }
     setTimeout(() => {
       if (!this.multiple && autocomplete) {
-        autocomplete.children[1].scrollTo({ top: 0 });
-        autocomplete.children[0].focus();
+        autocomplete.children[1]?.scrollTo({ top: 0 });
+        autocomplete.children[0]?.focus();
       }
     }, 150);
   }
@@ -181,8 +184,8 @@ export class FilterRelatedComponent
       this.generateList();
     } else {
       let filteredList;
-      if (this.searchValue && this.chashValues) {
-        filteredList = this.chashValues.filter((el) => {
+      if (this.searchValue && this.cacheValue) {
+        filteredList = this.cacheValue.filter((el) => {
           const val = el[this.config.data.value];
           if (val) {
             return (
@@ -194,13 +197,14 @@ export class FilterRelatedComponent
         });
         this.previewList = filteredList;
       } else {
-        this.previewList = this.chashValues;
+        this.previewList = this.cacheValue;
       }
     }
   }
 
   public onModalScrollDown() {
     if (!this.multiple) {
+      console.log(this.skipScroll);
       if (!this.skipScroll) {
         this.skipScroll = true;
         this.generateList(true);
@@ -434,7 +438,7 @@ export class FilterRelatedComponent
                 this.previewList.push(...res.results);
               }
             } else {
-              if (!this.chashValues && this.multiple) {
+              if (!this.cacheValue && this.multiple) {
                 if (this.selected) {
                   res.results.forEach((el: any) => {
                     if (this.selected.indexOf(el[this.config.data.key]) > -1) {
@@ -442,8 +446,8 @@ export class FilterRelatedComponent
                     }
                   });
                 }
-                this.chashValues = res.results;
-                this.previewList = this.chashValues;
+                this.cacheValue = res.results;
+                this.previewList = this.cacheValue;
                 this.selected = this.filterSelectedValues(this.previewList);
                 return;
               }
@@ -456,6 +460,15 @@ export class FilterRelatedComponent
               this.previewList = res.results;
               this.cd.detectChanges();
             }
+          } else if (this.config.property) {
+            const list = res[this.config.property].map((el: string) => ({
+              [this.config.data.value]: this.translateService.instant(el, {defaultKey: el}),
+              [this.config.data.key]: el
+            }));
+
+            this.item.count = list.length;
+            this.previewList = list;
+            this.skipScroll = true;
           }
         });
     } else {

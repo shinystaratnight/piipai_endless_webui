@@ -22,17 +22,17 @@ const list = function () {
           yesterday: true,
           today: true
         }),
-        createFilter(Type.Relared, {
+        createFilter(Type.Related, {
           key: 'candidate',
           label: 'Candidate Contact',
           endpoint: `${Endpoints.CandidateSupervisor}?supervisor={session.data.contact.contact_id}`
         }),
-        createFilter(Type.Relared, {
+        createFilter(Type.Related, {
           key: 'jobsite',
           label: 'Jobsite',
           endpoint: `${Endpoints.Jobsite}?regular_company={session.data.contact.company_id}`
         }),
-        createFilter(Type.Relared, {
+        createFilter(Type.Related, {
           key: 'primary_contact',
           label: 'Primary Contact',
           endpoint: `${Endpoints.CompanyContact}?company={session.data.contact.company_id}`
@@ -54,7 +54,6 @@ const list = function () {
 
         getTimesColumn(),
         getTotalTimeColumn(),
-        getEvaluateColumn(),
 
         new List.column.element('approve', 'Approve')
           .setHide()

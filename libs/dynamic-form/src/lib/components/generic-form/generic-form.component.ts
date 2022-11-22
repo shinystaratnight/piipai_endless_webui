@@ -17,6 +17,7 @@ import isObject from 'isobject';
 
 import { BehaviorSubject, Subject, Subscription, forkJoin, of, Observable } from 'rxjs';
 import { finalize, skip, catchError } from 'rxjs/operators';
+import { TranslateService } from '@ngx-translate/core';
 
 import {
   UserService,
@@ -214,7 +215,8 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
     private modal: NgbModal,
     private purposeService: CompanyPurposeService,
     private timelineService: TimelineService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private translateService: TranslateService
   ) {
     this.updateDataAfterSendForm = {
       config: [],
@@ -593,6 +595,9 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
       Endpoints.CompanyContact,
       Endpoints.CandidateContact,
       Endpoints.Job,
+      Endpoints.ClientJobs,
+      Endpoints.Jobsite,
+      Endpoints.JobsiteClient
     ];
 
     if (endpoints.includes(this.endpoint as Endpoints)) {
@@ -663,6 +668,33 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
                         obj,
                         error,
                         '/mn/hr/jobs/',
+                        true
+                      ),
+                    };
+                  } else if (this.endpoint === Endpoints.ClientJobs) {
+                    errors = {
+                      non_field_errors: this.generateCustomError(
+                        obj,
+                        error,
+                        '/cl/hr/jobs/client_contact_job/',
+                        true
+                      ),
+                    };
+                  } else if (this.endpoint === Endpoints.JobsiteClient) {
+                    errors = {
+                      non_field_errors: this.generateCustomError(
+                        obj,
+                        error,
+                        '/cl/hr/jobsites/client_contact_jobsite/',
+                        true
+                      ),
+                    };
+                  } else if (this.endpoint === Endpoints.Jobsite) {
+                    errors = {
+                      non_field_errors: this.generateCustomError(
+                        obj,
+                        error,
+                        '/mn/hr/jobsites/',
                         true
                       ),
                     };
@@ -2167,6 +2199,8 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
       const keyss = Object.keys(errors);
       keyss.forEach((el) => {
         if (errors[el].length) {
+          this.i18nize(errors[el]);
+
           if (field) {
             error[`${field}.${el}`] = errors[el];
             delete response[`${field}.${el}`];
@@ -2177,6 +2211,14 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
         } else {
           this.updateErrors(error, errors[el], response, el);
         }
+      });
+    }
+  }
+
+  public i18nize(errors: any) {
+    if (Array.isArray(errors)) {
+      errors.forEach((err, i) => {
+        errors[i] = this.translateService.instant(err);
       });
     }
   }

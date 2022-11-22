@@ -9,22 +9,22 @@ const filter = {
     today: true,
     tomorrow: true
   }),
-  jobsite: createFilter(Type.Relared, {
+  jobsite: createFilter(Type.Related, {
     key: 'jobsite',
     label: 'Jobsite',
     endpoint: Endpoints.Jobsite
   }),
-  position: createFilter(Type.Relared, {
+  position: createFilter(Type.Related, {
     key: 'position',
     label: 'Skill',
     endpoint: Endpoints.Skill
   }),
-  provider_representative: createFilter(Type.Relared, {
+  provider_representative: createFilter(Type.Related, {
     key: 'provider_representative',
     label: 'Provider representative',
     endpoint: '/core/companycontacts/?master_company=current'
   }),
-  active_states: createFilter(Type.Relared, {
+  active_states: createFilter(Type.Related, {
     key: 'active_states',
     label: 'State',
     endpoint:
@@ -32,7 +32,7 @@ const filter = {
     display: ['name_after_activation', 'name_before_activation'],
     parameter: 'number'
   }),
-  customer_company: createFilter(Type.Relared, {
+  customer_company: createFilter(Type.Related, {
     key: 'customer_company',
     label: 'Client',
     endpoint: Endpoints.Company

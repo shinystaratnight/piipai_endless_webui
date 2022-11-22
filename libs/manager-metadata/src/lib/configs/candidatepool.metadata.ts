@@ -7,13 +7,13 @@ const filters = {
     label: 'Average score',
     max: 5
   }),
-  skill: createFilter(Type.Relared, {
+  skill: createFilter(Type.Related, {
     key: 'skill',
     label: 'Skills',
     endpoint: Endpoints.Skill,
     multiple: true
   }),
-  tag: createFilter(Type.Relared, {
+  tag: createFilter(Type.Related, {
     key: 'tag',
     label: 'Tags',
     endpoint: Endpoints.Tag,

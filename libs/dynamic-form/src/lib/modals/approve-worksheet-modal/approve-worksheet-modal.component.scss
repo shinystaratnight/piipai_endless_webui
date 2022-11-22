@@ -175,5 +175,19 @@ button {
 }
 
 .cancel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 160px;
+  height: 40px;
+  box-shadow: 0 4px 6px #0000001a;
   margin-left: auto;
+
+  &:hover {
+    box-shadow: 0 2px 6px #0000001a;
+  }
+
+  &:active {
+    box-shadow: none;
+  }
 }
