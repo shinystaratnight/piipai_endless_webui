@@ -16,3 +16,23 @@
     border: 1px solid rgba($gray, 0.2);
   }
 }
+
+.content {
+  position: relative;
+
+  ul {
+    padding-left: 0;
+  }
+
+  .form-element-checkbox:hover,
+  .form-element-checkbox.active, {
+    font-weight: 600;
+  }
+}
+
+.spinner-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $content-color;
+}

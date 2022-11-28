@@ -113,19 +113,15 @@
     border-radius: 0;
     border-bottom: 1px solid rgba($gray, .08);
 
-    &:hover {
-      background-color: #f7f7f7;
-    }
-
     label {
       margin-bottom: 0;
 
       cursor: pointer;
     }
 
-    &:hover {
-      cursor: pointer;
-    }
+    // &:hover {
+    //   cursor: pointer;
+    // }
 
     .form-element &:hover {
       color: $gray;

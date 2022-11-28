@@ -1,4 +1,4 @@
-<div class="filter-element">
+<!-- <div class="filter-element">
   <webui-filter-header
     [label]="config.label"
     [key]="config.key"
@@ -155,6 +155,89 @@
           (click)="removeItem(value)"
         ></fa-icon>
       </span>
+    </div>
+  </div>
+</div>
+ -->
+
+<div class="filter-element">
+  <webui-filter-header
+    [key]="config.key"
+    [label]="config.label"
+  ></webui-filter-header>
+
+  <div class="content" #content>
+    <div class="form-control autocomplete-value" (click)="onShowOptions()">
+      <ng-container *ngIf="value$ | async as value; else placeholder">
+        <span *ngIf="value.length > 1">
+          {{ value.length }}
+        </span>
+        <span *ngIf="value.length === 1">{{ value[0].label }}</span>
+      </ng-container>
+
+      <ng-template #placeholder>
+        {{ 'all' | translate }}
+      </ng-template>
+
+      <fa-icon icon="chevron-down"></fa-icon>
+    </div>
+
+    <div class="autocomplete" *ngIf="active$ | async" [ngStyle]="getStyle()">
+      <input
+        [formControl]="searchControl"
+        *ngIf="!config.property"
+        name="search"
+        type="text"
+        class="form-control mb-1"
+      />
+
+      <ul *ngIf="config.multiple" class="list-group w-100">
+        <li class="default-value">
+          <button class="btn btn-default" type="button" (click)="selectAll()">
+            {{ 'select_all' | translate }}
+          </button>
+          <button class="btn btn-default" type="button" (click)="resetAll()">
+            {{ 'reset_all' | translate }}
+          </button>
+        </li>
+      </ul>
+
+      <div
+        class="autocomplete-list"
+        infinite-scroll
+        [infiniteScrollDistance]="modalScrollDistance"
+        [infiniteScrollThrottle]="modalScrollThrottle"
+        [scrollWindow]="false"
+        (scrolled)="onScrollDown()"
+      >
+        <ul *ngIf="options$ | async as options">
+          <li
+            class="autocomplete-item form-check"
+            *ngFor="let option of options"
+          >
+            <label class="form-element-checkbox">
+              <ng-container *ngIf="option.control">
+                <input
+                  type="checkbox"
+                  class="form-check-input"
+                  [formControl]="option.control"
+                  [hidden]="true"
+                />
+                <webui-checkbox
+                  [sm]="true"
+                  [checked]="option.control.value"
+                ></webui-checkbox>
+              </ng-container>
+
+              {{ option.value.label }}
+            </label>
+          </li>
+        </ul>
+      </div>
+
+      <div *ngIf="loading$ | async" class="spinner-content">
+        <webui-spinner></webui-spinner>
+      </div>
     </div>
   </div>
 </div>
