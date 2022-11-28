@@ -44,22 +44,24 @@
         </span>
       </div>
     </ng-container>
+
+    <div>
+      <button
+        type="button"
+        class="btn btn-primary"
+        *ngIf="!currentPlan"
+        [disabled]="!cardExist"
+        (click)="setPlan()"
+      >
+        Subscribe
+      </button>
+    </div>
   </div>
 </div>
 
 <!-- <button type="button"
   class="btn btn-sm btn-primary action-button"
   [disabled]="!cardExist">Save Card</button> -->
-
-<button
-  type="button"
-  class="btn btn-primary"
-  *ngIf="!currentPlan"
-  [disabled]="!cardExist"
-  (click)="setPlan()"
->
-  Subscribe
-</button>
 
 <ng-template #subscription let-c="close" let-d="dismiss">
   <div class="modal-header-wrapper">
