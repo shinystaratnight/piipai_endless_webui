@@ -1283,6 +1283,7 @@ const form = [
           },
           {
             endpoint: Endpoints.WorkflowObject,
+            translateKey: 'workflowobjects',
             templateOptions: {
               label: 'States history',
               type: 'list',

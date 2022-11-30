@@ -960,7 +960,7 @@
     "registration.already_account": "Already have an account,",
     "registration.login_here": "Login here!",
     "tabs.workflowobjects.label": "States history",
-    "tabs.workflowobjects.help": "Here you can see changes job states",
+    "tabs.workflowobjects.help": "Here you can see changes states",
     "company_settings.invoice_template": "Invoice footer comment/notes",
     "tabs.groups": "Groups",
     "tabs.users": "Users",
@@ -1063,5 +1063,12 @@
     "will_send": "Will send",
     "was_sent": "Was sent",
     "cancel_shift_dates": "Cancel Shift Dates",
-    "message.credit_card_updated": "Credit card information updated"
+    "message.credit_card_updated": "Credit card information updated",
+    "common.back-to-list": "Back to list",
+    "common.recreate-invoice": "Recreate",
+    "common.sync": "Sync",
+    "common.show-tacking-map": "Show tracking map",
+    "common.job-information": "Job information",
+    "common.show-timesheet": "Show timesheet",
+    "common.pass-test-please": "Please pass test in \"States\" tab"
 }
