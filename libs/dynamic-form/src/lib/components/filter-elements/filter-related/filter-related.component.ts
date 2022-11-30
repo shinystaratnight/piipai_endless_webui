@@ -79,7 +79,6 @@ export class FilterRelatedComponent
   ) {}
 
   public ngOnInit() {
-    console.log(this.config);
     this.multiple = this.config.multiple;
     if (this.multiple) {
       this.limit = -1;
@@ -204,7 +203,6 @@ export class FilterRelatedComponent
 
   public onModalScrollDown() {
     if (!this.multiple) {
-      console.log(this.skipScroll);
       if (!this.skipScroll) {
         this.skipScroll = true;
         this.generateList(true);

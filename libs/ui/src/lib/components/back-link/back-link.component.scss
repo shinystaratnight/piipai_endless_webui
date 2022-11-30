@@ -1,32 +1,15 @@
 @use 'variables' as *;
 
-.form-navigation {
+:host {
+  display: block;
   padding-bottom: 8px;
 
-  .datatable-body & {
-    width: auto;
-    max-width: none;
-    padding-top: 0;
-    margin-top: -16px;
-  }
-
-  a {
+  .link {
     display: inline-flex;
     align-items: center;
     font-size: 14px;
     line-height: 16px;
-
+    gap: 0.5rem;
     color: $primary;
-
-    @each $item in $themes {
-      .#{$item}-theme & {
-        color: map-get($theme-colors, $item);
-      }
-    }
-  }
-
-  @include media-breakpoint-down('lg') {
-    width: 100%;
-    max-width: 100%;
   }
 }
