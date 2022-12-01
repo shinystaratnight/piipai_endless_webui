@@ -1,8 +1,15 @@
-import { Component, ViewChild, OnInit, OnDestroy, ChangeDetectorRef, ElementRef } from '@angular/core';
+import {
+  Component,
+  ViewChild,
+  OnInit,
+  OnDestroy,
+  ChangeDetectorRef,
+  ElementRef,
+} from '@angular/core';
 
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription, BehaviorSubject } from 'rxjs';
-import { finalize } from 'rxjs/operators';
+import { finalize, map, tap } from 'rxjs/operators';
 
 import { FormatString } from '@webui/utilities';
 import { SiteSettingsService } from '@webui/core';
@@ -12,12 +19,63 @@ import { PassTestModalComponent, PassTestModalConfig } from '../../../modals';
 import { FormControl } from '@angular/forms';
 import { Endpoints } from '@webui/models';
 
+interface IStateOption {
+  id: string;
+  number: number;
+  name_before_activation: string;
+  name_after_activation: string;
+  state: 1 | 2 | 3;
+  requirements: string[];
+  substates?: IStateOption[];
+  wf_object_id: string;
+  acceptance_tests: any[];
+}
+
+class StateOption {
+  id: string;
+  number: number;
+  name_before_activation: string;
+  name_after_activation: string;
+  state: 0 | 1 | 2 | 3 | 4;
+  model: string;
+  label: string;
+  requirements: string[];
+  substates?: IStateOption[];
+  wf_object_id: string;
+  acceptance_tests: any[];
+
+  constructor(payload: IStateOption, model: string) {
+    this.id = payload.id;
+    this.number = payload.number;
+    this.name_after_activation = payload.name_after_activation;
+    this.name_before_activation = payload.name_before_activation;
+    this.state = payload.state;
+    this.model = model;
+    this.label =
+      this.state === 2
+        ? this.name_after_activation || this.name_before_activation
+        : this.name_before_activation;
+    this.requirements = payload.requirements;
+    this.substates = payload.substates;
+    this.wf_object_id = payload.wf_object_id;
+    this.acceptance_tests = payload.acceptance_tests;
+  }
+
+  get translateKey() {
+    const state = this.state === 1 ? 'before' : 'after';
+
+    return `workflow.${this.model}.${this.number}.${state}`;
+  }
+}
+
 @Component({
   selector: 'webui-form-timeline',
   templateUrl: 'form-timeline.component.html',
   styleUrls: ['./form-timeline.component.scss'],
 })
 export class FormTimelineComponent implements OnInit, OnDestroy {
+  private _options = new BehaviorSubject<IStateOption[] | null>(null);
+
   @ViewChild('stateModal') stateModal!: ElementRef;
 
   public config: any;
@@ -32,7 +90,6 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
   public currentState = new FormControl();
 
   public dropdown!: boolean;
-  public selectArray!: any[];
   public updated!: boolean;
   public loading!: boolean;
   public saveProcess!: boolean;
@@ -42,6 +99,27 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
   public passedTests: Map<string, any[]> = new Map();
   public workflowObjectEndpoint = Endpoints.WorkflowObject;
   public FormMode = FormMode;
+
+  options$ = this._options
+    .asObservable()
+    .pipe(
+      map((states) =>
+        states?.map((el) => new StateOption(el, this.config.query['model']))
+      )
+    );
+
+  dropdownOptions$ = this.options$.pipe(
+    map((states) => states?.filter((el) => el.state < 3)),
+    tap((states) => {
+      const currentState = states?.reduce((prev, next) =>
+        next.state === 2 ? next : prev
+      );
+
+      if (currentState) {
+        this.currentState.patchValue(currentState.id);
+      }
+    })
+  );
 
   private subscriptions: Subscription[] = [];
 
@@ -65,15 +143,7 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
       }
 
       if (value !== TimelineAction.Reset) {
-        this.config.options = value;
-
-        if (this.dropdown) {
-          this.updateDropdown();
-        }
-
-        if (!(<any>this.cd).destroyed) {
-          this.cd.detectChanges();
-        }
+        this._options.next(value);
       }
     });
 
@@ -88,7 +158,10 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
       if (el === 'object_id') {
         if (Array.isArray(this.config.query[el])) {
           if (!this.objectId && type !== 'master') {
-            this.objectId = formatString.format(this.config.query[el][2], this.config.value);
+            this.objectId = formatString.format(
+              this.config.query[el][2],
+              this.config.value
+            );
           }
 
           this.config.query[el].forEach((query: any) => {
@@ -97,7 +170,10 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
             }
           });
         } else {
-          this.objectId = formatString.format(this.config.query[el], this.config.value);
+          this.objectId = formatString.format(
+            this.config.query[el],
+            this.config.value
+          );
         }
 
         this.query[el] = this.objectId;
@@ -113,32 +189,17 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
         }
       }
     });
-    if (!this.config.options) {
+
+    if (this._options.value === null) {
       this.getTimeline();
     }
   }
 
-  public updateDropdown() {
-    if (this.dropdown) {
-      this.selectArray = this.config.options.filter((el: any) => {
-        return el.state < 3;
-      });
+  public getState(): any {
+    const states = this._options.value;
+    const id = this.currentState.value;
 
-      let key = 0;
-      this.selectArray.forEach((el, i) => {
-        if (el.state === 2) {
-          key = i;
-        }
-      });
-
-      this.currentState.patchValue(this.selectArray[key] && this.selectArray[key].id);
-    }
-  }
-
-  public getState(state: string): any {
-    if (this.config.options) {
-      return this.config.options.find((el: any) => el.id === state);
-    }
+    return states?.find((el) => el.id === id);
   }
 
   public ngOnDestroy() {
@@ -157,7 +218,12 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
       return;
     }
     this.modalData = {};
-    if (state.state === 1 && !this.advancedSeving && !state.acceptance_tests.length && !state.substates.length) {
+    if (
+      state.state === 1 &&
+      !this.advancedSeving &&
+      !state.acceptance_tests.length &&
+      !state.substates.length
+    ) {
       state.saveProcess = true;
       this.timelineService
         .activateState(this.objectId, state.id, true)
@@ -169,14 +235,18 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
     }
 
     if (state.acceptance_tests.length) {
-      const tests = state.acceptance_tests.filter((test: any) => test.score === 0);
+      const tests = state.acceptance_tests.filter(
+        (test: any) => test.score === 0
+      );
 
       if (tests.length) {
         const passTestAction = new BehaviorSubject(0);
 
         passTestAction.subscribe((index) => {
           const testId = tests[index].acceptance_test.id;
-          this.modalRef = this.modalService.open(PassTestModalComponent, { backdrop: 'static' });
+          this.modalRef = this.modalService.open(PassTestModalComponent, {
+            backdrop: 'static',
+          });
           this.modalRef.componentInstance.config = {
             testId,
             send: false,
@@ -185,7 +255,10 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
           this.modalRef.result
             .then((res: any[]) => {
               if (this.passedTests.has(testId)) {
-                this.passedTests.set(testId, [...(this.passedTests.get(testId) as any[]), ...res]);
+                this.passedTests.set(testId, [
+                  ...(this.passedTests.get(testId) as any[]),
+                  ...res,
+                ]);
               } else {
                 this.passedTests.set(testId, res);
               }
@@ -196,9 +269,11 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
                 if (state.wf_object_id) {
                   this.savePassedTests(state.wf_object_id);
                 } else {
-                  this.timelineService.activateState(this.objectId, state.id, true).subscribe((workflowObject) => {
-                    this.savePassedTests(workflowObject.id);
-                  });
+                  this.timelineService
+                    .activateState(this.objectId, state.id, true)
+                    .subscribe((workflowObject) => {
+                      this.savePassedTests(workflowObject.id);
+                    });
                 }
               }
             })
@@ -225,7 +300,9 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
       if (state.state === 1) {
         title = state.name_before_activation;
       } else if (state.state === 2) {
-        title = state.name_after_activation ? state.name_after_activation : state.name_before_activation;
+        title = state.name_after_activation
+          ? state.name_after_activation
+          : state.name_before_activation;
       }
       this.modalData.id = state.wf_object_id || undefined;
       this.modalData.title = title;
@@ -248,8 +325,13 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
       }
 
       this.modalData.state = state;
-      this.stateData = this.setDataForState(state, !this.modalData.tests && !this.modalData.substates);
-      this.modalRef = this.modalService.open(this.stateModal, { backdrop: 'static' });
+      this.stateData = this.setDataForState(
+        state,
+        !this.modalData.tests && !this.modalData.substates
+      );
+      this.modalRef = this.modalService.open(this.stateModal, {
+        backdrop: 'static',
+      });
     }
   }
 
@@ -289,7 +371,8 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
     const fields = ['object_id', 'state', 'active'];
     const result: Record<string, any> = {};
     fields.forEach((el) => {
-      const value = el === 'state' ? state.id : el === 'object_id' ? this.objectId : true;
+      const value =
+        el === 'state' ? state.id : el === 'object_id' ? this.objectId : true;
       result[el] = {
         action: 'add',
         data: {
@@ -343,7 +426,9 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.modalRef = this.modalService.open(PassTestModalComponent, { backdrop: 'static' });
+    this.modalRef = this.modalService.open(PassTestModalComponent, {
+      backdrop: 'static',
+    });
     this.modalRef.componentInstance.config = {
       send: true,
       testId: id,
@@ -352,19 +437,23 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
   }
 
   public createWorkflowObject(stateId: string) {
-    this.timelineService.activateState(this.objectId, stateId).subscribe((res) => {
-      const { id } = res;
+    this.timelineService
+      .activateState(this.objectId, stateId)
+      .subscribe((res) => {
+        const { id } = res;
 
-      this.modalData.state.wf_object_id = id;
-      this.modalData.workflowObject = id;
+        this.modalData.state.wf_object_id = id;
+        this.modalData.workflowObject = id;
 
-      this.modalRef = this.modalService.open(PassTestModalComponent, { backdrop: 'static' });
-      this.modalRef.componentInstance.config = {
-        send: true,
-        testId: id,
-        workflowObject: this.modalData.workflowObject,
-      } as PassTestModalConfig;
-    });
+        this.modalRef = this.modalService.open(PassTestModalComponent, {
+          backdrop: 'static',
+        });
+        this.modalRef.componentInstance.config = {
+          send: true,
+          testId: id,
+          workflowObject: this.modalData.workflowObject,
+        } as PassTestModalConfig;
+      });
   }
 
   public testComplete(closeModal: () => void) {
