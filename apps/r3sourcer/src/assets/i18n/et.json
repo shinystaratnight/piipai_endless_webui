@@ -302,7 +302,7 @@
     "sms_history.label": "SMS-i ajalugu",
     "start": "Algus",
     "start_date.label": "Algus kuupäev",
-    "state.label": "Maakond",
+    "state.label": "Staatus",
     "status.supervisor_approved.label": "Kinnitatud",
     "status.label": "Staatus",
     "submit": "Esita",
@@ -583,7 +583,7 @@
     "filter.state.SENDING": "Saatmisel",
     "filter.state.SENT": "Saadetud",
     "filter.state.WAIT": "Ootel",
-    "filter.state.label": "Osariik",
+    "filter.state.label": "Staatus",
     "emailmessages.label": "Meilisõnum",
     "subject.label": "Teema",
     "to_addresses.label": "Saaja",
@@ -1073,5 +1073,9 @@
     "workflow.timesheet-entry": "",
     "workflow.order": "",
     "workflow.timesheet-issue": "",
-    "workflow.candidate-contact": ""
+    "workflow.candidate-contact": "",
+    "state.CREATED": "",
+    "state.ERROR": "",
+    "state.SENDING": "",
+    "state.WAIT": ""
 }

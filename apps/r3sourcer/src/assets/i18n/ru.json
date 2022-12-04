@@ -302,7 +302,7 @@
     "sms_history.label": "SMS история",
     "start": "Начало",
     "start_date.label": "Дата начала",
-    "state.label": "Регион",
+    "state.label": "Состояние",
     "status.supervisor_approved.label": "Одобрен",
     "status.label": "Статус",
     "submit": "Отправить",
@@ -1073,5 +1073,9 @@
     "workflow.timesheet-entry": "",
     "workflow.order": "",
     "workflow.timesheet-issue": "",
-    "workflow.candidate-contact": ""
+    "workflow.candidate-contact": "",
+    "state.CREATED": "",
+    "state.ERROR": "",
+    "state.SENDING": "",
+    "state.WAIT": ""
 }

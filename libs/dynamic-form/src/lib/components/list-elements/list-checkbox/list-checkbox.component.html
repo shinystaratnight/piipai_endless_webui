@@ -26,9 +26,7 @@
     delivered:
       (getTranslationKey(config.value) | translate: { Default: value }) ===
       'Delivered',
-    sent:
-      (getTranslationKey(config.value) | translate: { Default: value }) ===
-      'Sent'
+    sent: config.value === 'SENT'
   }"
   *ngIf="config.values && !config.content && value"
 >
