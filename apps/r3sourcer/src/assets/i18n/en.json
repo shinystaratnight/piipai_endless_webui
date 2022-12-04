@@ -1141,7 +1141,7 @@
     "minimum.label": "minimum",
     "action.approve": "Approve",
     "sms_credit_details.add_funds_description_second": "so we could use SMS service!",
-    "sms_credit_details.charge_rate_value": "{cost} per segment ({amount} signs)",
+    "sms_credit_details.charge_rate_value": "{{cost}} per segment ({{amount}} signs)",
     "enter_payment_information.label": "Enter your payment information",
     "action.add_new_cc": "Add new CC",
     "action.save_cc": "Save credit card",

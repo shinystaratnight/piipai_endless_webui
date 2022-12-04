@@ -1,24 +1,39 @@
 <div class="group">
   <div class="group__content">
-    <h5 class="group__label">{{'sms_credit_details.label' | translate}}</h5>
+    <h5 class="group__label">{{ 'sms_credit_details.label' | translate }}</h5>
 
     <ng-container *ngIf="smsBalance">
       <div class="field">
-        <label class="field__label">{{'sms_credit_details.charge_rate' | translate}}:</label>
-        <span>{{'sms_credit_details.charge_rate_value' | translate : { cost: smsBalance.segment_cost | currency: currency, amount: 160 } }}</span>
+        <label class="field__label">
+          {{ 'sms_credit_details.charge_rate' | translate }}:
+        </label>
+        <span>{{
+          'sms_credit_details.charge_rate_value'
+            | translate
+              : {
+                  cost: (smsBalance.segment_cost | currency: currency),
+                  amount: 160
+                }
+        }}</span>
       </div>
 
       <div class="field">
-        <label class="field__label">{{'sms_credit_details.auto_top_up' | translate}}:</label>
+        <label class="field__label"
+          >{{ 'sms_credit_details.auto_top_up' | translate }}:</label
+        >
         <div>
           <div class="switch">
-            <span class="on" [class.active]="smsBalance.auto_charge">{{'on.label' | translate}}</span>
+            <span class="on" [class.active]="smsBalance.auto_charge">
+              {{ 'on.label' | translate }}
+            </span>
             /
             <span class="off" [class.active]="!smsBalance.auto_charge">
-              {{'off.label' | translate}}
+              {{ 'off.label' | translate }}
             </span>
           </div>
-          <a href="#" (click)="autoCharge($event)">{{'sms_credit_details.action.configure_auto_charge' | translate}}</a>
+          <a href="#" (click)="autoCharge($event)">
+            {{ 'sms_credit_details.action.configure_auto_charge' | translate }}
+          </a>
         </div>
       </div>
     </ng-container>
@@ -26,7 +41,9 @@
 
   <ng-container *ngIf="smsBalance">
     <div class="field group__footer">
-      <label class="field__label">{{'sms_credit_details.current_balance' | translate}}:</label>
+      <label class="field__label">
+        {{ 'sms_credit_details.current_balance' | translate }}:
+      </label>
       <div
         class="d-flex align-items-center justify-content-between flex-grow-1"
       >
@@ -39,7 +56,7 @@
           (click)="showAddFundsForm()"
           [disabled]="!cardExist"
         >
-          {{'sms_credit_details.action.add_funds' | translate}}
+          {{ 'sms_credit_details.action.add_funds' | translate }}
         </button>
       </div>
     </div>
@@ -48,7 +65,9 @@
   <ng-template #charge let-c="close" let-d="dismiss">
     <div class="modal-header-wrapper">
       <div class="modal-header">
-        <h5 class="modal-title">{{'sms_credit_details.auto_charge' | translate}}</h5>
+        <h5 class="modal-title">
+          {{ 'sms_credit_details.auto_charge' | translate }}
+        </h5>
 
         <webui-close-button class="ms-auto" (click)="d()"></webui-close-button>
       </div>
@@ -72,14 +91,16 @@
   <ng-template #funds let-c="close" let-d="dismiss">
     <div class="modal-header-wrapper">
       <div class="modal-header">
-        <h5 class="modal-title">{{'sms_credit_details.add_funds' | translate}}</h5>
+        <h5 class="modal-title">
+          {{ 'sms_credit_details.add_funds' | translate }}
+        </h5>
 
         <webui-close-button class="ms-auto" (click)="d()"></webui-close-button>
       </div>
     </div>
 
     <div class="modal-body text-center">
-      <h6>{{'sms_credit_details.add_funds_description' | translate}}</h6>
+      <h6>{{ 'sms_credit_details.add_funds_details' | translate }}</h6>
 
       <div class="d-flex align-items-center justify-content-center">
         <div class="form-element">
@@ -93,11 +114,14 @@
           />
         </div>
         <small class="description">
-          (minimum {{ minChargeAmount | currency: currency }})
+          ({{ 'minimum.label' | translate }}
+          {{ minChargeAmount | currency: currency }})
         </small>
       </div>
 
-      <h6 class="mt-2">{{'sms_credit_details.add_funds_description_second' | translate}}</h6>
+      <h6 class="mt-2">
+        {{ 'sms_credit_details.add_funds_description_second' | translate }}
+      </h6>
 
       <button
         type="submit"
@@ -105,7 +129,7 @@
         [disabled]="amountControl.invalid"
         (click)="addFunds()"
       >
-        {{'action.approve' | translate}}
+        {{ 'action.approve' | translate }}
       </button>
     </div>
   </ng-template>
