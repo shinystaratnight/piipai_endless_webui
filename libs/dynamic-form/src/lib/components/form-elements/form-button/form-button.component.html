@@ -90,7 +90,7 @@
         config.translationKey
           ? (config.translationKey
             | translate: { Default: config.templateOptions.text })
-          : config.templateOptions.text
+          : config.templateOptions.text | translate
       }}
     </span>
   </button>
@@ -106,7 +106,7 @@
       config.translationKey && config.templateOptions.text
         ? (config.translationKey
           | translate: { Default: config.templateOptions.text })
-        : config.templateOptions.text
+        : config.templateOptions.text | translate
     }}
   </button>
   <span class="postfix me-1" *ngIf="config.postfix">{{ config.postfix }}</span>

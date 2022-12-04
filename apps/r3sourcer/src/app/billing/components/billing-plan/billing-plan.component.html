@@ -1,7 +1,7 @@
 <div class="group">
   <div class="group__content">
     <h5 class="header group__label">
-      <span>Subscription details</span>
+      <span>{{'details.label' | translate}}</span>
 
       <button type="button" class="btn hov-opacity" (click)="changePlan()">
         <fa-icon icon="pencil-alt" class="text-success"></fa-icon>
@@ -14,36 +14,48 @@
 
     <ng-container *ngIf="currentPlan">
       <div class="field">
-        <label class="field__label">Price:</label>
+        <label class="field__label">{{'price.label' | translate}}:</label>
         <span>{{ currentPlan.price | currency: currency }}</span>
       </div>
       <div class="field">
-        <label class="field__label">Worker count:</label>
+        <label class="field__label">{{'workers.label' | translate}}:</label>
         <span>{{ currentPlan.worker_count }}</span>
       </div>
       <div class="field">
-        <label class="field__label">Type:</label>
+        <label class="field__label">{{'type.label' | translate}}:</label>
         <span style="text-transform: capitalize">
           {{ types[currentPlan.subscription_type] }}
         </span>
       </div>
       <div class="field">
-        <label class="field__label">Status:</label>
+        <label class="field__label">{{'status.label' | translate}}:</label>
         <span>{{ currentPlan.active && 'Active' }}</span>
       </div>
       <div class="field">
-        <label class="field__label">Curent period start:</label>
+        <label class="field__label">{{'current_period_start.label' | translate}}:</label>
         <span>
           {{ currentPlan.current_period_start | dateFormat: 'datetime' }}
         </span>
       </div>
       <div class="field">
-        <label class="field__label">Curent period end:</label>
+        <label class="field__label">{{'current_period_end.label' | translate}}:</label>
         <span>
           {{ currentPlan.current_period_end | dateFormat: 'datetime' }}
         </span>
       </div>
     </ng-container>
+
+    <div>
+      <button
+        type="button"
+        class="btn btn-primary"
+        *ngIf="!currentPlan"
+        [disabled]="!cardExist"
+        (click)="setPlan()"
+      >
+        {{'action.subscribe' | translate}}
+      </button>
+    </div>
   </div>
 </div>
 
@@ -51,20 +63,10 @@
   class="btn btn-sm btn-primary action-button"
   [disabled]="!cardExist">Save Card</button> -->
 
-<button
-  type="button"
-  class="btn btn-primary"
-  *ngIf="!currentPlan"
-  [disabled]="!cardExist"
-  (click)="setPlan()"
->
-  Subscribe
-</button>
-
 <ng-template #subscription let-c="close" let-d="dismiss">
   <div class="modal-header-wrapper">
     <div class="modal-header">
-      <h5 class="modal-title">Select your plan</h5>
+      <h5 class="modal-title">{{'select_plan.label' | translate}}</h5>
 
       <webui-close-button class="ms-auto" (click)="d()"></webui-close-button>
     </div>
@@ -73,7 +75,7 @@
   <div class="modal-body">
     <form>
       <div class="form-element">
-        <label for="employees"> Employees count: </label>
+        <label for="employees">{{'employees' | translate}}}:</label>
         <input
           class="form-control form-element-content"
           size="5"
@@ -134,12 +136,12 @@
     </div>
 
     <p *ngIf="workerCount > 1000" class="message">
-      Please contact our sales staff for customized offer:
-      <a href="mailto:sales@r3sourcer.com">sales@r3sourcer.com</a>
+      {{'message.max_employees' | translate}}:
+      <a href="mailto:sales@piipai.com">sales@piipai.com</a>
     </p>
 
     <div class="spinner-wrapper" *ngIf="saveProcess">
-      Saving... <webui-spinner></webui-spinner>
+      {{'action.saving' | translate}} <webui-spinner></webui-spinner>
     </div>
   </div>
 </ng-template>

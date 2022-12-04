@@ -1,4 +1,4 @@
-<h4>Acceptance Tests</h4>
+<h4>{{ 'acceptance_tests.label' | translate }}</h4>
 
 <ngb-accordion *ngIf="tests" [closeOthers]="true">
   <ng-container *ngFor="let test of tests">
@@ -6,12 +6,19 @@
       <ng-template ngbPanelTitle>
         <div class="test-title-wrapper">
           <div class="test-title">
-            <h5 class="mb-0">{{test.acceptance_test.name}}</h5>
-            <small *ngIf="test.score === 0" class="text-danger">Please pass test in "States" tab</small>
-            <p *ngIf="!config.hideQuestions" class="description mt-2">{{test.company_workflow_node.name}}</p>
+            <h5 class="mb-0">{{ test.acceptance_test.name }}</h5>
+            <small *ngIf="test.score === 0" class="text-danger">
+              Please pass test in "States" tab
+            </small>
+            <p *ngIf="!config.hideQuestions" class="description mt-2">
+              {{ test.company_workflow_node.name }}
+            </p>
           </div>
-          <span class="score border-0" [style.color]="colors[getScore(test.score)]">
-            {{test.score}}
+          <span
+            class="score border-0"
+            [style.color]="colors[getScore(test.score)]"
+          >
+            {{ test.score }}
             <fa-icon [icon]="['fas', 'star']"></fa-icon>
           </span>
         </div>
@@ -19,10 +26,14 @@
       <ng-template ngbPanelContent>
         <ol>
           <li *ngFor="let question of test.questions">
-            <p class="question-title">{{question.question}}</p>
-            <p class="question-details description">{{question.details}}</p>
+            <p class="question-title">{{ question.question }}</p>
+            <p class="question-details description">{{ question.details }}</p>
 
-            <p *ngIf="question.answer"><span class="answer">Answer:</span> {{question.answer.answer}} <i class="description">({{question.answer.score}})</i></p>
+            <p *ngIf="question.answer">
+              <span class="answer">{{ 'answer.label' | translate }}:</span>
+              {{ question.answer.answer }}
+              <i class="description">({{ question.answer.score }})</i>
+            </p>
           </li>
         </ol>
       </ng-template>

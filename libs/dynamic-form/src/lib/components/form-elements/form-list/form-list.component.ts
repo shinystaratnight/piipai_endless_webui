@@ -109,12 +109,12 @@ export class FormListComponent implements OnInit, OnDestroy {
     this.hasAddForm = this.config.add_form;
 
     if (this.config.templateOptions?.label) {
-      this.labelTranslateKey = this.config.translateKey && this.config.templateOptions?.label
+      this.labelTranslateKey = this.config.templateOptions?.label
         ? `tabs.${this.config.translateKey}.label`
-        : 'without_translation';
+        : '';
       this.helpTranslateKey = this.config.translateKey
         ? `tabs.${this.config.translateKey}.help`
-        : 'without_translation';
+        : '';
     }
 
     if (this.hasAddForm) {

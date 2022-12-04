@@ -1,14 +1,14 @@
 <div class="form-tabs">
   <ul ngbNav #nav="ngbNav" [(activeId)]="activeTab">
     <li ngbNavItem="payment">
-      <a ngbNavLink>Payments</a>
+      <a ngbNavLink>{{'payments.label' | translate}}</a>
       <ng-template ngbNavContent>
         <webui-dynamic-form [config]="paymentConfig"></webui-dynamic-form>
       </ng-template>
     </li>
 
     <li ngbNavItem="sms-log">
-      <a ngbNavLink>SMS logs</a>
+      <a ngbNavLink>{{'smslog.label' | translate}}</a>
       <ng-template ngbNavContent>
         <webui-dynamic-form [config]="smsConfig"></webui-dynamic-form>
       </ng-template>
