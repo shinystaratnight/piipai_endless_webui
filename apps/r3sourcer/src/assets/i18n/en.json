@@ -1103,5 +1103,9 @@
     "workflow.core.companyrel.70.before": "Activate",
     "workflow.core.companyrel.70.after": "Active",
     "workflow.core.companyrel.40.before": "Preparing Proposal",
-    "workflow.core.companyrel.40.after": "Proposal Presented"
+    "workflow.core.companyrel.40.after": "Proposal Presented",
+    "error.invalid_shift_started_at_12": "<Shift Started At> cannot be later than 12 hours.",
+    "error.invalid_shift_started_at_4": "<Shift Started At> can not be earlier than 4 hours.",
+    "error.invalid_total_24": "Total working hours cannot be longer than 24 hours.",
+    "latest_activity": "Latest previous activity"
 }
