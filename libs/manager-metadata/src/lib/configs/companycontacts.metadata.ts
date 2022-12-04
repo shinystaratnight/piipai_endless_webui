@@ -78,7 +78,8 @@ const list = {
           endpoint: '/core/companycontacts/sendsms/',
           label: 'Send',
           confirm: false,
-          message: 'Are you sure?'
+          message: 'Are you sure?',
+          translateKey: 'send',
         }
       ],
       label: 'Actions',
