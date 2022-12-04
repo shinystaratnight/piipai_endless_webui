@@ -5,7 +5,7 @@
       class="form-control w-100 rounded p-2"
       [(ngModel)]="search"
       (keyup)="filter(search)"
-      placeholder="Search"
+      [placeholder]="'common.search' | translate"
     />
     <fa-icon
       [icon]="['fas', 'search']"
@@ -25,7 +25,7 @@
       class="d-flex justify-content-center flex-column"
     >
       <div class="d-flex align-items-center p-2 group">
-        <b class="field-name text-muted">{{ item.label }}</b>
+        <b class="field-name text-muted">{{ getTranslateKey(item.name) | translate }}</b>
         <div class="ms-auto d-flex align-items-center flex-wrap gap-3">
           <button
             type="button"
@@ -90,7 +90,7 @@
 
 <ng-template #field let-i="field" let-d="disabled">
   <div class="d-flex align-items-center p-2 field">
-    <span class="field-name">{{ i.label }}</span>
+    <span class="field-name">{{ getTranslateKey(i.name) | translate }}</span>
     <button
       type="button"
       class="btn btn-sm ms-auto"

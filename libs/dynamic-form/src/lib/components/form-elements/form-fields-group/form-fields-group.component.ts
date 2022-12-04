@@ -611,6 +611,10 @@ export class FormFieldsGroupComponent implements OnInit {
     return field.name === 'contact';
   }
 
+  getTranslateKey(name: string) {
+    return name.replace(/__/gi, '.') + '.label';
+  }
+
   lockUserField(field: Field) {
     const lockedFields = [
       'contact__first_name',
