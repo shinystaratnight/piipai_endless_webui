@@ -1065,5 +1065,13 @@
     "workflow.candidate.candidatecontact.90.before": "Ban",
     "workflow.candidate.candidatecontact.90.after": "Banned",
     "workflow.candidate.candidatecontact.80.before": "Suspend/Retire",
-    "workflow.candidate.candidatecontact.80.after": "Suspended/Retired"
+    "workflow.candidate.candidatecontact.80.after": "Suspended/Retired",
+    "workflow.job": "Job Workflow",
+    "workflow.jobsite": "Jobsite Workflow",
+    "workflow.company": "Master Company Workflow",
+    "workflow.company-relationship": "Client Company Workflow",
+    "workflow.timesheet-entry": "TimeSheet Workflow",
+    "workflow.order": "Order Workflow",
+    "workflow.timesheet-issue": "TimeSheet Issue Workflow",
+    "workflow.candidate-contact": "Candidate Contact Workflow"
 }
