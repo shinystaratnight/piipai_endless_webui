@@ -1077,5 +1077,13 @@
     "state.CREATED": "",
     "state.ERROR": "",
     "state.SENDING": "",
-    "state.WAIT": ""
+    "state.WAIT": "",
+    "workflow.hr.job.10.before": "",
+    "workflow.hr.job.10.after": "",
+    "workflow.hr.job.20.before": "",
+    "workflow.hr.job.20.after": "",
+    "workflow.hr.job.40.before": "",
+    "workflow.hr.job.40.after": "",
+    "workflow.hr.job.60.before": "",
+    "workflow.hr.job.60.after": ""
 }

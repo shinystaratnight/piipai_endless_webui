@@ -104,7 +104,7 @@
         <span [ngClass]="{ label: length > 1 }" *ngIf="config.label">
           {{ config.label + ':' }}
         </span>
-        {{ item && item.__str__ ? item.__str__ : item }}
+        {{ item && item.__str__ ? (item.__str__ | translate) : item }}
       </span>
     </span>
     <span

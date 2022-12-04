@@ -1077,5 +1077,13 @@
     "state.CREATED": "Created",
     "state.ERROR": "Failed",
     "state.SENDING": "Sending",
-    "state.WAIT": "Waiting"
+    "state.WAIT": "Waiting",
+    "workflow.hr.job.10.before": "New",
+    "workflow.hr.job.10.after": "New",
+    "workflow.hr.job.20.before": "Confirm",
+    "workflow.hr.job.20.after": "Confirmed",
+    "workflow.hr.job.40.before": "On-Hold",
+    "workflow.hr.job.40.after": "On-Hold",
+    "workflow.hr.job.60.before": "Complete",
+    "workflow.hr.job.60.after": "Completed"
 }

@@ -16,8 +16,10 @@ const filter = {
   }),
   position: createFilter(Type.Related, {
     key: 'position',
-    label: 'Skill',
-    endpoint: Endpoints.Skill
+    label: 'Position',
+    endpoint: Endpoints.SkillName,
+    parameter: 'skill_id',
+    display: 'translations'
   }),
   provider_representative: createFilter(Type.Related, {
     key: 'provider_representative',
@@ -176,7 +178,8 @@ const list = {
         content: [
           {
             field: 'active_states',
-            type: 'static'
+            type: 'static',
+            translateKey: 'workflow.hr.job.{number}.after'
           }
         ],
         name: 'state',
