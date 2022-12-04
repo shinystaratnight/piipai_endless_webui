@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectionStrategy, OnDestroy, ChangeDetectorRef } from '@angular/core';
 
-import { isMobile, getTranslationKey, checkAndReturnTranslation, getPropValue } from '@webui/utilities';
+import { isMobile, getTranslationKey, checkAndReturnTranslation, getPropValue, FormatString } from '@webui/utilities';
 import { getValueOfData, generateCssStyles } from '../../../helpers';
 import { DATE_FORMAT, DATE_TIME_FORMAT, Time } from '@webui/time';
 import { IconName } from '@fortawesome/fontawesome-svg-core';
@@ -53,6 +53,13 @@ export class ListTextComponent implements OnInit, OnDestroy {
       } else {
         this.value = this.config.value;
         if (Array.isArray(this.value)) {
+
+          if (this.config.translateKey) {
+            this.value.forEach((el) => {
+              el.__str__ = FormatString.format(this.config.translateKey, el);
+            });
+          }
+
           if (typeof this.config.arrayKey === 'number') {
             this.value = this.value[this.config.arrayKey];
           } else {
