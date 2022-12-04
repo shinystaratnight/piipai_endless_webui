@@ -919,7 +919,7 @@
     "title.label": "Название",
     "short_description.label": "Краткое описание",
     "button_text.label": "Текст кнопки",
-    "result_messages.labe": "Сообщение о результатах",
+    "result_messages.label": "Сообщение о результатах",
     "required.label": "Требуется",
     "preview.label": "Предварительный просмотр",
     "create_new.label": "Создать новый",
@@ -1107,5 +1107,12 @@
     "error.invalid_shift_started_at_12": "<Начало смены> не может быть позже 12 часов.",
     "error.invalid_shift_started_at_4": "<Начало смены> не может быть раньше 4 часов.",
     "error.invalid_total_24": "Общее рабочее время не может превышать 24 часа.",
-    "latest_activity": "Последняя предыдущая активность"
+    "latest_activity": "Последняя предыдущая активность",
+    "contact.picture.label": "",
+    "contact.bank_accounts.label": "",
+    "contact.bank_accounts.IBAN.label": "",
+    "contact.bank_accounts.bank_name.label": "",
+    "contact.bank_accounts.AccountholdersName.label": "",
+    "formalities.label": "",
+    "formalities.personal_id.label": ""
 }

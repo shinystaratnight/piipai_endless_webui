@@ -919,7 +919,7 @@
     "title.label": "Otsikko",
     "short_description.label": "Lyhyt kuvaus",
     "button_text.label": "Painikkeen teksti",
-    "result_messages.labe": "Tulosviesti",
+    "result_messages.label": "Tulosviesti",
     "required.label": "Vaadittu",
     "preview.label": "Esikatselu",
     "create_new.label": "Luo uusi",
@@ -1107,5 +1107,12 @@
     "error.invalid_shift_started_at_12": "<Vuoron alkamisajankohta> ei voi olla yli 12 tuntia myöhemmin.",
     "error.invalid_shift_started_at_4": "<Vuoron alkamisajankohta> voi olla aikaisintaan 4 tuntia.",
     "error.invalid_total_24": "Kokonaistyöaika voi olla enintään 24 tuntia.",
-    "latest_activity": "Viimeisin aikaisempi toiminta"
+    "latest_activity": "Viimeisin aikaisempi toiminta",
+    "contact.picture.label": "",
+    "contact.bank_accounts.label": "",
+    "contact.bank_accounts.IBAN.label": "",
+    "contact.bank_accounts.bank_name.label": "",
+    "contact.bank_accounts.AccountholdersName.label": "",
+    "formalities.label": "",
+    "formalities.personal_id.label": ""
 }

@@ -919,7 +919,7 @@
     "title.label": "Pealkiri",
     "short_description.label": "Lühike kirjeldus",
     "button_text.label": "Nupu tekst",
-    "result_messages.labe": "Tulemuste teade",
+    "result_messages.label": "Tulemuste teade",
     "required.label": "Nõutud",
     "preview.label": "Eelvaade",
     "create_new.label": "Loo uus",
@@ -1107,5 +1107,12 @@
     "error.invalid_shift_started_at_12": "<Vahetuse algusaeg> ei saa olla hiljem kui 12 tundi.",
     "error.invalid_shift_started_at_4": "<Vahetuse algusaeg> ei saa olla varasem kui 4 tundi.",
     "error.invalid_total_24": "Kogu töötundide arv ei saa olla rohkem kui 24 tundi.",
-    "latest_activity": "Viimane eelmine tegevus"
+    "latest_activity": "Viimane eelmine tegevus",
+    "contact.picture.label": "",
+    "contact.bank_accounts.label": "",
+    "contact.bank_accounts.IBAN.label": "",
+    "contact.bank_accounts.bank_name.label": "",
+    "contact.bank_accounts.AccountholdersName.label": "",
+    "formalities.label": "",
+    "formalities.personal_id.label": ""
 }

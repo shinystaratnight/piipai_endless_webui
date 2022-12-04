@@ -919,7 +919,7 @@
     "title.label": "Title",
     "short_description.label": "Short description",
     "button_text.label": "Button text",
-    "result_messages.labe": "Result message",
+    "result_messages.label": "Result message",
     "required.label": "Required",
     "preview.label": "Preview",
     "create_new.label": "Create new",
@@ -1107,5 +1107,12 @@
     "error.invalid_shift_started_at_12": "<Shift Started At> cannot be later than 12 hours.",
     "error.invalid_shift_started_at_4": "<Shift Started At> can not be earlier than 4 hours.",
     "error.invalid_total_24": "Total working hours cannot be longer than 24 hours.",
-    "latest_activity": "Latest previous activity"
+    "latest_activity": "Latest previous activity",
+    "contact.picture.label": "Picture",
+    "contact.bank_accounts.label": "Bank account",
+    "contact.bank_accounts.IBAN.label": "IBAN",
+    "contact.bank_accounts.bank_name.label": "Bank name",
+    "contact.bank_accounts.AccountholdersName.label": "Name of accountholder",
+    "formalities.label": "Formalities",
+    "formalities.personal_id.label": "Isikukood"
 }
