@@ -7,17 +7,24 @@
   color: #828282;
 
   box-shadow: 0 0 6px rgba(black, .1);
-}
-
-.default {
-  color: rgb(130, 130, 130);
+  border: 0;
+  padding: 8px 19px;
+  min-width: 128px;
 }
 
 .wrapper {
   display: flex;
   align-items: center;
+  gap: .5rem;
 
   @include media-breakpoint-down('sm') {
     display: none;
   }
+}
+
+button {
+  padding-left: 20px;
+  padding-right: 20px;
+  min-height: 40px;
+  margin-bottom: 0 !important;
 }

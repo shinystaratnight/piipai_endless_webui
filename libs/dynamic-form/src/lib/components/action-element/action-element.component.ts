@@ -1,4 +1,12 @@
-import { Component, Input, ViewChild, EventEmitter, Output, OnChanges } from '@angular/core';
+import {
+  Component,
+  Input,
+  ViewChild,
+  EventEmitter,
+  Output,
+  OnChanges,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { SiteSettingsService } from '@webui/core';
@@ -8,6 +16,7 @@ import { FormatString } from '@webui/utilities';
   selector: 'webui-action-element',
   templateUrl: 'action-element.component.html',
   styleUrls: ['./action-element.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ActionElementComponent implements OnChanges {
   @Input() public config: any;
@@ -23,7 +32,10 @@ export class ActionElementComponent implements OnChanges {
 
   public action: any = {};
 
-  public constructor(private modalService: NgbModal, private siteSettings: SiteSettingsService) {}
+  public constructor(
+    private modalService: NgbModal,
+    private siteSettings: SiteSettingsService
+  ) {}
 
   public ngOnChanges() {
     this.data = {
@@ -60,7 +72,9 @@ export class ActionElementComponent implements OnChanges {
   }
 
   public getSmsTitle(endpoint: string): string {
-    return this.isDisableSmsButton(endpoint) ? this.siteSettings.getSmsSendTitle() : '';
+    return this.isDisableSmsButton(endpoint)
+      ? this.siteSettings.getSmsSendTitle()
+      : '';
   }
 
   public isDisableSmsButton(endpoint = ''): boolean {
