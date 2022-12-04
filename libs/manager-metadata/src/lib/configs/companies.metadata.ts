@@ -18,7 +18,8 @@ const filters = {
     endpoint:
       '/core/workflownodes/?company={company_settings.company}&content_type=core.companyrel&number={filter_value}',
     display: ['name_after_activation', 'name_before_activation'],
-    parameter: 'number'
+    parameter: 'number',
+
   }),
   manager: createFilter(Type.Related, {
     key: 'portfolio_manager',
@@ -143,6 +144,7 @@ const list = {
             field: 'latest_state',
             outline: true,
             type: 'tags',
+            translateKey: 'workflow.core.companyrel.{number}.after',
             color: {
               danger: [0, 80, 90]
             },

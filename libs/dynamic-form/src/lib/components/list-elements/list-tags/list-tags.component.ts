@@ -1,17 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 
-import { FormatString } from '@webui/utilities';
+import { checkAndReturnTranslation, FormatString } from '@webui/utilities';
 import { SiteSettingsService } from '@webui/core';
-import { CountryCodeLanguage } from '@webui/models';
-
-const translationMap = CountryCodeLanguage;
+import { LocalStorageService } from 'ngx-webstorage';
 
 @Component({
   selector: 'webui-list-tags',
   templateUrl: 'list-tags.component.html',
-  styleUrls: ['./list-tags.component.scss']
+  styleUrls: ['./list-tags.component.scss'],
 })
-
 export class ListTagsComponent implements OnInit {
   public config: any;
 
@@ -21,25 +18,24 @@ export class ListTagsComponent implements OnInit {
   public color: any;
   public colorAttr!: string;
 
-  constructor(private siteSettings: SiteSettingsService) {}
+  constructor(
+    private siteSettings: SiteSettingsService,
+    private storage: LocalStorageService
+  ) {}
 
   public ngOnInit() {
-    const formatSting = new FormatString();
-
     this.display = this.config.display || '{__str__}';
     this.tags = this.config.value;
 
     this.tags.forEach((el) => {
       const { tag } = el;
-      let trans;
-      if (tag && tag.translations) {
-        trans = tag.translations.find((item: any) => item.language.id === translationMap[this.siteSettings.settings.country_code]);
-      }
+      const { country_code } = this.siteSettings.settings;
+      const lang = this.storage.retrieve('lang');
 
-      const val: any = trans && trans.value;
+      el.__str__ = checkAndReturnTranslation(tag || el, country_code, lang);
 
-      if (el) {
-        el.__str__ = val || formatSting.format(this.display, el);
+      if (this.config.translateKey) {
+        el.__str__ = FormatString.format(this.config.translateKey, el);
       }
     });
 
@@ -54,7 +50,10 @@ export class ListTagsComponent implements OnInit {
         const keys = Object.keys(this.color);
 
         keys.forEach((key) => {
-          className = this.color[key].indexOf(item[this.colorAttr]) > -1 ? key : 'success';
+          className =
+            this.color[key].indexOf(item[this.colorAttr]) > -1
+              ? key
+              : 'success';
         });
       }
 
