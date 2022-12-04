@@ -15,12 +15,13 @@ import { ActivatedRoute } from '@angular/router';
 
 import { GenericFormService, FilterService } from '../../../services';
 import { SiteSettingsService, UserService } from '@webui/core';
-import { FormatString } from '@webui/utilities';
+import { checkAndReturnTranslation, FormatString } from '@webui/utilities';
 
 import { Subject } from 'rxjs';
 import { debounceTime, filter, takeUntil } from 'rxjs/operators';
 import { FormControl } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
+import { LocalStorageService } from 'ngx-webstorage';
 
 @Component({
   selector: 'webui-filter-related',
@@ -75,7 +76,9 @@ export class FilterRelatedComponent
     private siteSettingsService: SiteSettingsService,
     private userService: UserService,
     private cd: ChangeDetectorRef,
-    private translateService: TranslateService
+    private translateService: TranslateService,
+    private storage: LocalStorageService,
+    private settingsService: SiteSettingsService,
   ) {}
 
   public ngOnInit() {
@@ -486,6 +489,12 @@ export class FilterRelatedComponent
         result = FormatString.format(value, data);
       } else {
         result = data[value];
+
+        if (Array.isArray(result)) {
+          const { country_code } = this.settingsService.settings;
+          const lang = this.storage.retrieve('lang');
+          result = checkAndReturnTranslation(data, country_code, lang)
+        }
       }
     }
 
