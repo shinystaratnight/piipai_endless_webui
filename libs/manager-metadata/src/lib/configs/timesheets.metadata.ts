@@ -55,7 +55,7 @@ const list = {
             type: 'text',
           },
         ],
-        width: 270,
+        width: 360,
         name: 'client_/_jobsite_/_supervisor',
         title: null,
         sort: true,
@@ -103,7 +103,6 @@ const list = {
       {
         content: [
           {
-            text: 'common.show-tacking-map',
             type: 'button',
             color: 'link',
             endpoint:
