@@ -1065,5 +1065,13 @@
     "workflow.candidate.candidatecontact.90.before": "",
     "workflow.candidate.candidatecontact.90.after": "",
     "workflow.candidate.candidatecontact.80.before": "",
-    "workflow.candidate.candidatecontact.80.after": ""
+    "workflow.candidate.candidatecontact.80.after": "",
+    "workflow.job": "",
+    "workflow.jobsite": "",
+    "workflow.company": "",
+    "workflow.company-relationship": "",
+    "workflow.timesheet-entry": "",
+    "workflow.order": "",
+    "workflow.timesheet-issue": "",
+    "workflow.candidate-contact": ""
 }

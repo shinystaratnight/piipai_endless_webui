@@ -1,4 +1,13 @@
-import { Component, OnInit, OnDestroy, ViewChild, TemplateRef, Input, Output, EventEmitter } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  ViewChild,
+  TemplateRef,
+  Input,
+  Output,
+  EventEmitter,
+} from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { BehaviorSubject, forkJoin, Subscription } from 'rxjs';
@@ -9,6 +18,7 @@ import { config, workflowEl } from './workflow.config';
 import { getElementFromMetadata } from '../../helpers';
 import { Field, Form } from '@webui/metadata';
 import { Endpoints } from '@webui/models';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'webui-workflow',
@@ -46,7 +56,11 @@ export class WorkflowComponent implements OnInit, OnDestroy {
   @ViewChild('edit') public editModal!: TemplateRef<any>;
   @ViewChild('tests') public testModal!: TemplateRef<any>;
 
-  constructor(private workflowService: WorkflowService, private modalService: NgbModal) {}
+  constructor(
+    private workflowService: WorkflowService,
+    private modalService: NgbModal,
+    private translateService: TranslateService
+  ) {}
 
   public ngOnInit() {
     this.subStates = {};
@@ -76,7 +90,11 @@ export class WorkflowComponent implements OnInit, OnDestroy {
   }
 
   public onDrop(event: CdkDragDrop<string[]>) {
-    moveItemInArray(this.currentWorkflowNodes, event.previousIndex, event.currentIndex);
+    moveItemInArray(
+      this.currentWorkflowNodes,
+      event.previousIndex,
+      event.currentIndex
+    );
 
     const states = this.currentWorkflowNodes;
     const requests: any[] = [];
@@ -96,18 +114,24 @@ export class WorkflowComponent implements OnInit, OnDestroy {
       const { results } = res;
       const options = results.length
         ? results.map((el: any) => {
-            const { id, name } = el;
+            const { id, name, model } = el;
+            const modalKey = model.name.toLowerCase().replace(' ', '-');
 
             return {
               value: id,
-              label: name,
+              label: this.translateService.instant(`workflow.${modalKey}`, {
+                Default: name,
+              }),
             };
           })
         : [];
 
       workflowEl.updateTemplate({ options });
       if (this.advanced) {
-        const saving: any = getElementFromMetadata(config, 'advance_state_saving');
+        const saving: any = getElementFromMetadata(
+          config,
+          'advance_state_saving'
+        );
         saving.value = true;
       }
       this.config = config;
@@ -117,7 +141,12 @@ export class WorkflowComponent implements OnInit, OnDestroy {
   public getNodes(id: string) {
     this.workflowService
       .getNodesOfCompany(id, this.company)
-      .subscribe((res: any) => (this.currentWorkflowNodes = res.results.sort((p: any, n: any) => (p.order > n.order ? 1 : -1))));
+      .subscribe(
+        (res: any) =>
+          (this.currentWorkflowNodes = res.results.sort((p: any, n: any) =>
+            p.order > n.order ? 1 : -1
+          ))
+      );
   }
 
   public getSubstates(workflowId: string, nodeId?: string) {
@@ -148,7 +177,10 @@ export class WorkflowComponent implements OnInit, OnDestroy {
 
     this.addConfig = this.getAddConfig(this.company, this.workflowId);
 
-    this.modalRef = this.modalService.open(this.addModal, { windowClass: 'visible-mode', backdrop: 'static' });
+    this.modalRef = this.modalService.open(this.addModal, {
+      windowClass: 'visible-mode',
+      backdrop: 'static',
+    });
   }
 
   public addStateToCompany(data: any, closeModal: any) {
@@ -196,9 +228,11 @@ export class WorkflowComponent implements OnInit, OnDestroy {
   }
 
   public addSubstateToCompany(parentId: string, data: any) {
-    this.workflowService.setParentForSubstate(data.workflow_node.id, parentId).subscribe(() => {
-      this.setState(data, parentId);
-    });
+    this.workflowService
+      .setParentForSubstate(data.workflow_node.id, parentId)
+      .subscribe(() => {
+        this.setState(data, parentId);
+      });
   }
 
   public addAcceptenceTest(data: any, closeModal: any) {
@@ -221,7 +255,10 @@ export class WorkflowComponent implements OnInit, OnDestroy {
 
     this.addConfig = this.getAcceptenceTestsConfig(node);
 
-    this.modalRef = this.modalService.open(this.testModal, { windowClass: 'visible-mode', backdrop: 'static' });
+    this.modalRef = this.modalService.open(this.testModal, {
+      windowClass: 'visible-mode',
+      backdrop: 'static',
+    });
   }
 
   public openEditModal(node: any, closeModal: any) {
@@ -247,7 +284,10 @@ export class WorkflowComponent implements OnInit, OnDestroy {
       this.getAcceptensTests(node.id);
     }
 
-    this.modalRef = this.modalService.open(modal, { ...options, backdrop: 'static' });
+    this.modalRef = this.modalService.open(modal, {
+      ...options,
+      backdrop: 'static',
+    });
   }
 
   public deleteNode(id: string, e?: MouseEvent) {
@@ -273,11 +313,13 @@ export class WorkflowComponent implements OnInit, OnDestroy {
       e.preventDefault();
     }
 
-    this.workflowService.deleteParentForSubstate(node.workflow_node.id).subscribe(() => {
-      this.workflowService.deleteNode(node.id).subscribe(() => {
-        this.getSubstates(this.workflowId, this.parentId);
+    this.workflowService
+      .deleteParentForSubstate(node.workflow_node.id)
+      .subscribe(() => {
+        this.workflowService.deleteNode(node.id).subscribe(() => {
+          this.getSubstates(this.workflowId, this.parentId);
+        });
       });
-    });
   }
 
   public formEvent(e: any, closeModal: () => void) {
@@ -331,30 +373,36 @@ export class WorkflowComponent implements OnInit, OnDestroy {
 
   public getAddConfig(company: string, workflow: string): any {
     return {
-      config: [{
-        type: 'related',
-        key: 'workflow_node',
-        endpoint: this.workflowService.workflowNodeEndpoint,
-        options: [],
-        templateOptions: {
-          add: true,
-          label: 'Workflow Node',
-          values: ['__str__'],
+      config: [
+        {
+          type: 'related',
+          key: 'workflow_node',
+          endpoint: this.workflowService.workflowNodeEndpoint,
+          options: [],
+          templateOptions: {
+            add: true,
+            label: 'Workflow Node',
+            values: ['__str__'],
+          },
+          prefilled: {
+            workflow,
+            company,
+          },
+          query: {
+            company,
+            workflow,
+            system: 2,
+          },
         },
-        prefilled: {
-          workflow,
-          company,
-        },
-        query: {
-          company,
-          workflow,
-          system: 2,
-        },
-      }]
+      ],
     };
   }
 
-  public getSubStatesConfig(company: string, workflow: string, parent: string): any[] {
+  public getSubStatesConfig(
+    company: string,
+    workflow: string,
+    parent: string
+  ): any[] {
     return [
       {
         many: true,
@@ -388,67 +436,79 @@ export class WorkflowComponent implements OnInit, OnDestroy {
     };
 
     return {
-      config: this.parseMetadata([
-        new Form.select.element('test_type', 'Test type')
-          .doNotSend()
-          .addOptions({
-            '': 'All',
-            'skill': 'Skill',
-            'tag': 'Tag',
-            'industry': 'Industry'
-          }),
+      config: this.parseMetadata(
+        [
+          new Form.select.element('test_type', 'Test type')
+            .doNotSend()
+            .addOptions({
+              '': 'All',
+              skill: 'Skill',
+              tag: 'Tag',
+              industry: 'Industry',
+            }),
 
-        new Form.related.element('industry', 'Industry', Endpoints.Industry)
-          .setShowIfRule([{
-            test_type: 'industry'
-          }])
-          .doNotSend()
-          .updateValues(['translations']),
+          new Form.related.element('industry', 'Industry', Endpoints.Industry)
+            .setShowIfRule([
+              {
+                test_type: 'industry',
+              },
+            ])
+            .doNotSend()
+            .updateValues(['translations']),
 
-        new Form.related.element('skill', 'Skill', Endpoints.Skill)
-          .updateValues(['tranlsations', 'name'])
-          .setShowIfRule([{
-            test_type: 'skill'
-          }])
-          .doNotSend()
-          .setQuery({
-            company: 'currentCompany'
-          }),
+          new Form.related.element('skill', 'Skill', Endpoints.Skill)
+            .updateValues(['tranlsations', 'name'])
+            .setShowIfRule([
+              {
+                test_type: 'skill',
+              },
+            ])
+            .doNotSend()
+            .setQuery({
+              company: 'currentCompany',
+            }),
 
-        new Form.related.element('tag', 'Tag', Endpoints.Tag)
-          .setShowIfRule([{
-            test_type: 'tag'
-          }])
-          .doNotSend()
-          .updateValues(['owner', 'translation']),
+          new Form.related.element('tag', 'Tag', Endpoints.Tag)
+            .setShowIfRule([
+              {
+                test_type: 'tag',
+              },
+            ])
+            .doNotSend()
+            .updateValues(['owner', 'translation']),
 
-        new Form.related.element('acceptance_test', 'Acceptance Test', Endpoints.AcceptanceTest)
-          .setQuery({
+          new Form.related.element(
+            'acceptance_test',
+            'Acceptance Test',
+            Endpoints.AcceptanceTest
+          ).setQuery({
             type: '{test_type}',
             industry: '{industry.id}',
             skill: '{skill.id}',
             tag: '{tag.id}',
           }),
 
-        {
-          endpoint: '/core/companyworkflownodes/',
-          read_only: false,
-          hide: true,
-          templateOptions: {
-            label: 'Acceptance Test',
-            values: ['__str__'],
+          {
+            endpoint: '/core/companyworkflownodes/',
+            read_only: false,
+            hide: true,
+            templateOptions: {
+              label: 'Acceptance Test',
+              values: ['__str__'],
+              type: 'related',
+            },
+            value: node.id,
             type: 'related',
+            key: 'company_workflow_node',
           },
-          value: node.id,
-          type: 'related',
-          key: 'company_workflow_node',
-        },
-      ], hiddenFields),
-      hiddenFields
+        ],
+        hiddenFields
+      ),
+      hiddenFields,
     };
   }
 
-  private parseMetadata(metadata: Field[], hiddenFields: any ): Field[] {
+  private parseMetadata(metadata: Field[], hiddenFields: any): Field[] {
     const formData = new BehaviorSubject({ data: {} });
 
     metadata.forEach((el) => {
@@ -465,7 +525,7 @@ export class WorkflowComponent implements OnInit, OnDestroy {
       }
 
       el.formData = formData;
-    })
+    });
 
     return metadata;
   }
