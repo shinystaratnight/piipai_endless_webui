@@ -23,7 +23,9 @@ const filters = {
   position: createFilter(Type.Related, {
     key: 'position',
     label: 'Position',
-    endpoint: Endpoints.Skill,
+    endpoint: Endpoints.SkillName,
+    parameter: 'skill_id',
+    display: 'translations'
   }),
   client: createFilter(Type.Related, {
     key: 'company',
