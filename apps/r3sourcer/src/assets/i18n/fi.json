@@ -302,7 +302,7 @@
     "sms_history.label": "SMS-historia",
     "start": "Alkaa",
     "start_date.label": "Työn aloituspäivä",
-    "state.label": "Osavaltio",
+    "state.label": "Tila",
     "status.supervisor_approved.label": "Hyväksytty",
     "status.label": "Tila",
     "submit": "Lähetä",
@@ -1073,5 +1073,9 @@
     "workflow.timesheet-entry": "",
     "workflow.order": "",
     "workflow.timesheet-issue": "",
-    "workflow.candidate-contact": ""
+    "workflow.candidate-contact": "",
+    "state.CREATED": "",
+    "state.ERROR": "",
+    "state.SENDING": "",
+    "state.WAIT": ""
 }

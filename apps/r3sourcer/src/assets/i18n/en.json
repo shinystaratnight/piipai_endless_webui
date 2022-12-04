@@ -1073,5 +1073,9 @@
     "workflow.timesheet-entry": "TimeSheet Workflow",
     "workflow.order": "Order Workflow",
     "workflow.timesheet-issue": "TimeSheet Issue Workflow",
-    "workflow.candidate-contact": "Candidate Contact Workflow"
+    "workflow.candidate-contact": "Candidate Contact Workflow",
+    "state.CREATED": "Created",
+    "state.ERROR": "Failed",
+    "state.SENDING": "Sending",
+    "state.WAIT": "Waiting"
 }
