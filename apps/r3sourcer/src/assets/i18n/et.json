@@ -1141,7 +1141,7 @@
     "minimum.label": "minimaalne",
     "action.approve": "Kinnitada",
     "sms_credit_details.add_funds_description_second": "nii et me võiksime kasutada SMS-teenust!",
-    "sms_credit_details.charge_rate_value": "{{kulud}} segmendi kohta ({{summa}} märgid)",
+    "sms_credit_details.charge_rate_value": "{{cost}} segmendi kohta ({{amount}} märgid)",
     "enter_payment_information.label": "Sisestage oma makseandmed",
     "action.add_new_cc": "Lisa uus CC",
     "action.save_cc": "Salvesta krediitkaart",
