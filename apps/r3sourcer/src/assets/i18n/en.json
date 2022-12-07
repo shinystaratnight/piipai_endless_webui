@@ -1149,5 +1149,6 @@
     "status.not_paid": "Not paid",
     "status.open": "Open",
     "status.void": "Void",
-    "select_plan.subLabel": "Selecting the plan charges your credit card account immediately"
+    "select_plan.subLabel": "Selecting the plan charges your credit card account immediately",
+    "subscription_details.label": "Subscription details"
 }
