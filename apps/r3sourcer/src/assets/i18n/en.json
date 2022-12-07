@@ -1145,5 +1145,6 @@
     "enter_payment_information.label": "Enter your payment information",
     "action.add_new_cc": "Add new CC",
     "action.save_cc": "Save credit card",
-    "action.cancel": "Cancel"
+    "action.cancel": "Cancel",
+    "drop_images": "Add images"
 }
