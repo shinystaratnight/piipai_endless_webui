@@ -1198,5 +1198,6 @@
     "enter_payment_information.label": "Sisestage oma makseandmed",
     "action.add_new_cc": "Lisa uus CC",
     "action.save_cc": "Salvesta krediitkaart",
-    "action.cancel": "Tühista"
+    "action.cancel": "Tühista",
+    "drop_images": "Lisa pilte"
 }
