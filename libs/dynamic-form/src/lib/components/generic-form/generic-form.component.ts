@@ -2218,7 +2218,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
   public i18nize(errors: any) {
     if (Array.isArray(errors)) {
       errors.forEach((err, i) => {
-        errors[i] = this.translateService.instant(err);
+        errors[i] = typeof err === 'string' && err ? this.translateService.instant(err) : err;
       });
     }
   }
