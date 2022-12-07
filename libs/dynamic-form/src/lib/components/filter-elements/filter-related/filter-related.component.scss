@@ -22,6 +22,15 @@
 
   ul {
     padding-left: 0;
+    margin-bottom: 0;
+  }
+
+  .actions {
+    border-bottom: 1px solid $border-color;
+  }
+
+  .form-control {
+    margin-bottom: 0.75rem;
   }
 
   .form-element-checkbox:hover,
@@ -35,4 +44,5 @@
   align-items: center;
   justify-content: center;
   color: $content-color;
+  margin-top: 0.75rem;
 }

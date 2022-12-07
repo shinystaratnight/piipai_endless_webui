@@ -182,7 +182,7 @@
       <fa-icon icon="chevron-down"></fa-icon>
     </div>
 
-    <div class="autocomplete" *ngIf="active$ | async" [ngStyle]="getStyle()">
+    <form [formGroup]="valueGroup" class="autocomplete" *ngIf="active$ | async" [ngStyle]="getStyle()">
       <input
         [formControl]="searchControl"
         *ngIf="!config.property"
@@ -191,7 +191,7 @@
         class="form-control mb-1"
       />
 
-      <ul *ngIf="config.multiple" class="list-group w-100">
+      <ul *ngIf="config.multiple" class="list-group w-100 actions">
         <li class="default-value">
           <button class="btn btn-default" type="button" (click)="selectAll()">
             {{ 'select_all' | translate }}
@@ -216,18 +216,16 @@
             *ngFor="let option of options"
           >
             <label class="form-element-checkbox">
-              <ng-container *ngIf="option.control">
-                <input
-                  type="checkbox"
-                  class="form-check-input"
-                  [formControl]="option.control"
-                  [hidden]="true"
-                />
-                <webui-checkbox
-                  [sm]="true"
-                  [checked]="option.control.value"
-                ></webui-checkbox>
-              </ng-container>
+              <input
+                type="checkbox"
+                class="form-check-input"
+                [formControl]="option.control"
+                [hidden]="true"
+              />
+              <webui-checkbox
+                [sm]="true"
+                [checked]="option.control.value"
+              ></webui-checkbox>
 
               {{ option.value.label }}
             </label>
@@ -238,6 +236,6 @@
       <div *ngIf="loading$ | async" class="spinner-content">
         <webui-spinner></webui-spinner>
       </div>
-    </div>
+    </form>
   </div>
 </div>

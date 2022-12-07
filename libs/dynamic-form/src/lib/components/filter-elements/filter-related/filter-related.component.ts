@@ -11,12 +11,12 @@ import {
   ElementRef,
   ChangeDetectorRef,
   TemplateRef,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { GenericFormService, FilterService } from '../../../services';
 import { SiteSettingsService, UserService } from '@webui/core';
-import { FormatString } from '@webui/utilities';
 
 import {
   BehaviorSubject,
@@ -34,12 +34,11 @@ import {
   map,
   scan,
   finalize,
-  tap,
   skip,
+  tap,
 } from 'rxjs/operators';
-import { FormControl } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
-import { RelatedElement } from '@webui/metadata';
 
 const listLimit = 10;
 
@@ -49,13 +48,15 @@ type FilterValue = {
 };
 type FilterOption = {
   value: FilterValue;
-  control?: FormControl;
+  control: FormControl;
+  key: string;
 };
 
 @Component({
   selector: 'webui-filter-related',
   templateUrl: 'filter-related.component.html',
   styleUrls: ['./filter-related.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FilterRelatedComponent implements OnInit, OnDestroy {
   private _destroy = new Subject<void>();
@@ -103,12 +104,12 @@ export class FilterRelatedComponent implements OnInit, OnDestroy {
   limit = listLimit;
 
   value$ = this._value.asObservable();
-  options$?: Observable<FilterOption[] | null>;
+  options$ = this._options.asObservable();
   loading$ = this._loading.asObservable();
   active$ = this._active.asObservable();
 
   searchControl = new FormControl(null);
-  valueControl = new FormControl(null);
+  valueGroup = new FormGroup({});
 
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
@@ -124,6 +125,21 @@ export class FilterRelatedComponent implements OnInit, OnDestroy {
     private translateService: TranslateService
   ) {}
 
+  get selectedElement(): FilterOption | undefined {
+    const filterValue = this.valueGroup.value;
+    let selectedControl = '';
+
+    for (const prop in filterValue) {
+      if (filterValue[prop]) {
+        selectedControl = prop;
+      }
+    }
+
+    console.log(selectedControl);
+
+    return this._options.value.find((option) => option.key === selectedControl);
+  }
+
   public ngOnInit() {
     console.log(this);
 
@@ -134,8 +150,17 @@ export class FilterRelatedComponent implements OnInit, OnDestroy {
     this.active$.pipe(takeUntil(this._destroy)).subscribe((value) => {
       if (value === false) {
         this._options.next([]);
+        this.cleanValueForm();
       }
     });
+
+    this.valueGroup.valueChanges.pipe(takeUntil(this._destroy)).subscribe((value) => {
+      if (!this.config.multiple && this.selectedElement) {
+        this._active.next(false);
+      }
+
+      console.log(value, this.selectedElement);
+    })
     // const { multiple = false } = this.config;
     // this.multiple = multiple;
     // this.limit = multiple ? -1 : listLimit;
@@ -672,6 +697,7 @@ export class FilterRelatedComponent implements OnInit, OnDestroy {
         { search: '', options: <FilterOption[]>[] }
       ),
       map((response) => response.options),
+      tap((options) => this._options.next(options)),
       takeUntil(
         merge(
           this._destroy,
@@ -684,11 +710,17 @@ export class FilterRelatedComponent implements OnInit, OnDestroy {
     );
 
     this._active.next(true);
+
     setTimeout(() => {
-      this._options.next([]);
+      this._loading.next(true);
       this.searchControl.patchValue('');
       this._offset.next(0);
     });
+    // setTimeout(() => {
+    //   this._options.next([]);
+    //   this.searchControl.patchValue('');
+    //   this._offset.next(0);
+    // });
   }
 
   @HostListener('document:click', ['$event'])
@@ -741,8 +773,10 @@ export class FilterRelatedComponent implements OnInit, OnDestroy {
                 label: el,
                 key: el,
               },
+              key: el,
               control: new FormControl(false)
             }));
+            options.forEach((el) => this.addValueControl(el));
 
             return { search: config.search, options };
           }
@@ -753,8 +787,11 @@ export class FilterRelatedComponent implements OnInit, OnDestroy {
                 label: el[this.config.data.value],
                 key: el[this.config.data.key],
               },
+              key: el[this.config.data.key],
               control: new FormControl(false)
             }));
+
+            options.forEach((el) => this.addValueControl(el));
 
             return { search: config.search, options };
           }
@@ -763,5 +800,23 @@ export class FilterRelatedComponent implements OnInit, OnDestroy {
         }),
         finalize(() => this._loading.next(false))
       );
+  }
+
+  private addValueControl(el: FilterOption) {
+    if (!this.valueGroup.get(el.key)) {
+      this.valueGroup.addControl(el.key, el.control);
+    }
+  }
+
+  private cleanValueForm() {
+    const unSelectedControls: string[] = [];
+
+    for (const prop in this.valueGroup.value) {
+      if (!this.valueGroup.value[prop]) {
+        unSelectedControls.push(prop);
+      }
+    }
+
+    unSelectedControls.forEach((key) => this.valueGroup.removeControl(key));
   }
 }
