@@ -1146,5 +1146,7 @@
     "action.add_new_cc": "Add new CC",
     "action.save_cc": "Save credit card",
     "action.cancel": "Cancel",
-    "drop_images": "Add images"
+    "status.not_paid": "Not paid",
+    "status.open": "Open",
+    "status.void": "Void"
 }

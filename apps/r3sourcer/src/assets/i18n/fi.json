@@ -1145,5 +1145,8 @@
     "enter_payment_information.label": "",
     "action.add_new_cc": "",
     "action.save_cc": "",
-    "action.cancel": ""
+    "action.cancel": "",
+    "status.not_paid": "",
+    "status.open": "",
+    "status.void": ""
 }
