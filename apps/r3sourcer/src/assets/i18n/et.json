@@ -1149,5 +1149,6 @@
     "status.not_paid": "",
     "status.open": "",
     "status.void": "",
-    "select_plan.subLabel": ""
+    "select_plan.subLabel": "",
+    "subscription_details.label": ""
 }
