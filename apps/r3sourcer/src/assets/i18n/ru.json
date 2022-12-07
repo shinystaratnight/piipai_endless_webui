@@ -1148,5 +1148,6 @@
     "action.cancel": "Отмена",
     "status.not_paid": "",
     "status.open": "",
-    "status.void": ""
+    "status.void": "",
+    "select_plan.subLabel": ""
 }
