@@ -21,6 +21,12 @@ export class SelectDateService {
   }
 
   selectDate(date: string, value?: boolean) {
+    const dateParsed = Time.parse(date, { format: 'YYYY-MM-DD' });
+
+    if (dateParsed.isBefore(Time.now())) {
+      return;
+    }
+
     const exist = this.selectedDates.has(date);
 
     if (exist && value === undefined) {
