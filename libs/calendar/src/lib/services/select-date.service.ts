@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Time } from '@webui/time';
+import { isClient } from '@webui/utilities';
 
 @Injectable()
 export class SelectDateService {
@@ -23,7 +24,7 @@ export class SelectDateService {
   selectDate(date: string, value?: boolean) {
     const dateParsed = Time.parse(date, { format: 'YYYY-MM-DD' });
 
-    if (dateParsed.isBefore(Time.now())) {
+    if (isClient() && dateParsed.isBefore(Time.now().add(1, 'day'))) {
       return;
     }
 
