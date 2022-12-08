@@ -944,7 +944,7 @@
     "timesheet_status.label\n": "Статус",
     "tracking.show": "Показать отслеживание",
     "add_note": "Добавить заметку",
-    "drop_images": "Падающие изображения",
+    "drop_images": "Добавить фотографии",
     "tabs.invoiceline.label": "Строки счета-фактуры",
     "average_includes": "Средний показатель включает",
     "excludes": "Исключает",
@@ -1146,9 +1146,9 @@
     "action.add_new_cc": "Добавить новый УК",
     "action.save_cc": "Сохранить кредитную карту",
     "action.cancel": "Отмена",
-    "status.not_paid": "",
-    "status.open": "",
-    "status.void": "",
-    "select_plan.subLabel": "",
-    "subscription_details.label": ""
+    "status.not_paid": "Не оплачено",
+    "status.open": "Открыты",
+    "status.void": "Недействительный",
+    "select_plan.subLabel": "При выборе плана с вашего счета кредитной карты сразу же снимаются деньги",
+    "subscription_details.label": "Детали подписки"
 }
