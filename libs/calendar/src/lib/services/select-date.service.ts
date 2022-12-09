@@ -24,7 +24,7 @@ export class SelectDateService {
   selectDate(date: string, value?: boolean) {
     const dateParsed = Time.parse(date, { format: 'YYYY-MM-DD' });
 
-    if (isClient() && dateParsed.isBefore(Time.now().add(1, 'day'))) {
+    if (isClient() && dateParsed.isBefore(Time.now().add(-1, 'day'))) {
       return;
     }
 
