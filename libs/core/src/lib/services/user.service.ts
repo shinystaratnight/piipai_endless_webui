@@ -49,7 +49,9 @@ export class UserService {
         map((user) => {
           this.user = user;
 
-          user.data.roles = user.data.roles.map((role: Role) => {
+          user.data.roles = user.data.roles
+          .filter((role) => !!role.company_contact_rel)
+          .map((role: Role) => {
             return {
               ...role,
               company_id: role.company_contact_rel.company.id,
