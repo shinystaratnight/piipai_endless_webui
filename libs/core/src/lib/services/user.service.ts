@@ -50,7 +50,7 @@ export class UserService {
           this.user = user;
 
           user.data.roles = user.data.roles
-          .filter((role) => !!role.company_contact_rel)
+          .filter((role) => role.is_active)
           .map((role: Role) => {
             return {
               ...role,

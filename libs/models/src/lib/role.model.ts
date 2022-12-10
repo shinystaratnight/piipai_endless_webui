@@ -18,4 +18,5 @@ export interface Role {
     }
   };
   name: RoleType;
+  is_active: boolean;
 }
