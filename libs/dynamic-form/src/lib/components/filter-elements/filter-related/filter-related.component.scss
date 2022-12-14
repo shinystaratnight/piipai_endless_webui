@@ -34,8 +34,8 @@
   }
 
   .form-element-checkbox:hover,
-  .form-element-checkbox.active, {
-    font-weight: 600;
+  .form-element-checkbox.active {
+    color: var(--primary-color);
   }
 }
 

@@ -182,7 +182,12 @@
       <fa-icon icon="chevron-down"></fa-icon>
     </div>
 
-    <form [formGroup]="valueGroup" class="autocomplete" *ngIf="active$ | async" [ngStyle]="getStyle()">
+    <form
+      [formGroup]="valueGroup"
+      class="autocomplete"
+      *ngIf="active$ | async"
+      [ngStyle]="getStyle()"
+    >
       <input
         [formControl]="searchControl"
         *ngIf="!config.property"
@@ -237,5 +242,18 @@
         <webui-spinner></webui-spinner>
       </div>
     </form>
+
+    <ng-container *ngIf="selectedOptions$ | async as options">
+      <div *ngIf="options.length" class="filter-values">
+        <span class="badge badge-outline" *ngFor="let option of options">
+          {{ option.value.label }}
+
+          <fa-icon
+            [icon]="['fas', 'times']"
+            (click)="onRemoveOption(option)"
+          ></fa-icon>
+        </span>
+      </div>
+    </ng-container>
   </div>
 </div>

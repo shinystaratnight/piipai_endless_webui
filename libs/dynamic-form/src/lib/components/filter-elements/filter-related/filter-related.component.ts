@@ -39,6 +39,7 @@ import {
 } from 'rxjs/operators';
 import { FormControl, FormGroup } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
+import { FormatString } from '@webui/utilities';
 
 const listLimit = 10;
 
@@ -56,7 +57,7 @@ type FilterOption = {
   selector: 'webui-filter-related',
   templateUrl: 'filter-related.component.html',
   styleUrls: ['./filter-related.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FilterRelatedComponent implements OnInit, OnDestroy {
   private _destroy = new Subject<void>();
@@ -65,6 +66,7 @@ export class FilterRelatedComponent implements OnInit, OnDestroy {
   private _offset = new BehaviorSubject<number>(0);
   private _loading = new BehaviorSubject<boolean>(false);
   private _active = new BehaviorSubject<boolean>(false);
+  private _selectedOptions = new BehaviorSubject<FilterOption[]>([]);
 
   @Input() public config!: any;
 
@@ -101,12 +103,15 @@ export class FilterRelatedComponent implements OnInit, OnDestroy {
   // @ViewChild('search')
   // public search!: FormControl;
 
+  value = new Set<FilterOption | undefined>();
+
   limit = listLimit;
 
   value$ = this._value.asObservable();
   options$ = this._options.asObservable();
   loading$ = this._loading.asObservable();
   active$ = this._active.asObservable();
+  selectedOptions$ = this._selectedOptions.asObservable();
 
   searchControl = new FormControl(null);
   valueGroup = new FormGroup({});
@@ -125,19 +130,8 @@ export class FilterRelatedComponent implements OnInit, OnDestroy {
     private translateService: TranslateService
   ) {}
 
-  get selectedElement(): FilterOption | undefined {
-    const filterValue = this.valueGroup.value;
-    let selectedControl = '';
-
-    for (const prop in filterValue) {
-      if (filterValue[prop]) {
-        selectedControl = prop;
-      }
-    }
-
-    console.log(selectedControl);
-
-    return this._options.value.find((option) => option.key === selectedControl);
+  get selectedElement(): (FilterOption | undefined)[] {
+    return Array.from(this.value.values());
   }
 
   public ngOnInit() {
@@ -154,13 +148,21 @@ export class FilterRelatedComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.valueGroup.valueChanges.pipe(takeUntil(this._destroy)).subscribe((value) => {
-      if (!this.config.multiple && this.selectedElement) {
-        this._active.next(false);
-      }
+    this.valueGroup.valueChanges
+      .pipe(takeUntil(this._destroy))
+      .subscribe((value) => {
+        this.value.clear();
 
-      console.log(value, this.selectedElement);
-    })
+          for (const id in value) {
+            value[id] && this.value.add(this._options.value.find((el) => el.key === id));
+          }
+
+        this._selectedOptions.next(this._options.value.filter(el => this.value.has(el)));
+
+
+
+        console.log(value, this.selectedElement);
+      });
     // const { multiple = false } = this.config;
     // this.multiple = multiple;
     // this.limit = multiple ? -1 : listLimit;
@@ -723,20 +725,25 @@ export class FilterRelatedComponent implements OnInit, OnDestroy {
     // });
   }
 
-  @HostListener('document:click', ['$event'])
-  handleClick(event: MouseEvent) {
-    let clickedComponent = event.target;
-    let inside = false;
-    do {
-      if (clickedComponent === this.elementRef.nativeElement) {
-        inside = true;
-      }
-      clickedComponent = (clickedComponent as HTMLElement).parentNode;
-    } while (clickedComponent);
-    if (!inside) {
-      this._active.next(false);
-    }
+  onRemoveOption(option: FilterOption) {
+    option.control.patchValue(false);
+    // this._selectedOptions.next(this._selectedOptions.value.filter((el) => el.key !== option.key));
   }
+
+  // @HostListener('document:click', ['$event'])
+  // handleClick(event: MouseEvent) {
+  //   let clickedComponent = event.target;
+  //   let inside = false;
+  //   do {
+  //     if (clickedComponent === this.elementRef.nativeElement) {
+  //       inside = true;
+  //     }
+  //     clickedComponent = (clickedComponent as HTMLElement).parentNode;
+  //   } while (clickedComponent);
+  //   if (!inside) {
+  //     this._active.next(false);
+  //   }
+  // }
 
   private patchOptions(value: boolean) {
     const options = this._options.value;
@@ -762,19 +769,18 @@ export class FilterRelatedComponent implements OnInit, OnDestroy {
       .pipe(
         takeUntil(this.active$.pipe(filter((el) => !el))),
         map((response) => {
-          console.log(response);
-          const responseProperty = this.config.property;
+          const { data, property } = this.config;
 
-          if (responseProperty && response[responseProperty]) {
+          if (property && response[property]) {
             const options: FilterOption[] = (
-              response[responseProperty] as string[]
+              response[property] as string[]
             ).map((el) => ({
               value: {
                 label: el,
                 key: el,
               },
               key: el,
-              control: new FormControl(false)
+              control: new FormControl(false),
             }));
             options.forEach((el) => this.addValueControl(el));
 
@@ -782,14 +788,18 @@ export class FilterRelatedComponent implements OnInit, OnDestroy {
           }
 
           if (response.results) {
-            const options: FilterOption[] = response.results.map((el: any) => ({
-              value: {
-                label: el[this.config.data.value],
-                key: el[this.config.data.key],
-              },
-              key: el[this.config.data.key],
-              control: new FormControl(false)
-            }));
+            const options: FilterOption[] = response.results.map((el: any) => {
+              return {
+                value: {
+                  label: this.hasFormatBraces(data.value)
+                    ? FormatString.format(data.value, el)
+                    : el[data.value],
+                  key: el[data.key],
+                },
+                key: el[data.key],
+                control: new FormControl(false),
+              };
+            });
 
             options.forEach((el) => this.addValueControl(el));
 
@@ -804,19 +814,21 @@ export class FilterRelatedComponent implements OnInit, OnDestroy {
 
   private addValueControl(el: FilterOption) {
     if (!this.valueGroup.get(el.key)) {
-      this.valueGroup.addControl(el.key, el.control);
+      this.valueGroup.addControl(el.key, el.control, { emitEvent: false });
     }
   }
 
   private cleanValueForm() {
-    const unSelectedControls: string[] = [];
+    const controls: string[] = [];
 
     for (const prop in this.valueGroup.value) {
-      if (!this.valueGroup.value[prop]) {
-        unSelectedControls.push(prop);
-      }
+      controls.push(prop);
     }
 
-    unSelectedControls.forEach((key) => this.valueGroup.removeControl(key));
+    controls.forEach((key) => this.valueGroup.removeControl(key));
+  }
+
+  private hasFormatBraces(value: string) {
+    return value.includes('{') && value.includes('}');
   }
 }
