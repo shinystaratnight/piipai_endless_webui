@@ -169,10 +169,10 @@
   <div class="content" #content>
     <div class="form-control autocomplete-value" (click)="onShowOptions()">
       <ng-container *ngIf="value$ | async as value; else placeholder">
-        <span *ngIf="value.length > 1">
-          {{ value.length }}
+        <span class="value" *ngIf="value.length > 1">
+          {{ value.length }} 
         </span>
-        <span *ngIf="value.length === 1">{{ value[0].label }}</span>
+        <span class="value" *ngIf="value.length === 1">{{ value[0].label }}</span>
       </ng-container>
 
       <ng-template #placeholder>
@@ -228,6 +228,7 @@
                 [hidden]="true"
               />
               <webui-checkbox
+                [class.hidden]="!config.multiple"
                 [sm]="true"
                 [checked]="option.control.value"
               ></webui-checkbox>
@@ -243,17 +244,19 @@
       </div>
     </form>
 
-    <ng-container *ngIf="selectedOptions$ | async as options">
-      <div *ngIf="options.length" class="filter-values">
-        <span class="badge badge-outline" *ngFor="let option of options">
-          {{ option.value.label }}
+    <ng-container *ngIf="config.multiple">
+      <ng-container *ngIf="selectedOptions$ | async as options">
+        <div *ngIf="options.length" class="filter-values">
+          <span class="badge badge-outline" *ngFor="let option of options">
+            {{ option.value.label }}
 
-          <fa-icon
-            [icon]="['fas', 'times']"
-            (click)="onRemoveOption(option)"
-          ></fa-icon>
-        </span>
-      </div>
+            <fa-icon
+              [icon]="['fas', 'times']"
+              (click)="onRemoveOption(option)"
+            ></fa-icon>
+          </span>
+        </div>
+      </ng-container>
     </ng-container>
   </div>
 </div>

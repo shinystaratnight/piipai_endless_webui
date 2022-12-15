@@ -141,28 +141,51 @@ export class FilterRelatedComponent implements OnInit, OnDestroy {
       this.limit = -1;
     }
 
-    this.active$.pipe(takeUntil(this._destroy)).subscribe((value) => {
-      if (value === false) {
-        this._options.next([]);
-        this.cleanValueForm();
-      }
-    });
+    this.active$
+      .pipe(
+        takeUntil(this._destroy),
+        filter((value) => !value)
+      )
+      .subscribe(() => {
+        if (this.config.multiple) {
+          // TODO: implement start filter
+        } else {
+          this._options.next([]);
+          this.cleanValueForm();
+        }
+      });
 
-    this.valueGroup.valueChanges
-      .pipe(takeUntil(this._destroy))
-      .subscribe((value) => {
-        this.value.clear();
+    if (this.config.multiple) {
+      this.valueGroup.valueChanges
+        .pipe(takeUntil(this._destroy))
+        .subscribe((value) => {
+          this.value.clear();
 
           for (const id in value) {
-            value[id] && this.value.add(this._options.value.find((el) => el.key === id));
+            value[id] &&
+              this.value.add(this._options.value.find((el) => el.key === id));
           }
 
-        this._selectedOptions.next(this._options.value.filter(el => this.value.has(el)));
+          this._selectedOptions.next(
+            this._options.value.filter((el) => this.value.has(el))
+          );
+        });
+    }
 
+    this.selectedOptions$
+      .pipe(takeUntil(this._destroy))
+      .subscribe((options) => {
+        if (options.length) {
+          this._value.next(options.map((option) => option.value));
+        } else {
+          this._value.next(null);
+        }
 
-
-        console.log(value, this.selectedElement);
+        if (!this.config.multiple) {
+          this._active.next(false);
+        }
       });
+
     // const { multiple = false } = this.config;
     // this.multiple = multiple;
     // this.limit = multiple ? -1 : listLimit;
@@ -677,6 +700,12 @@ export class FilterRelatedComponent implements OnInit, OnDestroy {
   }
 
   onShowOptions() {
+    if (this._options.value.length && this.config.multiple) {
+      this._active.next(true);
+      this.options$ = this._options.asObservable();
+      return;
+    }
+
     this.options$ = combineLatest({
       search: this.searchControl.valueChanges.pipe(
         debounceTime(400),
@@ -730,20 +759,20 @@ export class FilterRelatedComponent implements OnInit, OnDestroy {
     // this._selectedOptions.next(this._selectedOptions.value.filter((el) => el.key !== option.key));
   }
 
-  // @HostListener('document:click', ['$event'])
-  // handleClick(event: MouseEvent) {
-  //   let clickedComponent = event.target;
-  //   let inside = false;
-  //   do {
-  //     if (clickedComponent === this.elementRef.nativeElement) {
-  //       inside = true;
-  //     }
-  //     clickedComponent = (clickedComponent as HTMLElement).parentNode;
-  //   } while (clickedComponent);
-  //   if (!inside) {
-  //     this._active.next(false);
-  //   }
-  // }
+  @HostListener('document:click', ['$event'])
+  handleClick(event: MouseEvent) {
+    let clickedComponent = event.target;
+    let inside = false;
+    do {
+      if (clickedComponent === this.elementRef.nativeElement) {
+        inside = true;
+      }
+      clickedComponent = (clickedComponent as HTMLElement).parentNode;
+    } while (clickedComponent);
+    if (!inside) {
+      this._active.next(false);
+    }
+  }
 
   private patchOptions(value: boolean) {
     const options = this._options.value;
@@ -764,7 +793,7 @@ export class FilterRelatedComponent implements OnInit, OnDestroy {
       .get(this.config.data.endpoint, {
         search: config.search,
         offset: config.offset,
-        limit: this.limit,
+        limit: config.offset ? -1 : this.limit,
       })
       .pipe(
         takeUntil(this.active$.pipe(filter((el) => !el))),
@@ -815,6 +844,10 @@ export class FilterRelatedComponent implements OnInit, OnDestroy {
   private addValueControl(el: FilterOption) {
     if (!this.valueGroup.get(el.key)) {
       this.valueGroup.addControl(el.key, el.control, { emitEvent: false });
+
+      if (!this.config.multiple) {
+        this.subscribeOnChange(el.key, el.control);
+      }
     }
   }
 
@@ -830,5 +863,16 @@ export class FilterRelatedComponent implements OnInit, OnDestroy {
 
   private hasFormatBraces(value: string) {
     return value.includes('{') && value.includes('}');
+  }
+
+  private subscribeOnChange(id: string, control: FormControl) {
+    control.valueChanges.subscribe(() => {
+      const option = this._options.value.find((el) => el.key == id);
+
+      if (option) {
+        option.control.patchValue(false, { emitEvent: false });
+        this._selectedOptions.next([option]);
+      }
+    });
   }
 }
