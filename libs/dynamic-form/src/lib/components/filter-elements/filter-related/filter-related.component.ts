@@ -36,10 +36,12 @@ import {
   finalize,
   skip,
   tap,
+  delay,
 } from 'rxjs/operators';
 import { FormControl, FormGroup } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
-import { FormatString } from '@webui/utilities';
+import { checkAndReturnTranslation, FormatString } from '@webui/utilities';
+import { Language } from '@webui/models';
 
 const listLimit = 10;
 
@@ -47,11 +49,11 @@ type FilterValue = {
   label: string;
   key: string;
 };
-type FilterOption = {
-  value: FilterValue;
-  control: FormControl;
-  key: string;
-};
+// type FilterOption = {
+//   value: FilterValue;
+//   control: FormControl;
+//   key: string;
+// };
 
 @Component({
   selector: 'webui-filter-related',
@@ -67,6 +69,7 @@ export class FilterRelatedComponent implements OnInit, OnDestroy {
   private _loading = new BehaviorSubject<boolean>(false);
   private _active = new BehaviorSubject<boolean>(false);
   private _selectedOptions = new BehaviorSubject<FilterOption[]>([]);
+  private _hasQuery = new BehaviorSubject<boolean>(false);
 
   @Input() public config!: any;
 
@@ -112,6 +115,10 @@ export class FilterRelatedComponent implements OnInit, OnDestroy {
   loading$ = this._loading.asObservable();
   active$ = this._active.asObservable();
   selectedOptions$ = this._selectedOptions.asObservable();
+  hasQuery$ = combineLatest({
+    active: this.active$,
+    value: this.value$,
+  }).pipe(map((value) => Boolean(!value.active && value.value)));
 
   searchControl = new FormControl(null);
   valueGroup = new FormGroup({});
@@ -135,23 +142,22 @@ export class FilterRelatedComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
-    console.log(this);
-
     if (this.config.multiple) {
       this.limit = -1;
     }
 
     this.active$
-      .pipe(
-        takeUntil(this._destroy),
-        filter((value) => !value)
-      )
-      .subscribe(() => {
-        if (this.config.multiple) {
-          // TODO: implement start filter
-        } else {
-          this._options.next([]);
-          this.cleanValueForm();
+      .pipe(takeUntil(this._destroy), distinctUntilChanged(), skip(1))
+      .subscribe((active) => {
+        if (!active) {
+          if (this.config.multiple) {
+            // TODO: implement start filter
+          } else {
+            this._options.next([]);
+            this.cleanValueForm();
+          }
+
+          this.onChange(this._value.value);
         }
       });
 
@@ -190,13 +196,11 @@ export class FilterRelatedComponent implements OnInit, OnDestroy {
     // this.multiple = multiple;
     // this.limit = multiple ? -1 : listLimit;
 
-    // this.route.queryParams.pipe(takeUntil(this._destroy)).subscribe(() => {
-    //   setTimeout(() => {
-    //     if (!(this.cd as any).destroyed) {
-    //       this.updateFilter();
-    //     }
-    //   }, 200);
-    // });
+    this.route.queryParams
+      .pipe(delay(200), takeUntil(this._destroy))
+      .subscribe(() => {
+        this.updateFilter();
+      });
     // this.fs.reset
     //   .pipe(takeUntil(this._destroy))
     //   .subscribe(() => this.updateFilter());
@@ -358,36 +362,32 @@ export class FilterRelatedComponent implements OnInit, OnDestroy {
   //   return element;
   // }
 
-  // public onChange() {
-  //   this.fs.generateQuery(
-  //     this.genericQuery(this.config.query),
-  //     this.config.key,
-  //     this.config.listName,
-  //     this.item
-  //   );
-  //   this.changeQuery();
-  // }
+  public onChange(value: FilterValue[] | null) {
+    this.fs.generateQuery(
+      value ? this.genericQuery(this.config.query, value) : '',
+      this.config.key,
+      this.config.listName,
+      this.value
+    );
+    this.changeQuery(value);
+  }
 
-  // public genericQuery(query: string) {
-  //   let result = '';
-  //   if (Array.isArray(this.item.data)) {
-  //     this.item.data.forEach((el: any) => {
-  //       result += `${query}=${el}&`;
-  //     });
-  //   } else {
-  //     result = `${query}=${this.item.data}&`;
-  //   }
-  //   this.query = result;
-  //   return result.substring(0, result.length - 1);
-  // }
+  public genericQuery(query: string, value: FilterValue[]) {
+    const result = value.reduce(
+      (acc, curr) => (acc += `${query}=${curr?.key}&`),
+      ''
+    );
 
-  // public changeQuery() {
-  //   this.event.emit({
-  //     list: this.config.listName,
-  //     key: this.config.query,
-  //     value: this.item,
-  //   });
-  // }
+    return result.substring(0, result.length - 1);
+  }
+
+  public changeQuery(value: FilterValue[] | null) {
+    this.event.emit({
+      list: this.config.listName,
+      key: this.config.query,
+      value,
+    });
+  }
 
   // public parseQuery(query: string) {
   //   this.query = query;
@@ -406,60 +406,99 @@ export class FilterRelatedComponent implements OnInit, OnDestroy {
   //   }
   // }
 
-  // public updateFilter() {
-  //   const data = this.fs.getQueries(this.config.listName, this.config.key);
+  public updateFilter() {
+    const data = this.fs.getQueries(this.config.listName, this.config.key);
 
-  //   if (data) {
-  //     if (data.byQuery) {
-  //       if (this.settingValue) {
-  //         this.settingValue = false;
-  //         this.parseQuery(data.query);
-  //       }
-  //     } else {
-  //       if (this.settingValue) {
-  //         this.settingValue = false;
-  //         this.item = data;
-  //         this.genericQuery(this.config.query);
-  //       }
-  //     }
-  //   } else {
-  //     this.query = '';
-  //     if (!this.item) {
-  //       this.item = this.createElement();
-  //       if (this.multiple) {
-  //         this.item.displayValue = `Select ${this.config.label}`;
-  //       } else {
-  //         this.item.displayValue = data ? this.getOption(data) : 'All';
-  //       }
-  //     }
+    if (data) {
+      const { byQuery, query = '' } = data;
 
-  //     if (this.item && !this.multiple) {
-  //       this.item.data = '';
-  //       this.item.displayValue = 'All';
-  //     } else if (this.previewList) {
-  //       this.previewList.forEach((el) => {
-  //         el.checked = false;
-  //       });
-  //       this.selected = this.previewList.filter((item) => item.checked);
-  //       this.item.data = this.selected.map((el) =>
-  //         this.getValue(el, this.config.data.key)
-  //       );
-  //       this.item.displayValue =
-  //         this.selected && this.selected.length
-  //           ? `Selected ${this.selected.length} ${this.config.label}`
-  //           : `Select ${this.config.label}`;
-  //     }
-  //   }
+      if (byQuery) {
+        const keys: string[] = [];
+        query.split('&').forEach((el: string) => keys.push(el.split('=')[1]));
 
-  //   this.cd.detectChanges();
-  // }
+        if (this.config.multiple) {
+          this.getOptions({
+            search: '',
+            offset: 0,
+            initialize: true,
+          }).subscribe((response) => {
+            this._options.next(response.options);
+            this._selectedOptions.next(
+              response.options.filter((option) => keys.includes(option.key))
+            );
+          });
+        } else {
+          this.genericFormService
+            .getByQuery(this.config.data.endpoint, `/${keys[0]}/`)
+            .subscribe((response) => {
+              if (response) {
+                const { property } = this.config;
 
-  // public resetFilter() {
-  //   this.query = '';
-  //   this.deleteValue();
-  //   this.fs.generateQuery('', this.config.key, this.config.listName, this.item);
-  //   this.changeQuery();
-  // }
+                const config = {
+                  ...this.config,
+                  countryCode: this.siteSettingsService.settings.country_code,
+                  lang: this.translateService.currentLang,
+                };
+                const option = new FilterOption(response, config);
+                this._selectedOptions.next([option]);
+              }
+            });
+        }
+      }
+    }
+
+    // if (data) {
+    //   if (data.byQuery) {
+    //     if (this.settingValue) {
+    //       this.settingValue = false;
+    //       this.parseQuery(data.query);
+    //     }
+    //   } else {
+    //     if (this.settingValue) {
+    //       this.settingValue = false;
+    //       this.item = data;
+    //       this.genericQuery(this.config.query);
+    //     }
+    //   }
+    // } else {
+    //   this.query = '';
+    //   if (!this.item) {
+    //     this.item = this.createElement();
+    //     if (this.multiple) {
+    //       this.item.displayValue = `Select ${this.config.label}`;
+    //     } else {
+    //       this.item.displayValue = data ? this.getOption(data) : 'All';
+    //     }
+    //   }
+
+    //   if (this.item && !this.multiple) {
+    //     this.item.data = '';
+    //     this.item.displayValue = 'All';
+    //   } else if (this.previewList) {
+    //     this.previewList.forEach((el) => {
+    //       el.checked = false;
+    //     });
+    //     this.selected = this.previewList.filter((item) => item.checked);
+    //     this.item.data = this.selected.map((el) =>
+    //       this.getValue(el, this.config.data.key)
+    //     );
+    //     this.item.displayValue =
+    //       this.selected && this.selected.length
+    //         ? `Selected ${this.selected.length} ${this.config.label}`
+    //         : `Select ${this.config.label}`;
+    //   }
+    // }
+
+    // this.cd.detectChanges();
+  }
+
+  public resetFilter() {
+    this._active.next(false);
+    this._selectedOptions.next([]);
+    this._value.next(null);
+    this.fs.generateQuery('', this.config.key, this.config.listName, null);
+    this.changeQuery(null);
+  }
 
   // public getOption(value: any) {
   //   if (this.multiple) {
@@ -695,10 +734,6 @@ export class FilterRelatedComponent implements OnInit, OnDestroy {
     }
   }
 
-  onSelect(option: FilterOption) {
-    console.log(option);
-  }
-
   onShowOptions() {
     if (this._options.value.length && this.config.multiple) {
       this._active.next(true);
@@ -747,16 +782,10 @@ export class FilterRelatedComponent implements OnInit, OnDestroy {
       this.searchControl.patchValue('');
       this._offset.next(0);
     });
-    // setTimeout(() => {
-    //   this._options.next([]);
-    //   this.searchControl.patchValue('');
-    //   this._offset.next(0);
-    // });
   }
 
   onRemoveOption(option: FilterOption) {
     option.control.patchValue(false);
-    // this._selectedOptions.next(this._selectedOptions.value.filter((el) => el.key !== option.key));
   }
 
   @HostListener('document:click', ['$event'])
@@ -770,7 +799,9 @@ export class FilterRelatedComponent implements OnInit, OnDestroy {
       clickedComponent = (clickedComponent as HTMLElement).parentNode;
     } while (clickedComponent);
     if (!inside) {
-      this._active.next(false);
+      if (this._active.value) {
+        this._active.next(false);
+      }
     }
   }
 
@@ -786,49 +817,48 @@ export class FilterRelatedComponent implements OnInit, OnDestroy {
     );
   }
 
-  private getOptions(config: { search: string; offset: number }) {
+  private getOptions(config: {
+    search: string;
+    offset: number;
+    initialize?: boolean;
+  }) {
     this._loading.next(true);
 
     return this.genericFormService
       .get(this.config.data.endpoint, {
         search: config.search,
         offset: config.offset,
-        limit: config.offset ? -1 : this.limit,
+        limit: this.config.multiple ? -1 : this.limit,
+        fields: Array.isArray(this.config.data.value)
+          ? this.config.data.value
+          : [],
       })
       .pipe(
-        takeUntil(this.active$.pipe(filter((el) => !el))),
+        takeUntil(
+          this.active$.pipe(filter((el) => (!config.initialize ? !el : false)))
+        ),
         map((response) => {
-          const { data, property } = this.config;
+          const { property } = this.config;
 
-          if (property && response[property]) {
+          const config = {
+            ...this.config,
+            countryCode: this.siteSettingsService.settings.country_code,
+            lang: this.translateService.currentLang,
+          };
+
+          if (this.config.property && response[this.config.property]) {
             const options: FilterOption[] = (
               response[property] as string[]
-            ).map((el) => ({
-              value: {
-                label: el,
-                key: el,
-              },
-              key: el,
-              control: new FormControl(false),
-            }));
+            ).map((el) => new FilterOption(el, config));
             options.forEach((el) => this.addValueControl(el));
 
             return { search: config.search, options };
           }
 
           if (response.results) {
-            const options: FilterOption[] = response.results.map((el: any) => {
-              return {
-                value: {
-                  label: this.hasFormatBraces(data.value)
-                    ? FormatString.format(data.value, el)
-                    : el[data.value],
-                  key: el[data.key],
-                },
-                key: el[data.key],
-                control: new FormControl(false),
-              };
-            });
+            const options: FilterOption[] = response.results.map(
+              (el: any) => new FilterOption(el, config)
+            );
 
             options.forEach((el) => this.addValueControl(el));
 
@@ -861,10 +891,6 @@ export class FilterRelatedComponent implements OnInit, OnDestroy {
     controls.forEach((key) => this.valueGroup.removeControl(key));
   }
 
-  private hasFormatBraces(value: string) {
-    return value.includes('{') && value.includes('}');
-  }
-
   private subscribeOnChange(id: string, control: FormControl) {
     control.valueChanges.subscribe(() => {
       const option = this._options.value.find((el) => el.key == id);
@@ -874,5 +900,38 @@ export class FilterRelatedComponent implements OnInit, OnDestroy {
         this._selectedOptions.next([option]);
       }
     });
+  }
+}
+
+class FilterOption {
+  value: FilterValue;
+  control: FormControl;
+  key: string;
+
+  constructor(payload: any, config: any) {
+    const { data, property, countryCode, lang } = config;
+    const useProperty = Boolean(property);
+
+    this.value = useProperty
+      ? {
+          label: payload,
+          key: payload,
+        }
+      : {
+          label: this.hasFormatBraces(data.value)
+            ? FormatString.format(data.value, payload)
+            : checkAndReturnTranslation(
+                payload,
+                countryCode,
+                lang as Language
+              ) || payload[data.value],
+          key: payload[data.key],
+        };
+    this.key = useProperty ? payload : payload[data.key];
+    this.control = new FormControl(false);
+  }
+
+  private hasFormatBraces(value: string) {
+    return value.includes('{') && value.includes('}');
   }
 }

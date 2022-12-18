@@ -14,7 +14,6 @@ export class ListCheckboxComponent implements OnInit {
   public buttonAction!: EventEmitter<any>;
 
   public ngOnInit() {
-    console.log(this);
     if (this.config.values) {
       this.value = this.config.values[this.config.value];
     }
