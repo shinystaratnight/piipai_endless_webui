@@ -1,5 +1,5 @@
 <div *ngIf="!this.config.hide && !this.dropdown && !loading" class="timeline">
-  <ng-container *ngFor="let state of config.options; let last = last">
+  <ng-container *ngFor="let state of options$ | async; let last = last">
     <ng-container
       *ngTemplateOutlet="stateElement; context: { state: state, last: last }"
     ></ng-container>
@@ -10,7 +10,7 @@
     class="btn btn-outline-info btn-refresh"
     (click)="onRefresh()"
   >
-    <fa-icon class="me-0" icon="redo"></fa-icon>
+    <fa-icon icon="redo"></fa-icon>
   </button>
 </div>
 
@@ -19,49 +19,42 @@
 </div>
 
 <div
-  *ngIf="selectArray && currentState.value && this.dropdown"
+  *ngIf="this.dropdown"
   class="timeline timeline-select-wrapper"
 >
-  {{ 'filter.status' | translate }}:
+  {{ 'filter.status' | translate }}
 
   <select
     class="timeline-element badge badge-outline timeline-select"
     [ngClass]="{
-      'need-requirements': getState(currentState.value).state === 0,
-      allowed: getState(currentState.value).state === 1,
-      active: getState(currentState.value).state === 2,
-      visited: getState(currentState.value).state === 3,
-      'not-allowed': getState(currentState.value).state === 4
+      'need-requirements': getState()?.state === 0,
+      allowed: getState()?.state === 1,
+      active: getState()?.state === 2,
+      visited: getState()?.state === 3,
+      'not-allowed': getState()?.state === 4
     }"
     [formControl]="currentState"
   >
-    <option *ngFor="let option of selectArray" [ngValue]="option.id">
-      <span *ngIf="option.state === 2">
-        {{
-          option.name_after_activation
-            ? option.name_after_activation
-            : option.name_before_activation
-        }}
-      </span>
-      <span *ngIf="option.state !== 2">
-        {{ option.name_before_activation }}
+    <option *ngFor="let option of dropdownOptions$ | async" [ngValue]="option.id">
+      <span>
+        {{ option.translateKey | translate: { Default: option.label } }}
       </span>
     </option>
   </select>
 
   <webui-info
-    *ngIf="getState(currentState.value).state === 0"
+    *ngIf="getState()?.state === 0"
     triggersType="click:click"
     [description]="requirements"
   ></webui-info>
   <button
     type="button"
     class="btn btn-outline-success btn-refresh"
-    *ngIf="getState(currentState.value).state === 1"
+    *ngIf="getState()?.state === 1"
     [class.active]="saveProcess"
-    (click)="open(getState(currentState.value))"
+    (click)="open(getState())"
   >
-    <fa-icon class="f-size-10 me-0" icon="check" *ngIf="!saveProcess"></fa-icon>
+    <fa-icon icon="check" *ngIf="!saveProcess"></fa-icon>
     <webui-spinner *ngIf="saveProcess" [sm]="true"></webui-spinner>
   </button>
 
@@ -104,7 +97,9 @@
           </div>
 
           <div div class="state-tests">
-            <h5 class="state-info-label">Acceptance Tests</h5>
+            <h5 class="state-info-label">
+              {{ 'acceptance_tests.label' | translate }}
+            </h5>
 
             <table class="table table-sm">
               <tr>
@@ -213,17 +208,13 @@
     }"
   >
     <span *ngIf="state.state === 2">
-      {{
-        state.name_after_activation
-          ? state.name_after_activation
-          : state.name_before_activation
-      }}
+      {{ state.translateKey | translate: { Default: state.label } }}
     </span>
     <span *ngIf="state.state !== 2 && state.state !== 0">
-      {{ state.name_before_activation }}
+      {{ state.translateKey | translate: { Default: state.label } }}
     </span>
     <span *ngIf="state.state === 0" placement="bottom" [ngbTooltip]="requir">
-      {{ state.name_before_activation }}
+      {{ state.translateKey | translate: { Default: state.label } }}
     </span>
 
     <span *ngIf="calculateProgress(state)" class="state-progress">
@@ -255,7 +246,7 @@
     <ul class="info-block__list">
       <li
         class="info-block__item"
-        *ngFor="let option of getState(currentState.value).requirements"
+        *ngFor="let option of getState()?.requirements"
       >
         <fa-icon class="info-block__icon" icon="circle"></fa-icon>
         {{ option }}

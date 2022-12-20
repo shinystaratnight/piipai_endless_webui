@@ -1,6 +1,8 @@
 import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
 import { SiteSettingsService } from '@webui/core';
 import { CountryCodeLanguage } from '@webui/models';
+import { checkAndReturnTranslation } from '@webui/utilities';
+import { LocalStorageService } from 'ngx-webstorage';
 
 const translationMap = CountryCodeLanguage;
 
@@ -28,7 +30,7 @@ export class ListSkillsComponent implements OnInit {
   public more!: boolean;
   public evaluationCount!: string;
 
-  constructor(private siteSetting: SiteSettingsService) {}
+  constructor(private siteSetting: SiteSettingsService, private storage: LocalStorageService) {}
 
   public ngOnInit() {
     const { value } = this.config;
@@ -37,12 +39,10 @@ export class ListSkillsComponent implements OnInit {
       this.list = true;
 
       value.forEach(el => {
+        const { country_code } = this.siteSetting.settings;
+        const lang = this.storage.retrieve('lang');
         const { skill: { name } } = el;
-        const trans = name.translations.find((el: any) => el.language.id === translationMap[this.siteSetting.settings.country_code]);
-
-        if (trans) {
-          el.skill.__str__ = trans.value
-        }
+        el.skill.__str__ = checkAndReturnTranslation(name, country_code, lang);
       })
 
       if (value && value.length > 4) {

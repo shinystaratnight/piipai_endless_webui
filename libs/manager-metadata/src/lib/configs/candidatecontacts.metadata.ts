@@ -566,6 +566,23 @@ const form = [
                 type: 'group',
                 children: [
                   {
+                    key: 'language_default',
+                    send: false,
+                    type: 'listdropdown',
+                    endpoint: `${Endpoints.CompanyLanguages}{master_company.id}/languages/`,
+                    editEndpoint: `/contacts/{contact.id}/languages/`,
+                    setData: {
+                      default: true
+                    },
+                    translateKey: 'language_default',
+                    field: 'default',
+                    templateOptions: {
+                      label: 'Default notification language',
+                      display: '{language.name}',
+                      param: '{language.alpha_2}/'
+                    }
+                  },
+                  {
                     key: 'message_by_email',
                     default: false,
                     type: 'checkbox',
@@ -590,23 +607,6 @@ const form = [
                       showButtonIf: false
                     },
                     read_only: false
-                  },
-                  {
-                    key: 'language_default',
-                    send: false,
-                    type: 'listdropdown',
-                    endpoint: `${Endpoints.CompanyLanguages}{master_company.id}/languages/`,
-                    editEndpoint: `/contacts/{contact.id}/languages/`,
-                    setData: {
-                      default: true
-                    },
-                    translateKey: 'language_default',
-                    field: 'default',
-                    templateOptions: {
-                      label: 'Default notification language',
-                      display: '{language.name}',
-                      param: '{language.alpha_2}/'
-                    }
                   }
                 ],
                 width: 0.25
@@ -1283,6 +1283,7 @@ const form = [
           },
           {
             endpoint: Endpoints.WorkflowObject,
+            translateKey: 'workflowobjects',
             templateOptions: {
               label: 'States history',
               type: 'list',

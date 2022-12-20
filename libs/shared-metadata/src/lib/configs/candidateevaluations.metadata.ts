@@ -308,7 +308,7 @@ const formset = {
         sort: true,
         content: [
           {
-            text: 'Show timesheet',
+            text: 'common.show-timesheet',
             color: 'primary',
             endpoint: '/hr/timesheets/{reference_timesheet.id}',
             label: 'reference_timesheet',

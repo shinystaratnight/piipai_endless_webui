@@ -1,16 +1,16 @@
-<div class="wrapper mb-0 form-group mt-3">
+<div class="wrapper form-group mt-3">
   <select
-    class="form-select me-2"
+    class="form-select"
     [class.default]="!action.endpoint"
     [(ngModel)]="action"
   >
     <option [value]="{}" disabled>{{ 'actions.label' | translate }}</option>
     <option *ngFor="let option of config.options" [ngValue]="option">
-      {{ (option.translateKey || option.label) | translate }}
+      {{ option.translateKey || option.label | translate }}
     </option>
   </select>
   <button
-    class="btn btn-primary mb-0"
+    class="btn btn-primary"
     type="button"
     (click)="toDoAction()"
     webuiSubscriptionRequired

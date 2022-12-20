@@ -335,3 +335,20 @@ export function getLocalStorageItem<T>(key: string): T | undefined {
 export function isArray(val: unknown): val is Array<any> {
   return Array.isArray(val);
 }
+
+
+export const getUrlPrefix = (): string => {
+  if (isClient()) {
+    return '/cl';
+  }
+
+  if (isManager()) {
+    return '/mn';
+  }
+
+  if (isCandidate()) {
+    return '/cd'
+  }
+
+  return '';
+}

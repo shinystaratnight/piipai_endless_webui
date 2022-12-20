@@ -5,10 +5,10 @@ import {
   OnInit,
   EventEmitter,
   OnDestroy,
-  ChangeDetectionStrategy
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 
 import { FilterService } from './../../services';
 
@@ -16,30 +16,31 @@ import { FilterService } from './../../services';
   selector: 'webui-list-search-bar',
   templateUrl: './list-search-bar.component.html',
   styleUrls: ['./list-search-bar.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ListSerachBarComponent implements OnInit, OnDestroy {
+  private _destroy = new Subject<void>();
   @Input() public count!: string;
   @Input() public label!: string;
   @Input() public list!: string;
   @Input() public param!: string;
 
-  @Output() public event: EventEmitter<any> = new EventEmitter();
+  @Output() public event = new EventEmitter<{ list: string }>();
 
   public searchValue!: string;
-  private subscription!: Subscription;
   private type = 'search';
 
   constructor(private fs: FilterService, private route: ActivatedRoute) {}
 
   public ngOnInit() {
-    this.subscription = this.route.queryParams.subscribe(() =>
-      this.updateSearchBar()
-    );
+    this.route.queryParams
+      .pipe(takeUntil(this._destroy))
+      .subscribe(() => this.updateSearchBar());
   }
 
   public ngOnDestroy() {
-    this.subscription.unsubscribe();
+    this._destroy.next();
+    this._destroy.complete();
   }
 
   public search() {

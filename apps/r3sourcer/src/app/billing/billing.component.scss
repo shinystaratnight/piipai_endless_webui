@@ -8,7 +8,7 @@
     gap: 20px;
 
     @include media-breakpoint-up('lg') {
-      grid-template-columns: 1fr 470px;
+      grid-template-columns: 1fr 500px;
     }
   }
 
@@ -67,7 +67,8 @@
     font-weight: normal;
     color: $secondary-color;
     margin-bottom: 0;
-    min-width: 210px;
+    min-width: 180px;
+    padding-top: 3px;
   }
 
   a {
