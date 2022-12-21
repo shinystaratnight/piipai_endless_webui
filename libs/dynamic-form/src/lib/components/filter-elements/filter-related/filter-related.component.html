@@ -172,9 +172,11 @@
     <div class="form-control autocomplete-value" (click)="onShowOptions()">
       <ng-container *ngIf="value$ | async as value; else placeholder">
         <span class="value" *ngIf="value.length > 1">
-          {{ value.length }}
+          {{ 'status.selected-items' | translate: { count: value.length } }}
         </span>
-        <span class="value" *ngIf="value.length === 1">{{ value[0].label }}</span>
+        <span class="value" *ngIf="value.length === 1">
+          {{ value[0].label }}
+        </span>
       </ng-container>
 
       <ng-template #placeholder>
@@ -192,7 +194,7 @@
     >
       <input
         [formControl]="searchControl"
-        *ngIf="!config.property"
+        *ngIf="!config.property && !config.multiple"
         name="search"
         type="text"
         class="form-control mb-1"
@@ -252,10 +254,10 @@
           <span class="badge badge-outline" *ngFor="let option of options">
             {{ option.value.label }}
 
-            <fa-icon
+            <!-- <fa-icon
               [icon]="['fas', 'times']"
               (click)="onRemoveOption(option)"
-            ></fa-icon>
+            ></fa-icon> -->
           </span>
         </div>
       </ng-container>

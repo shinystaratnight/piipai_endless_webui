@@ -49,11 +49,6 @@ type FilterValue = {
   label: string;
   key: string;
 };
-// type FilterOption = {
-//   value: FilterValue;
-//   control: FormControl;
-//   key: string;
-// };
 
 @Component({
   selector: 'webui-filter-related',
@@ -64,12 +59,11 @@ type FilterValue = {
 export class FilterRelatedComponent implements OnInit, OnDestroy {
   private _destroy = new Subject<void>();
   private _value = new BehaviorSubject<FilterValue[] | null>(null);
-  private _options = new BehaviorSubject<FilterOption[]>([]);
+  private _options = new BehaviorSubject<FilterOption[] | null>(null);
   private _offset = new BehaviorSubject<number>(0);
   private _loading = new BehaviorSubject<boolean>(false);
   private _active = new BehaviorSubject<boolean>(false);
   private _selectedOptions = new BehaviorSubject<FilterOption[]>([]);
-  private _hasQuery = new BehaviorSubject<boolean>(false);
 
   @Input() public config!: any;
 
@@ -166,14 +160,16 @@ export class FilterRelatedComponent implements OnInit, OnDestroy {
         .pipe(takeUntil(this._destroy))
         .subscribe((value) => {
           this.value.clear();
+          console.log(value);
+          console.log(this);
 
           for (const id in value) {
             value[id] &&
-              this.value.add(this._options.value.find((el) => el.key === id));
+              this.value.add(this._options.value?.find((el) => el.key === id));
           }
 
           this._selectedOptions.next(
-            this._options.value.filter((el) => this.value.has(el))
+            this._options.value?.filter((el) => this.value.has(el)) || []
           );
         });
     }
@@ -225,6 +221,7 @@ export class FilterRelatedComponent implements OnInit, OnDestroy {
   // }
 
   public ngOnDestroy() {
+    console.log('destroy');
     this._destroy.next();
     this._destroy.complete();
   }
@@ -417,14 +414,23 @@ export class FilterRelatedComponent implements OnInit, OnDestroy {
         query.split('&').forEach((el: string) => keys.push(el.split('=')[1]));
 
         if (this.config.multiple) {
-          this.getOptions({
-            search: '',
-            offset: 0,
-            initialize: true,
-          }).subscribe((response) => {
-            this._options.next(response.options);
+          const options$ = this._options.value
+            ? this._options.asObservable()
+            : this.getOptions(
+                {
+                  search: '',
+                  offset: 0,
+                  initialize: true,
+                },
+                keys
+              ).pipe(map((response) => response.options));
+
+          options$.subscribe((options) => {
+            if (!this._options.value) {
+              this._options.next(options);
+            }
             this._selectedOptions.next(
-              response.options.filter((option) => keys.includes(option.key))
+              options?.filter((option) => keys.includes(option.key)) || []
             );
           });
         } else {
@@ -439,7 +445,7 @@ export class FilterRelatedComponent implements OnInit, OnDestroy {
                   countryCode: this.siteSettingsService.settings.country_code,
                   lang: this.translateService.currentLang,
                 };
-                const option = new FilterOption(response, config);
+                const option = new FilterOption(response, config, keys);
                 this._selectedOptions.next([option]);
               }
             });
@@ -495,6 +501,9 @@ export class FilterRelatedComponent implements OnInit, OnDestroy {
   public resetFilter() {
     this._active.next(false);
     this._selectedOptions.next([]);
+    this._options.value?.forEach((option) =>
+      option.control.patchValue(false, { emitEvent: true })
+    );
     this._value.next(null);
     this.fs.generateQuery('', this.config.key, this.config.listName, null);
     this.changeQuery(null);
@@ -735,7 +744,7 @@ export class FilterRelatedComponent implements OnInit, OnDestroy {
   }
 
   onShowOptions() {
-    if (this._options.value.length && this.config.multiple) {
+    if (this._options.value?.length && this.config.multiple) {
       this._active.next(true);
       this.options$ = this._options.asObservable();
       return;
@@ -806,28 +815,23 @@ export class FilterRelatedComponent implements OnInit, OnDestroy {
   }
 
   private patchOptions(value: boolean) {
-    const options = this._options.value;
-
-    this._options.next(
-      options.map((el) => {
-        el.control?.patchValue(value);
-
-        return el;
-      })
-    );
+    this._options.value?.forEach((option) => option?.control.patchValue(value));
   }
 
-  private getOptions(config: {
-    search: string;
-    offset: number;
-    initialize?: boolean;
-  }) {
+  private getOptions(
+    params: {
+      search: string;
+      offset: number;
+      initialize?: boolean;
+    },
+    selectedValues?: string[]
+  ) {
     this._loading.next(true);
 
     return this.genericFormService
       .get(this.config.data.endpoint, {
-        search: config.search,
-        offset: config.offset,
+        search: params.search,
+        offset: params.offset,
         limit: this.config.multiple ? -1 : this.limit,
         fields: Array.isArray(this.config.data.value)
           ? this.config.data.value
@@ -835,7 +839,7 @@ export class FilterRelatedComponent implements OnInit, OnDestroy {
       })
       .pipe(
         takeUntil(
-          this.active$.pipe(filter((el) => (!config.initialize ? !el : false)))
+          this.active$.pipe(filter((el) => (!params.initialize ? !el : false)))
         ),
         map((response) => {
           const { property } = this.config;
@@ -849,23 +853,23 @@ export class FilterRelatedComponent implements OnInit, OnDestroy {
           if (this.config.property && response[this.config.property]) {
             const options: FilterOption[] = (
               response[property] as string[]
-            ).map((el) => new FilterOption(el, config));
+            ).map((el) => new FilterOption(el, config, selectedValues));
             options.forEach((el) => this.addValueControl(el));
 
-            return { search: config.search, options };
+            return { search: params.search, options };
           }
 
           if (response.results) {
             const options: FilterOption[] = response.results.map(
-              (el: any) => new FilterOption(el, config)
+              (el: any) => new FilterOption(el, config, selectedValues)
             );
 
             options.forEach((el) => this.addValueControl(el));
 
-            return { search: config.search, options };
+            return { search: params.search, options };
           }
 
-          return { search: config.search, options: [] };
+          return { search: params.search, options: [] };
         }),
         finalize(() => this._loading.next(false))
       );
@@ -893,7 +897,7 @@ export class FilterRelatedComponent implements OnInit, OnDestroy {
 
   private subscribeOnChange(id: string, control: FormControl) {
     control.valueChanges.subscribe(() => {
-      const option = this._options.value.find((el) => el.key == id);
+      const option = this._options.value?.find((el) => el.key == id);
 
       if (option) {
         option.control.patchValue(false, { emitEvent: false });
@@ -908,7 +912,7 @@ class FilterOption {
   control: FormControl;
   key: string;
 
-  constructor(payload: any, config: any) {
+  constructor(payload: any, config: any, value?: string[]) {
     const { data, property, countryCode, lang } = config;
     const useProperty = Boolean(property);
 
@@ -928,7 +932,7 @@ class FilterOption {
           key: payload[data.key],
         };
     this.key = useProperty ? payload : payload[data.key];
-    this.control = new FormControl(false);
+    this.control = new FormControl(!!value && value.includes(this.key));
   }
 
   private hasFormatBraces(value: string) {
