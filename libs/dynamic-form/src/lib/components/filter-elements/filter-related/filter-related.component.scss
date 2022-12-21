@@ -16,3 +16,44 @@
     border: 1px solid rgba($gray, 0.2);
   }
 }
+
+.content {
+  position: relative;
+
+  ul {
+    padding-left: 0;
+    margin-bottom: 0;
+  }
+
+  .actions {
+    border-bottom: 1px solid $border-color;
+  }
+
+  .form-control {
+    margin-bottom: 0.75rem;
+  }
+
+  .form-element-checkbox:hover,
+  .form-element-checkbox.active {
+    color: var(--primary-color);
+  }
+}
+
+.spinner-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $content-color;
+  margin-top: 0.75rem;
+}
+
+.hidden {
+  display: none;
+}
+
+.value {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

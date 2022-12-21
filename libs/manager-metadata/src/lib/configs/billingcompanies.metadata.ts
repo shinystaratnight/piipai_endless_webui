@@ -1,3 +1,6 @@
+import { createFilter, Type } from "@webui/metadata";
+import { Endpoints } from "@webui/models";
+
 const list = {
   list: {
     list: 'subscription',
@@ -100,17 +103,14 @@ const list = {
       },
     ],
     filters: [
-      {
+      createFilter(Type.Related, {
         key: 'company',
         label: 'Company',
-        type: 'related',
-        data: {
-          value: '__str__',
-          endpoint: '/core/companies/?type=master',
-          key: 'id'
-        },
-        query: 'company'
-      }
+        endpoint: Endpoints.Company,
+        queryParams: {
+          type: 'master'
+        }
+      })
     ],
     buttons: [],
     editDisable: true

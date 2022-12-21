@@ -1,5 +1,5 @@
 import { SkillWorkTypeModel } from '@webui/data';
-import { Form, List } from '@webui/metadata';
+import { createFilter, Form, List, Type } from '@webui/metadata';
 import { Endpoints } from '@webui/models';
 
 const worktypeField = () =>
@@ -31,28 +31,16 @@ const list = {
     search_enabled: true,
     editDisable: false,
     filters: [
-      {
+      createFilter(Type.Related, {
         key: 'skill',
         label: 'Skill',
-        type: 'related',
-        data: {
-          value: '__str__',
-          endpoint: '/skills/skills/',
-          key: 'id'
-        },
-        query: 'skill'
-      },
-      {
+        endpoint: Endpoints.Skill
+      }),
+      createFilter(Type.Related, {
         key: 'price_list',
         label: 'Price list',
-        type: 'related',
-        data: {
-          value: '__str__',
-          endpoint: '/pricing/pricelists/',
-          key: 'id'
-        },
-        query: 'price_list'
-      }
+        endpoint: Endpoints.PriceList
+      })
     ]
   },
   fields: [

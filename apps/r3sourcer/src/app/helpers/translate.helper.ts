@@ -7,13 +7,12 @@ export class MissingTranslationHelper implements MissingTranslationHandler {
   private defaultKey = 'Default';
 
   handle(params: MissingTranslationHandlerParams) {
-    const { key, interpolateParams = {} as any } = params;
+    const key = params.key;
+    const interpolateParams = params.interpolateParams || {} as Record<string, unknown>;
+    const defaultValueDescriptior = Object.getOwnPropertyDescriptor(interpolateParams, this.defaultKey);
 
-    // console.log(`"${key}": "${interpolateParams[this.defaultKey]}"`);
+    // console.log(`"${key}": "${defaultValueDescriptior?.value}`);
 
-    if (interpolateParams && this.defaultKey in interpolateParams) {
-      return (interpolateParams as any)[this.defaultKey];
-    }
-    return key;
+    return defaultValueDescriptior?.value || key;
   }
 }

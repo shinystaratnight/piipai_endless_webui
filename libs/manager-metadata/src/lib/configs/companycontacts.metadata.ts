@@ -1,3 +1,6 @@
+import { createFilter, Type } from "@webui/metadata";
+import { Endpoints } from "@webui/models";
+
 const list = {
   list: {
     list: 'companycontact',
@@ -58,17 +61,11 @@ const list = {
       }
     ],
     filters: [
-      {
+      createFilter(Type.Related, {
         key: 'company',
         label: 'Company',
-        type: 'related',
-        data: {
-          value: '__str__',
-          endpoint: '/core/companies/',
-          key: 'id'
-        },
-        query: 'company'
-      },
+        endpoint: Endpoints.Company
+      }),
     ],
     search_enabled: true,
     editDisable: false,

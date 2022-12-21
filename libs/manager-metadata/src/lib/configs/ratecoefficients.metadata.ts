@@ -1,3 +1,6 @@
+import { createFilter, Type } from "@webui/metadata";
+import { Endpoints } from "@webui/models";
+
 const list = {
   list: {
     list: 'ratecoefficient',
@@ -66,17 +69,11 @@ const list = {
     search_enabled: false,
     editDisable: false,
     filters: [
-      {
+      createFilter(Type.Related, {
         key: 'industry',
         label: 'Industry',
-        type: 'related',
-        data: {
-          value: '__str__',
-          endpoint: '/pricing/industries/',
-          key: 'id'
-        },
-        query: 'industry'
-      }
+        endpoint: Endpoints.Industry
+      })
     ]
   },
   fields: [

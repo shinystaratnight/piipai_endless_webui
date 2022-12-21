@@ -24,9 +24,14 @@ const filters = {
   activeState: createFilter(Type.Related, {
     key: 'active_states',
     label: 'Status',
-    endpoint: `${Endpoints.WorkflowNode}?company={company_settings.company}&content_type=candidate.candidatecontact&number={filter_value}`,
+    endpoint: Endpoints.WorkflowNode,
     display: ['name_after_activation', 'name_before_activation'],
-    parameter: 'number'
+    parameter: 'number',
+    queryParams: {
+      company: '{company_settings.company}',
+      content_type: 'candidate.candidatecontact',
+      number: '{filter_value}'
+    }
   }),
   gender: createFilter(Type.Checkbox, {
     key: 'contact.gender',
@@ -48,7 +53,10 @@ const filters = {
   recruitmentAgent: createFilter(Type.Related, {
     key: 'recruitment_agent',
     label: 'Recruitment agent',
-    endpoint: `${Endpoints.CompanyContact}?master_company=current`
+    endpoint: Endpoints.CompanyContact,
+    queryParams: {
+      master_company: 'current'
+    }
   }),
   transportation_to_work: createFilter(Type.Checkbox, {
     key: 'transportation_to_work',

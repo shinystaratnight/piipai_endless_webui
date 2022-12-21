@@ -1146,10 +1146,10 @@
     "action.add_new_cc": "Add new CC",
     "action.save_cc": "Save credit card",
     "action.cancel": "Cancel",
+    "status.selected-items": "Selected {{count}} items",
     "status.not_paid": "Not paid",
     "status.open": "Open",
     "status.void": "Void",
     "select_plan.subLabel": "Selecting the plan charges your credit card account immediately",
-    "subscription_details.label": "Subscription details",
-    "drop_images": "Add images"
+    "subscription_details.label": "Subscription details"
 }

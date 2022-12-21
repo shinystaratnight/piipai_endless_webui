@@ -1,10 +1,14 @@
 import { createFilter, Type } from '@webui/metadata';
+import { Endpoints } from '@webui/models';
 
 const filters = {
   companyContact: createFilter(Type.Related, {
     key: 'company_contact',
     label: 'Recruitment Agent',
-    endpoint: '/core/companycontacts/?master_company=current',
+    endpoint: Endpoints.CompanyContact,
+    queryParams: {
+      master_company: 'current'
+    }
   }),
   candidateContact: createFilter(Type.Related, {
     key: 'candidate_contact',

@@ -1,3 +1,6 @@
+import { createFilter, Type } from "@webui/metadata";
+import { Endpoints } from "@webui/models";
+
 const list = {
   list: {
     list: 'contactunavailability',
@@ -13,17 +16,11 @@ const list = {
     search_enabled: false,
     editDisable: false,
     filters: [
-      {
+      createFilter(Type.Related, {
         key: 'contact',
         label: 'Contact',
-        type: 'related',
-        data: {
-          value: '__str__',
-          endpoint: '/core/contacts/',
-          key: 'id'
-        },
-        query: 'contact'
-      }
+        endpoint: Endpoints.Contact
+      })
     ]
   },
   fields: [

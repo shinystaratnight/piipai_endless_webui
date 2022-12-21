@@ -31,8 +31,11 @@ const filters = {
   state: createFilter(Type.Related, {
     key: 'state',
     label: 'State',
-    endpoint: `${Endpoints.Region}?country=AU`,
-    display: 'name'
+    endpoint: Endpoints.Region,
+    display: 'name',
+    queryParams: {
+      country: 'AU'
+    }
   }),
   contact_type: createFilter(Type.Select, {
     key: 'contact_type',

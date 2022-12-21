@@ -1,3 +1,6 @@
+import { createFilter, Type } from "@webui/metadata";
+import { Endpoints } from "@webui/models";
+
 const list = {
   list: {
     list: 'workflownode',
@@ -94,17 +97,11 @@ const list = {
     search_enabled: true,
     editDisable: false,
     filters: [
-      {
-        key: 'workflow.model',
+      createFilter(Type.Related, {
+        key: 'workflow__model',
         label: 'Model',
-        type: 'related',
-        data: {
-          value: '__str__',
-          endpoint: '/contenttypes/contenttypes/',
-          key: 'id'
-        },
-        query: 'workflow__model'
-      }
+        endpoint: '/contenttypes/contenttypes/'
+      })
     ]
   },
   fields: [

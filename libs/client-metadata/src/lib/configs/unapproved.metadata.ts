@@ -31,7 +31,10 @@ const list = function () {
         createFilter(Type.Related, {
           key: 'candidate',
           label: 'Candidate Contact',
-          endpoint: `${Endpoints.CandidateSupervisor}?supervisor={session.data.contact.contact_id}`
+          endpoint: Endpoints.CandidateSupervisor,
+          queryParams: {
+            supervisor: '{session.data.contact.contact_id}'
+          }
         }),
         createFilter(Type.Related, {
           key: 'position',

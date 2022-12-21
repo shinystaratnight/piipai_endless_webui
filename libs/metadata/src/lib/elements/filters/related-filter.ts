@@ -11,6 +11,7 @@ export interface RelatedFilterOptions {
   display?: string | string[];
   parameter?: string;
   property?: string; // For not list response
+  queryParams?: Record<string, string>
 }
 
 export const Related = 'related';
@@ -29,6 +30,7 @@ export class RelatedFilter implements FilterModel {
     endpoint: string;
     key: string;
   };
+  queryParams?: Record<string, string>;
 
   constructor(payload: RelatedFilterOptions) {
     this.key = payload.key;
@@ -42,5 +44,6 @@ export class RelatedFilter implements FilterModel {
       endpoint: payload.endpoint,
       key: payload.parameter || 'id',
     };
+    this.queryParams = payload.queryParams;
   }
 }

@@ -2,22 +2,7 @@ import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'webui-spinner',
-  template: `
-    <div class="lds-spinner" [class.sm]="sm">
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
-  </div>
-  `,
+  templateUrl: './spinner.component.html',
   styleUrls: ['./spinner.component.scss']
 })
 
