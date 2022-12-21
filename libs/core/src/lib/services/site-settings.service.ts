@@ -112,8 +112,7 @@ export class SiteSettingsService {
   }
 
   private updateLanguage(settings: CompanySettings): void {
-    const companyLang: string =
-      CountryCodeLanguage[settings.country_code].toString();
+    const companyLang: string = CountryCodeLanguage[settings.country_code]?.toString() || Language.English;
     const defaultLanguage = this.storage.retrieve('lang');
     const { currentLang } = this.translate;
 
