@@ -1,3 +1,6 @@
+import { createFilter, Type } from "@webui/metadata";
+import { Endpoints } from "@webui/models";
+
 const formFields = {
   'reference_timesheet.shift_started_at': {
     key: 'reference_timesheet.shift_started_at',
@@ -105,17 +108,11 @@ const list = {
     search_enabled: false,
     editDisable: false,
     filters: [
-      {
+      createFilter(Type.Related, {
         key: 'candidate_contact',
         label: 'Candidate contact',
-        type: 'related',
-        data: {
-          value: '__str__',
-          endpoint: '/candidate/candidatecontacts/',
-          key: 'id'
-        },
-        query: 'candidate_contact'
-      }
+        endpoint: Endpoints.CandidateContact
+      })
     ]
   },
   fields: [

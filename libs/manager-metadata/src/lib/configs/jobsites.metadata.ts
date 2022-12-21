@@ -11,7 +11,10 @@ const filters = {
   state: createFilter(Type.Related, {
     key: 'state',
     label: 'State',
-    endpoint: Endpoints.Region + '?country=AU',
+    endpoint: Endpoints.Region,
+    queryParams: {
+      country: 'AU'
+    }
   }),
   regular_company: createFilter(Type.Related, {
     key: 'regular_company',
@@ -21,7 +24,10 @@ const filters = {
   portfolio_manager: createFilter(Type.Related, {
     key: 'portfolio_manager',
     label: 'Portfolio manager',
-    endpoint: Endpoints.CompanyContact + '?master_company=current',
+    endpoint: Endpoints.CompanyContact,
+    queryParams: {
+      master_company: 'current'
+    }
   }),
 };
 

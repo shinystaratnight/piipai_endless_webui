@@ -1,4 +1,5 @@
 import { createFilter, Type } from '@webui/metadata';
+import { Endpoints } from '@webui/models';
 
 const list = {
   list: {
@@ -50,17 +51,11 @@ const list = {
     search_enabled: false,
     editDisable: false,
     filters: [
-      {
+      createFilter(Type.Related, {
         key: 'candidate_contact',
         label: 'Candidate contact',
-        type: 'related',
-        data: {
-          value: '__str__',
-          endpoint: '/candidate/candidatecontacts/',
-          key: 'id',
-        },
-        query: 'candidate_contact',
-      },
+        endpoint: Endpoints.CandidateContact
+      }),
       createFilter(Type.Date, {
         key: 'target_date',
         label: 'Target date',

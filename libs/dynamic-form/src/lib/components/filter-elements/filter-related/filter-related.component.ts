@@ -827,6 +827,16 @@ export class FilterRelatedComponent implements OnInit, OnDestroy {
     selectedValues?: string[]
   ) {
     this._loading.next(true);
+    const queryParams: Record<string, string> = this.config.queryParams || {};
+
+    Object.keys(params).forEach(key => {
+      const data = {
+        ...this.siteSettingsService.settings,
+        session: this.userService.user,
+      }
+
+      queryParams[key] = FormatString.format(queryParams[key], data);
+    });
 
     return this.genericFormService
       .get(this.config.data.endpoint, {
@@ -836,6 +846,7 @@ export class FilterRelatedComponent implements OnInit, OnDestroy {
         fields: Array.isArray(this.config.data.value)
           ? this.config.data.value
           : [],
+        ...queryParams
       })
       .pipe(
         takeUntil(
