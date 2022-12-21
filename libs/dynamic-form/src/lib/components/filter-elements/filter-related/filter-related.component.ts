@@ -160,8 +160,6 @@ export class FilterRelatedComponent implements OnInit, OnDestroy {
         .pipe(takeUntil(this._destroy))
         .subscribe((value) => {
           this.value.clear();
-          console.log(value);
-          console.log(this);
 
           for (const id in value) {
             value[id] &&
@@ -221,7 +219,6 @@ export class FilterRelatedComponent implements OnInit, OnDestroy {
   // }
 
   public ngOnDestroy() {
-    console.log('destroy');
     this._destroy.next();
     this._destroy.complete();
   }
@@ -434,21 +431,40 @@ export class FilterRelatedComponent implements OnInit, OnDestroy {
             );
           });
         } else {
-          this.genericFormService
-            .getByQuery(this.config.data.endpoint, `/${keys[0]}/`)
-            .subscribe((response) => {
-              if (response) {
-                const { property } = this.config;
+          const request = this.config.queryParams
+            ? this.genericFormService.get(
+                this.config.data.endpoint,
+                this.parseQueryParams(this.config.queryParams, keys[0])
+              )
+            : this.genericFormService.getByQuery(
+                this.config.data.endpoint,
+                `${keys[0]}/`
+              );
 
-                const config = {
-                  ...this.config,
-                  countryCode: this.siteSettingsService.settings.country_code,
-                  lang: this.translateService.currentLang,
-                };
+          request.subscribe((response) => {
+            if (response) {
+              const { property } = this.config;
+
+              const config = {
+                ...this.config,
+                countryCode: this.siteSettingsService.settings.country_code,
+                lang: this.translateService.currentLang,
+              };
+
+              if (response.results) {
+                const option = response.results.find(
+                  (el: any) => el[this.config.data.key].toString() === keys[0]
+                );
+
+                this._selectedOptions.next([
+                  new FilterOption(option, config, keys),
+                ]);
+              } else {
                 const option = new FilterOption(response, config, keys);
                 this._selectedOptions.next([option]);
               }
-            });
+            }
+          });
         }
       }
     }
@@ -827,16 +843,6 @@ export class FilterRelatedComponent implements OnInit, OnDestroy {
     selectedValues?: string[]
   ) {
     this._loading.next(true);
-    const queryParams: Record<string, string> = this.config.queryParams || {};
-
-    Object.keys(params).forEach(key => {
-      const data = {
-        ...this.siteSettingsService.settings,
-        session: this.userService.user,
-      }
-
-      queryParams[key] = FormatString.format(queryParams[key], data);
-    });
 
     return this.genericFormService
       .get(this.config.data.endpoint, {
@@ -844,9 +850,9 @@ export class FilterRelatedComponent implements OnInit, OnDestroy {
         offset: params.offset,
         limit: this.config.multiple ? -1 : this.limit,
         fields: Array.isArray(this.config.data.value)
-          ? this.config.data.value
-          : [],
-        ...queryParams
+          ? [...this.config.data.value, this.config.data.key]
+          : [this.config.data.key],
+        ...this.parseQueryParams(this.config.queryParams),
       })
       .pipe(
         takeUntil(
@@ -916,6 +922,22 @@ export class FilterRelatedComponent implements OnInit, OnDestroy {
       }
     });
   }
+
+  private parseQueryParams(params: Record<string, string>, value = '') {
+    const queryParams: Record<string, string> = params || {};
+
+    Object.keys(queryParams).forEach((key) => {
+      const data = {
+        company_settings: this.siteSettingsService.settings,
+        session: this.userService.user,
+        [this.config.data.key]: value,
+      };
+
+      queryParams[key] = FormatString.format(queryParams[key], data);
+    });
+
+    return queryParams;
+  }
 }
 
 class FilterOption {
@@ -939,10 +961,15 @@ class FilterOption {
                 payload,
                 countryCode,
                 lang as Language
-              ) || payload[data.value],
-          key: payload[data.key],
+              ) || Array.isArray(data.value)
+            ? data.value.reduce(
+                (acc: string, curr: any) => payload[curr] || acc,
+                ''
+              )
+            : payload[data.value],
+          key: payload[data.key]?.toString(),
         };
-    this.key = useProperty ? payload : payload[data.key];
+    this.key = useProperty ? payload : payload[data.key]?.toString();
     this.control = new FormControl(!!value && value.includes(this.key));
   }
 
