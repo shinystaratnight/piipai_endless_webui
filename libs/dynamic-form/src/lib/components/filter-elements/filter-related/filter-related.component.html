@@ -13,7 +13,7 @@
           {{ 'status.selected-items' | translate: { count: value.length } }}
         </span>
         <span class="value" *ngIf="value.length === 1">
-          {{ value[0].label }}
+          {{ value[0].label | translate }}
         </span>
       </ng-container>
 
@@ -75,7 +75,7 @@
                 [checked]="option.control.value"
               ></webui-checkbox>
 
-              {{ option.value.label }}
+              {{ option.value.label | translate }}
             </label>
           </li>
         </ul>
@@ -90,7 +90,7 @@
       <ng-container *ngIf="selectedOptions$ | async as options">
         <div *ngIf="options.length" class="filter-values">
           <span class="badge badge-outline" *ngFor="let option of options">
-            {{ option.value.label }}
+            {{ option.value.label | translate }}
 
             <!-- <fa-icon
               [icon]="['fas', 'times']"
