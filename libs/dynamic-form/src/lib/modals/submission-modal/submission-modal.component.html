@@ -124,6 +124,8 @@
       <div [ngbNavOutlet]="nav" class="mt-4"></div>
 
       <footer class="footer" *ngIf="timeSheet.status !== 7">
+        <webui-form-errors [formId]="formId"></webui-form-errors>
+
         <button
           class="btn submit-btn"
           [disabled]="formInvalid || (processing$ | async)"
