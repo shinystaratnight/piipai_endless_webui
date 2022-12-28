@@ -10,42 +10,37 @@
       <li
         class="dates-item"
         *ngFor="let item of config.list"
-        [class.text-primary]="query === getListElementQuery(item.query)"
-        (click)="selectQuery(getListElementQuery(item.query))"
       >
         <a href="#">{{ getTranslateKey(item.key) | translate: {"Default": item.label} }}</a>
       </li>
     </ul>
-    <div class="input-group datepicker" *ngFor="let input of config.input">
+    <!-- <div class="input-group datepicker" *ngFor="let input of config.input">
       <ng-container *ngIf="!mobileDevice">
         <input
-          class="form-control filter-date"
-          #d
+          class="form-control"
           [class.active]="data[input.query]"
           [attr.name]="input.query"
           [(ngModel)]="data[input.query]"
         />
         <div class="placeholder">
-          {{ getTranslateKey(input.key) | translate: {"Default": input.label} }}
+          {{ 'from' | translate }}
         </div>
       </ng-container>
 
       <ng-container *ngIf="mobileDevice">
         <input
           type="date"
-          class="form-control filter-date mobile"
+          class="form-control"
           [class.active]="data[input.query]"
-          pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}"
-          placeholder=""
           [attr.name]="input.query"
           [(ngModel)]="data[input.query]"
           (ngModelChange)="changeDateOnMobile()"
         />
         <div class="placeholder">
-          {{ getTranslateKey(input.key) | translate: {"Default": input.label} }}
+          {{ 'to' | translate }}
         </div>
       </ng-container>
-    </div>
-    <div class="delimiter"></div>
+    </div> -->
+    <!-- <div class="delimiter"></div> -->
   </div>
 </div>
