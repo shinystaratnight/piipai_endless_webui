@@ -11,7 +11,7 @@ export interface RelatedFilterOptions {
   display?: string | string[];
   parameter?: string;
   property?: string; // For not list response
-  queryParams?: Record<string, string>
+  queryParams?: Record<string, string>;
 }
 
 export const Related = 'related';
@@ -40,10 +40,18 @@ export class RelatedFilter implements FilterModel {
     this.default = payload.defaultValue || null;
     this.multiple = payload.multiple || false;
     this.data = {
-      value: payload.display || '__str__',
+      value: this.parseDisplay(payload.display),
       endpoint: payload.endpoint,
       key: payload.parameter || 'id',
     };
     this.queryParams = payload.queryParams;
+  }
+
+  private parseDisplay(display?: string | string[]) {
+    if (!display) {
+      return ['__str__'];
+    }
+
+    return Array.isArray(display) ? display : [display];
   }
 }

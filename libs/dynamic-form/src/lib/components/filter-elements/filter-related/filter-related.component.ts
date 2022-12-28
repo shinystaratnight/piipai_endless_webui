@@ -380,9 +380,7 @@ export class FilterRelatedComponent implements OnInit, OnDestroy {
         search: params.search,
         offset: params.offset,
         limit: this.config.multiple ? -1 : this.limit,
-        fields: Array.isArray(this.config.data.value)
-          ? [...this.config.data.value, this.config.data.key]
-          : [this.config.data.key],
+        fields: this.parseFields(),
         ...this.parseQueryParams(this.config.queryParams),
       })
       .pipe(
@@ -469,6 +467,25 @@ export class FilterRelatedComponent implements OnInit, OnDestroy {
 
     return queryParams;
   }
+
+  private parseFields(): string[] {
+    const { value, key } = this.config.data;
+    const keys = [key];
+
+    value.forEach((el: string) => {
+      if (this.hasFormatBraces(el)) {
+        // TODO: get keys from format string
+      } else {
+        keys.push(el);
+      }
+    });
+
+    return keys;
+  }
+
+  private hasFormatBraces(value: string) {
+    return value.includes('{') && value.includes('}');
+  }
 }
 
 class FilterOption {
@@ -486,18 +503,7 @@ class FilterOption {
           key: payload,
         }
       : {
-          label: this.hasFormatBraces(data.value)
-            ? FormatString.format(data.value, payload)
-            : checkAndReturnTranslation(
-                payload,
-                countryCode,
-                lang as Language
-              ) || Array.isArray(data.value)
-            ? data.value.reduce(
-                (acc: string, curr: any) => payload[curr] || acc,
-                ''
-              )
-            : payload[data.value],
+          label: this.parseLabel(data.value, payload, countryCode, lang),
           key: payload[data.key]?.toString(),
         };
     this.key = useProperty ? payload : payload[data.key]?.toString();
@@ -506,5 +512,24 @@ class FilterOption {
 
   private hasFormatBraces(value: string) {
     return value.includes('{') && value.includes('}');
+  }
+
+  private parseLabel(
+    display: string[],
+    data: any,
+    countryCode: string,
+    lang: string
+  ) {
+    return display.reduce((acc: string, curr: any) => {
+      if (this.hasFormatBraces(curr)) {
+        return FormatString.format(curr, data) || acc;
+      }
+
+      return (
+        checkAndReturnTranslation(data, countryCode, lang as Language) ||
+        data[curr] ||
+        acc
+      );
+    }, '');
   }
 }
