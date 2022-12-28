@@ -1,30 +1,43 @@
 <div class="group">
   <div class="group__content">
-    <h5 class="group__label mt-4">{{'enter_payment_information.label' | translate}}</h5>
+    <h5 class="group__label mt-4 mb-0">
+      {{ 'enter_payment_information.label' | translate }}
+    </h5>
 
-    <div *ngIf="cardExist && !newCard" class="d-flex align-items-center">
+    <div
+      *ngIf="cardInformation?.payment_information_submited && !newCard"
+      class="d-flex align-items-center gap-3"
+    >
+      <p *ngIf="cardInformation?.card_number_last4" class="description mb-0">
+        **** **** **** {{ cardInformation?.card_number_last4 }}
+      </p>
+
       <button class="btn btn-primary" (click)="showCardForm()">
-        {{'action.add_new_cc' | translate}}
+        {{ 'action.add_new_cc' | translate }}
       </button>
     </div>
 
     <form
       (submit)="checkCard($event)"
       class="me-3"
-      [hidden]="cardExist && !newCard"
+      [hidden]="cardInformation?.payment_information_submited && !newCard"
     >
       <div class="form-row flex-grow-1 me-3" [class.submited]="saving">
         <div id="card-element"></div>
-        <div id="card-errors" role="alert">{{ error }}</div>
+        <div id="card-errors" class="pt-2 text-danger" role="alert">
+          {{ error }}
+        </div>
       </div>
 
-      <button class="btn btn-primary align-self-start mt-2">{{'action.save_cc' | translate}}</button>
+      <button class="btn btn-primary align-self-start mt-2">
+        {{ 'action.save_cc' | translate }}
+      </button>
       <button
-        *ngIf="cardExist"
+        *ngIf="cardInformation?.payment_information_submited"
         class="btn btn-default align-self-start mt-1 ms-2"
         (click)="newCard = false"
       >
-        {{'action.cancel' | translate}}
+        {{ 'action.cancel' | translate }}
       </button>
     </form>
   </div>

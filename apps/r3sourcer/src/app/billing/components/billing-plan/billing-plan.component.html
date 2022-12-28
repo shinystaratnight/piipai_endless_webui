@@ -54,7 +54,7 @@
         type="button"
         class="btn btn-primary"
         *ngIf="!currentPlan"
-        [disabled]="!cardExist"
+        [disabled]="!cardInformation?.payment_information_submited"
         (click)="setPlan()"
       >
         {{ 'action.subscribe' | translate }}
