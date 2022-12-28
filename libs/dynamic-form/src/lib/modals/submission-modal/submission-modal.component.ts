@@ -9,12 +9,13 @@ import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { TimeSheet, TimesheetRate } from '@webui/data';
 import { DatepickerType, DropdownOption } from '@webui/form-controls';
 import { Icon, IconSize } from '@webui/icon';
-import { GenericFormService } from '../../services';
-import { BehaviorSubject, forkJoin, Subject } from 'rxjs';
-import { finalize, switchMap, takeUntil } from 'rxjs/operators';
+import { FormMode, FormService, GenericFormService } from '../../services';
+import { BehaviorSubject, forkJoin, Subject, throwError } from 'rxjs';
+import { catchError, finalize, switchMap, takeUntil } from 'rxjs/operators';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Modal, Status } from '../modal/modal.component';
 import { Endpoints } from '@webui/models';
+import { IFormErrors } from '../../models';
 
 const isHourlyWork = (name: string): boolean => {
   return name.toLocaleLowerCase().replace(/ /g, '_').includes('hourly_work');
@@ -46,6 +47,7 @@ export class SubmissionModalComponent
     time: 'tab-time',
     activity: 'tab-activity',
   };
+  public formId!: number;
 
   public get activitiesForm(): FormGroup[] {
     return (this.formGroup.get('activities') as FormArray)
@@ -82,7 +84,8 @@ export class SubmissionModalComponent
   constructor(
     private apiService: GenericFormService,
     private cd: ChangeDetectorRef,
-    modal: NgbActiveModal
+    modal: NgbActiveModal,
+    private formService: FormService
   ) {
     super(modal);
   }
@@ -124,6 +127,11 @@ export class SubmissionModalComponent
     if (this.timeSheet.status === 7) {
       this.formGroup.disable();
     }
+
+    this.formId = this.formService.registerForm(
+      Endpoints.TimesheetCandidate,
+      FormMode.Edit
+    );
   }
 
   public ngOnDestroy() {
@@ -155,6 +163,7 @@ export class SubmissionModalComponent
   }
 
   public submitForm(): void {
+    const form = this.formService.getForm(this.formId);
     const creationRequests = this.formGroup.value.activities.map(
       (activity: any) => {
         const timesheetRate = new TimesheetRate(activity);
@@ -184,11 +193,18 @@ export class SubmissionModalComponent
 
     this.processing$.next(true);
 
+    form.setErrors({} as IFormErrors);
+
     if (creationRequests.length) {
       forkJoin(creationRequests)
         .pipe(
           switchMap(() => submitRequest),
-          finalize(() => this.processing$.next(false))
+          finalize(() => this.processing$.next(false)),
+          catchError((err) => {
+            form.setErrors(err.errors);
+
+            return throwError(() => err);
+          })
         )
         .subscribe(() => {
           this.close(Status.Success);
