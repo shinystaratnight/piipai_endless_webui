@@ -42,7 +42,10 @@ export class CheckCardComponent implements OnInit {
   public newCard!: boolean;
 
   @Input()
-  public cardExist!: boolean;
+  public cardInformation?: {
+    payment_information_submited: true;
+    card_number_last4: null | string;
+  };
 
   @Output()
   public cardChange = new EventEmitter();
@@ -85,27 +88,28 @@ export class CheckCardComponent implements OnInit {
         this.error = result.error.message;
         this.saving = false;
       } else {
-        this.sendToken(result.token.id);
+        console.log(result);
+        this.sendToken(result.token.id, result.token.card.last4);
       }
     });
   }
 
-  public sendToken(token: string) {
-    if (this.cardExist) {
+  public sendToken(token: string, last4: string) {
+    if (this.cardInformation?.payment_information_submited) {
       this.billingService.changeCard({
-        source: token
+        source: token,
+        last4,
       }).subscribe(() => {
         this.saving = false;
-        this.cardExist = true;
         this.newCard = false;
         this.cardChange.emit();
       });
     } else {
       this.billingService.setCardInfo({
-        source: token
+        source: token,
+        last4,
       }).subscribe(() => {
         this.saving = false;
-        this.cardExist = true;
         this.newCard = false;
         this.cardChange.emit();
       });

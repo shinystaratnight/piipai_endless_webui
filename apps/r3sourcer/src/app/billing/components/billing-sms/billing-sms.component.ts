@@ -20,7 +20,7 @@ import { ToastService, MessageType } from '@webui/core';
 })
 export class BillingSmsComponent implements OnInit, OnDestroy {
   @Input() currency = 'USD';
-  @Input() cardExist!: boolean;
+  @Input() cardExist?: boolean;
 
   public minChargeAmount = 20;
   public smsBalance?: ISmsBalance;

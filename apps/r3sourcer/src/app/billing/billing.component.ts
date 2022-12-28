@@ -5,7 +5,12 @@ import { BillingService } from './services/billing-service';
 
 import { Plan, BillingSubscription } from './models';
 
-import { ToastService, EventService, SiteSettingsService, MessageType } from '@webui/core';
+import {
+  ToastService,
+  EventService,
+  SiteSettingsService,
+  MessageType,
+} from '@webui/core';
 import { Subscription } from 'rxjs';
 import { User } from '@webui/models';
 
@@ -13,13 +18,16 @@ import { User } from '@webui/models';
   selector: 'webui-billing-page',
   templateUrl: './billing.component.html',
   styleUrls: ['./billing.component.scss'],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
 })
 export class BillingComponent implements OnInit, OnDestroy {
   public user!: User;
   public pagesList!: any[];
   public currentPlan?: BillingSubscription;
-  public checkInformation: boolean;
+  public checkInformation?: {
+    payment_information_submited: true;
+    card_number_last4: null | string;
+  };
   public saveProcess!: boolean;
   public cancelProcess!: boolean;
   public plans!: Plan[];
@@ -35,48 +43,45 @@ export class BillingComponent implements OnInit, OnDestroy {
     private toastr: ToastService,
     private eventService: EventService,
     private siteSettings: SiteSettingsService,
-    private toastrService: ToastService,
-  ) {
-    this.checkInformation = true;
-  }
+    private toastrService: ToastService
+  ) {}
 
   public ngOnInit() {
     this.user = this.route.snapshot.data['user'];
     this.pagesList = this.route.snapshot.data['pagesList'];
-    const subscriptions: any[] = this.route.snapshot.data['subscription'].subscriptions;
+    const subscriptions: any[] =
+      this.route.snapshot.data['subscription'].subscriptions;
 
     this.currency = this.siteSettings.settings.currency;
 
-    this.currentPlan = subscriptions && subscriptions.find(el => el.active);
+    this.currentPlan = subscriptions && subscriptions.find((el) => el.active);
 
     this.checkPaymentInformation();
 
     this.setActivePage(this.pagesList, `${this.router.url}/`);
 
-    this.billingService
-      .getSubscriptionTypes()
-      .subscribe((res) => {
-        if (Array.isArray(res)) {
-          return;
+    this.billingService.getSubscriptionTypes().subscribe((res) => {
+      if (Array.isArray(res)) {
+        return;
+      }
+
+      const plans: Plan[] = [];
+
+      for (const plan of res.subscription_types) {
+        if (plan.table_text) {
+          plan.table = plan.table_text.split(';');
         }
 
-        const plans: Plan[] = []
+        plans.push({
+          ...plan,
+          procent: plan.percentage_discount
+            ? (100 - plan.percentage_discount) / 100
+            : 1,
+        });
+      }
 
-        for (const plan of res.subscription_types) {
-          if (plan.table_text) {
-            plan.table = plan.table_text.split(';');
-          }
-
-          plans.push({
-            ...plan,
-            procent: plan.percentage_discount
-              ? (100 - plan.percentage_discount) / 100
-              : 1
-          })
-        }
-
-        this.plans = plans;
-      });
+      this.plans = plans;
+    });
 
     this.subscriptions.push(
       this.eventService.event$.subscribe(() => {
@@ -88,7 +93,7 @@ export class BillingComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.subscriptions.forEach(sub => sub.unsubscribe());
+    this.subscriptions.forEach((sub) => sub.unsubscribe());
   }
 
   // public updateNavigation(role: string) {
@@ -108,9 +113,15 @@ export class BillingComponent implements OnInit, OnDestroy {
         this.saveProcess = false;
 
         if (changed) {
-          this.toastr.sendMessage('Subscription has been updated', MessageType.Success);
+          this.toastr.sendMessage(
+            'Subscription has been updated',
+            MessageType.Success
+          );
         } else {
-          this.toastr.sendMessage('Subscription has been created', MessageType.Success);
+          this.toastr.sendMessage(
+            'Subscription has been created',
+            MessageType.Success
+          );
         }
 
         this.getSubscriptionInformation();
@@ -130,22 +141,22 @@ export class BillingComponent implements OnInit, OnDestroy {
   public checkPaymentInformation() {
     this.billingService
       .checkPaymentInformation()
-      .subscribe(
-        (data: any) =>
-          (this.checkInformation = data.payment_information_submited)
-      );
+      .subscribe((data) => (this.checkInformation = data));
   }
 
   public cancelPlan() {
     this.billingService.cancelSubscription().subscribe(() => {
       this.currentPlan = undefined;
-      this.toastr.sendMessage('Subscription has been canceled', MessageType.Success);
+      this.toastr.sendMessage(
+        'Subscription has been canceled',
+        MessageType.Success
+      );
     });
   }
 
   public setActivePage(pages: any[], path: string) {
     let active = false;
-    pages.forEach(page => {
+    pages.forEach((page) => {
       if (path === page.url && page.url !== '/') {
         active = true;
         page.active = true;
@@ -158,7 +169,10 @@ export class BillingComponent implements OnInit, OnDestroy {
   }
 
   onCardChange() {
-    this.toastrService.sendMessage('message.credit_card_updated', MessageType.Success);
+    this.toastrService.sendMessage(
+      'message.credit_card_updated',
+      MessageType.Success
+    );
     this.checkPaymentInformation();
   }
 }
