@@ -17,7 +17,7 @@
         {{
           getTranslationKey(config.translateKey || config.key, 'label')
             | translate: { Default: config.templateOptions?.label }
-        }}:
+        }}
       </label>
 
       <webui-info
@@ -164,7 +164,7 @@
         {{
           getTranslationKey(config.key, 'label')
             | translate: { Default: config.templateOptions?.label }
-        }}:
+        }}
       </label>
       <webui-info
         *ngIf="config.templateOptions?.description"
