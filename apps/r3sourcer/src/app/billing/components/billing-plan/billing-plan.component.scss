@@ -30,8 +30,9 @@ h6 {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
+    gap: 1rem;
 
-    margin: 1rem auto;
+    margin-top: 1rem;
   }
 
   &-item {
@@ -50,14 +51,14 @@ h6 {
 
     cursor: pointer;
 
+    transition: box-shadow 0.2s ease-in;
+
     &:hover {
-      box-shadow: 0 0 10px #333;
+      box-shadow: 0 0 1rem var(--content-color);
     }
 
-    &.active {
-      i {
-        visibility: visible;
-      }
+    &.active:not(:hover) {
+      box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--success-color);
     }
   }
 
@@ -175,15 +176,6 @@ h6 {
   }
 }
 
-p.message {
-  text-align: center;
-  color: rgba(#333, 0.5);
-
-  a {
-    color: $primary;
-  }
-}
-
 .buttons {
   text-align: center;
 }
@@ -220,17 +212,12 @@ p.message {
 
   &__item {
     display: flex;
-    align-items: center;
-  }
+    gap: 0.5rem;
 
-  &__icon {
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    width: 12px;
-    height: 12px;
-    margin-right: 0.25rem;
-    font-size: 10px;
+    fa-icon {
+      position: relative;
+      top: 2px;
+    }
   }
 }
 .action-button {
@@ -280,4 +267,36 @@ p.message {
   display: flex;
   align-items: center;
   gap: 1rem;
+}
+
+.footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+
+  p {
+    margin-bottom: 0;
+
+    a {
+      color: var(--secondary-color);
+      text-decoration: underline;
+    }
+  }
+
+  fa-icon {
+    font-size: 1rem;
+  }
+
+  &:not(:empty) {
+    margin-top: 1rem;
+  }
+
+  .btn {
+    margin-top: 1rem;
+  }
+}
+
+.text-warning {
+  color: var(--warning-color);
 }
