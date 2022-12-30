@@ -1150,5 +1150,6 @@
     "status.open": "Avatud",
     "status.void": "Tühistatud",
     "select_plan.subLabel": "Plaani valimine võtab teie krediitkaardikontolt raha kohe",
-    "subscription_details.label": "Plaani andmed"
+    "subscription_details.label": "Plaani andmed",
+    "trial_subscription_expires": "Trial subscription expires <b>{{date}}</b>_ET"
 }

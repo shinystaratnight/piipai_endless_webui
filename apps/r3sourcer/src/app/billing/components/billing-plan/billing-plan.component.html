@@ -3,13 +3,15 @@
     <h5 class="header group__label">
       <span>{{ 'subscription_details.label' | translate }}</span>
 
-      <button type="button" class="btn hov-opacity" (click)="changePlan()">
-        <fa-icon icon="pencil-alt" class="text-success"></fa-icon>
-      </button>
+      <ng-container *ngIf="currentPlan">
+        <button type="button" class="btn hov-opacity" (click)="changePlan()">
+          <fa-icon icon="pencil-alt" class="text-success"></fa-icon>
+        </button>
 
-      <button type="button" class="btn hov-opacity" (click)="cancelPlan()">
-        <fa-icon icon="trash" class="text-danger"></fa-icon>
-      </button>
+        <button type="button" class="btn hov-opacity" (click)="cancelPlan()">
+          <fa-icon icon="trash" class="text-danger"></fa-icon>
+        </button>
+      </ng-container>
     </h5>
 
     <ng-container *ngIf="currentPlan">
@@ -49,11 +51,19 @@
       </div>
     </ng-container>
 
-    <div>
+    <div class="actions" *ngIf="!currentPlan">
+      <p
+        class="secondary-title"
+        [innerHTML]="
+          'trial_subscription_expires'
+            | translate: { date: trialExpires }
+            | safeHtml
+        "
+      ></p>
+
       <button
         type="button"
         class="btn btn-primary"
-        *ngIf="!currentPlan"
         [disabled]="!cardInformation?.payment_information_submited"
         (click)="setPlan()"
       >

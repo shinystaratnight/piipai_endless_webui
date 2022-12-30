@@ -1150,5 +1150,6 @@
     "status.open": "",
     "status.void": "",
     "select_plan.subLabel": "",
-    "subscription_details.label": ""
+    "subscription_details.label": "",
+    "trial_subscription_expires": "Trial subscription expires <b>{{date}}</b>_FI"
 }

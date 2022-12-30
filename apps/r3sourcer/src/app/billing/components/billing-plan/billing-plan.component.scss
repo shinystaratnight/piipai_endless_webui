@@ -275,3 +275,9 @@ p.message {
   color: $secondary-color;
   margin-bottom: 0;
 }
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
