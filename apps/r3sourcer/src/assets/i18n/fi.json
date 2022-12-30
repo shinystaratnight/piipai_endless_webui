@@ -1126,7 +1126,6 @@
     "select_plan.label": "",
     "employees": "",
     "message.max_employees": "",
-    "action.saving": "",
     "sms_credit_details.label": "",
     "sms_credit_details.charge_rate": "",
     "sms_credit_details.auto_top_up": "",
@@ -1151,5 +1150,6 @@
     "status.void": "",
     "select_plan.subLabel": "",
     "subscription_details.label": "",
-    "trial_subscription_expires": "Trial subscription expires <b>{{date}}</b>_FI"
+    "trial_subscription_expires": "Trial subscription expires <b>{{date}}</b>_FI",
+    "change_plan_warning": "If you click that save button below, the amount will be deducted from your bank account to activate a subscription_FI"
 }

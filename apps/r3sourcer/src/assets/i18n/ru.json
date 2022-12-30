@@ -1126,7 +1126,6 @@
     "select_plan.label": "Выберите свой план",
     "employees": "Сотрудники",
     "message.max_employees": "Пожалуйста, свяжитесь с нашим торговым персоналом для получения индивидуального предложения",
-    "action.saving": "Экономия",
     "sms_credit_details.label": "Смс реквизиты кредита",
     "sms_credit_details.charge_rate": "Тариф за SMS",
     "sms_credit_details.auto_top_up": "Автоматическое пополнение баланса",
@@ -1151,5 +1150,6 @@
     "status.void": "Недействительный",
     "select_plan.subLabel": "При выборе плана с вашего счета кредитной карты сразу же снимаются деньги",
     "subscription_details.label": "Детали подписки",
-    "trial_subscription_expires": "Trial subscription expires <b>{{date}}</b>_RU"
+    "trial_subscription_expires": "Trial subscription expires <b>{{date}}</b>_RU",
+    "change_plan_warning": "If you click that save button below, the amount will be deducted from your bank account to activate a subscription_RU"
 }

@@ -1126,7 +1126,6 @@
     "select_plan.label": "Select your plan",
     "employees": "Employees",
     "message.max_employees": "Please contact our sales staff for customized offer",
-    "action.saving": "Saving",
     "sms_credit_details.label": "Sms credit details",
     "sms_credit_details.charge_rate": "Charge rate for SMS",
     "sms_credit_details.auto_top_up": "Auto top-up",
@@ -1152,5 +1151,6 @@
     "status.void": "Void",
     "select_plan.subLabel": "Selecting the plan charges your credit card account immediately",
     "subscription_details.label": "Subscription details",
-    "trial_subscription_expires": "Trial subscription expires <b>{{date}}</b>"
+    "trial_subscription_expires": "Trial subscription expires <b>{{date}}</b>",
+    "change_plan_warning": "If you click that save button below, the amount will be deducted from your bank account to activate a subscription"
 }
