@@ -1,8 +1,8 @@
 import { Component, EventEmitter, Output, Input, ViewChild, OnChanges, SimpleChanges, OnDestroy, ElementRef } from '@angular/core';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { UserService } from '@webui/core';
 
 import { Plan, BillingSubscription } from '../../models';
-import { BillingService } from '../../services/billing-service';
 
 @Component({
   selector: 'webui-billing-plan',
@@ -28,7 +28,11 @@ export class BillingPlanComponent implements OnChanges, OnDestroy {
   @Output() public selectedPlan = new EventEmitter();
   @Output() public cancelingPlan = new EventEmitter();
 
-  constructor(private modalService: NgbModal, private billingService: BillingService) {}
+  constructor(private modalService: NgbModal, private userService: UserService) {}
+
+  get trialExpires() {
+    return this.userService.user?.data.end_trial_date;
+  }
 
   public ngOnChanges(changes: SimpleChanges) {
     if (changes['saveProcess']) {
