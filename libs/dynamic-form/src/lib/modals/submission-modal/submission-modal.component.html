@@ -10,74 +10,82 @@
       class="form"
       (ngSubmit)="submitForm()"
     >
-      <div class="form-tabs">
-        <ul ngbNav #nav="ngbNav" [(activeId)]="activeTab">
-          <li [ngbNavItem]="tabs.time">
-            <a ngbNavLink>
-              {{ 'time' | translate }}
-            </a>
-            <ng-template ngbNavContent>
-              <header class="times__header">
-                <h4 class="section-title">{{ 'time' | translate }}</h4>
+      <ng-container *ngIf="hasActivities">
+        <div class="form-tabs">
+          <ul ngbNav #nav="ngbNav" [(activeId)]="activeTab">
+            <li
+              [ngbNavItem]="tabs.time"
+              [class.disabled]="timesDisabled"
+              [disabled]="timesDisabled"
+            >
+              <a ngbNavLink>
+                {{ 'time' | translate }}
+              </a>
+              <ng-template ngbNavContent>
+                <header class="times__header">
+                  <h4 class="section-title">{{ 'time' | translate }}</h4>
 
-                <span class="total-time">{{ timeSheet.totalTime }}</span>
-              </header>
+                  <span class="total-time">{{ timeSheet.totalTime }}</span>
+                </header>
 
-              <div class="form-row">
-                <webui-form-datepicker-control
-                  formControlName="shiftStartedAt"
-                  [type]="DatepickerType.DateTime"
-                  [initialValue]="timeSheet.startedAt"
-                  [timezone]="timeSheet.timezone"
-                  [label]="'start_time' | translate"
-                ></webui-form-datepicker-control>
+                <div class="form-row">
+                  <webui-form-datepicker-control
+                    formControlName="shiftStartedAt"
+                    [type]="DatepickerType.DateTime"
+                    [initialValue]="timeSheet.startedAt"
+                    [timezone]="timeSheet.timezone"
+                    [label]="'start_time' | translate"
+                  ></webui-form-datepicker-control>
 
-                <webui-form-datepicker-control
-                  formControlName="shiftEndedAt"
-                  [initialValue]="timeSheet.endedAt"
-                  [timezone]="timeSheet.timezone"
-                  [type]="DatepickerType.DateTime"
-                  [label]="'end_time' | translate"
-                ></webui-form-datepicker-control>
-              </div>
+                  <webui-form-datepicker-control
+                    formControlName="shiftEndedAt"
+                    [initialValue]="timeSheet.endedAt"
+                    [timezone]="timeSheet.timezone"
+                    [type]="DatepickerType.DateTime"
+                    [label]="'end_time' | translate"
+                  ></webui-form-datepicker-control>
+                </div>
 
-              <div class="form-row">
-                <webui-form-datepicker-control
-                  formControlName="break"
-                  [initialValue]="timeSheet.startedAt"
-                  [timerFrom]="timeSheet.breakStartedAt"
-                  [timerTo]="timeSheet.breakEndedAt"
-                  [type]="DatepickerType.Timer"
-                  [label]="'break_time' | translate"
-                ></webui-form-datepicker-control>
+                <div class="form-row">
+                  <webui-form-datepicker-control
+                    formControlName="break"
+                    [initialValue]="timeSheet.startedAt"
+                    [timerFrom]="timeSheet.breakStartedAt"
+                    [timerTo]="timeSheet.breakEndedAt"
+                    [type]="DatepickerType.Timer"
+                    [label]="'break_time' | translate"
+                  ></webui-form-datepicker-control>
 
-                <span>&nbsp;</span>
-              </div>
-            </ng-template>
-          </li>
+                  <span>&nbsp;</span>
+                </div>
+              </ng-template>
+            </li>
 
-          <li [ngbNavItem]="tabs.activity">
-            <a ngbNavLink>
-              {{ 'activity' | translate }}
-            </a>
-            <ng-template ngbNavContent>
-              <h4 class="section-title">
+            <li
+              [ngbNavItem]="tabs.activity"
+              [class.disabled]="activitiesDisabled"
+              [disabled]="activitiesDisabled"
+            >
+              <a ngbNavLink>
                 {{ 'activity' | translate }}
-                <button
-                  type="button"
-                  class="plus-button"
-                  *ngIf="timeSheet.status !== 7"
-                  [disabled]="!hasActivities"
-                  (click)="addActivityControl()"
-                >
-                  <webui-icon
-                    [icon]="Icon.Plus"
-                    [size]="IconSize.Large"
-                  ></webui-icon>
-                </button>
-              </h4>
+              </a>
+              <ng-template ngbNavContent>
+                <h4 class="section-title">
+                  {{ 'activity' | translate }}
+                  <button
+                    type="button"
+                    class="plus-button"
+                    *ngIf="timeSheet.status !== 7"
+                    [disabled]="!hasActivities"
+                    (click)="addActivityControl()"
+                  >
+                    <webui-icon
+                      [icon]="Icon.Plus"
+                      [size]="IconSize.Large"
+                    ></webui-icon>
+                  </button>
+                </h4>
 
-              <ng-container *ngIf="hasActivities">
                 <div
                   [formGroup]="activity"
                   *ngFor="let activity of activitiesForm; let index = index"
@@ -111,19 +119,19 @@
                     ></webui-form-input-control>
                   </div>
                 </div>
-              </ng-container>
+              </ng-template>
+            </li>
+          </ul>
+        </div>
 
-              <div *ngIf="!hasActivities" class="activities-empty">
-                <webui-loader class="loader"></webui-loader>
-              </div>
-            </ng-template>
-          </li>
-        </ul>
+        <div [ngbNavOutlet]="nav" class="mt-4"></div>
+      </ng-container>
+
+      <div *ngIf="!hasActivities" class="activities-empty">
+        <webui-loader class="loader"></webui-loader>
       </div>
 
-      <div [ngbNavOutlet]="nav" class="mt-4"></div>
-
-      <footer class="footer" *ngIf="timeSheet.status !== 7">
+      <footer class="footer" *ngIf="timeSheet.status !== 7 && hasActivities">
         <webui-form-errors [formId]="formId"></webui-form-errors>
 
         <button
