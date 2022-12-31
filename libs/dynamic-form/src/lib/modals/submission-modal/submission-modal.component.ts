@@ -49,6 +49,9 @@ export class SubmissionModalComponent
   };
   public formId!: number;
 
+  timesDisabled = false;
+  activitiesDisabled = false;
+
   public get activitiesForm(): FormGroup[] {
     return (this.formGroup.get('activities') as FormArray)
       .controls as FormGroup[];
@@ -95,8 +98,10 @@ export class SubmissionModalComponent
     if (this.timeSheet.status !== 4) {
       if (this.timeSheet.endedAt) {
         this.activeTab = this.tabs.time;
+        this.activitiesDisabled = true;
       } else {
         this.activeTab = this.tabs.activity;
+        this.timesDisabled = true;
       }
     }
 
@@ -245,6 +250,16 @@ export class SubmissionModalComponent
   };
 
   private updateTimeSheet(value: any) {
+    if (['shiftEndedAt', 'break'].some((key) => value[key])) {
+      this.activitiesDisabled = true;
+      this.timesDisabled = false;
+    }
+
+    if (value['activities']?.length) {
+      this.timesDisabled = true;
+      this.activitiesDisabled = false;
+    }
+
     if ('shiftStartedAt' in value) {
       this.timeSheet.startedAt = value.shiftStartedAt || null;
     }
@@ -265,13 +280,26 @@ export class SubmissionModalComponent
         limit: -1,
       })
       .subscribe((response) => {
-        const activities = response.results
-          .map((activity: any) => new TimesheetRate(activity))
-          .filter((rate: any) => !isHourlyWork(rate.worktype.__str__));
+        const activities = response.results.map(
+          (activity: any) => new TimesheetRate(activity)
+        );
+
+        const onlyHourlyWork = !activities.filter(
+          (rate: any) => !isHourlyWork(rate.worktype.__str__)
+        ).length;
+
+        if (response.count > 1 && !onlyHourlyWork) {
+          this.activeTab = this.tabs.activity;
+        }
+
         this.formGroup.addControl(
           'activities',
           new FormArray(
-            activities.map((activity: any) => this.getActivityForm(activity))
+            onlyHourlyWork
+              ? []
+              : activities.map((activity: any) =>
+                  this.getActivityForm(activity)
+                )
           )
         );
         this.cd.detectChanges();
