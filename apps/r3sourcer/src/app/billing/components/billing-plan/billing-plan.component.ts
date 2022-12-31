@@ -12,6 +12,7 @@ import {
 import { FormControl } from '@angular/forms';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { UserService } from '@webui/core';
+import { Time } from '@webui/time';
 
 import { Plan, BillingSubscription } from '../../models';
 
@@ -47,6 +48,10 @@ export class BillingPlanComponent implements OnChanges, OnDestroy {
   ) {}
 
   get hasSelectedPlan() {
+    if (!this.currentPlan) {
+      return this._planControl.value;
+    }
+
     return (
       this._planControl.value?.id !== this.currentPlan?.subscription_type ||
       this.currentPlan?.worker_count !== this.workerCount
@@ -54,7 +59,9 @@ export class BillingPlanComponent implements OnChanges, OnDestroy {
   }
 
   get trialExpires() {
-    return this.userService.user?.data.end_trial_date;
+    const expires = Time.parse(this.userService.user?.data.end_trial_date);
+
+    return expires.isAfter(Time.now()) ? expires.format() : null;
   }
 
   public ngOnChanges(changes: SimpleChanges) {

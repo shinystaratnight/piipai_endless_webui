@@ -53,6 +53,7 @@
 
     <div class="actions" *ngIf="!currentPlan">
       <p
+        *ngIf="trialExpires"
         class="secondary-title"
         [innerHTML]="
           'trial_subscription_expires'
