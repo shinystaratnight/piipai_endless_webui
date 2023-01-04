@@ -711,7 +711,7 @@
     "skillrates.label": "Рейтинг навыков",
     "skill_rel.label": "Навык",
     "rate_coefficient_modifier.label": "Модификатор коэффициента скорости",
-    "should_have_subscription": "У вас должна быть активная подписка!",
+    "should_have_subscription": "Add a credit card to unlock this button_RU",
     "contact.myob_card_id.label": "Идентификатор карты MYOB",
     "visa_type.label": "Тип визы",
     "superannuation_fund.label": "Название сверхгодового фонда",
@@ -1126,12 +1126,11 @@
     "select_plan.label": "Выберите свой план",
     "employees": "Сотрудники",
     "message.max_employees": "Пожалуйста, свяжитесь с нашим торговым персоналом для получения индивидуального предложения",
-    "action.saving": "Экономия",
     "sms_credit_details.label": "Смс реквизиты кредита",
     "sms_credit_details.charge_rate": "Тариф за SMS",
     "sms_credit_details.auto_top_up": "Автоматическое пополнение баланса",
-    "on.label": "на сайте",
-    "off.label": "отключен",
+    "on.label": "Вкл",
+    "off.label": "Откл",
     "sms_credit_details.action.configure_auto_charge": "Настройка автозарядки",
     "sms_credit_details.current_balance": "Текущий баланс",
     "sms_credit_details.action.add_funds": "Добавить средства",
@@ -1150,5 +1149,7 @@
     "status.open": "Открыты",
     "status.void": "Недействительный",
     "select_plan.subLabel": "При выборе плана с вашего счета кредитной карты сразу же снимаются деньги",
-    "subscription_details.label": "Детали подписки"
+    "subscription_details.label": "Детали подписки",
+    "trial_subscription_expires": "Trial subscription expires <b>{{date}}</b>_RU",
+    "change_plan_warning": "If you click that save button below, the amount will be deducted from your bank account to activate a subscription_RU"
 }

@@ -1,8 +1,20 @@
-import { Component, EventEmitter, Output, Input, ViewChild, OnChanges, SimpleChanges, OnDestroy, ElementRef } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Output,
+  Input,
+  ViewChild,
+  OnChanges,
+  SimpleChanges,
+  OnDestroy,
+  ElementRef,
+} from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { UserService } from '@webui/core';
+import { Time } from '@webui/time';
 
 import { Plan, BillingSubscription } from '../../models';
-import { BillingService } from '../../services/billing-service';
 
 @Component({
   selector: 'webui-billing-plan',
@@ -18,20 +30,53 @@ export class BillingPlanComponent implements OnChanges, OnDestroy {
   @Input() public workerCount!: number;
   @Input() public plans!: Plan[];
   @Input() public currency = 'USD';
-  @Input() public cardExist!: boolean;
+  @Input() public cardInformation?: {
+    payment_information_submited: true;
+    card_number_last4: null | string;
+  };
 
   @ViewChild('subscription') public modal!: ElementRef;
 
   @Output() public selectedPlan = new EventEmitter();
   @Output() public cancelingPlan = new EventEmitter();
 
-  constructor(private modalService: NgbModal, private billingService: BillingService) {}
+  private _planControl = new FormControl(null);
+
+  constructor(
+    private modalService: NgbModal,
+    private userService: UserService
+  ) {}
+
+  get hasSelectedPlan() {
+    if (!this.currentPlan) {
+      return this._planControl.value;
+    }
+
+    return (
+      this._planControl.value?.id !== this.currentPlan?.subscription_type ||
+      this.currentPlan?.worker_count !== this.workerCount
+    );
+  }
+
+  get trialExpires() {
+    const expires = Time.parse(this.userService.user?.data.end_trial_date);
+
+    return expires.isAfter(Time.now()) ? expires.format() : null;
+  }
 
   public ngOnChanges(changes: SimpleChanges) {
     if (changes['saveProcess']) {
       if (!changes['saveProcess'].currentValue && this.modalRef) {
         this.modalRef.close();
       }
+    }
+
+    if (changes['plans'] && changes['plans'].currentValue) {
+      this._planControl.patchValue(
+        this.plans?.find(
+          (plan) => plan.id === this.currentPlan?.subscription_type
+        )
+      );
     }
 
     this.types = {};
@@ -52,9 +97,13 @@ export class BillingPlanComponent implements OnChanges, OnDestroy {
   }
 
   public planPay(plan: Plan): number {
-    const start: number = plan.start_range_price_annual || plan.start_range_price_monthly;
+    const start: number =
+      plan.start_range_price_annual || plan.start_range_price_monthly;
 
-    const price = start + (this.workerCount - plan.start_range) * (plan.step_change_val * plan.procent);
+    const price =
+      start +
+      (this.workerCount - plan.start_range) *
+        (plan.step_change_val * plan.procent);
 
     return this.workerCount > plan.start_range ? Math.round(price) : start;
   }
@@ -66,25 +115,19 @@ export class BillingPlanComponent implements OnChanges, OnDestroy {
   }
 
   public selectPlan(plan: Plan) {
-    const body = {
-      type: plan.type,
-      worker_count: this.workerCount,
-      price: plan.type === 'monthly' ? this.planPay(plan) : this.planPayYear(plan),
-      changed: this.currentPlan,
-    };
-
-    this.selectedPlan.emit(body);
+    this._planControl.patchValue(plan);
   }
 
   public checkActivePlan(plan: Plan) {
-    if (this.currentPlan) {
-      return this.currentPlan.type === plan.type;
-    }
-    return;
+    const selectedPlan = this._planControl.value;
+
+    return selectedPlan
+      ? selectedPlan.id === plan.id
+      : this.currentPlan?.subscription_type === plan.id;
   }
 
   public setPlan() {
-    if (this.cardExist) {
+    if (this.cardInformation?.payment_information_submited) {
       this.openModal();
     }
   }
@@ -99,5 +142,19 @@ export class BillingPlanComponent implements OnChanges, OnDestroy {
 
   public openModal() {
     this.modalRef = this.modalService.open(this.modal, { backdrop: 'static' });
+  }
+
+  savePlan() {
+    const plan = this._planControl.value;
+
+    const body = {
+      type: plan.type,
+      worker_count: this.workerCount,
+      price:
+        plan.type === 'monthly' ? this.planPay(plan) : this.planPayYear(plan),
+      changed: this.currentPlan,
+    };
+
+    this.selectedPlan.emit(body);
   }
 }

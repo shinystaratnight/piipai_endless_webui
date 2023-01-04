@@ -24,15 +24,22 @@ const filter = {
   provider_representative: createFilter(Type.Related, {
     key: 'provider_representative',
     label: 'Provider representative',
-    endpoint: '/core/companycontacts/?master_company=current'
+    endpoint: Endpoints.CompanyContact,
+    queryParams: {
+      master_company: 'current'
+    }
   }),
   active_states: createFilter(Type.Related, {
     key: 'active_states',
     label: 'State',
-    endpoint:
-      '/core/workflownodes/?company={company_settings.company}&content_type=hr.job&number={filter_value}',
+    endpoint: Endpoints.WorkflowNode,
     display: ['name_after_activation', 'name_before_activation'],
-    parameter: 'number'
+    parameter: 'number',
+    queryParams: {
+      company: '{company_settings.company}',
+      content_type: 'hr.job',
+      number: '{filter_value}'
+    }
   }),
   customer_company: createFilter(Type.Related, {
     key: 'customer_company',

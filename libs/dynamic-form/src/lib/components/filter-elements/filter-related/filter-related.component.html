@@ -1,160 +1,104 @@
 <div class="filter-element">
   <webui-filter-header
-    [label]="config.label"
     [key]="config.key"
-    [resetButton]="!!query"
+    [label]="config.label"
+    [resetButton]="(hasQuery$ | async) || false"
     (resetEvent)="resetFilter()"
-  >
-  </webui-filter-header>
+  ></webui-filter-header>
 
-  <div class="filter-related">
-    <div
-      class="d-flex justify-content-center align-items-center autocomplete-filter"
-      style="position: relative"
+  <div class="content" #content>
+    <div class="form-control autocomplete-value" (click)="onShowOptions()">
+      <ng-container *ngIf="value$ | async as value; else placeholder">
+        <span class="value" *ngIf="value.length > 1">
+          {{ 'status.selected-items' | translate: { count: value.length } }}
+        </span>
+        <span class="value" *ngIf="value.length === 1">
+          {{ value[0].label | translate }}
+        </span>
+      </ng-container>
+
+      <ng-template #placeholder>
+        {{ 'all' | translate }}
+      </ng-template>
+
+      <fa-icon icon="chevron-down"></fa-icon>
+    </div>
+
+    <form
+      [formGroup]="valueGroup"
+      class="autocomplete"
+      *ngIf="active$ | async"
+      [ngStyle]="getStyle()"
     >
-      <div
-        class="form-control autocomplete-value"
-        [class.active]="
-          (multiple && selected && selected.length) ||
-          (!multiple && item && item.data)
-        "
-        (click)="openAutocomplete($event)"
-      >
-        <div style="overflow: hidden; white-space: nowrap">
-          <span *ngIf="multiple && selected.length">
-            {{ 'selected' | translate: { Default: 'Selected' } }}
-          </span>
-          <span *ngIf="multiple && !selected.length">
-            {{ 'select' | translate: { Default: 'Select' } }}
-          </span>
-          <span *ngIf="!multiple && !selected.length && item && !item.data">
-            {{ 'all' | translate: { Default: 'All' } }}
-          </span>
+      <input
+        [formControl]="searchControl"
+        *ngIf="!config.property && !config.multiple"
+        name="search"
+        type="text"
+        class="form-control mb-1"
+      />
 
-          <span *ngIf="multiple && selected.length">
-            {{ selected.length }}
-          </span>
-
-          <span *ngIf="multiple">
-            {{ getTranslateKey() | translate: { Default: config.label } }}
-          </span>
-
-          <span *ngIf="!multiple && item && item.data">
-            {{ item.displayValue }}
-          </span>
-        </div>
-        <fa-icon
-          [icon]="item && item.hideAutocomplete ? 'chevron-down' : 'chevron-up'"
-          class="text-md-white ms-2"
-        ></fa-icon>
-      </div>
+      <ul *ngIf="config.multiple" class="list-group w-100 actions">
+        <li class="default-value">
+          <button class="btn btn-default" type="button" (click)="selectAll()">
+            {{ 'select_all' | translate }}
+          </button>
+          <button class="btn btn-default" type="button" (click)="resetAll()">
+            {{ 'reset_all' | translate }}
+          </button>
+        </li>
+      </ul>
 
       <div
-        class="autocomplete"
-        [hidden]="item ? item.hideAutocomplete : true"
-        [ngStyle]="{ 'top.px': topHeight }"
+        class="autocomplete-list"
+        infinite-scroll
+        [infiniteScrollDistance]="modalScrollDistance"
+        [infiniteScrollThrottle]="modalScrollThrottle"
+        [scrollWindow]="false"
+        (scrolled)="onScrollDown()"
       >
-        <input
-          #search="ngModel"
-          *ngIf="!multiple"
-          name="search"
-          type="text"
-          class="form-control mb-1"
-          [(ngModel)]="searchValue"
-          [ngModelOptions]="{ standalone: true }"
-          (blur)="resetList()"
-        />
-        <ul *ngIf="multiple" class="list-group w-100">
-          <li class="autocomplete-item default-value">
-            <a (click)="selectAll(previewList)">
-              {{ 'select_all' | translate: { Default: 'Select All' } }}
-            </a>
-            <a (click)="resetAll(previewList)">
-              {{ 'reset_all' | translate: { Default: 'Reset All' } }}
-            </a>
+        <ul *ngIf="options$ | async as options">
+          <li
+            class="autocomplete-item form-check"
+            *ngFor="let option of options"
+          >
+            <label class="form-element-checkbox">
+              <input
+                type="checkbox"
+                class="form-check-input"
+                [formControl]="option.control"
+                [hidden]="true"
+              />
+              <webui-checkbox
+                [class.hidden]="!config.multiple"
+                [sm]="true"
+                [checked]="option.control.value"
+              ></webui-checkbox>
+
+              {{ option.value.label | translate }}
+            </label>
           </li>
         </ul>
-
-        <input
-          #search="ngModel"
-          *ngIf="multiple"
-          name="search"
-          type="text"
-          class="form-control mt-1"
-          [(ngModel)]="searchValue"
-          [ngModelOptions]="{ standalone: true }"
-        />
-
-        <div
-          class="autocomplete-list"
-          infinite-scroll
-          [infiniteScrollDistance]="modalScrollDistance"
-          [infiniteScrollThrottle]="modalScrollThrottle"
-          [scrollWindow]="false"
-          (scrolled)="onModalScrollDown()"
-        >
-          <ul
-            *ngIf="!multiple && previewList && previewList.length"
-            class="list-group w-100"
-          >
-            <li
-              class="list-group-item autocomplete-item"
-              (click)="setValue(defaultValue, item)"
-            >
-              {{ 'all' | translate: { Default: 'All' } }}
-            </li>
-            <li
-              class="list-group-item autocomplete-item"
-              *ngFor="let option of previewList"
-              (click)="setValue(option, previewList)"
-            >
-              {{ option.__str__ }}
-            </li>
-          </ul>
-
-          <ul
-            *ngIf="multiple && previewList && previewList.length"
-            class="list-group w-100"
-          >
-            <li
-              class="list-group-item autocomplete-item form-check"
-              *ngFor="let option of previewList; let index = index"
-            >
-              <label class="d-flex align-items-center">
-                <input
-                  type="checkbox"
-                  class="form-check-input"
-                  [(ngModel)]="option.checked"
-                  name="checked"
-                  (ngModelChange)="setValue(option, cacheValue)"
-                  hidden
-                />
-                <webui-checkbox
-                  [sm]="true"
-                  [checked]="option.checked"
-                ></webui-checkbox>
-                {{ option[config.data.value] }}
-              </label>
-            </li>
-          </ul>
-          <div
-            class="d-flex align-items-center justify-content-center"
-            *ngIf="skipScroll && !previewList?.length"
-          >
-            <webui-loader></webui-loader>
-          </div>
-        </div>
       </div>
-    </div>
 
-    <div *ngIf="selected && selected.length" class="filter-values">
-      <span class="badge badge-outline" *ngFor="let value of selected">
-        {{ value[config.data.value] }}
-        <fa-icon
-          [icon]="['fas', 'times']"
-          (click)="removeItem(value)"
-        ></fa-icon>
-      </span>
-    </div>
+      <div *ngIf="loading$ | async" class="spinner-content">
+        <webui-spinner></webui-spinner>
+      </div>
+    </form>
+
+    <ng-container *ngIf="config.multiple">
+      <ng-container *ngIf="selectedOptions$ | async as options">
+        <div *ngIf="options.length" class="filter-values">
+          <span class="badge badge-outline" *ngFor="let option of options">
+            {{ option.value.label | translate }}
+
+            <!-- <fa-icon
+              [icon]="['fas', 'times']"
+              (click)="onRemoveOption(option)"
+            ></fa-icon> -->
+          </span>
+        </div>
+      </ng-container>
+    </ng-container>
   </div>
 </div>

@@ -15,22 +15,31 @@ const filters = {
   status: createFilter(Type.Related, {
     key: 'status',
     label: 'Status',
-    endpoint:
-      '/core/workflownodes/?company={company_settings.company}&content_type=core.companyrel&number={filter_value}',
+    endpoint: Endpoints.WorkflowNode,
     display: ['name_after_activation', 'name_before_activation'],
     parameter: 'number',
-
+    queryParams: {
+      company: '{company_settings.company}',
+      content_type: 'core.companyrel',
+      number: '{filter_value}'
+    }
   }),
   manager: createFilter(Type.Related, {
     key: 'portfolio_manager',
     label: 'Portfolio Manager',
-    endpoint: '/core/companycontacts/?master_company=current'
+    endpoint: Endpoints.CompanyContact,
+    queryParams: {
+      master_company: 'current'
+    }
   }),
   state: createFilter(Type.Related, {
     key: 'state',
     label: 'State',
-    endpoint: '/core/regions/?country=AU',
-    display: 'name'
+    endpoint: Endpoints.Region,
+    display: 'name',
+    queryParams: {
+      country: 'AU'
+    }
   }),
   creditLimit: createFilter(Type.Range, {
     key: 'approved_credit_limit',

@@ -711,7 +711,7 @@
     "skillrates.label": "Oskusmäärad",
     "skill_rel.label": "Oskus",
     "rate_coefficient_modifier.label": "Hinnakordaja koefitsient",
-    "should_have_subscription": "Teil puudub aktiivne litsents",
+    "should_have_subscription": "Add a credit card to unlock this button_ET",
     "contact.myob_card_id.label": "MYOB kaardi ID",
     "visa_type.label": "Viis tüüp",
     "superannuation_fund.label": "Pensionifond",
@@ -1126,7 +1126,6 @@
     "select_plan.label": "Valige oma plaan",
     "employees": "Töötajad",
     "message.max_employees": "Palun võtke ühendust meie müügipersonaliga kohandatud pakkumise saamiseks",
-    "action.saving": "Säästmine",
     "sms_credit_details.label": "Sms-krediidi andmed",
     "sms_credit_details.charge_rate": "SMS-i tasumäär",
     "sms_credit_details.auto_top_up": "Automaatne laadimine",
@@ -1150,5 +1149,7 @@
     "status.open": "Avatud",
     "status.void": "Tühistatud",
     "select_plan.subLabel": "Plaani valimine võtab teie krediitkaardikontolt raha kohe",
-    "subscription_details.label": "Plaani andmed"
+    "subscription_details.label": "Plaani andmed",
+    "trial_subscription_expires": "Trial subscription expires <b>{{date}}</b>_ET",
+    "change_plan_warning": "If you click that save button below, the amount will be deducted from your bank account to activate a subscription_ET"
 }

@@ -5,7 +5,7 @@
     <div class="order-lg-1">
       <div class="billing__section">
         <webui-check-card
-          [cardExist]="checkInformation"
+          [cardInformation]="checkInformation"
           (cardChange)="onCardChange()"
         ></webui-check-card>
 
@@ -17,7 +17,7 @@
           [currentPlan]="currentPlan"
           [workerCount]="(currentPlan && currentPlan.worker_count) || 1"
           [currency]="currency"
-          [cardExist]="checkInformation"
+          [cardInformation]="checkInformation"
           (selectedPlan)="selectPlan($event)"
           (cancelingPlan)="cancelPlan()"
         ></webui-billing-plan>
@@ -26,7 +26,7 @@
 
         <webui-billing-sms
           [currency]="currency"
-          [cardExist]="checkInformation"
+          [cardExist]="checkInformation?.payment_information_submited"
         ></webui-billing-sms>
       </div>
     </div>

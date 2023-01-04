@@ -711,7 +711,7 @@
     "skillrates.label": "Taitoprosentit",
     "skill_rel.label": "Taito",
     "rate_coefficient_modifier.label": "Korkokertoimen muokkaaja",
-    "should_have_subscription": "Sinulla pitäisi olla aktiivinen tilaus!",
+    "should_have_subscription": "Add a credit card to unlock this button_FI",
     "contact.myob_card_id.label": "MYOB-kortin tunnus",
     "visa_type.label": "Visa tyyppi",
     "superannuation_fund.label": "Ylivuotisen rahaston nimi",
@@ -1126,7 +1126,6 @@
     "select_plan.label": "",
     "employees": "",
     "message.max_employees": "",
-    "action.saving": "",
     "sms_credit_details.label": "",
     "sms_credit_details.charge_rate": "",
     "sms_credit_details.auto_top_up": "",
@@ -1150,5 +1149,7 @@
     "status.open": "",
     "status.void": "",
     "select_plan.subLabel": "",
-    "subscription_details.label": ""
+    "subscription_details.label": "",
+    "trial_subscription_expires": "Trial subscription expires <b>{{date}}</b>_FI",
+    "change_plan_warning": "If you click that save button below, the amount will be deducted from your bank account to activate a subscription_FI"
 }

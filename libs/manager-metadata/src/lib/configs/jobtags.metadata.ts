@@ -1,3 +1,6 @@
+import { createFilter, Type } from "@webui/metadata";
+import { Endpoints } from "@webui/models";
+
 const list = {
   fields: [
     {
@@ -65,17 +68,11 @@ const list = {
       }
     ],
     filters: [
-      {
-        data: {
-          key: 'id',
-          endpoint: '/hr/jobs/',
-          value: '__str__'
-        },
+      createFilter(Type.Related, {
         key: 'job',
         label: 'Job',
-        type: 'related',
-        query: 'job'
-      }
+        endpoint: Endpoints.Job
+      })
     ],
     list: 'jobtag',
     editDisable: false,

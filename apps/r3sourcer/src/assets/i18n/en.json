@@ -711,7 +711,7 @@
     "skillrates.label": "Skill Rates",
     "skill_rel.label": "Skill",
     "rate_coefficient_modifier.label": "Rate coefficient modifier",
-    "should_have_subscription": "You should have an active subscription!",
+    "should_have_subscription": "Add a credit card to unlock this button",
     "contact.myob_card_id.label": "MYOB Card ID",
     "visa_type.label": "Visa Type",
     "superannuation_fund.label": "Superannual Fund Name",
@@ -1126,7 +1126,6 @@
     "select_plan.label": "Select your plan",
     "employees": "Employees",
     "message.max_employees": "Please contact our sales staff for customized offer",
-    "action.saving": "Saving",
     "sms_credit_details.label": "Sms credit details",
     "sms_credit_details.charge_rate": "Charge rate for SMS",
     "sms_credit_details.auto_top_up": "Auto top-up",
@@ -1146,10 +1145,12 @@
     "action.add_new_cc": "Add new CC",
     "action.save_cc": "Save credit card",
     "action.cancel": "Cancel",
+    "status.selected-items": "Selected {{count}} items",
     "status.not_paid": "Not paid",
     "status.open": "Open",
     "status.void": "Void",
     "select_plan.subLabel": "Selecting the plan charges your credit card account immediately",
     "subscription_details.label": "Subscription details",
-    "drop_images": "Add images"
+    "trial_subscription_expires": "Trial subscription expires <b>{{date}}</b>",
+    "change_plan_warning": "If you click that save button below, the amount will be deducted from your bank account to activate a subscription"
 }

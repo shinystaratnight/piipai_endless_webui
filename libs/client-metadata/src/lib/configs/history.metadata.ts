@@ -25,17 +25,26 @@ const list = function () {
         createFilter(Type.Related, {
           key: 'candidate',
           label: 'Candidate Contact',
-          endpoint: `${Endpoints.CandidateSupervisor}?supervisor={session.data.contact.contact_id}`
+          endpoint: Endpoints.CandidateSupervisor,
+          queryParams: {
+            supervisor: '{session.data.contact.contact_id}'
+          }
         }),
         createFilter(Type.Related, {
           key: 'jobsite',
           label: 'Jobsite',
-          endpoint: `${Endpoints.Jobsite}?regular_company={session.data.contact.company_id}`
+          endpoint: Endpoints.Jobsite,
+          queryParams: {
+            regular_company: '{session.data.contact.company_id}'
+          }
         }),
         createFilter(Type.Related, {
           key: 'primary_contact',
           label: 'Primary Contact',
-          endpoint: `${Endpoints.CompanyContact}?company={session.data.contact.company_id}`
+          endpoint: Endpoints.CompanyContact,
+          queryParams: {
+            company: '{session.data.contact.company_id}'
+          }
         })
       ])
       .disableEdit()

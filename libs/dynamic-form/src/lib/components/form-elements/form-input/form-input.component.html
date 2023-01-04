@@ -27,7 +27,7 @@
         *ngIf="templateOptions?.icon && templateOptions?.iconParsed"
       >
         &nbsp;({{ templateOptions?.iconParsed }}) </b
-      >:
+      >
     </label>
     <webui-info
       *ngIf="config.templateOptions?.description"
@@ -227,7 +227,7 @@
     [attr.name]="key"
     [attr.placeholder]="
       getTranslationKey('placeholder')
-        | translate: { Default: config.templateOptions?.placeholder || '' }
+        | translate: { Default: config.templateOptions?.placeholder || ' ' }
     "
     [readonly]="config.read_only"
     pattern="{{ config.templateOptions?.pattern }}"
