@@ -1,5 +1,20 @@
 @use 'variables' as *;
 
+.filter-date-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+
+  input.form-control {
+    border-radius: 50px !important;
+    border-right: 1px solid rgba($gray, 0.2);
+
+    &:focus {
+      border-right-color: $gray;
+    }
+  }
+}
+
 .dates {
   display: flex;
   justify-content: center;
@@ -33,4 +48,19 @@
 
 .delimiter {
   display: none;
+}
+
+.datepicker {
+  position: relative;
+
+  input:focus ~ webui-datepicker {
+    display: block;
+  }
+}
+
+webui-datepicker {
+  top: 45px;
+  position: absolute;
+  z-index: 4;
+  // display: none;
 }

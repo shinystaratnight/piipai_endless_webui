@@ -1,14 +1,21 @@
-import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core';
+import { Component, Input, Output, OnInit, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 
-import { DateRangeService, DatepickerService } from '../../services';
 import { DateRange, filterDateFormat } from '@webui/utilities';
 import { Moment } from '@webui/time';
-import { IDateRange } from '../../models';
+import { DatepickerRangeService, DatepickerService } from '@webui/core';
+
+export interface IDateRange {
+  start: Moment;
+  end: Moment;
+  monthStart?: Moment;
+  monthEnd?: Moment;
+}
 
 @Component({
   selector: 'webui-datepicker',
   templateUrl: './datepicker.component.html',
   styleUrls: ['./datepicker.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DatepickerComponent implements OnInit {
   @Input() type!: DateRange;
@@ -38,7 +45,7 @@ export class DatepickerComponent implements OnInit {
   }
 
   constructor(
-    private dateRangeService: DateRangeService,
+    private dateRangeService: DatepickerRangeService,
     private datepickerService: DatepickerService
   ) {}
 

@@ -3,8 +3,10 @@ import { Moment } from '@webui/time';
 
 import { rangeFormats, DateRange, weekEnd, weekStart } from '@webui/utilities';
 
-@Injectable()
-export class DateRangeService {
+@Injectable({
+  providedIn: 'root'
+})
+export class DatepickerRangeService {
   public nextRange(date: Moment, type: DateRange) {
     return this.updateDate(date, type, 1);
   }
