@@ -3,174 +3,124 @@ import {
   OnInit,
   Output,
   EventEmitter,
-  AfterViewInit,
-  ViewChildren,
   OnDestroy,
-  ChangeDetectorRef,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { Subscription } from 'rxjs';
+import { BehaviorSubject, delay, Subject, takeUntil } from 'rxjs';
 
 import { FilterService } from '../../../services';
-import { isTouchDevice } from '@webui/utilities';
+import { DateRange } from '@webui/utilities';
 
 import { date as DateFilter } from '@webui/metadata';
-import { Time } from '@webui/time';
+import { Moment, Time } from '@webui/time';
+import { FormControl } from '@angular/forms';
 
-interface Params {
-  [query: string]: string;
+type Params = Record<string, string>;
+
+class DateControl {
+  private _hasDatepicker = new BehaviorSubject<boolean>(false);
+
+  control = new FormControl('');
+  hasDatepicker$ = this._hasDatepicker.asObservable().pipe(delay(16));
+  date = Time.now();
+  key: string;
+  query: string;
+
+  constructor(key: string, query: string) {
+    this.key = key;
+    this.query = query;
+  }
+
+  showDatepicker() {
+    this._hasDatepicker.next(true);
+  }
+
+  hideDatepicker() {
+    this._hasDatepicker.next(false);
+  }
 }
 
 @Component({
   selector: 'webui-filter-date',
   templateUrl: './filter-date.component.html',
   styleUrls: ['./filter-date.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class FilterDateComponent implements OnInit, AfterViewInit, OnDestroy {
-  public config: any;
-  public data!: Params;
-  public query!: string;
-  public mobileDevice!: boolean;
+export class FilterDateComponent implements OnInit, OnDestroy {
+  private _destroy = new Subject<void>();
+  private _hasQuery = new BehaviorSubject<boolean>(false);
 
+  public config: any;
   public displayFormat = 'DD/MM/YYYY';
   public queryFormat = 'YYYY-MM-DD';
-  public init = false;
-
-  public filterSubscription!: Subscription;
-  public querySubscription!: Subscription;
 
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
 
-  @ViewChildren('d')
-  public d: any;
-  translationKey = '';
+  type = DateRange.Day;
+  currentDate = Time.now();
+  controls?: DateControl[];
+  hasQuery$ = this._hasQuery.asObservable();
 
-  constructor(
-    private fs: FilterService,
-    private route: ActivatedRoute,
-    private cd: ChangeDetectorRef
-  ) {}
+  constructor(private fs: FilterService, private route: ActivatedRoute) {}
 
   public ngOnInit() {
-    this.data = this.createInputs(this.config.input);
-    this.mobileDevice = isTouchDevice();
+    this.controls = this.config.input.map(
+      (el: { key: string; query: string }) => {
+        const item = new DateControl(el.key, el.query);
 
-    if (this.mobileDevice) {
-      this.displayFormat = this.queryFormat;
-    }
+        this.subscribeOnChange(item);
 
-    this.querySubscription = this.route.queryParams.subscribe(() => {
-      setTimeout(() => {
-        if (!(this.cd as any).destroyed) {
-          this.updateFilter();
-        }
-      }, 200);
-    });
-    this.filterSubscription = this.fs.reset.subscribe(() =>
-      this.updateFilter()
+        return item;
+      }
     );
 
-    this.translationKey = `filter.${this.config.key}`;
+    this.route.queryParams.pipe(takeUntil(this._destroy)).subscribe({
+      next: () => this.updateFilter(),
+    });
+
+    this.fs.reset
+      .pipe(takeUntil(this._destroy))
+      .subscribe(() => this.updateFilter(true));
   }
 
   public ngOnDestroy() {
-    this.querySubscription.unsubscribe();
-    this.filterSubscription.unsubscribe();
+    this._destroy.next();
+    this._destroy.complete();
   }
 
-  public ngAfterViewInit() {
-    if (!this.init && this.d) {
-      const dateType = this.mobileDevice ? 'flipbox' : 'calbox';
-      this.init = true;
-      this.d.forEach((el: any) => {
-        (window as any).$(el.nativeElement).datebox({
-          mode: dateType,
-          dateFormat: '%d/%m/%Y',
-          overrideDateFormat: '%d/%m/%Y',
-          useClearButton: true,
-          useCancelButton: true,
-          useHeader: false,
-          useFocus: true,
-          themeDatePick: 'primary',
-          calHighToday: true,
-          overrideCalStartDay: 1,
-          theme: {
-            clearBtn: 'clear'
-          },
-          beforeOpenCallback: () => {
-            setTimeout(() => {
-              this.refreshDatebox(el.nativeElement);
-            }, 200);
-          },
-          closeCallback: () => {
-            const newDate = el.nativeElement.value || '';
-            const prevDate = this.data[el.nativeElement.name] || '';
+  public selectQuery(item: any, event: MouseEvent) {
+    event.preventDefault();
 
-            if (newDate.trim() !== prevDate.trim()) {
-              this.onChange(newDate, el.nativeElement.name);
-            }
-          },
-        });
-        el.nativeElement.readOnly = false;
-      });
-    }
+    const query = DateFilter.element.getQuery(this.config.key, item.query);
+    const queryParams: Params = this.getParams(query);
+
+    this.controls?.forEach((item) => {
+      if (item.query in queryParams) {
+        this.setDate(item, Time.parse(queryParams[item.query]));
+      }
+    });
   }
 
-  public getListElementQuery(type: any) {
-    return DateFilter.element.getQuery(this.config.key, type);
-  }
+  public onChange() {
+    const queryParams: Params = {};
 
-  public changeDateOnMobile() {
-    this.query = this.getQuery(this.data);
-    this.fs.generateQuery(this.query, this.config.key, this.config.listName, {
-      data: this.data,
+    this.controls?.forEach((item) => {
+      if (item.control.value) {
+        queryParams[item.query] = item.date.format(this.queryFormat);
+      }
     });
 
-    this.changeQuery();
-  }
-
-  public refreshDatebox(element: HTMLElement) {
-    if (element) {
-      (window as any).$(element).datebox('refresh');
-    }
-  }
-
-  public selectQuery(query: string) {
-    this.resetData(this.data);
-
-    const params = this.getParams(query);
-    const queryParams = this.convert(undefined, this.queryFormat, params);
-
-    this.data = this.convert(undefined, this.displayFormat, params);
-    this.query = this.getQuery(queryParams);
-
-    this.fs.generateQuery(this.query, this.config.key, this.config.listName, {
-      data: this.data,
-      query,
-    });
-
-    this.changeQuery();
-
-    return false;
-  }
-
-  public onChange(date: string, param: string) {
-    this.query = '';
-    this.data[param] = date;
-
-    const queryParams = this.convert(
-      this.displayFormat,
-      this.queryFormat,
-      this.data
+    this.fs.generateQuery(
+      this.getQuery(queryParams),
+      this.config.key,
+      this.config.listName,
+      {
+        data: this.controls,
+      }
     );
-
-    this.query = this.getQuery(queryParams);
-
-    this.fs.generateQuery(this.query, this.config.key, this.config.listName, {
-      data: this.data,
-    });
 
     this.changeQuery();
   }
@@ -179,70 +129,36 @@ export class FilterDateComponent implements OnInit, AfterViewInit, OnDestroy {
     this.event.emit({
       list: this.config.listName,
     });
+
+    this._hasQuery.next(this.controls?.some((el) => el.control.value) || false);
   }
 
-  public createInputs(inputs: any[]): Params {
-    const params: Record<string, any> = {};
-
-    inputs.forEach((el) => {
-      params[el.query] = '';
-    });
-
-    return params;
-  }
-
-  public resetData(data: { [key: string]: string }) {
-    const keys = Object.keys(data);
-
-    if (keys.length) {
-      keys.forEach((el) => {
-        data[el] = '';
-      });
-    }
-  }
-
-  public updateFilter() {
+  public updateFilter(reset?: boolean) {
     const data = this.fs.getQueries(this.config.listName, this.config.key);
 
     if (data) {
+      this._hasQuery.next(true);
+
       if (data.byQuery) {
-        this.query = data.query;
-        const params = this.getParams(this.query);
-        this.data = this.convert(this.queryFormat, this.displayFormat, params);
+        const params = this.getParams(data.query);
+
+        this.controls?.forEach((item) => {
+          if (item.query in params) {
+            this.setDate(
+              item,
+              Time.parse(params[item.query], { format: this.queryFormat }),
+              false
+            );
+          }
+        });
       } else {
-        this.data = data.data;
-        this.query = data.query;
+        // this.data = data.data;
+        // this.query = data.query;
       }
     } else {
-      this.query = '';
-      this.resetData(this.data);
+      this._hasQuery.next(false);
+      this.resetFilter(reset);
     }
-  }
-
-  public resetFilter() {
-    this.query = '';
-    this.resetData(this.data);
-
-    this.fs.generateQuery(this.query, this.config.key, this.config.listName);
-    this.changeQuery();
-  }
-
-  public convert(format?: string, to?: string, params?: Params) {
-    //tslint:disable-line
-    const newParams = { ...params };
-
-    Object.keys(newParams).forEach((el) => {
-      newParams[el] = newParams[el]
-        ? this.parseDateValue(newParams[el], format).format(to)
-        : '';
-    });
-
-    return newParams;
-  }
-
-  public parseDateValue(date: string, format?: string) {
-    //tslint:disable-line
-    return format ? Time.parse(date, { format }) : Time.parse(date);
   }
 
   public getParams(query: string): Params {
@@ -273,5 +189,26 @@ export class FilterDateComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public getTranslateKey(type: string): string {
     return `filter.${this.config.key}.${type}`;
+  }
+
+  resetFilter(reset = false) {
+    this.controls?.forEach((item) => {
+      item.date = Time.now();
+      item.control.patchValue('', { emitEvent: !reset });
+    });
+  }
+
+  setDate(item: DateControl, date: Moment, emitEvent = true) {
+    const queryDate = date.format(this.displayFormat);
+
+    item.date = date;
+    item.control.patchValue(queryDate, { emitEvent });
+    item.hideDatepicker();
+  }
+
+  private subscribeOnChange(item: DateControl) {
+    item.control.valueChanges.pipe(takeUntil(this._destroy)).subscribe(() => {
+      this.onChange();
+    });
   }
 }

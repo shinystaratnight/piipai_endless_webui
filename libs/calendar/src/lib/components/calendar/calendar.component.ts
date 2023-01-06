@@ -41,7 +41,6 @@ import {
 } from '@webui/utilities';
 import { filters } from './calendar-filters.meta';
 
-import { DatepickerComponent } from '../datepicker/datepicker.component';
 import {
   UserService,
   EventService,
@@ -52,6 +51,7 @@ import { Endpoints, ITranslationPayload } from '@webui/models';
 import { finalize } from 'rxjs/operators';
 import { Moment, Time } from '@webui/time';
 import { IDateRange, Status } from '../../models';
+import { DatepickerComponent } from '@webui/shared';
 
 type StatusFilter = {
   type: Status;

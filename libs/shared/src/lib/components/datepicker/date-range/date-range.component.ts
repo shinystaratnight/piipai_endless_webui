@@ -1,8 +1,8 @@
 import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core';
 
-import { DateRangeService } from '../../services';
 import { DateRange } from '@webui/utilities';
 import { Moment } from '@webui/time';
+import { DatepickerRangeService } from '@webui/core';
 
 @Component({
   selector: 'webui-date-range',
@@ -18,7 +18,7 @@ export class DateRangeComponent implements OnInit {
 
   rangeTitle!: string;
 
-  constructor(private dateRangeService: DateRangeService) {}
+  constructor(private dateRangeService: DatepickerRangeService) {}
 
   ngOnInit() {
     this.updateRangeTitle();

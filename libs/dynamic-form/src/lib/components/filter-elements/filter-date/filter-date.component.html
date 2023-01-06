@@ -2,50 +2,36 @@
   <webui-filter-header
     [label]="config.label"
     [key]="config.key"
-    [resetButton]="!!query"
+    [resetButton]="(hasQuery$ | async) || false"
     (resetEvent)="resetFilter()"
   ></webui-filter-header>
   <div class="filter-date-wrapper">
     <ul class="list-inline dates my-1">
-      <li
-        class="dates-item"
-        *ngFor="let item of config.list"
-        [class.text-primary]="query === getListElementQuery(item.query)"
-        (click)="selectQuery(getListElementQuery(item.query))"
-      >
-        <a href="#">{{ getTranslateKey(item.key) | translate: {"Default": item.label} }}</a>
+      <li class="dates-item" *ngFor="let item of config.list">
+        <a href="#" (click)="selectQuery(item, $event)">
+          {{ getTranslateKey(item.key) | translate: { Default: item.label } }}
+        </a>
       </li>
     </ul>
-    <div class="input-group datepicker" *ngFor="let input of config.input">
-      <ng-container *ngIf="!mobileDevice">
-        <input
-          class="form-control filter-date"
-          #d
-          [class.active]="data[input.query]"
-          [attr.name]="input.query"
-          [(ngModel)]="data[input.query]"
-        />
-        <div class="placeholder">
-          {{ getTranslateKey(input.key) | translate: {"Default": input.label} }}
-        </div>
-      </ng-container>
 
-      <ng-container *ngIf="mobileDevice">
-        <input
-          type="date"
-          class="form-control filter-date mobile"
-          [class.active]="data[input.query]"
-          pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}"
-          placeholder=""
-          [attr.name]="input.query"
-          [(ngModel)]="data[input.query]"
-          (ngModelChange)="changeDateOnMobile()"
-        />
-        <div class="placeholder">
-          {{ getTranslateKey(input.key) | translate: {"Default": input.label} }}
-        </div>
-      </ng-container>
+    <div class="input-group datepicker" *ngFor="let item of controls">
+      <input
+        type="text"
+        class="form-control"
+        (focus)="item.showDatepicker()"
+        [formControl]="item.control"
+      />
+
+      <div class="placeholder">
+        {{ item.key | translate }}
+      </div>
+
+      <webui-datepicker
+        *ngIf="item.hasDatepicker$ | async"
+        [date]="item.date"
+        [type]="type"
+        (update)="setDate(item, $event)"
+      ></webui-datepicker>
     </div>
-    <div class="delimiter"></div>
   </div>
 </div>
