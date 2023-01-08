@@ -1,5 +1,8 @@
 <ng-container *ngIf="!loader">
-  <webui-navigation [user]="user" (changePasswordEmitter)="openChangePassword()">
+  <webui-navigation
+    [user]="user"
+    (changePasswordEmitter)="openChangePassword()"
+  >
   </webui-navigation>
 
   <ng-container *ngIf="!identifyDevice()">
@@ -38,12 +41,10 @@
                 pageData.endpoint !== '/core/forms/' &&
                 !pageData.pathData.postfix) ||
               pageData.pathData.postfix === 'submit' ||
-              pageData.pathData.postfix === 'change_username' && formMode
+              (pageData.pathData.postfix === 'change_username' && formMode)
             "
             [title]="
-              pageData.pathData.postfix === 'submit'
-                ? 'submit_timesheet'
-                : ''
+              pageData.pathData.postfix === 'submit' ? 'submit_timesheet' : ''
             "
             [endpoint]="pageData.endpoint"
             [id]="pageData.pathData.id"
@@ -61,11 +62,19 @@
             (str)="changeFormLabel($event)"
           >
             <div class="d-flex">
-              <button type="submit" class="btn btn-primary button-save save mt-2"
-                *ngIf="!formStorage && formMode !== FormMode.View && (checkPermission('post') || checkPermission('update')) && (pageData.endpoint !== '/core/users/')"
-                [disabled]="saveProcess">
-                  {{ 'save' | translate: {"Default": "Save"} }}
-                  <webui-spinner *ngIf="saveProcess"></webui-spinner>
+              <button
+                type="submit"
+                class="btn btn-primary button-save save mt-2"
+                *ngIf="
+                  !formStorage &&
+                  formMode !== FormMode.View &&
+                  (checkPermission('post') || checkPermission('update')) &&
+                  pageData.endpoint !== '/core/users/'
+                "
+                [disabled]="saveProcess || checkingInstance"
+              >
+                {{ 'save' | translate: { Default: 'Save' } }}
+                <webui-spinner *ngIf="saveProcess"></webui-spinner>
               </button>
             </div>
           </webui-generic-form>
@@ -90,7 +99,12 @@
           </webui-generic-list>
         </div>
 
-        <div class="datatable-list" *ngIf="pageData.pathData.postfix && pageData.pathData.postfix === 'fillin'">
+        <div
+          class="datatable-list"
+          *ngIf="
+            pageData.pathData.postfix && pageData.pathData.postfix === 'fillin'
+          "
+        >
           <webui-generic-list
             [responseField]="fillInData.responseField || 'results'"
             [paginated]="fillInData.paginated || 'on'"
@@ -105,10 +119,14 @@
           ></webui-generic-list>
           <div class="buttons mb-5">
             <button type="button" class="btn btn-secondary" (click)="back()">
-              {{'cancel' | translate: {"Default": "Cancel"} }}
+              {{ 'cancel' | translate: { Default: 'Cancel' } }}
             </button>
-            <button type="button" class="btn btn-primary pr-3" (click)="sendData()">
-              {{'fill_in.label' | translate: {"Default": "Fill in"} }}
+            <button
+              type="button"
+              class="btn btn-primary pr-3"
+              (click)="sendData()"
+            >
+              {{ 'fill_in.label' | translate: { Default: 'Fill in' } }}
             </button>
           </div>
         </div>
@@ -133,7 +151,7 @@
       <div class="modal-header-wrapper">
         <div class="modal-header">
           <h5 class="modal-title">
-            {{'change_password' | translate: {"Default": "Change Password"} }}
+            {{ 'change_password' | translate: { Default: 'Change Password' } }}
           </h5>
 
           <webui-close-button
@@ -150,11 +168,11 @@
           (event)="resetEvent($event)"
         >
           <a class="forgot" href="" (click)="openResetForm()">
-            {{'forgot_password' | translate: {"Default": "Forgot Password?"} }}
+            {{ 'forgot_password' | translate: { Default: 'Forgot Password?' } }}
           </a>
           <div class="d-flex align-items-center">
             <button type="submit" class="btn btn-primary ms-auto">
-              {{ 'save' | translate: {"Default": "Save"} }}
+              {{ 'save' | translate: { Default: 'Save' } }}
             </button>
           </div>
         </webui-generic-form>
@@ -167,7 +185,7 @@
       <div class="modal-header-wrapper">
         <div class="modal-header">
           <h5 class="modal-title">
-            {{'password_reset' | translate: {"Default": "Password Reset"} }}
+            {{ 'password_reset' | translate: { Default: 'Password Reset' } }}
           </h5>
 
           <webui-close-button
@@ -184,7 +202,7 @@
         >
           <div class="d-flex align-items-center">
             <button type="submit" class="btn btn-primary ms-auto">
-              {{'reset' | translate: {"Default": "Reset"} }}
+              {{ 'reset' | translate: { Default: 'Reset' } }}
             </button>
           </div>
         </webui-generic-form>

@@ -862,7 +862,7 @@
             webuiSubscriptionRequired
             type="submit"
             class="btn big-btn btn-shadow btn-primary text-white button-save mt-3 mb-4"
-            [disabled]="saveProcess || extendFormInvalid"
+            [disabled]="saveProcess || extendFormInvalid || jobChecking"
           >
             <span>{{ 'save' | translate }}</span>
             <webui-spinner *ngIf="saveProcess"></webui-spinner>

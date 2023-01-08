@@ -141,6 +141,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
   public customRange?: IDateRange;
   public modalInfo: any;
   public saveProcess!: boolean;
+  jobChecking = false;
   public availability = [];
   public selectedTime!: string;
 
@@ -432,7 +433,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
   }
 
   public formEvent(
-    e: { type: string; status: 'success'; form: any },
+    e: { type: string; status: 'success'; form: any, checking?: boolean },
     closeModal: () => void
   ) {
     if (e.type === 'saveStart') {
@@ -453,6 +454,9 @@ export class CalendarComponent implements OnInit, OnDestroy {
     }
     if (e.type === 'formRegistration') {
       this.extendForm = e.form;
+    }
+    if (e.type === 'checkObject') {
+      this.jobChecking = Boolean(e.checking);
     }
   }
 
