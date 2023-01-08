@@ -968,7 +968,8 @@ const form = [
                     templateOptions: {
                       label: 'Client representative',
                       values: ['__str__', 'company'],
-                      type: 'related'
+                      type: 'related',
+                      edit: true
                     },
                     type: 'related',
                     query: {
