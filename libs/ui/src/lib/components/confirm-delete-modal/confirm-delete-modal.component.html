@@ -1,10 +1,14 @@
 <webui-dialog>
   <div dialog-content>
-    {{ 'confirm_delete_instance' | translate : param }}
+    {{ 'message.confirm_delete_instance' | translate: param }}
   </div>
 
   <div class="footer" dialog-footer>
-    <button type="button" class="btn btn-secondary" (click)="onDismiss()">Do not delete!</button>
-    <button type="button" class="btn btn-primary" (click)="onDelete()">{{ 'delete' | translate }}</button>
+    <button type="button" class="btn btn-secondary" (click)="onDismiss()">
+      {{ 'action.do_not_delete' | translate }}
+    </button>
+    <button type="button" class="btn btn-primary" (click)="onDelete()">
+      {{ 'delete' | translate }}
+    </button>
   </div>
 </webui-dialog>

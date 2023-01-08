@@ -1159,5 +1159,7 @@
     "last_timesheet_date.label": "Last",
     "action.remove_cc": "Remove CC",
     "message.credit_Card_removed": "Credit card removed!",
-    "message.add_credit_card": "Add credit card to unlock this button"
+    "message.add_credit_card": "Add credit card to unlock this button",
+    "message.confirm_delete_instance": "Confirm delete {{name}}",
+    "action.do_not_delete": "Do not delete!"
 }
