@@ -10,4 +10,4 @@ export const components = [
   DateRangeComponent
 ];
 
-export {DatepickerComponent} from './datepicker/datepicker.component';
+export * from './datepicker/datepicker.component';
