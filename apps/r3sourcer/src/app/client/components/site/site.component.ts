@@ -75,6 +75,7 @@ export class SiteComponent implements OnInit, OnDestroy {
   public data: any;
   public endpointWithoutViewMode: string[] = ['/core/users/'];
   public passwordData: any;
+  checkingInstance = false;
 
   public modalRef!: NgbModalRef;
 
@@ -361,6 +362,9 @@ export class SiteComponent implements OnInit, OnDestroy {
       setTimeout(() => {
         this.reload = false;
       }, 150);
+    }
+    if (e.type === 'checkObject') {
+      this.checkingInstance = e.checking;
     }
   }
 

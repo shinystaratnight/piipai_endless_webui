@@ -639,9 +639,19 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
           this.checkObject[key].cache = query;
 
           if (send) {
+            this.event.emit({
+              type: 'checkObject',
+              checking: true
+            });
+
             this.service
               .get(this.checkObject[key].endpoint, query)
               .subscribe((res) => {
+                this.event.emit({
+                  type: 'checkObject',
+                  checking: false
+                });
+
                 if (res.count) {
                   const error = this.checkObject[key].error;
                   const obj = res.results[0];
