@@ -1150,6 +1150,6 @@
     "status.void": "Недействительный",
     "select_plan.subLabel": "При выборе плана с вашего счета кредитной карты сразу же снимаются деньги",
     "subscription_details.label": "Детали подписки",
-    "trial_subscription_expires": "Trial subscription expires <b>{{date}}</b>_RU",
+    "trial_subscription_expires": "Trial subscription expires at_RU",
     "change_plan_warning": "If you click that save button below, the amount will be deducted from your bank account to activate a subscription_RU"
 }

@@ -1150,6 +1150,6 @@
     "status.void": "",
     "select_plan.subLabel": "",
     "subscription_details.label": "",
-    "trial_subscription_expires": "Trial subscription expires <b>{{date}}</b>_FI",
+    "trial_subscription_expires": "Trial subscription expires at_FI",
     "change_plan_warning": "If you click that save button below, the amount will be deducted from your bank account to activate a subscription_FI"
 }
