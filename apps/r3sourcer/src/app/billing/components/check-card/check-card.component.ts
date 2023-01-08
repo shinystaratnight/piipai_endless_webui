@@ -14,29 +14,28 @@ import { ENV } from '@webui/core';
 
 const style = {
   base: {
-    'color': '#32325d',
-    'lineHeight': '18px',
-    'fontFamily': '"Helvetica Neue", Helvetica, sans-serif',
-    'fontSmoothing': 'antialiased',
-    'fontSize': '16px',
+    color: '#32325d',
+    lineHeight: '18px',
+    fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+    fontSmoothing: 'antialiased',
+    fontSize: '16px',
     '::placeholder': {
-      color: '#aab7c4'
-    }
+      color: '#aab7c4',
+    },
   },
   invalid: {
     color: '#fa755a',
-    iconColor: '#fa755a'
-  }
+    iconColor: '#fa755a',
+  },
 };
 
 @Component({
   selector: 'webui-check-card',
   templateUrl: './check-card.component.html',
   styleUrls: ['./check-card.component.scss'],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
 })
 export class CheckCardComponent implements OnInit {
-
   public error!: string;
   public saving!: boolean;
   public newCard!: boolean;
@@ -50,6 +49,7 @@ export class CheckCardComponent implements OnInit {
   @Output()
   public cardChange = new EventEmitter();
 
+  @Output() removeCC = new EventEmitter<void>();
   private stripe: any;
   private card: any;
 
@@ -62,7 +62,7 @@ export class CheckCardComponent implements OnInit {
     this.billingService.getStripeKey().subscribe((res) => {
       const key = (res as any).public_key;
 
-      this.stripe = (<any> window).Stripe(key);
+      this.stripe = (<any>window).Stripe(key);
       const elements = this.stripe.elements();
       this.card = elements.create('card', { style });
       this.card.mount('#card-element');
@@ -74,7 +74,6 @@ export class CheckCardComponent implements OnInit {
           this.error = '';
         }
       });
-
     });
   }
 
@@ -95,29 +94,35 @@ export class CheckCardComponent implements OnInit {
 
   public sendToken(token: string, last4: string) {
     if (this.cardInformation?.payment_information_submited) {
-      this.billingService.changeCard({
-        source: token,
-        last4,
-      }).subscribe(() => {
-        this.saving = false;
-        this.newCard = false;
-        this.cardChange.emit();
-      });
+      this.billingService
+        .changeCard({
+          source: token,
+          last4,
+        })
+        .subscribe(() => {
+          this.saving = false;
+          this.newCard = false;
+          this.cardChange.emit();
+        });
     } else {
-      this.billingService.setCardInfo({
-        source: token,
-        last4,
-      }).subscribe(() => {
-        this.saving = false;
-        this.newCard = false;
-        this.cardChange.emit();
-      });
+      this.billingService
+        .setCardInfo({
+          source: token,
+          last4,
+        })
+        .subscribe(() => {
+          this.saving = false;
+          this.newCard = false;
+          this.cardChange.emit();
+        });
     }
-
   }
 
   public showCardForm() {
     this.newCard = true;
   }
 
+  onRemoveCC(): void {
+    this.removeCC.emit();
+  }
 }

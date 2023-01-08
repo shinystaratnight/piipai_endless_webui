@@ -1156,5 +1156,7 @@
     "message.timesheet_time_description": "Choose this if you had an hourly job only",
     "message.timesheet_activity_description": "Choose this if you had piecework or hourly + piecework job",
     "count_timesheets.label": "Total",
-    "last_timesheet_date.label": "Last"
+    "last_timesheet_date.label": "Last",
+    "action.remove_cc": "Remove CC",
+    "message.credit_Card_removed": "Credit card removed!"
 }
