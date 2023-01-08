@@ -88,7 +88,6 @@ export class CheckCardComponent implements OnInit {
         this.error = result.error.message;
         this.saving = false;
       } else {
-        console.log(result);
         this.sendToken(result.token.id, result.token.card.last4);
       }
     });

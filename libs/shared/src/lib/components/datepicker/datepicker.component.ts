@@ -1,4 +1,13 @@
-import { Component, Input, Output, OnInit, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
+import {
+  Component,
+  Input,
+  Output,
+  OnInit,
+  EventEmitter,
+  ChangeDetectionStrategy,
+  HostListener,
+  ElementRef,
+} from '@angular/core';
 
 import { DateRange, filterDateFormat } from '@webui/utilities';
 import { Moment } from '@webui/time';
@@ -15,7 +24,7 @@ export interface IDateRange {
   selector: 'webui-datepicker',
   templateUrl: './datepicker.component.html',
   styleUrls: ['./datepicker.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DatepickerComponent implements OnInit {
   @Input() type!: DateRange;
@@ -23,6 +32,7 @@ export class DatepickerComponent implements OnInit {
   @Input() range?: IDateRange;
 
   @Output() update = new EventEmitter();
+  @Output() closed = new EventEmitter<void>();
 
   dateRange = DateRange;
   showCustomWeek = false;
@@ -46,11 +56,12 @@ export class DatepickerComponent implements OnInit {
 
   constructor(
     private dateRangeService: DatepickerRangeService,
-    private datepickerService: DatepickerService
+    private datepickerService: DatepickerService,
+    private elementRef: ElementRef
   ) {}
 
   public ngOnInit() {
-    this.fillCalendar();
+    this.fillCalendar(this.date);
 
     this.setActiveDates(this.date, this.range);
   }
@@ -66,26 +77,24 @@ export class DatepickerComponent implements OnInit {
     }
   }
 
-  public fillCalendar() {
+  public fillCalendar(date: Moment) {
     switch (this.type) {
       case DateRange.Year:
-        this.generateYearCalendar();
+        this.generateYearCalendar(date);
         break;
 
       case DateRange.Week:
-        this.generateMonthCalendar();
+        this.generateMonthCalendar(date);
         break;
 
       case DateRange.Day:
-        this.generateMonthCalendar();
+        this.generateMonthCalendar(date);
         break;
     }
   }
 
   public changeCalendar(date: Moment) {
-    this.date = date;
-
-    this.fillCalendar();
+    this.fillCalendar(date);
   }
 
   public changeDate(date: Moment) {
@@ -118,29 +127,45 @@ export class DatepickerComponent implements OnInit {
     });
   }
 
-  private generateYearCalendar() {
-    this.yearBody = this.datepickerService.generateYear(this.date, (body) => {
+  private generateYearCalendar(date: Moment) {
+    this.yearBody = this.datepickerService.generateYear(date, (body) => {
       return body.map((row) => {
         return row.map((month) => {
           return {
             ...month,
-            active: month.month === this.date.month(),
+            active: month.month === date.month(),
           };
         });
       });
     });
   }
 
-  private generateMonthCalendar() {
-    this.monthBody = this.datepickerService.generateMonth(this.date, (body) => {
+  private generateMonthCalendar(date: Moment) {
+    this.monthBody = this.datepickerService.generateMonth(date, (body) => {
       return body.map((week) => {
         return week.map((day) => {
           return {
             ...day,
-            currentMonth: day.month === this.date.month(),
+            currentMonth: day.month === date.month(),
           };
         });
       });
     });
+  }
+
+  @HostListener('document:click', ['$event'])
+  @HostListener('document:touchstart', ['$event'])
+  public handleClick(event: MouseEvent) {
+    let clickedComponent = event.target;
+    let inside = false;
+    do {
+      if (clickedComponent === this.elementRef.nativeElement) {
+        inside = true;
+      }
+      clickedComponent = (clickedComponent as HTMLElement).parentNode;
+    } while (clickedComponent);
+    if (!inside) {
+      this.closed.emit();
+    }
   }
 }
