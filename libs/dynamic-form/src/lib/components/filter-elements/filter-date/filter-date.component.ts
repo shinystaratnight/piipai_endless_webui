@@ -206,6 +206,10 @@ export class FilterDateComponent implements OnInit, OnDestroy {
     item.hideDatepicker();
   }
 
+  onClose(item: DateControl) {
+    item.hideDatepicker();
+  }
+
   private subscribeOnChange(item: DateControl) {
     item.control.valueChanges.pipe(takeUntil(this._destroy)).subscribe(() => {
       this.onChange();
