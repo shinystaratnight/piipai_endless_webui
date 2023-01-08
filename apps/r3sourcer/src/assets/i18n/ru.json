@@ -1153,5 +1153,7 @@
     "trial_subscription_expires": "Trial subscription expires at_RU",
     "change_plan_warning": "If you click that save button below, the amount will be deducted from your bank account to activate a subscription_RU",
     "message.timesheet_time_description": "Choose this if you had an hourly job only",
-    "message.timesheet_activity_description": "Choose this if you had piecework or hourly + piecework job"
+    "message.timesheet_activity_description": "Choose this if you had piecework or hourly + piecework job",
+    "count_timesheets.label": "Total",
+    "last_timesheet_date.label": "Last"
 }

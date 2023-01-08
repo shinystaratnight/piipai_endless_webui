@@ -92,6 +92,8 @@ const list = {
       },
       {
         name: 'contact.__str__',
+        sort: true,
+        sort_field: 'average_score',
         width: 175,
         content: [
           {
@@ -140,26 +142,34 @@ const list = {
         label: 'Available'
       },
       {
-        name: 'timesheet',
+        name: 'count_timesheets',
+        sort_field: 'count_timesheets',
         width: 150,
+        sort: true,
         content: [
           {
             type: 'static',
             field: 'count_timesheets',
-            label: 'Total',
-            display: '{field}'
-          },
+          }
+        ]
+      },
+      {
+        name: 'last_timesheet_date',
+        sort_field: 'last_timesheet_date',
+        width: 150,
+        sort: true,
+        content: [
           {
             type: 'static',
             field: 'days_from_last_timesheet',
-            label: 'From last',
             display: '{field} day(s)'
           }
-        ],
-        label: 'Timesheet'
+        ]
       },
       {
         name: 'distance',
+        sort: true,
+        sort_field: 'distance_to_jobsite',
         width: 130,
         content: [
           {
