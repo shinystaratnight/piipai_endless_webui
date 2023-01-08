@@ -52,15 +52,21 @@
     </ng-container>
 
     <div class="actions" *ngIf="!currentPlan">
-      <p
-        *ngIf="trialExpires"
-        class="secondary-title"
-        [innerHTML]="
-          'trial_subscription_expires'
-            | translate: { date: trialExpires }
-            | safeHtml
-        "
-      ></p>
+      <div class="actions__group">
+        <p *ngIf="trialExpires" class="secondary-title">
+          {{ 'trial_subscription_expires' | translate }}
+        </p>
+
+        <p class="secondary-title" *ngIf="trialExpires">
+          {{ 'date' | translate }}:
+          <b>{{ trialExpires | dateFormat: 'DD/MM/YYYY' }}</b>
+        </p>
+
+        <p class="secondary-title" *ngIf="trialExpires">
+          {{ 'time' | translate }}:
+          <b>{{ trialExpires | dateFormat: 'hh:mm A Z' }}</b>
+        </p>
+      </div>
 
       <button
         type="button"

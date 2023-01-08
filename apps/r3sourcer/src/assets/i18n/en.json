@@ -1151,6 +1151,6 @@
     "status.void": "Void",
     "select_plan.subLabel": "Selecting the plan charges your credit card account immediately",
     "subscription_details.label": "Subscription details",
-    "trial_subscription_expires": "Trial subscription expires <b>{{date}}</b>",
+    "trial_subscription_expires": "Trial subscription expires at",
     "change_plan_warning": "If you click that save button below, the amount will be deducted from your bank account to activate a subscription"
 }

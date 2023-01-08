@@ -265,8 +265,18 @@ h6 {
 
 .actions {
   display: flex;
-  align-items: center;
-  gap: 1rem;
+  align-items: flex-end;
+  gap: 4rem;
+
+  &__group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  p {
+    margin-bottom: 0;
+  }
 }
 
 .footer {
