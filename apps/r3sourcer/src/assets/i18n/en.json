@@ -1152,5 +1152,7 @@
     "select_plan.subLabel": "Selecting the plan charges your credit card account immediately",
     "subscription_details.label": "Subscription details",
     "trial_subscription_expires": "Trial subscription expires at",
-    "change_plan_warning": "If you click that save button below, the amount will be deducted from your bank account to activate a subscription"
+    "change_plan_warning": "If you click that save button below, the amount will be deducted from your bank account to activate a subscription",
+    "message.timesheet_time_description": "Choose this if you had an hourly job only",
+    "message.timesheet_activity_description": "Choose this if you had piecework or hourly + piecework job"
 }

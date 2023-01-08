@@ -18,10 +18,17 @@
               [class.disabled]="timesDisabled"
               [disabled]="timesDisabled"
             >
-              <a ngbNavLink>
+              <a
+                ngbNavLink
+                [title]="'message.timesheet_time_description' | translate"
+              >
                 {{ 'time' | translate }}
               </a>
               <ng-template ngbNavContent>
+                <p class="description mb-4">
+                  {{ 'message.timesheet_time_description' | translate }}
+                </p>
+
                 <header class="times__header">
                   <h4 class="section-title">{{ 'time' | translate }}</h4>
 
@@ -66,10 +73,17 @@
               [class.disabled]="activitiesDisabled"
               [disabled]="activitiesDisabled"
             >
-              <a ngbNavLink>
-                {{ 'activity' | translate }}
+              <a
+                ngbNavLink
+                [title]="'message.timesheet_activity_description' | translate"
+              >
+                {{ 'piecework_or_combined' | translate }}
               </a>
               <ng-template ngbNavContent>
+                <p class="description mb-4">
+                  {{ 'message.timesheet_activity_description' | translate }}
+                </p>
+
                 <h4 class="section-title">
                   {{ 'activity' | translate }}
                   <button
