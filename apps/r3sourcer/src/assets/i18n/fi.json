@@ -711,7 +711,7 @@
     "skillrates.label": "Taitoprosentit",
     "skill_rel.label": "Taito",
     "rate_coefficient_modifier.label": "Korkokertoimen muokkaaja",
-    "should_have_subscription": "Add a credit card to unlock this button_FI",
+    "should_have_subscription": "Sinulla pitäisi olla aktiivinen tilaus!",
     "contact.myob_card_id.label": "MYOB-kortin tunnus",
     "visa_type.label": "Visa tyyppi",
     "superannuation_fund.label": "Ylivuotisen rahaston nimi",
@@ -1157,5 +1157,6 @@
     "count_timesheets.label": "Total",
     "last_timesheet_date.label": "Last",
     "action.remove_cc": "Remove CC",
-    "message.credit_card_removedit_Card_removed": "Credit card removed!"
+    "message.credit_card_removedit_Card_removed": "Credit card removed!",
+    "message.add_credit_card": "Add credit card to unlock this button"
 }

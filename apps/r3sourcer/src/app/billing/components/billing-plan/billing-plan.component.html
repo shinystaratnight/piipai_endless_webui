@@ -71,7 +71,8 @@
       <button
         type="button"
         class="btn btn-primary"
-        [disabled]="!cardInformation?.payment_information_submited"
+        [disabled]="!hasAttachedCC"
+        [title]="!hasAttachedCC ? ('message.add_credit_card' | translate) : ''"
         (click)="setPlan()"
       >
         {{ 'action.subscribe' | translate }}

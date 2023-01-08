@@ -58,10 +58,14 @@ export class BillingPlanComponent implements OnChanges, OnDestroy {
     );
   }
 
+  get hasAttachedCC() {
+    return this.cardInformation?.payment_information_submited
+  }
+
   get trialExpires() {
     const expires = Time.parse(this.userService.user?.data.end_trial_date);
 
-    return expires.isAfter(Time.now()) ? expires.format() : null;
+    return expires.format();
   }
 
   public ngOnChanges(changes: SimpleChanges) {
