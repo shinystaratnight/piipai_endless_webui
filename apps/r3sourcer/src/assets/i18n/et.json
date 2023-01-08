@@ -711,7 +711,7 @@
     "skillrates.label": "Oskusmäärad",
     "skill_rel.label": "Oskus",
     "rate_coefficient_modifier.label": "Hinnakordaja koefitsient",
-    "should_have_subscription": "Add a credit card to unlock this button_ET",
+    "should_have_subscription": "Teil puudub aktiivne litsents",
     "contact.myob_card_id.label": "MYOB kaardi ID",
     "visa_type.label": "Viis tüüp",
     "superannuation_fund.label": "Pensionifond",
@@ -1157,5 +1157,6 @@
     "count_timesheets.label": "Total",
     "last_timesheet_date.label": "Last",
     "action.remove_cc": "Remove CC",
-    "message.credit_card_removedit_Card_removed": "Credit card removed!"
+    "message.credit_card_removedit_Card_removed": "Credit card removed!",
+    "message.add_credit_card": "Add credit card to unlock this button"
 }
