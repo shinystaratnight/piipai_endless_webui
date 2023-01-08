@@ -175,4 +175,15 @@ export class BillingComponent implements OnInit, OnDestroy {
     );
     this.checkPaymentInformation();
   }
+
+  onRemoveCC(): void {
+    this.billingService.removeCC().subscribe(() => {
+      this.toastrService.sendMessage(
+        'message.credit_card_removed',
+        MessageType.Success
+      );
+
+      this.checkPaymentInformation();
+    });
+  }
 }
