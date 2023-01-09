@@ -27,7 +27,7 @@ const filters = {
     key: 'active_states',
     label: 'Status',
     endpoint: Endpoints.WorkflowNode,
-    display: ['name_after_activation', 'name_before_activation'],
+    display: ['workflow.candidate.candidatecontact.{number}.after', 'name_after_activation', 'name_before_activation'],
     parameter: 'number',
     queryParams: {
       company: '{company_settings.company}',

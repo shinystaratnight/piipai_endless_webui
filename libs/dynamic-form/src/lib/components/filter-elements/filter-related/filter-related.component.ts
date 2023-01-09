@@ -8,7 +8,6 @@ import {
   OnDestroy,
   HostListener,
   ElementRef,
-  ChangeDetectorRef,
   ChangeDetectionStrategy,
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
@@ -522,13 +521,12 @@ class FilterOption {
   ) {
     return display.reduce((acc: string, curr: any) => {
       if (this.hasFormatBraces(curr)) {
-        return FormatString.format(curr, data) || acc;
+        return acc || FormatString.format(curr, data);
       }
 
       return (
-        checkAndReturnTranslation(data, countryCode, lang as Language) ||
-        data[curr] ||
-        acc
+        acc || checkAndReturnTranslation(data, countryCode, lang as Language) ||
+        data[curr]
       );
     }, '');
   }
