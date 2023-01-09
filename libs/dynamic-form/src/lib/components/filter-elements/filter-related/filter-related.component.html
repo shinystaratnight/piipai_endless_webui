@@ -6,8 +6,8 @@
     (resetEvent)="resetFilter()"
   ></webui-filter-header>
 
-  <div class="content" #content>
-    <div class="form-control autocomplete-value" (click)="onShowOptions()">
+  <div class="content">
+    <div class="form-control autocomplete-value" #content (click)="onShowOptions()">
       <ng-container *ngIf="value$ | async as value; else placeholder">
         <span class="value" *ngIf="value.length > 1">
           {{ 'status.selected-items' | translate: { count: value.length } }}
