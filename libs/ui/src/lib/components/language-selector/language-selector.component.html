@@ -1,6 +1,6 @@
-<label class="control" cdk-overlay-origin>
+<label class="control" cdk-overlay-origin (click)="openDropdown()">
   <span class="control__input-wrapper">
-    <div class="control__input" (click)="openDropdown()">
+    <div class="control__input">
       <span [ngClass]="getIconClass(control.value)"></span>
     </div>
     <webui-icon
