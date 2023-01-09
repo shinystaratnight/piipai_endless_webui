@@ -506,7 +506,7 @@ export class SiteComponent implements OnInit, OnDestroy {
   }
 
   public openResetForm() {
-    this.modalRef.close();
+    this.modalRef?.close();
     this.passwordData = {
       email: {
         action: 'add',
