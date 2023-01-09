@@ -338,13 +338,11 @@ export class CalendarComponent implements OnInit, OnDestroy {
     this.changeCalendar(this.currentRange.value);
   }
 
-  changeQuery(event?: {
+  changeQuery(event: {
     key: 'candidate' | 'client';
-    value: { data: string };
+    value: ({key: string; label: string})[];
   }) {
-    if (event) {
-      this[event.key] = event.value.data;
-    }
+    this[event.key] = event.value ? event.value[0]?.key : undefined;
 
     this.changeCalendar();
   }

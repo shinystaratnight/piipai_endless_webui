@@ -66,9 +66,10 @@
       </webui-filter-related>
 
       <div class="filter-element" #filter>
-        <label class="filter-label related">
-          {{ 'info_layers' | translate: { Default: 'Info layers' } }}
-        </label>
+        <webui-filter-header
+          label="Info layers"
+          key="info_layers"
+        ></webui-filter-header>
 
         <div class="filter-related">
           <div
