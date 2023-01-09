@@ -151,13 +151,13 @@ export class SiteComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.subscriptions.push(
-      this.eventService.event$.subscribe((type: EventType) => {
-        if (type === EventType.RoleChanged) {
-          this.updateNavigationList();
-        }
-      })
-    );
+    // this.subscriptions.push(
+    //   this.eventService.event$.subscribe((type: EventType) => {
+    //     if (type === EventType.RoleChanged) {
+    //       this.updateNavigationList();
+    //     }
+    //   })
+    // );
   }
 
   public ngOnDestroy() {

@@ -42,15 +42,15 @@ export class SettingsComponent implements OnInit, OnDestroy {
       );
     });
 
-    this.subscriptions.push(
-      this.eventService.event$.subscribe((type: EventType) => {
-        if (type === EventType.RoleChanged) {
-          setTimeout(() => {
-            this.router.navigate(['']);
-          }, 150);
-        }
-      })
-    );
+    // this.subscriptions.push(
+    //   this.eventService.event$.subscribe((type: EventType) => {
+    //     if (type === EventType.RoleChanged) {
+    //       setTimeout(() => {
+    //         this.router.navigate(['']);
+    //       }, 150);
+    //     }
+    //   })
+    // );
   }
 
   public ngOnDestroy() {
