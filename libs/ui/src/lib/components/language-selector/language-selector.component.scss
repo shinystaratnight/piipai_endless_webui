@@ -18,6 +18,7 @@
 
 .control {
   margin-bottom: 0;
+  cursor: pointer;
 }
 
 .control__input {
@@ -25,7 +26,6 @@
   align-items: center;
   min-width: 4rem;
   background-color: $white;
-  cursor: pointer;
 }
 
 .dropdown {
@@ -52,7 +52,7 @@
     }
 
     &:hover:not(.empty) {
-      color: $brand-color;
+      background-color: $brand-color;
       cursor: pointer;
     }
 
