@@ -198,12 +198,12 @@
     "timesheet_status": [
         "Uus",
         "Vahetuse-eelne kontroll on ootel",
-        "Vahetuse-eelne kontroll on kinnitatud",
-        "Vahetuse-eelne kontroll nurjus",
-        "Esitamise ootel",
-        "Kinnitamine on ootel",
-        "Juhendaja muudetud",
-        "Kinnitatud"
+        "Vahetuseelne kontroll on kinnitatud",
+        "Vahetuseelne kontroll ebaõnnestus",
+        "Ootab tunnilehe esitamist",
+        "Ootab tunnilehe vastuvõtmist",
+        "Juhendaja muutis tunnilehte",
+        "Tunnileht on kinnitatud"
     ],
     "local_time": "Kohalik aeg",
     "log_out": "Logi välja",
