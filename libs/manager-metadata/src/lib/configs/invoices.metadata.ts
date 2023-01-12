@@ -70,6 +70,7 @@ const list = {
         ],
         name: 'date',
         sort_field: 'date',
+        sorted: 'desc',
         label: 'Creation date',
         width: 80,
         sort: true
