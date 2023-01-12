@@ -1,4 +1,10 @@
-import { Component, OnInit, ViewChild, OnDestroy, ElementRef } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  OnDestroy,
+  ElementRef,
+} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
@@ -13,7 +19,7 @@ import {
   SiteSettingsService,
   CompanyPurposeService,
   EventService,
-  EventType
+  EventType,
 } from '@webui/core';
 import { PageData } from '@webui/data';
 import { GenericFormService, FormMode } from '@webui/dynamic-form';
@@ -21,14 +27,13 @@ import { CheckPermissionService, ToastService, MessageType } from '@webui/core';
 import { isMobile, isCandidate, isClient, isManager } from '@webui/utilities';
 import { finalize } from 'rxjs/operators';
 import { DialogService, DialogRef } from '@webui/dialog';
-import { ConfirmDeleteModalComponent } from '@webui/ui';
-import { Endpoints, Role, User } from '@webui/models';
+import { DialogType, Endpoints, Role, User } from '@webui/models';
 import { empty } from 'ramda';
 
 @Component({
   selector: 'webui-site',
   templateUrl: './site.component.html',
-  styleUrls: ['./site.component.scss']
+  styleUrls: ['./site.component.scss'],
 })
 export class SiteComponent implements OnInit, OnDestroy {
   public pageData?: PageData | null;
@@ -46,7 +51,7 @@ export class SiteComponent implements OnInit, OnDestroy {
     paginated: 'off',
     supportData: 'job',
     metaType: true,
-    actions: true
+    actions: true,
   };
   public FormMode = FormMode;
 
@@ -82,7 +87,7 @@ export class SiteComponent implements OnInit, OnDestroy {
   public mobileDesign: string[] = [
     '/hr/timesheets/approved/',
     '/hr/timesheets/history/',
-    '/hr/timesheets/unapproved/'
+    '/hr/timesheets/unapproved/',
   ];
 
   public fillInDataSending = false;
@@ -91,7 +96,7 @@ export class SiteComponent implements OnInit, OnDestroy {
 
   private subscriptions: Subscription[] = [];
 
-  public rowId: any = "";
+  public rowId: any = '';
   public dialogRef!: DialogRef;
 
   get isMobileDevice() {
@@ -127,7 +132,7 @@ export class SiteComponent implements OnInit, OnDestroy {
     private modalService: NgbModal,
     private purposeService: CompanyPurposeService,
     private eventService: EventService,
-    private dialogService: DialogService,
+    private dialogService: DialogService
   ) {}
 
   public ngOnInit() {
@@ -199,7 +204,7 @@ export class SiteComponent implements OnInit, OnDestroy {
     this.upload.next(true);
   }
 
-  public getPageData(url: Array<{path: string}>) {
+  public getPageData(url: Array<{ path: string }>) {
     this.siteService
       .getDataOfPage(url, this.pagesList)
       .subscribe((pageData: PageData) => {
@@ -209,10 +214,10 @@ export class SiteComponent implements OnInit, OnDestroy {
               action: 'add',
               data: {
                 value: {
-                  id: this.siteSettingsService.settings.company
-                }
-              }
-            }
+                  id: this.siteSettingsService.settings.company,
+                },
+              },
+            },
           };
           this.pageData = pageData;
           this.permissionMethods = this.permission.getAllowMethods(
@@ -365,7 +370,7 @@ export class SiteComponent implements OnInit, OnDestroy {
     }
   }
 
-  public getPages(url: Array<{path: string}>) {
+  public getPages(url: Array<{ path: string }>) {
     const role = this.user?.currentRole;
     // const companyId = isManager() ? this.user.data.contact.company_id : '';
 
@@ -383,8 +388,8 @@ export class SiteComponent implements OnInit, OnDestroy {
   }
 
   public formEvent(e: any) {
-	const rowId = this.pageData?.pathData.id as string;
-	localStorage.setItem('rowId', rowId);
+    const rowId = this.pageData?.pathData.id as string;
+    localStorage.setItem('rowId', rowId);
     if (e.type === 'saveStart') {
       this.saveProcess = true;
       return;
@@ -392,7 +397,7 @@ export class SiteComponent implements OnInit, OnDestroy {
     if (e.type === 'sendForm' && e.status === 'success') {
       if (this.pageData?.pathData.postfix === 'submit') {
         this.router.navigate([
-          '/' + this.authService.getRedirectUrl() + this.pageData.pathData.path
+          '/' + this.authService.getRedirectUrl() + this.pageData.pathData.path,
         ]);
         this.saveProcess = false;
         return;
@@ -403,7 +408,7 @@ export class SiteComponent implements OnInit, OnDestroy {
             this.authService.getRedirectUrl() +
             this.pageData?.pathData.path +
             e.data.id +
-            '/change'
+            '/change',
         ]);
         this.saveProcess = false;
         return;
@@ -426,7 +431,12 @@ export class SiteComponent implements OnInit, OnDestroy {
   }
 
   public deleteElement(element: any) {
-    this.dialogRef = this.dialogService.open(ConfirmDeleteModalComponent, { size: 'sm' });
+    this.eventService.emit(EventType.OpenDialog, {
+      type: DialogType.ConfirmAction,
+      onInit: (dialogRef: any) => (this.dialogRef = dialogRef),
+    });
+
+    // this.dialogRef = this.dialogService.open(ConfirmDeleteModalComponent, { size: 'sm' });
     this.dialogRef.componentInstance.instanceName = this.listName.toLowerCase();
 
     this.dialogRef.result
@@ -460,12 +470,12 @@ export class SiteComponent implements OnInit, OnDestroy {
   public approveFormStorage(element: any) {
     const endpoint = `${this.formStorageEndpoint}${element.pathData.id}/approve/`;
     const body = {
-      status: 'True'
+      status: 'True',
     };
     this.genericFormService.submitForm(endpoint, body).subscribe(
       () =>
         this.router.navigate([
-          '/' + this.authService.getRedirectUrl() + element.pathData.path
+          '/' + this.authService.getRedirectUrl() + element.pathData.path,
         ]),
       (err: any) => (this.error = err)
     );
@@ -508,13 +518,13 @@ export class SiteComponent implements OnInit, OnDestroy {
         action: 'add',
         data: {
           value: this.user?.data.contact.email,
-          read_only: true
-        }
-      }
+          read_only: true,
+        },
+      },
     };
 
     this.modalRef = this.modalService.open(this.forgotPasswordModal, {
-      backdrop: 'static'
+      backdrop: 'static',
     });
 
     return false;
@@ -540,7 +550,7 @@ export class SiteComponent implements OnInit, OnDestroy {
 
     this.data = {
       candidates,
-      shifts
+      shifts,
     };
   }
 

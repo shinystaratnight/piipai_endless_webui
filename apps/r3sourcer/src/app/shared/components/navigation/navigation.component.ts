@@ -18,6 +18,8 @@ import { debounceTime } from 'rxjs/operators';
 
 import {
   AuthService,
+  EventService,
+  EventType,
   NavigationService,
   TranslateHelperService,
   UserService,
@@ -30,7 +32,7 @@ import {
   isManager,
 } from '@webui/utilities';
 import { Time } from '@webui/time';
-import { Language, Role, User } from '@webui/models';
+import { DialogType, Language, Role, User } from '@webui/models';
 import { Icon, IconSize } from '@webui/icon';
 
 @Component({
@@ -40,6 +42,7 @@ import { Icon, IconSize } from '@webui/icon';
   encapsulation: ViewEncapsulation.None,
 })
 export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
+
   @ViewChild('header') public header: any;
   @ViewChild('list') public list: any;
   @ViewChild('item') public item: any;
@@ -118,7 +121,8 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
     private navigationService: NavigationService,
     private userService: UserService,
     private translate: TranslateHelperService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private eventService: EventService
   ) {}
 
   public ngOnInit() {
@@ -264,6 +268,13 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
     const company = role.company_contact_rel.company.name
 
     return `${position.trim()}, ${company}`
+  }
+
+  onChangePhoneNumber() {
+    this.eventService.emit(EventType.OpenDialog, { type: DialogType.ChangePhoneNumber });
+  }
+  onChangeEmail() {
+    this.eventService.emit(EventType.OpenDialog, { type:  DialogType.ChangeEmail });
   }
 
   @HostListener('document:click', ['$event'])

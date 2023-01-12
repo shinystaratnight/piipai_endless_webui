@@ -77,6 +77,7 @@ import { MasterGuideModule } from './master-guide/master-guide.module';
 import { HttpLoaderFactory } from './translate.loader';
 import { MissingTranslationHelper } from './helpers/translate.helper';
 import { catchError, forkJoin, of } from 'rxjs';
+import { DialogModule } from '@webui/dialog';
 
 @NgModule({
   declarations: [
@@ -112,6 +113,7 @@ import { catchError, forkJoin, of } from 'rxjs';
     CoreModule.forRoot(environment),
     MasterGuideModule,
     SettingsModule,
+    DialogModule
   ],
   providers: [
     {

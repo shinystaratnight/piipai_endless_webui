@@ -4,7 +4,6 @@ import { RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { ReactiveFormsModule } from '@angular/forms';
-import { DialogModule } from '@webui/dialog';
 
 import {
   CloseButtonComponent,
@@ -15,7 +14,6 @@ import {
   SpinnerComponent,
   LanguageSelectorComponent,
   UserAvatarComponent,
-  ConfirmDeleteModalComponent,
   IconComponent,
 } from './components';
 import { IconModule } from '@webui/icon';
@@ -33,7 +31,6 @@ import { OverlayModule } from '@angular/cdk/overlay';
     LanguageSelectorComponent,
     IconComponent,
     UserAvatarComponent,
-    ConfirmDeleteModalComponent,
   ],
   imports: [
     CommonModule,
@@ -41,7 +38,6 @@ import { OverlayModule } from '@angular/cdk/overlay';
     TranslateModule,
     FontAwesomeModule,
     ReactiveFormsModule,
-    DialogModule,
     IconModule,
     ScrollingModule,
     OverlayModule
