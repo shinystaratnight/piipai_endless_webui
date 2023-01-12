@@ -15,7 +15,7 @@ import { ActivatedRoute } from '@angular/router';
 import { GenericFormService, FilterService } from '../../../services';
 import { SiteSettingsService, UserService } from '@webui/core';
 
-import { BehaviorSubject, combineLatest, Subject, merge } from 'rxjs';
+import { BehaviorSubject, combineLatest, Subject, merge, timer } from 'rxjs';
 import {
   debounceTime,
   filter,
@@ -341,6 +341,14 @@ export class FilterRelatedComponent implements OnInit, OnDestroy {
 
   onRemoveOption(option: FilterOption) {
     option.control.patchValue(false);
+  }
+
+  toggleOption(option: FilterOption) {
+    const value = option.control.value;
+
+    timer(150).subscribe(() => {
+      option.control.patchValue(!value);
+    })
   }
 
   @HostListener('document:click', ['$event'])
