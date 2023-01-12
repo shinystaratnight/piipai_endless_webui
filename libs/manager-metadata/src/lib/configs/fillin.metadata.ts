@@ -162,7 +162,7 @@ const list = {
           {
             type: 'static',
             field: 'days_from_last_timesheet',
-            display: '{field} day(s)'
+            display: '{field} days'
           }
         ]
       },
