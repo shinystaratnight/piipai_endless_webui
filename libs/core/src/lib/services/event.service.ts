@@ -7,7 +7,8 @@ export enum EventType {
   RoleChanged,
   CalendarJobSelected,
   RefreshCalendar,
-  SubscriptionChanged
+  SubscriptionChanged,
+  OpenDialog
 }
 
 @Injectable({

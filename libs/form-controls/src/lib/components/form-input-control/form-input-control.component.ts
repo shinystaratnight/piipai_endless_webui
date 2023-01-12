@@ -24,6 +24,7 @@ export class FormInputControlComponent implements ControlValueAccessor {
   @Input() placeholder?: string;
   @Input() type = 'text';
   @Input() prefix?: string;
+  @Input() error?: string;
 
   public value?: string = '';
   public onChange!: (value: string) => void;
