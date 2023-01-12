@@ -8,15 +8,10 @@ import { DialogComponent } from '../dialog/dialog.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ConfirmDialogComponent {
-    instanceName?: string;
+  instanceName?: string;
+  payload!: Record<string, string>;
 
   @ViewChild(DialogComponent) dialogComponent!: DialogComponent;
-
-  get param() {
-    return {
-      name: this.instanceName
-    }
-  }
 
   public onDismiss() {
     this.dialogComponent.dismiss();
