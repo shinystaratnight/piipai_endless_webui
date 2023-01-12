@@ -597,7 +597,7 @@
   "master_company.label": "Palveluntarjoajayritys",
   "max_size": "Suurin sallittu tiedostokoko on 10 Mt.",
   "message.add_credit_card": "Add credit card to unlock this button",
-  "message.confirm_delete_instance": "Confirm delete {{name}}",
+  "message.confirm_delete_instance": "Are you sure you want to continue to delete the {{model}} {{name}}?_FI",
   "message.credit_Card_removed": "",
   "message.credit_card_removedit_Card_removed": "Credit card removed!",
   "message.credit_card_updated": "",

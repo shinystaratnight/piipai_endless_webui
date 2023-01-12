@@ -434,10 +434,14 @@ export class SiteComponent implements OnInit, OnDestroy {
     this.eventService.emit(EventType.OpenDialog, {
       type: DialogType.ConfirmAction,
       onInit: (dialogRef: any) => (this.dialogRef = dialogRef),
+      content: {
+        message: 'message.confirm_delete_instance',
+        model: this.listName.toLowerCase(),
+        name: this.formLabel,
+        accept: 'delete',
+        decline: 'action.do_not_delete',
+      },
     });
-
-    // this.dialogRef = this.dialogService.open(ConfirmDeleteModalComponent, { size: 'sm' });
-    this.dialogRef.componentInstance.instanceName = this.listName.toLowerCase();
 
     this.dialogRef.result
       .then(() => {
@@ -453,7 +457,7 @@ export class SiteComponent implements OnInit, OnDestroy {
             },
             error: (err: any) => {
               this.errors = err.errors;
-            }
+            },
           });
       })
       .catch(() => empty({}));

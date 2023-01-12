@@ -37,11 +37,13 @@ export class DialogService {
         filter((event) => event === EventType.OpenDialog)
       )
       .subscribe(() => {
-        const { type, onInit } = this.eventService.payload;
+        const { type, onInit, content } = this.eventService.payload;
 
         const dialogRef = this.open(dialogMap.get(type), {
           size: 'sm',
         });
+
+        dialogRef.componentInstance.payload = content || {};
 
         if (onInit) {
           onInit(dialogRef);

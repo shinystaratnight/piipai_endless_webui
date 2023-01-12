@@ -1,14 +1,14 @@
 <webui-dialog>
   <div dialog-content>
-    {{ 'message.confirm_delete_instance' | translate: param }}
+    {{ payload['message'] | translate: payload }}
   </div>
 
   <div class="footer" dialog-footer>
     <button type="button" class="btn btn-secondary" (click)="onDismiss()">
-      <span>{{ 'action.do_not_delete' | translate }}</span>
+      <span>{{ payload['decline'] | translate }}</span>
     </button>
     <button type="button" class="btn btn-primary" (click)="onDelete()">
-      <span>{{ 'delete' | translate }}</span>
+      <span>{{ payload['accept'] | translate }}</span>
     </button>
   </div>
 </webui-dialog>
