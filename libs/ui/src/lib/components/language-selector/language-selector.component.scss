@@ -25,7 +25,8 @@
   display: inline-flex;
   align-items: center;
   min-width: 4rem;
-  background-color: $white;
+  background-color: transparent;
+  border: none;
 }
 
 .dropdown {
