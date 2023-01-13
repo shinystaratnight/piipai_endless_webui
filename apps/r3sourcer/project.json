@@ -32,6 +32,7 @@
         ],
         "scripts": [
           "node_modules/jquery/dist/jquery.min.js",
+          "node_modules/intl-tel-input/build/js/utils.js",
           "node_modules/jtsage-datebox-bootstrap4/jtsage-datebox.js"
         ],
         "allowedCommonJsDependencies": [

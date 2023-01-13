@@ -323,6 +323,7 @@
   "error.invalid_shift_started_at_12": "<Vuoron alkamisajankohta> ei voi olla yli 12 tuntia myöhemmin.",
   "error.invalid_shift_started_at_4": "<Vuoron alkamisajankohta> voi olla aikaisintaan 4 tuntia.",
   "error.invalid_total_24": "Kokonaistyöaika voi olla enintään 24 tuntia.",
+  "error.phone_number_invalid": "Phone number is invalid_FI",
   "evaluate.button": "Arvioida",
   "evaluate.label": "Arvioida",
   "evaluated_at.label": "Arvioitu",

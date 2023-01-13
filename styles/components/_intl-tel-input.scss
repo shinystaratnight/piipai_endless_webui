@@ -2,7 +2,7 @@
   width: 100%;
 }
 
-.iti input {
+.iti input:not(.control__input) {
   width: 100%;
   font-size: 14px;
   border: none;
@@ -18,7 +18,7 @@
 }
 
 @each $item in $themes {
-  .#{$item}-theme .iti input:focus {
+  .#{$item}-theme .iti input:focus:not(.control__input) {
     outline: none;
     border-color: map-get($theme-colors, $item);
   }
@@ -32,7 +32,7 @@
 	}
 }
 .iti--separate-dial-code {
-	input[type=tel] {
+	input[type=tel]:not(.control__input) {
 		padding-right: 6px;
 		padding-left: 52px !important;
 		margin-left: 0;

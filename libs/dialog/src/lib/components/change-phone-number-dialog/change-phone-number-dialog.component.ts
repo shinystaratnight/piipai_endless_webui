@@ -1,4 +1,9 @@
-import { Component, ChangeDetectionStrategy, ViewChild } from '@angular/core';
+import {
+  Component,
+  ChangeDetectionStrategy,
+  ViewChild,
+  OnInit,
+} from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import {
   ApiService,
@@ -15,7 +20,10 @@ import { DialogComponent } from '../dialog/dialog.component';
   styleUrls: ['./change-phone-number-dialog.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ChangePhoneNumberDialogComponent extends FormElement {
+export class ChangePhoneNumberDialogComponent
+  extends FormElement
+  implements OnInit
+{
   override readonly formGroup = new FormGroup({
     password: new FormControl('', Validators.required),
     new_phone_mobile: new FormControl('', Validators.required),
@@ -29,6 +37,10 @@ export class ChangePhoneNumberDialogComponent extends FormElement {
     private toast: ToastService
   ) {
     super();
+  }
+
+  ngOnInit(): void {
+    this.init();
   }
 
   onSubmit() {
