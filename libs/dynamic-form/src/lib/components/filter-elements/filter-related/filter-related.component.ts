@@ -348,7 +348,7 @@ export class FilterRelatedComponent implements OnInit, OnDestroy {
 
     timer(150).subscribe(() => {
       option.control.patchValue(!value);
-    })
+    });
   }
 
   @HostListener('document:click', ['$event'])
@@ -429,12 +429,10 @@ export class FilterRelatedComponent implements OnInit, OnDestroy {
   }
 
   private addValueControl(el: FilterOption) {
-    if (!this.valueGroup.get(el.key)) {
-      this.valueGroup.addControl(el.key, el.control, { emitEvent: false });
+    this.valueGroup.addControl(el.key, el.control, { emitEvent: false });
 
-      if (!this.config.multiple) {
-        this.subscribeOnChange(el.key, el.control);
-      }
+    if (!this.config.multiple) {
+      this.subscribeOnChange(el.key, el.control);
     }
   }
 
@@ -533,7 +531,8 @@ class FilterOption {
       }
 
       return (
-        acc || checkAndReturnTranslation(data, countryCode, lang as Language) ||
+        acc ||
+        checkAndReturnTranslation(data, countryCode, lang as Language) ||
         data[curr]
       );
     }, '');
