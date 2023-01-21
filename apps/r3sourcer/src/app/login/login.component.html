@@ -32,7 +32,7 @@
             </label>
             <a class="forgot" href="" (click)="openResetForm()">{{'login.forgot_password' | translate}}</a>
           </div>
-          <button class="btn btn-primary login-button" type="submit">
+          <button class="btn btn-primary login-button" type="submit" [disabled]="loginProcess">
             {{'login.login' | translate}} <webui-spinner *ngIf="loginProcess"></webui-spinner>
           </button>
         </webui-generic-form>

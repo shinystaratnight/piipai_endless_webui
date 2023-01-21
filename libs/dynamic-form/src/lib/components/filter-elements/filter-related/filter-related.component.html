@@ -34,6 +34,7 @@
         [formControl]="searchControl"
         *ngIf="!config.property && !config.multiple"
         name="search"
+        autocopmlete="off"
         type="text"
         class="form-control mb-1"
       />
@@ -92,11 +93,6 @@
         <div *ngIf="options.length" class="filter-values">
           <span class="badge badge-outline" *ngFor="let option of options">
             {{ option.value.label | translate }}
-
-            <!-- <fa-icon
-              [icon]="['fas', 'times']"
-              (click)="onRemoveOption(option)"
-            ></fa-icon> -->
           </span>
         </div>
       </ng-container>
