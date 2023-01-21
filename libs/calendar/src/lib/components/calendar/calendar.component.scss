@@ -440,6 +440,12 @@ webui-datepicker {
 
     overflow-y: auto;
 
+    &-header {
+      display: flex;
+      justify-content: flex-end;
+      padding-top: 0.25rem;
+    }
+
     &-title {
       display: flex;
       margin-bottom: 4px;

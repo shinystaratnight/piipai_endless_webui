@@ -301,9 +301,12 @@
         [disable]="!(isManager() || canClientCreateJob())"
         *ngIf="day.tooltip"
         [class.active]="day.isOpen"
-        triggers="click:click"
+        triggers="manual"
         [attr.title]="day.holiday"
         [ngbTooltip]="monthTooltip"
+        [autoClose]="false"
+        #t="ngbTooltip"
+        (click)="t.open()"
         [placement]="getPlacement(i, week.length)"
         (shown)="getShiftData(day)"
         (hidden)="day.isOpen = false"
@@ -340,6 +343,10 @@
         </div>
 
         <ng-template #monthTooltip>
+          <div class="shift-tooltip-header">
+            <webui-close-button (click)="t.close()"></webui-close-button>
+          </div>
+
           <webui-loader *ngIf="day.loading"></webui-loader>
 
           <div *ngIf="!day.loading" class="shift-tooltip">
