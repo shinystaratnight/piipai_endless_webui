@@ -1539,7 +1539,10 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
   }
 
   public responseHandler(response: any, sendData: any) {
-    this.formService.getForm(this.formId).setSaveProcess(false);
+    if (this.endpoint !== Endpoints.Note) {
+      this.formService.getForm(this.formId).setSaveProcess(false);
+    }
+
     this.parseResponse(response);
 
     if ((this.isJobEndpoint && !this.id && this.selectedDates && this.selectedDates.length) || sendData.client_contact_page) {
@@ -1574,19 +1577,27 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
           return this.service.uploadFile('/core/notefiles/', body);
         });
 
-        forkJoin([...requests])
+        forkJoin(requests)
           .pipe(
             finalize(() => {
-              this.formGroup.reset();
               this.event.emit({
                 type: 'sendForm',
                 viewData: response,
                 sendData,
                 status: 'success',
               });
+
+              this.formService.getForm(this.formId).setSaveProcess(false);
             })
           )
-          .subscribe();
+          .subscribe(() => {
+            this.formGroup.get('note')?.reset();
+            this.formGroup.get('files')?.reset();
+          });
+      } else {
+        this.formGroup.get('note')?.reset();
+        this.formGroup.get('files')?.reset();
+        this.formService.getForm(this.formId).setSaveProcess(false);
       }
     }
 

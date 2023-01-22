@@ -6,11 +6,11 @@ import {
   Output,
   EventEmitter,
   ChangeDetectorRef,
-  Optional
+  Optional,
 } from '@angular/core';
 
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { Subject, Subscription } from 'rxjs';
+import { Observable, Subject, Subscription } from 'rxjs';
 
 import { FormatString } from '@webui/utilities';
 import { smallModalEndpoints } from '../../../helpers';
@@ -19,7 +19,7 @@ import { CheckPermissionService } from '@webui/core';
 import {
   GenericFormService,
   TimelineService,
-  TimelineAction
+  TimelineAction,
 } from '../../../services';
 import { Field } from '@webui/metadata';
 import { Endpoints } from '@webui/models';
@@ -27,7 +27,7 @@ import { Endpoints } from '@webui/models';
 @Component({
   selector: 'webui-form-list',
   templateUrl: 'form-list.component.html',
-  styleUrls: ['./form-list.component.scss']
+  styleUrls: ['./form-list.component.scss'],
 })
 export class FormListComponent implements OnInit, OnDestroy {
   @ViewChild('modal')
@@ -61,7 +61,7 @@ export class FormListComponent implements OnInit, OnDestroy {
   public defaultQueries: any;
   public addedData: any[] = [];
 
-  public saveProcess!: boolean;
+  public saveProcess$?: Observable<boolean>;
 
   public hasAddForm?: boolean;
   public addFormConfig: any;
@@ -154,7 +154,7 @@ export class FormListComponent implements OnInit, OnDestroy {
       this.config.data = {
         length: 0,
         results: [],
-        sendData: []
+        sendData: [],
       };
       this.config.delayData[this.config.endpoint as string] = this.config;
     }
@@ -233,14 +233,15 @@ export class FormListComponent implements OnInit, OnDestroy {
     this.modalRef = this.modal.open(this.modalTemplate, {
       size: size as any,
       windowClass,
-      backdrop: 'static'
+      backdrop: 'static',
     });
   }
 
   public formEvent(e: any, closeModal?: () => void) {
-    if (e.type === 'saveStart') {
-      this.saveProcess = true;
+    if (e.type === 'formRegistration') {
+      this.saveProcess$ = e.form.saveProcess;
     }
+
     if (e.type === 'sendForm' && e.status === 'success') {
       if (closeModal) {
         closeModal();
@@ -253,15 +254,10 @@ export class FormListComponent implements OnInit, OnDestroy {
       if (this.timelineService) {
         this.timelineService.emit(TimelineAction.Update);
       }
-      this.saveProcess = false;
     }
   }
 
-  public formError() {
-    this.saveProcess = false;
-  }
-
-  public updateList(event:  any) {
+  public updateList(event: any) {
     if (
       this.config.delay &&
       this.checkOnUnique(event.sendData, this.config.unique as string[])
@@ -319,7 +315,7 @@ export class FormListComponent implements OnInit, OnDestroy {
         }
       });
 
-      this.config.data.results.find((field:  any) => {
+      this.config.data.results.find((field: any) => {
         const value = this.getValueByKey(el, field);
         if (inputValue === value) {
           check = false;
@@ -461,7 +457,7 @@ export class FormListComponent implements OnInit, OnDestroy {
     const config = {
       title: templateOptions?.add_label,
       endpoint: add_endpoint || endpoint,
-      data: <any>null
+      data: <any>null,
     };
 
     if (prefilled) {
@@ -474,8 +470,8 @@ export class FormListComponent implements OnInit, OnDestroy {
           data: {
             value: delay ? undefined : prefilled[el],
             read_only: true,
-            editForm: true
-          }
+            editForm: true,
+          },
         };
 
         if (delay) {

@@ -6,9 +6,11 @@
       (click)="showPreview(index)"
       title="Click for popup"
     />
-    <button class="btn button" type="button" (click)="hidePreview(index)">
-      <fa-icon class="icon" icon="times"></fa-icon>
-    </button>
+
+    <webui-close-button
+      class="close"
+      (click)="hidePreview(index)"
+    ></webui-close-button>
   </li>
 </ul>
 

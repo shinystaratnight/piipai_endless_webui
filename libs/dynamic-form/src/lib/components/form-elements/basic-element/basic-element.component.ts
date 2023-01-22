@@ -1,9 +1,13 @@
-import { FormGroup, FormBuilder, Validators, ValidatorFn } from '@angular/forms';
+import {
+  FormGroup,
+  FormBuilder,
+  Validators,
+  ValidatorFn,
+} from '@angular/forms';
 import { EventEmitter } from '@angular/core';
 import { ITemplateOptions } from '@webui/metadata';
 
 export class BasicElementComponent {
-
   public group!: FormGroup;
   public key: any;
   public config: any;
@@ -19,11 +23,21 @@ export class BasicElementComponent {
       if (keys.length > 1) {
         this.addControls(this.group, keys, fb, validators);
       } else {
-        if (config.type === 'related' && !config.many && !config.withoutIdField) {
+        if (
+          config.type === 'related' &&
+          !config.many &&
+          !config.withoutIdField
+        ) {
           keys.push('id');
           this.addControls(this.group, keys, fb, validators);
-        } else if (config.type !== 'static' || (config.type === 'static' && !config.read_only)) {
-          this.group.addControl(config.key, fb.control(undefined, this.getValidators(validators))); //tslint:disable-line
+        } else if (
+          config.type !== 'static' ||
+          (config.type === 'static' && !config.read_only)
+        ) {
+          this.group.addControl(
+            config.key,
+            fb.control(undefined, this.getValidators(validators))
+          ); //tslint:disable-line
           this.key = config.key;
         }
       }
@@ -32,7 +46,8 @@ export class BasicElementComponent {
 
   public addFlags(element: any, config: any) {
     const { nativeElement } = element;
-    const { type, required, max, min, cols, rows, pattern, disabled, step } = config.templateOptions;
+    const { type, required, max, min, cols, rows, pattern, disabled, step } =
+      config.templateOptions;
 
     nativeElement.required = config.type !== 'datepicker' && required;
 
@@ -66,13 +81,19 @@ export class BasicElementComponent {
     this.event.emit({
       type: 'create',
       el: this.config,
-      value: this.config.key === 'id'
-        ? { id: this.group.get(this.key)?.value }
-        : this.group.get(this.key)?.value
+      value:
+        this.config.key === 'id'
+          ? { id: this.group.get(this.key)?.value }
+          : this.group.get(this.key)?.value,
     });
   }
 
-  private addElement(group: FormGroup, el: string, fb: FormBuilder, validators: any[]) {
+  private addElement(
+    group: FormGroup,
+    el: string,
+    fb: FormBuilder,
+    validators: any[]
+  ) {
     group.addControl(el, fb.control('', this.getValidators(validators)));
   }
 
@@ -80,7 +101,12 @@ export class BasicElementComponent {
     group.addControl(el, fb.group({}));
   }
 
-  private addControls(group: FormGroup, keys: string[], fb: FormBuilder, validators: any[]) {
+  private addControls(
+    group: FormGroup,
+    keys: string[],
+    fb: FormBuilder,
+    validators: any[]
+  ) {
     const el: string = keys.shift() as string;
     if (keys.length === 0) {
       if (!group.get(el)) {
@@ -97,12 +123,7 @@ export class BasicElementComponent {
   }
 
   private getValidators(options: any[]): ValidatorFn[] {
-    const [
-      required,
-      min,
-      max,
-      pattern
-     ] = options;
+    const [required, min, max, pattern] = options;
 
     const result = [];
 
