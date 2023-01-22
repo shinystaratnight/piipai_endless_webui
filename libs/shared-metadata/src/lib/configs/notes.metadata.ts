@@ -327,7 +327,9 @@ const form = [
       .setChildren([new Form.textarea.element('note', 'Notes').setRows(5)]),
     new Form.group.element()
       .doNotShowLabel()
-      .setChildren([new Form.imageList.element('files', 'Files').doNotSend()]),
+      .setChildren([
+        new Form.imageList.element('files', 'Images').doNotSend(),
+      ]),
   ]),
 ];
 
@@ -375,7 +377,9 @@ const formadd = [
       ]),
     new Form.group.element(' ')
       .doNotShowLabel()
-      .setChildren([new Form.imageList.element('files', 'Files').doNotSend()]),
+      .setChildren([
+        new Form.imageList.element('files', 'Images').doNotSend(),
+      ]),
   ]),
 ];
 
