@@ -9,12 +9,14 @@ const formset = {
       .hideField()
       .doNotSend(),
     new Form.related.element('worktype', 'Work Type', Endpoints.SkillWorkTypes)
+      .setRequired()
       .setQuery({
         skill: '{skill.id}',
         limited: true,
       })
       .updateValues(['translations', 'skill_rate_ranges', 'uom']),
     new Form.input.element('rate', 'Rate', InputType.Number)
+      .setRequired()
       .setNumberOptions(0.01, 0)
       .setDefaultValue('{worktype.skill_rate_ranges.default_rate}'),
     new Form.related.element('skill_rel', 'Skill', Endpoints.CandidateSkill)

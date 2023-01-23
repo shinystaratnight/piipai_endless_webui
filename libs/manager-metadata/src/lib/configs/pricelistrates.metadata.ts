@@ -79,7 +79,7 @@ const pricelist = {
         add: true,
         delete: false,
         edit: true,
-        values: ['__str__', 'tranlsations', 'name'],
+        values: ['__str__', 'translations', 'name'],
         label: 'Skill',
         type: 'related'
       },
@@ -175,7 +175,7 @@ const form = [
       active: true,
       company: '{company.id}'
     })
-    .updateValues(['price_list_default_rate', 'tranlsations', 'name']),
+    .updateValues(['price_list_default_rate', 'translations', 'name']),
   {
     key: 'rate',
     default: '{skill.price_list_default_rate}',
@@ -232,7 +232,7 @@ const formadd = [
       active: true,
       company: '{company.id}'
     })
-    .updateValues(['price_list_default_rate', 'tranlsations', 'name']),
+    .updateValues(['price_list_default_rate', 'translations', 'name']),
   {
     key: 'rate',
     default: '{skill.price_list_default_rate}',
@@ -276,7 +276,7 @@ const pricelistForm = [
       type: 'related',
       add: true,
       edit: true,
-      values: ['default_rate', '__str__', 'tranlsations'],
+      values: ['default_rate', '__str__', 'translations'],
       label: 'Skill',
       delete: false
     },

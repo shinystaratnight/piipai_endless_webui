@@ -124,7 +124,7 @@ export const testMetadata = (type: MetadataType) => {
                   templateOptions: {
                     label: 'Skills',
                     type: 'related',
-                    values: ['__str__', 'tranlsations', 'name'],
+                    values: ['__str__', 'translations', 'name'],
                     delete: true,
                     add: false
                   },
