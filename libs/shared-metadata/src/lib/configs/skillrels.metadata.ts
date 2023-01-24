@@ -1,5 +1,5 @@
-import { createFilter, Form, Type } from "@webui/metadata";
-import { Endpoints } from "@webui/models";
+import { createFilter, Form, Type } from '@webui/metadata';
+import { Endpoints } from '@webui/models';
 
 const list = {
   list: {
@@ -12,33 +12,33 @@ const list = {
           {
             endpoint: '/candidate/candidatecontacts/',
             field: 'candidate_contact',
-            type: 'related'
-          }
+            type: 'related',
+          },
         ],
         name: 'candidate_contact',
         sort_field: 'candidate_contact',
         label: 'Candidate contact',
-        sort: true
+        sort: true,
       },
       {
         content: [
           {
             endpoint: '/skills/skills/',
             field: 'skill',
-            type: 'text'
-          }
+            type: 'text',
+          },
         ],
         name: 'skill',
         sort_field: 'skill',
         label: 'Skill',
-        sort: true
+        sort: true,
       },
       {
         content: [{ field: 'score', type: 'input' }],
         name: 'score',
         sort_field: 'score',
         label: 'Score',
-        sort: true
+        sort: true,
       },
       {
         content: [
@@ -51,17 +51,17 @@ const list = {
               31536000: '1 Year',
               63072000: '2 Years',
               94608000: '3 Years',
-              157680000: '5 Years or more'
+              157680000: '5 Years or more',
             },
             field: 'prior_experience',
-            type: 'select'
-          }
+            type: 'select',
+          },
         ],
         name: 'prior_experience',
         sort_field: 'prior_experience',
         label: 'Prior Experience',
-        sort: true
-      }
+        sort: true,
+      },
     ],
     pagination_label: 'Candidate Skill',
     search_enabled: false,
@@ -70,9 +70,9 @@ const list = {
       createFilter(Type.Related, {
         key: 'candidate_contact',
         label: 'Candidate contact',
-        endpoint: Endpoints.CandidateContact
-      })
-    ]
+        endpoint: Endpoints.CandidateContact,
+      }),
+    ],
   },
   fields: [
     {
@@ -85,12 +85,12 @@ const list = {
         delete: false,
         values: ['__str__'],
         type: 'related',
-        edit: true
+        edit: true,
       },
       collapsed: false,
       type: 'related',
       key: 'candidate_contact',
-      many: false
+      many: false,
     },
     {
       key: 'score',
@@ -101,9 +101,9 @@ const list = {
         label: 'Score',
         type: 'number',
         min: 0,
-        max: 32767
+        max: 32767,
       },
-      read_only: true
+      read_only: true,
     },
     {
       list: false,
@@ -113,14 +113,14 @@ const list = {
         label: 'Skill',
         add: true,
         delete: false,
-        values: ['__str__', 'tranlsations', 'name'],
+        values: ['__str__', 'translations', 'name'],
         type: 'related',
-        edit: true
+        edit: true,
       },
       collapsed: false,
       type: 'related',
       key: 'skill',
-      many: false
+      many: false,
     },
     {
       key: 'prior_experience',
@@ -136,13 +136,13 @@ const list = {
           { value: 31536000, label: '1 Year' },
           { value: 63072000, label: '2 Years' },
           { value: 94608000, label: '3 Years' },
-          { value: 157680000, label: '5 Years or more' }
+          { value: 157680000, label: '5 Years or more' },
         ],
-        type: 'select'
+        type: 'select',
       },
-      read_only: true
-    }
-  ]
+      read_only: true,
+    },
+  ],
 };
 
 const formset = {
@@ -154,15 +154,15 @@ const formset = {
         required: true,
         label: 'Skill',
         max: 63,
-        type: 'text'
+        type: 'text',
       },
-      type: 'input'
+      type: 'input',
     },
     {
       key: 'created_by',
       read_only: true,
       templateOptions: { required: false, label: 'Created by', type: 'static' },
-      type: 'static'
+      type: 'static',
     },
     {
       default: 0,
@@ -173,9 +173,9 @@ const formset = {
         min: 0,
         label: 'Score',
         max: 32767,
-        type: 'number'
+        type: 'number',
       },
-      type: 'input'
+      type: 'input',
     },
     {
       key: 'id',
@@ -183,9 +183,9 @@ const formset = {
         action: 'editForm',
         label: '',
         type: 'button',
-        text: ''
+        text: '',
       },
-      type: 'button'
+      type: 'button',
     },
     {
       key: 'hourly_rate',
@@ -194,9 +194,9 @@ const formset = {
         required: true,
         display: '{currency}{field}/h',
         label: 'Skill Rate',
-        type: 'static'
+        type: 'static',
       },
-      type: 'static'
+      type: 'static',
     },
     {
       key: 'updated_at',
@@ -204,9 +204,9 @@ const formset = {
       templateOptions: {
         required: false,
         label: 'Updated at',
-        type: 'datetime'
+        type: 'datetime',
       },
-      type: 'datepicker'
+      type: 'datepicker',
     },
     {
       key: 'prior_experience',
@@ -221,18 +221,18 @@ const formset = {
           { value: 31536000, label: '1 Year' },
           { value: 63072000, label: '2 Years' },
           { value: 94608000, label: '3 Years' },
-          { value: 157680000, label: '5 Years or more' }
+          { value: 157680000, label: '5 Years or more' },
         ],
         label: 'Prior Experience',
-        type: 'select'
+        type: 'select',
       },
-      type: 'select'
+      type: 'select',
     },
     {
       key: 'updated_by',
       read_only: true,
       templateOptions: { required: false, label: 'Updated by', type: 'static' },
-      type: 'static'
+      type: 'static',
     },
     {
       key: 'created_at',
@@ -240,10 +240,10 @@ const formset = {
       templateOptions: {
         required: false,
         label: 'Created at',
-        type: 'datetime'
+        type: 'datetime',
       },
-      type: 'datepicker'
-    }
+      type: 'datepicker',
+    },
   ],
   list: {
     columns: [
@@ -254,14 +254,14 @@ const formset = {
         sort: true,
         content: [{ label: 'Skill', type: 'text', field: 'skill.name' }],
         label: 'Skill',
-        delim: null
+        delim: null,
       },
       {
         name: 'score',
         sort: true,
         sort_field: 'score',
         content: [{ type: 'input', field: 'score' }],
-        label: 'Score'
+        label: 'Score',
       },
       {
         name: 'prior_experience',
@@ -277,33 +277,33 @@ const formset = {
               31536000: '1 Year',
               63072000: '2 Years',
               94608000: '3 Years',
-              157680000: '5 Years or more'
+              157680000: '5 Years or more',
             },
             type: 'select',
-            field: 'prior_experience'
-          }
+            field: 'prior_experience',
+          },
         ],
-        label: 'Prior Experience'
+        label: 'Prior Experience',
       },
       {
         name: 'created',
         content: [
           { type: 'datepicker', field: 'created_at' },
-          { type: 'static', field: 'created_by' }
+          { type: 'static', field: 'created_by' },
         ],
         label: 'Created',
         title: null,
-        delim: null
+        delim: null,
       },
       {
         name: 'updated',
         content: [
           { type: 'datepicker', field: 'updated_at' },
-          { type: 'static', field: 'updated_by' }
+          { type: 'static', field: 'updated_by' },
         ],
         label: 'Updated',
         title: null,
-        delim: null
+        delim: null,
       },
       {
         name: 'actions',
@@ -315,7 +315,7 @@ const formset = {
             title: 'Edit',
             text_color: '#f0ad4e',
             type: 'button',
-            field: 'id'
+            field: 'id',
           },
           {
             action: 'delete',
@@ -323,20 +323,20 @@ const formset = {
             title: 'Delete',
             text_color: '#f32700',
             type: 'button',
-            field: 'id'
-          }
+            field: 'id',
+          },
         ],
         label: 'Actions',
         title: null,
-        delim: null
-      }
+        delim: null,
+      },
     ],
     list: 'skillrel',
     editDisable: false,
     label: 'Candidate Skill',
     pagination_label: 'Candidate Skill',
-    search_enabled: false
-  }
+    search_enabled: false,
+  },
 };
 
 const form = [
@@ -351,12 +351,12 @@ const form = [
       delete: false,
       values: ['__str__'],
       type: 'related',
-      edit: true
+      edit: true,
     },
     collapsed: false,
     type: 'related',
     key: 'candidate_contact',
-    many: false
+    many: false,
   },
   {
     list: false,
@@ -368,15 +368,15 @@ const form = [
       label: 'Skill',
       add: true,
       delete: false,
-      values: ['default_rate', '__str__', 'tranlsations', 'name'],
+      values: ['default_rate', '__str__', 'translations', 'name'],
       type: 'related',
-      edit: true
+      edit: true,
     },
     visibleMode: true,
     collapsed: false,
     type: 'related',
     query: { exclude: '{candidate_contact.id}', company: 'currentCompany' },
-    many: false
+    many: false,
   },
   {
     key: 'score',
@@ -387,9 +387,9 @@ const form = [
       max: 5,
       type: 'score',
       min: 0,
-      noneValue: 'Please add skill rating'
+      noneValue: 'Please add skill rating',
     },
-    read_only: false
+    read_only: false,
   },
   {
     key: 'prior_experience',
@@ -406,10 +406,10 @@ const form = [
         { value: 31536000, label: '1 Year' },
         { value: 63072000, label: '2 Years' },
         { value: 94608000, label: '3 Years' },
-        { value: 157680000, label: '5 Years or more' }
-      ]
+        { value: 157680000, label: '5 Years or more' },
+      ],
     },
-    read_only: false
+    read_only: false,
   },
   {
     endpoint: Endpoints.SkillRateCoefficient,
@@ -418,17 +418,17 @@ const form = [
       label: 'Candidate Skill Modifier',
       type: 'list',
       text: 'Candidate Skill Modifier',
-      add_label: 'Add'
+      add_label: 'Add',
     },
     collapsed: false,
     visibleMode: true,
     translateKey: 'skillratecoefficientrels',
     prefilled: {
-      skill_rel: '{id}'
+      skill_rel: '{id}',
     },
     query: {
-      skill_rel: '{id}'
-    }
+      skill_rel: '{id}',
+    },
   },
   {
     endpoint: Endpoints.SkillRate,
@@ -437,19 +437,19 @@ const form = [
       label: 'Skill Rate',
       type: 'list',
       text: 'Skill Rate',
-      add_label: 'Add'
+      add_label: 'Add',
     },
     translateKey: 'skillrates',
     collapsed: false,
     visibleMode: true,
     prefilled: {
       skill_rel: '{id}',
-      skill: '{skill.id}'
+      skill: '{skill.id}',
     },
     query: {
-      skill_rel: '{id}'
-    }
-  }
+      skill_rel: '{id}',
+    },
+  },
 ];
 
 const formadd = [
@@ -464,12 +464,12 @@ const formadd = [
       delete: false,
       values: ['__str__'],
       type: 'related',
-      edit: true
+      edit: true,
     },
     collapsed: false,
     type: 'related',
     key: 'candidate_contact',
-    many: false
+    many: false,
   },
   {
     list: false,
@@ -481,16 +481,16 @@ const formadd = [
       label: 'Skill',
       add: true,
       delete: false,
-      values: ['default_rate', '__str__', 'tranlsations', 'name'],
+      values: ['default_rate', '__str__', 'translations', 'name'],
       type: 'related',
       edit: true,
-      display: '{name.name}'
+      display: '{name.name}',
     },
     visibleMode: true,
     collapsed: false,
     type: 'related',
     query: { exclude: '{candidate_contact.id}', company: 'currentCompany' },
-    many: false
+    many: false,
   },
   {
     key: 'score',
@@ -501,9 +501,9 @@ const formadd = [
       max: 5,
       type: 'score',
       min: 0,
-      noneValue: 'Please add skill rating'
+      noneValue: 'Please add skill rating',
     },
-    read_only: false
+    read_only: false,
   },
   {
     key: 'prior_experience',
@@ -520,23 +520,24 @@ const formadd = [
         { value: 31536000, label: '1 Year' },
         { value: 63072000, label: '2 Years' },
         { value: 94608000, label: '3 Years' },
-        { value: 157680000, label: '5 Years or more' }
-      ]
+        { value: 157680000, label: '5 Years or more' },
+      ],
     },
-    read_only: false
+    read_only: false,
   },
   new Form.related.element('skillrates', 'Skill Rate', Endpoints.SkillRate)
     .setPrefilledFields({
       skill_rel: '{id}',
-      skill: '{skill.id}'
+      skill: '{skill.id}',
     })
     .setQuery({
-      skill_rel: '{id}'
+      skill_rel: '{id}',
     })
     .setTranslateKey('skillrates')
     .setDelay()
     .setList()
     .setShowIfRule(['skill.id'])
+    .setRequired(),
 ];
 
 const profile = {
@@ -548,15 +549,15 @@ const profile = {
         required: true,
         label: 'Skill',
         max: 63,
-        type: 'text'
+        type: 'text',
       },
-      type: 'input'
+      type: 'input',
     },
     {
       key: 'created_by',
       read_only: true,
       templateOptions: { required: false, label: 'Created by', type: 'static' },
-      type: 'static'
+      type: 'static',
     },
     {
       default: 0,
@@ -567,9 +568,9 @@ const profile = {
         min: 0,
         label: 'Score',
         max: 32767,
-        type: 'number'
+        type: 'number',
       },
-      type: 'input'
+      type: 'input',
     },
     {
       key: 'id',
@@ -577,9 +578,9 @@ const profile = {
         action: 'editForm',
         label: '',
         type: 'button',
-        text: ''
+        text: '',
       },
-      type: 'button'
+      type: 'button',
     },
     {
       key: 'hourly_rate',
@@ -588,9 +589,9 @@ const profile = {
         required: true,
         display: '{currency}{field}/h',
         label: 'Skill Rate',
-        type: 'static'
+        type: 'static',
       },
-      type: 'static'
+      type: 'static',
     },
     {
       key: 'updated_at',
@@ -598,9 +599,9 @@ const profile = {
       templateOptions: {
         required: false,
         label: 'Updated at',
-        type: 'datetime'
+        type: 'datetime',
       },
-      type: 'datepicker'
+      type: 'datepicker',
     },
     {
       key: 'prior_experience',
@@ -615,18 +616,18 @@ const profile = {
           { value: 31536000, label: '1 Year' },
           { value: 63072000, label: '2 Years' },
           { value: 94608000, label: '3 Years' },
-          { value: 157680000, label: '5 Years or more' }
+          { value: 157680000, label: '5 Years or more' },
         ],
         label: 'Prior Experience',
-        type: 'select'
+        type: 'select',
       },
-      type: 'select'
+      type: 'select',
     },
     {
       key: 'updated_by',
       read_only: true,
       templateOptions: { required: false, label: 'Updated by', type: 'static' },
-      type: 'static'
+      type: 'static',
     },
     {
       key: 'created_at',
@@ -634,10 +635,10 @@ const profile = {
       templateOptions: {
         required: false,
         label: 'Created at',
-        type: 'datetime'
+        type: 'datetime',
       },
-      type: 'datepicker'
-    }
+      type: 'datepicker',
+    },
   ],
   list: {
     columns: [
@@ -648,7 +649,7 @@ const profile = {
         sort: true,
         content: [{ label: 'Skill', type: 'text', field: 'skill.name' }],
         label: 'Skill',
-        delim: null
+        delim: null,
       },
       {
         name: 'score',
@@ -658,10 +659,10 @@ const profile = {
           {
             type: 'skills',
             field: 'score',
-            stars: true
-          }
+            stars: true,
+          },
         ],
-        label: 'Score'
+        label: 'Score',
       },
       {
         name: 'prior_experience',
@@ -677,14 +678,14 @@ const profile = {
               31536000: '1 Year',
               63072000: '2 Years',
               94608000: '3 Years',
-              157680000: '5 Years or more'
+              157680000: '5 Years or more',
             },
             type: 'select',
-            field: 'prior_experience'
-          }
+            field: 'prior_experience',
+          },
         ],
-        label: 'Prior Experience'
-      }
+        label: 'Prior Experience',
+      },
       // {
       //   name: 'actions',
       //   content: [
@@ -715,8 +716,8 @@ const profile = {
     editDisable: false,
     label: 'Candidate Skill',
     pagination_label: 'Candidate Skill',
-    search_enabled: false
-  }
+    search_enabled: false,
+  },
 };
 
 const candidatepool = {
@@ -728,9 +729,9 @@ const candidatepool = {
         required: true,
         label: 'Skill',
         max: 63,
-        type: 'text'
+        type: 'text',
       },
-      type: 'input'
+      type: 'input',
     },
     {
       default: 0,
@@ -741,9 +742,9 @@ const candidatepool = {
         min: 0,
         label: 'Score',
         max: 32767,
-        type: 'number'
+        type: 'number',
       },
-      type: 'input'
+      type: 'input',
     },
     {
       key: 'prior_experience',
@@ -758,13 +759,13 @@ const candidatepool = {
           { value: 31536000, label: '1 Year' },
           { value: 63072000, label: '2 Years' },
           { value: 94608000, label: '3 Years' },
-          { value: 157680000, label: '5 Years or more' }
+          { value: 157680000, label: '5 Years or more' },
         ],
         label: 'Prior Experience',
-        type: 'select'
+        type: 'select',
       },
-      type: 'select'
-    }
+      type: 'select',
+    },
   ],
   list: {
     columns: [
@@ -775,14 +776,14 @@ const candidatepool = {
         sort: true,
         content: [{ label: 'Skill', type: 'text', field: 'skill.name.name' }],
         label: 'Skill',
-        delim: null
+        delim: null,
       },
       {
         name: 'score',
         sort: true,
         sort_field: 'score',
         content: [{ type: 'input', field: 'score' }],
-        label: 'Score'
+        label: 'Score',
       },
       {
         name: 'prior_experience',
@@ -798,21 +799,21 @@ const candidatepool = {
               31536000: '1 Year',
               63072000: '2 Years',
               94608000: '3 Years',
-              157680000: '5 Years or more'
+              157680000: '5 Years or more',
             },
             type: 'select',
-            field: 'prior_experience'
-          }
+            field: 'prior_experience',
+          },
         ],
-        label: 'Prior Experience'
-      }
+        label: 'Prior Experience',
+      },
     ],
     list: 'skillrel',
     editDisable: true,
     label: 'Candidate Skill',
     pagination_label: 'Candidate Skill',
-    search_enabled: false
-  }
+    search_enabled: false,
+  },
 };
 
 export const skillrels = {
@@ -821,5 +822,5 @@ export const skillrels = {
   form,
   formadd,
   profile,
-  candidatepool
+  candidatepool,
 };

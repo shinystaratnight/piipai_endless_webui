@@ -1,6 +1,6 @@
 import {
   BasicFormElement,
-  BasicElementTemplateOptions
+  BasicElementTemplateOptions,
 } from './basic-form-element';
 
 export const Input = 'input';
@@ -19,6 +19,7 @@ export interface InputElementTemplateOptions
   min?: number;
   display?: string;
   icon?: string;
+  required: boolean;
 }
 
 export class InputElement extends BasicFormElement {
@@ -28,6 +29,7 @@ export class InputElement extends BasicFormElement {
     super(key, label, Input);
 
     this.templateOptions.type = type;
+    this.templateOptions.required = false;
   }
 
   setNumberOptions(step: number, min?: number, max?: number) {
@@ -46,6 +48,12 @@ export class InputElement extends BasicFormElement {
 
   setIcon(icon?: string) {
     this.templateOptions.icon = icon;
+
+    return this;
+  }
+
+  setRequired() {
+    this.templateOptions.required = true;
 
     return this;
   }

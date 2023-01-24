@@ -47,7 +47,7 @@ const form = [
         'upper_rate_limit',
         'lower_rate_limit',
         'default_rate',
-        'tranlsations',
+        'translations',
         'name'
       ],
       type: 'related',
@@ -129,7 +129,7 @@ const formadd = [
         'upper_rate_limit',
         'lower_rate_limit',
         'default_rate',
-        'tranlsations',
+        'translations',
         'name'
       ],
       type: 'related',
