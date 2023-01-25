@@ -6,10 +6,10 @@ const list = {
       templateOptions: {
         required: false,
         label: 'Shift',
-        type: 'static'
+        type: 'static',
       },
-      type: 'static'
-    }
+      type: 'static',
+    },
   ],
   list: {
     columns: [
@@ -18,18 +18,18 @@ const list = {
         content: [
           {
             type: 'static',
-            field: '__str__'
-          }
+            field: '__str__',
+          },
         ],
-        label: 'Shift'
-      }
+        label: 'Shift',
+      },
     ],
     list: 'shift',
     editDisable: false,
     label: 'Shift',
     pagination_label: 'Shift',
-    search_enabled: false
-  }
+    search_enabled: false,
+  },
 };
 
 const form = [
@@ -47,17 +47,17 @@ const form = [
         'upper_rate_limit',
         'lower_rate_limit',
         'default_rate',
-        'tranlsations',
-        'name'
+        'translations',
+        'name',
       ],
       query: {
-        company: 'currentCompany'
+        company: 'currentCompany',
       },
       type: 'related',
-      edit: true
+      edit: true,
     },
     type: 'related',
-    key: 'skill'
+    key: 'skill',
   },
   {
     many: false,
@@ -71,10 +71,10 @@ const form = [
       edit: true,
       values: ['__str__'],
       label: 'Date',
-      type: 'related'
+      type: 'related',
     },
     read_only: false,
-    type: 'related'
+    type: 'related',
   },
   {
     key: 'time',
@@ -82,9 +82,9 @@ const form = [
     templateOptions: {
       required: true,
       label: 'Time',
-      type: 'time'
+      type: 'time',
     },
-    type: 'datepicker'
+    type: 'datepicker',
   },
   {
     default: 1,
@@ -95,9 +95,9 @@ const form = [
       required: false,
       label: 'Workers',
       max: 32767,
-      type: 'number'
+      type: 'number',
     },
-    type: 'input'
+    type: 'input',
   },
   {
     default: 0.0,
@@ -107,14 +107,14 @@ const form = [
       required: false,
       display: '{currency}{field}/h',
       label: 'Candidate rate',
-      type: 'number'
+      type: 'number',
     },
     attributes: {
       max: '{skill.upper_rate_limit}',
-      min: '{skill.lower_rate_limit}'
+      min: '{skill.lower_rate_limit}',
     },
-    type: 'input'
-  }
+    type: 'input',
+  },
 ];
 
 const formadd = [
@@ -132,17 +132,17 @@ const formadd = [
         'upper_rate_limit',
         'lower_rate_limit',
         'default_rate',
-        'tranlsations',
-        'name'
+        'translations',
+        'name',
       ],
       type: 'related',
-      edit: true
+      edit: true,
     },
     query: {
-      company: 'currentCompany'
+      company: 'currentCompany',
     },
     type: 'related',
-    key: 'skill'
+    key: 'skill',
   },
   {
     many: false,
@@ -156,10 +156,10 @@ const formadd = [
       edit: true,
       values: ['__str__'],
       label: 'Date',
-      type: 'related'
+      type: 'related',
     },
     read_only: false,
-    type: 'related'
+    type: 'related',
   },
   {
     key: 'time',
@@ -168,9 +168,9 @@ const formadd = [
       required: true,
       label: 'Time',
       type: 'time',
-      placeholder: 'Time'
+      placeholder: 'Time',
     },
-    type: 'datepicker'
+    type: 'datepicker',
   },
   {
     default: 1,
@@ -182,9 +182,9 @@ const formadd = [
       label: 'Workers',
       max: 32767,
       type: 'number',
-      placeholder: 'Workers'
+      placeholder: 'Workers',
     },
-    type: 'input'
+    type: 'input',
   },
   {
     default: 0.0,
@@ -195,14 +195,14 @@ const formadd = [
       display: '{currency}{field}/h',
       label: 'Candidate rate',
       type: 'number',
-      placeholder: 'Candidate rate'
+      placeholder: 'Candidate rate',
     },
     attributes: {
       max: '{skill.upper_rate_limit}',
-      min: '{skill.lower_rate_limit}'
+      min: '{skill.lower_rate_limit}',
     },
-    type: 'input'
-  }
+    type: 'input',
+  },
 ];
 
 const shiftDate = {
@@ -217,9 +217,9 @@ const shiftDate = {
         edit: true,
         values: ['__str__'],
         label: 'Date',
-        type: 'related'
+        type: 'related',
       },
-      type: 'related'
+      type: 'related',
     },
     {
       key: 'time',
@@ -228,12 +228,11 @@ const shiftDate = {
       templateOptions: {
         required: true,
         label: 'Time',
-        type: 'time'
+        type: 'time',
       },
-      type: 'datepicker'
+      type: 'datepicker',
     },
     {
-      default: '{workers}',
       key: 'workers',
       read_only: false,
       templateOptions: {
@@ -242,23 +241,23 @@ const shiftDate = {
         label: 'Workers',
         max: 32767,
         type: 'number',
-        placeholder: 'Workers'
+        placeholder: 'Workers',
       },
-      type: 'input'
+      type: 'input',
     },
     {
       key: 'hourly_rate',
       type: 'input',
       attributes: {
         max: '{skill.upper_rate_limit}',
-        min: '{skill.lower_rate_limit}'
+        min: '{skill.lower_rate_limit}',
       },
       templateOptions: {
         label: 'Candidate rate default',
         type: 'number',
         text: '{currency}{hourly_rate}/h',
-      }
-    }
+      },
+    },
   ],
   list: {
     columns: [
@@ -269,17 +268,17 @@ const shiftDate = {
         title: null,
         sort: true,
         content: [
-          { label: 'Shift start time', type: 'datepicker', field: 'time' }
+          { label: 'Shift start time', type: 'datepicker', field: 'time' },
         ],
         label: 'Shift start time',
-        delim: null
+        delim: null,
       },
       {
         name: 'workers',
         sort: true,
         sort_field: 'workers',
         content: [{ type: 'input', field: 'workers' }],
-        label: 'Workers'
+        label: 'Workers',
       },
       {
         name: 'candidate_rate',
@@ -288,12 +287,12 @@ const shiftDate = {
             display: '{currency}{field}/h',
             label: 'Candidate rate',
             type: 'text',
-            field: 'hourly_rate'
-          }
+            field: 'hourly_rate',
+          },
         ],
         label: 'Candidate rate',
         title: null,
-        delim: null
+        delim: null,
       },
       {
         name: 'actions',
@@ -305,28 +304,28 @@ const shiftDate = {
             title: 'Edit',
             text_color: '#f0ad4e',
             type: 'button',
-            field: 'id'
+            field: 'id',
           },
           {
             action: 'delete',
             icon: 'fa-trash',
             title: 'Delete',
             type: 'button',
-            field: 'id'
-          }
+            field: 'id',
+          },
         ],
         label: 'Actions',
         title: null,
-        delim: null
-      }
+        delim: null,
+      },
     ],
     buttons: [],
     list: 'shift',
     editDisable: false,
     label: 'Shift',
     pagination_label: 'Shift',
-    search_enabled: false
-  }
+    search_enabled: false,
+  },
 };
 
 const editShiftDate = [
@@ -339,9 +338,9 @@ const editShiftDate = [
       edit: true,
       values: ['__str__'],
       label: 'Date',
-      type: 'related'
+      type: 'related',
     },
-    type: 'related'
+    type: 'related',
   },
   {
     key: 'time',
@@ -350,9 +349,9 @@ const editShiftDate = [
     templateOptions: {
       required: true,
       label: 'Time',
-      type: 'time'
+      type: 'time',
     },
-    type: 'datepicker'
+    type: 'datepicker',
   },
   {
     default: 1,
@@ -363,23 +362,23 @@ const editShiftDate = [
       required: false,
       label: 'Workers',
       max: 32767,
-      type: 'number'
+      type: 'number',
     },
-    type: 'input'
+    type: 'input',
   },
   {
     key: 'hourly_rate',
     type: 'input',
     attributes: {
       max: '{skill.upper_rate_limit}',
-      min: '{skill.lower_rate_limit}'
+      min: '{skill.lower_rate_limit}',
     },
     templateOptions: {
       label: 'Candidate rate default',
       type: 'number',
-      text: '{currency}{hourly_rate}/h'
-    }
-  }
+      text: '{currency}{hourly_rate}/h',
+    },
+  },
 ];
 
 const job = {
@@ -394,18 +393,18 @@ const job = {
           1: 'check-circle',
           2: 'exclamation-circle',
           3: 'minus-circle',
-          null: 'minus-circle'
+          null: 'minus-circle',
         },
         label: 'Fulfilled',
-        type: 'icon'
+        type: 'icon',
       },
-      type: 'checkbox'
+      type: 'checkbox',
     },
     {
       key: 'date.shift_date',
       read_only: false,
       templateOptions: { required: true, label: 'Date', type: 'date' },
-      type: 'datepicker'
+      type: 'datepicker',
     },
     {
       default: 0.0,
@@ -415,9 +414,9 @@ const job = {
         required: false,
         display: '{currency}{field}/h',
         label: 'Candidate rate',
-        type: 'text'
+        type: 'text',
       },
-      type: 'input'
+      type: 'input',
     },
     {
       key: 'time',
@@ -425,9 +424,9 @@ const job = {
       templateOptions: {
         required: true,
         label: 'Shift start time',
-        type: 'time'
+        type: 'time',
       },
-      type: 'datepicker'
+      type: 'datepicker',
     },
     {
       default: 1,
@@ -438,9 +437,9 @@ const job = {
         min: 1,
         label: 'Workers',
         max: 32767,
-        type: 'number'
+        type: 'number',
       },
-      type: 'input'
+      type: 'input',
     },
     {
       key: 'id',
@@ -448,10 +447,10 @@ const job = {
         action: 'editForm',
         label: '',
         type: 'button',
-        text: ''
+        text: '',
       },
-      type: 'button'
-    }
+      type: 'button',
+    },
   ],
   list: {
     columns: [
@@ -462,10 +461,10 @@ const job = {
         title: null,
         sort: true,
         content: [
-          { label: 'Date', type: 'datepicker', field: 'date.shift_date' }
+          { label: 'Date', type: 'datepicker', field: 'date.shift_date' },
         ],
         label: 'Date',
-        delim: null
+        delim: null,
       },
       {
         name: 'time',
@@ -474,10 +473,10 @@ const job = {
         title: null,
         sort: true,
         content: [
-          { label: 'Shift start time', type: 'datepicker', field: 'time' }
+          { label: 'Shift start time', type: 'datepicker', field: 'time' },
         ],
         label: 'Shift start time',
-        delim: null
+        delim: null,
       },
       {
         name: 'workers',
@@ -487,10 +486,10 @@ const job = {
           {
             type: 'input',
             field: 'workers',
-            workers_details: true
-          }
+            workers_details: true,
+          },
         ],
-        label: 'Workers'
+        label: 'Workers',
       },
       {
         name: 'candidate_rate',
@@ -499,12 +498,12 @@ const job = {
             display: '{currency}{field}',
             label: ' Candidate rate override',
             type: 'text',
-            field: 'hourly_rate'
-          }
+            field: 'hourly_rate',
+          },
         ],
         label: ' Candidate rate override',
         title: null,
-        delim: null
+        delim: null,
       },
       {
         name: 'fulfilled',
@@ -515,30 +514,30 @@ const job = {
               1: 'check-circle',
               2: 'exclamation-circle',
               3: 'minus-circle',
-              null: 'minus-circle'
+              null: 'minus-circle',
             },
             color: {
               0: 'danger',
               1: 'success',
               2: 'warning',
               3: 'default',
-              null: 'default'
+              null: 'default',
             },
             label: {
               0: 'unfulfilled',
               1: 'fulfilled.label',
               2: 'pending',
               3: 'unfulfilled',
-              null: 'unfulfilled'
+              null: 'unfulfilled',
             },
             setColorForLabel: true,
             type: 'icon',
-            field: 'is_fulfilled'
-          }
+            field: 'is_fulfilled',
+          },
         ],
         label: 'Status',
         title: null,
-        delim: null
+        delim: null,
       },
       {
         name: 'actions',
@@ -558,13 +557,13 @@ const job = {
             title: 'Delete',
             showIf: ['can_delete'],
             type: 'button',
-            field: 'id'
-          }
+            field: 'id',
+          },
         ],
         label: 'Actions',
         title: null,
-        delim: null
-      }
+        delim: null,
+      },
     ],
     buttons: [],
     groups: ['date.shift_date'],
@@ -572,8 +571,8 @@ const job = {
     editDisable: false,
     label: 'Shift',
     pagination_label: 'Shift',
-    search_enabled: false
-  }
+    search_enabled: false,
+  },
 };
 
 export const shifts = {
@@ -582,5 +581,5 @@ export const shifts = {
   form,
   formadd,
   shiftDate,
-  editShiftDate
+  editShiftDate,
 };

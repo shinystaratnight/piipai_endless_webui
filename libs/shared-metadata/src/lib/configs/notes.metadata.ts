@@ -10,12 +10,12 @@ const list = {
       {
         content: [{ field: '__str__', type: 'static' }],
         name: '__str__',
-        label: 'Contact Note'
-      }
+        label: 'Contact Note',
+      },
     ],
     pagination_label: 'Contact Note',
     search_enabled: false,
-    editDisable: false
+    editDisable: false,
   },
   fields: [
     {
@@ -24,11 +24,11 @@ const list = {
       templateOptions: {
         required: false,
         label: 'Contact Note',
-        type: 'static'
+        type: 'static',
       },
-      read_only: true
-    }
-  ]
+      read_only: true,
+    },
+  ],
 };
 
 const formset = {
@@ -37,7 +37,7 @@ const formset = {
       key: 'created_by',
       read_only: true,
       templateOptions: { required: false, label: 'Created by', type: 'static' },
-      type: 'static'
+      type: 'static',
     },
     {
       key: 'id',
@@ -45,15 +45,15 @@ const formset = {
         action: 'delete',
         label: '',
         type: 'button',
-        text: ''
+        text: '',
       },
-      type: 'button'
+      type: 'button',
     },
     {
       key: 'note',
       read_only: false,
       templateOptions: { required: false, label: 'Notes', type: 'text' },
-      type: 'input'
+      type: 'input',
     },
     {
       key: 'updated_at',
@@ -61,15 +61,15 @@ const formset = {
       templateOptions: {
         required: false,
         label: 'Updated at',
-        type: 'datetime'
+        type: 'datetime',
       },
-      type: 'datepicker'
+      type: 'datepicker',
     },
     {
       key: 'updated_by',
       read_only: true,
       templateOptions: { required: false, label: 'Updated by', type: 'static' },
-      type: 'static'
+      type: 'static',
     },
     {
       key: 'created_at',
@@ -77,10 +77,10 @@ const formset = {
       templateOptions: {
         required: false,
         label: 'Created at',
-        type: 'datetime'
+        type: 'datetime',
       },
-      type: 'datepicker'
-    }
+      type: 'datepicker',
+    },
   ],
   list: {
     columns: [
@@ -89,39 +89,39 @@ const formset = {
         sort: true,
         sort_field: 'note',
         content: [{ type: 'input', field: 'note' }],
-        label: 'Notes'
+        label: 'Notes',
       },
       {
         name: 'contact',
         content: [{ type: 'input', field: 'contact.__str__' }],
-        label: 'Contact'
+        label: 'Contact',
       },
       {
         name: 'files',
         content: [{ type: 'imageList', field: 'files' }],
-        label: 'Files'
+        label: 'Files',
       },
       {
         name: 'created',
         width: 200,
         content: [
           { type: 'datepicker', field: 'created_at' },
-          { type: 'static', field: 'created_by' }
+          { type: 'static', field: 'created_by' },
         ],
         label: 'Created',
         title: null,
-        delim: null
+        delim: null,
       },
       {
         name: 'updated',
         width: 200,
         content: [
           { type: 'datepicker', field: 'updated_at' },
-          { type: 'static', field: 'updated_by' }
+          { type: 'static', field: 'updated_by' },
         ],
         label: 'Updated',
         title: null,
-        delim: null
+        delim: null,
       },
       {
         content: [
@@ -135,9 +135,9 @@ const formset = {
             field: 'id',
             showIf: [
               {
-                ['contact.id']: '{session.data.contact.id}'
-              }
-            ]
+                ['contact.id']: '{session.data.contact.id}',
+              },
+            ],
           },
           {
             action: 'delete',
@@ -148,24 +148,24 @@ const formset = {
             field: 'id',
             showIf: [
               {
-                ['contact.id']: '{session.data.contact.id}'
-              }
-            ]
-          }
+                ['contact.id']: '{session.data.contact.id}',
+              },
+            ],
+          },
         ],
         width: 120,
         name: 'actions',
         title: null,
         label: 'Actions',
-        delim: null
-      }
+        delim: null,
+      },
     ],
     list: 'note',
     editDisable: false,
     label: 'Contact Note',
     pagination_label: 'Contact Note',
-    search_enabled: false
-  }
+    search_enabled: false,
+  },
 };
 
 const timesheet = {
@@ -174,7 +174,7 @@ const timesheet = {
       key: 'created_by',
       read_only: true,
       templateOptions: { required: false, label: 'Created by', type: 'static' },
-      type: 'static'
+      type: 'static',
     },
     {
       key: 'id',
@@ -182,15 +182,15 @@ const timesheet = {
         action: 'delete',
         label: '',
         type: 'button',
-        text: ''
+        text: '',
       },
-      type: 'button'
+      type: 'button',
     },
     {
       key: 'note',
       read_only: false,
       templateOptions: { required: false, label: 'Notes', type: 'text' },
-      type: 'input'
+      type: 'input',
     },
     {
       key: 'updated_at',
@@ -198,15 +198,15 @@ const timesheet = {
       templateOptions: {
         required: false,
         label: 'Updated at',
-        type: 'datetime'
+        type: 'datetime',
       },
-      type: 'datepicker'
+      type: 'datepicker',
     },
     {
       key: 'updated_by',
       read_only: true,
       templateOptions: { required: false, label: 'Updated by', type: 'static' },
-      type: 'static'
+      type: 'static',
     },
     {
       key: 'created_at',
@@ -214,10 +214,10 @@ const timesheet = {
       templateOptions: {
         required: false,
         label: 'Created at',
-        type: 'datetime'
+        type: 'datetime',
       },
-      type: 'datepicker'
-    }
+      type: 'datepicker',
+    },
   ],
   list: {
     columns: [
@@ -226,17 +226,17 @@ const timesheet = {
         sort: true,
         sort_field: 'note',
         content: [{ type: 'input', field: 'note' }],
-        label: 'Notes'
+        label: 'Notes',
       },
       {
         name: 'contact',
         content: [{ type: 'input', field: 'contact.__str__' }],
-        label: 'Contact'
+        label: 'Contact',
       },
       {
         name: 'files',
         content: [{ type: 'imageList', field: 'files' }],
-        label: 'Files'
+        label: 'Files',
       },
       {
         name: 'created',
@@ -244,7 +244,7 @@ const timesheet = {
         content: [{ type: 'datepicker', field: 'created_at' }],
         label: 'Created',
         title: null,
-        delim: null
+        delim: null,
       },
       {
         content: [
@@ -258,9 +258,9 @@ const timesheet = {
             field: 'id',
             showIf: [
               {
-                ['contact.id']: '{session.data.contact.id}'
-              }
-            ]
+                ['contact.id']: '{session.data.contact.id}',
+              },
+            ],
           },
           {
             action: 'delete',
@@ -271,24 +271,24 @@ const timesheet = {
             field: 'id',
             showIf: [
               {
-                ['contact.id']: '{session.data.contact.id}'
-              }
-            ]
-          }
+                ['contact.id']: '{session.data.contact.id}',
+              },
+            ],
+          },
         ],
         width: 120,
         name: 'actions',
         title: null,
         label: 'Actions',
-        delim: null
-      }
+        delim: null,
+      },
     ],
     list: 'note',
     editDisable: false,
     label: 'Contact Note',
     pagination_label: 'Contact Note',
-    search_enabled: false
-  }
+    search_enabled: false,
+  },
 };
 
 const form = [
@@ -298,29 +298,17 @@ const form = [
     hide: true,
     templateOptions: {
       label: 'Content type',
-      values: ['__str__']
+      values: ['__str__'],
     },
     type: 'related',
-    key: 'content_type'
+    key: 'content_type',
   },
   {
     key: 'object_id',
     type: 'input',
     hide: true,
     templateOptions: { required: true, label: 'Object id', type: 'text' },
-    read_only: false
-  },
-  {
-    key: 'note',
-    type: 'textarea',
-    templateOptions: {
-      rows: 3,
-      full: true,
-      required: false,
-      label: 'Notes',
-      type: 'textarea'
-    },
-    read_only: false
+    read_only: false,
   },
   {
     key: 'contact',
@@ -329,11 +317,20 @@ const form = [
     templateOptions: {
       required: false,
       label: 'Contact',
-      type: 'related'
+      type: 'related',
     },
-    read_only: true
+    read_only: true,
   },
-  new Form.imageList.element('files', 'Files').doNotSend()
+  new Form.row.element().setChildren([
+    new Form.group.element()
+      .doNotShowLabel()
+      .setChildren([new Form.textarea.element('note', 'Notes').setRows(5)]),
+    new Form.group.element()
+      .doNotShowLabel()
+      .setChildren([
+        new Form.imageList.element('files', 'Images').doNotSend(),
+      ]),
+  ]),
 ];
 
 const formadd = [
@@ -343,10 +340,10 @@ const formadd = [
     hide: true,
     templateOptions: {
       label: 'Content type',
-      values: ['__str__']
+      values: ['__str__'],
     },
     type: 'related',
-    key: 'content_type'
+    key: 'content_type',
   },
   {
     key: 'object_id',
@@ -355,35 +352,35 @@ const formadd = [
     templateOptions: {
       required: true,
       label: 'Object id',
-      type: 'text'
+      type: 'text',
     },
-    read_only: false
+    read_only: false,
   },
-  {
-    key: 'note',
-    type: 'textarea',
-    templateOptions: {
-      label: 'Note',
-      rows: 10,
-      autofocus: true,
-      type: 'textarea',
-      full: true
-    },
-    read_only: false
-  },
-  new Form.imageList
-    .element('files', 'Files')
-    .doNotSend(),
   {
     key: 'contact',
     type: 'input',
     hide: true,
     templateOptions: {
       label: 'Contact',
-      type: 'text'
+      type: 'text',
     },
-    read_only: true
-  }
+    read_only: true,
+  },
+  new Form.row.element().setChildren([
+    new Form.group.element(' ')
+      .doNotShowLabel()
+      .setChildren([
+        new Form.textarea.element('note', 'Notes')
+          .setRows(5)
+          .setFullWidth()
+          .setAutofocus(),
+      ]),
+    new Form.group.element(' ')
+      .doNotShowLabel()
+      .setChildren([
+        new Form.imageList.element('files', 'Images').doNotSend(),
+      ]),
+  ]),
 ];
 
 const candidatepool = {
@@ -392,13 +389,13 @@ const candidatepool = {
       key: 'created_by',
       read_only: true,
       templateOptions: { required: false, label: 'Created by', type: 'static' },
-      type: 'static'
+      type: 'static',
     },
     {
       key: 'note',
       read_only: false,
       templateOptions: { required: false, label: 'Notes', type: 'text' },
-      type: 'input'
+      type: 'input',
     },
     {
       key: 'created_at',
@@ -406,10 +403,10 @@ const candidatepool = {
       templateOptions: {
         required: false,
         label: 'Created at',
-        type: 'datetime'
+        type: 'datetime',
       },
-      type: 'datepicker'
-    }
+      type: 'datepicker',
+    },
   ],
   list: {
     columns: [
@@ -418,22 +415,22 @@ const candidatepool = {
         sort: true,
         sort_field: 'note',
         content: [{ type: 'input', field: 'note' }],
-        label: 'Notes'
+        label: 'Notes',
       },
       {
         name: 'created',
         content: [{ type: 'datepicker', field: 'created_at' }],
         label: 'Created',
         title: null,
-        delim: null
-      }
+        delim: null,
+      },
     ],
     list: 'note',
     editDisable: true,
     label: 'Contact Note',
     pagination_label: 'Contact Note',
-    search_enabled: false
-  }
+    search_enabled: false,
+  },
 };
 
 export const notes = {
@@ -442,5 +439,5 @@ export const notes = {
   form,
   formadd,
   candidatepool,
-  timesheet
+  timesheet,
 };

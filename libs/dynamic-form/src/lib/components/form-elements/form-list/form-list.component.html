@@ -35,17 +35,16 @@
         [data]="addFormConfig.data"
         [metadataQuery]="config.add_metadata_query"
         (event)="formEvent($event)"
-        (errorForm)="formError()"
       >
         <div class="d-flex">
           <button
             webuiSubscriptionRequired
             type="submit"
             class="btn btn-primary ms-auto"
-            [disabled]="saveProcess"
+            [disabled]="saveProcess$ | async"
           >
             {{ 'add_note' | translate }}
-            <webui-spinner *ngIf="saveProcess"></webui-spinner>
+            <webui-spinner *ngIf="saveProcess$ | async"></webui-spinner>
           </button>
         </div>
       </webui-generic-form>
@@ -109,15 +108,14 @@
         [data]="modalData.data"
         [metadataQuery]="config.add_metadata_query"
         (event)="formEvent($event, modal.close)"
-        (errorForm)="formError()"
       >
         <button
           type="submit"
           class="btn btn-primary button-save"
-          [disabled]="saveProcess"
+          [disabled]="saveProcess$ | async"
         >
           {{ 'save' | translate: { Default: 'Save' } }}
-          <webui-spinner *ngIf="saveProcess"></webui-spinner>
+          <webui-spinner *ngIf="saveProcess$ | async"></webui-spinner>
         </button>
       </webui-generic-form>
     </div>

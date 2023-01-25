@@ -75,6 +75,7 @@ export class SiteComponent implements OnInit, OnDestroy {
   public data: any;
   public endpointWithoutViewMode: string[] = ['/core/users/'];
   public passwordData: any;
+  checkingInstance = false;
 
   public modalRef!: NgbModalRef;
 
@@ -144,14 +145,14 @@ export class SiteComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.subscriptions.push(
-      this.eventService.event$.subscribe((type: EventType) => {
-        if (type === EventType.RoleChanged) {
-          const role = getCurrentRole();
-          this.updateNavigationList(role);
-        }
-      })
-    );
+    // this.subscriptions.push(
+    //   this.eventService.event$.subscribe((type: EventType) => {
+    //     if (type === EventType.RoleChanged) {
+    //       const role = getCurrentRole();
+    //       this.updateNavigationList(role);
+    //     }
+    //   })
+    // );
   }
 
   public ngOnDestroy() {
@@ -362,6 +363,9 @@ export class SiteComponent implements OnInit, OnDestroy {
         this.reload = false;
       }, 150);
     }
+    if (e.type === 'checkObject') {
+      this.checkingInstance = e.checking;
+    }
   }
 
   public formError() {
@@ -407,7 +411,7 @@ export class SiteComponent implements OnInit, OnDestroy {
   }
 
   public openResetForm() {
-    this.modalRef.close();
+    this.modalRef?.close();
     this.passwordData = {
       email: {
         action: 'add',

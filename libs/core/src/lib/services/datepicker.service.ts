@@ -7,7 +7,13 @@ import {
   weekEnd,
 } from '@webui/utilities';
 import { Moment, Time } from '@webui/time';
-import { IDateRange } from '../models';
+
+export interface IDateRange {
+  start: Moment;
+  end: Moment;
+  monthStart?: Moment;
+  monthEnd?: Moment;
+}
 
 export interface IYearPickerCell {
   label: string;
@@ -32,7 +38,9 @@ export interface IDayPickerCell {
   date: string;
 }
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class DatepickerService {
   private headerFormat: Record<DateRange, string> = {
     month: 'ddd',

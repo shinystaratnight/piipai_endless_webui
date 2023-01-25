@@ -8,7 +8,6 @@ import { Plan } from '../models';
 
 @Injectable()
 export class BillingService {
-
   private endpoints = {
     cardInfo: '/billing/stripe_customer/',
     plan: '/billing/subscription/create/',
@@ -23,104 +22,87 @@ export class BillingService {
     countryAccount: '/billing/country_account/',
   };
 
-  constructor(
-    private http: HttpClient,
-    private errorService: ErrorsService,
-  ) {}
+  constructor(private http: HttpClient, private errorService: ErrorsService) {}
 
   public getStripeKey() {
     return this.http
       .get(this.endpoints.countryAccount)
-      .pipe(
-        catchError((err: any) => this.errorService.handleError(err))
-      );
+      .pipe(catchError((err: any) => this.errorService.handleError(err)));
   }
 
   public setCardInfo(body: any) {
     return this.http
       .post(this.endpoints.cardInfo, body)
-      .pipe(
-        catchError((err: any) => this.errorService.handleError(err))
-      );
+      .pipe(catchError((err: any) => this.errorService.handleError(err)));
   }
 
   public changeCard(body: any) {
     return this.http
       .put(this.endpoints.cardInfo, body)
-      .pipe(
-        catchError((err: any) => this.errorService.handleError(err))
-      );
+      .pipe(catchError((err: any) => this.errorService.handleError(err)));
   }
 
   public getSubscriptionInfo() {
     return this.http
       .get(this.endpoints.subscriptionInfo)
-      .pipe(
-        catchError((err: any) => this.errorService.handleError(err))
-      );
+      .pipe(catchError((err: any) => this.errorService.handleError(err)));
   }
 
   public getSubscriptionStatus() {
     return this.http
       .get(this.endpoints.subscriptionStatus)
-      .pipe(
-        catchError((err: any) => this.errorService.handleError(err))
-      );
+      .pipe(catchError((err: any) => this.errorService.handleError(err)));
   }
 
   public setPlan(body: Plan) {
     return this.http
       .post(this.endpoints.plan, body)
-      .pipe(
-        catchError((err: any) => this.errorService.handleError(err))
-      );
+      .pipe(catchError((err: any) => this.errorService.handleError(err)));
   }
 
   public checkPaymentInformation() {
     return this.http
       .get(this.endpoints.checkPaymentInformation)
-      .pipe(
-        catchError((err: any) => this.errorService.handleError(err))
-      );
+      .pipe(catchError((err: any) => this.errorService.handleError(err)));
   }
 
   public cancelSubscription() {
     return this.http
       .get(this.endpoints.cancelSubscription)
       .pipe(
-        catchError((err: any) => this.errorService.handleError(err, { close: true }))
+        catchError((err: any) =>
+          this.errorService.handleError(err, { close: true })
+        )
       );
   }
 
   public getCreditDetails() {
     return this.http
       .get(this.endpoints.autoCharge)
-      .pipe(
-        catchError((err: any) => this.errorService.handleError(err))
-      );
+      .pipe(catchError((err: any) => this.errorService.handleError(err)));
   }
 
   public setCreditDetails(body: any) {
     return this.http
       .post(this.endpoints.autoCharge, body)
-      .pipe(
-        catchError((err: any) => this.errorService.handleError(err))
-      );
+      .pipe(catchError((err: any) => this.errorService.handleError(err)));
   }
 
   public addFunds(body: any) {
     return this.http
       .post(this.endpoints.fund, body)
-      .pipe(
-        catchError((err: any) => this.errorService.handleError(err))
-      );
+      .pipe(catchError((err: any) => this.errorService.handleError(err)));
   }
 
   public getSubscriptionTypes() {
     return this.http
       .get<{ subscription_types: Plan[] }>(this.endpoints.subscriptionTypes)
-      .pipe(
-        catchError((err: any) => this.errorService.handleError(err))
-       );
+      .pipe(catchError((err: any) => this.errorService.handleError(err)));
+  }
+
+  removeCC() {
+    return this.http
+      .delete(this.endpoints.cardInfo)
+      .pipe(catchError((err: any) => this.errorService.handleError(err)));
   }
 }

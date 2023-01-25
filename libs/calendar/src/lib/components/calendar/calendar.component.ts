@@ -41,7 +41,6 @@ import {
 } from '@webui/utilities';
 import { filters } from './calendar-filters.meta';
 
-import { DatepickerComponent } from '../datepicker/datepicker.component';
 import {
   UserService,
   EventService,
@@ -52,6 +51,7 @@ import { Endpoints, ITranslationPayload } from '@webui/models';
 import { finalize } from 'rxjs/operators';
 import { Moment, Time } from '@webui/time';
 import { IDateRange, Status } from '../../models';
+import { DatepickerComponent } from '@webui/shared';
 
 type StatusFilter = {
   type: Status;
@@ -141,6 +141,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
   public customRange?: IDateRange;
   public modalInfo: any;
   public saveProcess!: boolean;
+  jobChecking = false;
   public availability = [];
   public selectedTime!: string;
 
@@ -337,13 +338,11 @@ export class CalendarComponent implements OnInit, OnDestroy {
     this.changeCalendar(this.currentRange.value);
   }
 
-  changeQuery(event?: {
+  changeQuery(event: {
     key: 'candidate' | 'client';
-    value: { data: string };
+    value: ({key: string; label: string})[];
   }) {
-    if (event) {
-      this[event.key] = event.value.data;
-    }
+    this[event.key] = event.value ? event.value[0]?.key : undefined;
 
     this.changeCalendar();
   }
@@ -432,7 +431,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
   }
 
   public formEvent(
-    e: { type: string; status: 'success'; form: any },
+    e: { type: string; status: 'success'; form: any, checking?: boolean },
     closeModal: () => void
   ) {
     if (e.type === 'saveStart') {
@@ -453,6 +452,9 @@ export class CalendarComponent implements OnInit, OnDestroy {
     }
     if (e.type === 'formRegistration') {
       this.extendForm = e.form;
+    }
+    if (e.type === 'checkObject') {
+      this.jobChecking = Boolean(e.checking);
     }
   }
 

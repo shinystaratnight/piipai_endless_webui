@@ -66,9 +66,10 @@
       </webui-filter-related>
 
       <div class="filter-element" #filter>
-        <label class="filter-label related">
-          {{ 'info_layers' | translate: { Default: 'Info layers' } }}
-        </label>
+        <webui-filter-header
+          label="Info layers"
+          key="info_layers"
+        ></webui-filter-header>
 
         <div class="filter-related">
           <div
@@ -300,9 +301,12 @@
         [disable]="!(isManager() || canClientCreateJob())"
         *ngIf="day.tooltip"
         [class.active]="day.isOpen"
-        triggers="click:click"
+        triggers="manual"
         [attr.title]="day.holiday"
         [ngbTooltip]="monthTooltip"
+        [autoClose]="false"
+        #t="ngbTooltip"
+        (click)="t.open()"
         [placement]="getPlacement(i, week.length)"
         (shown)="getShiftData(day)"
         (hidden)="day.isOpen = false"
@@ -339,6 +343,10 @@
         </div>
 
         <ng-template #monthTooltip>
+          <div class="shift-tooltip-header">
+            <webui-close-button (click)="t.close()"></webui-close-button>
+          </div>
+
           <webui-loader *ngIf="day.loading"></webui-loader>
 
           <div *ngIf="!day.loading" class="shift-tooltip">
@@ -862,7 +870,7 @@
             webuiSubscriptionRequired
             type="submit"
             class="btn big-btn btn-shadow btn-primary text-white button-save mt-3 mb-4"
-            [disabled]="saveProcess || extendFormInvalid"
+            [disabled]="saveProcess || extendFormInvalid || jobChecking"
           >
             <span>{{ 'save' | translate }}</span>
             <webui-spinner *ngIf="saveProcess"></webui-spinner>

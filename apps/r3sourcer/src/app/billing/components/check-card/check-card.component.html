@@ -15,6 +15,14 @@
       <button class="btn btn-primary" (click)="showCardForm()">
         {{ 'action.add_new_cc' | translate }}
       </button>
+
+      <button
+        *ngIf="cardInformation?.payment_information_submited"
+        class="btn btn-primary"
+        (click)="onRemoveCC()"
+      >
+        {{ 'action.remove_cc' | translate }}
+      </button>
     </div>
 
     <form

@@ -33,9 +33,9 @@
       padding-bottom: 0;
     }
 
-    .datepicker:nth-child(2) {
-      margin-bottom: 0.3rem;
-    }
+    // .datepicker:nth-child(2) {
+    //   margin-bottom: 0.3rem;
+    // }
 
     @include media-breakpoint-up('xl') {
       .inline-container {
@@ -226,12 +226,13 @@
 
     .datepicker {
       display: relative;
+      align-items: center;
 
-      margin-bottom: 8px;
+      // margin-bottom: 8px;
 
-      &:last-child {
-        margin-bottom: 0;
-      }
+      // &:last-child {
+      //   margin-bottom: 0;
+      // }
 
       input {
         padding-left: 3rem;
@@ -244,14 +245,10 @@
 
       .placeholder {
         position: absolute;
-        top: 11px;
         left: 16px;
-
         font-size: 12px;
-
         color: rgba($gray, 0.4);
-
-        z-index: 1;
+        z-index: 3;
       }
     }
 

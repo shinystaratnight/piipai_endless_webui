@@ -13,19 +13,21 @@ const filters = {
     label: 'Skills',
     endpoint: Endpoints.SkillName,
     multiple: true,
-    parameter: 'skill_id'
+    parameter: 'skill_id',
+    display: ['translations']
   }),
   tag: createFilter(Type.Related, {
     key: 'tag',
     label: 'Tags',
     endpoint: Endpoints.Tag,
-    multiple: true
+    multiple: true,
+    display: ['translations']
   }),
   activeState: createFilter(Type.Related, {
     key: 'active_states',
     label: 'Status',
     endpoint: Endpoints.WorkflowNode,
-    display: ['name_after_activation', 'name_before_activation'],
+    display: ['workflow.candidate.candidatecontact.{number}.after', 'name_after_activation', 'name_before_activation'],
     parameter: 'number',
     queryParams: {
       company: '{company_settings.company}',

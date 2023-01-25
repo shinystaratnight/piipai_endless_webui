@@ -7,6 +7,8 @@ export const Textarea = 'textarea';
 
 type TextareaTemplateOptions = {
   full?: boolean;
+  rows?: number;
+  autofocus?: boolean;
 };
 
 export class TextareaElement extends BasicFormElement {
@@ -18,6 +20,18 @@ export class TextareaElement extends BasicFormElement {
 
   setFullWidth() {
     this.templateOptions.full = true;
+
+    return this;
+  }
+
+  setRows(rows: number) {
+    this.templateOptions.rows = rows;
+
+    return this;
+  }
+
+  setAutofocus() {
+    this.templateOptions.autofocus = true;
 
     return this;
   }

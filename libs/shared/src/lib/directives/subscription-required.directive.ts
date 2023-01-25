@@ -2,39 +2,40 @@ import {
   AfterViewInit,
   Directive,
   ElementRef,
+  HostListener,
   OnDestroy,
   Optional,
   Renderer2,
 } from '@angular/core';
 import { SubscriptionService } from '@webui/core';
 import { TranslateService } from '@ngx-translate/core';
-import { Subject, takeUntil } from 'rxjs';
+import { Subject, takeUntil, delay } from 'rxjs';
 import { RouterLink, RouterLinkWithHref } from '@angular/router';
 
 @Directive({
   selector: '[webuiSubscriptionRequired]',
 })
 export class SubscriptionRequiredDirective implements OnDestroy, AfterViewInit {
-  private _destroy: Subject<void> = new Subject();
-  private disabled!: boolean;
+  private _destroy = new Subject<void>();
+  private _disabled = false;
+  private _initialTitle: string | null = null;
+  private _initialDisabled = false;
 
   constructor(
     private subscriptionService: SubscriptionService,
-    private el: ElementRef,
+    private el: ElementRef<HTMLAnchorElement | HTMLButtonElement>,
     private renderer: Renderer2,
     private translateService: TranslateService,
     @Optional() routerLink: RouterLink,
     @Optional() routerLinkWithHref: RouterLinkWithHref
   ) {
     const link = routerLink || routerLinkWithHref;
-
     if (link) {
       // Save original method
       const onClick = link.onClick;
-
       // Replace method
       link.onClick = (...args) => {
-        if (this.disabled) {
+        if (this._disabled) {
           return routerLinkWithHref ? false : true;
         } else {
           return onClick.apply(link, args);
@@ -44,6 +45,9 @@ export class SubscriptionRequiredDirective implements OnDestroy, AfterViewInit {
   }
 
   public ngAfterViewInit() {
+    this._initialTitle = this.el.nativeElement.getAttribute('title');
+    this._initialDisabled = this.el.nativeElement.classList.contains('disabled');
+
     this.subscribe();
   }
 
@@ -54,26 +58,39 @@ export class SubscriptionRequiredDirective implements OnDestroy, AfterViewInit {
 
   private subscribe(): void {
     this.subscriptionService.activePlan$
-      .pipe(takeUntil(this._destroy))
+      .pipe(delay(150), takeUntil(this._destroy))
       .subscribe((subscription) => {
-        if (!subscription) {
-          this.disabled = true;
-          this.renderer.setAttribute(
-            this.el.nativeElement,
-            'disabled',
-            'disabled'
-          );
+        this._disabled = !subscription;
+
+        if (this._disabled) {
           this.renderer.addClass(this.el.nativeElement, 'disabled');
           this.renderer.setAttribute(
             this.el.nativeElement,
             'title',
             this.translateService.instant('should_have_subscription')
           );
+        } else {
+          if (!this._initialDisabled) {
+            this.renderer.removeClass(this.el.nativeElement, 'disabled');
+          }
 
-          if (this.el.nativeElement instanceof HTMLAnchorElement) {
-            this.renderer.setAttribute(this.el.nativeElement, 'href', '#');
+          if (this._initialTitle) {
+            this.renderer.setAttribute(
+              this.el.nativeElement,
+              'title',
+              this._initialTitle
+            );
           }
         }
       });
+  }
+
+  @HostListener('click', ['$event'])
+  @HostListener('touchstart', ['$event'])
+  public handleClick(event: MouseEvent | PointerEvent) {
+    if (this._disabled) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
   }
 }

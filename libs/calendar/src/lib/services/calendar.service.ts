@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import { DateRange, rangeFormats, weekEnd, weekStart } from '@webui/utilities';
-import { DatepickerService } from './datepicker.service';
-import { TranslateHelperService } from '@webui/core';
+import { DatepickerService, TranslateHelperService } from '@webui/core';
 import { Moment, Time } from '@webui/time';
 import { ICalendarLine, Status, Tooltip, IDateRange } from '../models';
 

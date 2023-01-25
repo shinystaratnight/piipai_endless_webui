@@ -1,16 +1,11 @@
+
 $shadow: 0px 4px 6px 0;
 
 .ng-invalid button[type='submit'] {
   position: relative;
   cursor: not-allowed;
   box-shadow: none;
-
-  @each $item in $themes {
-    .#{$item}-theme & {
-      background-color: rgba(map-get($theme-colors, $item), 0.2);
-      border-color: rgba(map-get($theme-colors, $item), 0.2);
-    }
-  }
+  opacity: 0.5;
 
   &.button-save:hover::after,
   &.save:hover::after {
@@ -36,10 +31,8 @@ $shadow: 0px 4px 6px 0;
   transition: 0.4s all;
   gap: 0.5rem;
   border-color: transparent;
-
-  // & > fa-icon {
-  //   margin-right: 0.25rem;
-  // }
+  padding: 0.4rem 0.75rem;
+  line-height: 19px;
 
   &:focus,
   &:active {
@@ -208,7 +201,8 @@ $shadow: 0px 4px 6px 0;
     }
   }
 
-  &:disabled {
+  &:disabled,
+  &.disabled {
     pointer-events: initial;
     cursor: not-allowed;
     color: $white;
@@ -308,7 +302,8 @@ webui-form-button:not(:first-child) {
   padding: 12px 24px;
   border: none;
 
-  &:disabled {
+  &:disabled,
+  &.disabled {
     filter: grayscale(1);
     opacity: 0.4;
     cursor: not-allowed;
@@ -360,7 +355,8 @@ webui-form-button:not(:first-child) {
 .button-save {
   padding: 8px 20px;
 
-  &:disabled {
+  &:disabled,
+  &.disabled {
     cursor: not-allowed;
   }
 
@@ -382,6 +378,7 @@ webui-form-button:not(:first-child) {
   color: $white;
 
   &:disabled,
+  &.disabled,
   &:hover,
   &:active,
   &:focus {
@@ -402,6 +399,11 @@ webui-form-button:not(:first-child) {
   border-radius: 30px;
   color: $content-color;
   border: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: box-shadow 0.4s linear;
 
   &--primary {
     @each $item in $themes {
@@ -416,7 +418,8 @@ webui-form-button:not(:first-child) {
     width: 100%;
   }
 
-  &:disabled {
+  &:disabled,
+  &.disabled {
     opacity: 0.55;
     cursor: not-allowed;
   }

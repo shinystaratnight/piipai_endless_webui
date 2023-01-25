@@ -639,9 +639,19 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
           this.checkObject[key].cache = query;
 
           if (send) {
+            this.event.emit({
+              type: 'checkObject',
+              checking: true
+            });
+
             this.service
               .get(this.checkObject[key].endpoint, query)
               .subscribe((res) => {
+                this.event.emit({
+                  type: 'checkObject',
+                  checking: false
+                });
+
                 if (res.count) {
                   const error = this.checkObject[key].error;
                   const obj = res.results[0];
@@ -1529,7 +1539,10 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
   }
 
   public responseHandler(response: any, sendData: any) {
-    this.formService.getForm(this.formId).setSaveProcess(false);
+    if (this.endpoint !== Endpoints.Note) {
+      this.formService.getForm(this.formId).setSaveProcess(false);
+    }
+
     this.parseResponse(response);
 
     if ((this.isJobEndpoint && !this.id && this.selectedDates && this.selectedDates.length) || sendData.client_contact_page) {
@@ -1564,19 +1577,27 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
           return this.service.uploadFile('/core/notefiles/', body);
         });
 
-        forkJoin([...requests])
+        forkJoin(requests)
           .pipe(
             finalize(() => {
-              this.formGroup.reset();
               this.event.emit({
                 type: 'sendForm',
                 viewData: response,
                 sendData,
                 status: 'success',
               });
+
+              this.formService.getForm(this.formId).setSaveProcess(false);
             })
           )
-          .subscribe();
+          .subscribe(() => {
+            this.formGroup.get('note')?.reset();
+            this.formGroup.get('files')?.reset();
+          });
+      } else {
+        this.formGroup.get('note')?.reset();
+        this.formGroup.get('files')?.reset();
+        this.formService.getForm(this.formId).setSaveProcess(false);
       }
     }
 

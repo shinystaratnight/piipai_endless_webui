@@ -33,7 +33,7 @@ const filter = {
     key: 'active_states',
     label: 'State',
     endpoint: Endpoints.WorkflowNode,
-    display: ['name_after_activation', 'name_before_activation'],
+    display: ['workflow.hr.job.{number}.after', 'name_after_activation', 'name_before_activation'],
     parameter: 'number',
     queryParams: {
       company: '{company_settings.company}',
@@ -237,7 +237,7 @@ const list = {
         label: 'Position',
         add: true,
         delete: false,
-        values: ['__str__', 'tranlsations', 'name'],
+        values: ['__str__', 'translations', 'name'],
         type: 'related',
         edit: true,
         placeholder: 'Please select role/trade'
@@ -469,7 +469,7 @@ const formset = {
         add: true,
         delete: false,
         edit: true,
-        values: ['__str__', 'tranlsations', 'name'],
+        values: ['__str__', 'translations', 'name'],
         label: 'Position',
         type: 'related',
         placeholder: 'Please select role/trade'
@@ -702,7 +702,7 @@ const jobsite_client = {
         add: true,
         delete: false,
         edit: true,
-        values: ['__str__', 'tranlsations', 'name'],
+        values: ['__str__', 'translations', 'name'],
         label: 'Position',
         type: 'related',
         placeholder: 'Please select role/trade'
@@ -968,7 +968,8 @@ const form = [
                     templateOptions: {
                       label: 'Client representative',
                       values: ['__str__', 'company'],
-                      type: 'related'
+                      type: 'related',
+                      edit: true
                     },
                     type: 'related',
                     query: {
@@ -1241,7 +1242,7 @@ const form = [
       label: 'Position',
       add: false,
       delete: false,
-      values: ['__str__', 'tranlsations', 'name'],
+      values: ['__str__', 'translations', 'name'],
       type: 'related',
       edit: true,
       placeholder: 'Please select role/trade'
@@ -1416,7 +1417,7 @@ const formadd = [
                 'upper_rate_limit',
                 'lower_rate_limit',
                 'default_rate',
-                'tranlsations',
+                'translations',
                 'name'
               ],
               type: 'related',

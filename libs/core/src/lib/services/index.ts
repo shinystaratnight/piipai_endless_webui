@@ -14,3 +14,6 @@ export * from './translate-helper-service';
 export * from './date-range.service';
 export * from './subscription.service';
 export * from './local_env.service';
+export * from './datepicker-range.service';
+export * from './datepicker.service'
+export * from './api.service';

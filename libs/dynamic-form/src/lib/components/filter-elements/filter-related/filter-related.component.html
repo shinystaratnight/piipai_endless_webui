@@ -6,8 +6,8 @@
     (resetEvent)="resetFilter()"
   ></webui-filter-header>
 
-  <div class="content" #content>
-    <div class="form-control autocomplete-value" (click)="onShowOptions()">
+  <div class="content">
+    <div class="form-control autocomplete-value" #content (click)="onShowOptions()">
       <ng-container *ngIf="value$ | async as value; else placeholder">
         <span class="value" *ngIf="value.length > 1">
           {{ 'status.selected-items' | translate: { count: value.length } }}
@@ -34,6 +34,7 @@
         [formControl]="searchControl"
         *ngIf="!config.property && !config.multiple"
         name="search"
+        autocopmlete="off"
         type="text"
         class="form-control mb-1"
       />
@@ -61,6 +62,7 @@
           <li
             class="autocomplete-item form-check"
             *ngFor="let option of options"
+            (click)="toggleOption(option)"
           >
             <label class="form-element-checkbox">
               <input
@@ -91,11 +93,6 @@
         <div *ngIf="options.length" class="filter-values">
           <span class="badge badge-outline" *ngFor="let option of options">
             {{ option.value.label | translate }}
-
-            <!-- <fa-icon
-              [icon]="['fas', 'times']"
-              (click)="onRemoveOption(option)"
-            ></fa-icon> -->
           </span>
         </div>
       </ng-container>

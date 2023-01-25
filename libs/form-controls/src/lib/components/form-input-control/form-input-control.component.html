@@ -4,11 +4,14 @@
     <span *ngIf="prefix" class="control__input-prefix">{{ prefix }}</span>
 
     <input
+      #input
       [ngModel]="value"
-      (ngModelChange)="onChange($event)"
-      [attr.placeholder]="placeholder"
+      (ngModelChange)="onInput($event)"
+      (blur)="onTouched()"
       class="control__input"
       [attr.type]="type"
     />
   </span>
 </label>
+
+<span *ngIf="error" class="error">{{ error | translate }}</span>

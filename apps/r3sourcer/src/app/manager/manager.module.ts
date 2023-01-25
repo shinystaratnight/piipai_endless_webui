@@ -41,7 +41,6 @@ import { SharedModule } from '../shared/shared.module';
 import { SharedModule as LibSharedModule } from '@webui/shared';
 import { UiModule } from '@webui/ui';
 import { DragDropModule } from '@angular/cdk/drag-drop';
-import { DialogModule } from '@webui/dialog';
 import { TranslateModule } from '@ngx-translate/core';
 import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import { GoogleMapsModule } from '@angular/google-maps';
@@ -81,7 +80,6 @@ import { GoogleMapsModule } from '@angular/google-maps';
     LibSharedModule,
     UiModule,
     DragDropModule,
-    DialogModule,
     TranslateModule,
     GoogleMapsModule
   ],

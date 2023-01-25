@@ -8,7 +8,6 @@ import {
   OnDestroy,
   HostListener,
   ElementRef,
-  ChangeDetectorRef,
   ChangeDetectionStrategy,
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
@@ -16,7 +15,7 @@ import { ActivatedRoute } from '@angular/router';
 import { GenericFormService, FilterService } from '../../../services';
 import { SiteSettingsService, UserService } from '@webui/core';
 
-import { BehaviorSubject, combineLatest, Subject, merge } from 'rxjs';
+import { BehaviorSubject, combineLatest, Subject, merge, timer } from 'rxjs';
 import {
   debounceTime,
   filter,
@@ -344,6 +343,14 @@ export class FilterRelatedComponent implements OnInit, OnDestroy {
     option.control.patchValue(false);
   }
 
+  toggleOption(option: FilterOption) {
+    const value = option.control.value;
+
+    timer(150).subscribe(() => {
+      option.control.patchValue(!value);
+    });
+  }
+
   @HostListener('document:click', ['$event'])
   handleClick(event: MouseEvent) {
     let clickedComponent = event.target;
@@ -422,12 +429,10 @@ export class FilterRelatedComponent implements OnInit, OnDestroy {
   }
 
   private addValueControl(el: FilterOption) {
-    if (!this.valueGroup.get(el.key)) {
-      this.valueGroup.addControl(el.key, el.control, { emitEvent: false });
+    this.valueGroup.addControl(el.key, el.control, { emitEvent: false });
 
-      if (!this.config.multiple) {
-        this.subscribeOnChange(el.key, el.control);
-      }
+    if (!this.config.multiple) {
+      this.subscribeOnChange(el.key, el.control);
     }
   }
 
@@ -522,13 +527,13 @@ class FilterOption {
   ) {
     return display.reduce((acc: string, curr: any) => {
       if (this.hasFormatBraces(curr)) {
-        return FormatString.format(curr, data) || acc;
+        return acc || FormatString.format(curr, data);
       }
 
       return (
+        acc ||
         checkAndReturnTranslation(data, countryCode, lang as Language) ||
-        data[curr] ||
-        acc
+        data[curr]
       );
     }, '');
   }

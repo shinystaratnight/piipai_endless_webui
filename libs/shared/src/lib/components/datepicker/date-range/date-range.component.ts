@@ -1,8 +1,8 @@
 import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core';
 
-import { DateRangeService } from '../../services';
 import { DateRange } from '@webui/utilities';
 import { Moment } from '@webui/time';
+import { DatepickerRangeService } from '@webui/core';
 
 @Component({
   selector: 'webui-date-range',
@@ -10,6 +10,8 @@ import { Moment } from '@webui/time';
   styleUrls: ['./date-range.component.scss'],
 })
 export class DateRangeComponent implements OnInit {
+  private _date!: Moment;
+
   @Input() type!: DateRange;
   @Input() date!: Moment;
   @Input() large!: boolean;
@@ -18,20 +20,22 @@ export class DateRangeComponent implements OnInit {
 
   rangeTitle!: string;
 
-  constructor(private dateRangeService: DateRangeService) {}
+  constructor(private dateRangeService: DatepickerRangeService) {}
 
   ngOnInit() {
+    this._date = this.date.clone();
+
     this.updateRangeTitle();
   }
 
   nextRange(e: MouseEvent) {
-    this.dateRangeService.nextRange(this.date, this.type);
+    this.dateRangeService.nextRange(this._date, this.type);
 
     this.rangeChanged(e);
   }
 
   previousRange(e: MouseEvent) {
-    this.dateRangeService.previousRange(this.date, this.type);
+    this.dateRangeService.previousRange(this._date, this.type);
 
     this.rangeChanged(e);
   }
@@ -40,11 +44,14 @@ export class DateRangeComponent implements OnInit {
     e.stopPropagation();
     e.preventDefault();
 
-    this.dateChange.emit(this.date);
+    this.dateChange.emit(this._date);
     this.updateRangeTitle();
   }
 
   private updateRangeTitle() {
-    this.rangeTitle = this.dateRangeService.getRangeTitle(this.date, this.type);
+    this.rangeTitle = this.dateRangeService.getRangeTitle(
+      this._date,
+      this.type
+    );
   }
 }

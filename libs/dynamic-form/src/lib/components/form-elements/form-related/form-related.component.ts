@@ -1057,6 +1057,10 @@ export class FormRelatedComponent
   }
 
   public updateValue(e?: any): void {
+    if (!e) {
+      return;
+    }
+
     const { el, type } = e;
     const eventTypes = ['change', 'create', 'blur'];
 

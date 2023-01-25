@@ -457,7 +457,7 @@ export class WorkflowComponent implements OnInit, OnDestroy {
             .updateValues(['translations']),
 
           new Form.related.element('skill', 'Skill', Endpoints.Skill)
-            .updateValues(['tranlsations', 'name'])
+            .updateValues(['translations', 'name'])
             .setShowIfRule([
               {
                 test_type: 'skill',

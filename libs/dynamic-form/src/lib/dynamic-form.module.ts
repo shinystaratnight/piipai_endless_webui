@@ -103,6 +103,7 @@ import { EmailPreviewComponent } from './modals/email-preview/email-preview.comp
     fromContainers.FormBuilderFormComponent,
     fromComponents.FilterRelatedComponent,
     fromComponents.ImageUploaderComponent,
+    fromComponents.FilterHeaderComponent
   ],
   declarations: [
     // fromComponents.WebcamComponent,

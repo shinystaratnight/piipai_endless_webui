@@ -10,6 +10,7 @@ import { EventService, EventType } from './event.service';
 import { UserService } from './user.service';
 import { isManager, getCurrentRole, isClient } from '@webui/utilities';
 import { Endpoints, Role, User } from '@webui/models';
+import { Router } from '@angular/router';
 
 export interface Page {
   name: string;
@@ -46,7 +47,8 @@ export class NavigationService {
     private purposeService: CompanyPurposeService,
     private errorService: ErrorsService,
     private userService: UserService,
-    private eventService: EventService
+    private eventService: EventService,
+    private router: Router
   ) {
     this.eventService.event$.subscribe((type: EventType) => {
       if (type === EventType.Logout) {
@@ -56,6 +58,7 @@ export class NavigationService {
       if (type === EventType.RoleChanged) {
         const role = getCurrentRole();
         this.setCurrentRole(role);
+        this.router.navigateByUrl('/');
       }
     });
   }

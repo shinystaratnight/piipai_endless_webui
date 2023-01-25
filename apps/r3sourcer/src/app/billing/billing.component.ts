@@ -10,6 +10,7 @@ import {
   EventService,
   SiteSettingsService,
   MessageType,
+  EventType,
 } from '@webui/core';
 import { Subscription } from 'rxjs';
 import { User } from '@webui/models';
@@ -84,10 +85,10 @@ export class BillingComponent implements OnInit, OnDestroy {
     });
 
     this.subscriptions.push(
-      this.eventService.event$.subscribe(() => {
-        setTimeout(() => {
-          this.router.navigate(['']);
-        }, 150);
+      this.eventService.event$.subscribe((event) => {
+        if (event === EventType.PurposeChanged) {
+          this.router.navigateByUrl('');
+        }
       })
     );
   }
@@ -108,28 +109,21 @@ export class BillingComponent implements OnInit, OnDestroy {
     plan.changed = undefined;
 
     this.saveProcess = true;
-    this.billingService.setPlan(plan).subscribe(
-      () => {
-        this.saveProcess = false;
+    this.billingService.setPlan(plan).subscribe({
+      next: () => {
+        this.toastr.sendMessage(
+          changed
+            ? 'Subscription has been updated'
+            : 'Subscription has been created',
+          MessageType.Success
+        );
 
-        if (changed) {
-          this.toastr.sendMessage(
-            'Subscription has been updated',
-            MessageType.Success
-          );
-        } else {
-          this.toastr.sendMessage(
-            'Subscription has been created',
-            MessageType.Success
-          );
-        }
+        this.eventService.emit(EventType.SubscriptionChanged);
 
         this.getSubscriptionInformation();
       },
-      () => {
-        this.saveProcess = false;
-      }
-    );
+      complete: () => (this.saveProcess = false),
+    });
   }
 
   public getSubscriptionInformation() {
@@ -151,6 +145,7 @@ export class BillingComponent implements OnInit, OnDestroy {
         'Subscription has been canceled',
         MessageType.Success
       );
+      this.eventService.emit(EventType.SubscriptionChanged);
     });
   }
 
@@ -174,5 +169,16 @@ export class BillingComponent implements OnInit, OnDestroy {
       MessageType.Success
     );
     this.checkPaymentInformation();
+  }
+
+  onRemoveCC(): void {
+    this.billingService.removeCC().subscribe(() => {
+      this.toastrService.sendMessage(
+        'message.credit_card_removed',
+        MessageType.Success
+      );
+
+      this.checkPaymentInformation();
+    });
   }
 }

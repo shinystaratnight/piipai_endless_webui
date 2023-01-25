@@ -20,7 +20,7 @@ type Error = {
 };
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ErrorsService {
   constructor(private ts: ToastService) {}
@@ -51,15 +51,18 @@ export class ErrorsService {
     return close ? of(<any>[]) : throwError(error);
   }
 
-  private showErrorMessage(error: Error, defaultMessage: string = '') {
+  private showErrorMessage(error: Error, defaultMessage = '') {
     const { detail, non_field_errors, message, ...fields } = error.errors;
-    let text =
+    let text: string =
       detail ||
       message ||
-      (non_field_errors ? non_field_errors.join(' ') : defaultMessage);
+      (Array.isArray(non_field_errors)
+        ? non_field_errors.join(', ')
+        : non_field_errors) ||
+      defaultMessage;
 
     Object.keys(fields).forEach((key: string) => (text += ` ${fields[key]}.`));
 
-    this.ts.sendMessage(message, MessageType.Error);
+    this.ts.sendMessage(text, MessageType.Error);
   }
 }

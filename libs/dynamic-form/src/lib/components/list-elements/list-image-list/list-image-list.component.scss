@@ -25,25 +25,16 @@
     height: auto;
   }
 
-  .button {
+  .close {
     display: inline-flex;
-    align-items: center;
-    justify-content: center;
   }
 }
 
-.button {
+.close {
   position: absolute;
   right: 1rem;
   top: 1rem;
   display: none;
-
-  & > .icon {
-    font-size: 16px;
-    color: white;
-    text-shadow: 0 0 1px rgba(black, 0.5);
-    margin-right: 0;
-  }
 }
 
 .image {

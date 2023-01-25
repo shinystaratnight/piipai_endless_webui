@@ -1,8 +1,12 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, Router, ActivatedRouteSnapshot } from '@angular/router';
+import {
+  CanActivate,
+  Router,
+  ActivatedRouteSnapshot,
+} from '@angular/router';
 
-import { forkJoin, Subject, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { forkJoin, throwError, of } from 'rxjs';
+import { catchError, map, switchMap } from 'rxjs/operators';
 
 import {
   UserService,
@@ -34,71 +38,70 @@ export class PermissionGuard implements CanActivate {
   }
 
   public canActivate(route: ActivatedRouteSnapshot) {
-    const subject = new Subject<boolean>();
+    return this.userService.getUserData().pipe(
+      map((user) => {
+        if (Array.isArray(user)) {
+          throwError(() => new Error());
+        }
 
-    setTimeout(() => {
-      this.userService
-        .getUserData()
-        .pipe(catchError((err) => {
-          subject.next(false);
-          return throwError(err);
-        }))
-        .subscribe((user) => {
-          if (Array.isArray(user)) {
-            subject.next(false);
-            return;
-          }
+        if (this.isManager(user.currentRole)) {
+          const trialExpired = Time.parse(user.data.end_trial_date).isBefore(
+            Time.now()
+          );
 
-          const requests = [this.navigationService.getPages(user.currentRole)];
+          trialExpired
+            ? this.subscriptionService.update()
+            : this.subscriptionService.useTrialPermissions();
+        } else {
+          this.subscriptionService.useClientPermissions();
+        }
 
-          if (this.isManager(user.currentRole)) {
-            const endTrial = Time.parse(user.data.end_trial_date);
-            const trialExpired = endTrial.isBefore(Time.now());
+        return {
+          navigation: this.navigationService.getPages(user.currentRole),
+          permissions: this.isManager(user.currentRole)
+            ? this.checkPermissionService.getPermissions(user.data.user)
+            : of([]),
+          user: of(user),
+        };
+      }),
+      switchMap((requests) => forkJoin(requests)),
+      map(({ navigation, user }) => {
+        let result = false;
 
-            if (trialExpired) {
-              this.subscriptionService.update();
-            } else {
-              this.subscriptionService.useTrialPermissions();
-            }
+        if (!this.isManager(user.currentRole)) {
+          result = true;
+        }
 
-            requests.push(
-              this.checkPermissionService.getPermissions(user.data.user)
-            );
-          } else {
-            this.subscriptionService.useClientPermissions();
-          }
+        let routeSegments = (<any>route)._urlSegment.segments;
 
-          forkJoin(requests).subscribe(([navigation]) => {
-            if (!this.isManager(user.currentRole)) {
-              subject.next(true);
-              return;
-            }
+        if (routeSegments[0].path === 'mn') {
+          routeSegments = routeSegments.slice(1);
+        }
 
-            let routeSegments = (<any>route)._urlSegment.segments;
+        if (routeSegments[0]?.path === 'settings') {
+          result = true;
+        }
 
-            if (routeSegments[0].path === 'mn') {
-              routeSegments = routeSegments.slice(1);
-            }
+        return {
+          result,
+          navigation,
+          routeSegments,
+          user,
+        };
+      }),
+      switchMap(({ result, navigation, routeSegments, user }) =>
+        result
+          ? of(result)
+          : this.checkPermissionService.checkPermission(
+              user.data.user,
+              routeSegments,
+              navigation
+            )
+      ),
 
-            if (routeSegments[0] && routeSegments[0].path === 'settings') {
-              subject.next(true);
-              return;
-            }
-
-            this.checkPermissionService
-              .checkPermission(user.data.user, routeSegments, navigation)
-              .subscribe((hasAccess) => {
-                if (hasAccess) {
-                  subject.next(hasAccess);
-                  return;
-                }
-
-                this.router.navigate(['/']);
-              });
-          });
-        });
-    });
-
-    return subject.asObservable();
+      catchError(() => {
+        return of(this.router.parseUrl('/'));
+      })
+    );
   }
 }

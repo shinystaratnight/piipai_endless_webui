@@ -1,7 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { TranslateHelperService } from '@webui/core';
-import { Subscription } from 'rxjs';
+import { DialogService } from '@webui/dialog';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'webui-root',
@@ -22,21 +23,27 @@ import { Subscription } from 'rxjs';
   `,
 })
 export class AppComponent implements OnInit, OnDestroy {
+  private _destroy = new Subject<void>();
+
   loader = true;
-  langSubscription!: Subscription;
 
   constructor(
     private translate: TranslateService,
-    private translateHelper: TranslateHelperService
+    private translateHelper: TranslateHelperService,
+    private dialogService: DialogService
   ) {}
 
   ngOnInit() {
-    this.langSubscription = this.translateHelper.langChange$.subscribe((v) =>
-      this.translate.use(v)
-    );
+    this.translateHelper.langChange$
+      .pipe(takeUntil(this._destroy))
+      .subscribe((v) => this.translate.use(v));
+
+    this.dialogService.init();
   }
 
   ngOnDestroy() {
-    this.langSubscription.unsubscribe();
+    this._destroy.next();
+    this._destroy.complete();
+    this.dialogService.destroy();
   }
 }
