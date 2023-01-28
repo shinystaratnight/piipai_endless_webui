@@ -4,18 +4,18 @@ import {
   EventEmitter,
   Input,
   Output,
-  OnInit
+  OnInit,
 } from '@angular/core';
 
 @Component({
   selector: 'webui-filter-header',
   templateUrl: './filter-header.component.html',
   styleUrls: ['./filter-header.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FilterHeaderComponent implements OnInit {
   @Input() label!: string;
-  @Input() resetButton!: boolean;
+  @Input() resetButton?: boolean | null;
   @Input() key!: string;
   @Output() resetEvent: EventEmitter<void> = new EventEmitter<void>();
 

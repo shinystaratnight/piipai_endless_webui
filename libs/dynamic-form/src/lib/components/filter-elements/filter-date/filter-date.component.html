@@ -2,7 +2,7 @@
   <webui-filter-header
     [label]="config.label"
     [key]="config.key"
-    [resetButton]="(hasQuery$ | async) || false"
+    [resetButton]="hasQuery$ | async"
     (resetEvent)="resetFilter()"
   ></webui-filter-header>
   <div class="filter-date-wrapper">
@@ -20,11 +20,19 @@
         class="form-control"
         readonly
         [formControl]="item.control"
+        (click)="item.showDatepicker()"
       />
 
       <div class="placeholder">
         {{ item.key | translate }}
       </div>
+
+      <webui-close-button
+        *ngIf="item.control.value"
+        [sm]="true"
+        class="close-button"
+        (click)="clearInput(item)"
+      ></webui-close-button>
 
       <button type="button" class="icon" (click)="item.showDatepicker()">
         <svg

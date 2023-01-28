@@ -59,6 +59,7 @@ export class FilterRelatedComponent implements OnInit, OnDestroy {
   @Input() config!: any;
 
   @ViewChild('content') content?: ElementRef<HTMLDivElement>;
+  @ViewChild('search') search?: ElementRef<HTMLInputElement>;
 
   modalScrollDistance = 2;
   modalScrollThrottle = 50;
@@ -70,7 +71,9 @@ export class FilterRelatedComponent implements OnInit, OnDestroy {
   value$ = this._value.asObservable();
   options$ = this._options.asObservable();
   loading$ = this._loading.asObservable();
-  active$ = this._active.asObservable();
+  active$ = this._active
+    .asObservable()
+    .pipe(tap((value) => value && this.search?.nativeElement.focus()));
   selectedOptions$ = this._selectedOptions.asObservable();
   hasQuery$ = combineLatest({
     active: this.active$,
