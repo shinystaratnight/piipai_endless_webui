@@ -77,9 +77,11 @@ export class FilterDateComponent implements OnInit, OnDestroy {
       }
     );
 
-    this.route.queryParams.pipe(takeUntil(this._destroy)).subscribe({
-      next: () => this.updateFilter(),
-    });
+    this.route.queryParams
+      .pipe(delay(200), takeUntil(this._destroy))
+      .subscribe({
+        next: () => this.updateFilter(),
+      });
 
     this.fs.reset
       .pipe(takeUntil(this._destroy))
@@ -208,6 +210,10 @@ export class FilterDateComponent implements OnInit, OnDestroy {
 
   onClose(item: DateControl) {
     item.hideDatepicker();
+  }
+
+  clearInput(item: DateControl) {
+    item.control.patchValue('');
   }
 
   private subscribeOnChange(item: DateControl) {
