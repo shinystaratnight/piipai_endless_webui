@@ -133,11 +133,6 @@ const formset = {
             text_color: '#f0ad4e',
             type: 'button',
             field: 'id',
-            showIf: [
-              {
-                ['contact.id']: '{session.data.contact.id}',
-              },
-            ],
           },
           {
             action: 'delete',
@@ -146,17 +141,17 @@ const formset = {
             text_color: '#f32700',
             type: 'button',
             field: 'id',
-            showIf: [
-              {
-                ['contact.id']: '{session.data.contact.id}',
-              },
-            ],
           },
         ],
         width: 120,
         name: 'actions',
         title: null,
         label: 'Actions',
+        showIf: [
+          {
+            ['contact.id']: '{session.data.contact.id}',
+          },
+        ],
         delim: null,
       },
     ],
@@ -327,9 +322,7 @@ const form = [
       .setChildren([new Form.textarea.element('note', 'Notes').setRows(5)]),
     new Form.group.element()
       .doNotShowLabel()
-      .setChildren([
-        new Form.imageList.element('files', 'Images').doNotSend(),
-      ]),
+      .setChildren([new Form.imageList.element('files', 'Images').doNotSend()]),
   ]),
 ];
 
@@ -356,16 +349,9 @@ const formadd = [
     },
     read_only: false,
   },
-  {
-    key: 'contact',
-    type: 'input',
-    hide: true,
-    templateOptions: {
-      label: 'Contact',
-      type: 'text',
-    },
-    read_only: true,
-  },
+  new Form.related.element('contact', 'Contact', Endpoints.Contact)
+    .setDefaultValue('{session.data.contact.id}')
+    .readOnly(),
   new Form.row.element().setChildren([
     new Form.group.element(' ')
       .doNotShowLabel()
@@ -377,9 +363,7 @@ const formadd = [
       ]),
     new Form.group.element(' ')
       .doNotShowLabel()
-      .setChildren([
-        new Form.imageList.element('files', 'Images').doNotSend(),
-      ]),
+      .setChildren([new Form.imageList.element('files', 'Images').doNotSend()]),
   ]),
 ];
 

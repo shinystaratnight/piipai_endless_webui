@@ -833,7 +833,9 @@ export class FormRelatedComponent
       this.config.default.includes('session') &&
       !this.config.editForm
     ) {
-      const id = this.userService.user?.data.contact.contact_id;
+      const id = FormatString.format(this.config.default, {
+        session: this.userService.user,
+      });
 
       if (this.config.read_only) {
         this.viewMode = true;
