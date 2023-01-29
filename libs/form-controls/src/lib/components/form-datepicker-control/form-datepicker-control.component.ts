@@ -87,6 +87,10 @@ export class FormDatepickerControlComponent
     return this.platform.FIREFOX;
   }
 
+  public get formatedTime(): string {
+    return this.timeControl.value || '';
+  }
+
   constructor(
     private platform: Platform,
     private overlay: Overlay,
