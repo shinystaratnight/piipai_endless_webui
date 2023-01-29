@@ -36,8 +36,6 @@ export class FormListComponent implements OnInit, OnDestroy {
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
 
-  public isCollapsed!: boolean;
-
   public config!: Field;
   public errors: any;
   public message: any;
@@ -146,7 +144,6 @@ export class FormListComponent implements OnInit, OnDestroy {
 
   public initialize(): void {
     this.update = new Subject();
-    this.isCollapsed = this.config.collapsed ? this.config.collapsed : false;
     if (this.config.query) {
       this.query = this.generateQuery(this.config.query).slice(1);
     }

@@ -8,8 +8,9 @@ import {
   SimpleChanges,
   OnDestroy,
   ElementRef,
+  OnInit,
 } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormControl, Validators } from '@angular/forms';
 import { EventService, EventType, UserService } from '@webui/core';
 import { DialogRef } from '@webui/dialog';
 import { BillingSubscription, DialogType, Plan } from '@webui/models';
@@ -20,7 +21,7 @@ import { Time } from '@webui/time';
   templateUrl: 'billing-plan.component.html',
   styleUrls: ['./billing-plan.component.scss'],
 })
-export class BillingPlanComponent implements OnChanges, OnDestroy {
+export class BillingPlanComponent implements OnInit, OnChanges, OnDestroy {
   types!: Record<string, string>;
 
   @Input() public saveProcess!: boolean;
@@ -42,10 +43,16 @@ export class BillingPlanComponent implements OnChanges, OnDestroy {
   private _planControl = new FormControl(null);
   public dialogRef!: DialogRef;
 
+  workerCountControl = new FormControl(5, [Validators.min(1)]);
+
   constructor(
     private userService: UserService,
     private eventService: EventService
   ) {}
+
+  ngOnInit(): void {
+    this.workerCountControl.patchValue(this.workerCount);
+  }
 
   get hasSelectedPlan() {
     if (!this.currentPlan) {
@@ -54,7 +61,7 @@ export class BillingPlanComponent implements OnChanges, OnDestroy {
 
     return (
       this._planControl.value?.id !== this.currentPlan?.subscription_type ||
-      this.currentPlan?.worker_count !== this.workerCount
+      this.currentPlan?.worker_count !== this.workerCountControl.value
     );
   }
 
@@ -70,8 +77,8 @@ export class BillingPlanComponent implements OnChanges, OnDestroy {
 
   public ngOnChanges(changes: SimpleChanges) {
     if (changes['saveProcess']) {
-      if (!changes['saveProcess'].currentValue && this.dialogRef) {
-        this.dialogRef.close();
+      if (!changes['saveProcess'].currentValue) {
+        this.dialogRef?.close();
       }
     }
 
@@ -95,7 +102,7 @@ export class BillingPlanComponent implements OnChanges, OnDestroy {
   }
 
   public ngOnDestroy() {
-    this.dialogRef.close();
+    this.dialogRef?.close();
   }
 
   public planPay(plan: Plan): number {
@@ -104,10 +111,12 @@ export class BillingPlanComponent implements OnChanges, OnDestroy {
 
     const price =
       start +
-      (this.workerCount - plan.start_range) *
+      (this.workerCountControl.value - plan.start_range) *
         (plan.step_change_val * plan.procent);
 
-    return this.workerCount > plan.start_range ? Math.round(price) : start;
+    return this.workerCountControl.value > plan.start_range
+      ? Math.round(price)
+      : start;
   }
 
   public planPayYear(plan: Plan): number {
@@ -169,7 +178,7 @@ export class BillingPlanComponent implements OnChanges, OnDestroy {
 
     const body = {
       type: plan.type,
-      worker_count: this.workerCount,
+      worker_count: this.workerCountControl.value,
       price:
         plan.type === 'monthly' ? this.planPay(plan) : this.planPayYear(plan),
       changed: this.currentPlan,
