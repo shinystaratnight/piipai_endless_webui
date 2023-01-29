@@ -1,0 +1,31 @@
+/* --------- Rating --------- */
+
+.evaluate-label {
+  opacity: .7;
+  margin: 20px;
+}
+
+.star {
+  position: relative;
+  display: inline-block;
+  font-size: 16px;
+  color: rgba(#bdbdbd, .3);
+}
+
+.star.star-lg {
+  font-size: 28px;
+}
+
+.full {
+  color: #ffd042;
+}
+.half {
+  position: absolute;
+  display: inline-block;
+  overflow: hidden;
+  color: #ffd042;
+}
+
+ngb-rating:focus {
+  outline: none;
+}

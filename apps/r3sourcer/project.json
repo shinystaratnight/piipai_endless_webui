@@ -15,7 +15,7 @@
         "tsConfig": "apps/r3sourcer/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
         "stylePreprocessorOptions": {
-          "includePaths": ["styles/"]
+          "includePaths": ["apps/r3sourcer/src/styles/"]
         },
         "assets": [
           "apps/r3sourcer/src/assets",
@@ -28,7 +28,7 @@
           "node_modules/ngx-bootstrap/datepicker/bs-datepicker.css",
           "node_modules/intl-tel-input/build/css/intlTelInput.css",
           "node_modules/flag-icons/css/flag-icons.min.css",
-          "styles/styles.scss"
+          "apps/r3sourcer/src/styles/styles.scss"
         ],
         "scripts": [
           "node_modules/jquery/dist/jquery.min.js",
