@@ -609,6 +609,7 @@
   "message_by_sms.text": "SMS",
   "message_html_template.label": "HTML template",
   "message_text_template.label": "Text template",
+  "message.delete_subscription": "Are you sure you want to delete your subscription?",
   "minimum.label": "minimum",
   "mobileTimes.break_started_at.label": "Break start/end",
   "mobileTimes.shift_ended_at.label": "Shift start/end",

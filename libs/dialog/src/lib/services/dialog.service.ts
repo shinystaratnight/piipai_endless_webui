@@ -3,6 +3,7 @@ import { EventService, EventType } from '@webui/core';
 import { NgbModal, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
 import { filter, Subject, takeUntil } from 'rxjs';
 import { dialogMap } from '../models';
+import { DialogType } from '@webui/models';
 
 @Injectable()
 export class DialogService {
@@ -37,13 +38,25 @@ export class DialogService {
         filter((event) => event === EventType.OpenDialog)
       )
       .subscribe(() => {
-        const { type, onInit, content } = this.eventService.payload;
+        const {
+          type,
+          onInit,
+          content = {},
+          dialog,
+          options = {},
+        } = this.eventService.payload;
 
-        const dialogRef = this.open(dialogMap.get(type), {
-          size: 'sm',
-        });
+        const dialogRef = this.open(
+          type === DialogType.CustomDialog ? dialog : dialogMap.get(type),
+          {
+            size: 'sm',
+            ...options,
+          }
+        );
 
-        dialogRef.componentInstance.payload = content || {};
+        if (dialogRef.componentInstance) {
+          dialogRef.componentInstance.payload = content;
+        }
 
         if (onInit) {
           onInit(dialogRef);

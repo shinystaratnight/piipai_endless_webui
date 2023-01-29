@@ -605,6 +605,7 @@
   "message.max_employees": "Пожалуйста, свяжитесь с нашим торговым персоналом для получения индивидуального предложения",
   "message.timesheet_activity_description": "Choose this if you had piecework or hourly + piecework job",
   "message.timesheet_time_description": "Choose this if you had an hourly job only",
+  "message.delete_subscription": "Are you sure you want to delete your subscription?",
   "message_by_email.text": "Эл. почта",
   "message_by_sms.text": "смс",
   "message_html_template.label": "HTML-шаблон",
