@@ -106,10 +106,7 @@
 
         <ng-container *ngIf="activities$ | async">
           <ng-container *ngIf="activityViewType$ | async as type">
-            <div
-              *ngIf="type === 'form'"
-              [formGroup]="activityGroup"
-            >
+            <div *ngIf="type === 'form'" [formGroup]="activityGroup">
               <div class="form-row">
                 <webui-form-dropdown-control
                   formControlName="worktype"
