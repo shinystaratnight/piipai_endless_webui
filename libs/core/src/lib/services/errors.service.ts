@@ -51,7 +51,12 @@ export class ErrorsService {
     return close ? of(<any>[]) : throwError(error);
   }
 
-  private showErrorMessage(error: Error, defaultMessage = '') {
+  private showErrorMessage(error: Error | string, defaultMessage = '') {
+    if (typeof error === 'string') {
+      this.ts.sendMessage(defaultMessage, MessageType.Error);
+      return;
+    }
+
     const { detail, non_field_errors, message, ...fields } = error.errors;
     let text: string =
       detail ||
