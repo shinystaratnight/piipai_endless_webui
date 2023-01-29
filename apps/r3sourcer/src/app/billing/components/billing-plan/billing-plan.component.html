@@ -34,17 +34,17 @@
         <span>{{ currentPlan.active && 'Active' }}</span>
       </div>
       <div class="field">
-        <label class="field__label"
-          >{{ 'current_period_start.label' | translate }}:</label
-        >
+        <label class="field__label">
+          {{ 'current_period_start.label' | translate }}:
+        </label>
         <span>
           {{ currentPlan.current_period_start | dateFormat: 'datetime' }}
         </span>
       </div>
       <div class="field">
-        <label class="field__label"
-          >{{ 'current_period_end.label' | translate }}:</label
-        >
+        <label class="field__label">
+          {{ 'current_period_end.label' | translate }}:
+        </label>
         <span>
           {{ currentPlan.current_period_end | dateFormat: 'datetime' }}
         </span>

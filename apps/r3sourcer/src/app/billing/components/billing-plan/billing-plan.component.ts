@@ -10,9 +10,9 @@ import {
   ElementRef,
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { UserService } from '@webui/core';
-import { BillingSubscription, Plan } from '@webui/models';
+import { EventService, EventType, UserService } from '@webui/core';
+import { DialogRef } from '@webui/dialog';
+import { BillingSubscription, DialogType, Plan } from '@webui/models';
 import { Time } from '@webui/time';
 
 @Component({
@@ -21,7 +21,6 @@ import { Time } from '@webui/time';
   styleUrls: ['./billing-plan.component.scss'],
 })
 export class BillingPlanComponent implements OnChanges, OnDestroy {
-  public modalRef!: NgbModalRef;
   types!: Record<string, string>;
 
   @Input() public saveProcess!: boolean;
@@ -41,10 +40,11 @@ export class BillingPlanComponent implements OnChanges, OnDestroy {
   @Output() public cancelingPlan = new EventEmitter();
 
   private _planControl = new FormControl(null);
+  public dialogRef!: DialogRef;
 
   constructor(
-    private modalService: NgbModal,
-    private userService: UserService
+    private userService: UserService,
+    private eventService: EventService
   ) {}
 
   get hasSelectedPlan() {
@@ -59,7 +59,7 @@ export class BillingPlanComponent implements OnChanges, OnDestroy {
   }
 
   get hasAttachedCC() {
-    return this.cardInformation?.payment_information_submited
+    return this.cardInformation?.payment_information_submited;
   }
 
   get trialExpires() {
@@ -70,8 +70,8 @@ export class BillingPlanComponent implements OnChanges, OnDestroy {
 
   public ngOnChanges(changes: SimpleChanges) {
     if (changes['saveProcess']) {
-      if (!changes['saveProcess'].currentValue && this.modalRef) {
-        this.modalRef.close();
+      if (!changes['saveProcess'].currentValue && this.dialogRef) {
+        this.dialogRef.close();
       }
     }
 
@@ -95,9 +95,7 @@ export class BillingPlanComponent implements OnChanges, OnDestroy {
   }
 
   public ngOnDestroy() {
-    if (this.modalRef) {
-      this.modalRef.close();
-    }
+    this.dialogRef.close();
   }
 
   public planPay(plan: Plan): number {
@@ -141,11 +139,29 @@ export class BillingPlanComponent implements OnChanges, OnDestroy {
   }
 
   public cancelPlan() {
-    this.cancelingPlan.emit();
+    this.eventService.emit(EventType.OpenDialog, {
+      type: DialogType.ConfirmAction,
+      onInit: (dialogRef: any) => (this.dialogRef = dialogRef),
+      content: {
+        message: 'message.delete_subscription',
+        accept: 'delete',
+        decline: 'action.do_not_delete',
+      },
+    });
+
+    this.dialogRef.result
+      .then(() => this.cancelingPlan.emit())
+      .catch(() => null);
   }
 
   public openModal() {
-    this.modalRef = this.modalService.open(this.modal, { backdrop: 'static' });
+    this.eventService.emit(EventType.OpenDialog, {
+      type: DialogType.CustomDialog,
+      dialog: this.modal,
+      options: {
+        size: 'md',
+      },
+    });
   }
 
   savePlan() {

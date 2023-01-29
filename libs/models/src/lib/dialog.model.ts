@@ -1,5 +1,6 @@
 export enum DialogType {
   ChangeEmail,
   ChangePhoneNumber,
-  ConfirmAction
+  ConfirmAction,
+  CustomDialog
 }
