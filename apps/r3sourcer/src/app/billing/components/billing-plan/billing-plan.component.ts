@@ -12,9 +12,8 @@ import {
 import { FormControl } from '@angular/forms';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { UserService } from '@webui/core';
+import { BillingSubscription, Plan } from '@webui/models';
 import { Time } from '@webui/time';
-
-import { Plan, BillingSubscription } from '../../models';
 
 @Component({
   selector: 'webui-billing-plan',
@@ -34,6 +33,7 @@ export class BillingPlanComponent implements OnChanges, OnDestroy {
     payment_information_submited: true;
     card_number_last4: null | string;
   };
+  @Input() hasSubscriptions = false;
 
   @ViewChild('subscription') public modal!: ElementRef;
 

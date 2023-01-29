@@ -1,10 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-
-import { catchError } from 'rxjs/operators';
-
+import { catchError, map } from 'rxjs/operators';
 import { ErrorsService } from '@webui/core';
-import { Plan } from '../models';
+import { BillingSubscription, Plan } from '@webui/models';
 
 @Injectable()
 export class BillingService {
@@ -44,8 +42,13 @@ export class BillingService {
 
   public getSubscriptionInfo() {
     return this.http
-      .get(this.endpoints.subscriptionInfo)
-      .pipe(catchError((err: any) => this.errorService.handleError(err)));
+      .get<Record<'subscriptions', BillingSubscription[]>>(
+        this.endpoints.subscriptionInfo
+      )
+      .pipe(
+        map((response) => response.subscriptions),
+        catchError((err: any) => this.errorService.handleError(err))
+      );
   }
 
   public getSubscriptionStatus() {
@@ -69,11 +72,7 @@ export class BillingService {
   public cancelSubscription() {
     return this.http
       .get(this.endpoints.cancelSubscription)
-      .pipe(
-        catchError((err: any) =>
-          this.errorService.handleError(err, { close: true })
-        )
-      );
+      .pipe(catchError((err: any) => this.errorService.handleError(err)));
   }
 
   public getCreditDetails() {

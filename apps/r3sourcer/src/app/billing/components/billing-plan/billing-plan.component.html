@@ -51,7 +51,7 @@
       </div>
     </ng-container>
 
-    <div class="actions" *ngIf="!currentPlan">
+    <div class="actions" *ngIf="!currentPlan && !hasSubscriptions">
       <div class="actions__group">
         <p *ngIf="trialExpires" class="secondary-title">
           {{ 'trial_subscription_expires' | translate }}
