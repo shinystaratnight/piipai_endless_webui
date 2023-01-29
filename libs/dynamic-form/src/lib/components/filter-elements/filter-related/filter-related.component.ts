@@ -153,6 +153,10 @@ export class FilterRelatedComponent implements OnInit, OnDestroy {
       .subscribe(() => {
         this.updateFilter();
       });
+
+    this.fs.reset
+      .pipe(takeUntil(this._destroy))
+      .subscribe(() => this.updateFilter());
   }
 
   public ngOnDestroy() {
@@ -254,6 +258,12 @@ export class FilterRelatedComponent implements OnInit, OnDestroy {
           });
         }
       }
+    } else {
+      this._selectedOptions.next([]);
+      this._options.value?.forEach((option) =>
+        option.control.patchValue(false, { emitEvent: true })
+      );
+      this._value.next(null);
     }
   }
 
