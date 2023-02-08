@@ -196,7 +196,7 @@
   </div>
   <div *ngIf="errors">
     <div class="text-danger mt-3" *ngIf="errors[config.key || '']">
-      {{ errors[config.key || ''] }}
+      {{ errors[config.key || ''] | translate }}
     </div>
   </div>
   <div *ngIf="message">
