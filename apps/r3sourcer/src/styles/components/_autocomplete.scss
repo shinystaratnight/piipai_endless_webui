@@ -16,6 +16,7 @@
   border: 1px solid rgba($gray, .1);
   box-shadow: 0 0 12px rgba($gray, .15);
   z-index: 30;
+  min-width: 230px;
 
   .registration-form & {
     top: 2.8rem;
@@ -96,7 +97,7 @@
 
   &-list {
     width: 100%;
-    max-height: 120px;
+    max-height: 180px;
 
     overflow-y: auto;
 
