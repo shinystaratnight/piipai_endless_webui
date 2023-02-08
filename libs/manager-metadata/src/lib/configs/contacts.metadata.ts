@@ -248,6 +248,7 @@ const form = [
                   {
                     key: 'email',
                     type: 'input',
+                    send: false,
                     templateOptions: {
                       placeholder: 'E-mail',
                       required: true,
@@ -255,19 +256,20 @@ const form = [
                       max: 255,
                       type: 'text'
                     },
-                    read_only: false
+                    read_only: true
                   },
                   {
                     key: 'phone_mobile',
                     type: 'input',
                     intl: true,
+                    send: false,
                     templateOptions: {
                       placeholder: 'Mobile phone',
                       required: true,
                       label: 'Phone number',
                       type: 'text'
                     },
-                    read_only: false
+                    read_only: true
                   }
                 ]
               },

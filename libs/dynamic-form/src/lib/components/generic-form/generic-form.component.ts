@@ -1494,10 +1494,17 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
     this.formService.getForm(this.formId).setSaveProcess(true);
 
     if (edit) {
-      this.service.editForm(endpoint, data).subscribe(
-        (response: any) => this.responseHandler(response, data),
-        (errors: any) => this.parseError(errors.errors || errors)
-      );
+      if (this.endpoint === Endpoints.Contact) {
+        this.service.updateForm(endpoint, data).subscribe({
+          next: (response: any) => this.responseHandler(response, data),
+          error: (errors: any) => this.parseError(errors.errors || errors)
+        });
+      } else {
+        this.service.editForm(endpoint, data).subscribe(
+          (response: any) => this.responseHandler(response, data),
+          (errors: any) => this.parseError(errors.errors || errors)
+        );
+      }
     } else {
       this.service.submitForm(endpoint, data).subscribe(
         (response: any) => this.responseHandler(response, data),
