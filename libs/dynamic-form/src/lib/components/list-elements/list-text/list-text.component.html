@@ -34,7 +34,7 @@
       </ng-container>
 
       <ng-container *ngIf="!config.translated">
-        {{ value }}
+        {{ value.toString()| translate }}
       </ng-container>
     </span>
     <span

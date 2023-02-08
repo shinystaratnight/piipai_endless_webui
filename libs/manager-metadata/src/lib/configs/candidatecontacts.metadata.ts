@@ -1304,6 +1304,9 @@ const form = [
             prefilled: {
               object_id: '{id}'
             },
+            insertData: {
+              model: 'candidate.candidatecontact'
+            },
             type: 'list',
             query: {
               object_id: '{id}'

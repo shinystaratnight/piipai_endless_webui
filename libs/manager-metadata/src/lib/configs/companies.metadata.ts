@@ -1034,7 +1034,7 @@ const form = [
             key: 'timeline',
             type: 'timeline',
             query: {
-              model: ['core.companyrel', 'core.company'],
+              model: 'core.companyrel',
               object_id: ['{id.id}', '{id}', '{regular_company_rel.id}']
             },
             templateOptions: {
@@ -1053,8 +1053,11 @@ const form = [
               text: 'States history'
             },
             collapsed: false,
+            insertData: {
+              model: 'core.companyrel'
+            },
             prefilled: {
-              object_id: '{regular_company_rel.id}'
+              object_id: '{regular_company_rel.id}',
             },
             type: 'list',
             query: {

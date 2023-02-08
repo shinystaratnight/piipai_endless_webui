@@ -891,6 +891,7 @@ export class DynamicListComponent
         (el.endpoint === Endpoints.Tag || this.endpoint === Endpoints.Tag) &&
         (el.owner === 'system' || (el.tag && el.tag.system === 'owner')),
       translated: element.translated,
+      jsonTranslate: element.jsonTranslate
     };
     if (cell.timezone) {
       obj.timezone = this.getPropValue(el, cell.timezone);

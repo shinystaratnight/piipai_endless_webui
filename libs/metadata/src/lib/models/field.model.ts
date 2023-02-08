@@ -59,6 +59,7 @@ export interface ITemplateOptions {
 }
 
 export interface Field {
+  insertData?: Record<string, any>;
   type?: string;
   key?: string;
   read_only?: boolean;

@@ -685,7 +685,7 @@ export class FormInputComponent
   // }
 
   getTranslationKey(type: string) {
-    return `${this.config.key}.${type}`;
+    return `${this.config.translateKey || this.config.key}.${type}`;
   }
 
   isIconName(val?: string): val is IconName {
