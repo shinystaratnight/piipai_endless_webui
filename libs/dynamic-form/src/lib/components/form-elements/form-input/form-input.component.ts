@@ -174,6 +174,10 @@ export class FormInputComponent
         control.valueChanges.pipe(distinctUntilChanged())
           .subscribe(() => {
             this.eventHandler({ type: FormEvent.Change });
+
+            if (this.config.intl) {
+              this.errors[this.config.key as string] = control.invalid && 'error.invalid_phone';
+            }
           })
       );
     }

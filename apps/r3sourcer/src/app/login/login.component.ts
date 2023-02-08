@@ -24,7 +24,6 @@ import { IFormErrors } from '@webui/dynamic-form';
 export class LoginComponent implements OnInit, OnDestroy {
   @ViewChild('modal') public modal!: ElementRef;
 
-  // public label: any;
   public response: any;
   public loginProcess!: boolean;
   public settings: any;
