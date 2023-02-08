@@ -24,7 +24,7 @@ const list = {
           {
             endpoint: '/',
             fields: [
-              { values: { true: 'HQ:' }, field: 'hq', type: 'checkbox' },
+              { values: { true: 'Headquarter:' }, field: 'hq', type: 'checkbox' },
               { field: 'address.__str__', type: 'static' }
             ],
             type: 'link'
@@ -231,7 +231,7 @@ const list = {
       key: 'hq',
       default: false,
       type: 'checkbox',
-      templateOptions: { required: false, label: 'HQ', type: 'checkbox' },
+      templateOptions: { required: false, label: 'Headquarter', type: 'checkbox' },
       read_only: true
     },
     {
@@ -405,7 +405,7 @@ const formset = {
       default: false,
       key: 'hq',
       read_only: false,
-      templateOptions: { required: false, label: 'HQ', type: 'checkbox' },
+      templateOptions: { required: false, label: 'Headquarter', type: 'checkbox' },
       type: 'checkbox'
     },
     {
@@ -456,7 +456,7 @@ const formset = {
         sort: true,
         sort_field: 'hq',
         content: [{ type: 'checkbox', field: 'hq' }],
-        label: 'HQ'
+        label: 'Headquarter'
       },
       {
         name: 'address',
@@ -599,7 +599,7 @@ const form = [
     key: 'hq',
     default: false,
     type: 'checkbox',
-    templateOptions: { required: false, label: 'HQ', type: 'checkbox' },
+    templateOptions: { required: false, label: 'Headquarter', type: 'checkbox' },
     read_only: false
   },
   {
@@ -688,7 +688,7 @@ const formadd = [
     key: 'hq',
     default: false,
     type: 'checkbox',
-    templateOptions: { required: false, label: 'HQ', type: 'checkbox' },
+    templateOptions: { required: false, label: 'Headquarter', type: 'checkbox' },
     read_only: false
   },
   {
