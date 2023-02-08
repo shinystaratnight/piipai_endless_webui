@@ -8,3 +8,7 @@
   flex-direction: column;
   gap: 1rem;
 }
+
+::ng-deep .control__input {
+  @apply w-full;
+}
