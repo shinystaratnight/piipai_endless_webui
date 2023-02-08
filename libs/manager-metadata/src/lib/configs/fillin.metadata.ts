@@ -76,8 +76,8 @@ const list = {
     searchParameter: 'q',
     columns: [
       {
-        name: 'favourite',
-        width: 24,
+        name: '',
+        width: 48,
         content: [
           {
             type: 'icon',
@@ -109,7 +109,7 @@ const list = {
       },
       {
         name: 'hourly_rate',
-        width: 95,
+        width: 135,
         content: [
           {
             type: 'static',
@@ -132,7 +132,7 @@ const list = {
       },
       {
         name: 'available',
-        width: 160,
+        width: 80,
         content: [
           {
             type: 'available',
@@ -144,7 +144,7 @@ const list = {
       {
         name: 'count_timesheets',
         sort_field: 'count_timesheets',
-        width: 150,
+        width: 180,
         sort: true,
         content: [
           {

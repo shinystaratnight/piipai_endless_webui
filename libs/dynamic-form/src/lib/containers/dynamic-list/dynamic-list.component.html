@@ -236,13 +236,12 @@
               </ng-container>
 
               <th *ngIf="config.list.tabs" class="last-cell">
-                <span (click)="openAllTabs()" class="more__header">
-                  <b>{{ 'more' | translate }}</b>
-                  <fa-icon
-                    class="ms-2 sort-icon"
-                    [icon]="['fas', collapsed ? 'chevron-down' : 'chevron-up']"
-                  ></fa-icon>
-                </span>
+                  <button class="px-2 py-1 hover:text-primary" type="button" (click)="openAllTabs()">
+                    <fa-icon
+                      class="cursor-pointer"
+                      [icon]="['fas', collapsed ? 'chevron-down' : 'chevron-up']"
+                    ></fa-icon>
+                  </button>
               </th>
             </tr>
           </thead>
