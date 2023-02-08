@@ -87,18 +87,18 @@
 
 <ng-template #subscription let-c="close" let-d="dismiss">
   <div class="modal-header-wrapper">
-    <div class="modal-header">
-      <div>
-        <h5 class="modal-title">{{ 'select_plan.label' | translate }}</h5>
-        <p class="secondary-title">{{ 'select_plan.subLabel' | translate }}</p>
-      </div>
-
+    <div class="modal-header border-0">
       <webui-close-button class="ms-auto" (click)="d()"></webui-close-button>
     </div>
   </div>
 
   <div class="modal-body">
-    <section class="flex flex-col gap-2">
+    <div class="text-center">
+      <h5 class="modal-title">{{ 'select_plan.label' | translate }}</h5>
+      <p class="secondary-title">{{ 'select_plan.subLabel' | translate }}</p>
+    </div>
+
+    <section class="flex flex-col gap-2 mt-4">
       <div class="flex items-center gap-2 justify-center">
         <label class="mb-0" for="employees">
           {{ 'employees' | translate }}:
