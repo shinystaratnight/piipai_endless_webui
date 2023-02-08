@@ -116,7 +116,7 @@ export class ListTextComponent implements OnInit, OnDestroy {
           this.config.name === '__str__'
             ? this.config.initValue
             : getPropValue(this.config.initValue, this.config.name);
-        if (value) {
+        if (value && !this.config.jsonTranslate) {
           const tranlsation = checkAndReturnTranslation(
             value as ITranslationPayload,
             'EE',

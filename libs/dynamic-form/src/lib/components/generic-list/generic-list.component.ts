@@ -57,6 +57,7 @@ export class GenericListComponent implements OnInit, OnDestroy {
   @Input() disableActions?: boolean;
   @Input() inlineFilters?: boolean;
   @Input() hasButtonInAction?: boolean;
+  @Input() insertData?: Record<string, any>;
 
   @Output() checkedObjects: EventEmitter<any> = new EventEmitter();
   @Output() event: EventEmitter<any> = new EventEmitter();
@@ -330,6 +331,12 @@ export class GenericListComponent implements OnInit, OnDestroy {
             el.workers_details
           );
         });
+      }
+
+      if (this.insertData) {
+        data[this.responseField].forEach((row: any) => {
+          Object.assign(row, this.insertData);
+        })
       }
 
       if (endpoint.includes('/fillin/')) {

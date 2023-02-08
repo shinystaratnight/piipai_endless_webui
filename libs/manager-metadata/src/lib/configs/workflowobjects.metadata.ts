@@ -7,36 +7,36 @@ const list = {
         content: [
           {
             field: 'state_name',
-            type: 'static'
-          }
+            type: 'static',
+          },
         ],
         name: 'state_name',
-        label: 'State name'
+        label: 'State name',
       },
       {
         content: [
           {
             field: 'comment',
-            type: 'input'
-          }
+            type: 'input',
+          },
         ],
         name: 'comment',
         sort_field: 'comment',
         label: 'Comments',
-        sort: true
+        sort: true,
       },
       {
         content: [
           {
             field: 'active',
-            type: 'checkbox'
-          }
+            type: 'checkbox',
+          },
         ],
         name: 'active',
         sort_field: 'active',
         label: 'Active',
-        sort: true
-      }
+        sort: true,
+      },
     ],
     pagination_label: 'Workflow object',
     search_enabled: false,
@@ -54,16 +54,16 @@ const list = {
         options: [
           {
             value: 'True',
-            label: 'Yes'
+            label: 'Yes',
           },
           {
             value: 'False',
-            label: 'No'
-          }
+            label: 'No',
+          },
         ],
         query: 'active',
         default: null,
-        type: 'checkbox'
+        type: 'checkbox',
       },
       // {
       //   key: 'state.workflow.name',
@@ -71,7 +71,7 @@ const list = {
       //   type: 'text',
       //   default: null
       // }
-    ]
+    ],
   },
   fields: [
     {
@@ -81,9 +81,9 @@ const list = {
       templateOptions: {
         required: false,
         label: 'Active',
-        type: 'checkbox'
+        type: 'checkbox',
       },
-      read_only: true
+      read_only: true,
     },
     {
       key: 'state_name',
@@ -91,9 +91,9 @@ const list = {
       templateOptions: {
         required: false,
         label: 'State name',
-        type: 'static'
+        type: 'static',
       },
-      read_only: true
+      read_only: true,
     },
     {
       key: 'comment',
@@ -102,11 +102,11 @@ const list = {
         required: false,
         label: 'Comments',
         description: 'State Change Comment',
-        type: 'text'
+        type: 'text',
       },
-      read_only: true
-    }
-  ]
+      read_only: true,
+    },
+  ],
 };
 
 const formset = {
@@ -115,20 +115,20 @@ const formset = {
       key: 'created_by',
       read_only: true,
       templateOptions: { required: false, label: 'Created by', type: 'static' },
-      type: 'static'
+      type: 'static',
     },
     {
       key: 'state_name',
       read_only: true,
       templateOptions: { required: false, label: 'State name', type: 'static' },
-      type: 'static'
+      type: 'static',
     },
     {
       default: true,
       key: 'active',
       read_only: false,
       templateOptions: { required: false, label: 'Active', type: 'checkbox' },
-      type: 'checkbox'
+      type: 'checkbox',
     },
     {
       key: 'comment',
@@ -137,9 +137,9 @@ const formset = {
         required: false,
         description: 'State Change Comment',
         label: 'Comments',
-        type: 'text'
+        type: 'text',
       },
-      type: 'input'
+      type: 'input',
     },
     {
       key: 'updated_at',
@@ -147,15 +147,15 @@ const formset = {
       templateOptions: {
         required: false,
         label: 'Updated at',
-        type: 'datetime'
+        type: 'datetime',
       },
-      type: 'datepicker'
+      type: 'datepicker',
     },
     {
       key: 'updated_by',
       read_only: true,
       templateOptions: { required: false, label: 'Updated by', type: 'static' },
-      type: 'static'
+      type: 'static',
     },
     {
       key: 'created_at',
@@ -163,16 +163,23 @@ const formset = {
       templateOptions: {
         required: false,
         label: 'Created at',
-        type: 'datetime'
+        type: 'datetime',
       },
-      type: 'datepicker'
-    }
+      type: 'datepicker',
+    },
   ],
   list: {
     columns: [
       {
-        name: 'state_name',
-        content: [{ type: 'static', field: 'state_name' }],
+        name: 'state',
+        content: [
+          {
+            type: 'static',
+            field: 'state',
+            display: `workflow.{model}.{state.number}.after`,
+            jsonTranslate: true
+          },
+        ],
         label: 'State name',
         width: 150,
       },
@@ -193,56 +200,56 @@ const formset = {
             type: 'input',
             field: 'comment',
             color: 'comment',
-            setColor: '{comment}'
-          }
+            setColor: '{comment}',
+          },
         ],
-        label: 'Comments'
+        label: 'Comments',
       },
       {
         name: 'created',
         content: [
           {
             type: 'datepicker',
-            field: 'created_at'
+            field: 'created_at',
           },
           {
             type: 'static',
             field: 'created_by',
             color: 'description',
-            setColor: '{created_by}'
-          }
+            setColor: '{created_by}',
+          },
         ],
         label: 'Created',
         width: 150,
         title: null,
-        delim: null
+        delim: null,
       },
       {
         name: 'updated',
         content: [
           {
             type: 'datepicker',
-            field: 'updated_at'
+            field: 'updated_at',
           },
           {
             type: 'static',
             field: 'updated_by',
             color: 'description',
-            setColor: '{updated_by}'
-          }
+            setColor: '{updated_by}',
+          },
         ],
         label: 'Updated',
         width: 150,
         title: null,
-        delim: null
-      }
+        delim: null,
+      },
     ],
     list: 'workflowobject',
     editDisable: false,
     label: 'Workflow object',
     pagination_label: 'Workflow object',
-    search_enabled: false
-  }
+    search_enabled: false,
+  },
 };
 
 const form = [
@@ -254,9 +261,9 @@ const form = [
       required: true,
       label: 'Object id',
       type: 'text',
-      description: 'ID of Object belonging to model in Workflow'
+      description: 'ID of Object belonging to model in Workflow',
     },
-    read_only: false
+    read_only: false,
   },
   {
     list: false,
@@ -268,12 +275,12 @@ const form = [
       delete: false,
       values: ['__str__'],
       type: 'related',
-      edit: true
+      edit: true,
     },
     collapsed: false,
     type: 'related',
     key: 'state',
-    many: false
+    many: false,
   },
   {
     key: 'comment',
@@ -282,9 +289,9 @@ const form = [
       required: false,
       label: 'Comments',
       type: 'textarea',
-      description: 'State Change Comment'
+      description: 'State Change Comment',
     },
-    read_only: false
+    read_only: false,
   },
   {
     key: 'score',
@@ -295,9 +302,9 @@ const form = [
       min: 1,
       max: 5,
       label: 'Score',
-      type: 'number'
+      type: 'number',
     },
-    read_only: false
+    read_only: false,
   },
   {
     key: 'active',
@@ -306,10 +313,10 @@ const form = [
     templateOptions: {
       required: false,
       label: 'Active',
-      type: 'checkbox'
+      type: 'checkbox',
     },
-    read_only: false
-  }
+    read_only: false,
+  },
 ];
 
 const formadd = [
@@ -321,9 +328,9 @@ const formadd = [
       required: true,
       label: 'Object id',
       type: 'text',
-      description: 'ID of Object belonging to model in Workflow'
+      description: 'ID of Object belonging to model in Workflow',
     },
-    read_only: false
+    read_only: false,
   },
   {
     list: false,
@@ -335,12 +342,12 @@ const formadd = [
       delete: false,
       values: ['__str__'],
       type: 'related',
-      edit: true
+      edit: true,
     },
     collapsed: false,
     type: 'related',
     key: 'state',
-    many: false
+    many: false,
   },
   {
     key: 'comment',
@@ -349,9 +356,9 @@ const formadd = [
       required: false,
       label: 'Comments',
       type: 'textarea',
-      description: 'State Change Comment'
+      description: 'State Change Comment',
     },
-    read_only: false
+    read_only: false,
   },
   {
     key: 'score',
@@ -362,9 +369,9 @@ const formadd = [
       min: 1,
       max: 5,
       label: 'Score',
-      type: 'number'
+      type: 'number',
     },
-    read_only: false
+    read_only: false,
   },
   {
     key: 'active',
@@ -373,15 +380,15 @@ const formadd = [
     templateOptions: {
       required: false,
       label: 'Active',
-      type: 'checkbox'
+      type: 'checkbox',
     },
-    read_only: false
-  }
+    read_only: false,
+  },
 ];
 
 export const workflowobjects = {
   list,
   formset,
   form,
-  formadd
+  formadd,
 };

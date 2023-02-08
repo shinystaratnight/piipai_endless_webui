@@ -71,6 +71,7 @@
       [hasButtonInAction]="
         hasAddButton && config.templateOptions?.hasButtonInAction
       "
+      [insertData]="config.insertData"
       (dataLength)="checkCount($event)"
       (checkedObjects)="checkedHandler($event)"
       (event)="eventHandler($event)"
