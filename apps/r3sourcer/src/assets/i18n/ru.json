@@ -750,7 +750,7 @@
   "reference_timesheet.label": "Табель учета рабочего времени",
   "registered_for_gst.label": "км",
   "registered_for_gst.text": "Зарегистрировано",
-  "registration.already_account": "Уже есть учетная запись,",
+  "registration.already_account": "Уже есть учетная запись?",
   "registration.fill_error": "Пожалуйста заполните обязательные поля",
   "registration.login_here": "Войдите сюда!",
   "registration.of": "из",
