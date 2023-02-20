@@ -51,8 +51,8 @@
       </div>
     </ng-container>
 
-    <div class="actions" *ngIf="!currentPlan && !hasSubscriptions">
-      <div class="actions__group">
+    <div class="flex gap-16 items-end" *ngIf="!currentPlan">
+      <div class="flex flex-col gap-1">
         <p *ngIf="trialExpires" class="secondary-title">
           {{ 'trial_subscription_expires' | translate }}
         </p>
