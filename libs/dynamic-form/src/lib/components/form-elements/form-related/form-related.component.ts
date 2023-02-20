@@ -28,15 +28,15 @@ import {
   CheckPermissionService,
   ToastService,
   MessageType,
+  Page,
 } from '@webui/core';
 import {
   FormatString,
-  isManager,
   isClient,
-  isCandidate,
   getTranslationKey,
   checkAndReturnTranslation,
   setPropValue,
+  getUrlPrefix,
 } from '@webui/utilities';
 
 import {
@@ -656,22 +656,18 @@ export class FormRelatedComponent
   }
 
   public getLinkPath(endpoint: string): string {
-    const list = this.navigation.linksList;
-    let result;
-    list.forEach((el) => {
-      if (el.endpoint === endpoint) {
-        result = el.url;
-      }
-    });
-    const prefix = isManager()
-      ? '/mn'
-      : isClient()
-      ? '/cl'
-      : isCandidate()
-      ? '/cd'
-      : '';
+    const contactPage: Page = {
+      url: '/core/contacts/',
+      endpoint: '/core/contacts/',
+      children: [],
+      name: 'Contacts',
+      __str__: 'Contacts',
+      translateKey: '/core/contacts/'
+    }
 
-    return prefix + result;
+    const result = [...this.navigation.linksList, contactPage].find((page) => page.url === endpoint)?.url;
+
+    return getUrlPrefix() + result;
   }
 
   public setInitValue() {
