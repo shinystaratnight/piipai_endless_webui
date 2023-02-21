@@ -41,6 +41,8 @@
 }
 
 .control__input {
+  @apply w-full font-medium;
+
   border-radius: 3px;
   background-color: $brand-light-color;
   border: 1px solid $border-color;

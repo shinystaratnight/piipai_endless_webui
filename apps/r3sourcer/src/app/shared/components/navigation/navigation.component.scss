@@ -234,6 +234,7 @@ $border-color: #d3deea;
   border-radius: 100%;
   background-color: #f5f5f5;
   object-fit: cover;
+  flex-shrink: 0;
 }
 
 .user-preview {
@@ -273,7 +274,6 @@ $border-color: #d3deea;
   font-family: 'Roboto';
   color: $secondary-color;
   margin-bottom: 0;
-  white-space: nowrap;
 }
 
 .dropdown-icon {
