@@ -8,10 +8,17 @@ module.exports = {
   ],
   theme: {
     colors: {
-      primary: '#2196F3',
-      'primary-light': '#D3DEEA',
-
+      primary: {
+        200: '#eef6ff',
+        300: '#d3deea',
+        DEFAULT: '#2196f3',
+      },
+      gray: {
+        300: '#7a7a7a',
+        DEFAULT: '#333333',
+      },
       yellow: '#F58926',
+      white: '#ffffff'
     },
     extend: {},
   },

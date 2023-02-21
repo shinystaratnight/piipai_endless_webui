@@ -1,5 +1,10 @@
-<header #header class="site-header">
-  <div class="site-header__content">
+<header
+  #header
+  class="site-header fixed top-0 w-full bg-primary-200 border-b border-primary-300 z-10"
+>
+  <div
+    class="site-header__content flex items-center w-full max-w-[1440px] px-4 mx-auto"
+  >
     <button
       class="hamburger hamburger--spring d-xl-none"
       type="button"
@@ -40,7 +45,7 @@
 
     <webui-time
       *ngIf="user"
-      class="clock"
+      class="absolute bottom-0 translate-y-full px-4 border border-primary-300 border-t-0 rounded-b right-10"
       translateKey="local_time"
       description="Local time"
       [hidden]="!initTime"
@@ -49,88 +54,124 @@
 
     <webui-language-selector
       [class.ms-auto]="!user"
-      class="language-selector"
+      class="hidden md:inline-block ml-8 order-1"
     ></webui-language-selector>
 
-    <div #userBlock class="user" *ngIf="user" (click)="toggleUserBlock($event)">
-      <div class="user-block">
+    <div
+      #userBlock
+      class="relative cursor-pointer ml-auto"
+      *ngIf="user"
+      (click)="toggleUserBlock($event)"
+    >
+      <div class="flex items-center gap-4">
         <img
-          class="user-avatar"
+          class="rounded-full w-[50px] h-[50px] object-cover"
           *ngIf="picture"
           [src]="picture"
-          width="50px"
-          height="50px"
+          width="50"
+          height="50"
         />
-        <div *ngIf="contactAvatar" class="user-avatar contact-avatar">
+        <div
+          *ngIf="contactAvatar"
+          class="rounded-full w-[50px] h-[50px] contact-avatar"
+        >
           {{ contactAvatar }}
         </div>
 
-        <div class="user-preview">
-          <div class="user-role-information">
-            <h4 class="user-name text-primary">{{ fullName }}</h4>
-            <p class="user-position">
+        <div class="hidden md:flex gap-6 items-center">
+          <div class="grid gap-2">
+            <h4 class="font-medium text-lg text-primary truncate">
+              {{ fullName }}
+            </h4>
+            <p class="text-xs text-gray-300 truncate">
               {{ getRolePosition(currentRoleObject) | translate }}
             </p>
           </div>
 
-          <span class="text-primary dropdown-icon">
-            <webui-icon
-              [icon]="Icon.ArrowDown"
-              [size]="IconSize.Medium"
-            ></webui-icon>
-          </span>
+          <webui-icon
+            class="text-primary"
+            [icon]="Icon.ArrowDown"
+            [size]="IconSize.Medium"
+          ></webui-icon>
         </div>
       </div>
 
-      <div *ngIf="!hideUserMenu" class="user-menu">
+      <div
+        [class.hidden]="hideUserMenu"
+        class="absolute bg-white rounded shadow-lg shadow-primary-300 border border-primary-300 right-0 w-72 md:w-96"
+      >
         <a
           *ngFor="let role of roles"
           href="https://{{ role.domain }}"
-          class="user-menu__role"
-          [class.active]="role.id === currentRole"
+          class="flex py-3.5 px-6 items-center gap-4"
+          [class.bg-primary-200]="role.id === currentRole"
+          [class.opacity-40]="role.id !== currentRole"
           (click)="changeRole(role, $event)"
         >
-          <span class="user-menu__role-indicator"></span>
+          <span
+            class="inline-flex items-center justify-center w-3.5 h-3.5 border border-primary rounded-full shrink-0 before:block before:w-1.5 before:h-1.5 before:rounded-full"
+            [class.before:bg-primary]="role.id === currentRole"
+          ></span>
 
           <img
-            class="user-avatar"
+            class="rounded-full w-[50px] h-[50px] object-cover"
             *ngIf="picture"
             [src]="picture"
-            width="50px"
-            height="50px"
+            width="50"
+            height="50"
           />
-          <div *ngIf="contactAvatar" class="user-avatar contact-avatar">
+          <div
+            *ngIf="contactAvatar"
+            class="rounded-full w-[50px] h-[50px] contact-avatar"
+          >
             {{ contactAvatar }}
           </div>
 
-          <div class="user-preview">
-            <div class="user-role-information">
-              <h4 class="user-name text-primary">{{ fullName }}</h4>
-              <p class="user-position">
-                {{ getRolePosition(role) | translate }}
-              </p>
-            </div>
+          <div class="grid gap-2">
+            <h4 class="font-medium text-lg text-primary truncate">
+              {{ fullName }}
+            </h4>
+            <p
+              class="text-xs text-gray-300 truncate"
+              [title]="getRolePosition(role) | translate"
+            >
+              {{ getRolePosition(role) | translate }}
+            </p>
           </div>
         </a>
 
-        <div class="user-menu__section">
+        <hr class="text-primary-300" />
+
+        <div class="grid px-6 py-5 gap-5 text-center">
           <a
-            class="link"
+            class="uppercase font-medium text-sm text-primary"
             [routerLink]="this.urlPrefix + '/profile'"
-            *ngIf="userType ==='client' || userType === 'candidate'"
+            *ngIf="userType === 'client' || userType === 'candidate'"
           >
             {{ 'profile' | translate: { Default: 'Profile' } }}
           </a>
 
-          <a class="link" href="" (click)="changePassword()">
+          <a
+            class="uppercase font-medium text-sm text-primary hover:underline"
+            href=""
+            (click)="changePassword()"
+          >
             {{ 'change_password' | translate: { Default: 'Change password' } }}
           </a>
 
-          <a class="link" href="" (click)="onChangeEmail()">
+          <a
+            class="uppercase font-medium text-sm text-primary hover:underline"
+            href=""
+            (click)="onChangeEmail()"
+          >
             {{ 'action.change_email' | translate }}
           </a>
 
-          <a class="link" href="" (click)="onChangePhoneNumber()">
+          <a
+            class="uppercase font-medium text-sm text-primary hover:underline"
+            href=""
+            (click)="onChangePhoneNumber()"
+          >
             {{ 'action.change_phone_number' | translate }}
           </a>
 
@@ -174,12 +215,19 @@
             ? [checkUrlPrefix(p.url) ? urlPrefix + p.url : p.url]
             : null
         "
-        class="link"
+        class="link inline-flex items-center py-1.5 px-6 hover:text-primary"
         [class.main]="f"
         [class.active]="p.active"
+        [class.gap-2]="!f"
+        [class.pl-2.5]="!f"
         (click)="clickAction($event, p)"
       >
-        <span *ngIf="!f" class="circle-indicator"></span>
+        <span
+          *ngIf="!f"
+          class="inline-block w-1.5 h-1.5 bg-primary rounded-full"
+          [class.invisible]="!p.active"
+          [class.visible]="p.active"
+        ></span>
 
         {{ p.translateKey | translate: { Default: p.name } }}
       </a>
