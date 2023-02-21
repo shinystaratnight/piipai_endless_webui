@@ -432,7 +432,7 @@
             *ngIf="day.jobOffers && day.jobOffers.length"
           >
             <ng-container *ngFor="let jobOffer of day.jobOffers">
-              <div class="shift-name flex-column items-start">
+              <div class="shift-name flex-col items-start">
                 <span class="p-1 mb-2 rounded bg-secondary text-white">
                   {{ 'start' | translate: { Default: 'Start' } }} -
                   {{ jobOffer.time }}
@@ -664,7 +664,7 @@
 
     <div
       class="shift-name"
-      [class.flex-column]="!status"
+      [class.flex-col]="!status"
       [class.items-start]="!status"
       *ngFor="let shift of shifts"
     >

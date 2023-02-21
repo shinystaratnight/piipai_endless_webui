@@ -22,7 +22,7 @@
   <div *ngFor="let item of l">
     <div
       *ngIf="item.model_fields && !item.hidden"
-      class="flex justify-center flex-column"
+      class="flex justify-center flex-col"
     >
       <div class="flex items-center p-2 group">
         <b class="field-name text-muted">{{ getTranslateKey(item.name) | translate }}</b>
@@ -126,7 +126,7 @@
 
     <div class="modal-body">
       <div
-        class="flex flex-column"
+        class="flex flex-col"
         *ngIf="modalData.type === 'field' && !modalData.id && !choosenType"
       >
         <span
@@ -166,7 +166,7 @@
   <div class="modal-content-wrapper">
     <div class="modal-body">
       <div
-        class="flex flex-column"
+        class="flex flex-col"
         *ngFor="let item of activeFields; let l = last; let f = first"
       >
         <h4

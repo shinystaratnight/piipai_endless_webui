@@ -38,7 +38,7 @@
       ></webui-info>
 
       <div
-        class="form-element-content flex-row edit position-relative"
+        class="form-element-content flex-row edit relative"
         [class.disabled]="fieldDisabled"
         tooltipClass="dark-tooltip"
         placement="bottom"
@@ -177,11 +177,11 @@
       <div
         #autocomplete
         *ngIf="config.many && results && !config.useOptions"
-        class="form-element-content flex-column items-start edit"
+        class="form-element-content flex-col items-start edit"
         [class.many]="config.many && results"
         style="position: relative"
       >
-        <div class="position-relative w-100">
+        <div class="relative w-100">
           <input
             [hidden]="config.hideSelect"
             type="text"
@@ -343,7 +343,7 @@
 
       <div
         #autocomplete
-        class="form-element-content flex-column items-start edit"
+        class="form-element-content flex-col items-start edit"
         style="position: relative"
         *ngIf="config.many && results && config.useOptions"
         [class.many]="config.many && results"
@@ -418,7 +418,7 @@
 
   <div class="form-list" *ngIf="config.list">
     <div class="flex">
-      <div class="mr-auto flex flex-column justify-center">
+      <div class="mr-auto flex flex-col justify-center">
         <h4 class="mb-0">
           {{
             getTranslationKey(config.key, 'label')
@@ -504,7 +504,7 @@
                 </fa-icon>
 
                 <ng-template #actionsTemplate>
-                  <div class="flex flex-column items-start">
+                  <div class="flex flex-col items-start">
                     <button
                       webuiSubscriptionRequired
                       class="btn"
@@ -760,7 +760,7 @@
 <ng-template #custom>
   <div
     *ngIf="customTemplate && customTemplate.length"
-    class="flex flex-column justify-center"
+    class="flex flex-col justify-center"
   >
     <span *ngFor="let field of customTemplate">
       <fa-icon
@@ -799,7 +799,7 @@
   </div>
   <div
     *ngIf="customTemplate && !customTemplate.length"
-    class="flex flex-column justify-center"
+    class="flex flex-col justify-center"
   >
     -
   </div>

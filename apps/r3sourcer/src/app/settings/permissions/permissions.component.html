@@ -119,12 +119,12 @@
       />
       <fa-icon
         [icon]="['fas', 'search']"
-        class="position-absolute end-0 mr-3"
+        class="absolute end-0 mr-3"
       ></fa-icon>
     </div>
     <div class="permission-block">
       <div
-        class="permission-item shadow-sm"
+        class="permission-item shadow"
         [class.shadow-none]="item.active"
         [class.text-white]="item.id === targetId && type === 'list'"
         [class.bg-primary]="item.id === targetId && type === 'list'"
@@ -135,8 +135,8 @@
         {{ item[p] }}
 
         <fa-icon
-          class="text-success position-absolute end-0 mr-3"
-          [class.d-none]="!item.active"
+          class="text-success absolute end-0 mr-3"
+          [class.hidden]="!item.active"
           icon="check"
         ></fa-icon>
 
