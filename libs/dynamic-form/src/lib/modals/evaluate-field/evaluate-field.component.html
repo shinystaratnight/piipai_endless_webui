@@ -3,8 +3,8 @@
     {{ 'evaluate.label' | translate: { Default: 'Evaluation' } }}
   </h4>
 
-  <div class="evaluation-wrapper d-flex align-items-center text-warning">
-    <div class="rating d-inline-flex" [class.filled]="score">
+  <div class="evaluation-wrapper flex items-center text-warning">
+    <div class="rating inline-flex" [class.filled]="score">
       <ngb-rating
         min="1"
         [max]="5"

@@ -21,7 +21,7 @@
     <webui-spinner *ngIf="actionProcess"></webui-spinner>
   </button>
 
-  <div class="ms-auto">
+  <div class="ml-auto">
     <ng-content></ng-content>
   </div>
 </div>
@@ -31,7 +31,7 @@
     <p>{{ action.message | translate }}</p>
 
     <webui-close-button
-      class="ms-auto"
+      class="ml-auto"
       (click)="modal.dismiss(false)"
     ></webui-close-button>
   </div>

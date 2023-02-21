@@ -1,6 +1,6 @@
-<div class="d-flex align-items-center" *webuiHasPermission="{action: 'post', endpoint: convertedEndpoint}" [class.list-buttons]="first">
+<div class="flex items-center" *webuiHasPermission="{action: 'post', endpoint: convertedEndpoint}" [class.list-buttons]="first">
   <div
-    class="d-flex align-items-center flex-wrap ms-sm-auto"
+    class="flex items-center flex-wrap ml-sm-auto"
     *ngIf="buttons && buttons.length"
   >
     <div
@@ -33,7 +33,7 @@
       </button>
     </div>
   </div>
-  <div class="d-flex align-items-center ms-sm-auto w-100" *ngIf="!buttons">
+  <div class="flex items-center ml-sm-auto w-100" *ngIf="!buttons">
     <a
       class="btn btn-primary btn-shadow datatable-button first text-white"
       routerLink="add"
@@ -48,7 +48,7 @@
     </a>
     <button
       *ngIf="(!first || inForm) && checkPermission('post')"
-      class="datatable-button ms-auto"
+      class="datatable-button ml-auto"
       (click)="buttonAction('add_object')"
     >
       <span class="button-icon"></span>
@@ -59,7 +59,7 @@
     </button>
   </div>
   <button
-    class="btn btn-primary btn-shadow datatable-button hidden-sm-down ms-2"
+    class="btn btn-primary btn-shadow datatable-button hidden-sm-down ml-2"
     *ngIf="!first && !poped"
     (click)="buttonAction('poped_table')"
   >

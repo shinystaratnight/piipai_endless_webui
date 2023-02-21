@@ -33,8 +33,8 @@
       (errorForm)="errorEvent()"
       (event)="formEvent($event)"
     >
-      <div class="d-flex">
-        <button class="btn btn-shadow btn-primary button-save ms-lg-auto">
+      <div class="flex">
+        <button class="btn btn-shadow btn-primary button-save ml-lg-auto">
           {{ 'save' | translate: { Default: 'Save' } }}
           <webui-spinner *ngIf="saveProcess"></webui-spinner>
         </button>
@@ -61,7 +61,7 @@
       </ng-container>
 
       <p class="evaluate-label">{{ config.label.name }}</p>
-      <hr class="ms-auto me-auto" width="100" />
+      <hr class="ml-auto mr-auto" width="100" />
 
       <ngb-rating [max]="5" min="1" [(ngModel)]="config.data['evaluation_score']">
         <ng-template let-fill="fill" let-index="index">
@@ -72,7 +72,7 @@
         </ng-template>
       </ngb-rating>
     </div>
-    <div class="modal-footer justify-content-center">
+    <div class="modal-footer justify-center">
       <button
         type="button"
         class="btn btn-shadow btn-primary button-save"

@@ -490,13 +490,19 @@ export class FilterRelatedComponent implements OnInit, OnDestroy {
     const { value, key } = this.config.data;
     const keys = [key];
 
-    value.forEach((el: string) => {
-      if (this.hasFormatBraces(el)) {
-        // TODO: get keys from format string
-      } else {
-        keys.push(el);
-      }
-    });
+    console.log(value, key);
+
+    if (Array.isArray(value)) {
+      value.forEach((el: string) => {
+        if (this.hasFormatBraces(el)) {
+          // TODO: get keys from format string
+        } else {
+          keys.push(el);
+        }
+      });
+    } else {
+      keys.push(value);
+    }
 
     return keys;
   }
@@ -533,21 +539,27 @@ class FilterOption {
   }
 
   private parseLabel(
-    display: string[],
+    display: string[] | string,
     data: any,
     countryCode: string,
     lang: string
   ) {
-    return display.reduce((acc: string, curr: any) => {
-      if (this.hasFormatBraces(curr)) {
-        return acc || FormatString.format(curr, data);
-      }
+    console.log(display);
 
-      return (
-        acc ||
-        checkAndReturnTranslation(data, countryCode, lang as Language) ||
-        data[curr]
-      );
-    }, '');
+    if (Array.isArray(display)) {
+      return display.reduce((acc: string, curr: any) => {
+        if (this.hasFormatBraces(curr)) {
+          return acc || FormatString.format(curr, data);
+        }
+
+        return (
+          acc ||
+          checkAndReturnTranslation(data, countryCode, lang as Language) ||
+          data[curr]
+        );
+      }, '');
+    } else {
+      return data[display];
+    }
   }
 }

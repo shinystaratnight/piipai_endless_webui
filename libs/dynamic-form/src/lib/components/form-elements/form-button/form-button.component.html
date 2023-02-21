@@ -1,11 +1,11 @@
 <div
   class="form-group"
   *ngIf="!config.hidden || showButton"
-  [class.d-inline-flex]="!config.templateOptions.title && !config.inverse"
+  [class.inline-flex]="!config.templateOptions.title && !config.inverse"
   [class.mb-0]="!config.templateOptions.mb && !this.group"
   style="white-space: nowrap"
 >
-  <label class="me-1" *ngIf="label && config.templateOptions.label">
+  <label class="mr-1" *ngIf="label && config.templateOptions.label">
     {{ config.templateOptions.label }}
   </label>
 
@@ -57,7 +57,7 @@
   >
     <span
       *ngIf="repeatArray"
-      class="d-flex align-items-center justify-content-between"
+      class="flex items-center justify-between"
     >
       <ng-container
         *ngTemplateOutlet="icon; context: { icon: config.svg }"
@@ -67,7 +67,7 @@
         [ngClass]="{
           'text-white':
             buttonClass && buttonClass !== 'btn-link' && !config.shadow,
-          'me-1': !last || first
+          'mr-1': !last || first
         }"
         *ngFor="let icon of repeatArray; let last = last; let first = first"
         [icon]="['fas', config.templateOptions.icon]"
@@ -95,7 +95,7 @@
     </span>
   </button>
   <button
-    class="btn btn-sm btn-link me-1"
+    class="btn btn-sm btn-link mr-1"
     type="button"
     *ngIf="config.action === 'showMessage'"
     [placement]="config.placement"
@@ -109,7 +109,7 @@
         : config.templateOptions.text | translate
     }}
   </button>
-  <span class="postfix me-1" *ngIf="config.postfix">{{ config.postfix }}</span>
+  <span class="postfix mr-1" *ngIf="config.postfix">{{ config.postfix }}</span>
   <button
     webuiSubscriptionRequired
     class="btn"
@@ -196,7 +196,7 @@
   {{ config.templateOptions.additionalDescription }}
 </div>
 <span *ngIf="config.emptyValue && config.hidden">{{ config.emptyValue }}</span>
-<span [class.me-1]="config.delim !== ' '" *ngIf="config.delim && !last">
+<span [class.mr-1]="config.delim !== ' '" *ngIf="config.delim && !last">
   {{ config.delim }}
 </span>
 <br *ngIf="config.list && !config.hidden && !config.delim && !config.noDelim" />
