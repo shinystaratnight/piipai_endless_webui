@@ -1,14 +1,14 @@
 <webui-form-element-view [label]="config.templateOptions.label" [many]="true">
-  <div class="d-flex flex-column" *ngIf="config.many">
+  <div class="flex flex-column" *ngIf="config.many">
     <span
-      class="d-inline-flex align-items-center my-1"
+      class="inline-flex items-center my-1"
       *ngFor="let account of accounts"
     >
       <a href="#" (click)="viewAccount(account, $event)">Bank Account</a>
 
       <button
         type="button"
-        class="btn btn-danger ms-2"
+        class="btn btn-danger ml-2"
         (click)="deleteAccount(account)"
       >
         Delete
@@ -35,7 +35,7 @@
         </div>
       </div>
 
-      <div class="form-element-content-actions align-items-center">
+      <div class="form-element-content-actions items-center">
         <button
           *ngIf="!account"
           type="button"
@@ -80,7 +80,7 @@
         <h5 class="modal-title">{{ modalData.title }}</h5>
 
         <webui-close-button
-          class="ms-auto"
+          class="ml-auto"
           (click)="modal.dismiss()"
         ></webui-close-button>
       </div>

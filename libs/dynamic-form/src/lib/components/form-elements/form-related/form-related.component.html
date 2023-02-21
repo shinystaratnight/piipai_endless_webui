@@ -55,12 +55,12 @@
         </div>
 
         <div
-          class="form-element-content-actions align-items-center"
+          class="form-element-content-actions items-center"
           *ngIf="hasActions"
         >
           <button
             *ngIf="displayValue"
-            class="clear-button me-1"
+            class="clear-button mr-1"
             type="button"
             (click)="clearField()"
           >
@@ -79,7 +79,7 @@
           <button
             webuiSubscriptionRequired
             type="button"
-            class="btn btn-warning text-white me-1"
+            class="btn btn-warning text-white mr-1"
             *ngIf="canEdit"
             (click)="open('update')"
           >
@@ -177,7 +177,7 @@
       <div
         #autocomplete
         *ngIf="config.many && results && !config.useOptions"
-        class="form-element-content flex-column align-items-start edit"
+        class="form-element-content flex-column items-start edit"
         [class.many]="config.many && results"
         style="position: relative"
       >
@@ -206,7 +206,7 @@
               *ngIf="config.templateOptions?.add && checkPermission('post')"
               (click)="open('post')"
             >
-              <!-- <i class="text-white me-1" fa name="plus"></i>  -->
+              <!-- <i class="text-white mr-1" fa name="plus"></i>  -->
               {{ 'add_new' | translate }}
             </button>
           </div>
@@ -236,11 +236,11 @@
                 {{ option.__str__ }}
                 <span *ngIf="config.templateOptions?.info">
                   <span
-                    class="d-inline-flex align-items-center mx-1"
+                    class="inline-flex items-center mx-1"
                     [style.color]="colors[getScore(option.score)]"
                   >
                     {{ option.score | number: '1.1-1' }}
-                    <fa-icon class="ms-1" icon="star"></fa-icon>
+                    <fa-icon class="ml-1" icon="star"></fa-icon>
                   </span>
                   <span>{{ option.distance }} km</span>
                 </span>
@@ -252,10 +252,10 @@
           </div>
         </div>
         <ng-container *ngIf="!config.tests && !config.templateOptions?.info">
-          <div class="d-flex flex-wrap mt-2">
+          <div class="flex flex-wrap mt-2">
             <ng-container *ngFor="let item of results; let i = index">
               <span
-                class="d-flex align-items-center text-left badge badge-outline mt-2 me-1"
+                class="flex items-center text-left badge badge-outline mt-2 mr-1"
                 style="white-space: normal"
               >
                 <span>
@@ -276,7 +276,7 @@
                   </ng-container>
                 </span>
                 <fa-icon
-                  class="ms-2 text-danger"
+                  class="ml-2 text-danger"
                   icon="times"
                   (click)="deleteItem(i, item)"
                 ></fa-icon>
@@ -292,7 +292,7 @@
           >
             {{ item.__str__ }}
             <fa-icon
-              class="ms-2 me-3 text-danger"
+              class="ml-2 mr-3 text-danger"
               icon="times"
               (click)="deleteItem(i, item)"
             ></fa-icon>
@@ -320,18 +320,18 @@
             class="candidate-info"
           >
             <span>{{ item.__str__ }}</span>
-            <span class="d-inline-flex align-items-center mx-1">
+            <span class="inline-flex items-center mx-1">
               {{
                 item.score ||
                   (item.candidate_scores && item.candidate_scores.average_score)
                   | number: '1.1-1'
               }}
-              <fa-icon class="ms-1" icon="star"></fa-icon>
+              <fa-icon class="ml-1" icon="star"></fa-icon>
             </span>
             <span>{{ item.distance }} km</span>
 
             <webui-close-button
-              class="ms-2"
+              class="ml-2"
               *ngIf="!config.doNotChoice"
               [sm]="true"
               (click)="deleteItem(i, item)"
@@ -343,7 +343,7 @@
 
       <div
         #autocomplete
-        class="form-element-content flex-column align-items-start edit"
+        class="form-element-content flex-column items-start edit"
         style="position: relative"
         *ngIf="config.many && results && config.useOptions"
         [class.many]="config.many && results"
@@ -371,7 +371,7 @@
                 style="cursor: pointer"
                 *ngFor="let option of previewList; trackBy: trackByFn"
               >
-                <label class="d-flex align-items-center w-100">
+                <label class="flex items-center w-100">
                   <input
                     type="checkbox"
                     class="form-check-input"
@@ -397,10 +397,10 @@
 
         <div
           *ngIf="results && results.length"
-          class="d-flex flex-wrap align-items-center"
+          class="flex flex-wrap items-center"
         >
           <span
-            class="badge badge-outline mt-2 me-1"
+            class="badge badge-outline mt-2 mr-1"
             style="white-space: normal"
             *ngFor="let item of results; let i = index"
           >
@@ -417,8 +417,8 @@
   </div>
 
   <div class="form-list" *ngIf="config.list">
-    <div class="d-flex">
-      <div class="me-auto d-flex flex-column justify-content-center">
+    <div class="flex">
+      <div class="mr-auto flex flex-column justify-center">
         <h4 class="mb-0">
           {{
             getTranslationKey(config.key, 'label')
@@ -492,7 +492,7 @@
               </td>
             </ng-container>
             <td>
-              <span *ngIf="object.id" class="d-flex align-items-center">
+              <span *ngIf="object.id" class="flex items-center">
                 <fa-icon
                   class="icon px-3 py-1"
                   style="opacity: 0.3; margin-left: 8px"
@@ -504,7 +504,7 @@
                 </fa-icon>
 
                 <ng-template #actionsTemplate>
-                  <div class="d-flex flex-column align-items-start">
+                  <div class="flex flex-column items-start">
                     <button
                       webuiSubscriptionRequired
                       class="btn"
@@ -634,13 +634,13 @@
       {{ displayValue }}
     </a>
     <div
-      [ngClass]="{ 'd-flex align-items-top flex-wrap': config.key === 'tags' }"
+      [ngClass]="{ 'flex items-top flex-wrap': config.key === 'tags' }"
       *ngIf="config.many && results && !config.templateOptions?.deleteList"
     >
       <span
         [ngClass]="{
-          'badge badge-outline mb-2 me-1': config.key === 'tags',
-          'd-block': config.column
+          'badge badge-outline mb-2 mr-1': config.key === 'tags',
+          'block': config.column
         }"
         *ngFor="let item of results; let l = last"
       >
@@ -659,10 +659,10 @@
     </div>
     <div
       *ngIf="config.many && results && config.templateOptions?.deleteList"
-      class="d-flex flex-wrap align-items-center mt-2"
+      class="flex flex-wrap items-center mt-2"
     >
       <span
-        class="badge badge-outline mt-2 me-1"
+        class="badge badge-outline mt-2 mr-1"
         style="white-space: normal"
         *ngFor="let item of results; let i = index"
       >
@@ -706,7 +706,7 @@
       <div class="modal-header">
         <h5 class="modal-title">{{ modalData.title }}</h5>
 
-        <webui-close-button class="ms-auto" (click)="c()"></webui-close-button>
+        <webui-close-button class="ml-auto" (click)="c()"></webui-close-button>
       </div>
     </div>
 
@@ -760,7 +760,7 @@
 <ng-template #custom>
   <div
     *ngIf="customTemplate && customTemplate.length"
-    class="d-flex flex-column justify-content-center"
+    class="flex flex-column justify-center"
   >
     <span *ngFor="let field of customTemplate">
       <fa-icon
@@ -799,7 +799,7 @@
   </div>
   <div
     *ngIf="customTemplate && !customTemplate.length"
-    class="d-flex flex-column justify-content-center"
+    class="flex flex-column justify-center"
   >
     -
   </div>
@@ -810,7 +810,7 @@
     <h5 class="message-label">{{ modalData.label }}</h5>
 
     <webui-close-button
-      class="close ms-2"
+      class="close ml-2"
       (click)="modal.dismiss()"
     ></webui-close-button>
   </div>

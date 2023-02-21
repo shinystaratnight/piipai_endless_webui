@@ -18,6 +18,8 @@ module.exports = {
         DEFAULT: '#333333',
       },
       yellow: '#F58926',
+      danger: '#fa5c46',
+      success: '#32ba5e',
       white: '#ffffff'
     },
     extend: {},

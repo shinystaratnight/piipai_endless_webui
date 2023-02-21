@@ -45,7 +45,7 @@
         {{ 'sms_credit_details.current_balance' | translate }}:
       </label>
       <div
-        class="d-flex align-items-center justify-content-between flex-grow-1"
+        class="flex items-center justify-between flex-grow-1"
       >
         <span class="balance">
           {{ smsBalance.balance | currency: currency }}
@@ -69,7 +69,7 @@
           {{ 'sms_credit_details.auto_charge' | translate }}
         </h5>
 
-        <webui-close-button class="ms-auto" (click)="d()"></webui-close-button>
+        <webui-close-button class="ml-auto" (click)="d()"></webui-close-button>
       </div>
     </div>
 
@@ -95,14 +95,14 @@
           {{ 'sms_credit_details.add_funds' | translate }}
         </h5>
 
-        <webui-close-button class="ms-auto" (click)="d()"></webui-close-button>
+        <webui-close-button class="ml-auto" (click)="d()"></webui-close-button>
       </div>
     </div>
 
     <div class="modal-body text-center">
       <h6>{{ 'sms_credit_details.add_funds_details' | translate }}</h6>
 
-      <div class="d-flex align-items-center justify-content-center">
+      <div class="flex items-center justify-center">
         <div class="form-element">
           <input
             class="form-control form-element-content"

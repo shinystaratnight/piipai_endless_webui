@@ -47,33 +47,33 @@
               <fa-icon icon="chevron-down" class="text-white"></fa-icon>
           </button>
         </div>
-        <div class="d-flex justify-content-center">
+        <div class="flex justify-center">
           <webui-loader *ngIf="!tables[0].data || isLoading"></webui-loader>
         </div>
       </div>
   </webui-dynamic-list>
 </div>
 
-<!-- <div #list class="d-flex justify-content-start datatable-list pt-2 flex-wrap" *ngIf="minimizedTable.length">
+<!-- <div #list class="flex justify-start datatable-list pt-2 flex-wrap" *ngIf="minimizedTable.length">
   <ng-container *ngFor="let table of minimizedTable">
     <div class="datatable-item px-1 pt-1">
       <div class="card">
         <div class="card-header bg-primary text-white">
-          <h6 class="d-flex justify-content-between align-items-center mb-0">
-            <span class="me-3 title" placement="top" ngbTooltip="{{table.metadata.list.label}}">{{table.metadata.list.label}}</span>
-            <div class="d-flex fustify-content-center align-items-center">
+          <h6 class="flex justify-between items-center mb-0">
+            <span class="mr-3 title" placement="top" ngbTooltip="{{table.metadata.list.label}}">{{table.metadata.list.label}}</span>
+            <div class="flex fustify-content-center items-center">
               <fa-icon
-                class="ms-2 icon"
+                class="ml-2 icon"
                 [icon]="['fas', 'window-minimize']"
                 (click)="action('minimize', table)"
                 aria-hidden="true"></fa-icon>
               <fa-icon
-                class="ms-2 icon"
+                class="ml-2 icon"
                 [icon]="['fas', 'window-maximize']"
                 (click)="action('maximize', table)"
                 aria-hidden="true"></fa-icon>
               <fa-icon
-                class="ms-2 icon"
+                class="ml-2 icon"
                 [icon]="['fas', 'times']"
                 (click)="action('close', table)"
                 aria-hidden="true"></fa-icon>

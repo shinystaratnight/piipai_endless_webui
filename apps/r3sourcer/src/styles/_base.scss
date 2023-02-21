@@ -379,4 +379,10 @@ form {
   position: relative;
 }
 
+.visually-hidden {
+  @apply sr-only;
+}
 
+.d-block {
+  @apply block;
+}

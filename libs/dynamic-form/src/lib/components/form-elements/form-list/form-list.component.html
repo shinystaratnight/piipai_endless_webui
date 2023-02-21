@@ -29,18 +29,18 @@
   <div>
     <div class="form" *ngIf="hasAddForm">
       <webui-generic-form
-        class="d-block"
+        class="block"
         [delay]="config.delay"
         [endpoint]="addFormConfig.endpoint"
         [data]="addFormConfig.data"
         [metadataQuery]="config.add_metadata_query"
         (event)="formEvent($event)"
       >
-        <div class="d-flex">
+        <div class="flex">
           <button
             webuiSubscriptionRequired
             type="submit"
-            class="btn btn-primary ms-auto"
+            class="btn btn-primary ml-auto"
             [disabled]="saveProcess$ | async"
           >
             {{ 'add_note' | translate }}
@@ -96,7 +96,7 @@
         </h5>
 
         <webui-close-button
-          class="ms-auto"
+          class="ml-auto"
           (click)="modal.dismiss()"
         ></webui-close-button>
       </div>

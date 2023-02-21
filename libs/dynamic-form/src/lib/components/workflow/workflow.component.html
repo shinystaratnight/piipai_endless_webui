@@ -14,12 +14,12 @@
       cdkDrag
       (click)="openState(node)"
       *ngFor="let node of currentWorkflowNodes">
-        <fa-icon class="me-2 circle" icon="dot-circle"></fa-icon>
+        <fa-icon class="mr-2 circle" icon="dot-circle"></fa-icon>
         <div class="title">
           {{node.workflow_node.name_before_activation}}
         </div>
 
-        <fa-icon class="icon text-danger ms-2" icon="times" (click)="deleteNode(node.id, $event)"></fa-icon>
+        <fa-icon class="icon text-danger ml-2" icon="times" (click)="deleteNode(node.id, $event)"></fa-icon>
     </div>
 
   </div>
@@ -33,7 +33,7 @@
       <div class="modal-header">
         <h5 class="modal-title">{{modalInfo.label}}</h5>
 
-        <webui-close-button class="close ms-auto" (click)="modal.dismiss()"></webui-close-button>
+        <webui-close-button class="close ml-auto" (click)="modal.dismiss()"></webui-close-button>
       </div>
     </div>
     <div class="modal-body">
@@ -49,11 +49,11 @@
           <label class="field-title">Substates:</label>
 
           <div>
-            <span class="badge badge-outline mb-1 me-1" style="white-space: normal"
+            <span class="badge badge-outline mb-1 mr-1" style="white-space: normal"
               (click)="openState(state, modal.close)"
               *ngFor="let state of subStates[modalInfo.id]">
                 {{state.workflow_node.name_before_activation}}
-                <fa-icon class="ms-2 text-danger" icon="times" (click)="deleteSubstate(state, $event)"></fa-icon>
+                <fa-icon class="ml-2 text-danger" icon="times" (click)="deleteSubstate(state, $event)"></fa-icon>
             </span>
           </div>
 
@@ -63,10 +63,10 @@
         <div class="substates-item">
           <label class="field-title">{{'acceptance_tests.label' | translate}}</label>
           <div>
-            <span class="badge badge-outline mb-1 me-1" style="white-space: normal"
+            <span class="badge badge-outline mb-1 mr-1" style="white-space: normal"
               *ngFor="let test of acceptanceTests[modalInfo.node.id]">
                 {{test.acceptance_test.name}}
-                <fa-icon class="ms-2 text-danger" icon="times" (click)="deleteTest(test, modalInfo.node)"></fa-icon>
+                <fa-icon class="ml-2 text-danger" icon="times" (click)="deleteTest(test, modalInfo.node)"></fa-icon>
             </span>
           </div>
           <a href="" class="add-link mt-1" webuiSubscriptionRequired (click)="addTest($event, modalInfo.node)">Add Acceptence Test</a>
@@ -82,7 +82,7 @@
       <div class="modal-header">
         <h5 class="modal-title">{{editModalInfo.label}}</h5>
 
-        <webui-close-button class="close ms-auto" (click)="modal.dismiss()"></webui-close-button>
+        <webui-close-button class="close ml-auto" (click)="modal.dismiss()"></webui-close-button>
       </div>
     </div>
     <div class="modal-body">
@@ -107,7 +107,7 @@
       <div class="modal-header">
         <h5 class="modal-title">{{parentId ? 'Add Substate' : 'Add State'}}</h5>
 
-        <webui-close-button class="close ms-auto" (click)="modal.dismiss()"></webui-close-button>
+        <webui-close-button class="close ml-auto" (click)="modal.dismiss()"></webui-close-button>
       </div>
     </div>
     <div class="modal-body">
@@ -131,7 +131,7 @@
       <div class="modal-header">
         <h5 class="modal-title">Add Acceptance Test</h5>
 
-        <webui-close-button class="close ms-auto" (click)="modal.dismiss()"></webui-close-button>
+        <webui-close-button class="close ml-auto" (click)="modal.dismiss()"></webui-close-button>
       </div>
     </div>
     <div class="modal-body">

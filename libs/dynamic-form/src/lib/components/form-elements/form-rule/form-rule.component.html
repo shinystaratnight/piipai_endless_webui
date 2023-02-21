@@ -112,7 +112,7 @@
         </ng-container>
 
         <span *ngIf="!last" class="btn-group-sm mx-1">
-          <a href="" class="operator me-1" [(ngModel)]="data.operator" btnRadio="or" (click)="changeOperator($event, type)">or</a>
+          <a href="" class="operator mr-1" [(ngModel)]="data.operator" btnRadio="or" (click)="changeOperator($event, type)">or</a>
           <a href="" class="operator" [(ngModel)]="data.operator" btnRadio="and" (click)="changeOperator($event, type)">and</a>
         </span>
       </span>
@@ -121,9 +121,9 @@
   </span>
 
   <span class="buttons" [class.hide]="data && data.data.length">
-    <button *ngIf="type === 'state'" type="button" class="btn btn-sm btn-link p-0 ms-2" (click)="open(element, type, data.data, undefined, data, parent)">+ State</button>
-    <button *ngIf="type === 'function'" type="button" class="btn btn-sm btn-link p-0 ms-2" (click)="open(element, type, data.data, undefined, data, parent)">+ Function</button>
-    <button type="button" class="btn btn-sm btn-link p-0 ms-1" (click)="addRule(data.data)">+ Rule</button>
+    <button *ngIf="type === 'state'" type="button" class="btn btn-sm btn-link p-0 ml-2" (click)="open(element, type, data.data, undefined, data, parent)">+ State</button>
+    <button *ngIf="type === 'function'" type="button" class="btn btn-sm btn-link p-0 ml-2" (click)="open(element, type, data.data, undefined, data, parent)">+ Function</button>
+    <button type="button" class="btn btn-sm btn-link p-0 ml-1" (click)="addRule(data.data)">+ Rule</button>
   </span>
 
 </ng-template>

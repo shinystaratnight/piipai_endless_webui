@@ -92,7 +92,7 @@
             !config.read_only &&
             config.templateOptions?.file === undefined
           "
-          class="link ms-0 me-auto"
+          class="link ml-0 mr-auto"
           (click)="upload()"
         >
           {{ 'upload_file' | translate: { Default: 'Upload new file' } }}
@@ -103,7 +103,7 @@
             !config.read_only &&
             config.templateOptions.file === false
           "
-          class="d-flex align-items-center flex-wrap mt-1"
+          class="flex items-center flex-wrap mt-1"
         >
           <div class="btn-group flex-wrap">
             <button
@@ -181,17 +181,17 @@
       }}
     </h5>
 
-    <webui-close-button class="ms-auto" (click)="c()"></webui-close-button>
+    <webui-close-button class="ml-auto" (click)="c()"></webui-close-button>
   </div>
 
   <div
-    class="modal-body picture d-flex justify-content-around flex-wrap"
+    class="modal-body picture flex justify-around flex-wrap"
     style="overflow: auto"
   >
     <webcam
       [width]="300"
       [height]="200"
-      class="d-flex align-items-center"
+      class="flex items-center"
       [captureImageData]="true"
       [trigger]="capture$"
       (imageCapture)="onImageCapture($event)"
@@ -199,7 +199,7 @@
     </webcam>
 
     <div
-      class="photo d-flex justify-content-center align-items-center mt-3 mt-sm-0"
+      class="photo flex justify-center items-center mt-3 mt-sm-0"
     >
       <span *ngIf="!photoExist" class="text-white">
         {{ 'photo' | translate: { Default: 'Photo' } }}
@@ -208,7 +208,7 @@
     </div>
   </div>
 
-  <div class="modal-footer justify-content-start">
+  <div class="modal-footer justify-start">
     <button
       *ngIf="photoExist"
       type="button"

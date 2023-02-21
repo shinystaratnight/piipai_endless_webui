@@ -129,16 +129,16 @@
         </div>
       </div>
 
-      <div class="d-flex justify-content-center align-items-center flex-column">
+      <div class="flex justify-center items-center flex-column">
         <div [hidden]="!config.signature" class="signature-content">
           <h3
-            class="group-title signature-title d-flex align-items-center w-100"
+            class="group-title signature-title flex items-center w-100"
           >
             {{ 'signature' | translate: { Default: 'Signature' } }}
             <button
               *ngIf="config.signature"
               type="button"
-              class="btn btn-link text-danger ms-auto pr-0 py-0 only-mobile"
+              class="btn btn-link text-danger ml-auto pr-0 py-0 only-mobile"
               (click)="signatureCanvas.clear()"
             >
               {{ 'clear' | translate: { Default: 'Clear area' } }}
@@ -180,7 +180,7 @@
       >
         {{ 'next' | translate: { Default: 'Next' } }}
         <svg
-          class="ms-1"
+          class="ml-1"
           width="16"
           height="11"
           viewBox="0 0 16 11"

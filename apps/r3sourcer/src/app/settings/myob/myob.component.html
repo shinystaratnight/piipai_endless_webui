@@ -11,7 +11,7 @@
       <webui-spinner *ngIf="connectProcess"></webui-spinner>
     </button>
     <p class="description">
-      <span class="border rounded-circle border-info me-1">i</span>
+      <span class="border rounded-circle border-info mr-1">i</span>
       Please click button to authorize access to your MYOB online files!
     </p>
   </div>
@@ -19,7 +19,7 @@
 
 <div class="content">
   <h6
-    class="d-flex align-items-center rounded border mb-3"
+    class="flex items-center rounded border mb-3"
     [ngClass]="{ 'bg-primary text-white': !companyFile.isCollapsed }"
   >
     <fa-icon
@@ -31,7 +31,7 @@
       style="cursor: pointer"
     >
     </fa-icon>
-    <span class="me-auto">Company File</span>
+    <span class="mr-auto">Company File</span>
 
     <span class="date"
       >Last refreshed -
@@ -54,7 +54,7 @@
     class="px-2"
   >
     <div
-      class="company-file d-flex align-items-center flex-wrap py-2"
+      class="company-file flex items-center flex-wrap py-2"
       *ngFor="let file of companyFile.list"
     >
       <label class="label mb-0 my-1">{{ file.name }}</label>
@@ -83,7 +83,7 @@
 
       <button
         type="button"
-        class="test-btn btn btn-success me-3 my-1"
+        class="test-btn btn btn-success mr-3 my-1"
         (click)="testCompanyFile(file)"
       >
         Test
@@ -98,13 +98,13 @@
     </div>
 
     <p class="description" *ngIf="companyFile">
-      <span class="border rounded-circle border-info me-1">i</span>
+      <span class="border rounded-circle border-info mr-1">i</span>
       Please enter your company file credentials!
     </p>
   </div>
 
   <h6
-    class="d-flex align-items-center rounded border mb-3"
+    class="flex items-center rounded border mb-3"
     [ngClass]="{ 'bg-primary text-white': !payrollAccounts.isCollapsed }"
   >
     <fa-icon
@@ -115,7 +115,7 @@
       aria-controls="collapseExample"
       style="cursor: pointer"
     ></fa-icon>
-    <span class="me-auto">Payroll accounts</span>
+    <span class="mr-auto">Payroll accounts</span>
 
     <span class="date"
       >Last refreshed -
@@ -139,11 +139,11 @@
     [ngbCollapse]="payrollAccounts.isCollapsed"
     class="px-2"
   >
-    <div class="d-flex flex-wrap">
+    <div class="flex flex-wrap">
       <div class="flex-grow-1 flex-shrink-1">
         <h6 class="group-label">Invoice settings</h6>
 
-        <div class="d-flex align-items-center mb-3">
+        <div class="flex items-center mb-3">
           <div class="form-element">
             <label class="form-element-label">
               {{ payrollAccounts.invoice_company_file.label }}
@@ -183,7 +183,7 @@
           </div>
         </div>
 
-        <div class="d-flex align-items-center mb-3">
+        <div class="flex items-center mb-3">
           <div class="form-element">
             <label class="form-element-label">
               {{ payrollAccounts.invoice_activity_account.label }}
@@ -224,7 +224,7 @@
       <div class="flex-grow-1 flex-shrink-1">
         <h6 class="group-label">TimeSheet Settings</h6>
 
-        <div class="d-flex align-items-center mb-3">
+        <div class="flex items-center mb-3">
           <div class="form-element">
             <label class="form-element-label">
               {{ payrollAccounts.timesheet_company_file.label }}
@@ -273,17 +273,17 @@
         )
       "
     >
-      <span class="border rounded-circle border-info me-1">i</span>
+      <span class="border rounded-circle border-info mr-1">i</span>
       Please assign preferred company files and accounts in “Edit mode”!
     </p>
 
     <div
       *ngIf="authData && authData.length"
-      class="d-flex justify-content-end align-items-center mt-2"
+      class="flex justify-end items-center mt-2"
     >
       <button
         type="button"
-        class="btn btn-primary btn-shadow ms-auto button-edit"
+        class="btn btn-primary btn-shadow ml-auto button-edit"
         *ngIf="viewMode"
         (click)="viewMode = false"
       >
