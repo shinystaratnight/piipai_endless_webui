@@ -386,3 +386,7 @@ form {
 .d-block {
   @apply block;
 }
+
+.cdk-overlay-container {
+  z-index: 1100;
+}
