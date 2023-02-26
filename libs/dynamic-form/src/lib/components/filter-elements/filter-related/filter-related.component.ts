@@ -490,8 +490,6 @@ export class FilterRelatedComponent implements OnInit, OnDestroy {
     const { value, key } = this.config.data;
     const keys = [key];
 
-    console.log(value, key);
-
     if (Array.isArray(value)) {
       value.forEach((el: string) => {
         if (this.hasFormatBraces(el)) {
@@ -544,8 +542,6 @@ class FilterOption {
     countryCode: string,
     lang: string
   ) {
-    console.log(display);
-
     if (Array.isArray(display)) {
       return display.reduce((acc: string, curr: any) => {
         if (this.hasFormatBraces(curr)) {

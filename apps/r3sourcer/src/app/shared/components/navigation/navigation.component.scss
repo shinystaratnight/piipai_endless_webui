@@ -13,15 +13,9 @@ $border-color: #d3deea;
     padding-right: 0;
     width: auto;
     height: 72px;
-    margin-right: 60px;
 
     @include media-breakpoint-down('lg') {
       margin-right: 0;
-    }
-
-    &-link {
-      display: inline;
-      padding: 0;
     }
 
     &-img {
@@ -29,81 +23,76 @@ $border-color: #d3deea;
     }
   }
 
-  .nav {
+  .nav__list {
     display: flex;
-    align-items: center;
+    justify-content: flex-start;
 
-    &__list {
-      display: flex;
+    &--main {
+      max-height: calc(100vh - 72px);
 
-      &--main {
-        max-height: calc(100vh - 72px);
-
-        &.show {
-          display: block;
-          position: absolute;
-          left: 0;
-          max-width: 70vw;
-          max-height: calc(100vh - 72px);
-          overflow: auto;
-          border-radius: 5px;
-          border: 1px solid $border-color;
-          background-color: $white;
-          box-shadow: $nested-shadow;
-          z-index: 10;
-          box-sizing: content-box;
-
-          .nav__item:hover > .nav__list--nested {
-            display: none;
-          }
-
-          .nav__item.opened > .nav__list--nested {
-            position: relative;
-            display: flex;
-            box-shadow: none;
-            border: none;
-            border-top: 1px solid $border-color;
-            border-bottom: 1px solid $border-color;
-            border-radius: 0;
-          }
-
-          & .nav__list--nested {
-            position: relative;
-            height: auto;
-          }
-        }
-      }
-
-      &--nested {
-        display: none;
-        flex-direction: column;
+      &.show {
+        display: block;
         position: absolute;
         left: 0;
-        width: $nested-width;
         max-width: 70vw;
-        font-size: 14px;
+        max-height: calc(100vh - 72px);
+        overflow: auto;
         border-radius: 5px;
         border: 1px solid $border-color;
         background-color: $white;
         box-shadow: $nested-shadow;
         z-index: 10;
-      }
+        box-sizing: content-box;
 
-      @include media-breakpoint-down('xl') {
-        display: none;
-        width: $nested-width;
-        max-width: 70vw;
+        .nav__item:hover > .nav__list--nested {
+          display: none;
+        }
+
+        .nav__item.opened > .nav__list--nested {
+          position: relative;
+          display: flex;
+          box-shadow: none;
+          border: none;
+          border-top: 1px solid $border-color;
+          border-bottom: 1px solid $border-color;
+          border-radius: 0;
+        }
+
+        & .nav__list--nested {
+          position: relative;
+          height: auto;
+        }
       }
     }
 
-    &__item {
-      position: relative;
-      width: 100%;
+    &--nested {
+      display: none;
+      flex-direction: column;
+      position: absolute;
+      left: 0;
+      width: $nested-width;
+      max-width: 70vw;
+      font-size: 14px;
+      border-radius: 5px;
+      border: 1px solid $border-color;
+      background-color: $white;
+      box-shadow: $nested-shadow;
+      z-index: 10;
+    }
 
-      &:hover > .nav__list--nested {
-        display: flex;
-        height: auto;
-      }
+    @include media-breakpoint-down('xl') {
+      display: none;
+      width: $nested-width;
+      max-width: 70vw;
+    }
+  }
+
+  .nav__item {
+    position: relative;
+
+    &:hover > .nav__list--nested {
+      display: flex;
+      height: auto;
     }
   }
 }
