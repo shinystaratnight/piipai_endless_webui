@@ -8,7 +8,7 @@
       local="fr"
     />
     <webui-icon
-      *ngIf="hasIcon"
+      *ngIf="hasIcon('date')"
       class="control__input-icon"
       [icon]="Icon.Calendar"
       [size]="IconSize.Medium"
@@ -29,7 +29,7 @@
       local="fr"
     />
     <webui-icon
-      *ngIf="hasIcon"
+      *ngIf="hasIcon('time')"
       class="control__input-icon"
       [icon]="Icon.Clock"
       [size]="IconSize.Medium"

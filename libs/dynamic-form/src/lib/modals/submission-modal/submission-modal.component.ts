@@ -112,8 +112,9 @@ export class SubmissionModalComponent
       activity: new FormControl(),
     });
 
-    this.formGroup.valueChanges.pipe(skip(1)).subscribe((value) =>
+    this.formGroup.valueChanges.pipe(skip(1)).subscribe((value) => {
       this.updateTimeSheet(value)
+    }
     );
     this.activityParams = this.getActivityParams();
 

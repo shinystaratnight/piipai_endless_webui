@@ -20,6 +20,8 @@ module.exports = {
       yellow: '#F58926',
       danger: '#fa5c46',
       success: '#32ba5e',
+      warning: '#f58926',
+      secondary: '#7a7a7a',
       muted: '#6c757d',
       white: '#ffffff'
     },

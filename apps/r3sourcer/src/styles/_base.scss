@@ -387,6 +387,10 @@ form {
   @apply block;
 }
 
+.w-100 {
+  @apply w-full;
+}
+
 .cdk-overlay-container {
   z-index: 1100;
 }

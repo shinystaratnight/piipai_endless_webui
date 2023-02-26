@@ -3,7 +3,7 @@
   class="site-header fixed top-0 w-full bg-primary-200 border-b border-primary-300 z-10"
 >
   <div
-    class="site-header__content flex items-center w-full max-w-[1440px] px-4 mx-auto"
+    class="site-header__content flex items-center justify-between w-full max-w-[1440px] px-4 mx-auto"
   >
     <button
       class="hamburger hamburger--spring d-xl-none"
@@ -17,18 +17,17 @@
       </span>
     </button>
 
-    <a class="logo" routerLink="/">
+    <a class="logo mr-4" routerLink="/">
       <img class="logo-img" *ngIf="logo" [src]="logo" />
     </a>
 
     <nav
       #nav
-      class="nav order-0"
-      [ngClass]="{ 'flex-first': pages }"
+      class="order-0 grow"
       *ngIf="pages && pages.length"
     >
       <ul
-        class="nav__list nav__list--main"
+        class="nav__list nav__list--main w-full"
         [ngClass]="{ show: isCollapsed }"
         [ngStyle]="{ 'top.px': isCollapsed ? headerHeight : 0 }"
       >
@@ -51,11 +50,6 @@
       [hidden]="!initTime"
       (init)="initTime = true"
     ></webui-time>
-
-    <webui-language-selector
-      [class.ml-auto]="!user"
-      class="hidden md:inline-block ml-8 order-1"
-    ></webui-language-selector>
 
     <div
       #userBlock
@@ -94,6 +88,8 @@
             [size]="IconSize.Medium"
           ></webui-icon>
         </div>
+
+
       </div>
 
       <div
@@ -185,6 +181,11 @@
         </div>
       </div>
     </div>
+
+    <webui-language-selector
+      [class.ml-auto]="!user"
+      class="md:ml-4"
+    ></webui-language-selector>
   </div>
 </header>
 
@@ -206,7 +207,7 @@
 </ng-template>
 
 <ng-template #item let-p="page" let-f="first" let-h="height">
-  <li class="nav__item" [class.disabled]="p.disabled" [class.opened]="p.opened">
+  <li class="nav__item relative" [class.disabled]="p.disabled" [class.opened]="p.opened">
     <span class="link__wrapper">
       <a
         *ngIf="!p.disabled"

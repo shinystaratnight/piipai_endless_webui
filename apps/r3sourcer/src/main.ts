@@ -13,6 +13,9 @@ Sentry.init({
       tracingOrigins: ['https://piipaitest.com'],
       routingInstrumentation: Sentry.routingInstrumentation,
     }),
+    new Sentry.Integrations.Breadcrumbs({
+      console: false
+    })
   ],
 
   // Set tracesSampleRate to 1.0 to capture 100%
