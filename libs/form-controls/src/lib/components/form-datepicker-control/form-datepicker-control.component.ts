@@ -83,8 +83,8 @@ export class FormDatepickerControlComponent
     return this.type === DatepickerType.DateTime;
   }
 
-  public get hasIcon(): boolean {
-    return this.platform.FIREFOX;
+  public hasIcon(type: string): boolean {
+    return this.platform.FIREFOX && type === 'time';
   }
 
   public get formatedTime(): string {
