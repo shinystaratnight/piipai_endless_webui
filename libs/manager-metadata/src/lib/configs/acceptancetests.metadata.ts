@@ -97,6 +97,7 @@ const form = function () {
         )
           .updateModel({ many: true, useOptions: true })
           .setActions({ delete: true })
+          .updateValues(['translations'])
           .setRelatedObjects(
             'industry',
             { acceptance_test: '{id}' },
@@ -110,6 +111,7 @@ const form = function () {
         )
           .updateModel({ many: true, useOptions: true })
           .setActions({ delete: true })
+          .updateValues(['translations', 'name'])
           .setQuery({
             company: 'currentCompany'
           })
@@ -122,6 +124,7 @@ const form = function () {
         new Form.related.element('acceptance_tests_tags', 'Tags', Endpoints.Tag)
           .updateModel({ many: true, useOptions: true })
           .setActions({ delete: true })
+          .updateValues(['translations'])
           .setRelatedObjects(
             'tag',
             { acceptance_test: '{id}' },

@@ -734,19 +734,7 @@ export class FormRelatedComponent
         if (this.config.options && this.config.options.length) {
           const results: any[] = [];
           this.config.options.forEach((el) => {
-            if (el.translations) {
-              const trans = data.translations.find(
-                (item: any) =>
-                  item.language.id ===
-                  translationMap[this.settingsService.settings.country_code]
-              );
-
-              if (trans) {
-                el.__str__ = trans.value;
-              }
-            }
-
-            el.__str__ = formatString.format(this.display, el);
+            this.parseOption(el);
             el.checked = false;
             data.forEach((elem: any) => {
               if (elem instanceof Object) {
@@ -1850,40 +1838,13 @@ export class FormRelatedComponent
               this.skipScroll = false;
               this.count = res.count;
               if (res.results && res.results.length) {
-                const formatString = new FormatString();
-                const { country_code } = this.settingsService.settings;
-                const lang = this.storage.retrieve('lang');
                 let results = [...res.results];
 
                 if (this.config.unique) {
                   results = this.filterUniqueValue(res.results, this.results);
                 }
 
-                results.forEach((el) => {
-                  const { templateOptions } = this.config;
-                  const { listParam, listDisplay, info } =
-                    templateOptions as ITemplateOptions;
-                  const display = listDisplay || this.display;
-
-                  el.__str__ =
-                    checkAndReturnTranslation(el, country_code, lang) ||
-                    formatString.format(display, el);
-                  setPropValue(
-                    this.display.replace('{', '').replace('}', ''),
-                    el,
-                    el.__str__
-                  );
-
-                  if (listParam) {
-                    el[this.param] = FormatString.format(listParam, el);
-                    el['name'] = FormatString.format(listDisplay as string, el);
-                  }
-
-                  if (info) {
-                    el.score = formatString.format(info['score'], el);
-                    el.distance = formatString.format(info['distance'], el);
-                  }
-                });
+                results.forEach((el) => this.parseOption(el));
 
                 if (this.config.options) {
                   this.config.options = [
@@ -2162,6 +2123,34 @@ export class FormRelatedComponent
     }
 
     return false;
+  }
+
+  parseOption(option: any) {
+    const formatString = new FormatString();
+    const { country_code } = this.settingsService.settings;
+    const lang = this.storage.retrieve('lang');
+    const { templateOptions } = this.config;
+    const { listParam, listDisplay, info } = templateOptions as ITemplateOptions;
+    const display = listDisplay || this.display;
+
+    option.__str__ =
+      checkAndReturnTranslation(option, country_code, lang) ||
+      formatString.format(display, option);
+    setPropValue(
+      this.display.replace('{', '').replace('}', ''),
+      option,
+      option.__str__
+    );
+
+    if (listParam) {
+      option[this.param] = FormatString.format(listParam, option);
+      option['name'] = FormatString.format(listDisplay as string, option);
+    }
+
+    if (info) {
+      option.score = formatString.format(info['score'], option);
+      option.distance = formatString.format(info['distance'], option);
+    }
   }
 
   @HostListener('document:click', ['$event'])
