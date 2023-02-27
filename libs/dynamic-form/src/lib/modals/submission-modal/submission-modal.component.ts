@@ -270,8 +270,6 @@ export class SubmissionModalComponent
     }
 
     if ('break' in value) {
-      console.log(value);
-
       this.timeSheet.updateBreak(value.break ? value.break.split(':') : null);
     }
   }

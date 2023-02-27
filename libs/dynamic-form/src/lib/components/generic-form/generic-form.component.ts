@@ -433,7 +433,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
           el.key,
           el.endpoint,
           {},
-          '?limit=-1' + this.generateQuery(el.query, data)
+          '?limit=-1' + this.generateQuery(el.query, data) + this.generateFields(el)
         );
       } else if (el.children) {
         this.getRelatedDataForOptions(el.children, data);
@@ -2639,5 +2639,21 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
       'disableActions'
     );
     this.formService.disableEditMode(this.formId);
+  }
+
+  public generateFields(el: Field) {
+    const fields = el.templateOptions?.values;
+    const param = el.templateOptions?.param || 'id';
+
+    let query = '&';
+    if (fields) {
+      fields.forEach((el) => {
+        query += `fields=${el}&`;
+      });
+      query = query.slice(0, query.length - 1);
+    } else {
+      query = `&fields=__str__&fields=${param}`;
+    }
+    return query;
   }
 }
