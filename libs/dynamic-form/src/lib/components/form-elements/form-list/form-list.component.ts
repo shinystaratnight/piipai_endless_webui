@@ -22,7 +22,6 @@ import {
   TimelineAction,
 } from '../../../services';
 import { Field } from '@webui/metadata';
-import { Endpoints } from '@webui/models';
 
 @Component({
   selector: 'webui-form-list',
@@ -53,7 +52,7 @@ export class FormListComponent implements OnInit, OnDestroy {
   public showButton!: boolean;
 
   public allowMethods!: string[];
-  public formData!: any[];
+  public formData!: any;
 
   public defaultValues: any[] = [];
   public defaultQueries: any;
@@ -117,6 +116,10 @@ export class FormListComponent implements OnInit, OnDestroy {
 
     if (this.hasAddForm) {
       this.addFormConfig = this.getAddFormConfig();
+    }
+
+    if (this.formData.type === 'master' && this.config.insertData && this.config.insertData['model']) {
+      this.config.insertData['model'] = this.config.insertData['model'][1];
     }
   }
 

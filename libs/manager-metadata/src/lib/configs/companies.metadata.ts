@@ -1034,7 +1034,7 @@ const form = [
             key: 'timeline',
             type: 'timeline',
             query: {
-              model: 'core.companyrel',
+              model: ['core.companyrel', 'core.company'],
               object_id: ['{id.id}', '{id}', '{regular_company_rel.id}']
             },
             templateOptions: {
@@ -1054,7 +1054,7 @@ const form = [
             },
             collapsed: false,
             insertData: {
-              model: 'core.companyrel'
+              model: ['core.companyrel', 'core.company']
             },
             prefilled: {
               object_id: '{regular_company_rel.id}',

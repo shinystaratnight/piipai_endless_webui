@@ -1170,5 +1170,13 @@
   "worksheet_submission": "Отправка рабочего листа",
   "worktype.label": "Навык Активность",
   "worktype.placeholder": "Навык Активность",
-  "your_activity": "Ваша деятельность"
+  "your_activity": "Ваша деятельность",
+  "workflow.core.company.10.after": "Trial_RU",
+  "workflow.core.company.10.before": "Trial_RU",
+  "workflow.core.company.20.after": "Set up MYOB_RU",
+  "workflow.core.company.20.before": "MYOB configured_RU",
+  "workflow.core.company.30.after": "Set up Twilio_RU",
+  "workflow.core.company.30.before": "Twilio configured_RU",
+  "workflow.core.company.40.after": "Active_RU",
+  "workflow.core.company.40.before": "Active_RU"
 }

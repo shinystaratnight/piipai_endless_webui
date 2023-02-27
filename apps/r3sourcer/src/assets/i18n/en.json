@@ -1170,5 +1170,13 @@
   "worksheet_submission": "Worksheet submission",
   "worktype.label": "Skill Activity",
   "worktype.placeholder": "Skill Activity",
-  "your_activity": "Your activity"
+  "your_activity": "Your activity",
+  "workflow.core.company.10.after": "Trial",
+  "workflow.core.company.10.before": "Trial",
+  "workflow.core.company.20.after": "Set up MYOB",
+  "workflow.core.company.20.before": "MYOB configured",
+  "workflow.core.company.30.after": "Set up Twilio",
+  "workflow.core.company.30.before": "Twilio configured",
+  "workflow.core.company.40.after": "Active",
+  "workflow.core.company.40.before": "Active"
 }
