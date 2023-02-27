@@ -906,7 +906,7 @@
   "Confirmations.label": "Kinnitused",
   "candidcontact.label": "Kandidaadi kontakt",
   "next_step": "Järgmine samm",
-  "registration.already_account": "On juba konto",
+  "registration.already_account": "On juba konto?",
   "registration.login_here": "Logi sisse siit!",
   "tabs.workflowobjects.label": "Osariikide ajalugu",
   "tabs.workflowobjects.help": "Siin näete tööolekute muudatusi",

@@ -751,7 +751,7 @@
   "reference_timesheet.label": "Related timesheet",
   "registered_for_gst.label": "KM",
   "registered_for_gst.text": "Registered",
-  "registration.already_account": "Already have an account,",
+  "registration.already_account": "Already have an account?",
   "registration.fill_error": "Please fill all the REQUIRED fields",
   "registration.login_here": "Login here!",
   "registration.of": "of",
