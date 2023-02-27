@@ -1170,5 +1170,13 @@
   "worksheet_submission": "Työarkin lähetys",
   "worktype.label": "Taitotoiminta",
   "worktype.placeholder": "Valitse",
-  "your_activity": "Toimintasi"
+  "your_activity": "Toimintasi",
+  "workflow.core.company.10.after": "Trial_FI",
+  "workflow.core.company.10.before": "Trial_FI",
+  "workflow.core.company.20.after": "Set up MYOB_FI",
+  "workflow.core.company.20.before": "MYOB configured_FI",
+  "workflow.core.company.30.after": "Set up Twilio_FI",
+  "workflow.core.company.30.before": "Twilio configured_FI",
+  "workflow.core.company.40.after": "Active_FI",
+  "workflow.core.company.40.before": "Active_FI"
 }
