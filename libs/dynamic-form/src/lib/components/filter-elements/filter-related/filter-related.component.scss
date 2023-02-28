@@ -32,7 +32,7 @@
   .form-element-checkbox {
     position: relative;
     width: 100%;
-    padding: 0.5rem .75rem;
+    padding: 0.5rem 0.75rem;
 
     &::after {
       position: absolute;
@@ -51,6 +51,10 @@
       background-color: $brand-light-color;
     }
   }
+
+  ::ng-deep .autocomplete-list {
+    max-height: 144px;
+  }
 }
 
 .content {
@@ -68,7 +72,6 @@
   .form-control {
     margin-bottom: 0.75rem;
   }
-
 }
 
 .spinner-content {
@@ -88,4 +91,13 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.search-control {
+  position: absolute;
+  top: 0;
+
+  &:not(.active) {
+    display: none;
+  }
 }

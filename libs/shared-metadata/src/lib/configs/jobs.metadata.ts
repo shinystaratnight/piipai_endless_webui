@@ -1157,6 +1157,9 @@ const form = [
             prefilled: {
               object_id: '{id}'
             },
+            insertData: {
+              model: 'hr.job',
+            },
             translateKey: 'workflowobjects',
             type: 'list',
             query: {

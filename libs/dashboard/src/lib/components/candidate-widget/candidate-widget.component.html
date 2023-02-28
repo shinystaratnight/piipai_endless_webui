@@ -3,9 +3,9 @@
     <h3
       class="
         widget-name
-        d-flex
-        align-items-center
-        justify-content-between
+        flex
+        items-center
+        justify-between
         w-100
       "
     >
@@ -25,7 +25,7 @@
         (click)="toggleFilters()"
       >
         {{ 'filter.plural' | translate: { Default: 'Candidates' } }}
-        <fa-icon class="ms-2" icon="chevron-down"></fa-icon>
+        <fa-icon class="ml-2" icon="chevron-down"></fa-icon>
       </button>
     </h3>
   </div>
@@ -56,7 +56,7 @@
 
     <div
       *ngIf="!candidates || loading"
-      class="d-flex align-items-center justify-content-center flex-fill"
+      class="flex items-center justify-center flex-fill"
     >
       <webui-loader></webui-loader>
     </div>
@@ -73,7 +73,7 @@
       <img
         *ngIf="candidate.img"
         [src]="candidate.img"
-        alt=""
+        class="w-8 h-8"
         width="32"
         height="32"
       />
@@ -82,7 +82,7 @@
       </div>
       <b class="name">{{ candidate.name }}</b>
 
-      <div class="ms-auto">
+      <div class="ml-auto">
         <ng-container *ngTemplateOutlet="score; context: { value: candidate.score, right: true }"></ng-container>
       </div>
 
@@ -123,7 +123,7 @@
         </div>
       </ng-container>
 
-      <div class="d-flex justify-content-between">
+      <div class="flex justify-between">
         <div *ngIf="candidate.hourly_rate">
           <div class="list-item-group-title">
             {{ 'hourly_rate' | translate: { Default: 'Hourly rate' } }}
@@ -176,10 +176,10 @@
 </ng-template>
 
 <ng-template #score let-value="value" let-right="right">
-  <span class="score d-inline-flex align-items-center" [webuiAverageScore]="value">
+  <span class="score inline-flex items-center" [webuiAverageScore]="value">
     {{ value | averageScore }}
     <ng-container *ngIf="value">
-      <fa-icon class="ms-1" icon="star"></fa-icon>
+      <fa-icon class="ml-1" icon="star"></fa-icon>
     </ng-container>
   </span>
 </ng-template>

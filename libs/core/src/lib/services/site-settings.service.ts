@@ -102,7 +102,7 @@ export class SiteSettingsService {
     const root = document.documentElement;
     const { color_scheme, font } = settings;
 
-    const themeClass = `${settings.color_scheme}-theme`;
+    const themeClass = `${settings.color_scheme || 'default'}-theme`;
     const fontFamily = `${font || 'Source Sans Pro'}, sans-serif`;
 
     // TODO: refactor it

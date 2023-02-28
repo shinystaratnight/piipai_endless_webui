@@ -34,25 +34,25 @@
         <span>{{ currentPlan.active && 'Active' }}</span>
       </div>
       <div class="field">
-        <label class="field__label"
-          >{{ 'current_period_start.label' | translate }}:</label
-        >
+        <label class="field__label">
+          {{ 'current_period_start.label' | translate }}:
+        </label>
         <span>
           {{ currentPlan.current_period_start | dateFormat: 'datetime' }}
         </span>
       </div>
       <div class="field">
-        <label class="field__label"
-          >{{ 'current_period_end.label' | translate }}:</label
-        >
+        <label class="field__label">
+          {{ 'current_period_end.label' | translate }}:
+        </label>
         <span>
           {{ currentPlan.current_period_end | dateFormat: 'datetime' }}
         </span>
       </div>
     </ng-container>
 
-    <div class="actions" *ngIf="!currentPlan">
-      <div class="actions__group">
+    <div class="flex gap-16 items-end" *ngIf="!currentPlan">
+      <div class="flex flex-col gap-1" *ngIf="!hasSubscriptions">
         <p *ngIf="trialExpires" class="secondary-title">
           {{ 'trial_subscription_expires' | translate }}
         </p>
@@ -87,94 +87,118 @@
 
 <ng-template #subscription let-c="close" let-d="dismiss">
   <div class="modal-header-wrapper">
-    <div class="modal-header">
-      <div>
-        <h5 class="modal-title">{{ 'select_plan.label' | translate }}</h5>
-        <p class="secondary-title">{{ 'select_plan.subLabel' | translate }}</p>
-      </div>
-
-      <webui-close-button class="ms-auto" (click)="d()"></webui-close-button>
+    <div class="modal-header border-0">
+      <webui-close-button class="ml-auto" (click)="d()"></webui-close-button>
     </div>
   </div>
 
   <div class="modal-body">
-    <section>
-      <form>
-        <div class="form-element">
-          <label for="employees">{{ 'employees' | translate }}:</label>
-          <input
-            class="form-control form-element-content"
-            size="5"
-            type="number"
-            name="employees"
-            id="employees"
-            min="1"
-            max="1005"
-            [ngModel]="workerCount"
-            (ngModelChange)="
-              workerCount = $event > 1006 ? 1005 : $event < 1 ? 1 : $event
-            "
-          />
-        </div>
-      </form>
+    <div class="text-center">
+      <h5 class="modal-title">{{ 'select_plan.label' | translate }}</h5>
+      <p class="secondary-title">{{ 'select_plan.subLabel' | translate }}</p>
+    </div>
 
-      <div class="plan-info">
-        <div
+    <section class="flex flex-col gap-2 mt-4">
+      <div class="flex items-center gap-2 justify-center">
+        <label class="mb-0" for="employees">
+          {{ 'employees' | translate }}:
+        </label>
+        <input
+          class="border border-primary-light rounded px-2"
+          size="5"
+          type="number"
+          id="employees"
+          [formControl]="workerCountControl"
+        />
+      </div>
+
+      <div class="grid grid-cols-2 gap-4 mt-3">
+        <section
+          class="relative rounded shadow-md p-3 border cursor-pointer"
           *ngFor="let plan of plans"
-          [class.active]="checkActivePlan(plan)"
-          class="plan-item"
+          [class.border-primary]="checkActivePlan(plan)"
           (click)="selectPlan(plan)"
         >
-          <div class="plan-name">
-            <h4 class="mb-2 pt-3">
+          <header>
+            <h4 class="text-2xl font-semibold text-center">
               {{ plan.heading }}
-              <small *ngIf="plan.discount_comment">
+            </h4>
+
+            <strong
+              class="ribbon ribbon-top-right"
+              *ngIf="plan.discount_comment"
+            >
+              <span>
                 {{ plan.discount_comment }}
                 {{
                   plan.percentage_discount ? plan.percentage_discount + '%' : ''
                 }}
-              </small>
-            </h4>
-            <p>{{ plan.heading_tag_line }}</p>
-          </div>
-          <div class="plan-detail">
-            <h4 class="mb-1">{{ planPay(plan) | currency: currency }}</h4>
-            <p class="mb-2">{{ plan.amount_tag_line }}</p>
-            <p class="annually">
-              <small>
-                ({{ planPayYear(plan) | currency: currency }} annually)
-              </small>
+              </span>
+            </strong>
+
+            <p class="text-sm text-center">{{ plan.heading_tag_line }}</p>
+          </header>
+
+          <div class="flex flex-col mt-3">
+            <p class="text-center text-xl font-bold">
+              {{ planPay(plan) | currency: currency }} / m
             </p>
-            <ul class="features" *ngIf="plan.table">
-              <ng-container *ngFor="let item of plan.table">
-                <li class="features__item" *ngIf="item">
-                  <fa-icon icon="check" class="features__icon"></fa-icon>
-                  {{ item }}
-                </li>
-              </ng-container>
+
+            <p class="text-sm text-center">
+              ({{ planPayYear(plan) | currency: currency }} annually)
+            </p>
+
+            <p class="text-center text-sm">{{ plan.amount_tag_line }}</p>
+
+            <hr class="mt-3" />
+
+            <ul class="flex flex-col gap-2 py-2" *ngIf="plan.table">
+              <li
+                class="flex items-start gap-2"
+                *ngFor="let item of plan.table"
+              >
+                <span class="text-primary">
+                  <fa-icon icon="check-circle"></fa-icon>
+                </span>
+
+                <span>{{ item }}</span>
+              </li>
             </ul>
 
-            <p *ngIf="plan.amount_comment" class="pay mt-auto">
+            <hr />
+
+            <p class="text-center mt-2" *ngIf="plan.amount_comment">
               {{ plan.amount_comment }}
             </p>
           </div>
-        </div>
+        </section>
       </div>
 
-      <footer class="footer">
-        <p class="text-warning" *ngIf="workerCount > 1000">
-          <fa-icon icon="circle-exclamation"></fa-icon>
-          {{ 'message.max_employees' | translate }}:
-          <a href="mailto:sales@piipai.com">sales@piipai.com</a>
-        </p>
+      <footer class="flex flex-col gap-1">
+        <div
+          class="flex items-start gap-2 text-yellow"
+          *ngIf="workerCountControl.value > 1000"
+        >
+          <span class="inline-flex items-center mt-1">
+            <fa-icon icon="circle-exclamation"></fa-icon>
+          </span>
 
-        <p class="text-warning" *ngIf="hasSelectedPlan">
-          <fa-icon icon="circle-exclamation"></fa-icon>
-          {{ 'change_plan_warning' | translate }}
-        </p>
+          <p>
+            {{ 'message.max_employees' | translate }}:
+            <a href="mailto:sales@piipai.com">sales@piipai.com</a>
+          </p>
+        </div>
+
+        <div class="flex items-start gap-2 text-yellow" *ngIf="hasSelectedPlan">
+          <span class="inline-flex items-center mt-1">
+            <fa-icon icon="circle-exclamation"></fa-icon>
+          </span>
+
+          <p>{{ 'change_plan_warning' | translate }}</p>
+        </div>
 
         <button
-          class="btn btn-primary"
+          class="btn btn-primary self-center"
           *ngIf="hasSelectedPlan"
           type="button"
           [disabled]="saveProcess"

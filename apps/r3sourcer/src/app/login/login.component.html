@@ -4,7 +4,7 @@
   <div class="container">
     <div class="login-wrapper">
       <div class="login-title">
-        <img src="{{ settings.logo || '/assets/img/logo.svg' }}" alt="" height="80" />
+        <img class="inline-block" src="{{ settings.logo || '/assets/img/logo.svg' }}" alt="" height="80" />
       </div>
 
       <div class="login-form">
@@ -60,13 +60,13 @@
       <div class="modal-header">
         <h5 class="modal-title">{{'password.reset' | translate}}</h5>
 
-        <webui-close-button class="ms-auto" (click)="modal.dismiss()"></webui-close-button>
+        <webui-close-button class="ml-auto" (click)="modal.dismiss()"></webui-close-button>
       </div>
     </div>
     <div class="p-3">
       <webui-generic-form [showResponse]="true" [showToastr]="false" endpoint="/core/contacts/forgot_password/">
-        <div class="d-flex align-items-center">
-          <button type="submit" class="btn btn-primary ms-auto">{{'reset' | translate}}</button>
+        <div class="flex items-center">
+          <button type="submit" class="btn btn-primary ml-auto">{{'reset' | translate}}</button>
         </div>
       </webui-generic-form>
     </div>

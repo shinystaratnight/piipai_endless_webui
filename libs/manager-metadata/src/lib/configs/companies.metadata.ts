@@ -1053,8 +1053,11 @@ const form = [
               text: 'States history'
             },
             collapsed: false,
+            insertData: {
+              model: ['core.companyrel', 'core.company']
+            },
             prefilled: {
-              object_id: '{regular_company_rel.id}'
+              object_id: '{regular_company_rel.id}',
             },
             type: 'list',
             query: {

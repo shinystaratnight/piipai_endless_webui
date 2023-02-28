@@ -41,10 +41,10 @@ export class SortService {
 
     if (!nextValue) {
       delete currentState[key];
-      return this.next({...currentState});
+      return this.next({});
     }
 
-    this.next({...currentState, [key]: nextValue});
+    this.next({[key]: nextValue});
   }
 
   public getCurrentState(): SortData {

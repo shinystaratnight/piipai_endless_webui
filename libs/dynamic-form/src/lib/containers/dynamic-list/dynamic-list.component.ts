@@ -806,10 +806,14 @@ export class DynamicListComponent
           center,
           width: width,
           content: <any[]>[],
+          showIf: col.showIf,
+          isShow: true,
           contextMenu: col.context_menu,
           tab: this.getTabOfColumn(col.name),
           timezone: col.timezone,
         };
+        cell.isShow = this.isShowCell(row, cell);
+
         col.content.forEach((element: any) => {
           const obj = this.generateContentElement(element, col, cell, el);
 
@@ -887,6 +891,7 @@ export class DynamicListComponent
         (el.endpoint === Endpoints.Tag || this.endpoint === Endpoints.Tag) &&
         (el.owner === 'system' || (el.tag && el.tag.system === 'owner')),
       translated: element.translated,
+      jsonTranslate: element.jsonTranslate
     };
     if (cell.timezone) {
       obj.timezone = this.getPropValue(el, cell.timezone);
@@ -2798,6 +2803,10 @@ export class DynamicListComponent
         this.open(this.modal, { size: 'lg' });
       }
     }
+  }
+
+  private isShowCell(row: any, cell: any) {
+    return cell.showIf ? this.checkShowRules(cell.showIf, row.rowData) : true;
   }
 
   private getDataAction(value: any, type = 'add') {

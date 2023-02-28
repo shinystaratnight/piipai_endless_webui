@@ -9,7 +9,7 @@ export const routes: Routes = [
     path: '',
     component: BillingComponent,
     resolve: {
-      subscription: SubscriptionResolver,
+      subscriptions: SubscriptionResolver,
       settings: SiteSettingsService
     }
   },

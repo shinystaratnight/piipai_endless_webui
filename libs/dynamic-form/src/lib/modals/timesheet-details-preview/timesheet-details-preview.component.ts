@@ -1,6 +1,7 @@
 import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
 import { TimeSheet } from '@webui/data';
 import { Icon } from '@webui/icon';
+import { DATE_TIME_FORMAT, Time } from '@webui/time';
 import { getContactAvatar } from '@webui/utilities';
 
 @Component({
@@ -37,7 +38,7 @@ export class TimesheetDetailsPreviewComponent {
         {
           label: 'shift.date.__str__.label',
           icon: Icon.Calendar,
-          text: this.timeSheet.shift.__str__
+          text: Time.parse(this.timeSheet.startedAt).format(DATE_TIME_FORMAT)
         }
       ],
       [

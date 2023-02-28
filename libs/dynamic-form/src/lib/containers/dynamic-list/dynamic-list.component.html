@@ -5,23 +5,23 @@
   class="mw-100 datatable"
 >
   <!-- <div webuiMove [parent]="datatable" *ngIf="poped" class="card-header bg-primary text-white" (active)="activeTable($event)">
-    <h5 class="d-flex justify-content-between align-items-center mb-0 lead" *ngIf="config.list">
-      <span [ngClass]="{'me-5': poped}">{{config.list.label}}</span>
-      <div class="d-flex fustify-content-center align-items-center">
+    <h5 class="flex justify-between items-center mb-0 lead" *ngIf="config.list">
+      <span [ngClass]="{'mr-5': poped}">{{config.list.label}}</span>
+      <div class="flex fustify-content-center items-center">
         <fa-icon
-          class="ms-2 icon"
+          class="ml-2 icon"
           [icon]="['fas', 'window-minimize']"
           (click)="minimizeTable()"
           aria-hidden="true">
         </fa-icon>
         <fa-icon
-          class="ms-2 icon"
+          class="ml-2 icon"
           [icon]="['fas', 'window-maximize']"
           (click)="unpopedTable()"
           aria-hidden="true">
         </fa-icon>
         <fa-icon
-          class="ms-2 icon"
+          class="ml-2 icon"
           [icon]="['fas', 'times']"
           (click)="closeTable()"
           aria-hidden="true">
@@ -77,7 +77,7 @@
           (!inForm && !poped)
         "
       >
-        <span *ngIf="!inForm && !description" class="me-auto my-1">
+        <span *ngIf="!inForm && !description" class="mr-auto my-1">
           {{
             getListLabelKey()
               | translate: { Default: label || config.list.label }
@@ -165,16 +165,16 @@
       </webui-action-element>
 
       <div
-        class="d-flex align-items-center justify-content-between"
+        class="flex items-center justify-between"
         *ngIf="identifyDevice() || isMobileDevice"
       >
         <button
-          class="btn btn-link text-secondary d-flex align-items-center text-uppercase fw-600 mb-0"
+          class="btn btn-link text-secondary flex items-center text-uppercase fw-600 mb-0"
           (click)="toggleFilterBlock()"
           *ngIf="showFilters"
           style="font-size: 14px"
         >
-          <svg class="me-1" width="16" height="12" viewBox="0 0 20 15">
+          <svg class="mr-1" width="16" height="12" viewBox="0 0 20 15">
             <path
               fill-rule="evenodd"
               clip-rule="evenodd"
@@ -236,13 +236,12 @@
               </ng-container>
 
               <th *ngIf="config.list.tabs" class="last-cell">
-                <span (click)="openAllTabs()" class="more__header">
-                  <b>{{ 'more' | translate }}</b>
-                  <fa-icon
-                    class="ms-2 sort-icon"
-                    [icon]="['fas', collapsed ? 'chevron-down' : 'chevron-up']"
-                  ></fa-icon>
-                </span>
+                  <button class="px-2 py-1 hover:text-primary" type="button" (click)="openAllTabs()">
+                    <fa-icon
+                      class="cursor-pointer"
+                      [icon]="['fas', collapsed ? 'chevron-down' : 'chevron-up']"
+                    ></fa-icon>
+                  </button>
               </th>
             </tr>
           </thead>
@@ -283,7 +282,7 @@
                     *ngIf="hasEditLink"
                   >
                     <fa-icon icon="pencil-alt" class="icon"></fa-icon>
-                    <span class="d-inline-block ms-1">
+                    <span class="inline-block ml-1">
                       {{ 'edit' | translate }}
                     </span>
                   </a>
@@ -330,7 +329,7 @@
                     </ng-container>
                     <!-- (cell.pop = pop) -->
                     <ng-template #actionsTemplate>
-                      <div class="d-flex flex-column">
+                      <div class="flex flex-col">
                         <ng-container
                           webuiListElement
                           [config]="cell.content"
@@ -351,7 +350,7 @@
 
                     <button
                       type="button"
-                      *ngIf="cell.name === 'actions' && !isMobileDevice"
+                      *ngIf="cell.name === 'actions' && !isMobileDevice && cell.isShow"
                       class="btn actions-btn mb-0"
                       #pop="ngbPopover"
                       triggers="manual"
@@ -396,7 +395,7 @@
                     (click)="toggleTab($event, row)"
                   >
                     <fa-icon
-                      class="more__icon me-0"
+                      class="more__icon mr-0"
                       [icon]="row.collapsed ? 'chevron-down' : 'chevron-up'"
                     >
                     </fa-icon>
@@ -506,7 +505,7 @@
 
       <div
         *ngIf="pageSize && inForm"
-        class="pagination d-flex flex-wrap align-items-center justify-content-between"
+        class="pagination flex flex-wrap items-center justify-between"
       >
         <div class="ml-2 logs">
           {{ data.count }}
@@ -539,7 +538,7 @@
         <h5 class="modal-title">{{ modalInfo.label }}</h5>
         &nbsp;
         <webui-close-button
-          class="close-button ms-auto align-self-center"
+          class="close-button ml-auto align-self-center"
           (click)="modal.dismiss()"
         ></webui-close-button>
       </div>
@@ -596,7 +595,7 @@
   <div class="message-detail-header">
     <h5 class="message-label">{{ modalInfo.label }}</h5>
     <webui-close-button
-      class="close-button ms-auto"
+      class="close-button ml-auto"
       (click)="modal.dismiss()"
     ></webui-close-button>
   </div>
@@ -618,7 +617,7 @@
   <div class="modal-header">
     <p>{{ modalInfo.message }}</p>
     <webui-close-button
-      class="close-button ms-auto"
+      class="close-button ml-auto"
       (click)="modal.close()"
     ></webui-close-button>
   </div>
@@ -645,7 +644,7 @@
     <div class="modal-header-wrapper">
       <div class="modal-header">
         <webui-close-button
-          class="close-button ms-auto"
+          class="close-button ml-auto"
           (click)="modal.dismiss()"
         ></webui-close-button>
       </div>
@@ -655,7 +654,7 @@
         {{'buy_profile.message' | translate: { amount: modalInfo.amount } }}
       </p>
     </div>
-    <div class="modal-footer justify-content-center py-2">
+    <div class="modal-footer justify-center py-2">
       <button
         type="button"
         class="btn big-btn btn-shadow btn-primary button-save"
@@ -674,7 +673,7 @@
       <div class="modal-header">
         <h5 class="modal-title">{{'send_message'|translate}}</h5>
         <webui-close-button
-          class="close-button ms-auto"
+          class="close-button ml-auto"
           (click)="modal.dismiss()"
         ></webui-close-button>
       </div>
@@ -693,7 +692,7 @@
 
 <ng-template #pdfDocumentModal let-modal>
   <webui-close-button
-    class="close-button ms-auto mt-3 me-3"
+    class="close-button ml-auto mt-3 mr-3"
     (click)="modal.close()"
   ></webui-close-button>
   <div class="modal-body">
@@ -785,7 +784,7 @@
 
 <ng-template #history let-data="data" let-status="status">
   <div class="header">
-    <div class="d-flex justify-content-center flex-column">
+    <div class="flex justify-center flex-col">
       <ng-container
         *ngFor="let field of getElement('position', data.content).content"
         webuiListElement
@@ -796,7 +795,7 @@
       >
       </ng-container>
     </div>
-    <div class="d-flex align-items-center">
+    <div class="flex items-center">
       <ng-container
         *ngFor="
           let field of getElement(
@@ -824,7 +823,7 @@
     </ng-container>
     <div class="mb-3 total-time-wrapper">
       <!-- <span
-        class="text-success me-1"
+        class="text-success mr-1"
         style="display: inline-block; font-size: 15px; width: 50%"
         >{{
           'total_time.label' | translate: { Default: 'Total time' }
@@ -840,7 +839,7 @@
       >
       </ng-container> -->
     </div>
-    <div class="d-flex align-items-center mb-2">
+    <div class="flex items-center mb-2">
       <ng-container
         *ngFor="let field of getElement('tracking', data.content).content"
         webuiListElement
@@ -853,7 +852,7 @@
     <span class="label"
       >{{ 'evaluate.label' | translate: { Default: 'Evaluation' } }}:</span
     >
-    <div class="d-inline-block">
+    <div class="inline-block">
       <ng-container
         *ngFor="let field of getElement('evaluate', data.content).content"
         webuiListElement
@@ -866,11 +865,11 @@
   </div>
 
   <div
-    class="footer position-relative"
+    class="footer relative"
     [class.footer-container]="status && status.content[0].value !== 5"
   >
     <div
-      class="d-flex justify-content-center flex-column"
+      class="flex justify-center flex-col"
       *ngIf="status && status.content[0].value !== 5"
     >
       <ng-container
@@ -916,7 +915,7 @@
 
 <ng-template #timesheetsCandidate let-data="data" let-status="status">
   <div class="header">
-    <div class="d-flex justify-content-center flex-column">
+    <div class="flex justify-center flex-col">
       <ng-container
         *ngFor="let field of getElement('jobsite', data.content).content"
         webuiListElement
@@ -940,7 +939,7 @@
     </ng-container>
     <div class="mb-3">
       <!-- <span
-        class="text-success me-1"
+        class="text-success mr-1"
         style="display: inline-block; font-size: 15px; width: 50%"
         >{{
           'totalTime.label' | translate: { Default: 'Total time' }
@@ -956,7 +955,7 @@
       >
       </ng-container> -->
     </div>
-    <div class="d-flex align-items-center mb-2">
+    <div class="flex items-center mb-2">
       <ng-container
         *ngFor="let field of getElement('tracking', data.content).content"
         webuiListElement
@@ -968,14 +967,14 @@
     </div>
   </div>
 
-  <div class="footer position-relative" [class.footer-container]="status">
+  <div class="footer relative" [class.footer-container]="status">
     <div
-      class="d-flex"
+      class="flex"
       *ngIf="status"
       [ngClass]="{
-        'align-items-center flex-wrap justify-content-between w-100':
+        'items-center flex-wrap justify-between w-100':
           status.content[0].value !== 7,
-        'flex-column justify-content-center': status.content[0].value === 7,
+        'flex-col justify-center': status.content[0].value === 7,
         'no-signature':
           !status.content[status.content.length - 1].value.origin &&
           status.content[0].value === 7
@@ -1002,7 +1001,7 @@
 
 <ng-template #unapproved let-data="data">
   <div class="header">
-    <div class="d-flex justify-content-center flex-column">
+    <div class="flex justify-center flex-col">
       <ng-container
         *ngFor="let field of getElement('position', data.content).content"
         webuiListElement
@@ -1013,7 +1012,7 @@
       >
       </ng-container>
     </div>
-    <div class="d-flex align-items-center">
+    <div class="flex items-center">
       <ng-container
         *ngFor="
           let field of getElement(
@@ -1042,7 +1041,7 @@
     </ng-container>
     <div class="mb-3 total-time-wrapper">
       <!-- <span
-        class="text-success me-1"
+        class="text-success mr-1"
         style="display: inline-block; font-size: 15px; width: 50%"
         >Total time:&nbsp;</span
       > -->
@@ -1056,7 +1055,7 @@
       >
       </ng-container> -->
     </div>
-    <div class="d-flex align-items-center mb-2">
+    <div class="flex items-center mb-2">
       <ng-container
         *ngFor="let field of getElement('tracking', data.content).content"
         webuiListElement
@@ -1067,7 +1066,7 @@
       </ng-container>
     </div>
     <span class="label">Evaluation:</span>
-    <div class="d-inline-block">
+    <div class="inline-block">
       <ng-container
         *ngFor="let field of getElement('evaluate', data.content).content"
         webuiListElement

@@ -81,3 +81,9 @@ webui-datepicker {
     opacity: 1;
   }
 }
+
+.close-button {
+  position: absolute;
+  right: 3.5rem;
+  z-index: 3;
+}

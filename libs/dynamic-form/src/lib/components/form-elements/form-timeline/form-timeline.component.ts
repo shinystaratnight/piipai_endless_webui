@@ -178,7 +178,7 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
 
         this.query[el] = this.objectId;
       } else {
-        if (type && type === 'master') {
+        if (type && type === 'master' && el === 'model') {
           this.query[el] = this.config.query[el][1];
         } else {
           if (Array.isArray(this.config.query[el])) {

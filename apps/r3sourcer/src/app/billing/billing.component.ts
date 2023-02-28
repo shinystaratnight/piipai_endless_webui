@@ -1,10 +1,6 @@
 import { Component, OnInit, ViewEncapsulation, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-
 import { BillingService } from './services/billing-service';
-
-import { Plan, BillingSubscription } from './models';
-
 import {
   ToastService,
   EventService,
@@ -12,8 +8,8 @@ import {
   MessageType,
   EventType,
 } from '@webui/core';
-import { Subscription } from 'rxjs';
-import { User } from '@webui/models';
+import { Subject, takeUntil } from 'rxjs';
+import { BillingSubscription, Plan, User } from '@webui/models';
 
 @Component({
   selector: 'webui-billing-page',
@@ -22,6 +18,9 @@ import { User } from '@webui/models';
   encapsulation: ViewEncapsulation.None,
 })
 export class BillingComponent implements OnInit, OnDestroy {
+  private _destroy = new Subject<void>();
+  private _subscriptions = <BillingSubscription[]>[];
+
   public user!: User;
   public pagesList!: any[];
   public currentPlan?: BillingSubscription;
@@ -34,10 +33,11 @@ export class BillingComponent implements OnInit, OnDestroy {
   public plans!: Plan[];
   public currency!: string;
 
-  subscriptions: Subscription[] = [];
+  get hasSubscriptions() {
+    return this._subscriptions.length > 0;
+  }
 
   constructor(
-    // private userService: UserService,
     private billingService: BillingService,
     private route: ActivatedRoute,
     private router: Router,
@@ -48,14 +48,15 @@ export class BillingComponent implements OnInit, OnDestroy {
   ) {}
 
   public ngOnInit() {
+    this._subscriptions = this.route.snapshot.data['subscriptions'];
+
     this.user = this.route.snapshot.data['user'];
     this.pagesList = this.route.snapshot.data['pagesList'];
-    const subscriptions: any[] =
-      this.route.snapshot.data['subscription'].subscriptions;
 
     this.currency = this.siteSettings.settings.currency;
 
-    this.currentPlan = subscriptions && subscriptions.find((el) => el.active);
+    this.currentPlan =
+      this._subscriptions && this._subscriptions.find((el) => el.active);
 
     this.checkPaymentInformation();
 
@@ -84,25 +85,19 @@ export class BillingComponent implements OnInit, OnDestroy {
       this.plans = plans;
     });
 
-    this.subscriptions.push(
-      this.eventService.event$.subscribe((event) => {
+    this.eventService.event$
+      .pipe(takeUntil(this._destroy))
+      .subscribe((event) => {
         if (event === EventType.PurposeChanged) {
           this.router.navigateByUrl('');
         }
-      })
-    );
+      });
   }
 
   ngOnDestroy() {
-    this.subscriptions.forEach((sub) => sub.unsubscribe());
+    this._destroy.next();
+    this._destroy.complete();
   }
-
-  // public updateNavigation(role: string) {
-  //   // this.userService.currentRole(role);
-  //   setTimeout(() => {
-  //     this.router.navigate(['']);
-  //   }, 150);
-  // }
 
   public selectPlan(plan: Plan) {
     const changed = plan.changed;

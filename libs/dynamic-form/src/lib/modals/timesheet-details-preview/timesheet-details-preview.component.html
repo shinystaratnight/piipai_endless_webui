@@ -1,10 +1,9 @@
 <section class="details">
-  <div class="details__person">
+  <div class="details__person px-4">
     <img
       *ngIf="avatar.src"
       class="avatar contact-avatar"
       [src]="avatar.src"
-      alt="Avatar"
     />
 
     <div *ngIf="!avatar.src" class="avatar contact-avatar">

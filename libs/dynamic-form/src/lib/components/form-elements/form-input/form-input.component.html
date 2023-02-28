@@ -49,7 +49,7 @@
       class="form-element-content edit"
       [class.showAll]="viewMode || config.type === 'static'"
       [class.full]="addonIcon"
-      [class.flex-column]="
+      [class.flex-col]="
         (!viewMode && isPhoneField) || config.templateOptions?.type === 'email'
       "
     >
@@ -196,7 +196,7 @@
   </div>
   <div *ngIf="errors">
     <div class="text-danger mt-3" *ngIf="errors[config.key || '']">
-      {{ errors[config.key || ''] }}
+      {{ errors[config.key || ''] | translate }}
     </div>
   </div>
   <div *ngIf="message">
@@ -315,7 +315,7 @@
       {{ config.templateOptions?.noneValue || '' | translate }}
     </span>
     <span
-      class="d-flex align-items-center"
+      class="flex items-center"
       *ngIf="hovered || formControl.value"
     >
       &nbsp;

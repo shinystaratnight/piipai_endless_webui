@@ -248,6 +248,7 @@ const form = [
                   {
                     key: 'email',
                     type: 'input',
+                    send: false,
                     templateOptions: {
                       placeholder: 'E-mail',
                       required: true,
@@ -255,19 +256,20 @@ const form = [
                       max: 255,
                       type: 'text'
                     },
-                    read_only: false
+                    read_only: true
                   },
                   {
                     key: 'phone_mobile',
                     type: 'input',
                     intl: true,
+                    send: false,
                     templateOptions: {
                       placeholder: 'Mobile phone',
                       required: true,
                       label: 'Phone number',
                       type: 'text'
                     },
-                    read_only: false
+                    read_only: true
                   }
                 ]
               },
@@ -607,6 +609,7 @@ const formadd = [
           {
             key: 'title',
             type: 'select',
+            translateKey: 'contact.title',
             templateOptions: {
               required: true,
               label: 'Title',
@@ -635,6 +638,7 @@ const formadd = [
           {
             key: 'first_name',
             type: 'input',
+            translateKey: 'contact.first_name',
             templateOptions: {
               required: true,
               label: 'First Name',
@@ -646,6 +650,7 @@ const formadd = [
           {
             key: 'last_name',
             type: 'input',
+            translateKey: 'contact.last_name',
             templateOptions: {
               required: true,
               label: 'Last Name',
@@ -657,6 +662,7 @@ const formadd = [
           {
             key: 'email',
             type: 'input',
+            translateKey: 'contact.email',
             templateOptions: {
               required: true,
               label: 'E-mail',
@@ -669,6 +675,7 @@ const formadd = [
             key: 'phone_mobile',
             type: 'input',
             intl: true,
+            translateKey: 'contact.phone_mobile',
             templateOptions: {
               required: true,
               label: 'Mobile Phone',

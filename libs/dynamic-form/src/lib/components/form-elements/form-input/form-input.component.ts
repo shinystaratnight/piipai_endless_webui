@@ -174,6 +174,10 @@ export class FormInputComponent
         control.valueChanges.pipe(distinctUntilChanged())
           .subscribe(() => {
             this.eventHandler({ type: FormEvent.Change });
+
+            if (this.config.intl) {
+              this.errors[this.config.key as string] = control.invalid && 'error.invalid_phone';
+            }
           })
       );
     }
@@ -681,7 +685,7 @@ export class FormInputComponent
   // }
 
   getTranslationKey(type: string) {
-    return `${this.config.key}.${type}`;
+    return `${this.config.translateKey || this.config.key}.${type}`;
   }
 
   isIconName(val?: string): val is IconName {

@@ -2,7 +2,7 @@
 
 <div class="site-page">
   <div class="form-page billing__page">
-    <div class="order-lg-1">
+    <div class="lg:order-1">
       <div class="billing__section">
         <webui-check-card
           [cardInformation]="checkInformation"
@@ -19,6 +19,7 @@
           [workerCount]="(currentPlan && currentPlan.worker_count) || 1"
           [currency]="currency"
           [cardInformation]="checkInformation"
+          [hasSubscriptions]="hasSubscriptions"
           (selectedPlan)="selectPlan($event)"
           (cancelingPlan)="cancelPlan()"
         ></webui-billing-plan>

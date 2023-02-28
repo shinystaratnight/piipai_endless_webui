@@ -63,7 +63,7 @@
       </div>
 
       <div
-        class="position-relative time-wrapper"
+        class="relative time-wrapper"
         [hidden]="
           (config.templateOptions.type === 'datetime' && !d.value) ||
           config.templateOptions.type === 'date'
@@ -112,7 +112,7 @@
         [attr.name]="key"
       />
 
-      <div class="position-relative time-wrapper">
+      <div class="relative time-wrapper">
         <input
           type="time"
           class="form-control mobile-datepicker fa-clock-o"
@@ -148,7 +148,7 @@
 
 <div
   class="form-group"
-  [class.d-inline-block]="config.inline"
+  [class.inline-block]="config.inline"
   *ngIf="(viewMode && !config.hide) || (config.read_only && !config.hide)"
 >
   <div class="form-element">

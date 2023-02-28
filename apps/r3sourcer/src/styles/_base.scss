@@ -379,4 +379,18 @@ form {
   position: relative;
 }
 
+.visually-hidden {
+  @apply sr-only;
+}
 
+.d-block {
+  @apply block;
+}
+
+.w-100 {
+  @apply w-full;
+}
+
+.cdk-overlay-container {
+  z-index: 1100;
+}

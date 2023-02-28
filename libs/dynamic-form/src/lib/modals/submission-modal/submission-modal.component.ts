@@ -11,7 +11,7 @@ import { DatepickerType, DropdownOption } from '@webui/form-controls';
 import { Icon, IconSize } from '@webui/icon';
 import { FormMode, FormService, GenericFormService } from '../../services';
 import { BehaviorSubject, forkJoin, Subject, throwError } from 'rxjs';
-import { catchError, finalize, switchMap, takeUntil } from 'rxjs/operators';
+import { catchError, finalize, skip, switchMap, takeUntil } from 'rxjs/operators';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Modal, Status } from '../modal/modal.component';
 import { Endpoints } from '@webui/models';
@@ -112,8 +112,9 @@ export class SubmissionModalComponent
       activity: new FormControl(),
     });
 
-    this.formGroup.valueChanges.subscribe((value) =>
+    this.formGroup.valueChanges.pipe(skip(1)).subscribe((value) => {
       this.updateTimeSheet(value)
+    }
     );
     this.activityParams = this.getActivityParams();
 

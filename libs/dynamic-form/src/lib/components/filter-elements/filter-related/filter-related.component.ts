@@ -59,6 +59,7 @@ export class FilterRelatedComponent implements OnInit, OnDestroy {
   @Input() config!: any;
 
   @ViewChild('content') content?: ElementRef<HTMLDivElement>;
+  @ViewChild('search') search?: ElementRef<HTMLInputElement>;
 
   modalScrollDistance = 2;
   modalScrollThrottle = 50;
@@ -70,7 +71,9 @@ export class FilterRelatedComponent implements OnInit, OnDestroy {
   value$ = this._value.asObservable();
   options$ = this._options.asObservable();
   loading$ = this._loading.asObservable();
-  active$ = this._active.asObservable();
+  active$ = this._active
+    .asObservable()
+    .pipe(tap((value) => value && this.search?.nativeElement.focus()));
   selectedOptions$ = this._selectedOptions.asObservable();
   hasQuery$ = combineLatest({
     active: this.active$,
@@ -150,6 +153,10 @@ export class FilterRelatedComponent implements OnInit, OnDestroy {
       .subscribe(() => {
         this.updateFilter();
       });
+
+    this.fs.reset
+      .pipe(takeUntil(this._destroy))
+      .subscribe(() => this.updateFilter());
   }
 
   public ngOnDestroy() {
@@ -251,6 +258,12 @@ export class FilterRelatedComponent implements OnInit, OnDestroy {
           });
         }
       }
+    } else {
+      this._selectedOptions.next([]);
+      this._options.value?.forEach((option) =>
+        option.control.patchValue(false, { emitEvent: true })
+      );
+      this._value.next(null);
     }
   }
 
@@ -477,13 +490,17 @@ export class FilterRelatedComponent implements OnInit, OnDestroy {
     const { value, key } = this.config.data;
     const keys = [key];
 
-    value.forEach((el: string) => {
-      if (this.hasFormatBraces(el)) {
-        // TODO: get keys from format string
-      } else {
-        keys.push(el);
-      }
-    });
+    if (Array.isArray(value)) {
+      value.forEach((el: string) => {
+        if (this.hasFormatBraces(el)) {
+          // TODO: get keys from format string
+        } else {
+          keys.push(el);
+        }
+      });
+    } else {
+      keys.push(value);
+    }
 
     return keys;
   }
@@ -520,21 +537,25 @@ class FilterOption {
   }
 
   private parseLabel(
-    display: string[],
+    display: string[] | string,
     data: any,
     countryCode: string,
     lang: string
   ) {
-    return display.reduce((acc: string, curr: any) => {
-      if (this.hasFormatBraces(curr)) {
-        return acc || FormatString.format(curr, data);
-      }
+    if (Array.isArray(display)) {
+      return display.reduce((acc: string, curr: any) => {
+        if (this.hasFormatBraces(curr)) {
+          return acc || FormatString.format(curr, data);
+        }
 
-      return (
-        acc ||
-        checkAndReturnTranslation(data, countryCode, lang as Language) ||
-        data[curr]
-      );
-    }, '');
+        return (
+          acc ||
+          checkAndReturnTranslation(data, countryCode, lang as Language) ||
+          data[curr]
+        );
+      }, '');
+    } else {
+      return data[display];
+    }
   }
 }

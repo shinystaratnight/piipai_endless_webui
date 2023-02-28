@@ -4,8 +4,9 @@
 $width: 510px;
 
 .modal-backdrop {
+  @apply z-10;
+
   bottom: -100px;
-  z-index: 3 !important;
 }
 
 .approve-modal {
@@ -639,8 +640,6 @@ $width: 510px;
 }
 
 .modal {
-  z-index: 3;
-
   &[id*='jtdb'] {
     z-index: 22;
 

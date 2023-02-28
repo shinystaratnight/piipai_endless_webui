@@ -1,11 +1,23 @@
-import { Component, OnInit, ChangeDetectionStrategy, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ChangeDetectionStrategy,
+  OnDestroy,
+  ChangeDetectorRef,
+} from '@angular/core';
 
-import { isMobile, getTranslationKey, checkAndReturnTranslation, getPropValue, FormatString } from '@webui/utilities';
+import {
+  isMobile,
+  getTranslationKey,
+  checkAndReturnTranslation,
+  getPropValue,
+  FormatString,
+} from '@webui/utilities';
 import { getValueOfData, generateCssStyles } from '../../../helpers';
 import { DATE_FORMAT, DATE_TIME_FORMAT, Time } from '@webui/time';
 import { IconName } from '@fortawesome/fontawesome-svg-core';
 import { TranslateService } from '@ngx-translate/core';
-import { Subject } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { ITranslationPayload, Language } from '@webui/models';
 
 @Component({
@@ -15,7 +27,7 @@ import { ITranslationPayload, Language } from '@webui/models';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ListTextComponent implements OnInit, OnDestroy {
-  private _destroy: Subject<void> = new Subject();
+  private _destroy = new Subject<void>();
   private stylePrefix = 'list-text';
 
   public config: any;
@@ -53,7 +65,6 @@ export class ListTextComponent implements OnInit, OnDestroy {
       } else {
         this.value = this.config.value;
         if (Array.isArray(this.value)) {
-
           if (this.config.translateKey) {
             this.value.forEach((el) => {
               el.__str__ = FormatString.format(this.config.translateKey, el);
@@ -98,17 +109,26 @@ export class ListTextComponent implements OnInit, OnDestroy {
         : 'label'
     );
 
-    this.translateService.onLangChange.subscribe(({ lang }) => {
-      const value = getPropValue(this.config.initValue, this.config.name);
-      if (value) {
-        const tranlsation = checkAndReturnTranslation(value as ITranslationPayload, 'EE', lang as Language)
+    this.translateService.onLangChange
+      .pipe(takeUntil(this._destroy))
+      .subscribe(({ lang }) => {
+        const value =
+          this.config.name === '__str__'
+            ? this.config.initValue
+            : getPropValue(this.config.initValue, this.config.name);
+        if (value && !this.config.jsonTranslate) {
+          const tranlsation = checkAndReturnTranslation(
+            value as ITranslationPayload,
+            'EE',
+            lang as Language
+          );
 
-        if (tranlsation) {
-          this.value = tranlsation;
-          this.cd.detectChanges();
+          if (tranlsation) {
+            this.value = tranlsation;
+            this.cd.detectChanges();
+          }
         }
-      }
-    });
+      });
   }
 
   ngOnDestroy(): void {

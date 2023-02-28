@@ -51,7 +51,7 @@
               type="submit"
               class="btn btn-primary btn-shadow save"
               webuiSubscriptionRequired
-              [class.ms-auto]="mode !== 'edit'"
+              [class.ml-auto]="mode !== 'edit'"
               *ngIf="mode === 'edit' || !config.editForm"
               [disabled]="form && form.disableSaveButton"
             >

@@ -1,9 +1,14 @@
 <label *ngIf="isDate || isDateTime" class="wrapper">
   <span class="control__label">{{ label | translate }}</span>
   <span class="control__input-wrapper">
-    <input [formControl]="dateControl" class="control__input" type="date" />
+    <input
+      [formControl]="dateControl"
+      class="control__input"
+      type="date"
+      local="fr"
+    />
     <webui-icon
-      *ngIf="hasIcon"
+      *ngIf="hasIcon('date')"
       class="control__input-icon"
       [icon]="Icon.Calendar"
       [size]="IconSize.Medium"
@@ -12,12 +17,19 @@
 </label>
 
 <label *ngIf="isTime || isDateTime" class="wrapper">
-  <span *ngIf="isTime" class="control__label">{{ label | translate }}</span>
-  <span *ngIf="isDateTime" class="control__label empty">&nbsp;</span>
+  <span *ngIf="isTime" class="control__label">
+    {{ label | translate }} {{ formatedTime }}
+  </span>
+  <span *ngIf="isDateTime" class="control__label">{{ formatedTime }}</span>
   <span class="control__input-wrapper">
-    <input [formControl]="timeControl" class="control__input" type="time" />
+    <input
+      [formControl]="timeControl"
+      class="control__input"
+      type="time"
+      local="fr"
+    />
     <webui-icon
-      *ngIf="hasIcon"
+      *ngIf="hasIcon('time')"
       class="control__input-icon"
       [icon]="Icon.Clock"
       [size]="IconSize.Medium"
@@ -49,7 +61,12 @@
       <button class="btn" type="button" (click)="plus(hoursControl)">
         <webui-icon [icon]="Icon.ArrowUp" [size]="IconSize.Medium"></webui-icon>
       </button>
-      <input class="control__input" placeholder="HH" type="string" [formControl]="hoursControl" />
+      <input
+        class="control__input"
+        placeholder="HH"
+        type="string"
+        [formControl]="hoursControl"
+      />
       <button class="btn" type="button" (click)="minus(hoursControl)">
         <webui-icon [icon]="Icon.ArrowUp" [size]="IconSize.Medium"></webui-icon>
       </button>
@@ -61,7 +78,12 @@
       <button class="btn" type="button" (click)="plus(minutesControl)">
         <webui-icon [icon]="Icon.ArrowUp" [size]="IconSize.Medium"></webui-icon>
       </button>
-      <input class="control__input" placeholder="MM" type="string" [formControl]="minutesControl" />
+      <input
+        class="control__input"
+        placeholder="MM"
+        type="string"
+        [formControl]="minutesControl"
+      />
       <button class="btn" type="button" (click)="minus(minutesControl)">
         <webui-icon [icon]="Icon.ArrowUp" [size]="IconSize.Medium"></webui-icon>
       </button>

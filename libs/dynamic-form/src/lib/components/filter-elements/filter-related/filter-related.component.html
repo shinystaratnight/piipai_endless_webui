@@ -7,7 +7,11 @@
   ></webui-filter-header>
 
   <div class="content">
-    <div class="form-control autocomplete-value" #content (click)="onShowOptions()">
+    <div
+      class="form-control autocomplete-value"
+      #content
+      (click)="onShowOptions()"
+    >
       <ng-container *ngIf="value$ | async as value; else placeholder">
         <span class="value" *ngIf="value.length > 1">
           {{ 'status.selected-items' | translate: { count: value.length } }}
@@ -24,21 +28,23 @@
       <fa-icon icon="chevron-down"></fa-icon>
     </div>
 
+    <input
+      [formControl]="searchControl"
+      *ngIf="!config.property && !config.multiple"
+      [class.active]="active$ | async"
+      #search
+      name="search"
+      autocopmlete="off"
+      type="text"
+      class="form-control mb-1 search-control"
+    />
+
     <form
       [formGroup]="valueGroup"
       class="autocomplete"
       *ngIf="active$ | async"
       [ngStyle]="getStyle()"
     >
-      <input
-        [formControl]="searchControl"
-        *ngIf="!config.property && !config.multiple"
-        name="search"
-        autocopmlete="off"
-        type="text"
-        class="form-control mb-1"
-      />
-
       <ul *ngIf="config.multiple" class="list-group w-100 actions">
         <li class="default-value">
           <button class="btn btn-default" type="button" (click)="selectAll()">

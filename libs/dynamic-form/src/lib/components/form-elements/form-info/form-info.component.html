@@ -52,7 +52,7 @@
       </div>
 
       <span
-        class="score d-flex align-items-center justify-content-center"
+        class="score flex items-center justify-center"
         *ngIf="isMobileDevice && getScore(averageScore)"
         [style.borderColor]="colors[getScore(averageScore)]"
         [style.color]="colors[getScore(averageScore)]"
@@ -96,7 +96,7 @@
         [class.text-danger]="!available"
       >
         <fa-icon
-          class="me-2"
+          class="mr-2"
           [icon]="['fas', available ? 'check-circle' : 'times-circle']"
         ></fa-icon>
         {{ availabelLabel() | translate }}
@@ -211,7 +211,7 @@
         </span>
 
         <span *ngIf="!titlePath && title">{{ title }}</span>
-        <webui-info class="ms-1" [description]="description"></webui-info>
+        <webui-info class="ml-1" [description]="description"></webui-info>
       </span>
       <span *ngIf="averageScore || averageScore === 0">
         <span class="view-mode" *ngIf="titlePath">
@@ -436,7 +436,7 @@
         <h5 class="modal-title">{{ modalInfo.label }}</h5>
 
         <webui-close-button
-          class="ms-auto"
+          class="ml-auto"
           (click)="modal.dismiss()"
         ></webui-close-button>
       </div>

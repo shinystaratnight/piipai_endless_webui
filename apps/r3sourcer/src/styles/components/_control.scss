@@ -41,16 +41,18 @@
 }
 
 .control__input {
+  @apply w-full font-medium;
+
   border-radius: 3px;
   background-color: $brand-light-color;
   border: 1px solid $border-color;
-  width: 100%;
   font-size: 14px;
   line-height: 16px;
   font-family: inherit;
   color: $content-color;
   padding: 8px 28px 8px 12px;
   max-height: 38px;
+  max-width: 100%;
 
   &:last-child {
     padding-right: 12px;
