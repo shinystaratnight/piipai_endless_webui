@@ -201,11 +201,11 @@
           class="btn btn-primary self-center"
           *ngIf="hasSelectedPlan"
           type="button"
-          [disabled]="saveProcess"
+          [disabled]="saving$ | async"
           (click)="savePlan()"
         >
           {{ 'save' | translate }}
-          <webui-spinner *ngIf="saveProcess"></webui-spinner>
+          <webui-spinner *ngIf="saving$ | async"></webui-spinner>
         </button>
       </footer>
     </section>

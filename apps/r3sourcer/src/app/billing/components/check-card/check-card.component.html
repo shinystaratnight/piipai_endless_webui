@@ -30,7 +30,7 @@
       class="mr-3"
       [hidden]="cardInformation?.payment_information_submited && !newCard"
     >
-      <div class="form-row flex-grow-1 mr-3" [class.submited]="saving">
+      <div class="form-row grow mr-3" [class.submited]="saving">
         <div id="card-element"></div>
         <div id="card-errors" class="pt-2 text-danger" role="alert">
           {{ error }}

@@ -118,7 +118,7 @@ export class FormListComponent implements OnInit, OnDestroy {
       this.addFormConfig = this.getAddFormConfig();
     }
 
-    if (this.formData.type === 'master' && this.config.insertData && this.config.insertData['model']) {
+    if (this.formData?.type === 'master' && this.config.insertData && this.config.insertData['model']) {
       this.config.insertData['model'] = this.config.insertData['model'][1];
     }
   }
