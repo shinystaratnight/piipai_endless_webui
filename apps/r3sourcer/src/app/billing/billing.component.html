@@ -14,13 +14,12 @@
 
         <webui-billing-plan
           [plans]="plans"
-          [saveProcess]="saveProcess"
           [currentPlan]="currentPlan"
           [workerCount]="(currentPlan && currentPlan.worker_count) || 1"
           [currency]="currency"
           [cardInformation]="checkInformation"
           [hasSubscriptions]="hasSubscriptions"
-          (selectedPlan)="selectPlan($event)"
+          (changed)="selectPlan($event)"
           (cancelingPlan)="cancelPlan()"
         ></webui-billing-plan>
 
