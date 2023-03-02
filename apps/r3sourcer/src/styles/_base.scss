@@ -394,3 +394,11 @@ form {
 .cdk-overlay-container {
   z-index: 1100;
 }
+
+.bg-light {
+  @apply bg-white;
+}
+
+.d-flex {
+  @apply flex;
+}
