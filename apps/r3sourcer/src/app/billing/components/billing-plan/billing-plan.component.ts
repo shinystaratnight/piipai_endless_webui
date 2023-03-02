@@ -15,6 +15,8 @@ import { EventService, EventType, UserService } from '@webui/core';
 import { DialogRef } from '@webui/dialog';
 import { BillingSubscription, DialogType, Plan } from '@webui/models';
 import { Time } from '@webui/time';
+import { BehaviorSubject, finalize } from 'rxjs';
+import { BillingService } from '../../services/billing-service';
 
 @Component({
   selector: 'webui-billing-plan',
@@ -22,9 +24,10 @@ import { Time } from '@webui/time';
   styleUrls: ['./billing-plan.component.scss'],
 })
 export class BillingPlanComponent implements OnInit, OnChanges, OnDestroy {
+  private _saving = new BehaviorSubject<boolean>(false);
+
   types!: Record<string, string>;
 
-  @Input() public saveProcess!: boolean;
   @Input() public currentPlan?: BillingSubscription;
   @Input() public workerCount!: number;
   @Input() public plans!: Plan[];
@@ -37,17 +40,20 @@ export class BillingPlanComponent implements OnInit, OnChanges, OnDestroy {
 
   @ViewChild('subscription') public modal!: ElementRef;
 
-  @Output() public selectedPlan = new EventEmitter();
   @Output() public cancelingPlan = new EventEmitter();
 
-  private _planControl = new FormControl(null);
-  public dialogRef!: DialogRef;
+  @Output() changed = new EventEmitter<'create' | 'update'>();
 
+  private _planControl = new FormControl(null);
+  public dialogRef?: DialogRef;
+
+  saving$ = this._saving.asObservable();
   workerCountControl = new FormControl(5, [Validators.min(1)]);
 
   constructor(
     private userService: UserService,
-    private eventService: EventService
+    private eventService: EventService,
+    private billingService: BillingService
   ) {}
 
   ngOnInit(): void {
@@ -76,12 +82,6 @@ export class BillingPlanComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   public ngOnChanges(changes: SimpleChanges) {
-    if (changes['saveProcess']) {
-      if (!changes['saveProcess'].currentValue) {
-        this.dialogRef?.close();
-      }
-    }
-
     if (changes['plans'] && changes['plans'].currentValue) {
       this._planControl.patchValue(
         this.plans?.find(
@@ -103,6 +103,17 @@ export class BillingPlanComponent implements OnInit, OnChanges, OnDestroy {
 
   public ngOnDestroy() {
     this.dialogRef?.close();
+  }
+
+  public updatePlan(plan: any) {
+    this._saving.next(true);
+    this.billingService
+      .setPlan(plan)
+      .pipe(finalize(() => this._saving.next(false)))
+      .subscribe(() => {
+        this.dialogRef?.close();
+        this.changed.emit(plan.changed ? 'update' : 'create');
+      });
   }
 
   public planPay(plan: Plan): number {
@@ -158,7 +169,7 @@ export class BillingPlanComponent implements OnInit, OnChanges, OnDestroy {
       },
     });
 
-    this.dialogRef.result
+    this.dialogRef?.result
       .then(() => this.cancelingPlan.emit())
       .catch(() => null);
   }
@@ -166,6 +177,7 @@ export class BillingPlanComponent implements OnInit, OnChanges, OnDestroy {
   public openModal() {
     this.eventService.emit(EventType.OpenDialog, {
       type: DialogType.CustomDialog,
+      onInit: (dialogRef: any) => (this.dialogRef = dialogRef),
       dialog: this.modal,
       options: {
         size: 'md',
@@ -184,6 +196,6 @@ export class BillingPlanComponent implements OnInit, OnChanges, OnDestroy {
       changed: this.currentPlan,
     };
 
-    this.selectedPlan.emit(body);
+    this.updatePlan(body);
   }
 }

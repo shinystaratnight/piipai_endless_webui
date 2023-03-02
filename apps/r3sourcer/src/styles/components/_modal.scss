@@ -4,8 +4,7 @@
 $width: 510px;
 
 .modal-backdrop {
-  @apply z-10;
-
+  z-index: 10 !important;
   bottom: -100px;
 }
 
@@ -761,4 +760,8 @@ $width: 510px;
   .nav {
     padding: 0 16px;
   }
+}
+
+.modal {
+  z-index: 10 !important;
 }

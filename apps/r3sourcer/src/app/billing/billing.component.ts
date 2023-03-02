@@ -99,32 +99,29 @@ export class BillingComponent implements OnInit, OnDestroy {
     this._destroy.complete();
   }
 
-  public selectPlan(plan: Plan) {
-    const changed = plan.changed;
-    plan.changed = undefined;
+  public selectPlan(event: 'update' | 'create') {
+    let message = '';
 
-    this.saveProcess = true;
-    this.billingService.setPlan(plan).subscribe({
-      next: () => {
-        this.toastr.sendMessage(
-          changed
-            ? 'Subscription has been updated'
-            : 'Subscription has been created',
-          MessageType.Success
-        );
+    switch (event) {
+      case 'create':
+        message = 'Subscription has been created';
+        break;
+      case 'update':
+        message = 'Subscription has been updated';
+        break;
+    }
 
-        this.eventService.emit(EventType.SubscriptionChanged);
-
-        this.getSubscriptionInformation();
-      },
-      complete: () => (this.saveProcess = false),
-    });
+    this.toastr.sendMessage(message, MessageType.Success);
+    this.eventService.emit(EventType.SubscriptionChanged);
+    this.getSubscriptionInformation();
   }
 
   public getSubscriptionInformation() {
-    this.billingService.getSubscriptionInfo().subscribe((data: any) => {
-      this.currentPlan = data.subscriptions.find((el: any) => el.active);
-    });
+    this.billingService
+      .getSubscriptionInfo()
+      .subscribe((subscriptions: BillingSubscription[]) => {
+        this.currentPlan = subscriptions.find((el: any) => el.active);
+      });
   }
 
   public checkPaymentInformation() {
