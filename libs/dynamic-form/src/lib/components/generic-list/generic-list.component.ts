@@ -80,9 +80,9 @@ export class GenericListComponent implements OnInit, OnDestroy {
 
   private results!: any[];
 
-  public afterEditLimit: any = 10;
-  public afterEditOffset: any = 0;
-  public isEditRecord: any = false;
+  // public afterEditLimit: any = 10;
+  // public afterEditOffset: any = 0;
+  // public isEditRecord: any = false;
 
   get isTableReady(): boolean {
     if (!this.tables?.length) {
@@ -116,8 +116,8 @@ export class GenericListComponent implements OnInit, OnDestroy {
     this.initTableData(mainTable);
 
     if (this.update) {
-		// set temp flag in localstorage
-      localStorage.setItem('flagAfterEditRecord', 'true');
+		// // set temp flag in localstorage
+    //   localStorage.setItem('flagAfterEditRecord', 'true');
       this.subscriptions.push(
         this.update.subscribe((update) => {
           const table = this.getFirstTable();
@@ -205,13 +205,16 @@ export class GenericListComponent implements OnInit, OnDestroy {
   public uploadMore() {
     const table = this.getFirstTable();
     const limit = table.limit;
-    const offset = this.afterEditOffset != 0 ? parseInt(this.afterEditOffset) + limit :  table.offset + limit;
+    const offset = table.offset + limit;
+  //   const offset = this.afterEditOffset != 0 ? parseInt(this.afterEditOffset) + limit :  table.offset + limit;
     table.query.pagination = `limit=${limit}&offset=${offset}`;
 
-	// Here we handlig pagination in after edit record
-    const afterEditLimit = offset + limit;
-    this.afterEditOffset = parseInt(this.afterEditOffset) + limit;
-    localStorage.setItem('afterEditLimit', afterEditLimit);
+  //   console.log(offset);
+
+	// // Here we handlig pagination in after edit record
+  //   const afterEditLimit = offset + limit;
+  //   this.afterEditOffset = parseInt(this.afterEditOffset) + limit;
+    // localStorage.setItem('afterEditLimit', afterEditLimit);
 
     this.getData(
       table.endpoint,
@@ -348,21 +351,21 @@ export class GenericListComponent implements OnInit, OnDestroy {
         table.uploadAll = true;
       }
     },
-    // The 2nd callback handles errors.
-    (err) => console.error(err),
-    // The 3rd callback handles the "complete" event.
-    () => {
-      setTimeout(() => {
-        const rowId = localStorage.getItem('rowId');
-        if(rowId != ""){
-          const selectedRow = (document.getElementById(rowId as string)) as HTMLTableElement;
-          if(selectedRow) {
-            selectedRow.scrollIntoView({behavior: "smooth", block: "center", inline: "center"});localStorage.removeItem('rowId');
+    // // The 2nd callback handles errors.
+    // (err) => console.error(err),
+    // // The 3rd callback handles the "complete" event.
+    // () => {
+    //   setTimeout(() => {
+    //     const rowId = localStorage.getItem('rowId');
+    //     if(rowId != ""){
+    //       const selectedRow = (document.getElementById(rowId as string)) as HTMLTableElement;
+    //       if(selectedRow) {
+    //         selectedRow.scrollIntoView({behavior: "smooth", block: "center", inline: "center"});localStorage.removeItem('rowId');
 
-          }
-        }
-      }, 500);
-      }
+    //       }
+    //     }
+    //   }, 500);
+    //   }
       );
   }
 
@@ -421,6 +424,7 @@ export class GenericListComponent implements OnInit, OnDestroy {
   }
 
   public eventHandler(e: any) {
+    console.log(e);
     const table = this.getTable(e.list);
     if (!table.query) {
       table.query = {};
@@ -553,6 +557,7 @@ export class GenericListComponent implements OnInit, OnDestroy {
   }
 
   public listHandler(e: any) {
+    console.log(e);
     if (
       this.checkList(e.endpoint) &&
       !e.innerTable &&
@@ -727,15 +732,15 @@ export class GenericListComponent implements OnInit, OnDestroy {
       pagination: ''
     };
 
-    // Here we handlig pagination in after edit record
-    const flagAfterEditRecord = localStorage.getItem('flagAfterEditRecord');
-    if(flagAfterEditRecord == 'true' && parseInt(localStorage.getItem('afterEditLimit') as string) > this.limit){
-      queryList['pagination'] = "limit="+ localStorage.getItem('afterEditLimit') + "&offset=" + this.afterEditOffset;
-      this.afterEditOffset = localStorage.getItem('afterEditLimit');
+    // // Here we handlig pagination in after edit record
+    // const flagAfterEditRecord = localStorage.getItem('flagAfterEditRecord');
+    // if(flagAfterEditRecord == 'true' && parseInt(localStorage.getItem('afterEditLimit') as string) > this.limit){
+    //   queryList['pagination'] = "limit="+ localStorage.getItem('afterEditLimit') + "&offset=" + this.afterEditOffset;
+    //   this.afterEditOffset = localStorage.getItem('afterEditLimit');
 
-    }
-    localStorage.removeItem('flagAfterEditRecord');
-    localStorage.removeItem('afterEditLimit');
+    // }
+    // localStorage.removeItem('flagAfterEditRecord');
+    // localStorage.removeItem('afterEditLimit');
 
     const table = this.getFirstTable();
     const keys = Object.keys(queryParams);
@@ -776,6 +781,8 @@ export class GenericListComponent implements OnInit, OnDestroy {
     });
 
     table.query = queryList;
+
+    console.log(table.query);
 
     if (this.cashData) {
       if (!table.query.filter && !table.query.sort && !table.query.pagination) {
