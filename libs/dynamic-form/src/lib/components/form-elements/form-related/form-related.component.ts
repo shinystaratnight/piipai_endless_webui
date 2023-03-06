@@ -95,7 +95,6 @@ export class FormRelatedComponent
   public override key: any;
 
   public label!: boolean;
-  public isCollapsed = false;
   public viewMode?: boolean;
   public editMode: boolean;
   public saveProcess!: boolean;
@@ -228,7 +227,6 @@ export class FormRelatedComponent
     this.display = this.config.templateOptions?.display || '{__str__}';
     this.param = this.config.templateOptions?.param || 'id';
     this.fields = this.config.templateOptions?.values || ['__str__'];
-    this.isCollapsed = this.config.collapsed || false;
     this.viewMode = this.config.editForm && this.config.read_only;
 
     if (this.fields.indexOf(this.param) === -1) {
