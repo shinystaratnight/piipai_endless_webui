@@ -782,8 +782,6 @@ export class GenericListComponent implements OnInit, OnDestroy {
 
     table.query = queryList;
 
-    console.log(table.query);
-
     if (this.cashData) {
       if (!table.query.filter && !table.query.sort && !table.query.pagination) {
         table.data = this.cashData;
