@@ -4,6 +4,7 @@ export const environment = {
   production: true,
   api: 'https://api.piipai.com',
   clientId: 'MMtPUqBFwBDo3kVEQl6mzVm6e8h5OHclTsDcraUj',
+  origin: 'https://piipai.com',
   host: 'piipai.com'
 };
 
