@@ -14,13 +14,15 @@ type Errors =
   | string[]
   | {
       detail?: string;
+      message?: string
       non_field_errors?: string[];
       [key: string]: any;
     };
 
 type Error = {
   status: string;
-  errors: Errors;
+  message?: string;
+  errors?: Errors;
 };
 
 @Injectable({
@@ -56,8 +58,6 @@ export class ErrorsService {
   }
 
   private showErrorMessage(error: Error | string, defaultMessage = '') {
-    console.log(error);
-
     if (typeof error === 'string') {
       this.ts.sendMessage(defaultMessage, MessageType.Error);
       return;
@@ -68,7 +68,8 @@ export class ErrorsService {
 
       this.ts.sendMessage(text, MessageType.Error);
     } else {
-      const { detail, non_field_errors, message, ...fields } = error.errors;
+      const { detail, non_field_errors, ...fields } = error.errors || {};
+      const message = error.errors?.message || error.message;
       let text: string =
         detail ||
         message ||

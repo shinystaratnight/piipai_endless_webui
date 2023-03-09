@@ -4,31 +4,6 @@
   [class.on-list]="!inForm"
   class="mw-100 datatable"
 >
-  <!-- <div webuiMove [parent]="datatable" *ngIf="poped" class="card-header bg-primary text-white" (active)="activeTable($event)">
-    <h5 class="flex justify-between items-center mb-0 lead" *ngIf="config.list">
-      <span [ngClass]="{'mr-5': poped}">{{config.list.label}}</span>
-      <div class="flex fustify-content-center items-center">
-        <fa-icon
-          class="ml-2 icon"
-          [icon]="['fas', 'window-minimize']"
-          (click)="minimizeTable()"
-          aria-hidden="true">
-        </fa-icon>
-        <fa-icon
-          class="ml-2 icon"
-          [icon]="['fas', 'window-maximize']"
-          (click)="unpopedTable()"
-          aria-hidden="true">
-        </fa-icon>
-        <fa-icon
-          class="ml-2 icon"
-          [icon]="['fas', 'times']"
-          (click)="closeTable()"
-          aria-hidden="true">
-        </fa-icon>
-      </div>
-    </h5>
-  </div> -->
   <div
     class="datatable-content"
     [ngClass]="{

@@ -73,11 +73,11 @@ export class GenericFormService {
       );
   }
 
-  public callAction(endpoint: string, data: any): Observable<any> {
+  public callAction(endpoint: string, data: any, options?: ParseErrorOptions): Observable<any> {
     return this.http
       .post(endpoint, data)
       .pipe(
-        catchError((error: any) => this.errors.handleError(error))
+        catchError((error: any) => this.errors.handleError(error, options))
       );
   }
 
