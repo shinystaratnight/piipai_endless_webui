@@ -424,7 +424,6 @@ export class GenericListComponent implements OnInit, OnDestroy {
   }
 
   public eventHandler(e: any) {
-    console.log(e);
     const table = this.getTable(e.list);
     if (!table.query) {
       table.query = {};
@@ -557,7 +556,6 @@ export class GenericListComponent implements OnInit, OnDestroy {
   }
 
   public listHandler(e: any) {
-    console.log(e);
     if (
       this.checkList(e.endpoint) &&
       !e.innerTable &&
