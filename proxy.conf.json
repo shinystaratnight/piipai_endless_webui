@@ -7,7 +7,7 @@
     },
     "changeOrigin": true,
     "headers": {
-      "Origin": "https://laviin.piipaitest.com"
+      "Origin": "https://piiprent.piipaitest.com"
     },
     "logLevel": "debug"
   },

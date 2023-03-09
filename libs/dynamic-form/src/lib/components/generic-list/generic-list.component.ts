@@ -678,7 +678,7 @@ export class GenericListComponent implements OnInit, OnDestroy {
     }
 
     target.actionProcess = true;
-    this.gfs.callAction(endpoint, body).subscribe(
+    this.gfs.callAction(endpoint, body, { showMessage: true }).subscribe(
       (res) => {
         target.actionProcess = false;
         if (res.status === 'success') {
