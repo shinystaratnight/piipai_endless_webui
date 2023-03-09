@@ -386,6 +386,19 @@ webui-form-button:not(:first-child) {
   }
 }
 
+
+.btn-success {
+  @apply bg-success;
+}
+
+.btn-danger {
+  @apply bg-danger;
+}
+
+.btn-warning {
+  @apply bg-warning;
+}
+
 .button {
   font-size: 16px;
   line-height: 19px;

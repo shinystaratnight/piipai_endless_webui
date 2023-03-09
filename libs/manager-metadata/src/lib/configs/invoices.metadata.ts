@@ -188,7 +188,6 @@ const list = {
             endpoint: `${Endpoints.Invoice}{id}/approve/`,
             field: 'id',
             icon: 'fa-external-link-alt',
-            color: 'success',
             action: 'emptyPost',
             type: 'button',
             text: 'Approve',

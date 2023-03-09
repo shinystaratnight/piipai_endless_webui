@@ -10,13 +10,17 @@ export type ParseErrorOptions = {
   showMessage?: boolean;
 };
 
+type Errors =
+  | string[]
+  | {
+      detail?: string;
+      non_field_errors?: string[];
+      [key: string]: any;
+    };
+
 type Error = {
   status: string;
-  errors: {
-    detail?: string;
-    non_field_errors?: string[];
-    [key: string]: any;
-  };
+  errors: Errors;
 };
 
 @Injectable({
@@ -52,22 +56,30 @@ export class ErrorsService {
   }
 
   private showErrorMessage(error: Error | string, defaultMessage = '') {
+    console.log(error);
+
     if (typeof error === 'string') {
       this.ts.sendMessage(defaultMessage, MessageType.Error);
       return;
     }
 
-    const { detail, non_field_errors, message, ...fields } = error.errors;
-    let text: string =
-      detail ||
-      message ||
-      (Array.isArray(non_field_errors)
-        ? non_field_errors.join(', ')
-        : non_field_errors) ||
-      defaultMessage;
+    if (Array.isArray(error.errors)) {
+      const text = error.errors.join('. ');
 
-    Object.keys(fields).forEach((key: string) => (text += ` ${fields[key]}.`));
+      this.ts.sendMessage(text, MessageType.Error);
+    } else {
+      const { detail, non_field_errors, message, ...fields } = error.errors;
+      let text: string =
+        detail ||
+        message ||
+        (Array.isArray(non_field_errors)
+          ? non_field_errors.join(', ')
+          : non_field_errors) ||
+        defaultMessage;
 
-    this.ts.sendMessage(text, MessageType.Error);
+      Object.keys(fields).forEach((key: string) => (text += ` ${fields[key]}.`));
+
+      this.ts.sendMessage(text, MessageType.Error);
+    }
   }
 }

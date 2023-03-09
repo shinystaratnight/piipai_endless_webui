@@ -37,13 +37,6 @@
     [class.btn-sm]="config.templateOptions.small"
     [class.px-2]="config.templateOptions.p && buttonClass !== 'btn-link'"
     [class.list]="config.templateOptions.p"
-    [class.btn-primary]="config.color && config.color === 'primary'"
-    [class.text-white]="
-      (buttonClass || config.color) &&
-      !config.inverse &&
-      buttonClass !== 'btn-link' &&
-      !config.shadow
-    "
     [class.disabled]="isDisabled"
     [ngClass]="[
       buttonClass || '',
@@ -57,18 +50,13 @@
   >
     <span
       *ngIf="repeatArray"
-      class="flex items-center justify-between"
+      class="flex items-center gap-1"
     >
       <ng-container
         *ngTemplateOutlet="icon; context: { icon: config.svg }"
       ></ng-container>
 
       <fa-icon
-        [ngClass]="{
-          'text-white':
-            buttonClass && buttonClass !== 'btn-link' && !config.shadow,
-          'mr-1': !last || first
-        }"
         *ngFor="let icon of repeatArray; let last = last; let first = first"
         [icon]="['fas', config.templateOptions.icon]"
       >

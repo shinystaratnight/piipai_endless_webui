@@ -29,7 +29,6 @@ import {
   MessageType,
   AuthService,
   UserService,
-  CompanyPurposeService,
   SiteSettingsService,
   ENV,
 } from '@webui/core';
@@ -218,7 +217,6 @@ export class DynamicListComponent
     private userService: UserService,
     private toastr: ToastService,
     private listStorage: ListStorageService,
-    private purposeService: CompanyPurposeService,
     private listService: ListService,
     private route: ActivatedRoute,
     @Optional() private sortService: SortService,
@@ -891,7 +889,7 @@ export class DynamicListComponent
         (el.endpoint === Endpoints.Tag || this.endpoint === Endpoints.Tag) &&
         (el.owner === 'system' || (el.tag && el.tag.system === 'owner')),
       translated: element.translated,
-      jsonTranslate: element.jsonTranslate
+      jsonTranslate: element.jsonTranslate,
     };
     if (cell.timezone) {
       obj.timezone = this.getPropValue(el, cell.timezone);
@@ -1742,7 +1740,7 @@ export class DynamicListComponent
 
   public submitTimesheet(e: any) {
     const dialogRef = this.dialog.open(SubmissionModalComponent, {
-      size: 'md'
+      size: 'md',
     });
     dialogRef.componentInstance.data = this.getRowData(e);
     dialogRef.result
@@ -1758,11 +1756,13 @@ export class DynamicListComponent
     const dialogRef = this.dialog.open(EvaluateCandidateModalComponent);
     dialogRef.componentInstance.data = this.getRowData(e);
     dialogRef.componentInstance.endpoint = e.el.endpoint;
-    dialogRef.result.then((result: any) => {
-      if (result.status === Status.Success) {
-        this.refreshList();
-      }
-    }).catch(() => {});
+    dialogRef.result
+      .then((result: any) => {
+        if (result.status === Status.Success) {
+          this.refreshList();
+        }
+      })
+      .catch(() => {});
   }
 
   public evaluate(e: any, data?: any, refresh = true) {
@@ -2541,71 +2541,72 @@ export class DynamicListComponent
 
   public post(e: any) {
     const endpoint: string = e.el.endpoint;
-    this.genericFormService.submitForm(endpoint, {}).subscribe(
-      (res: any) => {
-        if (e.el && e.el.redirect) {
-          // "loginas" functionlity
-          const helper = new JwtHelperService();
-          const token = helper.decodeToken(res.access_token_jwt);
-          const redirect = token.origin;
-          const envOrigin = this.environment.origin;
+    const isInvoiceApproveEndpoint =
+      endpoint.includes('/core/invoices/') && endpoint.includes('/approve/');
 
-          let isSameOrigin;
+    this.genericFormService
+      .submitForm(endpoint, {}, { showMessage: isInvoiceApproveEndpoint })
+      .subscribe(
+        (res: any) => {
+          if (e.el && e.el.redirect) {
+            // "loginas" functionlity
+            const helper = new JwtHelperService();
+            const token = helper.decodeToken(res.access_token_jwt);
+            const redirect = token.origin;
+            const envOrigin = this.environment.origin;
 
-          if (envOrigin) {
-            isSameOrigin = envOrigin === redirect;
-          } else {
-            isSameOrigin = redirect.includes(location.host);
-          }
+            let isSameOrigin;
 
-          if (isSameOrigin) {
-            this.authService.logoutWithoutRedirect();
-            this.userService.user = null;
-            this.authService.storeToken(res);
-            this.userService.getUserData().subscribe(() => {
-              location.href = '/';
-            });
+            if (envOrigin) {
+              isSameOrigin = envOrigin === redirect;
+            } else {
+              isSameOrigin = redirect.includes(location.host);
+            }
 
+            if (isSameOrigin) {
+              this.authService.logoutWithoutRedirect();
+              this.userService.user = null;
+              this.authService.storeToken(res);
+              this.userService.getUserData().subscribe(() => {
+                location.href = '/';
+              });
+
+              return;
+            }
+
+            location.href = redirect;
             return;
           }
 
-          location.href = redirect;
-          return;
-        }
+          this.event.emit({
+            type: 'update',
+            list: this.config.list.list,
+          });
+        },
+        (err: any) => {
+          this.error = err;
+          if (isInvoiceApproveEndpoint) {
+            this.approveInvoice = e;
+            const invoice = this.getRowData(e);
+            this.modalInfo = {
+              id: invoice.customer_company.id,
+              endpoint: Endpoints.Company,
+              label: invoice.customer_company.name,
+              type: 'form',
+              edit: true,
+              mode: 'edit',
+            };
+            this.open(this.modal, { size: 'lg' });
 
-        this.event.emit({
-          type: 'update',
-          list: this.config.list.list,
-        });
-      },
-      (err: any) => {
-        this.error = err;
-        if (
-          endpoint.includes('/core/invoices/') &&
-          endpoint.includes('/approve/')
-        ) {
-          this.toastr.sendMessage(err.errors, MessageType.Error);
-          this.approveInvoice = e;
-          const invoice = this.getRowData(e);
-          this.modalInfo = {
-            id: invoice.customer_company.id,
-            endpoint: Endpoints.Company,
-            label: invoice.customer_company.name,
-            type: 'form',
-            edit: true,
-            mode: 'edit',
-          };
-          this.open(this.modal, { size: 'lg' });
-
-          setTimeout(() => {
-            const input = document.querySelector(
-              'input[name="billing_email"]'
-            ) as HTMLInputElement;
-            input.focus();
-          }, 2000);
+            setTimeout(() => {
+              const input = document.querySelector(
+                'input[name="billing_email"]'
+              ) as HTMLInputElement;
+              input.focus();
+            }, 2000);
+          }
         }
-      }
-    );
+      );
   }
 
   public checkShowRules(rule: any[], data: any): boolean {
