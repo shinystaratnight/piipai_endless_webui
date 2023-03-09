@@ -15,7 +15,7 @@ import { Language, Role, User } from '@webui/models';
 const defaultCountryCode = 'GB';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class UserService {
   public authEndpoint = '/auth/restore_session/';
@@ -50,20 +50,28 @@ export class UserService {
           this.user = user;
 
           user.data.roles = user.data.roles
-          .filter((role) => role.is_active)
-          .map((role: Role) => {
-            return {
-              ...role,
-              company_id: role.company_contact_rel.company.id,
-              client_contact_id: role.company_contact_rel.company_contact.id
-            }
-          });
+            .filter((role) => role.is_active || user.data.is_superuser)
+            .map((role: Role) => {
+              return {
+                ...role,
+                company_id: role.company_contact_rel.company.id,
+                client_contact_id: role.company_contact_rel.company_contact.id,
+              };
+            });
 
           const currentDomainRoles = user.data.roles.filter((role) => {
-            return role.domain === location.host || (this.env.origin ? this.env.origin.replace('https://', '') === role.domain : false);
+            return (
+              role.domain === location.host ||
+              (this.env.origin
+                ? this.env.origin.replace('https://', '') === role.domain
+                : false)
+            );
           });
 
-          this.checkRoleExist(user.data.contact.contact_type, currentDomainRoles);
+          this.checkRoleExist(
+            user.data.contact.contact_type,
+            currentDomainRoles
+          );
 
           user.data.country_code = user.data.country_code || defaultCountryCode;
 
@@ -75,15 +83,19 @@ export class UserService {
           let role: Role | undefined;
 
           if (storageRole) {
-            role = currentDomainRoles.find(el => el.id === storageRole.id);
+            role = currentDomainRoles.find((el) => el.id === storageRole.id);
           } else {
-            role = currentDomainRoles.find(el =>
-              this.user && el.__str__.includes(this.user.data.contact.contact_type)
+            role = currentDomainRoles.find(
+              (el) =>
+                this.user &&
+                el.__str__.includes(this.user.data.contact.contact_type)
             );
           }
 
           if (redirectRole) {
-            const existRole = currentDomainRoles.find(el => el.id === redirectRole.id);
+            const existRole = currentDomainRoles.find(
+              (el) => el.id === redirectRole.id
+            );
 
             if (existRole) {
               role = existRole;
@@ -102,7 +114,7 @@ export class UserService {
 
           return this.user;
         }),
-        catchError(errors => this.errorsService.handleError(errors))
+        catchError((errors) => this.errorsService.handleError(errors))
       );
     } else {
       return of(this.user);
@@ -126,10 +138,7 @@ export class UserService {
       this.authService.logout();
 
       setTimeout(() => {
-        this.toastService.sendMessage(
-          'User is invalid',
-          MessageType.Error
-        );
+        this.toastService.sendMessage('User is invalid', MessageType.Error);
       }, 1000);
 
       throw Error('User is invalid');

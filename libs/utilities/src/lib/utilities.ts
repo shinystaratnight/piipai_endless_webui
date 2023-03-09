@@ -1,5 +1,11 @@
 import { MomentInput, Time } from '@webui/time';
-import {CountryCodeLanguage, ITranslationPayload, Language, Role, Translation} from '@webui/models';
+import {
+  CountryCodeLanguage,
+  ITranslationPayload,
+  Language,
+  Role,
+  Translation,
+} from '@webui/models';
 
 export enum DateRange {
   Year = 'year',
@@ -116,7 +122,10 @@ export function getStorageLang(): Language {
   return lang as Language;
 }
 
-export function getTotalTime(data: Record<string, MomentInput>, timezone?: string) {
+export function getTotalTime(
+  data: Record<string, MomentInput>,
+  timezone?: string
+) {
   const shift_ended_at = Time.parse(data['shift_ended_at'], { timezone });
   const shift_started_at = Time.parse(data['shift_started_at'], { timezone });
 
@@ -152,7 +161,10 @@ export function getTotalTime(data: Record<string, MomentInput>, timezone?: strin
   return `${Math.floor(totalTime.asHours())}hr ${totalTime.minutes()}min`;
 }
 
-export function getPropValue(data: Record<string, unknown>, key: string): unknown | undefined {
+export function getPropValue(
+  data: Record<string, unknown>,
+  key: string
+): unknown | undefined {
   const props = key.split('.');
   const prop = props.shift();
 
@@ -172,7 +184,10 @@ export function getPropValue(data: Record<string, unknown>, key: string): unknow
         return getPropValue(newData[0], props.join('.'));
       }
 
-      return getPropValue(data[prop] as Record<string, unknown>, props.join('.'));
+      return getPropValue(
+        data[prop] as Record<string, unknown>,
+        props.join('.')
+      );
     }
   }
 
@@ -200,20 +215,32 @@ export function format(str: string, data: Record<string, unknown>) {
     }
 
     if (data) {
-      const shift_started_at = Time.parse(data['shift_started_at'] as MomentInput, {
-        timezone: data['timezone'] as string || data['time_zone'] as string || undefined,
-      });
+      const shift_started_at = Time.parse(
+        data['shift_started_at'] as MomentInput,
+        {
+          timezone:
+            (data['timezone'] as string) ||
+            (data['time_zone'] as string) ||
+            undefined,
+        }
+      );
 
       if (key === 'shift_ended_at') {
-        data['shift_ended_at'] = data['shift_ended_at'] || shift_started_at.clone().add(8, 'hour').add(30, 'minute').format();
+        data['shift_ended_at'] =
+          data['shift_ended_at'] ||
+          shift_started_at.clone().add(8, 'hour').add(30, 'minute').format();
       }
 
       if (key === 'break_started_at') {
-        data['break_started_at'] = data['break_started_at'] || shift_started_at.clone().add(4, 'hour').format();
+        data['break_started_at'] =
+          data['break_started_at'] ||
+          shift_started_at.clone().add(4, 'hour').format();
       }
 
       if (key === 'break_ended_at') {
-        data['break_ended_at'] = data['break_ended_at'] || shift_started_at.clone().add(4, 'hour').add(30, 'minute').format();
+        data['break_ended_at'] =
+          data['break_ended_at'] ||
+          shift_started_at.clone().add(4, 'hour').add(30, 'minute').format();
       }
     }
 
@@ -253,7 +280,9 @@ export function checkAndReturnTranslation(
 
   const target = translationList.find((element: Translation) => {
     const { id } = element.language;
-    const languageCode = lang || CountryCodeLanguage[countryCode as keyof typeof CountryCodeLanguage];
+    const languageCode =
+      lang ||
+      CountryCodeLanguage[countryCode as keyof typeof CountryCodeLanguage];
 
     return id === languageCode;
   });
@@ -336,7 +365,6 @@ export function isArray(val: unknown): val is Array<any> {
   return Array.isArray(val);
 }
 
-
 export const getUrlPrefix = (): string => {
   if (isClient()) {
     return '/cl';
@@ -347,8 +375,8 @@ export const getUrlPrefix = (): string => {
   }
 
   if (isCandidate()) {
-    return '/cd'
+    return '/cd';
   }
 
   return '';
-}
+};
