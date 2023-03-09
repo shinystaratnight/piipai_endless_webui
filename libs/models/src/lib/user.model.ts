@@ -21,6 +21,7 @@ export interface User {
       default_language: Language;
     },
     is_primary: boolean;
+    is_superuser: boolean;
     user: string;
     roles: Role[];
     end_trial_date?: string;
